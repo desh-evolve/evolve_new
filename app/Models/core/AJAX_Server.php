@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class AJAX_Server {
 
 	function getCurrentUserFullName() {

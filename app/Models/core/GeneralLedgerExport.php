@@ -36,6 +36,8 @@ $gle->compile();
 $eft->save('/tmp/gl01.txt');
 */
 
+use Illuminate\Support\Facades\Log;
+
 /**
  * @package Core
  */

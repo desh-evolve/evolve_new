@@ -125,7 +125,7 @@ class StationDepartmentFactory extends Factory {
 	function addLog( $log_action ) {
 		$d_obj = $this->getDepartmentObject();
 		if ( is_object($d_obj) ) {
-			return TTLog::addEntry( $this->getStation(), $log_action, TTi18n::getText('Department').': '. $d_obj->getName() , NULL, $this->getTable() );
+			return TTDebug::addEntry( $this->getStation(), $log_action, TTi18n::getText('Department').': '. $d_obj->getName() , NULL, $this->getTable() );
 		}
 
 		return FALSE;

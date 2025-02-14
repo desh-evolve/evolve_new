@@ -10,6 +10,9 @@
                             'frequency' => 'DAILY',
                             'history' =>  5 );
 */
+
+use Illuminate\Support\Facades\Log;
+
 class LogRotate {
 
     private $config_arr = array();

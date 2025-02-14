@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class TTLog {
 	static function addEntry( $object_id, $action_id, $description, $user_id, $table, $object = NULL ) {
 		global $config_vars;

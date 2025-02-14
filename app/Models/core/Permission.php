@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class Permission {
 	function getPermissions( $user_id, $company_id ) {
 

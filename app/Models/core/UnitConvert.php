@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class UnitConvert {
 	/*
 		This class is used to convert units, ie:

@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 5453 $
  * $Id: CompanyFactory.class.php 5453 2011-11-03 20:30:28Z ipso $
@@ -2835,7 +2838,7 @@ class CompanyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Company Information'), NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Company Information'), NULL, $this->getTable(), $this );
 	}
 
 }

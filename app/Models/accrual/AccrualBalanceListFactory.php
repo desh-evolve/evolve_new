@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 5370 $
  * $Id: AccrualBalanceListFactory.class.php 5370 2011-10-21 19:38:06Z ipso $

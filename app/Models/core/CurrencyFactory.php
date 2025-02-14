@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class CurrencyFactory extends Factory {
 	protected $table = 'currency';
 	protected $pk_sequence_name = 'currency_id_seq'; //PK Sequence name
@@ -912,7 +914,7 @@ class CurrencyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Currency').': '. $this->getISOCode() .' '.  TTi18n::getText('Rate').': '. $this->getConversionRate(), NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Currency').': '. $this->getISOCode() .' '.  TTi18n::getText('Rate').': '. $this->getConversionRate(), NULL, $this->getTable(), $this );
 	}
 
 }

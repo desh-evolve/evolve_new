@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 2095 $
  * $Id: UserTitleFactory.class.php 2095 2008-09-01 07:04:25Z ipso $
@@ -201,7 +204,7 @@ class WageGroupFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Wage Group'), NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Wage Group'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

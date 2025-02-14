@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 5369 $
  * $Id: CompanyListFactory.class.php 5369 2011-10-21 19:37:24Z ipso $
@@ -198,6 +201,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate {
 			}
 			$strict = TRUE;
 		}
+		
 		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 

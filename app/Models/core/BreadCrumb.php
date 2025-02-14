@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class BreadCrumb {
 	static $home_name = 'Home';
 	static $seperator = ' > ';

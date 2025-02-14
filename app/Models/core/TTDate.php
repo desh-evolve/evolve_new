@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class TTDate {
 	static protected $time_zone = 'GMT';
 	static protected $date_format = 'd-M-y';

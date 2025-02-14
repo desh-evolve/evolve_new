@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class Misc {
 	/*
 		this method assumes that the form has one or more

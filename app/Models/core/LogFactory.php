@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class LogFactory extends Factory {
 	protected $table = 'system_log';
 	protected $pk_sequence_name = 'system_log_id_seq'; //PK Sequence name
@@ -676,7 +678,7 @@ class LogFactory extends Factory {
 					}
 				}
 			}
-			//$this->getCreatedAndUpdatedColumns( &$data, $include_columns );
+			//$this->getCreatedAndUpdatedColumns( $data, $include_columns );
 		}
 
 		return $data;

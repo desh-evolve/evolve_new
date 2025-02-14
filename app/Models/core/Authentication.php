@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class Authentication {
 	protected $name = 'SessionID';
 	protected $idle = 14400; //Max IDLE time
@@ -518,7 +520,7 @@ class Authentication {
 				$this->UpdateLastLoginDate();
 			}
 
-			TTLog::addEntry( $this->getObject()->getID(), 100,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '. TTi18n::getText('Type').': '. $type .' '.  TTi18n::getText('SessionID') .': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication'); //Login
+			TTDebug::addEntry( $this->getObject()->getID(), 100,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '. TTi18n::getText('Type').': '. $type .' '.  TTi18n::getText('SessionID') .': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication'); //Login
 
 			$this->rl->delete(); //Clear failed password rate limit upon successful login.
 
@@ -536,7 +538,7 @@ class Authentication {
 		$this->destroyCookie();
 		$this->Delete();
 
-		TTLog::addEntry( $this->getObject()->getID(), 110,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '.  TTi18n::getText('SessionID').': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication');
+		TTDebug::addEntry( $this->getObject()->getID(), 110,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '.  TTi18n::getText('SessionID').': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication');
 
 		BreadCrumb::Delete();
 

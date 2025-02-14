@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class ExceptionFactory extends Factory {
 	protected $table = 'exception';
 	protected $pk_sequence_name = 'exception_id_seq'; //PK Sequence name
@@ -523,7 +525,7 @@ class ExceptionFactory extends Factory {
 		$retval = $mail->Send();
 
 		if ( $retval == TRUE ) {
-			TTLog::addEntry( $this->getId(), 500,  TTi18n::getText('Email Exception to').': '. $to .' Bcc: '. $headers['Bcc'], NULL, $this->getTable() );
+			TTDebug::addEntry( $this->getId(), 500,  TTi18n::getText('Email Exception to').': '. $to .' Bcc: '. $headers['Bcc'], NULL, $this->getTable() );
 			return TRUE;
 		}
 

@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 5369 $
  * $Id: BranchListFactory.class.php 5369 2011-10-21 19:37:24Z ipso $

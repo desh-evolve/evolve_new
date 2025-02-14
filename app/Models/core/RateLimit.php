@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class RateLimit {
 	protected $sleep = FALSE; //When rate limit is reached, do we sleep or return FALSE?
 
@@ -77,6 +79,7 @@ class RateLimit {
 	function check() {
 		if ( $this->getID() != '' ) {
 			$rate_data = $this->getRateData();
+			
 			//Debug::Arr($rate_data, 'Failed Attempt Data: ', __FILE__, __LINE__, __METHOD__,10);
 			if ( !isset($rate_data['attempts']) ) {
 				$rate_data = array(

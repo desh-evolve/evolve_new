@@ -3,6 +3,9 @@
 //
 //http://danielmclaren.net/2008/08/13/tracking-progress-of-a-server-side-action-in-flashflex
 //
+
+use Illuminate\Support\Facades\Log;
+
 class ProgressBar {
 	protected $obj = NULL;
 

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 abstract class Factory {
 	public $data = array();
 	public $old_data = array(); //Used for detailed audit log.
@@ -517,7 +519,7 @@ abstract class Factory {
 
 		return TRUE;
 	}
-	function getCreatedAndUpdatedColumns( &$data, $include_columns = NULL ) {
+	function getCreatedAndUpdatedColumns( $data, $include_columns = NULL ) {
 		//Update array in-place.
 		if ( $include_columns == NULL OR ( isset($include_columns['created_by_id']) AND $include_columns['created_by_id'] == TRUE) ) {
 			$data['created_by_id'] = $this->getCreatedBy();
@@ -541,7 +543,7 @@ abstract class Factory {
 		return TRUE;
 	}
 
-	function getPermissionColumns( &$data, $object_user_id, $created_by_id, $permission_children_ids = NULL, $include_columns = NULL ) {
+	function getPermissionColumns( $data, $object_user_id, $created_by_id, $permission_children_ids = NULL, $include_columns = NULL ) {
 		$permission = new Permission();
 
 		if( $include_columns == NULL OR ( isset($include_columns['is_owner']) AND $include_columns['is_owner'] == TRUE) ) {

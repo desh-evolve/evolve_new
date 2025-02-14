@@ -126,7 +126,7 @@ class StationUserGroupFactory extends Factory {
 	function addLog( $log_action ) {
 		$g_obj = $this->getGroupObject();
 		if ( is_object($g_obj) ) {
-			return TTLog::addEntry( $this->getStation(), $log_action, TTi18n::getText('Group').': '. $g_obj->getName() , NULL, $this->getTable() );
+			return TTDebug::addEntry( $this->getStation(), $log_action, TTi18n::getText('Group').': '. $g_obj->getName() , NULL, $this->getTable() );
 		}
 
 		return FALSE;

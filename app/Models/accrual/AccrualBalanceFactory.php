@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 4265 $
  * $Id: AccrualBalanceFactory.class.php 4265 2011-02-18 00:49:20Z ipso $
@@ -270,7 +273,7 @@ class AccrualBalanceFactory extends Factory {
 			}
 			$this->getPermissionColumns( $data, $this->getUser(), FALSE, $permission_children_ids, $include_columns );
 			//Accrual Balances are only created/modified by the system.
-			//$this->getCreatedAndUpdatedColumns( &$data, $include_columns );
+			//$this->getCreatedAndUpdatedColumns( $data, $include_columns );
 		}
 
 		return $data;

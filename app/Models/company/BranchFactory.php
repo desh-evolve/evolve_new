@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 5229 $
  * $Id: BranchFactory.class.php 5229 2011-09-20 17:52:53Z ipso $
@@ -1215,7 +1218,7 @@ class BranchFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Branch') .': '. $this->getName() , NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Branch') .': '. $this->getName() , NULL, $this->getTable(), $this );
 	}
 
 }

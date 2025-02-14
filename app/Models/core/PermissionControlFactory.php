@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class PermissionControlFactory extends Factory {
 	protected $table = 'permission_control';
 	protected $pk_sequence_name = 'permission_control_id_seq'; //PK Sequence name
@@ -479,7 +481,7 @@ class PermissionControlFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Permission Group: '). $this->getName(), NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Permission Group: '). $this->getName(), NULL, $this->getTable(), $this );
 	}
 }
 ?>

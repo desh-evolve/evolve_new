@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 2095 $
  * $Id: PolicyGroupAccrualPolicyFactory.class.php 2095 2008-09-01 07:04:25Z ipso $
@@ -365,7 +368,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'policy_group' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'policy_group' );
 					break;
 				case 165:
 					$lf = new BreakPolicyListFactory();
@@ -375,7 +378,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'schedule_policy' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'schedule_policy' );
 					break;
 				//Job user mapping
 				case 1010: //'job_user_branch',
@@ -386,7 +389,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_branch' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_branch' );
 					break;
 				case 1020: // => 'job_user_department',
 					$lf = new DepartmentListFactory();
@@ -396,7 +399,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_department' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_department' );
 					break;
 				case 1030: // => 'job_user_group',
 					$lf = new UserGroupListFactory();
@@ -406,7 +409,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_group' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_group' );
 					break;
 				case 1040: // => 'job_include_user',
 				case 1050: // => 'job_exclude_user',
@@ -428,7 +431,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 					break;
 				//Job task mapping
 				case 1060: // => 'job_job_item_group',
@@ -439,7 +442,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_job_item_group' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_job_item_group' );
 					break;
 				case 1070: // => 'job_include_job_item',
 				case 1080: // => 'job_exclude_job_item',
@@ -461,7 +464,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 					break;
 				case 3010: // => 'payment_gateway_credit_card_type',
 					$table_name = 'payment_gateway_credit_card_type';
@@ -470,7 +473,7 @@ class CompanyGenericMapFactory extends Factory {
 					$description = TTi18n::getText('Credit Card Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('credit_card_type') );
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 
 					break;
 				case 3020: // => 'payment_gateway_bank_account_type',
@@ -480,7 +483,7 @@ class CompanyGenericMapFactory extends Factory {
 					$description = TTi18n::getText('Bank Account Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('bank_account_type') );
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 
 					break;
 					break;

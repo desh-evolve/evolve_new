@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 5125 $
  * $Id: BranchFactory.class.php 5125 2011-08-12 15:48:20Z ipso $
@@ -420,7 +423,7 @@ class CompanyGenericTagFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Tag') .': '. $this->getName() , NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Tag') .': '. $this->getName() , NULL, $this->getTable(), $this );
 	}
 
 }

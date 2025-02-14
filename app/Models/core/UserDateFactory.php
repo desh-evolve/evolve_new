@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class UserDateFactory extends Factory {
 	protected $table = 'user_date';
 	protected $pk_sequence_name = 'user_date_id_seq'; //PK Sequence name

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class Redirect {
 	static function page($url = NULL) {
 		if ( empty($url) AND !empty($_SERVER['HTTP_REFERER']) ) {

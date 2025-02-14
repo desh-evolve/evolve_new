@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class TTMail {
 	private $mime_obj = NULL;
 	private $mail_obj = NULL;

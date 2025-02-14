@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class PermissionFactory extends Factory {
 	protected $table = 'permission';
 	protected $pk_sequence_name = 'permission_id_seq'; //PK Sequence name
@@ -1931,7 +1933,7 @@ class PermissionFactory extends Factory {
 			$value_display =  TTi18n::getText( 'DENY' );
 		}
 
-		return TTLog::addEntry( $this->getPermissionControl(), $log_action, TTi18n::getText('Section').': '. Option::getByKey($this->getSection(), $this->getOptions('section') ) .' Name: '. Option::getByKey( $this->getName(), $this->getOptions('name', $this->getSection() ) ) .' Value: '. $value_display , NULL, $this->getTable() );
+		return TTDebug::addEntry( $this->getPermissionControl(), $log_action, TTi18n::getText('Section').': '. Option::getByKey($this->getSection(), $this->getOptions('section') ) .' Name: '. Option::getByKey( $this->getName(), $this->getOptions('name', $this->getSection() ) ) .' Value: '. $value_display , NULL, $this->getTable() );
 	}
 }
 ?>

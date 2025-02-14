@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class TTLDAP {
 	var $data = NULL;
 	private $password_attribute = 'userPassword';

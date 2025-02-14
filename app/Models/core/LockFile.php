@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class LockFile {
 	var $file_name = NULL;
 

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class DependencyTree {
 	/*
 		Take a look at PEAR: Structures_Graph

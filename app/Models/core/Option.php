@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class Option {
 	static function getByKey($key, $options, $false = FALSE ) {
 		if ( isset($options[$key]) ){

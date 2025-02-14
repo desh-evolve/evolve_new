@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class LogDetailFactory extends Factory {
 	protected $table = 'system_log_detail';
 	protected $pk_sequence_name = 'system_log_detail_id_seq'; //PK Sequence name

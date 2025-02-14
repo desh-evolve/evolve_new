@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 3536 $
  * $Id: FastTree.class.php 3536 2010-05-01 03:52:32Z ipso $

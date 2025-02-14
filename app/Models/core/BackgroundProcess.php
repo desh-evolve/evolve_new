@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class BackgroundProcess {
     var $max_processes = 1;
     var $max_process_check_sleep = 2;

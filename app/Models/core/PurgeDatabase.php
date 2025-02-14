@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class PurgeDatabase {
 	static $parent_table_column_map = array(
 											'users' => 'user_id',

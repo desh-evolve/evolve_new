@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 2095 $
  * $Id: PolicyGroupAccrualPolicyFactory.class.php 2095 2008-09-01 07:04:25Z ipso $
@@ -279,7 +282,7 @@ class CompanyGenericTagMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' TagID: '. $this->getTagID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'company' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'company' );
 					break;
 				case 200:
 					$lf = new UserListFactory();
@@ -289,7 +292,7 @@ class CompanyGenericTagMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' TagID: '. $this->getTagID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'users' );
+					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'users' );
 					break;
 			}
 		}

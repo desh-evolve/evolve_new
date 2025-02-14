@@ -125,7 +125,7 @@ class StationBranchFactory extends Factory {
 	function addLog( $log_action ) {
 		$b_obj = $this->getBranchObject();
 		if ( is_object($b_obj) ) {
-			return TTLog::addEntry( $this->getStation(), $log_action, TTi18n::getText('Branch').': '. $b_obj->getName() , NULL, $this->getTable() );
+			return TTDebug::addEntry( $this->getStation(), $log_action, TTi18n::getText('Branch').': '. $b_obj->getName() , NULL, $this->getTable() );
 		}
 
 		return FALSE;

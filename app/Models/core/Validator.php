@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Models\core;
 
 class Validator {
 	private $num_errors = 0; //Number of errors.

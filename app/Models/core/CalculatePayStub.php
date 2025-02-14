@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class CalculatePayStub extends PayStubFactory {
 
 	var $wage_obj = NULL;

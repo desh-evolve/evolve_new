@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class OtherFieldFactory extends Factory {
 	protected $table = 'other_field';
 	protected $pk_sequence_name = 'other_field_id_seq'; //PK Sequence name
@@ -446,7 +448,7 @@ class OtherFieldFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Other Fields'), NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Other Fields'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

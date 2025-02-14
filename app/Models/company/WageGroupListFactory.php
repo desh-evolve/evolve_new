@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 2095 $
  * $Id: UserTitleListFactory.class.php 2095 2008-09-01 07:04:25Z ipso $
@@ -172,6 +175,7 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 			}
 			$strict = TRUE;
 		}
+		
 		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 

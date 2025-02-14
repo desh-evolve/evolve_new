@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 4104 $
  * $Id: CompanyDeductionPayStubEntryAccountFactory.class.php 4104 2011-01-04 19:04:05Z ipso $
@@ -186,7 +189,7 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 		$obj = $this->getPayStubEntryAccountObject();
 		if ( is_object($obj) ) {
 			$type = Option::getByKey($this->getType(), Misc::TrimSortPrefix( $this->getOptions('type') ) );
-			return TTLog::addEntry( $this->getCompanyDeduction(), $log_action,  $type .' '. TTi18n::getText('Pay Stub Account').': '. $obj->getName(), NULL, $this->getTable() );
+			return TTDebug::addEntry( $this->getCompanyDeduction(), $log_action,  $type .' '. TTi18n::getText('Pay Stub Account').': '. $obj->getName(), NULL, $this->getTable() );
 		}
 	}
 }

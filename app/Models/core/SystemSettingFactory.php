@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class SystemSettingFactory extends Factory {
 	protected $table = 'system_setting';
 	protected $pk_sequence_name = 'system_setting_id_seq'; //PK Sequence name
@@ -133,7 +135,7 @@ class SystemSettingFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('System Setting - Name').': '. $this->getName() .' '. TTi18n::getText('Value').': '. $this->getValue(), NULL, $this->getTable() );
+		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('System Setting - Name').': '. $this->getName() .' '. TTi18n::getText('Value').': '. $this->getValue(), NULL, $this->getTable() );
 	}
 }
 ?>

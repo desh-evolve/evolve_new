@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use Illuminate\Support\Facades\Log;
+
 /*
  * $Revision: 4993 $
  * $Id: BankAccountListFactory.class.php 4993 2011-07-15 23:32:11Z ipso $

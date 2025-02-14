@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class TTi18n {
 	static private $locale_handler = NULL;
 	static private $translation_handler = NULL;

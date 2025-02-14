@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 class DBError extends Exception {
    function __construct($e) {
       global $db, $skip_db_error;

@@ -1,21 +1,16 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4881 $
- * $Id: BankAccountFactory.class.php 4881 2011-06-25 23:00:54Z ipso $
- * $Date: 2011-06-25 16:00:54 -0700 (Sat, 25 Jun 2011) $
- */
 
-/**
- * @package Module_Users
- */
+use App\Models\core\Validator;
+use Illuminate\Support\Facades\Log;
+
 class BranchBankAccountFactory extends Factory {
 	protected $table = 'branch_bank_account';
 	protected $pk_sequence_name = 'branch_bank_account_id_seq'; //PK Sequence name
+	protected $Validator;
+
+	public function __construct() {
+        $this->Validator = new Validator();
+    }
 
 	function _getFactoryOptions( $name ) {
 
@@ -63,7 +58,7 @@ class BranchBankAccountFactory extends Factory {
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap($param = null) {
 		$variable_function_map = array(
 										'id' => 'ID',
 										'company_id' => 'Company',
@@ -438,7 +433,7 @@ class BranchBankAccountFactory extends Factory {
 
 				}
 			}
-			$this->getCreatedAndUpdatedColumns( &$data, $include_columns );
+			$this->getCreatedAndUpdatedColumns( $data, $include_columns );
 		}
 
 		return $data;
@@ -450,7 +445,7 @@ class BranchBankAccountFactory extends Factory {
 		} else {
 			$log_description = TTi18n::getText('Employee');
 		}
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
+		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
 	}
 
 }
