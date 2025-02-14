@@ -12,7 +12,7 @@ class PermissionControlFactory extends Factory {
 		$retval = NULL;
 		switch( $name ) {
 			case 'preset':
-				$pf = TTnew( 'PermissionFactory' );
+				$pf = new PermissionFactory();
 				$retval = $pf->getOptions('preset');
 				break;
 			case 'level':
@@ -99,7 +99,7 @@ class PermissionControlFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$clf->getById( $this->getCompany() );
 			if ( $clf->getRecordCount() > 0 ) {
 				$this->company_obj = $clf->getCurrent();
@@ -120,7 +120,7 @@ class PermissionControlFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -224,7 +224,7 @@ class PermissionControlFactory extends Factory {
 	}
 
 	function getUser() {
-		$pulf = TTnew( 'PermissionUserListFactory' );
+		$pulf = new PermissionUserListFactory();
 		$pulf->getByPermissionControlId( $this->getId() );
 		foreach ($pulf as $obj) {
 			$list[] = $obj->getUser();
@@ -241,7 +241,7 @@ class PermissionControlFactory extends Factory {
 		if (is_array($ids) and count($ids) > 0) {
 			//Remove any of the selected employees from other permission control objects first.
 			//So there we can switch employees from one group to another in a single action.
-			$pulf = TTnew( 'PermissionUserListFactory' );
+			$pulf = new PermissionUserListFactory();
 			//$pculf->getByCompanyIdAndUserId( $this->getCompany(), $ids );
 			$pulf->getByCompanyIdAndUserIdAndNotPermissionControlId( $this->getCompany(), $ids, (int)$this->getId() );
 			if ( $pulf->getRecordCount() > 0 ) {
@@ -254,10 +254,10 @@ class PermissionControlFactory extends Factory {
 
 			$tmp_ids = array();
 
-			$pf = TTnew( 'PermissionFactory' );
+			$pf = new PermissionFactory();
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$pulf = TTnew( 'PermissionUserListFactory' );
+				$pulf = new PermissionUserListFactory();
 				$pulf->getByPermissionControlId( $this->getId() );
 
 				$tmp_ids = array();
@@ -280,7 +280,7 @@ class PermissionControlFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
@@ -288,7 +288,7 @@ class PermissionControlFactory extends Factory {
 					//first, otherwise there is a gab where an employee has
 					//no permissions, this is especially bad for administrators
 					//who are currently logged in.
-					$puf = TTnew( 'PermissionUserFactory' );
+					$puf = new PermissionUserFactory();
 					$puf->setPermissionControl( $this->getId() );
 					$puf->setUser( $id );
 
@@ -314,7 +314,7 @@ class PermissionControlFactory extends Factory {
 
 		$retval = array();
 
-		$pf = TTnew( 'PermissionFactory' );
+		$pf = new PermissionFactory();
 		$sections = $pf->getOptions('section');
 		$names = $pf->getOptions('name');
 		if ( is_array($names) ) {
@@ -335,7 +335,7 @@ class PermissionControlFactory extends Factory {
 	}
 
 	function getPermission() {
-		$plf = TTnew( 'PermissionListFactory' );
+		$plf = new PermissionListFactory();
 		$plf->getByCompanyIdAndPermissionControlId( $this->getCompany(), $this->getId() );
 		if ( $plf->getRecordCount() > 0 ) {
 			Debug::Text('Found Permissions: '. $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -368,7 +368,7 @@ class PermissionControlFactory extends Factory {
 			//Debug::Arr($permission_arr, ' Final Permissions: '. count($permission_arr), __FILE__, __LINE__, __METHOD__,10);
 		}
 
-		$pf = TTnew( 'PermissionFactory' );
+		$pf = new PermissionFactory();
 
 		//Don't Delete all previous permissions, do that in the Permission class.
 		if ( isset($permission_arr) AND is_array($permission_arr) AND count($permission_arr) > 0 ) {
@@ -386,7 +386,7 @@ class PermissionControlFactory extends Factory {
 
 						if ( $value == 0 OR $value == 1 ) {
 							Debug::Text('    Modifying/Adding Permission: '. $name .' - Value: '. $value, __FILE__, __LINE__, __METHOD__,10);
-							$tmp_pf = TTnew( 'PermissionFactory' );
+							$tmp_pf = new PermissionFactory();
 							$tmp_pf->setCompany( $this->getCompanyObject()->getId() );
 							$tmp_pf->setPermissionControl( $this->getId() );
 							$tmp_pf->setSection( $section );
@@ -416,7 +416,7 @@ class PermissionControlFactory extends Factory {
 	}
 
 	function postSave() {
-		$pf = TTnew( 'PermissionFactory' );
+		$pf = new PermissionFactory();
 
 		$clear_cache_user_ids = array_merge( (array)$this->getUser(), (array)$this->tmp_previous_user_ids);
 		foreach( $clear_cache_user_ids as $user_id ) {

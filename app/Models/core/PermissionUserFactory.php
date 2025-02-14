@@ -13,7 +13,7 @@ class PermissionUserFactory extends Factory {
 	function setPermissionControl($id) {
 		$id = trim($id);
 
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'permission_control',
@@ -32,7 +32,7 @@ class PermissionUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -43,7 +43,7 @@ class PermissionUserFactory extends Factory {
 		}
 	}
 	function isUniqueUser($id) {
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 
 		$ph = array(
 					'id' => $id,
@@ -65,7 +65,7 @@ class PermissionUserFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',

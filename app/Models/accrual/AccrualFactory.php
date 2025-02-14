@@ -116,7 +116,7 @@ class AccrualFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -134,7 +134,7 @@ class AccrualFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user_id',
 															$ulf->getByID($id),
@@ -162,7 +162,7 @@ class AccrualFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -223,7 +223,7 @@ class AccrualFactory extends Factory {
 	function setUserDateTotalID($id) {
 		$id = trim($id);
 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 
 		if ( $id == 0
 				OR
@@ -285,7 +285,7 @@ class AccrualFactory extends Factory {
 			$id = NULL;
 		}
 
-		$lrlf = TTnew( 'LeaveRequestListFactory' );
+		$lrlf = new LeaveRequestListFactory();
 
 		if ( $id == NULL
 				OR
@@ -397,7 +397,7 @@ class AccrualFactory extends Factory {
 		//Or orphaned entries on Sum'ing?
 		//Would have to do it on view as well though.
 		if ( $this->getUserDateTotalID() !== FALSE AND $this->getUserDateTotalID() !== 0 ) {
-			$alf = TTnew( 'AccrualListFactory' );
+			$alf = new AccrualListFactory();
 			$alf->getByUserIdAndAccrualPolicyIDAndUserDateTotalID( $this->getUser(), $this->getAccrualPolicyID(), $this->getUserDateTotalID() );
 			Debug::text('Found Duplicate Records: '. (int)$alf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 			if ( $alf->getRecordCount() > 0 ) {
@@ -423,7 +423,7 @@ class AccrualFactory extends Factory {
 	static function deleteOrphans($user_id) {
 		Debug::text('Attempting to delete Orphaned Records for User ID: '. $user_id, __FILE__, __LINE__, __METHOD__, 10);
 		//Remove orphaned entries
-		$alf = TTnew( 'AccrualListFactory' );
+		$alf = new AccrualListFactory();
 		$alf->getOrphansByUserId( $user_id );
 		Debug::text('Found Orphaned Records: '. $alf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		if ( $alf->getRecordCount() > 0 ) {

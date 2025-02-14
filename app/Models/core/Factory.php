@@ -341,7 +341,7 @@ abstract class Factory {
 		//Its possible that these are incorrect, especially if the user was created by a system or master administrator.
 		//Skip strict checks for now.
 		/*
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		if ( $this->Validator->isResultSetWithRows(	'created_by',
 													$ulf->getByID($id),
 													TTi18n::gettext('Incorrect User')
@@ -411,7 +411,7 @@ abstract class Factory {
 		//Its possible that these are incorrect, especially if the user was created by a system or master administrator.
 		//Skip strict checks for now.
 		/*
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		if ( $this->Validator->isResultSetWithRows(	'updated_by',
 													$ulf->getByID($id),
 													TTi18n::gettext('Incorrect User')
@@ -477,7 +477,7 @@ abstract class Factory {
 			}
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'updated_by',
 													$ulf->getByID($id),

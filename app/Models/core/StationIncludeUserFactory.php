@@ -14,7 +14,7 @@ class StationIncludeUserFactory extends Factory {
 	function setStation($id) {
 		$id = trim($id);
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 
 		if (	$id == 0
 				OR
@@ -42,7 +42,7 @@ class StationIncludeUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getIncludeUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -62,7 +62,7 @@ class StationIncludeUserFactory extends Factory {
 	function setIncludeUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'include_user',
 													$ulf->getByID($id),

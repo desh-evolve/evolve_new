@@ -29,7 +29,7 @@ class TTLog {
 			return FALSE;
 		}
 
-		$lf = TTnew( 'LogFactory' );
+		$lf = new LogFactory();
 
 		$lf->setObject( $object_id );
 		$lf->setAction( $action_id );
@@ -47,7 +47,7 @@ class TTLog {
 					)
 					AND is_object($object) AND $object->getEnableSystemLogDetail() == TRUE ) {
 
-				$ldf = TTnew( 'LogDetailFactory' );
+				$ldf = new LogDetailFactory();
 				$ldf->addLogDetail( $action_id, $insert_id, $object );
 			} else {
 				Debug::text('LogDetail Disabled... Object ID: '. $object_id .' Action ID: '. $action_id .' Table: '. $table .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);

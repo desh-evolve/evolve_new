@@ -14,7 +14,7 @@ class StationBranchFactory extends Factory {
 	function setStation($id) {
 		$id = trim($id);
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 
 		if (	$id == 0
 				OR
@@ -41,7 +41,7 @@ class StationBranchFactory extends Factory {
 		if ( is_object($this->branch_obj) ) {
 			return $this->branch_obj;
 		} else {
-			$blf = TTnew( 'BranchListFactory' );
+			$blf = new BranchListFactory();
 			$blf->getById( $this->getBranch() );
 			if ( $blf->getRecordCount() == 1 ) {
 				$this->branch_obj = $blf->getCurrent();
@@ -61,7 +61,7 @@ class StationBranchFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'branch',
 													$blf->getByID($id),

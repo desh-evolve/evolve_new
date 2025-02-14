@@ -15,7 +15,7 @@ class LogDetailFactory extends Factory {
 			$id = 0;
 		}
 
-		$llf = TTnew( 'LogListFactory' );
+		$llf = new LogListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -457,7 +457,7 @@ class LogDetailFactory extends Factory {
 			//Global variables, like branches,departments,titles,jobs,tasks,status_id,type_id etc...
 			case 'branch_id':
 			case 'default_branch_id':
-				$lf = TTnew( 'BranchListFactory' );
+				$lf = new BranchListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -467,7 +467,7 @@ class LogDetailFactory extends Factory {
 				break;
 			case 'department_id':
 			case 'default_department_id':
-				$lf = TTnew( 'DepartmentListFactory' );
+				$lf = new DepartmentListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -476,7 +476,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'title_id':
-				$lf = TTnew( 'UserTitleListFactory' );
+				$lf = new UserTitleListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -485,7 +485,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'currency_id':
-				$lf = TTnew( 'CurrencyListFactory' );
+				$lf = new CurrencyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -494,7 +494,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'group_id':
-				$lf = TTnew( 'UserGroupListFactory' );
+				$lf = new UserGroupListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -507,7 +507,7 @@ class LogDetailFactory extends Factory {
 			case 'sales_contact':
 			case 'sales_contact_id':
 			case 'user_id':
-				$lf = TTnew( 'UserListFactory' );
+				$lf = new UserListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getFullName();
@@ -516,7 +516,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'accrual_policy_id':
-				$lf = TTnew( 'AccrualPolicyListFactory' );
+				$lf = new AccrualPolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -525,7 +525,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'schedule_policy_id':
-				$lf = TTnew( 'SchedulePolicyListFactory' );
+				$lf = new SchedulePolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -534,7 +534,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'exception_policy_control_id':
-				$lf = TTnew( 'ExceptionPolicyListFactory' );
+				$lf = new ExceptionPolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -543,7 +543,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'meal_policy_id':
-				$lf = TTnew( 'MealPolicyListFactory' );
+				$lf = new MealPolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -552,7 +552,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'break_policy_id':
-				$lf = TTnew( 'BreakPolicyListFactory' );
+				$lf = new BreakPolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -561,7 +561,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'absence_policy_id':
-				$lf = TTnew( 'AbsencePolicyListFactory' );
+				$lf = new AbsencePolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -570,7 +570,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'over_time_policy_id':
-				$lf = TTnew( 'OverTimePolicyListFactory' );
+				$lf = new OverTimePolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -579,7 +579,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'holiday_policy_id':
-				$lf = TTnew( 'HolidayPolicyListFactory' );
+				$lf = new HolidayPolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -588,7 +588,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'round_interval_policy_id':
-				$lf = TTnew( 'RoundIntervalPolicyListFactory' );
+				$lf = new RoundIntervalPolicyListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -597,7 +597,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'wage_group_id':
-				$lf = TTnew( 'WageGroupListFactory' );
+				$lf = new WageGroupListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -606,7 +606,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'company_deduction_id':
-				$lf = TTnew( 'CompanyDeductionListFactory' );
+				$lf = new CompanyDeductionListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -618,7 +618,7 @@ class LogDetailFactory extends Factory {
 			case 'pay_stub_entry_name_id':
 			case 'accrual_pay_stub_entry_account_id':
 			case 'percent_amount_entry_name_id':
-				$lf = TTnew( 'PayStubEntryAccountListFactory' );
+				$lf = new PayStubEntryAccountListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$type_options  = $lf->getOptions('type');
@@ -628,7 +628,7 @@ class LogDetailFactory extends Factory {
 				}
 				break;
 			case 'recurring_schedule_template_control_id':
-				$lf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+				$lf = new RecurringScheduleTemplateControlListFactory();
 				$lf->getById( $value );
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
@@ -642,7 +642,7 @@ class LogDetailFactory extends Factory {
 			//
 			case 'job_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'JobListFactory' );
+					$lf = new JobListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
@@ -654,7 +654,7 @@ class LogDetailFactory extends Factory {
 			case 'default_item_id':
 			case 'job_item_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'JobItemListFactory' );
+					$lf = new JobItemListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
@@ -665,7 +665,7 @@ class LogDetailFactory extends Factory {
 				break;
 			case 'client_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'ClientListFactory' );
+					$lf = new ClientListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getCompanyName();
@@ -678,7 +678,7 @@ class LogDetailFactory extends Factory {
 			case 'shipping_contact_id':
 			case 'other_contact_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'ClientContactListFactory' );
+					$lf = new ClientContactListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getFullName();
@@ -689,7 +689,7 @@ class LogDetailFactory extends Factory {
 				break;
 			case 'shipping_policy_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'ShippingPolicyListFactory' );
+					$lf = new ShippingPolicyListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
@@ -700,7 +700,7 @@ class LogDetailFactory extends Factory {
 				break;
 			case 'product_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'ProductListFactory' );
+					$lf = new ProductListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
@@ -711,7 +711,7 @@ class LogDetailFactory extends Factory {
 				break;
 			case 'document_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'DocumentListFactory' );
+					$lf = new DocumentListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
@@ -722,7 +722,7 @@ class LogDetailFactory extends Factory {
 				break;
 			case 'invoice_district_id':
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$lf = TTnew( 'InvoiceDistrictListFactory' );
+					$lf = new InvoiceDistrictListFactory();
 					$lf->getById( $value );
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
@@ -752,13 +752,13 @@ class LogDetailFactory extends Factory {
 				break;
 			case 'origin_country':
 			case 'country':
-				$cf = TTnew( 'CompanyFactory' );
+				$cf = new CompanyFactory();
 				$retval = Option::getByKey($value, $cf->getOptions( 'country') );
 				break;
 			case 'province': //Cant do this one, as it requires the country value too.
 				break;
 			case 'time_zone':
-				$upf = TTnew( 'UserPreferenceFactory' );
+				$upf = new UserPreferenceFactory();
 				$retval = Option::getByKey($value, Misc::TrimSortPrefix( $upf->getOptions( $field ) ) );
 				break;
 			case 'time_stamp':
@@ -1182,7 +1182,7 @@ class LogDetailFactory extends Factory {
 			case 'JobListFactory':
 				switch ( $field ) {
 					case 'group_id':
-						$lf = TTnew( 'JobGroupListFactory' );
+						$lf = new JobGroupListFactory();
 						$lf->getById( $value );
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
@@ -1213,7 +1213,7 @@ class LogDetailFactory extends Factory {
 			case 'JobItemListFactory':
 				switch ( $field ) {
 					case 'group_id':
-						$lf = TTnew( 'JobItemGroupListFactory' );
+						$lf = new JobItemGroupListFactory();
 						$lf->getById( $value );
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
@@ -1231,7 +1231,7 @@ class LogDetailFactory extends Factory {
 			case 'DocumentListFactory':
 				switch ( $field ) {
 					case 'group_id':
-						$lf = TTnew( 'DocumentGroupListFactory' );
+						$lf = new DocumentGroupListFactory();
 						$lf->getById( $value );
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
@@ -1249,7 +1249,7 @@ class LogDetailFactory extends Factory {
 			case 'ClientListFactory':
 				switch ( $field ) {
 					case 'group_id':
-						$lf = TTnew( 'ClientGroupListFactory' );
+						$lf = new ClientGroupListFactory();
 						$lf->getById( $value );
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
@@ -1271,7 +1271,7 @@ class LogDetailFactory extends Factory {
 			case 'ProductListFactory':
 				switch ( $field ) {
 					case 'group_id':
-						$lf = TTnew( 'ProductGroupListFactory' );
+						$lf = new ProductGroupListFactory();
 						$lf->getById( $value );
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();

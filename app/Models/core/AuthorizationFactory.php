@@ -108,11 +108,11 @@ class AuthorizationFactory extends Factory {
 				Debug::Text(' Authorizing User ID: '. $user_id , __FILE__, __LINE__, __METHOD__,10);
 				Debug::Text(' Object User ID: '. $object_user_id , __FILE__, __LINE__, __METHOD__,10);
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$company_id = $ulf->getById( $object_user_id )->getCurrent()->getCompany();
 				Debug::Text(' Company ID: '. $company_id , __FILE__, __LINE__, __METHOD__,10);
 
-				$hlf = TTnew( 'HierarchyListFactory' );
+				$hlf = new HierarchyListFactory();
 				$this->hierarchy_parent_arr = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $company_id, $object_user_id, $this->getObjectType(), FALSE);
 
 				Debug::Arr($this->hierarchy_parent_arr, ' Parent Arr: ', __FILE__, __LINE__, __METHOD__,10);
@@ -186,7 +186,7 @@ class AuthorizationFactory extends Factory {
 
 			switch ( $this->getObjectType() ) {
 				case 90: //TimeSheet
-					$this->obj_handler = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+					$this->obj_handler = new PayPeriodTimeSheetVerifyListFactory();
 					break;
 				case 50: //Requests
 				case 1010:
@@ -194,7 +194,7 @@ class AuthorizationFactory extends Factory {
 				case 1030:
 				case 1040:
 				case 1100:
-					$this->obj_handler = TTnew( 'RequestListFactory' );
+					$this->obj_handler = new RequestListFactory();
 					break;
 			}
 
@@ -266,7 +266,7 @@ class AuthorizationFactory extends Factory {
 			return FALSE;
 		}
 
-		$alf = TTnew( 'AuthorizationListFactory' );
+		$alf = new AuthorizationListFactory();
 		$alf->getByObjectTypeAndObjectId( $this->getObjectType(), $this->getObject() );
 		foreach( $alf as $authorization_obj ) {
 			$authorization_obj->setDeleted(TRUE);

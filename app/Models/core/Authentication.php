@@ -132,7 +132,7 @@ class Authentication {
 	function setObject($user_id) {
 		if ( !empty($user_id) ) {
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
 			$ulf->getByID($user_id);
 
@@ -167,13 +167,13 @@ class Authentication {
 	}
 
 	function checkCompanyStatus( $user_name ) {
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getByUserName( strtolower($user_name) );
 
 		if ( $ulf->getRecordCount() == 1 ) {
 			$u_obj = $ulf->getCurrent();
 			if ( is_object($u_obj) ) {
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 				$clf->getById( $u_obj->getCompany() );
 				if ( $clf->getRecordCount() == 1 ) {
 					if ( $clf->getCurrent()->getStatus() == 10 ) {
@@ -189,7 +189,7 @@ class Authentication {
 
 	function checkPassword($user_name, $password) {
 		//Use UserFactory to set name.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$ulf->getByUserNameAndStatus(strtolower(trim($user_name)), 10 ); //Active
 
@@ -208,7 +208,7 @@ class Authentication {
 
 	function checkPhonePassword($phone_id, $password) {
 		//Use UserFactory to set name.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$ulf->getByPhoneIdAndStatus($phone_id, 10 );
 
@@ -226,7 +226,7 @@ class Authentication {
 	}
 
 	function checkIButton($id) {
-		$uilf = TTnew( 'UserIdentificationListFactory' );
+		$uilf = new UserIdentificationListFactory();
 		$uilf->getByTypeIdAndValue(10, $id);
 		if ( $uilf->getRecordCount() > 0 ) {
 			foreach( $uilf as $ui_obj ) {
@@ -238,7 +238,7 @@ class Authentication {
 		}
 /*
 		//Use UserFactory to set name.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$ulf->getByIButtonIdAndStatus($id, 10 );
 
@@ -257,7 +257,7 @@ class Authentication {
 
 	function checkBarcode($user_id, $employee_number) {
 		//Use UserFactory to set name.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$ulf->getByIdAndStatus($user_id, 10 );
 
@@ -275,7 +275,7 @@ class Authentication {
 	}
 
 	function checkFingerPrint($id) {
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$ulf->getByIdAndStatus($id, 10 );
 
@@ -295,7 +295,7 @@ class Authentication {
 
 	function checkClientPC($user_name) {
 		//Use UserFactory to set name.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$ulf->getByUserNameAndStatus(strtolower($user_name), 10 );
 

@@ -14,7 +14,7 @@ class StationDepartmentFactory extends Factory {
 	function setStation($id) {
 		$id = trim($id);
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 
 		if (	$id == 0
 				OR
@@ -41,7 +41,7 @@ class StationDepartmentFactory extends Factory {
 		if ( is_object($this->department_obj) ) {
 			return $this->department_obj;
 		} else {
-			$dlf = TTnew( 'DepartmentListFactory' );
+			$dlf = new DepartmentListFactory();
 			$dlf->getById( $this->getDepartment() );
 			if ( $dlf->getRecordCount() == 1 ) {
 				$this->department_obj = $dlf->getCurrent();
@@ -61,7 +61,7 @@ class StationDepartmentFactory extends Factory {
 	function setDepartment($id) {
 		$id = trim($id);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'department',
 													$dlf->getByID($id),

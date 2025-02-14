@@ -9,7 +9,7 @@ class StationUserFactory extends Factory {
 	function setStation($id) {
 		$id = trim($id);
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'station',
@@ -30,7 +30,7 @@ class StationUserFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == -1
 				OR $this->Validator->isResultSetWithRows(	'user',

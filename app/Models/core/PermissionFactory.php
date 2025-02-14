@@ -947,7 +947,7 @@ class PermissionFactory extends Factory {
 			return $this->permission_control_obj;
 		} else {
 
-			$pclf = TTnew( 'PermissionControlListFactory' );
+			$pclf = new PermissionControlListFactory();
 			$pclf->getById( $this->getPermissionControl() );
 
 			if ( $pclf->getRecordCount() == 1 ) {
@@ -970,7 +970,7 @@ class PermissionFactory extends Factory {
 	function setPermissionControl($id) {
 		$id = trim($id);
 
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 
 		if ( $id != 0
 				OR
@@ -1768,7 +1768,7 @@ class PermissionFactory extends Factory {
 
 		$this->setPermissionControl( $permission_control_id );
 
-		$pf = TTnew( 'PermissionFactory' );
+		$pf = new PermissionFactory();
 		$pf->StartTransaction();
 
 		//Delete all previous permissions for this user.
@@ -1790,7 +1790,7 @@ class PermissionFactory extends Factory {
 		}
 
 		//Clear cache for all users assigned to this permission_control_id
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 		$pclf->getById( $permission_control_id );
 		if ( $pclf->getRecordCount() > 0 ) {
 			$pc_obj = $pclf->getCurrent();
@@ -1818,7 +1818,7 @@ class PermissionFactory extends Factory {
 			return FALSE;
 		}
 
-		$plf = TTnew( 'PermissionListFactory' );
+		$plf = new PermissionListFactory();
 		$plf->getByCompanyIDAndPermissionControlId( $company_id, $permission_control_id );
 		foreach($plf as $permission_obj) {
 			$permission_obj->delete(TRUE);
@@ -1897,7 +1897,7 @@ class PermissionFactory extends Factory {
 
 	function preSave() {
 		//Just update any existing permissions. It would probably be faster to delete them all and re-insert though.
-		$plf = TTnew( 'PermissionListFactory' );
+		$plf = new PermissionListFactory();
 		$obj = $plf->getByCompanyIdAndPermissionControlIdAndSectionAndName( $this->getCompany(), $this->getPermissionControl(), $this->getSection(), $this->getName() )->getCurrent();
 		$this->setId( $obj->getId() );
 

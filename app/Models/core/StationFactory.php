@@ -251,7 +251,7 @@ class StationFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -264,7 +264,7 @@ class StationFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -455,7 +455,7 @@ class StationFactory extends Factory {
 	function setDefaultBranch($id) {
 		$id = trim($id);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 
 		if (
 				$id == 0
@@ -483,7 +483,7 @@ class StationFactory extends Factory {
 	function setDefaultDepartment($id) {
 		$id = trim($id);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 
 		if (
 				$id == 0
@@ -517,7 +517,7 @@ class StationFactory extends Factory {
 
 		Debug::Text('Job ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 		}
 
 		if (
@@ -552,7 +552,7 @@ class StationFactory extends Factory {
 
 		Debug::Text('Job Item ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 		}
 
 		if (
@@ -581,7 +581,7 @@ class StationFactory extends Factory {
 	function setTimeZone($time_zone) {
 		$time_zone = Misc::trimSortPrefix( trim($time_zone) );
 
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 
 		if ( $time_zone == 0
 				OR
@@ -622,7 +622,7 @@ class StationFactory extends Factory {
 	}
 
 	function getGroup() {
-		$lf = TTnew( 'StationUserGroupListFactory' );
+		$lf = new StationUserGroupListFactory();
 		$lf->getByStationId( $this->getId() );
 		foreach ($lf as $obj) {
 			$list[] = $obj->getGroup();
@@ -645,7 +645,7 @@ class StationFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'StationUserGroupListFactory' );
+				$lf_a = new StationUserGroupListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
 				foreach ($lf_a as $obj) {
@@ -666,11 +666,11 @@ class StationFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'UserGroupListFactory' );
+			$lf_b = new UserGroupListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'StationUserGroupFactory' );
+					$f = new StationUserGroupFactory();
 					$f->setStation( $this->getId() );
 					$f->setGroup( $id );
 
@@ -715,7 +715,7 @@ class StationFactory extends Factory {
 	}
 
 	function getBranch() {
-		$lf = TTnew( 'StationBranchListFactory' );
+		$lf = new StationBranchListFactory();
 		$lf->getByStationId( $this->getId() );
 		foreach ($lf as $obj) {
 			$list[] = $obj->getBranch();
@@ -738,7 +738,7 @@ class StationFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'StationBranchListFactory' );
+				$lf_a = new StationBranchListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
 				foreach ($lf_a as $obj) {
@@ -759,11 +759,11 @@ class StationFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'BranchListFactory' );
+			$lf_b = new BranchListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'StationBranchFactory' );
+					$f = new StationBranchFactory();
 					$f->setStation( $this->getId() );
 					$f->setBranch( $id );
 
@@ -808,7 +808,7 @@ class StationFactory extends Factory {
 	}
 
 	function getDepartment() {
-		$lf = TTnew( 'StationDepartmentListFactory' );
+		$lf = new StationDepartmentListFactory();
 		$lf->getByStationId( $this->getId() );
 		foreach ($lf as $obj) {
 			$list[] = $obj->getDepartment();
@@ -831,7 +831,7 @@ class StationFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'StationDepartmentListFactory' );
+				$lf_a = new StationDepartmentListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
 				foreach ($lf_a as $obj) {
@@ -852,11 +852,11 @@ class StationFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'DepartmentListFactory' );
+			$lf_b = new DepartmentListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'StationDepartmentFactory' );
+					$f = new StationDepartmentFactory();
 					$f->setStation( $this->getId() );
 					$f->setDepartment( $id );
 
@@ -878,7 +878,7 @@ class StationFactory extends Factory {
 	}
 
 	function getIncludeUser() {
-		$lf = TTnew( 'StationIncludeUserListFactory' );
+		$lf = new StationIncludeUserListFactory();
 		$lf->getByStationId( $this->getId() );
 		foreach ($lf as $obj) {
 			$list[] = $obj->getIncludeUser();
@@ -901,7 +901,7 @@ class StationFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'StationIncludeUserListFactory' );
+				$lf_a = new StationIncludeUserListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
 				foreach ($lf_a as $obj) {
@@ -922,11 +922,11 @@ class StationFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'UserListFactory' );
+			$lf_b = new UserListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'StationIncludeUserFactory' );
+					$f = new StationIncludeUserFactory();
 					$f->setStation( $this->getId() );
 					$f->setIncludeUser( $id );
 
@@ -947,7 +947,7 @@ class StationFactory extends Factory {
 		return FALSE;
 	}
 	function getExcludeUser() {
-		$lf = TTnew( 'StationExcludeUserListFactory' );
+		$lf = new StationExcludeUserListFactory();
 		$lf->getByStationId( $this->getId() );
 		foreach ($lf as $obj) {
 			$list[] = $obj->getExcludeUser();
@@ -970,7 +970,7 @@ class StationFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'StationExcludeUserListFactory' );
+				$lf_a = new StationExcludeUserListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
 				foreach ($lf_a as $obj) {
@@ -991,11 +991,11 @@ class StationFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'UserListFactory' );
+			$lf_b = new UserListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'StationExcludeUserFactory' );
+					$f = new StationExcludeUserFactory();
 					$f->setStation( $this->getId() );
 					$f->setExcludeUser( $id );
 
@@ -1269,7 +1269,7 @@ class StationFactory extends Factory {
 			return FALSE;
 		}
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
@@ -1292,7 +1292,7 @@ class StationFactory extends Factory {
 			return FALSE;
 		}
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
@@ -1315,7 +1315,7 @@ class StationFactory extends Factory {
 			return FALSE;
 		}
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
@@ -1671,7 +1671,7 @@ class StationFactory extends Factory {
 			return FALSE;
 		}
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
@@ -1878,7 +1878,7 @@ class StationFactory extends Factory {
 			}
 		}
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 		$slf->getByUserIdAndStatusAndType($user_id, 'ENABLED', $type);
 		Debug::text('Station ID: '. $station_id .' Type: '. $type .' Found Stations: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		foreach($slf as $station) {
@@ -1903,7 +1903,7 @@ class StationFactory extends Factory {
 			Debug::text('Station ID: '. $station_id .' does not exist, creating new station', __FILE__, __LINE__, __METHOD__, 10);
 
 			//Insert new station
-			$sf = TTnew( 'StationFactory' );
+			$sf = new StationFactory();
 			$sf->setCompany( $company_id );
 			$sf->setStatus( 'ENABLED' );
 			$sf->setType( 'PC' );

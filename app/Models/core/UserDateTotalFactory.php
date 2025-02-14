@@ -1658,7 +1658,7 @@ class UserDateTotalFactory extends Factory {
                                 //WITHOUT OT ROUND OFF
                                 /* if($schedule_start_time>0 && ($trigger_time_arr[$i]['over_time_policy_type_id']==40 || $trigger_time_arr[$i]['over_time_policy_type_id']==180) )
                                   {
-                                  $plf = TTnew( 'PunchListFactory' );
+                                  $plf = new PunchListFactory();
                                   $plf->getByUserDateId($this->getUserDateID());
                                   foreach( $plf as $plf_obj ) {
 
@@ -1700,7 +1700,7 @@ class UserDateTotalFactory extends Factory {
 
                                   elseif($schedule_start_time>0)
                                   {
-                                  $plf = TTnew( 'PunchListFactory' );
+                                  $plf = new PunchListFactory();
                                   $plf->getByUserDateId($this->getUserDateID());
                                   foreach( $plf as $plf_obj ) {
 
@@ -1789,7 +1789,7 @@ class UserDateTotalFactory extends Factory {
 
                                   //print_r($trigger_time_arr);
 
-                                  $plf = TTnew( 'PunchListFactory' );
+                                  $plf = new PunchListFactory();
                                   $plf->getByUserDateId($this->getUserDateID());
                                   foreach( $plf as $plf_obj ) {
 
@@ -3585,12 +3585,12 @@ class UserDateTotalFactory extends Factory {
 
         /*
           Debug::text(' Adding Paid Absence Policy time to Regular Time: '. $this->getUserDateID(), __FILE__, __LINE__, __METHOD__,10);
-          $udtlf = TTnew( 'UserDateTotalListFactory' );
+          $udtlf = new UserDateTotalListFactory();
           $udtlf->getPaidAbsenceByUserDateID( $this->getUserDateID() );
           if ( $udtlf->getRecordCount() > 0 ) {
           foreach ($udtlf as $udt_obj) {
           Debug::text(' Found some Paid Absence Policy time entries: '. $udt_obj->getTotalTime(), __FILE__, __LINE__, __METHOD__,10);
-          $udtf = TTnew( 'UserDateTotalFactory' );
+          $udtf = new UserDateTotalFactory();
           $udtf->setUserDateID( $this->getUserDateID() );
           $udtf->setStatus( 10 ); //System
           $udtf->setType( 20 ); //Regular

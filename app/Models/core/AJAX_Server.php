@@ -27,7 +27,7 @@ class AJAX_Server {
 
 		Debug::Arr($country, 'bCountry: ', __FILE__, __LINE__, __METHOD__, 10);
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		$province_arr = $cf->getOptions('province');
 
@@ -59,7 +59,7 @@ class AJAX_Server {
 		}
 		Debug::text('Country: '. $country .' Province: '. $province, __FILE__, __LINE__, __METHOD__, 10);
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		$district_arr = $cf->getOptions('district');
 
@@ -96,7 +96,7 @@ class AJAX_Server {
 
 		Debug::text('Country: '. $country .' Province: '. $province, __FILE__, __LINE__, __METHOD__, 10);
 
-		$idlf = TTnew( 'InvoiceDistrictListFactory' );
+		$idlf = new InvoiceDistrictListFactory();
 		$idlf->getByCompanyIdAndProvinceAndCountry( $current_company->getId(), $province, $country);
 
 		$district_arr = $idlf->getArrayByListFactory($idlf, FALSE);
@@ -122,7 +122,7 @@ class AJAX_Server {
 			return '0.00';
 		}
 
-		$uwf = TTnew( 'UserWageFactory' );
+		$uwf = new UserWageFactory();
 		$uwf->setType( $wage_type_id );
 		$uwf->setWage( $wage );
 		$uwf->setWeeklyTime( TTDate::parseTimeUnit($weekly_hours) );
@@ -149,7 +149,7 @@ class AJAX_Server {
 			return '0.00';
 		}
 
-		$uwf = TTnew( 'UserWageFactory' );
+		$uwf = new UserWageFactory();
 		$uwf->setType( $wage_type_id );
 		$uwf->setWage( $wage );
 		$uwf->setWeeklyTime( TTDate::parseTimeUnit($weekly_hours) );
@@ -169,7 +169,7 @@ class AJAX_Server {
 			return NULL;
 		}
                 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_short_id= $blf->getBranchShortIdById($default_branch_id);
 		return $branch_short_id;
 	}	
@@ -184,7 +184,7 @@ class AJAX_Server {
 			return NULL;
 		}
                 
-                $ulf = TTnew( 'UserListFactory' );
+                $ulf = new UserListFactory();
                 $ulf->getHighestEmployeeNumberOnlyByBranchId( $default_branch_id );                  
                 
                 if ( $ulf->getRecordCount() > 0 ) {
@@ -214,7 +214,7 @@ class AJAX_Server {
 //            }
 
 
-            $ulf = TTnew( 'UserListFactory' );
+            $ulf = new UserListFactory();
             $array = $ulf->getAllJobSkillsUniqueOptions();
             
 //            foreach ($ulf as $user)
@@ -267,7 +267,7 @@ class AJAX_Server {
 
 		$epoch = TTDate::parseDateTime($date);
 
-		$uwlf = TTnew( 'UserWageListFactory' );
+		$uwlf = new UserWageListFactory();
 		$uwlf->getByUserIdAndDate( $user_id, $epoch);
 		if ( $uwlf->getRecordCount() > 0 ) {
 			$hourly_rate = $uwlf->getCurrent()->getHourlyRate();
@@ -307,7 +307,7 @@ class AJAX_Server {
 
 		Debug::text('User ID: '. $user_id .' Company ID: '. $current_company->getId(), __FILE__, __LINE__, __METHOD__, 10);
 
-		$jlf = TTnew( 'JobListFactory' );
+		$jlf = new JobListFactory();
 		return $jlf->getByCompanyIdAndUserIdAndStatusArray( $current_company->getId(),  $user_id, array(10,20,30,40), TRUE );
 	}
 
@@ -323,7 +323,7 @@ class AJAX_Server {
 
 		Debug::text('Job ID: '. $job_id .' Include Disabled: '. (int)$include_disabled, __FILE__, __LINE__, __METHOD__, 10);
 
-		$jilf = TTnew( 'JobItemListFactory' );
+		$jilf = new JobItemListFactory();
 		//$jilf->getByCompanyIdAndJobId( $current_company->getId(), $job_id );
 		$jilf->getByJobId( $job_id );
 		$job_item_options = $jilf->getArrayByListFactory( $jilf, TRUE, $include_disabled );
@@ -355,7 +355,7 @@ class AJAX_Server {
 			return FALSE;
 		}
 
-		$jilf = TTnew( 'JobItemListFactory' );
+		$jilf = new JobItemListFactory();
 		$jilf->getByIdAndCompanyId( $job_item_id, $current_company->getId() );
 		if ( $jilf->getRecordCount() > 0 ) {
 			foreach( $jilf as $item_obj ) {
@@ -404,7 +404,7 @@ class AJAX_Server {
 			return FALSE;
 		}
 
-		$plf = TTnew( 'ProductListFactory' );
+		$plf = new ProductListFactory();
 		$plf->getByIdAndCompanyId($product_id, $current_company->getId() );
 		if ( $plf->getRecordCount() > 0 ) {
 			$p_obj = $plf->getCurrent();
@@ -437,7 +437,7 @@ class AJAX_Server {
 			return FALSE;
 		}
 
-		$plf = TTnew( 'ProductListFactory' );
+		$plf = new ProductListFactory();
 
 		if ( $product_id != '' ) {
 			$plf->getByIdAndCompanyId($product_id, $current_company->getId() );
@@ -521,7 +521,7 @@ class AJAX_Server {
 		//Debug::Arr($data, 'Input Transaction Data...', __FILE__, __LINE__, __METHOD__, 10);
 		//Debug::Arr($invoice_data, 'Input Invoice Data...', __FILE__, __LINE__, __METHOD__, 10);
 
-		$ilf = TTnew( 'InvoiceListFactory' );
+		$ilf = new InvoiceListFactory();
 
 		$transaction_arr = FALSE;
 		if ( is_array($data) ) {
@@ -573,7 +573,7 @@ class AJAX_Server {
 	}
 
 	function getShippingOptions( $data, $invoice_data ) {
-		$if = TTnew( 'InvoiceFactory' );
+		$if = new InvoiceFactory();
 
 		$transaction_arr = FALSE;
 		if ( is_array($data) ) {
@@ -596,7 +596,7 @@ class AJAX_Server {
 	function getCurrencyData( $currency_id ) {
 		Debug::Text('Getting Currency Data for ID: '. $currency_id, __FILE__, __LINE__, __METHOD__, 10);
 
-		$clf = TTnew( 'CurrencyListFactory' );
+		$clf = new CurrencyListFactory();
 		$clf->getById( $currency_id );
 		if ( $clf->getRecordCount() > 0 ) {
 			$c_obj = $clf->getCurrent();
@@ -618,7 +618,7 @@ class AJAX_Server {
 	}
 
 	function getScheduleTotalTime( $start, $end, $schedule_policy_id ) {
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 		$sf->setStartTime( TTDate::parseDateTime($start) );
 		$sf->setEndTime( TTDate::parseDateTime($end) );
 		$sf->setSchedulePolicyId( $schedule_policy_id );
@@ -634,14 +634,14 @@ class AJAX_Server {
 			return FALSE;
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$aplf->getByIdAndCompanyId( $absence_policy_id, $current_company->getId() );
 		if ( $aplf->getRecordCount() > 0 ) {
 			$ap_obj = $aplf->getCurrent();
 
 			$ap_data = $ap_obj->getObjectAsArray();
 
-			$aplf = TTnew( 'AccrualPolicyListFactory' );
+			$aplf = new AccrualPolicyListFactory();
 			$aplf->getByIdAndCompanyId( $ap_obj->getAccrualPolicyID(), $current_company->getId() );
 			if ( $aplf->getRecordCount() > 0 ) {
 				$ap_data['accrual_policy_name'] = $aplf->getCurrent()->getName();
@@ -665,7 +665,7 @@ class AJAX_Server {
 			return FALSE;
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$aplf->getByIdAndCompanyId( $absence_policy_id, $current_company->getId() );
 		if ( $aplf->getRecordCount() > 0 ) {
 			$ap_obj = $aplf->getCurrent();
@@ -852,7 +852,7 @@ class AJAX_Server {
 			return FALSE;
 		}
                
-		$aplf = TTnew( 'AbsenceLeaveListFactory' );
+		$aplf = new AbsenceLeaveListFactory();
 		$aplf->getById( $absence_policy_id);
 		if ( $aplf->getRecordCount() > 0 ) {
 			$ap_obj = $aplf->getCurrent();
@@ -909,7 +909,7 @@ class AJAX_Server {
                          $accrual_balance = $prev_obj->getMaximumTime();
                          
                         //Add Intitials Accruals after check accrual policy milestones
-                        $af = TTnew( 'AbsenceLeaveUserFactory' );
+                        $af = new AbsenceLeaveUserFactory();
 //                        $af->setId(null);
                         $af->setUserId($user_id);
                         $af->setAbsenceLeaveId(1);
@@ -955,7 +955,7 @@ class AJAX_Server {
 			return FALSE;
 		}
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getHighestOrderByCompanyIdAndTypeId( $current_company->getId(), $type_id );
 		if ( $psealf->getRecordCount() > 0 ) {
 			foreach( $psealf as $psea_obj ) {

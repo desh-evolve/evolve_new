@@ -200,7 +200,7 @@ class LogFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -405,7 +405,7 @@ class LogFactory extends Factory {
 			$id = 0;
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -589,7 +589,7 @@ class LogFactory extends Factory {
 				$class = new $table_class;
 				Debug::Text( 'Table Class: '. $table_class, __FILE__, __LINE__, __METHOD__,10);
 
-				$ldlf = TTnew( 'LogDetailListFactory' );
+				$ldlf = new LogDetailListFactory();
 				$ldlf->getBySystemLogIdAndCompanyId( $this->getID(), $this->getUserObject()->getCompany() );
 				if ( $ldlf->getRecordCount() > 0 ) {
 					foreach( $ldlf as $ld_obj ) {

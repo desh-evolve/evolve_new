@@ -14,7 +14,7 @@ class StationUserGroupFactory extends Factory {
 	function setStation($id) {
 		$id = trim($id);
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 
 		if (	$id == 0
 				OR
@@ -41,7 +41,7 @@ class StationUserGroupFactory extends Factory {
 		if ( is_object($this->group_obj) ) {
 			return $this->group_obj;
 		} else {
-			$uglf = TTnew( 'UserGroupListFactory' );
+			$uglf = new UserGroupListFactory();
 			$uglf->getById( $this->getGroup() );
 			if ( $uglf->getRecordCount() == 1 ) {
 				$this->group_obj = $uglf->getCurrent();
@@ -61,7 +61,7 @@ class StationUserGroupFactory extends Factory {
 	function setGroup($id) {
 		$id = trim($id);
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'group',

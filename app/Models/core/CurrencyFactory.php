@@ -341,7 +341,7 @@ class CurrencyFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
@@ -699,7 +699,7 @@ class CurrencyFactory extends Factory {
 			return $amount;
 		}
 
-		$clf = TTnew( 'CurrencyListFactory' );
+		$clf = new CurrencyListFactory();
 		$clf->getById( $src_currency_id );
 		if ( $clf->getRecordCount() > 0 ) {
 			$src_currency_obj = $clf->getCurrent();
@@ -739,7 +739,7 @@ class CurrencyFactory extends Factory {
 		*/
 		$base_currency = FALSE;
 
-		$clf = TTnew( 'CurrencyListFactory' );
+		$clf = new CurrencyListFactory();
 		$clf->getByCompanyId( $company_id );
 		if ( $clf->getRecordCount() > 0 ) {
 			foreach( $clf as $c_obj) {
@@ -767,7 +767,7 @@ class CurrencyFactory extends Factory {
 		if ( isset($currency_rates) AND is_array($currency_rates) AND count($currency_rates) > 0 ) {
 			foreach( $currency_rates as $currency => $rate ) {
 				if ( is_numeric($rate) ) {
-					$clf = TTnew( 'CurrencyListFactory' );
+					$clf = new CurrencyListFactory();
 					$clf->getByCompanyIdAndISOCode( $company_id, $currency);
 					if ( $clf->getRecordCount() == 1 ) {
 						$c_obj = $clf->getCurrent();
@@ -800,14 +800,14 @@ class CurrencyFactory extends Factory {
 			//CHeck to make sure currency isnt in-use by paystubs/employees/wages, if so, don't delete.
 			$invalid = FALSE;
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$pslf->getByCurrencyId( $this->getId() );
 			if ( $pslf->getRecordCount() > 0 ) {
 				$invalid = TRUE;
 			}
 
 			if ( $invalid == FALSE ) {
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$ulf->getByCurrencyId( $this->getId() );
 				if ( $ulf->getRecordCount() > 0 ) {
 					$invalid = TRUE;

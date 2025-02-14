@@ -11,7 +11,7 @@ class UserDateFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -22,7 +22,7 @@ class UserDateFactory extends Factory {
 		if ( is_object($this->pay_period_obj) ) {
 			return $this->pay_period_obj;
 		} else {
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$this->pay_period_obj = $pplf->getById( $this->getPayPeriod() )->getCurrent();
 
 			return $this->pay_period_obj;
@@ -37,7 +37,7 @@ class UserDateFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -62,7 +62,7 @@ class UserDateFactory extends Factory {
 			//This might happen when the MySQL server is in one timezone (ie: CST) and the pay period
 			//schedule is set to another timezone (ie: PST)
 			//This could severely slow down a lot of operations though, so make this specific to MySQL only.
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getByUserIdAndEndDate( $this->getUser(), $this->getDateStamp() );
 			$pay_period = $pplf->getCurrent();
 
@@ -92,7 +92,7 @@ class UserDateFactory extends Factory {
 			$id = $this->findPayPeriod();
 		}
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
 		//Allow NULL pay period, incase its an absence or something in the future.
 		//Cron will fill in the pay period later.
@@ -158,7 +158,7 @@ class UserDateFactory extends Factory {
 			//Find the employees preferred timezone, base the user date off that instead of the pay period timezone,
 			//as it can be really confusing to the user if they punch in at 10AM on Sept 27th, but it records as Sept 26th because
 			//the PP Schedule timezone is 12hrs different or something.
-			$uplf = TTnew( 'UserPreferenceListFactory' );
+			$uplf = new UserPreferenceListFactory();
 			$uplf->getByUserID( $user_id );
 			if ( $uplf->getRecordCount() > 0 ) {
 				$timezone = $uplf->getCurrent()->getTimeZone();
@@ -168,7 +168,7 @@ class UserDateFactory extends Factory {
                 echo $date;
 		Debug::text(' Using TimeZone: '. $timezone .' Date: '. TTDate::getDate('DATE+TIME', $date) .'('.$date.')', __FILE__, __LINE__, __METHOD__,10);
 
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory();
 		$udlf->getByUserIdAndDate( $user_id, $date );
 		if ( $udlf->getRecordCount() == 1 ) {
 			$id = $udlf->getCurrent()->getId();
@@ -178,7 +178,7 @@ class UserDateFactory extends Factory {
 			Debug::text(' Inserting new UserDate row.', __FILE__, __LINE__, __METHOD__,10);
 
 			//Insert new row
-			$udf = TTnew( 'UserDateFactory' );
+			$udf = new UserDateFactory();
 			$udf->setUser( $user_id );
 			$udf->setDateStamp( $date );
 			$udf->setPayPeriod(); 
@@ -265,7 +265,7 @@ class UserDateFactory extends Factory {
 
 
 		//Make sure the date isn't BEFORE the first pay period.
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByUserID( $this->getUser(), NULL, NULL, NULL, array('a.start_date' => 'asc') );
 		if ( $pplf->getRecordCount() > 0 ) {
 			$first_pp_obj = $pplf->getCurrent();
@@ -287,7 +287,7 @@ class UserDateFactory extends Factory {
 		if ( $this->getDeleted() == TRUE ) {
 			//Delete (for real) any already deleted rows in hopes to prevent a
 			//unique index conflict across user_id,date_stamp,deleted
-			$udlf = TTnew( 'UserDateListFactory' );
+			$udlf = new UserDateListFactory();
 			$udlf->deleteByUserIdAndDateAndDeleted( $this->getUser(), $this->getDateStamp(), TRUE );
 		}
 
@@ -304,7 +304,7 @@ class UserDateFactory extends Factory {
 
 			//Delete schedules assigned to this user date.
 			//Turn off any re-calc's
-			$slf = TTnew( 'ScheduleListFactory' );
+			$slf = new ScheduleListFactory();
 			$slf->getByUserDateID( $this->getId() );
 			if ( $slf->getRecordCount() > 0 ) {
 				foreach( $slf as $schedule_obj ) {
@@ -313,7 +313,7 @@ class UserDateFactory extends Factory {
 				}
 			}
 
-			$pclf = TTnew( 'PunchControlListFactory' );
+			$pclf = new PunchControlListFactory();
 			$pclf->getByUserDateID( $this->getId() );
 			if ( $pclf->getRecordCount() > 0 ) {
 				foreach( $pclf as $pc_obj ) {
@@ -323,7 +323,7 @@ class UserDateFactory extends Factory {
 			}
 
 			//Delete exceptions
-			$elf = TTnew( 'ExceptionListFactory' );
+			$elf = new ExceptionListFactory();
 			$elf->getByUserDateID( $this->getId() );
 			if ( $elf->getRecordCount() > 0 ) {
 				foreach( $elf as $e_obj ) {
@@ -333,7 +333,7 @@ class UserDateFactory extends Factory {
 			}
 
 			//Delete user_date_total rows too
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getByUserDateID( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				foreach( $udtlf as $udt_obj ) {

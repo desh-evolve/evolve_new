@@ -1967,7 +1967,7 @@ class TTDate {
 				//Since we allow multiple pay_period schedules to be selected, we have to return pay_period_ids, not start/end dates.
 				if ( $time_period == 'this_pay_period' ) {
 					Debug::text('this_pay_period', __FILE__, __LINE__, __METHOD__,10);
-					$pplf = TTnew( 'PayPeriodListFactory' );
+					$pplf = new PayPeriodListFactory();
 					$pplf->getThisPayPeriodByCompanyIdAndPayPeriodScheduleIdAndDate( $user_obj->getCompany(), $params['pay_period_schedule_id'], time() );
 					if ( $pplf->getRecordCount() > 0 ) {
 						foreach( $pplf as $pp_obj ) {
@@ -1976,7 +1976,7 @@ class TTDate {
 					}
 				} elseif ( $time_period == 'last_pay_period' ) {
 					Debug::text('last_pay_period', __FILE__, __LINE__, __METHOD__,10);
-					$pplf = TTnew( 'PayPeriodListFactory' );
+					$pplf = new PayPeriodListFactory();
 					$pplf->getLastPayPeriodByCompanyIdAndPayPeriodScheduleIdAndDate( $user_obj->getCompany(), $params['pay_period_schedule_id'], time() );
 					if ( $pplf->getRecordCount() > 0 ) {
 						foreach( $pplf as $pp_obj ) {

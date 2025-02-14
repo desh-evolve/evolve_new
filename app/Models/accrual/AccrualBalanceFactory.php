@@ -86,7 +86,7 @@ class AccrualBalanceFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
@@ -114,7 +114,7 @@ class AccrualBalanceFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -195,11 +195,11 @@ class AccrualBalanceFactory extends Factory {
 
 		$profiler->startTimer( "AccrualBalanceFactory::calcBalance()");
 
-		$alf = TTnew( 'AccrualListFactory' );
+		$alf = new AccrualListFactory();
 		$balance = $alf->getSumByUserIdAndAccrualPolicyId($user_id, $accrual_policy_id);
 		Debug::text('Balance for User ID: '. $user_id .' Accrual Policy ID: '. $accrual_policy_id .' Balance: '. $balance, __FILE__, __LINE__, __METHOD__, 10);
 
-		$ablf = TTnew( 'AccrualBalanceListFactory' );
+		$ablf = new AccrualBalanceListFactory();
 		$ablf->getByUserIdAndAccrualPolicyId( $user_id, $accrual_policy_id);
 		Debug::text('Found balance records to delete: '. $ablf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		if ( $ablf->getRecordCount() > 0) {
@@ -209,7 +209,7 @@ class AccrualBalanceFactory extends Factory {
 		}
 
 		Debug::text('Setting new balance to: '. $balance, __FILE__, __LINE__, __METHOD__, 10);
-		$ab = TTnew( 'AccrualBalanceFactory' );
+		$ab = new AccrualBalanceFactory();
 		$ab->setUser( $user_id );
 		$ab->setAccrualPolicyId( $accrual_policy_id );
 		$ab->setBalance( $balance );
@@ -239,7 +239,7 @@ class AccrualBalanceFactory extends Factory {
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE  ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {
-			$apf = TTnew( 'AccrualPolicyFactory' );
+			$apf = new AccrualPolicyFactory();
 
 			foreach( $variable_function_map as $variable => $function_stub ) {
 				if ( $include_columns == NULL OR ( isset($include_columns[$variable]) AND $include_columns[$variable] == TRUE ) ) {

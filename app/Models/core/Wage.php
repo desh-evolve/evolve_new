@@ -79,7 +79,7 @@ class Wage {
 			return $this->user_tax_obj;
 		} else {
 
-			$utlf = TTnew( 'UserTaxListFactory' );
+			$utlf = new UserTaxListFactory();
 			$utlf->getByUserId( $this->getUser() );
 			if ( $utlf->getRecordCount() > 0 ) {
 				$this->user_tax_obj = $utlf->getCurrent();
@@ -96,7 +96,7 @@ class Wage {
 			AND is_object($this->user_wage_obj[$user_wage_id]) ) {
 			return $this->user_wage_obj[$user_wage_id];
 		} else {
-			$uwlf = TTnew( 'UserWageListFactory' );
+			$uwlf = new UserWageListFactory();
 
 			$uwlf->getByID( $user_wage_id );
 			if ( $uwlf->getRecordCount() > 0 ) {
@@ -113,7 +113,7 @@ class Wage {
 		if ( is_object($this->pay_period_obj) ) {
 			return $this->pay_period_obj;
 		} else {
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 
 			$pplf->getById( $this->getPayPeriod() );
 			if ( $pplf->getRecordCount() > 0 ) {
@@ -130,7 +130,7 @@ class Wage {
 		if ( is_object($this->pay_period_schedule_obj) ) {
 			return $this->pay_period_schedule_obj;
 		} else {
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 			$this->pay_period_schedule_obj = $ppslf->getById( $this->getPayPeriodObject()->getPayPeriodSchedule() )->getCurrent();
 
 			return $this->pay_period_schedule_obj;
@@ -214,7 +214,7 @@ class Wage {
 
 	function getPayStubAmendmentEarnings() {
 		//Get pay stub amendments here.
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$psalf = new PayStubAmendmentListFactory();
 
 		if ( $this->getAdvance() == TRUE ) {
 			//For advances, any PS amendment effective BEFORE the advance end date is considered in full.
@@ -242,7 +242,7 @@ class Wage {
 
 	function getPayStubAmendmentDeductions() {
 		//Get pay stub amendments here.
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$psalf = new PayStubAmendmentListFactory();
 
 		if ( $this->getAdvance() == TRUE ) {
 			//For advances, any PS amendment effective BEFORE the advance end date is considered in full.
@@ -310,7 +310,7 @@ class Wage {
 	//            echo '<br>pay period:: '.$this->getPayPeriod();
 	//            echo '<br>pay period end :: '.date('Y-m-d',$this->getPayPeriodObject()->getEndDate());
 		//Loop through unique UserDateTotal rows... Adding entries to pay stubs.
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		$udtlf->getByUserIdAndPayPeriodIdAndEndDate( $this->getUser(), $this->getPayPeriod(), $this->getPayPeriodObject()->getEndDate() );
 
 		$dock_absence_time = 0;
@@ -365,7 +365,7 @@ class Wage {
                                                    if($plf->getRecordCount() > 0){
                                                        
                                                     $budgetary_allowance = 0;
-                                                    $udlf = TTnew( 'UserDeductionListFactory' );
+                                                    $udlf = new UserDeductionListFactory();
                                                     $udlf->getByUserIdAndCompanyDeductionId($this->getUser(), 3);
                                                     if($udlf->getRecordCount()>0){
                                                         foreach ($udlf as $udlf_obj1){
@@ -388,7 +388,7 @@ class Wage {
                                               {
                                                 $budgetary_allowance = 0;
                                                 
-                                                $uwlf = TTnew( 'UserWageListFactory' );
+                                                $uwlf = new UserWageListFactory();
                                                 $uwlf->getByUserId($this->getUser());
                                                  if($uwlf->getRecordCount()>0){
                                                      
@@ -397,7 +397,7 @@ class Wage {
                                                      $budgetary_allowance = $uw_obj->getBudgetoryAllowance();
                                                      $budgetary_allowance =   UserWageFactory::proRateBudgetory( $budgetary_allowance , $this->getUserWageObject( $udt_obj->getColumn('user_wage_id') )->getEffectiveDate(), $prev_wage_effective_date, $this->getPayPeriodObject()->getStartDate(), $this->getPayPeriodObject()->getEndDate(), $this->getUserObject()->getTerminationDate() );
                                                               
-                                                     $udlf = TTnew( 'UserDeductionListFactory' );
+                                                     $udlf = new UserDeductionListFactory();
                                                      $udlf->getByUserIdAndCompanyDeductionId($this->getUser(), 3);
                                                      
                                                      if($udlf->getRecordCount()>0){
@@ -416,7 +416,7 @@ class Wage {
                                              }
                                                  /*  
                                                  $budgetary_allowance = 0;
-                                                    $udlf = TTnew( 'UserDeductionListFactory' );
+                                                    $udlf = new UserDeductionListFactory();
                                                     $udlf->getByUserIdAndCompanyDeductionId($this->getUser(), 3);
                                                     if($udlf->getRecordCount()>0){
                                                         foreach ($udlf as $udlf_obj){
@@ -637,7 +637,7 @@ class Wage {
 	function setUserDateTotalArrayMiddlePay($check_date) {
 
 		//Loop through unique UserDateTotal rows... Adding entries to pay stubs. $this->getPayPeriodObject()->getEndDate()
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		$udtlf->getByUserIdAndPayPeriodIdAndEndDate( $this->getUser(), $this->getPayPeriod(), $check_date );
 
 		$dock_absence_time = 0;

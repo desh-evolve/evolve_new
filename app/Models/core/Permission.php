@@ -3,7 +3,7 @@
 class Permission {
 	function getPermissions( $user_id, $company_id ) {
 
-		$plf = TTnew( 'PermissionListFactory' );
+		$plf = new PermissionListFactory();
 
 		$cache_id = 'permission_all'.$user_id.$company_id;
 		$perm_arr = $plf->getCache($cache_id);
@@ -120,7 +120,7 @@ class Permission {
 			$company_id = $current_company->getId();
 		}
 
-		$plf = TTnew( 'PermissionListFactory' );
+		$plf = new PermissionListFactory();
 
 		return $plf->getBySectionAndNameAndUserIdAndCompanyId($section, $name, $user_id, $company_id)->getCurrent();
 	}
@@ -175,7 +175,7 @@ class Permission {
 	}
 
 	function getPermissionHierarchyChildren( $company_id, $user_id ) {
-		$hlf = TTnew( 'HierarchyListFactory' );
+		$hlf = new HierarchyListFactory();
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $company_id, $user_id, 100 );
 		//Debug::Arr($permission_children_ids, 'Permission Child IDs: ', __FILE__, __LINE__, __METHOD__, 10);
 

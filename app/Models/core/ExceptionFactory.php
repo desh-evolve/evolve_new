@@ -124,7 +124,7 @@ class ExceptionFactory extends Factory {
 		if ( is_object($this->user_date_obj) ) {
 			return $this->user_date_obj;
 		} else {
-			$udlf = TTnew( 'UserDateListFactory' );
+			$udlf = new UserDateListFactory();
 			$this->user_date_obj = $udlf->getById( $this->getUserDateID() )->getCurrent();
 
 			return $this->user_date_obj;
@@ -135,7 +135,7 @@ class ExceptionFactory extends Factory {
 		if ( is_object($this->exception_policy_obj) ) {
 			return $this->exception_policy_obj;
 		} else {
-			$eplf = TTnew( 'ExceptionPolicyListFactory' );
+			$eplf = new ExceptionPolicyListFactory();
 			$this->exception_policy_obj = $eplf->getById( $this->getExceptionPolicyID() )->getCurrent();
 
 			return $this->exception_policy_obj;
@@ -152,7 +152,7 @@ class ExceptionFactory extends Factory {
 	function setUserDateID($id = NULL) {
 		$id = trim($id);
 
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory();
 
 		if (  $this->Validator->isResultSetWithRows(	'user_date',
 														$udlf->getByID($id),
@@ -180,7 +180,7 @@ class ExceptionFactory extends Factory {
 			$id = NULL;
 		}
 
-		$eplf = TTnew( 'ExceptionPolicyListFactory' );
+		$eplf = new ExceptionPolicyListFactory();
 
 		if (	$id == NULL
 				OR
@@ -210,7 +210,7 @@ class ExceptionFactory extends Factory {
 			$id = NULL;
 		}
 
-		$pclf = TTnew( 'PunchControlListFactory' );
+		$pclf = new PunchControlListFactory();
 
 		if (
 				$id == NULL
@@ -241,7 +241,7 @@ class ExceptionFactory extends Factory {
 			$id = NULL;
 		}
 
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 
 		if (	$id == NULL
 				OR
@@ -385,11 +385,11 @@ class ExceptionFactory extends Factory {
 				//Make sure supervisor email notifcations are enabled
 				if ( $ep_obj->getEmailNotification() == 20 OR $ep_obj->getEmailNotification() == 100 ) {
 					//Find supervisor(s)
-					$hlf = TTnew( 'HierarchyListFactory' );
+					$hlf = new HierarchyListFactory();
 					$parent_user_id = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $u_obj->getCompany(), $u_obj->getId(), 80 );
 					if ( $parent_user_id != FALSE ) {
 						//Parent could be multiple supervisors, make sure we email them all.
-						$ulf = TTnew( 'UserListFactory' );
+						$ulf = new UserListFactory();
 						$ulf->getByIdAndCompanyId( $parent_user_id, $u_obj->getCompany() );
 						if ( $ulf->getRecordCount() > 0 ) {
 							foreach( $ulf as $parent_user_obj ) {
@@ -570,7 +570,7 @@ class ExceptionFactory extends Factory {
 	function getObjectAsArray( $include_columns = NULL ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 
-		$epf = TTnew( 'ExceptionPolicyFactory' );
+		$epf = new ExceptionPolicyFactory();
 		$exception_policy_type_options = $epf->getOptions('type');
 		$exception_policy_severity_options = $epf->getOptions('severity');
 
