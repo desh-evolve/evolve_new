@@ -1,4 +1,6 @@
 <?php
+
+namespace App\Models\Company;
 /*********************************************************************************
  * Evolve is a Payroll and Time Management program developed by
  * Evolve Technology PVT LTD.

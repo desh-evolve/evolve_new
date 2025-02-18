@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 /*
 
 How this needs to work

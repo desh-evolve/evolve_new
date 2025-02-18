@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class StationUserFactory extends Factory {
 	protected $table = 'station_user';
 	protected $pk_sequence_name = 'station_user_id_seq'; //PK Sequence name

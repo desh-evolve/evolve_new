@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class RateLimit {
 	protected $sleep = FALSE; //When rate limit is reached, do we sleep or return FALSE?

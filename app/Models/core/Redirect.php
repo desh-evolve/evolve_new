@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class Redirect {
 	static function page($url = NULL) {

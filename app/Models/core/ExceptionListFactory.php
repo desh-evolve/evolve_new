@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate {
 

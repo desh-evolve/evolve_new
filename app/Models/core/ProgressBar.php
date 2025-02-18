@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 //
 //http://danielmclaren.net/2008/08/13/tracking-progress-of-a-server-side-action-in-flashflex
 //

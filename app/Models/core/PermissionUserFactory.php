@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class PermissionUserFactory extends Factory {
 	protected $table = 'permission_user';
 	protected $pk_sequence_name = 'permission_user_id_seq'; //PK Sequence name

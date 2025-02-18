@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
+
+use Exception;
 
 class DBError extends Exception {
    function __construct($e) {
@@ -41,10 +43,6 @@ class DBError extends Exception {
    }
 }
 
-
-/**
- * @package Core
- */
 class GeneralError extends Exception {
    function __construct($message) {
       global $db;

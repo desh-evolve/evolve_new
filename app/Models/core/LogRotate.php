@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 /*
  - Example config array:
 

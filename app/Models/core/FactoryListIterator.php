@@ -1,59 +1,60 @@
 <?php
 
-class FactoryListIterator implements Iterator {
+namespace App\Models\Core;
+
+use Iterator;
+use IteratorIterator;
+
+class FactoryListIterator extends IteratorIterator {
     private $obj;
 	private $rs;
 	private $class_name;
 
     function __construct($obj) {
+		parent::__construct(new \ArrayIterator([])); // Use a dummy iterator to satisfy the parent
 		$this->class_name = get_class($obj);
 
-		if ( isset($obj->rs) ) {
+		if (isset($obj->rs)) {
 			$this->rs = $obj->rs;
 		}
 
 		$this->obj = $obj;
     }
 
-    function rewind() {
-		if ( isset($this->obj->rs) ) {
+    function rewind(): void {
+		if (is_object($this->obj->rs) && method_exists($this->obj->rs, 'MoveFirst')) {
 			$this->obj->rs->MoveFirst();
 		}
+	}
+	
+    function valid(): bool {
+		return is_object($this->obj->rs) && property_exists($this->obj->rs, 'EOF') && !$this->obj->rs->EOF;
+	}
+	
 
-		return FALSE;
-    }
-
-    function valid() {
-		if ( isset($this->obj->rs) ) {
-			return !$this->obj->rs->EOF;
-		}
-
-		return FALSE;
-    }
-
-    function key() {
+    function key(): int {
         return $this->obj->rs->_currentRow;
     }
 
-    function current() {
-		if ( isset($this->obj->rs) ) { //Stop some warnings from coming up?
-
-			//This automatically resets the object during each iteration in a foreach()
-			//Without this, data can persist and cause undesirable results.
-
+    function current(): mixed {
+		if (isset($this->obj->rs) && $this->obj->rs) {
+			// Reset object during each iteration to prevent data persistence
 			$this->obj = new $this->class_name();
-
 			$this->obj->rs = $this->rs;
-
-			$this->obj->data = $this->obj->rs->fields; //Orignal
+	
+			// Assuming $this->rs is a single row from your database query
+			// Directly assign the row data instead of using ->fields
+			//$this->obj->data = $this->obj->rs;
+			
+			// If your result set is a collection/array of rows, you might need:
+			$this->obj->data = $this->obj->rs[key($this->obj->rs)] ?? null;
 		}
-
 		return $this->obj;
-    }
+	}
 
-    function next() {
-        $this->obj->rs->MoveNext();
+    function next(): void {
+        if (isset($this->obj->rs)) {
+            $this->obj->rs->MoveNext();
+        }
     }
-
 }
-?>

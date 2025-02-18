@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Models\Core;
 use Illuminate\Support\Facades\Log;
 
 class StationListFactory extends StationFactory implements IteratorAggregate {

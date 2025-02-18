@@ -1,45 +1,7 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
-/*
- * $Revision: 3536 $
- * $Id: FastTree.class.php 3536 2010-05-01 03:52:32Z ipso $
- * $Date: 2010-04-30 20:52:32 -0700 (Fri, 30 Apr 2010) $
- */
-
-/*
---    id serial NOT NULL,
-CREATE TABLE hierarchy_tree (
-    tree_id integer DEFAULT 0 NOT NULL,
-    parent_id integer DEFAULT 0 NOT NULL,
-    object_id integer DEFAULT 0 NOT NULL,
-	left_id bigint DEFAULT 0 NOT NULL,
-    right_id bigint DEFAULT 0 NOT NULL
-) WITHOUT OIDS;
---Order of the columsn in the below index seem to matter
-create index "hierarchy_tree_left_id_right_id" on hierarchy_tree(left_id, right_id);
-create index "hierarchy_tree_tree_id_object_id" on hierarchy_tree(tree_id, object_id);
-create index "hierarchy_tree_tree_id_parent_id" on hierarchy_tree(tree_id, parent_id);
-
-
-//FIXME: there appears to be a bug that so far has only affected MySQL, where the initial
-		root row with object_id=0 and parent_id=-1 has the right_id less then the maximum right_id
-		for the tree, causing the tree to fail to display properly. I'm unable to replicate this issue
-		at all, or find debug logs that explain it.
-		*Maybe its a race condition that if the rebuild starts and someone adds another user to the tree
-		the new value doesn't get included and the hierarchy breaks.
-*/
-
-
-/**
- * @package Core
- */
 class FastTree {
 
 	var $db = NULL;

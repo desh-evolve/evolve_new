@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class StationUserGroupFactory extends Factory {
 	protected $table = 'station_user_group';
 	protected $pk_sequence_name = 'station_user_group_id_seq'; //PK Sequence name

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class OtherFieldFactory extends Factory {
 	protected $table = 'other_field';

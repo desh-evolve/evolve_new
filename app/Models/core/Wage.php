@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class Wage {
 	var $user_id = NULL;
 	var $pay_period_id = NULL;

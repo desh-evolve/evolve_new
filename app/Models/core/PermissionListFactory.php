@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class PermissionListFactory extends PermissionFactory implements IteratorAggregate {
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '

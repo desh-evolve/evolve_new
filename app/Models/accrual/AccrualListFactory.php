@@ -4,7 +4,7 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
-
+namespace App\Models\Accrual;
 use Illuminate\Support\Facades\Log;
 
 /*

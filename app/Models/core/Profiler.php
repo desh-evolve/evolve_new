@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Models\Core;
+
 /*
  * $Revision: 3508 $
  * $Id: Profiler.class.php 3508 2010-04-19 19:46:03Z ipso $
@@ -39,6 +42,8 @@ class Profiler {
     var $trace;
     var $count;
     var $running;
+    var $output_enabled;
+    var $trace_enabled;
 
     /**
     * Initialise the timer. with the current micro time
@@ -69,18 +74,31 @@ class Profiler {
     *   @param string $name name of the timer
     *   @param string optional $desc description of the timer
     */
-    function startTimer($name, $desc="" ){
-        $this->trace.="start   $name\n";
-        $n=array_push( $this->stack, $this->cur_timer );
-        $this->__suspendTimer( $this->stack[$n-1] );
+    function startTimer($name, $desc = "") {
+        $this->trace .= "start $name\n";
+    
+        // Initialize stack if not already
+        if (!isset($this->stack)) {
+            $this->stack = [];
+        }
+    
+        // Push current timer onto stack
+        $n = array_push($this->stack, $this->cur_timer ?? null);
+    
+        // Suspend previous timer if applicable
+        if ($n > 1) {
+            $this->__suspendTimer($this->stack[$n - 1]);
+        }
+    
+        // Start new timer
         $this->startTime[$name] = $this->getMicroTime();
-        $this->cur_timer=$name;
+        $this->cur_timer = $name;
         $this->description[$name] = $desc;
-        if (!array_key_exists($name,$this->count))
-            $this->count[$name] = 1;
-        else
-            $this->count[$name]++;
+    
+        // Increment count or initialize if first time
+        $this->count[$name] = ($this->count[$name] ?? 0) + 1;
     }
+    
 
     /**
     *   Stop an individual timer
@@ -90,6 +108,9 @@ class Profiler {
     function stopTimer($name){
         $this->trace.="stop    $name\n";
         $this->endTime[$name] = $this->getMicroTime();
+        if (!is_array($this->running)) {
+            $this->running = [];
+        }
         if (!array_key_exists($name, $this->running))
             $this->running[$name] = $this->elapsedTime($name);
         else
@@ -206,14 +227,23 @@ class Profiler {
     *   suspend  an individual timer
     *
     */
-    function __suspendTimer($name){
-        $this->trace.="suspend $name\n";
+    function __suspendTimer($name) {
+        if (!isset($name) || $name === null) {
+            return; // Prevent errors if an invalid name is passed
+        }
+    
+        $this->trace .= "suspend $name\n";
+    
+        // Record end time
         $this->endTime[$name] = $this->getMicroTime();
-        if (!array_key_exists($name, $this->running))
-            $this->running[$name] = $this->elapsedTime($name);
-        else
-            $this->running[$name] += $this->elapsedTime($name);
+    
+        // Calculate elapsed time once to avoid multiple calls
+        $elapsed = $this->elapsedTime($name);
+    
+        // Update running time
+        $this->running[$name] = ($this->running[$name] ?? 0) + $elapsed;
     }
+    
 }
 
 function profiler_start($name) {

@@ -5,6 +5,7 @@
  *
  ********************************************************************************/
 
+ namespace App\Models\Company;
 use Illuminate\Support\Facades\Log;
 
 /*
@@ -191,12 +192,20 @@ class BranchFactory extends Factory {
 	}
 	static function getNextAvailableManualId( $company_id = NULL ) {
 		global $current_company;
-
+		/*
+		//old code
 		if ( $company_id == '' ANd is_object($current_company) ) {
 			$company_id = $current_company->getId();
 		} elseif ( $company_id == '' AND isset($this) AND is_object($this) ) {
 			$company_id = $this->getCompany();
+		}*/
+
+		if ($company_id == '' && is_object($current_company)) {
+			$company_id = $current_company->getId();
+		} elseif ($company_id == '' && method_exists(static::class, 'getCompany')) {
+			$company_id = static::getCompany();
 		}
+		
 
 		$blf = new BranchListFactory();
 		$blf->getHighestManualIDByCompanyId( $company_id );

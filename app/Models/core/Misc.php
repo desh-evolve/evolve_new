@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class Misc {
 	/*
@@ -1619,6 +1619,32 @@ class Misc {
 		$strength = floor($strength / 10 + 1);
 
 		return $strength;
+	}
+
+	static function isSSL($check = false) {
+		if ($check === true) {
+			// Check if HTTPS is on or if the request is forwarded as HTTPS (e.g., behind a proxy)
+			if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+				return true;
+			}
+	
+			// Check for forwarded protocol (common in proxy setups)
+			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+				return true;
+			}
+	
+			// Check for forwarded SSL (less common)
+			if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') {
+				return true;
+			}
+	
+			// Check for server port (if HTTPS is running on a non-standard port)
+			if (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) {
+				return true;
+			}
+		}
+	
+		return false;
 	}
 }
 ?>

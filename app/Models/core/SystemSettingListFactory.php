@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Models\Core;
+
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class SystemSettingListFactory extends SystemSettingFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -12,9 +17,11 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
+			//$this->rs = $this->db->SelectLimit($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -37,7 +44,7 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -48,18 +55,18 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 		}
 
 		$ph = array(
-					'name' => $name,
+					':name' => $name,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	name = ?
+					where	name = :name
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

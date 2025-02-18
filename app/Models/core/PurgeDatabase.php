@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class PurgeDatabase {
 	static $parent_table_column_map = array(

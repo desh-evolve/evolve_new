@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class CurrencyFactory extends Factory {
 	protected $table = 'currency';
@@ -308,7 +308,7 @@ class CurrencyFactory extends Factory {
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap( $data = null) {
 		$variable_function_map = array(
 										'id' => 'ID',
 										'company_id' => 'Company',

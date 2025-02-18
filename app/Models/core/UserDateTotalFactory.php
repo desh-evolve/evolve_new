@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class UserDateTotalFactory extends Factory {
 
     protected $table = 'user_date_total';

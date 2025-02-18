@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 //Use this class to serializer arrays in PHP, XML, and JSON formats.
 class Serializer {
 	protected $available_formats = array('PHP','XML','JSON');

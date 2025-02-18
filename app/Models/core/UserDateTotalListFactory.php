@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Models\Core;
 
 class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorAggregate {
 

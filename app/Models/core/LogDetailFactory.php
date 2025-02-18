@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class LogDetailFactory extends Factory {
 	protected $table = 'system_log_detail';

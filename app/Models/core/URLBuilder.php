@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class URLBuilder {
 	static protected $data = array();
 	static protected $script = 'index.php';

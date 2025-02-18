@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class Debug {
 	static protected $enable = FALSE; 			//Enable/Disable debug printing.
 	static protected $verbosity = 5; 			//Display debug info with a verbosity level equal or lesser then this.

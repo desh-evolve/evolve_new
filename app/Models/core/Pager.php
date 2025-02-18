@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class Pager {
 	protected $rs = NULL;
 	protected $count_rows = TRUE; //Specify if we count the total rows or not.

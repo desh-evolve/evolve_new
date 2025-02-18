@@ -1,6 +1,13 @@
 <?php
 
+namespace App\Models\Core;
+
+use App\Models\Company\CompanyGenericTagFactory;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use UserListFactory;
 
 abstract class Factory {
 	public $data = array();
@@ -12,11 +19,15 @@ abstract class Factory {
 	protected $progress_bar_obj = NULL;
 	protected $AMF_message_id = NULL;
 
+	protected $db;
+    protected $cache;
+    protected $Validator;
+
 	function __construct() {
 		global $db, $cache;
 
-		$this->db = $db;
-		$this->cache = $cache;
+		$this->db = DB::connection();
+        $this->cache = Cache::store();
 		$this->Validator = new Validator();
 
 		//Callback to the child constructor method.
@@ -64,51 +75,47 @@ abstract class Factory {
 	/*
 	 * Cache functions
 	 */
-	function getCache($cache_id) {
-		if ( is_object($this->cache) ) {
-			return $this->cache->get($cache_id, $this->getTable(TRUE) );
-		}
-
-		return FALSE;
+	public function getCache($cache_id) {
+		// Ensure Cache ID is formatted correctly
+		$cache_id = str_replace(':', '_', $cache_id);
+		$cacheKey = $this->getTable(true) . '_' . $cache_id;
+	
+		return Cache::get($cacheKey, false); // Return cached data or false if not found
 	}
-	function saveCache($data, $cache_id) {
-		//Cache_ID can't have ':' in it, otherwise it fails on Windows.
-		if ( is_object($this->cache) ) {
-			$retval = $this->cache->save( $data, $cache_id, $this->getTable(TRUE) );
-			if ( $retval === FALSE ) {
-				//Due to locking, its common that cache files may fail writing once in a while.
-				Debug::text('WARNING: Unable to write cache file, likely due to permissions or locking! Cache ID: '. $cache_id .' Table: '. $this->getTable(TRUE) .' File: '. $this->cache->_file, __FILE__, __LINE__, __METHOD__,10);
-			}
-
-			return $retval;
+	
+	public function saveCache($data, $cache_id) {
+		// Ensure Cache ID is formatted correctly
+		$cache_id = str_replace(':', '_', $cache_id);
+		$cacheKey = $this->getTable(true) . '_' . $cache_id;
+	
+		// Save to Laravel Cache for 2 hours
+		$success = Cache::put($cacheKey, $data, now()->addHours(2));
+	
+		if (!$success) {
+			Log::warning("WARNING: Unable to write cache file. Cache ID: $cache_id | Table: " . $this->getTable(true));
 		}
-		return FALSE;
+	
+		return $success;
 	}
-	function removeCache($cache_id = NULL, $group_id = NULL ) {
-		Debug::text('Attempting to remove cache: '. $cache_id, __FILE__, __LINE__, __METHOD__,10);
-		if ( is_object($this->cache) ) {
-			if ( $group_id == '' ) {
-				$group_id = $this->getTable(TRUE);
-			}
-			if ( $cache_id != '' ) {
-				Debug::text('Removing cache: '. $cache_id .' Group Id: '. $group_id, __FILE__, __LINE__, __METHOD__,10);
-				return $this->cache->remove($cache_id, $group_id );
-			} elseif ( $group_id != '' ) {
-				Debug::text('Removing cache group: '. $group_id , __FILE__, __LINE__, __METHOD__,10);
-				return $this->cache->clean( $group_id );
-			}
+	
+	public function removeCache($cache_id = null) {
+		if ($cache_id) {
+			$cache_id = str_replace(':', '_', $cache_id);
+			$cacheKey = $this->getTable(true) . '_' . $cache_id;
+	
+			Cache::forget($cacheKey); // Remove specific cache entry
+			return true;
 		}
-
-		return FALSE;
+	
+		return false;
 	}
-	function setCacheLifeTime( $secs ) {
-		if ( is_object($this->cache) ) {
-			return $this->cache->setLifeTime( $secs );
-		}
-
-		return FALSE;
+	
+	public function setCacheLifeTime($seconds) {
+		// Laravel doesn't support dynamic cache lifetime setting per request.
+		// You need to modify the expiration time inside `saveCache()` instead.
+		return false;
 	}
-
+	
 
 	function getTable($strip_quotes = FALSE) {
 
@@ -181,24 +188,25 @@ abstract class Factory {
 	}
 
 	//Determines if the data is new data, or updated data.
-	function isNew( $force_lookup = FALSE ) {
-		//Debug::Arr( $this->getId() ,'getId: ', __FILE__, __LINE__, __METHOD__,10);
-		if ( $this->getId() === FALSE ) {
-			//New Data
-			return TRUE;
-		} elseif ( $force_lookup == TRUE ) {
-			//See if we can find the ID to determine if the record needs to be inserted or update.
-			$ph = array( 'id' => $this->getID() );
-			$query = 'select id from '. $this->getTable() .' where id = ?';
-			$retval = $this->db->GetOne($query, $ph);
-			if ( $retval === FALSE ) {
-				return TRUE;
+	public function isNew($force_lookup = false) {
+		// Check if the model has an ID (i.e., it's an existing record)
+		if ($this->getId() === false) {
+			// New Data (no ID set)
+			return true;
+		} elseif ($force_lookup === true) {
+			// Check if the record exists in the database
+			$exists = DB::table($this->getTable())->where('id', $this->getId())->exists();
+			
+			if (!$exists) {
+				// ID does not exist in the database, treat as new
+				return true;
 			}
 		}
-
-		//Not new data
-		return FALSE;
+	
+		// Not new data (the record exists in the DB)
+		return false;
 	}
+	
 
 	//Determines if we were called by a save function or not.
 	//This is useful for determining if we are just validating or actually saving data. Problem is its too late to throw any new validation errors.
@@ -586,8 +594,9 @@ abstract class Factory {
 	}
 
 	function getRecordCount() {
-		if ( isset($this->rs) ) {
-			return $this->rs->RecordCount();
+		
+		if (isset($this->rs) && is_array($this->rs)) {
+			return count($this->rs);
 		}
 
 		return FALSE;
@@ -1055,63 +1064,56 @@ abstract class Factory {
 		return $array;
 	}
 
-	protected function getSortSQL($array, $strict = TRUE, $additional_fields = NULL) {
-		if ( is_array($array) ) {
-			$array = $this->convertFlexArray( $array );
+	protected function getSortSQL($array, $strict = TRUE, $additional_fields = NULL)
+	{
+		if (is_array($array)) {
+			$array = $this->convertFlexArray($array);
 
-			$alt_order_options = array( 1 => 'asc', -1 => 'desc');
-			$order_options = array('asc', 'desc');
+			$alt_order_options = [1 => 'asc', -1 => 'desc'];
+			$order_options = ['asc', 'desc'];
 
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
 
-			//Merge additional fields
-			if ( is_array($additional_fields) ) {
-				$fields = array_merge( $fields, $additional_fields);
+			if (is_array($additional_fields)) {
+				$fields = array_merge($fields, $additional_fields);
 			}
-			//Debug::Arr($fields, 'Column List:', __FILE__, __LINE__, __METHOD__,10);
 
-			foreach ( $array as $orig_column => $order ) {
+			foreach ($array as $orig_column => $order) {
 				$orig_column = trim($orig_column);
-
-				$column = $this->parseColumnName( $orig_column );
+				$column = $this->parseColumnName($orig_column);
 				$order = trim($order);
-				//Handle both order types.
-				if ( is_numeric($order) ) {
-					if ( isset($alt_order_options[$order]) ) {
-						$order = $alt_order_options[$order];
-					}
+
+				if (is_numeric($order) && isset($alt_order_options[$order])) {
+					$order = $alt_order_options[$order];
 				}
 
-				if ( $strict == FALSE
-						OR ( 	(
-									in_array($column, $fields)
-									OR
-									in_array($orig_column, $fields)
-								)
-								AND in_array( strtolower($order), $order_options)
-							)
-						) {
-					//Make sure ';' does not appear in the resulting order string, to help prevent attacks in non-strict mode.
-					if ( $strict == TRUE OR ( $strict == FALSE AND strpos( $orig_column, ';') === FALSE AND strpos( $order, ';') === FALSE ) ) {
-						$sql_chunks[] = $orig_column.' '.$order;
+				if ($strict == false || (
+					(is_array($fields) && (in_array($column, $fields) || in_array($orig_column, $fields))) &&
+					in_array(strtolower($order), $order_options)
+				)) {
+					// Check for any illegal semicolons in the column or order
+					if ($strict == true || (strpos($orig_column, ';') === false && strpos($order, ';') === false)) {
+						// Add to the SQL chunks for ORDER BY clause
+						$sql_chunks[] = $orig_column . ' ' . $order;
 					} else {
-						Debug::text('ERROR: Found ";" in SQL order string: '. $orig_column .' Order: '. $order, __FILE__, __LINE__, __METHOD__,10);
+						Debug::text('ERROR: Found ";" in SQL order string: ' . $orig_column . ' Order: ' . $order, __FILE__, __LINE__, __METHOD__, 10);
 					}
 				} else {
-					Debug::text('Invalid Sort Column/Order: '. $column .' Order: '. $order, __FILE__, __LINE__, __METHOD__,10);
-				}
+					Debug::text('Invalid Sort Column/Order: ' . $column . ' Order: ' . $order, __FILE__, __LINE__, __METHOD__, 10);
+				}				
+				
 			}
 
-			if ( isset($sql_chunks) ) {
+			if (isset($sql_chunks)) {
 				$sql = implode(',', $sql_chunks);
-
-				return ' order by '. $this->db->escape( $sql );
+				return ' order by ' . DB::raw($sql);
 			}
 		}
 
 		return FALSE;
 	}
+
 
 	public function getColumnList() {
 		if ( is_array($this->data) AND count($this->data) > 0) {
@@ -1138,6 +1140,8 @@ abstract class Factory {
 
 	public function getEmptyRecordSet($id = NULL) {
 		global $profiler, $config_vars;
+
+		$profiler  = new Profiler();
 		$profiler->startTimer( 'getEmptyRecordSet()' );
 
 		if ($id == NULL) {
@@ -1161,7 +1165,7 @@ abstract class Factory {
 
 		try {
 			$query = 'select '. $column_str .' from '. $this->table .' where id = '. $id;
-
+			
 			if ( $id == -1 AND isset($config_vars['cache']['enable']) AND $config_vars['cache']['enable'] == TRUE ) {
 
 				/*
@@ -1185,14 +1189,15 @@ abstract class Factory {
 
 					//Execute non-cached query
 					try {
-						$rs = $this->db->Execute($query);
+    					$rs = DB::select($query);
 					} catch (Exception $e) {
 						throw new DBError($e);
 					}
 				}
 				$this->db->IgnoreErrors( $save_error_handlers ); //Prevent a cache write error from causing a transaction rollback.
 			} else {
-				$rs = $this->db->Execute($query);
+				//$rs = $this->db->Execute($query);
+				$rs = DB::select($query);
 			}
 		} catch (Exception $e) {
 			throw new DBError($e);

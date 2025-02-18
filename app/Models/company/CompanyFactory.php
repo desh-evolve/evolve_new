@@ -4,18 +4,10 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
-
+namespace App\Models\Company;
+use App\Models\Core\Factory;
 use Illuminate\Support\Facades\Log;
 
-/*
- * $Revision: 5453 $
- * $Id: CompanyFactory.class.php 5453 2011-11-03 20:30:28Z ipso $
- * $Date: 2011-11-03 13:30:28 -0700 (Thu, 03 Nov 2011) $
- */
-
-/**
- * @package Module_Company
- */
 class CompanyFactory extends Factory {
 	protected $table = 'company';
 	protected $pk_sequence_name = 'company_id_seq'; //PK Sequence name
@@ -27,7 +19,6 @@ class CompanyFactory extends Factory {
 	var $user_obj = NULL;
 
 	function _getFactoryOptions( $name ) {
-
 		$retval = NULL;
 		switch( $name ) {
 			case 'status':
@@ -1122,62 +1113,64 @@ class CompanyFactory extends Factory {
 								);
 				break;
 		}
-
+		
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
-			$variable_function_map = array(
-											'id' => 'ID',
-											'parent_id' => 'Parent',
-											'status_id' => 'Status',
-											'status' => FALSE,
-											'product_edition_id' => 'ProductEdition',
-											'product_edition' => FALSE,
-											'industry_id' => 'Industry',
-											'industry' => FALSE,
-											'name' => 'Name',
-											'business_number' => 'BusinessNumber',
-											'originator_id' => 'OriginatorID',
-											'data_center_id' => 'DataCenterID',
-											'short_name' => 'ShortName',
-											'address1' => 'Address1',
-											'address2' => 'Address2',
-											'city' => 'City',
-											'country' => 'Country',
-											'province' => 'Province',
-											'postal_code' => 'PostalCode',
-											'work_phone' => 'WorkPhone',
-											'fax_phone' => 'FaxPhone',
-											'admin_contact' => 'AdminContact',
-											'billing_contact' => 'BillingContact',
-											'support_contact' => 'SupportContact',
-											'enable_second_last_name' => 'EnableSecondLastName',
-											'other_id1' => 'OtherID1',
-											'other_id2' => 'OtherID2',
-											'other_id3' => 'OtherID3',
-											'other_id4' => 'OtherID4',
-											'other_id5' => 'OtherID5',
+	function _getVariableToFunctionMap($data = null) {
+		
+		$variable_function_map = array(
+			'id' => 'ID',
+			'parent_id' => 'Parent',
+			'status_id' => 'Status',
+			'status' => FALSE,
+			'product_edition_id' => 'ProductEdition',
+			'product_edition' => FALSE,
+			'industry_id' => 'Industry',
+			'industry' => FALSE,
+			'name' => 'Name',
+			'business_number' => 'BusinessNumber',
+			'originator_id' => 'OriginatorID',
+			'data_center_id' => 'DataCenterID',
+			'short_name' => 'ShortName',
+			'address1' => 'Address1',
+			'address2' => 'Address2',
+			'city' => 'City',
+			'country' => 'Country',
+			'province' => 'Province',
+			'postal_code' => 'PostalCode',
+			'work_phone' => 'WorkPhone',
+			'fax_phone' => 'FaxPhone',
+			'admin_contact' => 'AdminContact',
+			'billing_contact' => 'BillingContact',
+			'support_contact' => 'SupportContact',
+			'enable_second_last_name' => 'EnableSecondLastName',
+			'other_id1' => 'OtherID1',
+			'other_id2' => 'OtherID2',
+			'other_id3' => 'OtherID3',
+			'other_id4' => 'OtherID4',
+			'other_id5' => 'OtherID5',
 
-											'password_policy_type_id' => 'PasswordPolicyType',
-											'password_minimum_permission_level' => 'PasswordMinimumPermissionLevel',
-											'password_minimum_strength' => 'PasswordMinimumStrength',
-											'password_minimum_length' => 'PasswordMinimumLength',
-											'password_minimum_age' => 'PasswordMinimumAge',
-											'password_maximum_age' => 'PasswordMaximumAge',
+			'password_policy_type_id' => 'PasswordPolicyType',
+			'password_minimum_permission_level' => 'PasswordMinimumPermissionLevel',
+			'password_minimum_strength' => 'PasswordMinimumStrength',
+			'password_minimum_length' => 'PasswordMinimumLength',
+			'password_minimum_age' => 'PasswordMinimumAge',
+			'password_maximum_age' => 'PasswordMaximumAge',
 
-											'ldap_authentication_type_id' => 'LDAPAuthenticationType',
-											'ldap_host' => 'LDAPHost',
-											'ldap_port' => 'LDAPPort',
-											'ldap_bind_user_name' => 'LDAPBindUserName',
-											'ldap_bind_password' => 'LDAPBindPassword',
-											'ldap_base_dn' => 'LDAPBaseDN',
-											'ldap_bind_attribute' => 'LDAPBindAttribute',
-											'ldap_user_filter' => 'LDAPUserFilter',
-											'ldap_login_attribute' => 'LDAPLoginAttribute',
-											'deleted' => 'Deleted',
-											);
-			return $variable_function_map;
+			'ldap_authentication_type_id' => 'LDAPAuthenticationType',
+			'ldap_host' => 'LDAPHost',
+			'ldap_port' => 'LDAPPort',
+			'ldap_bind_user_name' => 'LDAPBindUserName',
+			'ldap_bind_password' => 'LDAPBindPassword',
+			'ldap_base_dn' => 'LDAPBaseDN',
+			'ldap_bind_attribute' => 'LDAPBindAttribute',
+			'ldap_user_filter' => 'LDAPUserFilter',
+			'ldap_login_attribute' => 'LDAPLoginAttribute',
+			'deleted' => 'Deleted',
+		);
+
+		return $variable_function_map;
 	}
 
 	function getUserDefaultObject() {
@@ -2799,7 +2792,7 @@ class CompanyFactory extends Factory {
 
 		return FALSE;
 	}
-
+	
 	function getObjectAsArray( $include_columns = NULL ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

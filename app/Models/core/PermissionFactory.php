@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class PermissionFactory extends Factory {
 	protected $table = 'permission';

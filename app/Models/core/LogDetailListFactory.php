@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {

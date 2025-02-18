@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models\Core;
+
 class FormVariables {
 	static function getVariables($form_variables, $form_type = 'BOTH', $filter_input = TRUE, $filter_ignore_name_arr = array('next_page','batch_next_page') ) {
 		$form_type = trim(strtoupper($form_type));

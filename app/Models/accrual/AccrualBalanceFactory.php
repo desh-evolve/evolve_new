@@ -5,6 +5,7 @@
  *
  ********************************************************************************/
 
+namespace App\Models\Accrual;
 use Illuminate\Support\Facades\Log;
 
 /*
@@ -63,21 +64,21 @@ class AccrualBalanceFactory extends Factory {
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap( $data ) {
 			$variable_function_map = array(
-											'user_id' => 'User',
-											'first_name' => FALSE,
-											'last_name' => FALSE,
-											'accrual_policy_id' => 'AccrualPolicyID',
-											'accrual_policy' => FALSE,
-											'accrual_policy_type_id' => FALSE,
-											'accrual_policy_type' => FALSE,
-											'default_branch' => FALSE,
-											'default_department' => FALSE,
-											'group' => FALSE,
-											'title' => FALSE,
-											'balance' => 'Balance',
-											);
+				'user_id' => 'User',
+				'first_name' => FALSE,
+				'last_name' => FALSE,
+				'accrual_policy_id' => 'AccrualPolicyID',
+				'accrual_policy' => FALSE,
+				'accrual_policy_type_id' => FALSE,
+				'accrual_policy_type' => FALSE,
+				'default_branch' => FALSE,
+				'default_department' => FALSE,
+				'group' => FALSE,
+				'title' => FALSE,
+				'balance' => 'Balance',
+			);
 			return $variable_function_map;
 	}
 

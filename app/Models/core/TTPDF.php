@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Models\Core;
 require_once(Environment::getBasePath() .'/classes/tcpdf/tcpdf.php');
 
 class TTPDF extends tcpdf {

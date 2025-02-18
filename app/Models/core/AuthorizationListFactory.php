@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
 
 class AuthorizationListFactory extends AuthorizationFactory implements IteratorAggregate {
 

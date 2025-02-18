@@ -1,6 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
+namespace App\Models\Core;
+
+use App\Models\Company\CompanyListFactory;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use UserIdentificationListFactory;
+use UserListFactory;
 
 class Authentication {
 	protected $name = 'SessionID';
@@ -112,12 +118,13 @@ class Authentication {
 					'session_id' => $this->getSessionID(),
 					);
 
-		$query = 'update authentication set user_id = ?
-					where session_id = ?
+		$query = 'update authentication set user_id = :user_id
+					where session_id = :session_id
 					';
 
 		try {
-			$this->db->Execute($query, $ph);
+			//$this->db->Execute($query, $ph);
+			$this->rs = DB::update($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -340,15 +347,16 @@ class Authentication {
 
 	private function UpdateLastLoginDate() {
 		$ph = array(
-					'last_login_date' => TTDate::getTime(),
-					'user_id' => (int)$this->getObject()->getID(),
+					':last_login_date' => TTDate::getTime(),
+					':user_id' => (int)$this->getObject()->getID(),
 					);
 
-		$query = 'update users set last_login_date = ?
-					where id = ?';
+		$query = 'update users set last_login_date = :last_login_date
+					where id = :user_id';
 
 		try {
-			$this->db->Execute($query, $ph);
+			//$this->db->Execute($query, $ph);
+			$this->rs = DB::update($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -362,12 +370,13 @@ class Authentication {
 					'session_id' => $this->getSessionID(),
 					);
 
-		$query = 'update authentication set updated_date = ?
-					where session_id = ?
+		$query = 'update authentication set updated_date = :updated_date
+					where session_id = :session_id
 					';
 
 		try {
-			$this->db->Execute($query, $ph);
+			//$this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -383,12 +392,13 @@ class Authentication {
 		//Can't use IdleTime here, as some users have different idle times.
 		//Assume none are longer then one day though.
 		$query = 'delete from authentication
-						where session_id = ?
+						where session_id = :session_id
 							OR (updated_date - created_date) > '. (86400*2) .'
 							OR ('. TTDate::getTime() .' - updated_date) > 86400';
 
 		try {
-			$this->db->Execute($query, $ph);
+			//$this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -398,23 +408,24 @@ class Authentication {
 
 	private function Write() {
 		$ph = array(
-					'session_id' => $this->getSessionID(),
-					'user_id' => $this->getObject()->getID(),
-					'ip_address' => $this->getIPAddress(),
-					'created_date' => $this->getCreatedDate(),
-					'updated_date' => $this->getUpdatedDate()
+					':session_id' => $this->getSessionID(),
+					':user_id' => $this->getObject()->getID(),
+					':ip_address' => $this->getIPAddress(),
+					':created_date' => $this->getCreatedDate(),
+					':updated_date' => $this->getUpdatedDate()
 					);
 
 		$query = 'insert into authentication (session_id,user_id,ip_address,created_date,updated_date)
 						VALUES(
-								?,
-								?,
-								?,
-								?,
-								?
+								:session_id,
+								:user_id,
+								:ip_address,
+								:created_date,
+								:updated_date
 							)';
 		try {
-			$this->db->Execute($query, $ph);
+			//$this->db->Execute($query, $ph);
+			$this->rs = DB::insert($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -424,21 +435,24 @@ class Authentication {
 
 	private function Read() {
 		$ph = array(
-					'session_id' => $this->getSessionID(),
-					'ip_address' => $this->getIPAddress(),
-					'updated_date' => ( TTDate::getTime() - $this->getIdle() ),
+					':session_id' => $this->getSessionID(),
+					':ip_address' => $this->getIPAddress(),
+					':updated_date' => ( TTDate::getTime() - $this->getIdle() ),
 					);
 
 
 		$query = 'select session_id,user_id,ip_address,created_date,updated_date from authentication
-					WHERE session_id = ?
-						AND ip_address = ?
-						AND updated_date >= ?
+					WHERE session_id = :session_id
+						AND ip_address = :ip_address
+						AND updated_date >= :updated_date
 						';
 
 		//Debug::text('Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 
-		$result = $this->db->GetRow($query, $ph);
+		//$result = $this->db->GetRow($query, $ph);
+		$result = DB::select($query, $ph);
+		// Get the first result
+		$result = !empty($result) ? $result[0] : [];
 
 		if ( count($result) > 0) {
 			$this->setSessionID($result['session_id']);
@@ -547,6 +561,8 @@ class Authentication {
 
 	function Check($session_id = NULL) {
 		global $profiler;
+
+		$profiler = new Profiler();
 		$profiler->startTimer( "Authentication::Check()");
 
 		//Debug::text('Session Name: '. $this->getName(), __FILE__, __LINE__, __METHOD__, 10);

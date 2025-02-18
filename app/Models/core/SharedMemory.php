@@ -1,40 +1,59 @@
 <?php
 
-require_once( Environment::getBasePath() .'/classes/pear/System/SharedMemory.php');
-class SharedMemory {
-	protected $obj = NULL;
+namespace App\Models\Core;
 
-	function __construct() {
-		global $config_vars;
-		if ( OPERATING_SYSTEM == 'WIN' ) {
-			$this->obj = &System_SharedMemory::Factory( 'File', array('tmp' => $config_vars['cache']['dir'] ) );
-		} else {
-			$this->obj = &System_SharedMemory::Factory( 'File', array('tmp' => $config_vars['cache']['dir'] ) );
-			//$this->obj = &System_SharedMemory::Factory( 'Systemv', array( 'size' => $size ) ); //Run into size issues all the time.
-		}
+use Illuminate\Support\Facades\Cache;
 
-		return TRUE;
-	}
+class SharedMemory 
+{
+    /**
+     * Store a value in the cache
+     * 
+     * @param string $key
+     * @param mixed $value
+     * @param int $minutes Optional TTL in minutes
+     * @return bool
+     */
+    public function set($key, $value, $minutes = null) 
+    {
+        if (!is_string($key)) {
+            return false;
+        }
 
-	function set( $key, $value ) {
-		if ( is_string( $key ) ) {
-			return $this->obj->set( $key, $value );
-		}
-		return FALSE;
-	}
+        if ($minutes) {
+            return Cache::put($key, $value, $minutes * 60);
+        }
+        
+        return Cache::put($key, $value);
+    }
 
-	function get( $key ) {
-		if ( is_string( $key ) ) {
-			return $this->obj->get( $key );
-		}
-		return FALSE;
-	}
+    /**
+     * Retrieve a value from the cache
+     * 
+     * @param string $key
+     * @return mixed
+     */
+    public function get($key) 
+    {
+        if (!is_string($key)) {
+            return false;
+        }
 
-	function delete( $key ) {
-		if ( is_string( $key ) ) {
-			return $this->obj->rm( $key );
-		}
-		return FALSE;
-	}
+        return Cache::get($key);
+    }
+
+    /**
+     * Remove a value from the cache
+     * 
+     * @param string $key
+     * @return bool
+     */
+    public function delete($key) 
+    {
+        if (!is_string($key)) {
+            return false;
+        }
+
+        return Cache::forget($key);
+    }
 }
-?>

@@ -4,7 +4,7 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
-
+namespace App\Models\Company;
 use Illuminate\Support\Facades\Log;
 
 /*

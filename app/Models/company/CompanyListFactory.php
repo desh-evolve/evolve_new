@@ -4,21 +4,22 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+namespace App\Models\Company;
 
-use Illuminate\Support\Facades\Log;
+use IteratorAggregate;
+use ArrayIterator;
+use App\Models\Company;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use UserFactory;
 
-/*
- * $Revision: 5369 $
- * $Id: CompanyListFactory.class.php 5369 2011-10-21 19:37:24Z ipso $
- * $Date: 2011-10-21 12:37:24 -0700 (Fri, 21 Oct 2011) $
- */
-
-/**
- * @package Module_Company
- */
-class CompanyListFactory extends CompanyFactory implements IteratorAggregate {
+class CompanyListFactory extends CompanyFactory implements IteratorAggregate
+{
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+		
 		if ( $order == NULL ) {
 			$order = array( 'status_id' => 'asc', 'name' => 'asc');
 			$strict = FALSE;
@@ -28,43 +29,57 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate {
 
 		$query = '
 					select 	*
-					from	'. $this->getTable() .'
+					from '. $this->getTable() .'
 					WHERE deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
-
-		if ($limit == NULL) {
-			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+		
+		if ($limit === null) {
+			// Run query without limit
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			// Run query with pagination
+			$this->rs = DB::select(DB::raw($query . ' LIMIT :limit OFFSET :offset'), [
+				'limit' => $limit,
+				'offset' => ($page - 1) * $limit,
+			]);
 		}
-
+		
 		return $this;
 	}
-
+	
 	function getById($id, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
 		}
 
 		$this->rs = $this->getCache($id);
-		if ( $this->rs === FALSE ) {
-			$ph = array(
-						'id' => $id,
-						);
 
+		if ($this->rs === FALSE) {
 			$query = '
-						select 	*
-						from	'. $this->getTable() .'
-						where	id = ?
-							AND deleted = 0';
-			$query .= $this->getWhereSQL( $where );
-			$query .= $this->getSortSQL( $order );
-
-			$this->rs = $this->db->Execute($query, $ph);
-
-			$this->saveCache($this->rs,$id);
+				SELECT *
+				FROM ' . $this->getTable() . '
+				WHERE id = :id
+				AND deleted = 0';
+				
+			// Add any additional where conditions
+			$query .= $this->getWhereSQL($where);
+			
+			// Add sorting
+			$query .= $this->getSortSQL($order);
+			
+			// Prepare parameters
+			$params = [
+				':id' => $id
+			];
+			
+			// Execute query with parameterized values
+			$this->rs = DB::select($query, $params);
+			
+			// Save to cache if query was successful
+			if ($this->rs !== FALSE) {
+				$this->saveCache($this->rs, $id);
+			}
 		}
 
 		return $this;
@@ -80,21 +95,20 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND id = ?
+					where	id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
-
+		$this->rs = DB::select($query, $ph);
 		return $this;
 	}
 
@@ -119,8 +133,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
-
+		$this->rs = DB::select($query, $ph);
 		return $this;
 	}
 
@@ -262,9 +275,10 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
