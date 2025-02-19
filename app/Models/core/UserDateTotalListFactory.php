@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use IteratorAggregate;
+
 class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {

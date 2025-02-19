@@ -452,11 +452,11 @@ class TTi18n {
 
 	*/
 	static public function getLanguageArray() {
-		require_once( 'I18Nv2/Language.php' );
+		//require_once( 'I18Nv2/Language.php' );
 
 		// We use self::getLanguage() because I18Nv2_Language() expects a 2 char lang code.
 		$lang = new I18Nv2_Language( self::getLanguage(), 'UTF-8' );
-
+		
 		$retarr = $lang->getAllCodes();
 		//asort($retarr);
 

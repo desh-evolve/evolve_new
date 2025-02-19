@@ -16,6 +16,7 @@ use App\Models\Core\StationListFactory;
 use App\Models\Core\SystemSettingListFactory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\URLBuilder;
+use Illuminate\Support\Facades\View;
 
 /*
  * $Revision: 5259 $
@@ -74,8 +75,8 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 		$authentication->setIdle( (int)$config_vars['other']['web_session_timeout'] );
 	}
 
-	echo 'Interface->$authentication->Check(): ';
-	print_r($authentication->Check());exit;
+	//echo 'Interface->$authentication->Check(): ';
+	//print_r($authentication->Check());exit;
 
 	if ( $authentication->Check() === TRUE ) {
 		$profiler->startTimer( 'Interface.inc - Post-Authentication' );
@@ -203,68 +204,81 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 }
 unset($clf);
 
-require_once( Environment::getBasePath() .'classes'. DIRECTORY_SEPARATOR .'smarty'. DIRECTORY_SEPARATOR .'libs'. DIRECTORY_SEPARATOR .'Smarty.class.php');
+// Get system settings from database
+$sslf = new SystemSettingListFactory();
+$data = $sslf->getAll()->rs;
 
-$smarty = new Smarty;
-$smarty->compile_check = TRUE;
-$smarty->template_dir = Environment::getTemplateDir();
-$smarty->compile_dir = Environment::getTemplateCompileDir();
-
-$smarty->assign('css_file', 'global.css.php' );
-$smarty->assign('IMAGES_URL', Environment::getImagesURL() );
-$smarty->assign('BASE_PATH', Environment::getBasePath() );
-
-$smarty->assign('APPLICATION_NAME', APPLICATION_NAME );
-$smarty->assign('ORGANIZATION_NAME', ORGANIZATION_NAME );
-$smarty->assign('ORGANIZATION_URL', ORGANIZATION_URL );
-$smarty->assign('APPLICATION_VERSION', APPLICATION_VERSION );
-$smarty->assign('DEPLOYMENT_ON_DEMAND', DEPLOYMENT_ON_DEMAND );
-
-if ( isset($cron_out_of_date) ) {
-	$smarty->assign('CRON_OUT_OF_DATE', $cron_out_of_date );
+foreach ($data as $item) {
+    $system_settings[$item->name] = $item->value;
 }
 
-if ( isset($db_time_zone_error) ) {
-	$smarty->assign('DB_TIME_ZONE_ERROR', $db_time_zone_error );
+//print_r($system_settings['system_version']);exit;
+        
+// Share data with all views
+View::share('css_file', 'global.css');
+View::share('IMAGES_URL', Environment::getImagesURL());
+View::share('BASE_PATH', Environment::getBasePath());
+
+// Application constants
+View::share('APPLICATION_NAME', config('app.name'));
+View::share('ORGANIZATION_NAME', config('app.organization_name'));
+View::share('ORGANIZATION_URL', config('app.organization_url'));
+View::share('APPLICATION_VERSION', config('app.version'));
+View::share('DEPLOYMENT_ON_DEMAND', config('app.deployment_on_demand'));
+
+// Check for various system conditions
+if (isset($cron_out_of_date)) {
+	View::share('CRON_OUT_OF_DATE', $cron_out_of_date);
 }
 
-if ( isset($config_vars['other']['installer_enabled']) ) {
-	$smarty->assign('INSTALLER_ENABLED', $config_vars['other']['installer_enabled'] );
+if (isset($db_time_zone_error)) {
+	View::share('DB_TIME_ZONE_ERROR', $db_time_zone_error);
 }
 
-if ( isset($system_settings['system_version']) AND DEPLOYMENT_ON_DEMAND == FALSE AND APPLICATION_VERSION != $system_settings['system_version'] ) {
-	$smarty->assign('VERSION_MISMATCH', TRUE );
+// System installer check
+if (config('other.installer_enabled')) {
+	View::share('INSTALLER_ENABLED', config('other.installer_enabled'));
 }
 
-if ( isset($system_settings['tax_data_version']) AND (time()-strtotime($system_settings['tax_data_version'])) > (86400*475) ) { //~1yr and 3mths
-	$smarty->assign('VERSION_OUT_OF_DATE', TRUE );
+// Version compatibility checks
+if (isset($system_settings['system_version']) && 
+	config('app.deployment_on_demand') == false && 
+	config('app.version') != $system_settings['system_version']) {
+	View::share('VERSION_MISMATCH', true);
 }
 
-if ( isset($system_settings) ) {
-	$smarty->assign_by_ref('system_settings', $system_settings );
+// Tax data version check
+if (isset($system_settings['tax_data_version']) && 
+	(time() - strtotime($system_settings['tax_data_version'])) > (86400 * 475)) {
+	View::share('VERSION_OUT_OF_DATE', true);
 }
 
-if ( isset($current_company) ) {
-	$smarty->assign_by_ref('current_company', $current_company );
-}
-if ( isset($primary_company) ) {
-	$smarty->assign_by_ref('primary_company', $primary_company );
+// Share system settings
+if (isset($system_settings)) {
+	View::share('system_settings', $system_settings);
 }
 
-if ( isset($config_vars) ) {
-	$smarty->assign_by_ref('config_vars', $config_vars );
+// Company information
+if (isset($current_company)) {
+	View::share('current_company', $current_company);
 }
 
-if ( TTi18n::getLanguage() != '' ) {
-	$smarty->assign('CALENDAR_LANG', TTi18n::getLanguage() );
-}else{
-	$smarty->assign('CALENDAR_LANG', 'en');
+if (isset($primary_company)) {
+	View::share('primary_company', $primary_company);
 }
 
+// Config variables
+if (isset($config_vars)) {
+	View::share('config_vars', $config_vars);
+}
+
+ // Calendar language
+ $language = TTi18n::getLanguage();
+ View::share('CALENDAR_LANG', !empty($language) ? $language : 'en');
 
 if ( isset($current_user) )  {
-	$smarty->assign_by_ref('current_user', $current_user );
-	$smarty->assign_by_ref('current_user_prefs', $current_user_prefs );
+	View::share('current_user', $currentUser);
+    View::share('current_user_prefs', $currentUser->preferences);
 
 	if ( !isset($skip_message_check) ) {
 		$profiler->startTimer( 'Interface.inc - Check for UNREAD messages...');
@@ -277,9 +291,10 @@ if ( isset($current_user) )  {
 		$mclf = new MessageControlListFactory();
 		$unread_messages = $mclf->getNewMessagesByCompanyIdAndUserId( $current_user->getCompany(), $current_user->getId() );
 		Debug::text('UnRead Messages: '. $unread_messages, __FILE__, __LINE__, __METHOD__, 10);
-		$smarty->assign_by_ref('unread_messages', $unread_messages );
-		if ( isset($_COOKIE['newMailPopUp']) ) {
-			$smarty->assign_by_ref('newMailPopUp', $_COOKIE['newMailPopUp'] );
+		View::share('unread_messages', $unread_messages);
+		
+		if ($request->cookie('newMailPopUp')) {
+			View::share('newMailPopUp', $request->cookie('newMailPopUp'));
 		}
 		unset($mclf);
 		$profiler->stopTimer( 'Interface.inc - Check for UNREAD messages...');
@@ -303,7 +318,7 @@ if ( isset($current_user) )  {
 
 		if ( isset($display_exception_flag) ) {
 			Debug::text('Exception Flag to Display: '. $display_exception_flag, __FILE__, __LINE__, __METHOD__, 10);
-			$smarty->assign_by_ref('display_exception_flag', $display_exception_flag );
+			View::share('display_exception_flag', $display_exception_flag);
 			//Make sure we leave this variable around for the menu.js.php.
 		}
 
@@ -311,13 +326,14 @@ if ( isset($current_user) )  {
 	}
 }
 if ( isset($current_station) ) {
-	$smarty->assign_by_ref('current_station', $current_station );
+	View::share('current_station', $current_station);
 }
 
-$smarty->assign('BASE_URL', Environment::getBaseURL() );
-$smarty->assign('global_script_start_time', $global_script_start_time );
-$smarty->assign('profiler', $profiler );
-$smarty->assign_by_ref('permission', $permission );
+// Base URL and performance metrics
+View::share('BASE_URL', Environment::getBaseURL());
+View::share('global_script_start_time', $GLOBALS['global_script_start_time'] ?? microtime(true));
+View::share('profiler', $profiler);
+View::share('permission', $permission);
 
 $profiler->startTimer( 'Main' );
 ?>

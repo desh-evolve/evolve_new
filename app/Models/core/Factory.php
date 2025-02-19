@@ -3,11 +3,12 @@
 namespace App\Models\Core;
 
 use App\Models\Company\CompanyGenericTagFactory;
+use App\Models\Users\UserListFactory;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use UserListFactory;
+use Illuminate\Support\Facades\Schema;
 
 abstract class Factory {
 	public $data = array();
@@ -1507,6 +1508,11 @@ abstract class Factory {
 	//Grabs the current object
 	final function getCurrent() {
 		return $this->getIterator()->current();
+	}
+
+	public static function checkTableExists($table_name)
+	{
+		return Schema::hasTable($table_name);
 	}
 }
 ?>

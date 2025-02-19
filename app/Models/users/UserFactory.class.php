@@ -1,19 +1,11 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5453 $
- * $Id: UserFactory.class.php 5453 2011-11-03 20:30:28Z ipso $
- * $Date: 2011-11-03 13:30:28 -0700 (Thu, 03 Nov 2011) $
- */
 
-/**
- * @package Module_Users
- */
+namespace App\Models\Users;
+
+use App\Models\Core\Factory;
+
 class UserFactory extends Factory {
+
 	protected $table = 'users';
 	protected $pk_sequence_name = 'users_id_seq'; //PK Sequence name
 

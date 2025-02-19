@@ -7,7 +7,7 @@ use IteratorAggregate;
 
 class SystemSettingListFactory extends SystemSettingFactory implements IteratorAggregate {
 
-	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+	public function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'

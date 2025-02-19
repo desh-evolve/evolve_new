@@ -3,10 +3,13 @@
 namespace App\Models\Core;
 
 use App\Models\Company\CompanyListFactory;
+use App\Models\Users\UserListFactory;
 use Exception;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use UserIdentificationListFactory;
-use UserListFactory;
 
 class Authentication {
 	protected $name = 'SessionID';
@@ -124,7 +127,7 @@ class Authentication {
 
 		try {
 			//$this->db->Execute($query, $ph);
-			$this->rs = DB::update($query, $ph);
+			DB::update($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -177,6 +180,7 @@ class Authentication {
 
 	function checkCompanyStatus( $user_name ) {
 		$ulf = new UserListFactory();
+
 		$ulf->getByUserName( strtolower($user_name) );
 
 		if ( $ulf->getRecordCount() == 1 ) {
@@ -329,20 +333,20 @@ class Authentication {
 		return FALSE;
 	}
 
-	private function setCookie() {
-		if ( $this->getSessionID() ) {
-			setcookie($this->getName(), $this->getSessionID(), time()+9999999, Environment::getBaseURL(), NULL, $this->isSSL() );
-
-			return TRUE;
+	private function setCookie()
+	{
+		if ($this->getSessionID()) {
+			Cookie::queue($this->getName(), $this->getSessionID(), 9999999, '/', null, $this->isSSL(), false);
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
-	private function destroyCookie() {
-		setcookie($this->getName(), NULL, time()+9999999, Environment::getBaseURL(), NULL, $this->isSSL() );
-
-		return TRUE;
+	private function destroyCookie()
+	{
+		Cookie::queue(Cookie::forget($this->getName()));
+		return true;
 	}
 
 	private function UpdateLastLoginDate() {
@@ -356,7 +360,7 @@ class Authentication {
 
 		try {
 			//$this->db->Execute($query, $ph);
-			$this->rs = DB::update($query, $ph);
+			DB::update($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -376,7 +380,7 @@ class Authentication {
 
 		try {
 			//$this->db->Execute($query, $ph);
-			$this->rs = DB::select($query, $ph);
+			DB::select($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -398,7 +402,7 @@ class Authentication {
 
 		try {
 			//$this->db->Execute($query, $ph);
-			$this->rs = DB::select($query, $ph);
+			DB::select($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -425,7 +429,7 @@ class Authentication {
 							)';
 		try {
 			//$this->db->Execute($query, $ph);
-			$this->rs = DB::insert($query, $ph);
+			DB::insert($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
 		}
@@ -468,55 +472,61 @@ class Authentication {
 		return FALSE;
 	}
 
-	function Login($user_name, $password, $type = 'USER_NAME') {
-		//DO NOT lowercase username, because iButton values are case sensitive.
-		$user_name = html_entity_decode( trim($user_name) );
-		$password = html_entity_decode( $password );
+	public function login($user_name, $password, $type = 'USER_NAME')
+	{
+		$user_name = trim(html_entity_decode($user_name));
+		$password = html_entity_decode($password);
 
-		//Checks user_name/password
-        if ( $user_name == '' OR $password == '' ) {
-			return FALSE;
+		if (empty($user_name) || empty($password)) {
+			return false;
 		}
 
-		Debug::text('Login Type: '. $type, __FILE__, __LINE__, __METHOD__, 10);
+		Log::info('Login Type: ' . $type);
 
-		//Prevent brute force attacks by IP address.
-
-		//Allowed up to 20 attempts in a 30 min period.
-		if ( $this->rl->check() == FALSE ) {
-			Debug::Text('Excessive failed password attempts... Preventing login from: '. $_SERVER['REMOTE_ADDR'] .' for up to 15 minutes...', __FILE__, __LINE__, __METHOD__,10);
-			sleep(5); //Excessive password attempts, sleep longer.
-			return FALSE;
+		$ipAddress = request()->ip();
+		$key = "login_attempts_{$ipAddress}";
+		
+		// Prevent brute force attacks
+		if (RateLimiter::tooManyAttempts($key, 20)) {
+			Log::warning("Excessive failed login attempts from $ipAddress. Locking for 15 minutes.");
+			sleep(5);
+			return false;
 		}
 
-		if ( strtolower($type) == 'user_name' ) {
-			if ( $this->checkCompanyStatus( $user_name ) == TRUE ) {
-				//Lowercase regular user_names here only.
-				$password_result = $this->checkPassword( strtolower($user_name), $password);
-			} else {
-				$password_result = FALSE; //No company by that user name.
-			}
-		} elseif (strtolower($type) == 'phone_id') {
-			$password_result = $this->checkPhonePassword($user_name, $password);
-		} elseif (strtolower($type) == 'ibutton') {
-			$password_result = $this->checkIButton($user_name);
-		} elseif (strtolower($type) == 'barcode') {
-			$password_result = $this->checkBarcode($user_name, $password);
-		} elseif (strtolower($type) == 'finger_print') {
-			$password_result = $this->checkFingerPrint( $user_name );
-		} elseif (strtolower($type) == 'client_pc') {
-			//This is for client application persistent connections, use:
-			//Login Type: client_pc
-			//Station Type: PC
+		$password_result = false;
 
-			//$password_result = $this->checkClientPC( $user_name );
-			$password_result = $this->checkBarcode($user_name, $password);
-		} else {
-			return FALSE;
+		switch (strtolower($type)) {
+			case 'user_name':
+				if ($this->checkCompanyStatus($user_name)) {
+					$password_result = $this->checkPassword(strtolower($user_name), $password);
+				}
+				break;
+			case 'phone_id':
+				$password_result = $this->checkPhonePassword($user_name, $password);
+				break;
+			case 'ibutton':
+				$password_result = $this->checkIButton($user_name);
+				break;
+			case 'barcode':
+				$password_result = $this->checkBarcode($user_name, $password);
+				break;
+			case 'finger_print':
+				$password_result = $this->checkFingerPrint($user_name);
+				break;
+			case 'client_pc':
+				//This is for client application persistent connections, use:
+				//Login Type: client_pc
+				//Station Type: PC
+
+				//$password_result = $this->checkClientPC( $user_name );
+				$password_result = $this->checkBarcode($user_name, $password);
+				break;
+			default:
+				return false;
 		}
 
-		if ( $password_result === TRUE ) {
-			Debug::text('Login Succesful!', __FILE__, __LINE__, __METHOD__, 10);
+		if ($password_result === true) {
+			Log::info('Login Successful!');
 
 			$this->setSessionID( $this->genSessionID() );
 			$this->setIPAddress();
@@ -534,25 +544,29 @@ class Authentication {
 				$this->UpdateLastLoginDate();
 			}
 
-			TTDebug::addEntry( $this->getObject()->getID(), 100,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '. TTi18n::getText('Type').': '. $type .' '.  TTi18n::getText('SessionID') .': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication'); //Login
+			TTLog::addEntry( $this->getObject()->getID(), 100,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '. TTi18n::getText('Type').': '. $type .' '.  TTi18n::getText('SessionID') .': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication'); //Login
 
-			$this->rl->delete(); //Clear failed password rate limit upon successful login.
+			Log::info("User {$user_name} logged in successfully with IP: {$ipAddress}");
 
-			return TRUE;
+			// Clear rate limit on successful login
+			RateLimiter::clear($key);
+
+			return true;
 		}
 
-		Debug::text('Login Failed! Attempt: '. $this->rl->getAttempts(), __FILE__, __LINE__, __METHOD__, 10);
+		Log::warning("Login Failed! Attempts: " . RateLimiter::attempts($key));
 
-		sleep( ($this->rl->getAttempts()*0.5) ); //If password is incorrect, sleep for some time to slow down brute force attacks.
+		RateLimiter::hit($key, 1800); // 30-minute limit
+		sleep(RateLimiter::attempts($key) * 0.5); //If password is incorrect, sleep for some time to slow down brute force attacks.
 
-		return FALSE;
+		return false;
 	}
 
 	function Logout( $session_id = NULL ) {
 		$this->destroyCookie();
 		$this->Delete();
 
-		TTDebug::addEntry( $this->getObject()->getID(), 110,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '.  TTi18n::getText('SessionID').': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication');
+		TTLog::addEntry( $this->getObject()->getID(), 110,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '.  TTi18n::getText('SessionID').': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication');
 
 		BreadCrumb::Delete();
 

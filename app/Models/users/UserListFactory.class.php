@@ -1,18 +1,10 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5613 $
- * $Id: UserListFactory.class.php 5613 2011-11-24 19:49:41Z ipso $
- * $Date: 2011-11-24 11:49:41 -0800 (Thu, 24 Nov 2011) $
- */
 
-/**
- * @package Module_Users
- */
+namespace App\Models\Users;
+
+use IteratorAggregate;
+use App\Models\Users\UserFactory;
+
 class UserListFactory extends UserFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
