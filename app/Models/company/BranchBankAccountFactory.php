@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Company;
+
+use App\Models\Core\Factory;
 use App\Models\core\Validator;
 use Illuminate\Support\Facades\Log;
 

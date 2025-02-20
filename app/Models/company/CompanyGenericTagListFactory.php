@@ -1,21 +1,7 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 namespace App\Models\Company;
-use Illuminate\Support\Facades\Log;
+use IteratorAggregate;
 
-/*
- * $Revision: 4265 $
- * $Id: BranchListFactory.class.php 4265 2011-02-18 00:49:20Z ipso $
- * $Date: 2011-02-17 16:49:20 -0800 (Thu, 17 Feb 2011) $
- */
-
-/**
- * @package Module_Company
- */
 class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -55,7 +41,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -103,7 +89,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
@@ -132,7 +118,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -159,7 +145,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -188,7 +174,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 		$query .= ' AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -215,7 +201,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -278,7 +264,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 		if ( $this->getRecordCount() > 0 ) {
 			Debug::text('Rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -368,9 +354,10 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 		Debug::Arr($ph,'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;

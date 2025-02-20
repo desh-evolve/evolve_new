@@ -9,12 +9,12 @@
  * $Id: PayStubFactory.class.php 5457 2011-11-04 20:49:58Z ipso $
  * $Date: 2011-11-04 13:49:58 -0700 (Fri, 04 Nov 2011) $
  */
+
+ 
+namespace App\Models\PayStub;
+use App\Models\Core\Factory;
 require_once( 'Numbers/Words.php');
 
-
-/**
- * @package Module_Pay_Stub
- */
 class PayStubFactory extends Factory {
 	protected $table = 'pay_stub';
 	protected $pk_sequence_name = 'pay_stub_id_seq'; //PK Sequence name
@@ -129,7 +129,7 @@ class PayStubFactory extends Factory {
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
 										'id' => 'ID',
 										'user_id' => 'User',

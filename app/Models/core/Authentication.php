@@ -3,13 +3,15 @@
 namespace App\Models\Core;
 
 use App\Models\Company\CompanyListFactory;
+use App\Models\Users\UserIdentificationListFactory;
 use App\Models\Users\UserListFactory;
+
 use Exception;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
-use UserIdentificationListFactory;
+
 
 class Authentication {
 	protected $name = 'SessionID';
@@ -126,7 +128,6 @@ class Authentication {
 					';
 
 		try {
-			//$this->db->Execute($query, $ph);
 			DB::update($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
@@ -178,7 +179,7 @@ class Authentication {
 		return md5( uniqid( dechex( mt_srand() ) ) );
 	}
 
-	function checkCompanyStatus( $user_name ) {
+	public function checkCompanyStatus( $user_name ) {
 		$ulf = new UserListFactory();
 
 		$ulf->getByUserName( strtolower($user_name) );
@@ -359,7 +360,6 @@ class Authentication {
 					where id = :user_id';
 
 		try {
-			//$this->db->Execute($query, $ph);
 			DB::update($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
@@ -379,7 +379,6 @@ class Authentication {
 					';
 
 		try {
-			//$this->db->Execute($query, $ph);
 			DB::select($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
@@ -401,7 +400,6 @@ class Authentication {
 							OR ('. TTDate::getTime() .' - updated_date) > 86400';
 
 		try {
-			//$this->db->Execute($query, $ph);
 			DB::select($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);
@@ -428,7 +426,6 @@ class Authentication {
 								:updated_date
 							)';
 		try {
-			//$this->db->Execute($query, $ph);
 			DB::insert($query, $ph);
 		} catch (Exception $e) {
 			throw new DBError($e);

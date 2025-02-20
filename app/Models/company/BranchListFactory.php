@@ -5,7 +5,7 @@
  *
  ********************************************************************************/
 namespace App\Models\Company;
-use Illuminate\Support\Facades\Log;
+use IteratorAggregate;
 
 /*
  * $Revision: 5369 $
@@ -55,7 +55,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -169,7 +169,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
@@ -224,7 +224,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -259,7 +259,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
@@ -289,7 +289,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -317,7 +317,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -350,7 +350,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -419,7 +419,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 		if ( $this->getRecordCount() > 0 ) {
 			Debug::text('Rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -521,9 +521,10 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;

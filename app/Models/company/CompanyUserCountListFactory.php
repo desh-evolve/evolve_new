@@ -1,20 +1,8 @@
 <?php
 
 namespace App\Models\Company;
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4701 $
- * $Id: CompanyUserCountListFactory.class.php 4701 2011-05-14 23:55:07Z ipso $
- * $Date: 2011-05-14 16:55:07 -0700 (Sat, 14 May 2011) $
- */
+use IteratorAggregate;
 
-/**
- * @package Module_Company
- */
 class CompanyUserCountListFactory extends CompanyUserCountFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -54,7 +42,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -81,9 +69,10 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -208,9 +197,10 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -266,9 +256,10 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -326,9 +317,10 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -383,9 +375,10 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -462,9 +455,10 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -488,7 +482,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 						';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -515,7 +509,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 						';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

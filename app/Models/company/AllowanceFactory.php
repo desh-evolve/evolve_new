@@ -1,18 +1,8 @@
 <?php
 
 namespace App\Models\Company;
+use App\Models\Core\Factory;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of AllowanceFactory
- *
- * @author Thusitha
- */
 class AllowanceFactory extends Factory {
 	protected $table = 'allowance_data';
 	protected $pk_sequence_name = 'allowance_data_id_seq'; //PK Sequence name

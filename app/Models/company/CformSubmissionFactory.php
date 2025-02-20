@@ -1,20 +1,8 @@
 <?php
 
 namespace App\Models\Company;
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: CompanyUserCountFactory.class.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
+use App\Models\Core\Factory;
 
-/**
- * @package Module_Company
- */
 class CformSubmissionFactory extends Factory {
 	protected $table = 'cform_submission';
 	protected $pk_sequence_name = 'cform_submission_id_seq'; //PK Sequence name

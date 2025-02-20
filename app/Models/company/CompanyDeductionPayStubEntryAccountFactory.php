@@ -5,17 +5,8 @@
  *
  ********************************************************************************/
 namespace App\Models\Company;
-use Illuminate\Support\Facades\Log;
+use App\Models\Core\Factory;
 
-/*
- * $Revision: 4104 $
- * $Id: CompanyDeductionPayStubEntryAccountFactory.class.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-
-/**
- * @package Module_Company
- */
 class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 	protected $table = 'company_deduction_pay_stub_entry_account';
 	protected $pk_sequence_name = 'company_deduction_pay_stub_entry_account_id_seq'; //PK Sequence name

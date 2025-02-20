@@ -1,21 +1,7 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 namespace App\Models\Company;
-use Illuminate\Support\Facades\Log;
+use App\Models\Core\Factory;
 
-/*
- * $Revision: 5125 $
- * $Id: BranchFactory.class.php 5125 2011-08-12 15:48:20Z ipso $
- * $Date: 2011-08-12 08:48:20 -0700 (Fri, 12 Aug 2011) $
- */
-
-/**
- * @package Module_Company
- */
 class CompanyGenericTagFactory extends Factory {
 	protected $table = 'company_generic_tag';
 	protected $pk_sequence_name = 'company_generic_tag_id_seq'; //PK Sequence name
@@ -98,7 +84,7 @@ class CompanyGenericTagFactory extends Factory {
 		return $retval;
 	}
 
-    function _getVariableToFunctionMap() {
+    function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
 										'id' => 'ID',
 										'company_id' => 'Company',

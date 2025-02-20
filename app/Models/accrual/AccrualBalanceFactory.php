@@ -1,22 +1,16 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 
 namespace App\Models\Accrual;
-use Illuminate\Support\Facades\Log;
 
-/*
- * $Revision: 4265 $
- * $Id: AccrualBalanceFactory.class.php 4265 2011-02-18 00:49:20Z ipso $
- * $Date: 2011-02-17 16:49:20 -0800 (Thu, 17 Feb 2011) $
- */
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTi18n;
+use App\Models\Policy\AccrualPolicyFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
 
-/**
- * @package Module_Accrual
- */
 class AccrualBalanceFactory extends Factory {
 	protected $table = 'accrual_balance';
 	protected $pk_sequence_name = 'accrual_balance_id_seq'; //PK Sequence name
@@ -26,36 +20,35 @@ class AccrualBalanceFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
+					'-1010-first_name' => TTi18n::gettext('First Name'),
+					'-1020-last_name' => TTi18n::gettext('Last Name'),
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+					'-1030-accrual_policy' => TTi18n::gettext('Accrual Policy'),
+					'-1040-accrual_policy_type' => TTi18n::gettext('Accrual Policy Type'),
+					'-1050-balance' => TTi18n::gettext('Balance'),
 
-										'-1030-accrual_policy' => TTi18n::gettext('Accrual Policy'),
-										'-1040-accrual_policy_type' => TTi18n::gettext('Accrual Policy Type'),
-										'-1050-balance' => TTi18n::gettext('Balance'),
+					'-1090-title' => TTi18n::gettext('Title'),
+					'-1099-group' => TTi18n::gettext('Group'),
+					'-1100-default_branch' => TTi18n::gettext('Branch'),
+					'-1110-default_department' => TTi18n::gettext('Department'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										'-1099-group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
-
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
-							);
+					'-2000-created_by' => TTi18n::gettext('Created By'),
+					'-2010-created_date' => TTi18n::gettext('Created Date'),
+					'-2020-updated_by' => TTi18n::gettext('Updated By'),
+					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+				);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( array('accrual_policy','balance'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
 				break;
 			case 'default_display_columns': //Columns that are displayed by default.
 				$retval = array(
-								'first_name',
-								'last_name',
-								'accrual_policy',
-								'accrual_policy_type',
-								'balance'
-								);
+					'first_name',
+					'last_name',
+					'accrual_policy',
+					'accrual_policy_type',
+					'balance'
+				);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
 				break;

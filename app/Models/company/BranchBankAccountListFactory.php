@@ -6,8 +6,7 @@
  ********************************************************************************/
 
  namespace App\Models\Company;
-use Illuminate\Support\Facades\Log;
-
+use IteratorAggregate;
 /*
  * $Revision: 4993 $
  * $Id: BankAccountListFactory.class.php 4993 2011-07-15 23:32:11Z ipso $
@@ -55,7 +54,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -77,7 +76,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -102,7 +101,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -124,7 +123,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}        
@@ -147,7 +146,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -175,7 +174,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -310,9 +309,10 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;

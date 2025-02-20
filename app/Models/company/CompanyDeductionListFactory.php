@@ -6,17 +6,8 @@
  *
  ********************************************************************************/
 namespace App\Models\Company;
-use Illuminate\Support\Facades\Log;
+use IteratorAggregate;
 
-/*
- * $Revision: 4265 $
- * $Id: CompanyDeductionListFactory.class.php 4265 2011-02-18 00:49:20Z ipso $
- * $Date: 2011-02-17 16:49:20 -0800 (Thu, 17 Feb 2011) $
- */
-
-/**
- * @package Module_Company
- */
 class CompanyDeductionListFactory extends CompanyDeductionFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -61,7 +52,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			if ( !is_array($id) ) {
 				$this->saveCache($this->rs,$id);
@@ -96,7 +87,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -127,7 +118,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 
 		//Debug::Text('Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -155,7 +146,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -183,7 +174,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -204,7 +195,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -232,7 +223,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -260,7 +251,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -293,7 +284,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -467,9 +458,10 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;

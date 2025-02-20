@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
-abstract class Factory {
+class Factory {
 	public $data = array();
 	public $old_data = array(); //Used for detailed audit log.
 

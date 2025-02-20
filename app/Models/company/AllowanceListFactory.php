@@ -1,17 +1,10 @@
 <?php
 
 namespace App\Models\Company;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of AllowanceListFactory
- *
- * @author Thusitha
- */
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregate {
     //put your code here
     
@@ -51,7 +44,7 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -73,7 +66,7 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -98,7 +91,7 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

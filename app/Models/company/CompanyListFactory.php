@@ -1,9 +1,4 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 namespace App\Models\Company;
 
 use IteratorAggregate;
@@ -11,9 +6,9 @@ use ArrayIterator;
 use App\Models\Company;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
+use App\Models\Users\UserFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
-use UserFactory;
 
 class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 {

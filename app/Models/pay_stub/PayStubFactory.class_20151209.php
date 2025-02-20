@@ -78,17 +78,13 @@
 
  */
 
+
+
+
+
+namespace App\Models\PayStub;
+use App\Models\Core\Factory;
 require_once( 'Numbers/Words.php');
-
-
-
-
-
-/**
-
- * @package Module_Pay_Stub
-
- */
 
 class PayStubFactory extends Factory {
 
@@ -318,7 +314,7 @@ class PayStubFactory extends Factory {
 
 
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap( $data ) {
 
 		$variable_function_map = array(
 

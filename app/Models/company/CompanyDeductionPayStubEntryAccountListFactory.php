@@ -1,20 +1,8 @@
 <?php
 
 namespace App\Models\Company;
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 2095 $
- * $Id: CompanyDeductionPayStubEntryAccountListFactory.class.php 2095 2008-09-01 07:04:25Z ipso $
- * $Date: 2008-09-01 00:04:25 -0700 (Mon, 01 Sep 2008) $
- */
+use IteratorAggregate;
 
-/**
- * @package Module_Company
- */
 class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPayStubEntryAccountFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -51,7 +39,7 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -74,7 +62,7 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -99,7 +87,7 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

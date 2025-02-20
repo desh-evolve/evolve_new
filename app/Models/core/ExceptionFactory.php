@@ -80,7 +80,7 @@ class ExceptionFactory extends Factory {
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap( $data ) {
 			$variable_function_map = array(
 											'id' => 'ID',
 											'user_date_id' => 'UserDateID',

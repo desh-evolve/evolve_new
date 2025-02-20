@@ -5,7 +5,7 @@
  *
  ********************************************************************************/
 namespace App\Models\Accrual;
-use Illuminate\Support\Facades\Log;
+use App\Models\Core\Factory;
 
 /*
  * $Revision: 5334 $
@@ -92,7 +92,7 @@ class AccrualFactory extends Factory {
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
                                                                     'id' => 'ID',
                                                                     'user_id' => 'User',

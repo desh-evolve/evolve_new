@@ -39,7 +39,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -61,7 +61,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -88,7 +88,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -124,7 +124,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -175,7 +175,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					ORDER BY b.date_stamp asc, d.type_id
 					'; 
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -226,7 +226,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					ORDER BY d.severity_id desc
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -269,7 +269,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					ORDER BY d.severity_id desc
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -321,9 +321,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -381,9 +382,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -442,9 +444,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -540,7 +543,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -632,7 +635,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -815,9 +818,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -1053,9 +1057,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		//Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;

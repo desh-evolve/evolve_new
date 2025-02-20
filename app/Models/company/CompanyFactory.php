@@ -1,12 +1,6 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 namespace App\Models\Company;
 use App\Models\Core\Factory;
-use Illuminate\Support\Facades\Log;
 
 class CompanyFactory extends Factory {
 	protected $table = 'company';

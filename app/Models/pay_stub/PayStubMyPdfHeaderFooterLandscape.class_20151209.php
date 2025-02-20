@@ -1,6 +1,10 @@
 <?php
 
 
+namespace App\Models\PayStub;
+
+use App\Models\Core\TTPDF;
+
 class PayStubMyPdfHeaderFooterLandscape extends TTPDF{
 
 

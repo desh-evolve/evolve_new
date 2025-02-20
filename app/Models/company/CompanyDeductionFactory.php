@@ -1,20 +1,8 @@
 <?php
 
 namespace App\Models\Company;
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5459 $
- * $Id: CompanyDeductionFactory.class.php 5459 2011-11-04 21:40:55Z ipso $
- * $Date: 2011-11-04 14:40:55 -0700 (Fri, 04 Nov 2011) $
- */
+use App\Models\Core\Factory;
 
-/**
- * @package Module_Company
- */
 class CompanyDeductionFactory extends Factory {
 	protected $table = 'company_deduction';
 	protected $pk_sequence_name = 'company_deduction_id_seq'; //PK Sequence name
@@ -417,7 +405,7 @@ class CompanyDeductionFactory extends Factory {
 		return $retval;
 	}
 
-	function _getVariableToFunctionMap() {
+	function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
 										'id' => 'ID',
 										'company_id' => 'Company',

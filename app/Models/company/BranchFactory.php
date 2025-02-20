@@ -6,7 +6,7 @@
  ********************************************************************************/
 
  namespace App\Models\Company;
-use Illuminate\Support\Facades\Log;
+ use App\Models\Core\Factory;
 
 /*
  * $Revision: 5229 $
@@ -86,7 +86,7 @@ class BranchFactory extends Factory {
 		return $retval;
 	}
 
-    function _getVariableToFunctionMap() {
+    function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
 										'id' => 'ID',
 										'company_id' => 'Company',

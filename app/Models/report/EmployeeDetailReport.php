@@ -1,21 +1,7 @@
 <?php
 
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 2095 $
- * $Id: Sort.class.php 2095 2008-09-01 07:04:25Z ipso $
- * $Date: 2008-09-01 00:04:25 -0700 (Mon, 01 Sep 2008) $
- */
+namespace App\Models\Report;
 
-/**
- * Description of EmployeeDetailReport
- *
- * @author Thusitha
- */
 class EmployeeDetailReport extends Report {
 
         function __construct() {
