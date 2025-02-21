@@ -5248,7 +5248,7 @@ class UserDateTotalFactory extends Factory {
 
     function addLog($log_action) {
         if ($this->getOverride() == TRUE AND $this->getStatus() == 30) { //Absence
-            return TTDebug::addEntry($this->getId(), $log_action, TTi18n::getText('Absence') . ' - ' . TTi18n::getText('Date') . ': ' . TTDate::getDate('DATE', $this->getUserDateObject()->getDateStamp()) . ' ' . TTi18n::getText('Total Time') . ': ' . TTDate::getTimeUnit($this->getTotalTime()), NULL, $this->getTable(), $this);
+            return TTLog::addEntry($this->getId(), $log_action, TTi18n::getText('Absence') . ' - ' . TTi18n::getText('Date') . ': ' . TTDate::getDate('DATE', $this->getUserDateObject()->getDateStamp()) . ' ' . TTi18n::getText('Total Time') . ': ' . TTDate::getTimeUnit($this->getTotalTime()), NULL, $this->getTable(), $this);
         }
     }
 

@@ -2,18 +2,15 @@
 
 namespace App\Models\Company;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Users\UserListFactory;
 
 class AllowanceFactory extends Factory {
 	protected $table = 'allowance_data';
 	protected $pk_sequence_name = 'allowance_data_id_seq'; //PK Sequence name
 
 	var $user_obj = NULL;
-        
-        
-        
-        
-        
-        
         
 	function getUserObject() {
 		if ( is_object($this->user_obj) ) {
@@ -98,8 +95,6 @@ class AllowanceFactory extends Factory {
 		return FALSE;
 	}
 
-        
-        
 	function getWorkedDays() {
 		if ( isset($this->data['worked_days']) ) {
 			return $this->data['worked_days'];

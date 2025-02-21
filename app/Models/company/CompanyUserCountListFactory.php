@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Models\Company;
+
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class CompanyUserCountListFactory extends CompanyUserCountFactory implements IteratorAggregate {
@@ -15,9 +18,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -31,20 +34,20 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 						';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
 			$this->rs = DB::select($query, $ph);
 
-			$this->saveCache($this->rs,$id);
+			$this->saveCache($this->rs, $id);
 		}
 
 		return $this;
@@ -56,13 +59,13 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -96,9 +99,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -122,9 +125,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -147,9 +150,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -169,9 +172,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -189,9 +192,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 							max(deleted_users) as max_deleted_users
 
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND date_stamp >= ?
-						AND date_stamp <= ?
+					where	company_id = :company_id
+						AND date_stamp >= :start_date
+						AND date_stamp <= :end_date
 						';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -222,8 +225,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		$ph = array(
 					//'company_id' => $id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -243,8 +246,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 					from	'. $this->getTable() .'
 					where
-						date_stamp >= ?
-						AND date_stamp <= ? ';
+						date_stamp >= :start_date
+						AND date_stamp <= :end_date ';
 
 		if ( $id != '' AND ( isset($id[0]) AND !in_array(-1, (array)$id) ) ) {
 			$query  .=	' AND company_id in ('. $this->getListSQL($id, $ph) .') ';
@@ -279,9 +282,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
@@ -308,9 +311,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 							max(deleted_users) as max_deleted_users
 
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND date_stamp >= ?
-						AND date_stamp <= ?
+					where	company_id = :company_id
+						AND date_stamp >= :start_date
+						AND date_stamp <= :end_date
 					GROUP BY '. $month_sql .'
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -336,8 +339,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
@@ -366,8 +369,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 					from	'. $this->getTable() .'
 					where
-						date_stamp >= ?
-						AND date_stamp <= ?
+						date_stamp >= :start_date
+						AND date_stamp <= :end_date
 					GROUP BY company_id,'. $month_sql .'
 					ORDER BY company_id,'. $month_sql .'
 						';
@@ -397,9 +400,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$cf = new CompanyFactory();
 
 		$ph = array(
-					'status_id' => $status_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':status_id' => $status_id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
@@ -443,9 +446,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 							from	'. $this->getTable() .' as a
 								LEFT JOIN '. $cf->getTable() .' as cf ON ( a.company_id = cf.id )
 							where
-								cf.status_id = ?
-								AND a.date_stamp >= ?
-								AND a.date_stamp <= ?
+								cf.status_id = :status_id
+								AND a.date_stamp >= :start_date
+								AND a.date_stamp <= :end_date
 								AND ( cf.deleted = 0 )
 							GROUP BY company_id,'. $month_sql .'
 						) as tmp
@@ -470,13 +473,13 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 					ORDER BY date_stamp desc
 					LIMIT 1
 						';
@@ -497,15 +500,15 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	id = ?
+					where	company_id = :company_id
+						AND	id = :id
 						';
 		$query .= $this->getSortSQL( $order );
 

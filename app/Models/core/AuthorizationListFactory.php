@@ -14,9 +14,9 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -28,13 +28,13 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 		}
 
 		$ph = array(
-					'id' => (int)$id,
+					':id' => (int)$id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->table .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -63,14 +63,14 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
 					LEFT JOIN '. $uf->getTable() .' as uf ON (a.created_by = uf.id )
-					where	uf.company_id = ?
+					where	uf.company_id = :company_id
 						AND	a.id in ('. $this->getListSQL($id, $ph) .')
 						AND ( a.deleted = 0 AND uf.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
@@ -96,8 +96,8 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 		}
 
 		$ph = array(
-					'object_type_id' => $object_type_id,
-					'object_id' => $object_id,
+					':object_type_id' => $object_type_id,
+					':object_id' => $object_id,
 					);
 
 		/*
@@ -109,8 +109,8 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 		$query = '
 					select 	*
 					from	'. $this->table .'
-					where	object_type_id = ?
-						AND object_id = ?
+					where	object_type_id = :object_type_id
+						AND object_id = :object_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -134,9 +134,9 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 		}
 
 		$ph = array(
-					'object_type_id' => $object_type_id,
-					'object_id' => $object_id,
-					'created_by' => $created_by,
+					':object_type_id' => $object_type_id,
+					':object_id' => $object_id,
+					':created_by' => $created_by,
 					);
 
 		/*
@@ -148,9 +148,9 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 		$query = '
 					select 	*
 					from	'. $this->table .'
-					where	object_type_id = ?
-						AND object_id = ?
-						AND created_by = ?
+					where	object_type_id = :object_type_id
+						AND object_id = :object_id
+						AND created_by = :created_by
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -196,7 +196,7 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 		$pptsvf = new PayPeriodTimeSheetVerifyListFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -214,7 +214,7 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 						LEFT JOIN '. $pptsvf->getTable() .' as pptsvf ON ( a.object_type_id = 90 AND a.object_id = pptsvf.id )
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	y.company_id = ?';
+					where	y.company_id = :company_id';
 		$user_id_column = 'a.created_by';
 		if ( isset($filter_data['object_type_id']) AND in_array( $filter_data['object_type_id'], array(1010,1020,1030,1040,1100) ) ) { //Requests
 			$user_id_column = 'ud.user_id';

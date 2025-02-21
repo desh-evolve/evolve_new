@@ -1,7 +1,23 @@
 <?php
 
 namespace App\Models\Company;
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTi18n;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Users\UserDeductionFactory;
+use App\Models\Users\UserListFactory;
+
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\Users\UserDeductionListFactory;
+use App\Models\Core\Environment;
+use App\Models\Core\TTLog;
+
+use App\Models\Core\TTDate;
 
 class CompanyDeductionFactory extends Factory {
 	protected $table = 'company_deduction';
@@ -573,11 +589,11 @@ class CompanyDeductionFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':name' => $name,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND  name = ? AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND  name = :name AND deleted=0';
 		$id = $this->db->GetOne($query, $ph);
 		Debug::Arr($id,'Unique Pay Stub Account: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
@@ -2186,7 +2202,7 @@ class CompanyDeductionFactory extends Factory {
 			return FALSE;
 		}
 
-		require_once( Environment::getBasePath().'/classes/payroll_deduction/PayrollDeduction.class.php');
+		require_once( Environment::getBasePath().'/classes/payroll_deduction/PayrollDeduction.php');
 		$cdf = new CompanyDeductionFactory();
 		$cdf->StartTransaction();
 
@@ -4202,7 +4218,7 @@ class CompanyDeductionFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Tax / Deduction'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Tax / Deduction'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

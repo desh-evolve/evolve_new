@@ -1,23 +1,21 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
+
 namespace App\Models\Accrual;
 
+use App\Models\Company\BranchFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\UserDateFactory;
+use App\Models\Core\UserDateTotalFactory;
+use App\Models\Department\DepartmentFactory;
+use App\Models\Policy\AccrualPolicyFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserTitleFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
-/*
- * $Revision: 5334 $
- * $Id: AccrualListFactory.class.php 5334 2011-10-17 22:18:33Z ipso $
- * $Date: 2011-10-17 15:18:33 -0700 (Mon, 17 Oct 2011) $
- */
-
-/**
- * @package Module_Accrual
- */
 class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -30,9 +28,10 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
+			//$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -44,13 +43,13 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -72,16 +71,16 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
-					);
+			':id' => $id,
+			':company_id' => $company_id
+		);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 						LEFT JOIN  '. $uf->getTable() .' as b on a.user_id = b.id
-					where	a.id = ?
-						AND b.company_id = ?
+					where	a.id = :id
+						AND b.company_id = :company_id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -101,9 +100,9 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id
-					);
+			':user_id' => $user_id,
+			':company_id' => $company_id
+		);
 
 		$uf = new UserFactory();
 
@@ -111,8 +110,8 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 					select 	a.*
 					from	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
-					where	a.user_id = ?
-						AND b.company_id = ?
+					where	a.user_id = :user_id
+						AND b.company_id = :company_id
 						AND a.deleted = 0';
 
 		$query .= $this->getWhereSQL( $where );
@@ -147,10 +146,10 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
-					'accrual_policy_id' => $accrual_policy_id,
-					);
+			':user_id' => $user_id,
+			':company_id' => $company_id,
+			':accrual_policy_id' => $accrual_policy_id,
+		);
 
 		$query = '
 					select 	a.*,
@@ -160,9 +159,9 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 							LEFT JOIN '. $udtf->getTable() .' as c ON a.user_date_total_id = c.id
 							LEFT JOIN '. $udf->getTable() .' as d ON c.user_date_id = d.id
 					where
-						a.user_id = ?
-						AND b.company_id = ?
-						AND a.accrual_policy_id = ?
+						a.user_id = :user_id
+						AND b.company_id = :company_id
+						AND a.accrual_policy_id = :accrual_policy_id
 						AND ( a.user_date_total_id IS NULL OR ( a.user_date_total_id IS NOT NULL AND c.deleted = 0 AND d.deleted = 0) )
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
@@ -200,11 +199,11 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
-					'accrual_policy_id' => $accrual_policy_id,
-                                        'type_id' => $type_id,
-					);
+			':user_id' => $user_id,
+			':company_id' => $company_id,
+			':accrual_policy_id' => $accrual_policy_id,
+			':type_id' => $type_id,
+		);
 
 		$query = '
 					select 	sum(a.amount) as amount,
@@ -214,9 +213,9 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 							LEFT JOIN '. $udtf->getTable() .' as c ON a.user_date_total_id = c.id
 							LEFT JOIN '. $udf->getTable() .' as d ON c.user_date_id = d.id
 					where
-						a.user_id = ?
-						AND b.company_id = ?
-						AND a.accrual_policy_id = ?
+						a.user_id = :user_id
+						AND b.company_id = :company_id
+						AND a.accrual_policy_id = :accrual_policy_id
                                                 AND a.type_id in (70,30,75) 
 						AND ( a.user_date_total_id IS NULL OR ( a.user_date_total_id IS NOT NULL AND c.deleted = 0 AND d.deleted = 0) )
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
@@ -257,11 +256,11 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
-					'accrual_policy_id' => $accrual_policy_id,
-                                        'type_id' => $type_id,
-					);
+			':user_id' => $user_id,
+			':company_id' => $company_id,
+			':accrual_policy_id' => $accrual_policy_id,
+			':type_id' => $type_id,
+		);
 
 		$query = '
 					select 	a.*,
@@ -271,10 +270,10 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 							LEFT JOIN '. $udtf->getTable() .' as c ON a.user_date_total_id = c.id
 							LEFT JOIN '. $udf->getTable() .' as d ON c.user_date_id = d.id
 					where
-						a.user_id = ?
-						AND b.company_id = ?
-						AND a.accrual_policy_id = ?
-                                                AND a.type_id = ? 
+						a.user_id = :user_id
+						AND b.company_id = :company_id
+						AND a.accrual_policy_id = :accrual_policy_id
+                        AND a.type_id = :type_id
 						AND ( a.user_date_total_id IS NULL OR ( a.user_date_total_id IS NOT NULL AND c.deleted = 0 AND d.deleted = 0) )
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
@@ -319,12 +318,12 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
-					'accrual_policy_id' => $accrual_policy_id,
-					'time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
-					'amount' => $amount,
-					);
+			':user_id' => $user_id,
+			':company_id' => $company_id,
+			':accrual_policy_id' => $accrual_policy_id,
+			':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
+			':amount' => $amount,
+		);
 
 		$query = '
 					select 	a.*,
@@ -334,11 +333,11 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 							LEFT JOIN '. $udtf->getTable() .' as c ON a.user_date_total_id = c.id
 							LEFT JOIN '. $udf->getTable() .' as d ON c.user_date_id = d.id
 					where
-						a.user_id = ?
-						AND b.company_id = ?
-						AND a.accrual_policy_id = ?
-						AND a.time_stamp = ?
-						AND a.amount = ?
+						a.user_id = :user_id
+						AND b.company_id = :company_id
+						AND a.accrual_policy_id = :accrual_policy_id
+						AND a.time_stamp = :time_stamp
+						AND a.amount = :amount
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order );
@@ -380,12 +379,12 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
-					'accrual_policy_id' => $accrual_policy_id,
-					'type_id' => $type_id,
-					'time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
-					);
+			':user_id' => $user_id,
+			':company_id' => $company_id,
+			':accrual_policy_id' => $accrual_policy_id,
+			':type_id' => $type_id,
+			':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
+		);
 
 		$query = '
 					select 	a.*,
@@ -395,11 +394,11 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 							LEFT JOIN '. $udtf->getTable() .' as c ON a.user_date_total_id = c.id
 							LEFT JOIN '. $udf->getTable() .' as d ON c.user_date_id = d.id
 					where
-						a.user_id = ?
-						AND b.company_id = ?
-						AND a.accrual_policy_id = ?
-						AND a.type_id = ?
-						AND a.time_stamp = ?
+						a.user_id = :user_id
+						AND b.company_id = :company_id
+						AND a.accrual_policy_id = :accrual_policy_id
+						AND a.type_id = :type_id
+						AND a.time_stamp = :time_stamp
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order );
@@ -423,17 +422,17 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'accrual_policy_id' => $accrual_policy_id,
-					'user_date_total_id' => $user_date_total_id,
-					);
+			':user_id' => $user_id,
+			':accrual_policy_id' => $accrual_policy_id,
+			':user_date_total_id' => $user_date_total_id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND accrual_policy_id = ?
-						AND user_date_total_id = ?
+					where	user_id = :user_id
+						AND accrual_policy_id = :accrual_policy_id
+						AND user_date_total_id = :user_date_total_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -454,15 +453,15 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'user_date_total_id' => $user_date_total_id,
-					);
+			':user_id' => $user_id,
+			':user_date_total_id' => $user_date_total_id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND user_date_total_id = ?
+					where	user_id = :user_id
+						AND user_date_total_id = :user_date_total_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -482,7 +481,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		//Make sure we check if user_date rows are deleted where user_date_total rows are not.
@@ -492,7 +491,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 					LEFT JOIN '. $udtf->getTable() .' as b ON a.user_date_total_id = b.id
 					LEFT JOIN '. $udf->getTable() .' as c ON b.user_date_id = c.id
 					LEFT JOIN '. $apf->getTable() .' as d ON a.accrual_policy_id = d.id
-					where	a.user_id = ?
+					where	a.user_id = :user_id
 						AND (
 								( b.id is NULL OR b.deleted = 1 )
 								OR
@@ -520,16 +519,16 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$udtf = new UserDateTotalFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'accrual_policy_id' => $accrual_policy_id,
-					);
+			':user_id' => $user_id,
+			':accrual_policy_id' => $accrual_policy_id,
+		);
 
 		$query = '
 					select 	sum(amount) as amount
 					from	'. $this->getTable() .' as a
 					LEFT JOIN '. $udtf->getTable() .' as b ON a.user_date_total_id = b.id
-					where	a.user_id = ?
-						AND a.accrual_policy_id = ?
+					where	a.user_id = :user_id
+						AND a.accrual_policy_id = :accrual_policy_id
 						AND ( (a.user_date_total_id is NOT NULL AND b.id is NOT NULL)
 								OR a.user_date_total_id IS NULL AND b.id is NULL )
 						AND a.deleted = 0';
@@ -552,8 +551,8 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'accrual_policy_id' => $accrual_policy_id,
-					);
+			':accrual_policy_id' => $accrual_policy_id,
+		);
 
 		$uf = new UserFactory();
 
@@ -561,7 +560,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 					select 	a.*
 					from	'. $this->getTable() .' as a
 							LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
-					where	a.accrual_policy_id = ?
+					where	a.accrual_policy_id = :accrual_policy_id
 						AND a.deleted = 0
 						AND b.deleted = 0
 					LIMIT 1
@@ -588,9 +587,9 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 		$additional_order_fields = array( 'accrual_policy','accrual_policy_type_id','date_stamp' );
 		$sort_column_aliases = array(
-									 'accrual_policy_type' => 'accrual_policy_type_id',
-									 'type' => 'type_id',
-									 );
+			'accrual_policy_type' => 'accrual_policy_type_id',
+			'type' => 'type_id',
+		);
 		$order = $this->getColumnsFromAliases( $order, $sort_column_aliases );
 		if ( $order == NULL ) {
 			$order = array( 'accrual_policy_id' => 'asc', 'date_stamp' => 'desc');
@@ -611,8 +610,8 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$apf = new AccrualPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					);
+			':company_id' => $company_id,
+		);
 
 		$query = '
 					select 	a.*,
@@ -644,7 +643,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 						LEFT JOIN '. $ugf->getTable() .' as e ON ( b.group_id = e.id AND e.deleted = 0 )
 						LEFT JOIN '. $utf->getTable() .' as f ON ( b.title_id = f.id AND f.deleted = 0 )
 
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -733,18 +732,18 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
                 
 
 		$ph = array(
-					'time_stamp' => $date_stamp,
-                                        'user_id' => $user_id,
-                                        'type_id' => $type_id,
-					);
+			':time_stamp' => $date_stamp,
+			':user_id' => $user_id,
+			':type_id' => $type_id,
+		);
 
 		$uf = new UserFactory();
                 
 
 		$query = "SELECT * FROM ". $this->getTable() ." as a
-                         WHERE DATE_FORMAT(a.time_stamp,'%Y-%m-%d') = ? 
-                         AND a.user_id = ? 
-                         AND a.type_id = ? 
+                         WHERE DATE_FORMAT(a.time_stamp,'%Y-%m-%d') = :time_stamp
+                         AND a.user_id = :user_id
+                         AND a.type_id = :type_id
                          AND a.deleted = 0";
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -755,62 +754,61 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 	}
         
        
-        function getByAccrualPolicyIdAndStartDateAndEndDate($company_id, $user_id,$accrual_policy_id,$type_id, $start_date, $end_date){
+    function getByAccrualPolicyIdAndStartDateAndEndDate($company_id, $user_id,$accrual_policy_id,$type_id, $start_date, $end_date){
             
-                if ( $company_id == '') {
+        if ( $company_id == '') {
 			return FALSE;
 		}
                 
                 
-                if ( $user_id == '') {
+        if ( $user_id == '') {
 			return FALSE;
 		}
                 
                 
-                if ( $accrual_policy_id == '') {
+        if ( $accrual_policy_id == '') {
 			return FALSE;
 		}
 
-                if ( $start_date == '') {
+        if ( $start_date == '') {
 			return FALSE;
 		}
                 
                 
-                if ( $end_date == '') {
+        if ( $end_date == '') {
 			return FALSE;
 		}
                 
                 
 		$ph = array(
-					'company_id' => $company_id,
-                                        'user_id' => $user_id,
-                                        'accrual_policy_id' => $accrual_policy_id,
-                                        'type_id' => $type_id,
-
-					);
+			':company_id' => $company_id,
+			':user_id' => $user_id,
+			':accrual_policy_id' => $accrual_policy_id,
+			':type_id' => $type_id,
+		);
                 
-                $uf = new UserFactory();
+		$uf = new UserFactory();
+		
+		
+		$query = 'select 	sum(a.amount) as amount 
+			from	'. $this->getTable() .' as a '
+				.'inner join '. $uf->getTable() .' as b on  b.id = a.user_id'
+				.' where b.company_id = :company_id '
+				.' and a.user_id =  :user_id'
+				.' and a.accrual_policy_id = :accrual_policy_id'
+				.' and a.type_id = :type_id'
+				." and a.time_stamp  between '".$start_date."' and '".$end_date."'"
+				.' and a.deleted = 0';
                 
                 
-                $query = 'select 	sum(a.amount) as amount 
-					from	'. $this->getTable() .' as a '
-                        .'inner join '. $uf->getTable() .' as b on  b.id = a.user_id'
-                        .' where b.company_id = ? '
-                        .' and a.user_id =  ?'
-                        .' and a.accrual_policy_id = ?'
-                        .' and a.type_id = ?'
-                        ." and a.time_stamp  between '".$start_date."' and '".$end_date."'"
-                        .' and a.deleted = 0';
-                
-                
-                $query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
+        //$query .= $this->getWhereSQL( $where );
+		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
             
-        }
+    }
         
 }
 ?>

@@ -1,21 +1,19 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
+
 namespace App\Models\Accrual;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Leaves\LeaveRequestListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Core\TTLog;
 
-/*
- * $Revision: 5334 $
- * $Id: AccrualFactory.class.php 5334 2011-10-17 22:18:33Z ipso $
- * $Date: 2011-10-17 15:18:33 -0700 (Mon, 17 Oct 2011) $
- */
-
-/**
- * @package Module_Accrual
- */
 class AccrualFactory extends Factory {
 	protected $table = 'accrual';
 	protected $pk_sequence_name = 'accrual_id_seq'; //PK Sequence name
@@ -29,17 +27,17 @@ class AccrualFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Banked'), //System
-										20 => TTi18n::gettext('Used'), //System
-										30 => TTi18n::gettext('Awarded'),
-										40 => TTi18n::gettext('Un-Awarded'),
-										50 => TTi18n::gettext('Gift'),
-										55 => TTi18n::gettext('Paid Out'),
-										60 => TTi18n::gettext('Rollover Adjustment'),
-										70 => TTi18n::gettext('Initial Balance'),
-										75 => TTi18n::gettext('Accrual Policy'), //System
-										80 => TTi18n::gettext('Other')
-									);
+					10 => TTi18n::gettext('Banked'), //System
+					20 => TTi18n::gettext('Used'), //System
+					30 => TTi18n::gettext('Awarded'),
+					40 => TTi18n::gettext('Un-Awarded'),
+					50 => TTi18n::gettext('Gift'),
+					55 => TTi18n::gettext('Paid Out'),
+					60 => TTi18n::gettext('Rollover Adjustment'),
+					70 => TTi18n::gettext('Initial Balance'),
+					75 => TTi18n::gettext('Accrual Policy'), //System
+					80 => TTi18n::gettext('Other')
+				);
 				break;
 			case 'system_type':
 				$retval = array_intersect_key( $this->getOptions('type'), array_flip( $this->system_type_ids ) );
@@ -49,40 +47,39 @@ class AccrualFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
+					'-1010-first_name' => TTi18n::gettext('First Name'),
+					'-1020-last_name' => TTi18n::gettext('Last Name'),
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+					'-1030-accrual_policy' => TTi18n::gettext('Accrual Policy'),
+					'-1040-type' => TTi18n::gettext('Type'),
+					//'-1050-time_stamp' => TTi18n::gettext('Date'),
+					'-1050-date_stamp' => TTi18n::gettext('Date'), //Date stamp is combination of time_stamp and user_date.date_stamp columns.
+					'-1060-amount' => TTi18n::gettext('Amount'),
 
-										'-1030-accrual_policy' => TTi18n::gettext('Accrual Policy'),
-										'-1040-type' => TTi18n::gettext('Type'),
-										//'-1050-time_stamp' => TTi18n::gettext('Date'),
-										'-1050-date_stamp' => TTi18n::gettext('Date'), //Date stamp is combination of time_stamp and user_date.date_stamp columns.
-										'-1060-amount' => TTi18n::gettext('Amount'),
+					'-1090-title' => TTi18n::gettext('Title'),
+					'-1099-group' => TTi18n::gettext('Group'),
+					'-1100-default_branch' => TTi18n::gettext('Branch'),
+					'-1110-default_department' => TTi18n::gettext('Department'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										'-1099-group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
-
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
-							);
+					'-2000-created_by' => TTi18n::gettext('Created By'),
+					'-2010-created_date' => TTi18n::gettext('Created Date'),
+					'-2020-updated_by' => TTi18n::gettext('Updated By'),
+					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+				);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( array('accrual_policy', 'type', 'date_stamp', 'amount'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
 				break;
 			case 'default_display_columns': //Columns that are displayed by default.
 				$retval = array(
-								'first_name',
-								'last_name',
-								'accrual_policy',
-								'type',
-								'amount',
-								'date_stamp',
-                                                                'leave_request_id'
-								);
+					'first_name',
+					'last_name',
+					'accrual_policy',
+					'type',
+					'amount',
+					'date_stamp',
+					'leave_request_id'
+				);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
 				break;
@@ -94,24 +91,24 @@ class AccrualFactory extends Factory {
 
 	function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
-                                                                    'id' => 'ID',
-                                                                    'user_id' => 'User',
-                                                                    'first_name' => FALSE,
-                                                                    'last_name' => FALSE,
-                                                                    'default_branch' => FALSE,
-                                                                    'default_department' => FALSE,
-                                                                    'group' => FALSE,
-                                                                    'title' => FALSE,
-                                                                    'accrual_policy_id' => 'AccrualPolicyID',
-                                                                    'accrual_policy' => FALSE,
-                                                                    'type_id' => 'Type',
-                                                                    'type' => FALSE,
-                                                                    'user_date_total_id' => 'UserDateTotalID',
-                                                                    'date_stamp' => FALSE,
-                                                                    'time_stamp' => 'TimeStamp',
-                                                                    'amount' => 'Amount',
-                                                                    'deleted' => 'Deleted',
-                                                                    );
+			'id' => 'ID',
+			'user_id' => 'User',
+			'first_name' => FALSE,
+			'last_name' => FALSE,
+			'default_branch' => FALSE,
+			'default_department' => FALSE,
+			'group' => FALSE,
+			'title' => FALSE,
+			'accrual_policy_id' => 'AccrualPolicyID',
+			'accrual_policy' => FALSE,
+			'type_id' => 'Type',
+			'type' => FALSE,
+			'user_date_total_id' => 'UserDateTotalID',
+			'date_stamp' => FALSE,
+			'time_stamp' => 'TimeStamp',
+			'amount' => 'Amount',
+			'deleted' => 'Deleted',
+        );
 		return $variable_function_map;
 	}
 
@@ -225,7 +222,7 @@ class AccrualFactory extends Factory {
 	}
 	function setUserDateTotalID($id) {
 		$id = trim($id);
-
+		
 		$udtlf = new UserDateTotalListFactory();
 
 		if ( $id == 0
@@ -529,7 +526,7 @@ class AccrualFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Accrual') .' - '. TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) .' '. TTi18n::getText('Type') .': '. Option::getByKey( $this->getType(), $this->getOptions('type') ) .' '. TTi18n::getText('Date') .': '.  TTDate::getDate('DATE', $this->getTimeStamp() ) .' '. TTi18n::getText('Total Time') .': '. TTDate::getTimeUnit( $this->getAmount() ), NULL, $this->getTable(), $this );
+			return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Accrual') .' - '. TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) .' '. TTi18n::getText('Type') .': '. Option::getByKey( $this->getType(), $this->getOptions('type') ) .' '. TTi18n::getText('Date') .': '.  TTDate::getDate('DATE', $this->getTimeStamp() ) .' '. TTi18n::getText('Total Time') .': '. TTDate::getTimeUnit( $this->getAmount() ), NULL, $this->getTable(), $this );
 		}
 
 		return FALSE;

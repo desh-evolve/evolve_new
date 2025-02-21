@@ -1,7 +1,26 @@
 <?php
 
 namespace App\Models\Company;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Option;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Policy\BreakPolicyListFactory;
+use App\Models\Policy\ExceptionPolicyListFactory;
+use App\Models\Policy\HolidayPolicyListFactory;
+use App\Models\Policy\MealPolicyListFactory;
+use App\Models\Policy\OverTimePolicyFactory;
+use App\Models\Policy\OverTimePolicyListFactory;
+use App\Models\Policy\PolicyGroupListFactory;
+use App\Models\Policy\PremiumPolicyListFactory;
+use App\Models\Policy\RoundIntervalPolicyListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
 
 class CompanyGenericMapFactory extends Factory {
 	protected $table = 'company_generic_map';
@@ -13,51 +32,51 @@ class CompanyGenericMapFactory extends Factory {
 		switch( $name ) {
 			case 'object_type':
 				$retval = array(
-										//Policy Group mapping
-										110 => 'policy_group_over_time_policy',
-										120 => 'policy_group_premium_policy',
-										130 => 'policy_group_round_interval_policy',
-										140 => 'policy_group_accrual_policy',
-										150 => 'policy_group_meal_policy',
-										155 => 'schedule_policy_meal_policy', //Mapping meal policies to schedule policies.
-										160 => 'policy_group_break_policy',
-										165 => 'schedule_policy_break_policy', //Mapping break policies to schedule policies.
-										170 => 'policy_group_absence_policy',
-										180 => 'policy_group_holiday_policy',
-										190 => 'policy_group_exception_policy',
+					//Policy Group mapping
+					110 => 'policy_group_over_time_policy',
+					120 => 'policy_group_premium_policy',
+					130 => 'policy_group_round_interval_policy',
+					140 => 'policy_group_accrual_policy',
+					150 => 'policy_group_meal_policy',
+					155 => 'schedule_policy_meal_policy', //Mapping meal policies to schedule policies.
+					160 => 'policy_group_break_policy',
+					165 => 'schedule_policy_break_policy', //Mapping break policies to schedule policies.
+					170 => 'policy_group_absence_policy',
+					180 => 'policy_group_holiday_policy',
+					190 => 'policy_group_exception_policy',
 
 /*
-										//Station user mapping
-										310 => 'station_branch',
-										320 => 'station_department',
-										330 => 'station_user_group',
-										340 => 'station_include_user',
-										350 => 'station_exclude_user',
+					//Station user mapping
+					310 => 'station_branch',
+					320 => 'station_department',
+					330 => 'station_user_group',
+					340 => 'station_include_user',
+					350 => 'station_exclude_user',
 
-										//Premium Policy mapping
-										510 => 'premium_policy_branch',
-										520 => 'premium_policy_department',
-										530 => 'premium_policy_job',
-										540 => 'premium_policy_job_group',
-										550 => 'premium_policy_job_item',
-										560 => 'premium_policy_job_item_group',
+					//Premium Policy mapping
+					510 => 'premium_policy_branch',
+					520 => 'premium_policy_department',
+					530 => 'premium_policy_job',
+					540 => 'premium_policy_job_group',
+					550 => 'premium_policy_job_item',
+					560 => 'premium_policy_job_item_group',
 */
-										//Job user mapping
-										1010 => 'job_user_branch',
-										1020 => 'job_user_department',
-										1030 => 'job_user_group',
-										1040 => 'job_include_user',
-										1050 => 'job_exclude_user',
+					//Job user mapping
+					1010 => 'job_user_branch',
+					1020 => 'job_user_department',
+					1030 => 'job_user_group',
+					1040 => 'job_include_user',
+					1050 => 'job_exclude_user',
 
-										//Job task mapping
-										1060 => 'job_job_item_group',
-										1070 => 'job_include_job_item',
-										1080 => 'job_exclude_job_item',
+					//Job task mapping
+					1060 => 'job_job_item_group',
+					1070 => 'job_include_job_item',
+					1080 => 'job_exclude_job_item',
 
-										//Invoice Payment Gateway mapping
-										3010 => 'payment_gateway_credit_card_type',
-										3020 => 'payment_gateway_bank_account_type',
-									);
+					//Invoice Payment Gateway mapping
+					3010 => 'payment_gateway_credit_card_type',
+					3020 => 'payment_gateway_bank_account_type',
+				);
 				break;
 		}
 
@@ -355,7 +374,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'policy_group' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'policy_group' );
 					break;
 				case 165:
 					$lf = new BreakPolicyListFactory();
@@ -365,7 +384,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'schedule_policy' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'schedule_policy' );
 					break;
 				//Job user mapping
 				case 1010: //'job_user_branch',
@@ -376,7 +395,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_branch' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_branch' );
 					break;
 				case 1020: // => 'job_user_department',
 					$lf = new DepartmentListFactory();
@@ -386,7 +405,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_department' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_department' );
 					break;
 				case 1030: // => 'job_user_group',
 					$lf = new UserGroupListFactory();
@@ -396,7 +415,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_group' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_user_group' );
 					break;
 				case 1040: // => 'job_include_user',
 				case 1050: // => 'job_exclude_user',
@@ -418,7 +437,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 					break;
 				//Job task mapping
 				case 1060: // => 'job_job_item_group',
@@ -429,7 +448,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_job_item_group' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'job_job_item_group' );
 					break;
 				case 1070: // => 'job_include_job_item',
 				case 1080: // => 'job_exclude_job_item',
@@ -451,7 +470,7 @@ class CompanyGenericMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 					break;
 				case 3010: // => 'payment_gateway_credit_card_type',
 					$table_name = 'payment_gateway_credit_card_type';
@@ -460,7 +479,7 @@ class CompanyGenericMapFactory extends Factory {
 					$description = TTi18n::getText('Credit Card Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('credit_card_type') );
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 
 					break;
 				case 3020: // => 'payment_gateway_bank_account_type',
@@ -470,7 +489,7 @@ class CompanyGenericMapFactory extends Factory {
 					$description = TTi18n::getText('Bank Account Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('bank_account_type') );
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
 
 					break;
 					break;

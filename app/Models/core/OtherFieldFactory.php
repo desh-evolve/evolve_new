@@ -448,7 +448,7 @@ class OtherFieldFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Other Fields'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Other Fields'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

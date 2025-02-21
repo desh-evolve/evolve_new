@@ -14,9 +14,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -28,13 +28,13 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -50,13 +50,13 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'user_date_id' => $user_date_id,
+					':user_date_id' => $user_date_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_date_id = ?
+					where	user_date_id = :user_date_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -75,15 +75,15 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'user_date_id' => $user_date_id,
-					'ep_id' => $ep_id,
+					':user_date_id' => $user_date_id,
+					':ep_id' => $ep_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_date_id = ?
-                    AND exception_policy_id = ?
+					where	user_date_id = :user_date_id
+                    AND exception_policy_id = :ep_id
 					AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -111,14 +111,14 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-						company_id = ?
+						company_id = :company_id
 						id in ('. $this->getListSQL($id, $ph) .')
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -151,10 +151,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$epf = new ExceptionPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date )
+					':company_id' => $company_id,
+					':user_id' => $user_id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date )
 					);
 
 		$query = '
@@ -167,10 +167,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
 					LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
 					where
-						c.company_id = ?
-						AND	b.user_id = ?
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						c.company_id = :company_id
+						AND	b.user_id = :user_id
+						AND b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					ORDER BY b.date_stamp asc, d.type_id
 					'; 
@@ -202,9 +202,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 */
 
 		$ph = array(
-					'user_id' => $user_id,
-					'date_stamp' => $this->db->BindDate( TTDate::getBeginDayEpoch( TTDate::getTime() ) ),
-					'status_id' => $pay_period_status,
+					':user_id' => $user_id,
+					':date_stamp' => $this->db->BindDate( TTDate::getBeginDayEpoch( TTDate::getTime() ) ),
+					':status_id' => $pay_period_status,
 					);
 
 		$query = '
@@ -216,10 +216,10 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
 					LEFT JOIN '. $ppf->getTable() .' as e ON b.pay_period_id = e.id
 					where
-						b.user_id = ?
+						b.user_id = :user_id
 						AND a.type_id = 50
-						AND b.date_stamp <= ?
-						AND e.status_id = ?
+						AND b.date_stamp <= :date_stamp
+						AND e.status_id = :status_id
 						AND NOT EXISTS ( select z.id from '. $rf->getTable() .' as z where z.user_date_id = a.user_date_id AND z.status_id = 30 )
 						AND ( a.deleted = 0 AND b.deleted = 0 AND e.deleted=0)
 					GROUP BY d.severity_id
@@ -247,8 +247,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$rf = new RequestFactory();
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id,
-					'date_stamp' => $this->db->BindDate( TTDate::getBeginDayEpoch( $before_epoch  ) ),
+					':pay_period_id' => $pay_period_id,
+					':date_stamp' => $this->db->BindDate( TTDate::getBeginDayEpoch( $before_epoch  ) ),
 					);
 
 		//Ignore pre-mature exceptions when counting exceptions.
@@ -261,9 +261,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
 					LEFT JOIN '. $ppf->getTable() .' as e ON b.pay_period_id = e.id
 					where
-						e.id = ?
+						e.id = :pay_period_id
 						AND a.type_id = 50
-						AND b.date_stamp <= ?
+						AND b.date_stamp <= :date_stamp
 						AND ( a.deleted = 0 AND b.deleted = 0 AND e.deleted=0)
 					GROUP BY d.severity_id
 					ORDER BY d.severity_id desc
@@ -297,7 +297,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$epf = new ExceptionPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -312,7 +312,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
 					LEFT JOIN '. $ppf->getTable() .' as e ON b.pay_period_id = e.id
 					where
-						c.company_id = ?
+						c.company_id = :company_id
 						AND e.status_id in ('. $this->getListSQL( $status, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 AND e.deleted=0 )
 					';
@@ -357,7 +357,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$epf = new ExceptionPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -372,7 +372,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
 					LEFT JOIN '. $ppf->getTable() .' as e ON b.pay_period_id = e.id
 					where
-						c.company_id = ?
+						c.company_id = :company_id
 						AND a.type_id in ('. $this->getListSQL( $type, $ph ) .')
 						AND e.status_id in ('. $this->getListSQL( $status, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 AND d.deleted = 0 AND e.deleted = 0 )
@@ -418,8 +418,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$epf = new ExceptionPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -434,8 +434,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
 					LEFT JOIN '. $ppf->getTable() .' as e ON b.pay_period_id = e.id
 					where
-						c.company_id = ?
-						AND b.user_id = ?
+						c.company_id = :company_id
+						AND b.user_id = :user_id
 						AND e.status_id in ('. $this->getListSQL( $status, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 AND e.deleted=0 )
 					';
@@ -507,9 +507,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -529,9 +529,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 						LEFT JOIN '. $this->getTable() .' as a ON a.user_date_id = b.id
 						LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
 						where
-							c.company_id = ?
-							AND b.date_stamp >= ?
-							AND b.date_stamp <= ?
+							c.company_id = :company_id
+							AND b.date_stamp >= :start_date
+							AND b.date_stamp <= :end_date
 							AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
 							AND a.exception_policy_id is not NULL
 							AND ( ( a.deleted = 0 OR a.deleted is NULL ) AND b.deleted=0 AND c.deleted=0)
@@ -582,9 +582,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$epcf = new ExceptionPolicyControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
@@ -602,9 +602,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 						LEFT JOIN '. $this->getTable() .' as a ON a.user_date_id = b.id
 						LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
 						where
-							c.company_id = ?
-							AND b.date_stamp >= ?
-							AND b.date_stamp <= ?
+							c.company_id = :company_id
+							AND b.date_stamp >= :start_date
+							AND b.date_stamp <= :end_date
 							AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
 							AND a.exception_policy_id is not NULL
 							AND ( ( a.deleted = 0 OR a.deleted is NULL ) AND b.deleted=0 AND c.deleted=0)
@@ -622,9 +622,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 						LEFT JOIN '. $this->getTable() .' as a ON a.user_date_id = b.id
 						LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
 						where
-							c.company_id = ?
-							AND b.date_stamp >= ?
-							AND b.date_stamp <= ?
+							c.company_id = :company_id
+							AND b.date_stamp >= :start_date
+							AND b.date_stamp <= :end_date
 							AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
 							AND a.exception_policy_id is not NULL
 							AND ( ( a.deleted = 0 OR a.deleted is NULL ) AND b.deleted=0 AND c.deleted=0)
@@ -740,7 +740,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$epf = new ExceptionPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -758,7 +758,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 						LEFT JOIN '. $utf->getTable() .' as g ON c.title_id = g.id
 						LEFT JOIN '. $ppf->getTable() .' as h ON b.pay_period_id = h.id
 						LEFT JOIN '. $epf->getTable() .' as i ON a.exception_policy_id = i.id
-					where	c.company_id = ?
+					where	c.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -935,7 +935,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$pcf = new PunchControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -984,7 +984,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 						LEFT JOIN '. $epf->getTable() .' as i ON a.exception_policy_id = i.id
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	c.company_id = ?
+					where	c.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -1039,12 +1039,12 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
 		//Make sure we accept exception rows assign to pay_period_id = 0 (no pay period), as this can happen when punches exist in the future.

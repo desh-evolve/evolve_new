@@ -1,6 +1,24 @@
 <?php
 namespace App\Models\Company;
+
+use App\Models\Core\CurrencyFactory;
+use App\Models\Core\CurrencyListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\PermissionControlFactory;
+use App\Models\Core\PermissionFactory;
+use App\Models\Core\StationFactory;
+use App\Models\Core\TTi18n;
+use App\Models\Holiday\RecurringHolidayFactory;
+use App\Models\PayStub\PayStubEntryAccountFactory;
+use App\Models\Users\UserDefaultFactory;
+use App\Models\Users\UserDefaultListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserPreferenceFactory;
+use App\Models\Core\TTLog;
 
 class CompanyFactory extends Factory {
 	protected $table = 'company';
@@ -2825,7 +2843,7 @@ class CompanyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Company Information'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Company Information'), NULL, $this->getTable(), $this );
 	}
 
 }

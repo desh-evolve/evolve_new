@@ -17,9 +17,9 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;

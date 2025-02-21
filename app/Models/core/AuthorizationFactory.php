@@ -417,7 +417,7 @@ class AuthorizationFactory extends Factory {
 		} else {
 			$authorized =  TTi18n::getText('False');
 		}
-		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Authorization Object Type').': '.$this->getObjectType() .' '. TTi18n::getText('Authorized').': '. $authorized, NULL , $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Authorization Object Type').': '.$this->getObjectType() .' '. TTi18n::getText('Authorized').': '. $authorized, NULL , $this->getTable() );
 	}
 }
 ?>

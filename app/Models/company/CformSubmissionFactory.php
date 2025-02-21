@@ -2,6 +2,8 @@
 
 namespace App\Models\Company;
 use App\Models\Core\Factory;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
 
 class CformSubmissionFactory extends Factory {
 	protected $table = 'cform_submission';
@@ -17,12 +19,8 @@ class CformSubmissionFactory extends Factory {
 			return FALSE;
 		}
  
-
-	 	 $query = '
-                                select 	*
-                                from 	'. $this->table .' where company_id = '.$epfNo.' and pay_period = '.$payperiod.' and type = '."'$type'";
+	 	$query = ' select 	* from 	'. $this->table .' where company_id = '.$epfNo.' and pay_period = '.$payperiod.' and type = '."'$type'";
 		 
- 
 		$this->rs = $this->db->Execute($query);
 		return $this;
 	}

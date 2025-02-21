@@ -5,7 +5,13 @@
  *
  ********************************************************************************/
 namespace App\Models\Company;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Option;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
 
 class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 	protected $table = 'company_deduction_pay_stub_entry_account';
@@ -180,7 +186,7 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 		$obj = $this->getPayStubEntryAccountObject();
 		if ( is_object($obj) ) {
 			$type = Option::getByKey($this->getType(), Misc::TrimSortPrefix( $this->getOptions('type') ) );
-			return TTDebug::addEntry( $this->getCompanyDeduction(), $log_action,  $type .' '. TTi18n::getText('Pay Stub Account').': '. $obj->getName(), NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getCompanyDeduction(), $log_action,  $type .' '. TTi18n::getText('Pay Stub Account').': '. $obj->getName(), NULL, $this->getTable() );
 		}
 	}
 }

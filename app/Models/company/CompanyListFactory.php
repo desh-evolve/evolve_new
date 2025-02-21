@@ -115,7 +115,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 		$uf = new UserFactory();
 
 		$ph = array(
-					'user_name' => strtolower( $user_name ),
+					':user_name' => strtolower( $user_name ),
 					);
 
 		$query = '
@@ -123,7 +123,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 					from	'. $this->getTable() .' as a, '. $uf->getTable() .' as b
 					where	a.id = b.company_id
 						AND b.status_id = 10
-						AND b.user_name = ?
+						AND b.user_name = :user_name
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

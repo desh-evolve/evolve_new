@@ -2,9 +2,14 @@
 
 namespace App\Models\Company;
 
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
 use App\Models\core\Validator;
+use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\Log;
+use App\Models\Core\TTLog;
 
 class BranchBankAccountFactory extends Factory {
 	protected $table = 'branch_bank_account';
@@ -21,35 +26,34 @@ class BranchBankAccountFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
+					'-1010-first_name' => TTi18n::gettext('First Name'),
+					'-1020-last_name' => TTi18n::gettext('Last Name'),
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+					'-1090-title' => TTi18n::gettext('Title'),
+					'-1099-group' => TTi18n::gettext('Group'),
+					'-1100-default_branch' => TTi18n::gettext('Branch'),
+					'-1110-default_department' => TTi18n::gettext('Department'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										'-1099-group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+					'-5010-transit' => TTi18n::gettext('Transit/Routing'),
+					'-5020-account' => TTi18n::gettext('Account'),
+					'-5030-institution' => TTi18n::gettext('Institution'),
 
-										'-5010-transit' => TTi18n::gettext('Transit/Routing'),
-										'-5020-account' => TTi18n::gettext('Account'),
-										'-5030-institution' => TTi18n::gettext('Institution'),
-
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
-							);
+					'-2000-created_by' => TTi18n::gettext('Created By'),
+					'-2010-created_date' => TTi18n::gettext('Created Date'),
+					'-2020-updated_by' => TTi18n::gettext('Updated By'),
+					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+				);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( $this->getOptions('default_display_columns'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
 				break;
 			case 'default_display_columns': //Columns that are displayed by default.
 				$retval = array(
-								'first_name',
-								'last_name',
-								'account',
-								'institution',
-								);
+					'first_name',
+					'last_name',
+					'account',
+					'institution',
+				);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
 				$retval = array(
@@ -63,14 +67,14 @@ class BranchBankAccountFactory extends Factory {
 
 	function _getVariableToFunctionMap($param = null) {
 		$variable_function_map = array(
-										'id' => 'ID',
-										'company_id' => 'Company',
-										'user_id' => 'User',
-										'institution' => 'Institution',
-										'transit' => 'Transit',
-										'account' => 'Account',
-										'deleted' => 'Deleted',
-										);
+			'id' => 'ID',
+			'company_id' => 'Company',
+			'user_id' => 'User',
+			'institution' => 'Institution',
+			'transit' => 'Transit',
+			'account' => 'Account',
+			'deleted' => 'Deleted',
+		);
 		return $variable_function_map;
 	}
 
@@ -126,11 +130,11 @@ class BranchBankAccountFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' =>  (int)$this->getCompany(),
-					'user_id' => (int)$this->getUser(),
+					':company_id' =>  (int)$this->getCompany(),
+					':user_id' => (int)$this->getUser(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND user_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
 		$id = $this->db->GetOne($query, $ph);
 		Debug::Arr($id,'Unique ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
@@ -448,7 +452,7 @@ class BranchBankAccountFactory extends Factory {
 		} else {
 			$log_description = TTi18n::getText('Employee');
 		}
-		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
 	}
 
 }

@@ -2,6 +2,9 @@
 
 namespace App\Models\Company;
 use App\Models\Core\Factory;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+
 class CompanyUserCountFactory extends Factory {
 	protected $table = 'company_user_count';
 	protected $pk_sequence_name = 'company_user_count_id_seq'; //PK Sequence name

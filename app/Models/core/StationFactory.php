@@ -1683,7 +1683,7 @@ class StationFactory extends Factory {
 			$query = 'UPDATE '. $this->getTable() .' set allowed_date = ? where id = ?';
 			$this->db->Execute($query, $ph);
 
-			TTDebug::addEntry( $id, 200,  TTi18n::getText('Access from station Allowed'), $user_id, $this->getTable() ); //Allow
+			TTLog::addEntry( $id, 200,  TTi18n::getText('Access from station Allowed'), $user_id, $this->getTable() ); //Allow
 
 			return TRUE;
 		}
@@ -2060,7 +2060,7 @@ class StationFactory extends Factory {
 
 	function addLog( $log_action ) {
 		if ( !( $log_action == 10 AND $this->getType() == 10 ) ) {
-			return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Station'), NULL, $this->getTable(), $this );
+			return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Station'), NULL, $this->getTable(), $this );
 		}
 	}
 }

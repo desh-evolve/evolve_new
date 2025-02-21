@@ -1,22 +1,22 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 
- namespace App\Models\Company;
- use App\Models\Core\Factory;
+namespace App\Models\Company;
 
-/*
- * $Revision: 5229 $
- * $Id: BranchFactory.class.php 5229 2011-09-20 17:52:53Z ipso $
- * $Date: 2011-09-20 10:52:53 -0700 (Tue, 20 Sep 2011) $
- */
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\StationBranchFactory;
+use App\Models\Core\StationFactory;
+use App\Models\Core\TTi18n;
+use App\Models\Core\UserDateTotalFactory;
+use App\Models\Punch\PunchControlFactory;
+use App\Models\Schedule\RecurringScheduleTemplateFactory;
+use App\Models\Schedule\ScheduleFactory;
+use App\Models\Users\UserDefaultFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Core\TTLog;
 
-/**
- * @package Module_Company
- */
 class BranchFactory extends Factory {
 	protected $table = 'branch';
 	protected $pk_sequence_name = 'branch_id_seq'; //PK Sequence name
@@ -30,56 +30,56 @@ class BranchFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('ENABLED'),
-										20 => TTi18n::gettext('DISABLED')
-									);
+					10 => TTi18n::gettext('ENABLED'),
+					20 => TTi18n::gettext('DISABLED')
+				);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-status' => TTi18n::gettext('Status'),
-										'-1020-manual_id' => TTi18n::gettext('Code'),
-										'-1030-name' => TTi18n::gettext('Name'),
+					'-1010-status' => TTi18n::gettext('Status'),
+					'-1020-manual_id' => TTi18n::gettext('Code'),
+					'-1030-name' => TTi18n::gettext('Name'),
 
-										'-1140-address1' => TTi18n::gettext('Address 1'),
-										'-1150-address2' => TTi18n::gettext('Address 2'),
-										'-1160-city' => TTi18n::gettext('City'),
-										'-1170-province' => TTi18n::gettext('Province/State'),
-										'-1180-country' => TTi18n::gettext('Country'),
-										'-1190-postal_code' => TTi18n::gettext('Postal Code'),
-										'-1200-work_phone' => TTi18n::gettext('Work Phone'),
-										'-1210-fax_phone' => TTi18n::gettext('Fax Phone'),
+					'-1140-address1' => TTi18n::gettext('Address 1'),
+					'-1150-address2' => TTi18n::gettext('Address 2'),
+					'-1160-city' => TTi18n::gettext('City'),
+					'-1170-province' => TTi18n::gettext('Province/State'),
+					'-1180-country' => TTi18n::gettext('Country'),
+					'-1190-postal_code' => TTi18n::gettext('Postal Code'),
+					'-1200-work_phone' => TTi18n::gettext('Work Phone'),
+					'-1210-fax_phone' => TTi18n::gettext('Fax Phone'),
 
-										'-1300-tag' => TTi18n::gettext('Tags'),
+					'-1300-tag' => TTi18n::gettext('Tags'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
-							);
+					'-2000-created_by' => TTi18n::gettext('Created By'),
+					'-2010-created_date' => TTi18n::gettext('Created Date'),
+					'-2020-updated_by' => TTi18n::gettext('Updated By'),
+					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+				);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( $this->getOptions('default_display_columns'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
 				break;
 			case 'default_display_columns': //Columns that are displayed by default.
 				$retval = array(
-								'manual_id',
-								'name',
-								'city',
-								'province',
-								);
+					'manual_id',
+					'name',
+					'city',
+					'province',
+				);
 				break;
 			case 'unique_columns': //Columns that are unique, and disabled for mass editing.
 				$retval = array(
-								'name',
-								'manual_id'
-								);
+					'name',
+					'manual_id'
+				);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
 				$retval = array(
-								'country',
-								'province',
-								'postal_code'
-								);
+					'country',
+					'province',
+					'postal_code'
+				);
 				break;
 		}
 
@@ -88,28 +88,28 @@ class BranchFactory extends Factory {
 
     function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
-										'id' => 'ID',
-										'company_id' => 'Company',
-										'status_id' => 'Status',
-										'status' => FALSE,
-										'manual_id' => 'ManualID',
-										'name' => 'Name',
-										'address1' => 'Address1',
-										'address2' => 'Address2',
-										'city' => 'City',
-										'country' => 'Country',
-										'province' => 'Province',
-										'postal_code' => 'PostalCode',
-										'work_phone' => 'WorkPhone',
-										'fax_phone' => 'FaxPhone',
-										'other_id1' => 'OtherID1',
-										'other_id2' => 'OtherID2',
-										'other_id3' => 'OtherID3',
-										'other_id4' => 'OtherID4',
-										'other_id5' => 'OtherID5',
-										'tag' => 'Tag',
-										'deleted' => 'Deleted',
-										);
+			'id' => 'ID',
+			'company_id' => 'Company',
+			'status_id' => 'Status',
+			'status' => FALSE,
+			'manual_id' => 'ManualID',
+			'name' => 'Name',
+			'address1' => 'Address1',
+			'address2' => 'Address2',
+			'city' => 'City',
+			'country' => 'Country',
+			'province' => 'Province',
+			'postal_code' => 'PostalCode',
+			'work_phone' => 'WorkPhone',
+			'fax_phone' => 'FaxPhone',
+			'other_id1' => 'OtherID1',
+			'other_id2' => 'OtherID2',
+			'other_id3' => 'OtherID3',
+			'other_id4' => 'OtherID4',
+			'other_id5' => 'OtherID5',
+			'tag' => 'Tag',
+			'deleted' => 'Deleted',
+		);
 		return $variable_function_map;
 	}
 
@@ -172,11 +172,11 @@ class BranchFactory extends Factory {
 		}
 
 		$ph = array(
-					'manual_id' => $id,
-					'company_id' =>  $this->getCompany(),
+					':manual_id' => $id,
+					':company_id' =>  $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where manual_id = ? AND company_id = ? AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where manual_id = :manual_id AND company_id = :company_id AND deleted=0';
 		$id = $this->db->GetOne($query, $ph);
 		Debug::Arr($id,'Unique Code: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
@@ -295,11 +295,11 @@ class BranchFactory extends Factory {
             }
 
             $ph = array(
-                'branch_short_id' => $id,
-                'company_id' => $this->getCompany(),
+                ':branch_short_id' => $id,
+                ':company_id' => $this->getCompany(),
             );
 
-            $query = 'select id from ' . $this->getTable() . ' where branch_short_id = ? AND company_id = ? AND deleted=0';
+            $query = 'select id from ' . $this->getTable() . ' where branch_short_id = :branch_short_id AND company_id = :company_id AND deleted=0';
             $id = $this->db->GetOne($query, $ph);
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -358,11 +358,11 @@ class BranchFactory extends Factory {
             }
 
             $ph = array(
-                'epf_no' => $id,
-                'company_id' => $this->getCompany(),
+                ':epf_no' => $id,
+                ':company_id' => $this->getCompany(),
             );
 
-            $query = 'select id from ' . $this->getTable() . ' where epf_no = ? AND company_id = ? AND deleted=0';
+            $query = 'select id from ' . $this->getTable() . ' where epf_no = :epf_no AND company_id = :company_id AND deleted=0';
             $id = $this->db->GetOne($query, $ph);
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -425,11 +425,11 @@ class BranchFactory extends Factory {
             }
 
             $ph = array(
-                'etf_no' => $id,
-                'company_id' => $this->getCompany(),
+                ':etf_no' => $id,
+                ':company_id' => $this->getCompany(),
             );
 
-            $query = 'select id from ' . $this->getTable() . ' where etf_no = ? AND company_id = ? AND deleted=0';
+            $query = 'select id from ' . $this->getTable() . ' where etf_no = :etf_no AND company_id = :company_id AND deleted=0';
             $id = $this->db->GetOne($query, $ph);
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -491,11 +491,11 @@ class BranchFactory extends Factory {
             }
 
             $ph = array(
-                'tin_no' => $id,
-                'company_id' => $this->getCompany(),
+                ':tin_no' => $id,
+                ':company_id' => $this->getCompany(),
             );
 
-            $query = 'select id from ' . $this->getTable() . ' where tin_no = ? AND company_id = ? AND deleted=0';
+            $query = 'select id from ' . $this->getTable() . ' where tin_no = :tin_no AND company_id = :company_id AND deleted=0';
             $id = $this->db->GetOne($query, $ph);
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -557,11 +557,11 @@ class BranchFactory extends Factory {
             }
 
             $ph = array(
-                'business_reg_no' => $id,
-                'company_id' => $this->getCompany(),
+                ':business_reg_no' => $id,
+                ':company_id' => $this->getCompany(),
             );
 
-            $query = 'select id from ' . $this->getTable() . ' where business_reg_no = ? AND company_id = ? AND deleted=0';
+            $query = 'select id from ' . $this->getTable() . ' where business_reg_no = :business_reg_no AND company_id = :company_id AND deleted=0';
             $id = $this->db->GetOne($query, $ph);
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -594,13 +594,13 @@ class BranchFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
-					);
+			':company_id' => $this->getCompany(),
+			':name' => $name,
+		);
 
 		$query = 'select id from '. $this->getTable() .'
-					where company_id = ?
-						AND name = ?
+					where company_id = :company_id
+						AND name = :name
 						AND deleted = 0';
 		$name_id = $this->db->GetOne($query, $ph);
 		Debug::Arr($name_id,'Unique Name: '. $name , __FILE__, __LINE__, __METHOD__,10);
@@ -1227,7 +1227,7 @@ class BranchFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Branch') .': '. $this->getName() , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Branch') .': '. $this->getName() , NULL, $this->getTable(), $this );
 	}
 
 }

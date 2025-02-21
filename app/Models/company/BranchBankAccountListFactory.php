@@ -6,6 +6,15 @@
  ********************************************************************************/
 
  namespace App\Models\Company;
+
+use App\Models\Core\CurrencyFactory;
+use App\Models\Core\Misc;
+use App\Models\Department\DepartmentFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserTitleFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 /*
  * $Revision: 4993 $
@@ -29,9 +38,9 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -43,13 +52,13 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -65,13 +74,13 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -90,13 +99,13 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	default_branch_id = ?
+					where	default_branch_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -112,13 +121,13 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -134,13 +143,13 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND user_id is NULL
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -161,15 +170,15 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
-					);
+			':company_id' => $company_id,
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND user_id = ?
+					where	company_id = :company_id
+						AND user_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -213,8 +222,8 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 		$cf = new CurrencyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					);
+			':company_id' => $company_id,
+		);
 
 		$query = '
 					select 	a.*,
@@ -253,7 +262,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

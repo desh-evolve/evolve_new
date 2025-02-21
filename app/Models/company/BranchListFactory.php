@@ -1,21 +1,13 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
+
 namespace App\Models\Company;
+
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
-/*
- * $Revision: 5369 $
- * $Id: BranchListFactory.class.php 5369 2011-10-21 19:37:24Z ipso $
- * $Date: 2011-10-21 12:37:24 -0700 (Fri, 21 Oct 2011) $
- */
-
-/**
- * @package Module_Company
- */
 class BranchListFactory extends BranchFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -28,9 +20,9 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -44,20 +36,20 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
-						);
+				':id' => $id,
+			);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
 			$this->rs = DB::select($query, $ph);
 
-			$this->saveCache($this->rs,$id);
+			$this->saveCache($this->rs, $id);
 		}
 
 		return $this;
@@ -157,13 +149,13 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -212,15 +204,15 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'status_id' => $status_id,
-					);
+			':company_id' => $company_id,
+			':status_id' => $status_id,
+		);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	status_id = ?
+					where	company_id = :company_id
+						AND	status_id = :status_id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -242,13 +234,13 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					);
+			':company_id' => $company_id,
+		);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ? ';
+					where	company_id = :company_id ';
 
 		//isset() returns false on NULL.
 		$query .= $this->getWhereClauseSQL( 'longitude', $longitude, 'numeric', $ph );
@@ -277,15 +269,15 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
-					);
+			':company_id' => $company_id,
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	id = ?
+					where	company_id = :company_id
+						AND	id = :id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -304,15 +296,15 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
-					);
+			':id' => $id,
+			':company_id' => $company_id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	manual_id = ?
-						AND company_id = ?
+					where	manual_id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -328,17 +320,17 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
-					'id2' => $id,
-					);
+			':id' => $id,
+			':id2' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND id = ( select id
 									from '. $this->getTable() .'
-									where company_id = ?
+									where company_id = :id2
 										AND manual_id IS NOT NULL
 										AND deleted = 0
 									ORDER BY manual_id DESC
@@ -401,19 +393,19 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'created_date' => $date,
-					'updated_date' => $date,
-					);
+			':company_id' => $company_id,
+			':created_date' => $date,
+			':updated_date' => $date,
+		);
 
 		//INCLUDE Deleted rows in this query.
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-							company_id = ?
+							company_id = :company_id
 						AND
-							( created_date >=  ? OR updated_date >= ? )
+							( created_date >=  :created_date OR updated_date >= :updated_date )
 					LIMIT 1
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -468,8 +460,8 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					);
+			':company_id' => $company_id,
+		);
 
 		$query = '
 					select 	a.*,
@@ -482,7 +474,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?';
+					where	a.company_id = :company_id';
 
 		$query .= ( isset($filter_data['permission_children_ids']) ) ? $this->getWhereClauseSQL( 'a.created_by', $filter_data['permission_children_ids'], 'numeric_list', $ph ) : NULL;
 		$query .= ( isset($filter_data['id']) ) ? $this->getWhereClauseSQL( 'a.id', $filter_data['id'], 'numeric_list', $ph ) : NULL;

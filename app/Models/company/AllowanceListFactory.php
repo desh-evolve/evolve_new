@@ -6,10 +6,8 @@ use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregate {
-    //put your code here
-    
-    
-    	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+
+    function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
@@ -19,9 +17,9 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -33,13 +31,13 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		}
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -55,13 +53,13 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					);
+			':user_id' => $user_id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -78,15 +76,15 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-                                        'payperiod_id'=>$payperiod_id,
-					);
+			':user_id' => $user_id,
+			':payperiod_id'=>$payperiod_id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ? 
-                                                AND payperiod_id = ? 
+					where	user_id = :user_id
+                        AND payperiod_id = :payperiod_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

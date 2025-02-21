@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Company;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements IteratorAggregate {
@@ -14,9 +16,9 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -28,13 +30,13 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -50,13 +52,13 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -75,12 +77,12 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 			return FALSE;
 		}
 
-		$ph = array( 'company_id' => $company_id);
+		$ph = array( ':company_id' => $company_id);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 						AND a.object_type_id in ('. $this->getListSQL($id, $ph) .')
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -104,12 +106,12 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 			return FALSE;
 		}
 
-		$ph = array( 'company_id' => $company_id);
+		$ph = array( ':company_id' => $company_id);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 						AND a.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 						AND a.object_id in ('. $this->getListSQL($id, $ph) .')
 					';
@@ -134,12 +136,12 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 			return FALSE;
 		}
 
-		$ph = array( 'company_id' => $company_id);
+		$ph = array( ':company_id' => $company_id);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 						AND a.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 						AND a.map_id in ('. $this->getListSQL($id, $ph) .')
 					';
@@ -164,12 +166,12 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 			return FALSE;
 		}
 
-		$ph = array( 'company_id' => $company_id);
+		$ph = array( ':company_id' => $company_id);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 						AND a.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 						AND a.object_id in ('. $this->getListSQL($id, $ph) .')
 						AND a.map_id in ('. $this->getListSQL($map_id, $ph) .')
@@ -195,12 +197,12 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 			return FALSE;
 		}
 
-		$ph = array( 'company_id' => $company_id);
+		$ph = array( ':company_id' => $company_id);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 						AND a.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 						AND a.object_id in ('. $this->getListSQL($id, $ph) .')
 						AND a.map_id not in ('. $this->getListSQL($map_id, $ph) .')

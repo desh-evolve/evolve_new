@@ -1,6 +1,11 @@
 <?php
 namespace App\Models\Company;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class CompanyGenericTagFactory extends Factory {
 	protected $table = 'company_generic_tag';
@@ -14,52 +19,52 @@ class CompanyGenericTagFactory extends Factory {
 		switch( $name ) {
 			case 'object_type':
 				$retval = array(
-										//These could be names instead?
-										100 => 'company',
-										110 => 'branch',
-										120 => 'department',
-										130 => 'stations',
-										140 => 'hierarchy',
-										150 => 'request',
-										160 => 'message',
-										170 => 'policy_group',
+					//These could be names instead?
+					100 => 'company',
+					110 => 'branch',
+					120 => 'department',
+					130 => 'stations',
+					140 => 'hierarchy',
+					150 => 'request',
+					160 => 'message',
+					170 => 'policy_group',
 
-										200 => 'users',
-										210 => 'user_wage',
-										220 => 'user_title',
+					200 => 'users',
+					210 => 'user_wage',
+					220 => 'user_title',
 
-										300 => 'pay_stub_amendment',
+					300 => 'pay_stub_amendment',
 
-										400 => 'schedule',
-										410 => 'recurring_schedule_template',
+					400 => 'schedule',
+					410 => 'recurring_schedule_template',
 
-										500 => 'report',
-										510 => 'report_schedule',
+					500 => 'report',
+					510 => 'report_schedule',
 
-										600 => 'job',
-										610 => 'job_item',
+					600 => 'job',
+					610 => 'job_item',
 
-										700 => 'document',
+					700 => 'document',
 
-										800 => 'client',
-										810 => 'client_contact',
-										820 => 'client_payment',
+					800 => 'client',
+					810 => 'client_contact',
+					820 => 'client_payment',
 
-										900 => 'product',
-										910 => 'invoice',
-									);
+					900 => 'product',
+					910 => 'invoice',
+				);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-object_type' => TTi18n::gettext('Object'),
-										'-1020-name' => TTi18n::gettext('Name'),
-										'-1030-description' => TTi18n::gettext('Description'),
+					'-1010-object_type' => TTi18n::gettext('Object'),
+					'-1020-name' => TTi18n::gettext('Name'),
+					'-1030-description' => TTi18n::gettext('Description'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
-							);
+					'-2000-created_by' => TTi18n::gettext('Created By'),
+					'-2010-created_date' => TTi18n::gettext('Created Date'),
+					'-2020-updated_by' => TTi18n::gettext('Updated By'),
+					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+				);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( $this->getOptions('default_display_columns'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
@@ -158,15 +163,15 @@ class CompanyGenericTagFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'object_type_id' => $this->getObjectType(),
-					'name' => strtolower($name),
+					':company_id' => $this->getCompany(),
+					':object_type_id' => $this->getObjectType(),
+					':name' => strtolower($name),
 					);
 
 		$query = 'select id from '. $this->getTable() .'
-					where company_id = ?
-						AND object_type_id = ?
-						AND lower(name) = ?
+					where company_id = :company_id
+						AND object_type_id = :object_type_id
+						AND lower(name) = :name
 						AND deleted = 0';
 		$name_id = $this->db->GetOne($query, $ph);
 		Debug::Arr($name_id,'Unique Name: '. $name , __FILE__, __LINE__, __METHOD__,10);
@@ -409,7 +414,7 @@ class CompanyGenericTagFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Tag') .': '. $this->getName() , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Tag') .': '. $this->getName() , NULL, $this->getTable(), $this );
 	}
 
 }

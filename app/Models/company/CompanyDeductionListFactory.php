@@ -6,6 +6,10 @@
  *
  ********************************************************************************/
 namespace App\Models\Company;
+
+use App\Models\Core\Misc;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class CompanyDeductionListFactory extends CompanyDeductionFactory implements IteratorAggregate {
@@ -21,9 +25,9 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -75,13 +79,13 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND deleted = 0
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -102,15 +106,15 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'name' => $name,
+					':company_id' => $company_id,
+					':name' => $name,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND lower(name) LIKE lower(?)
+					where	company_id = :company_id
+						AND lower(name) LIKE lower(:name)
 						AND deleted = 0
 					ORDER BY calculation_order ASC';
 		$query .= $this->getWhereSQL( $where );
@@ -133,13 +137,13 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND id in ('. $this->getListSQL($ids, $ph) .')
 						AND deleted = 0
 					';
@@ -161,13 +165,13 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND id in ('. $this->getListSQL($ids, $ph) .')
 						AND deleted = 0
 					';
@@ -210,13 +214,13 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where 	company_id = ?
+					where 	company_id = :company_id
 						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
 						AND deleted = 0
 					ORDER BY calculation_order ASC';
@@ -238,13 +242,13 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where 	company_id = ?
+					where 	company_id = :company_id
 						AND status_id in ('. $this->getListSQL($status_id, $ph) .')
 						AND deleted = 0
 					ORDER BY calculation_order ASC';
@@ -270,13 +274,13 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where 	company_id = ?
+					where 	company_id = :company_id
 						AND status_id in ('. $this->getListSQL($status_id, $ph) .')
 						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
 						AND deleted = 0
@@ -293,7 +297,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		if ( $id == '') {
 			return FALSE;
 		}
-
+		
 		$psenlf = new PayStubEntryNameListFactory();
 		$psenlf->getById($id);
 
@@ -399,7 +403,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -413,7 +417,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

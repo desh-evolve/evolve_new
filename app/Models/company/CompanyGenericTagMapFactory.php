@@ -1,6 +1,12 @@
 <?php
 namespace App\Models\Company;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
+use App\Models\Policy\PolicyGroupListFactory;
+use App\Models\Users\UserListFactory;
 
 class CompanyGenericTagMapFactory extends Factory {
 	protected $table = 'company_generic_tag_map';
@@ -268,7 +274,7 @@ class CompanyGenericTagMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' TagID: '. $this->getTagID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'company' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'company' );
 					break;
 				case 200:
 					$lf = new UserListFactory();
@@ -278,7 +284,7 @@ class CompanyGenericTagMapFactory extends Factory {
 					}
 
 					Debug::text('Action: '. $log_action .' TagID: '. $this->getTagID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
-					$retval = TTDebug::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'users' );
+					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, 'users' );
 					break;
 			}
 		}

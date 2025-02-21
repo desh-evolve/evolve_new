@@ -1,6 +1,12 @@
 <?php
 namespace App\Models\Company;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
+use App\Models\Users\UserWageListFactory;
 
 class WageGroupFactory extends Factory {
 	protected $table = 'wage_group';
@@ -71,13 +77,13 @@ class WageGroupFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':name' => $name,
 					);
 
 		$query = 'select id from '. $this->table .'
-					where company_id = ?
-						AND name = ?
+					where company_id = :company_id
+						AND name = :name
 						AND deleted = 0';
 		$name_id = $this->db->GetOne($query, $ph);
 		Debug::Arr($name_id,'Unique Name: '. $name, __FILE__, __LINE__, __METHOD__,10);
@@ -190,7 +196,7 @@ class WageGroupFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTDebug::addEntry( $this->getId(), $log_action, TTi18n::getText('Wage Group'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Wage Group'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

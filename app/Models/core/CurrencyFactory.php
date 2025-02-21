@@ -388,13 +388,13 @@ class CurrencyFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':name' => $name,
 					);
 
 		$query = 'select id from '. $this->getTable() .'
-					where company_id = ?
-						AND name = ?
+					where company_id = :company_id
+						AND name = :name
 						AND deleted = 0';
 		$name_id = $this->db->GetOne($query, $ph);
 		Debug::Arr($name_id,'Unique Name: '. $name, __FILE__, __LINE__, __METHOD__,10);
@@ -585,10 +585,10 @@ class CurrencyFactory extends Factory {
 
 	function isUniqueDefault() {
 		$ph = array(
-					'company_id' => $this->getCompany(),
+					':company_id' => $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND is_default = 1 AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND is_default = 1 AND deleted=0';
 		$id = $this->db->GetOne($query, $ph);
 		Debug::Arr($id,'Unique Currency Default: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
@@ -629,10 +629,10 @@ class CurrencyFactory extends Factory {
 
 	function isUniqueBase() {
 		$ph = array(
-					'company_id' => $this->getCompany(),
+					':company_id' => $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND is_base = 1 AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND is_base = 1 AND deleted=0';
 		$id = $this->db->GetOne($query, $ph);
 		Debug::Arr($id,'Unique Currency Base: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
@@ -914,7 +914,7 @@ class CurrencyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTDebug::addEntry( $this->getId(), $log_action,  TTi18n::getText('Currency').': '. $this->getISOCode() .' '.  TTi18n::getText('Rate').': '. $this->getConversionRate(), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Currency').': '. $this->getISOCode() .' '.  TTi18n::getText('Rate').': '. $this->getConversionRate(), NULL, $this->getTable(), $this );
 	}
 
 }

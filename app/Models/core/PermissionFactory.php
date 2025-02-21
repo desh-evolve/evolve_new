@@ -1933,7 +1933,7 @@ class PermissionFactory extends Factory {
 			$value_display =  TTi18n::getText( 'DENY' );
 		}
 
-		return TTDebug::addEntry( $this->getPermissionControl(), $log_action, TTi18n::getText('Section').': '. Option::getByKey($this->getSection(), $this->getOptions('section') ) .' Name: '. Option::getByKey( $this->getName(), $this->getOptions('name', $this->getSection() ) ) .' Value: '. $value_display , NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getPermissionControl(), $log_action, TTi18n::getText('Section').': '. Option::getByKey($this->getSection(), $this->getOptions('section') ) .' Name: '. Option::getByKey( $this->getName(), $this->getOptions('name', $this->getSection() ) ) .' Value: '. $value_display , NULL, $this->getTable() );
 	}
 }
 ?>

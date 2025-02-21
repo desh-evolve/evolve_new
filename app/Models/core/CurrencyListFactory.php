@@ -16,9 +16,9 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -32,13 +32,13 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -64,13 +64,13 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -95,15 +95,15 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	id = ?
+					where	company_id = :company_id
+						AND	id = :id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -122,15 +122,15 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'iso_code' => trim($iso_code),
+					':company_id' => $company_id,
+					':iso_code' => trim($iso_code),
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	iso_code = ?
+					where	company_id = :company_id
+						AND	iso_code = :iso_code
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -151,15 +151,15 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		$this->rs = $this->getCache( $company_id.$is_base );
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'company_id' => $company_id,
-						'is_base' => $is_base,
+						':company_id' => $company_id,
+						':is_base' => $is_base,
 						);
 
 			$query = '
 						select 	*
 						from 	'. $this->getTable() .'
-						where	company_id = ?
-							AND	is_base = ?
+						where	company_id = :company_id
+							AND	is_base = :is_base
 							AND deleted = 0';
 			$query .= $this->getSortSQL( $order );
 
@@ -181,15 +181,15 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'is_default' => $is_default,
+					':company_id' => $company_id,
+					':is_default' => $is_default,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	is_default = ?
+					where	company_id = :company_id
+						AND	is_default = :is_default
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -255,7 +255,7 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -269,7 +269,7 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -292,8 +292,8 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 
 		//Returns the default currency of a specific user.
 		if ( isset($filter_data['user_id']) AND trim($filter_data['user_id']) != '' ) {
-			$ph[] = (int)$filter_data['user_id'];
-			$query  .=	' AND a.id = (select currency_id from '. $uf->getTable() .' as uf_tmp where uf_tmp.id = ? )';
+			$ph[':user_id'] = (int)$filter_data['user_id'];
+			$query  .=	' AND a.id = (select currency_id from '. $uf->getTable() .' as uf_tmp where uf_tmp.id = :user_id )';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {

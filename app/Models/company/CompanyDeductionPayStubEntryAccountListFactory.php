@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Company;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPayStubEntryAccountFactory implements IteratorAggregate {
@@ -14,9 +16,9 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->SelectLimit($query);
+			$this->rs = DB::select($query);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page);
+			$this->rs = DB::select($query);
 		}
 
 		return $this;
@@ -28,13 +30,13 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		}
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -50,14 +52,14 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					where
-						a.company_deduction_id = ?
+						a.company_deduction_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -73,16 +75,16 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		}
 
 		$ph = array(
-					'id' => $id,
-					'type_id' => $type_id,
+					':id' => $id,
+					':type_id' => $type_id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					where
-						a.company_deduction_id = ?
-						AND a.type_id = ?
+						a.company_deduction_id = :id
+						AND a.type_id = :type_id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

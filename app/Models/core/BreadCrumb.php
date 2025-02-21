@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use Exception;
+
 class BreadCrumb {
 	static $home_name = 'Home';
 	static $seperator = ' > ';
@@ -25,15 +27,15 @@ class BreadCrumb {
 		Debug::text('Dropping Bread Crumb: '. $name .' URL: '. $url, __FILE__, __LINE__, __METHOD__, 10);
 
 		$ph = array(
-					'user_id' => $current_user->getId(),
-					'name' => $name,
+					':user_id' => $current_user->getId(),
+					':name' => $name,
 					);
 
 		//Determine if we should update or insert bread crumb.
 		$query = 'select name
 					FROM bread_crumb
-					WHERE user_id = ?
-						AND name = ?
+					WHERE user_id = :user_id
+						AND name = :name
 					LIMIT 1';
 		try {
 			$rs = $db->Execute($query, $ph);
@@ -43,31 +45,31 @@ class BreadCrumb {
 
 		if ( $rs->RecordCount() == 1 ) {
 			$ph = array(
-						'url' => $url,
-						'created_date' => TTDate::getTime(),
-						'user_id' => $current_user->getId(),
-						'name' => $name,
+						':url' => $url,
+						':created_date' => TTDate::getTime(),
+						':user_id' => $current_user->getId(),
+						':name' => $name,
 						);
 
 			$query = 'UPDATE bread_crumb
-						SET		url = ?,
-								created_date = ?
-						WHERE	user_id = ?
-							AND name = ?';
+						SET		url = :url,
+								created_date = :created_date
+						WHERE	user_id = :user_id
+							AND name = :name';
 		} else {
 			$ph = array(
-						'user_id' => $current_user->getId(),
-						'name' => $name,
-						'url' => $url,
-						'created_date' => TTDate::getTime(),
+						':user_id' => $current_user->getId(),
+						':name' => $name,
+						':url' => $url,
+						':created_date' => TTDate::getTime(),
 						);
 
 			$query = 'insert into bread_crumb (user_id,name,url,created_date)
 							VALUES(
-									?,
-									?,
-									?,
-									?
+									:user_id,
+									:name,
+									:url,
+									:created_date
 								)';
 		}
 		try {
@@ -83,12 +85,12 @@ class BreadCrumb {
 		global $db, $current_user;
 
 		$ph = array(
-					'user_id' => $current_user->getId(),
+					':user_id' => $current_user->getId(),
 					);
 
 		$query = 'SELECT name,url
 					FROM bread_crumb
-					WHERE user_id = ?
+					WHERE user_id = :user_id
 					ORDER BY created_date DESC
 					LIMIT 5';
 
@@ -128,10 +130,10 @@ class BreadCrumb {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
-		$query = 'DELETE FROM bread_crumb where user_id = ?';
+		$query = 'DELETE FROM bread_crumb where user_id = :user_id';
 
 		try {
 			$rs = $db->Execute($query, $ph);
