@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserListFactory;
+
 class StationIncludeUserFactory extends Factory {
 	protected $table = 'station_include_user';
 	protected $pk_sequence_name = 'station_include_user_id_seq'; //PK Sequence name
@@ -44,7 +46,7 @@ class StationIncludeUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = new UserListFactory();
+			$ulf = new UserListFactory(); 
 			$ulf->getById( $this->getIncludeUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();

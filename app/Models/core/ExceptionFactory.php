@@ -2,6 +2,13 @@
 
 namespace App\Models\Core;
 
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Policy\ExceptionPolicyFactory;
+use App\Models\Policy\ExceptionPolicyListFactory;
+use App\Models\Punch\PunchControlListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Users\UserListFactory;
+
 class ExceptionFactory extends Factory {
 	protected $table = 'exception';
 	protected $pk_sequence_name = 'exception_id_seq'; //PK Sequence name
@@ -243,7 +250,7 @@ class ExceptionFactory extends Factory {
 			$id = NULL;
 		}
 
-		$plf = new PunchListFactory();
+		$plf = new PunchListFactory(); 
 
 		if (	$id == NULL
 				OR
@@ -387,11 +394,11 @@ class ExceptionFactory extends Factory {
 				//Make sure supervisor email notifcations are enabled
 				if ( $ep_obj->getEmailNotification() == 20 OR $ep_obj->getEmailNotification() == 100 ) {
 					//Find supervisor(s)
-					$hlf = new HierarchyListFactory();
+					$hlf = new HierarchyListFactory(); 
 					$parent_user_id = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $u_obj->getCompany(), $u_obj->getId(), 80 );
 					if ( $parent_user_id != FALSE ) {
 						//Parent could be multiple supervisors, make sure we email them all.
-						$ulf = new UserListFactory();
+						$ulf = new UserListFactory(); 
 						$ulf->getByIdAndCompanyId( $parent_user_id, $u_obj->getCompany() );
 						if ( $ulf->getRecordCount() > 0 ) {
 							foreach( $ulf as $parent_user_obj ) {
@@ -572,7 +579,7 @@ class ExceptionFactory extends Factory {
 	function getObjectAsArray( $include_columns = NULL ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 
-		$epf = new ExceptionPolicyFactory();
+		$epf = new ExceptionPolicyFactory(); 
 		$exception_policy_type_options = $epf->getOptions('type');
 		$exception_policy_severity_options = $epf->getOptions('severity');
 

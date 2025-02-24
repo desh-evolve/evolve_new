@@ -1,7 +1,15 @@
 <?php
 
 namespace App\Models\Cron;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\LockFile;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class CronJobFactory extends Factory {
 	protected $table = 'cron';

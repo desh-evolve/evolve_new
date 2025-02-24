@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Models\Core;
+
+use App\Models\PayPeriod\PayPeriodListFactory;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
 class TTDate {

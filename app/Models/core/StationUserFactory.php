@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserListFactory;
+
 class StationUserFactory extends Factory {
 	protected $table = 'station_user';
 	protected $pk_sequence_name = 'station_user_id_seq'; //PK Sequence name

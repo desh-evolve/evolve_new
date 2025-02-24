@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserListFactory;
+
 class LogFactory extends Factory {
 	protected $table = 'system_log';
 	protected $pk_sequence_name = 'system_log_id_seq'; //PK Sequence name
@@ -202,7 +204,7 @@ class LogFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = new UserListFactory();
+			$ulf = new UserListFactory(); 
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;

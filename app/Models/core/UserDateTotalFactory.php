@@ -2,6 +2,27 @@
 
 namespace App\Models\Core;
 
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Policy\BreakPolicyListFactory;
+use App\Models\Policy\MealPolicyListFactory;
+use App\Models\Policy\OverTimePolicyListFactory;
+use App\Models\Policy\PremiumPolicyListFactory;
+use App\Models\Punch\PunchControlListFactory;
+use App\Models\Holiday\HolidayListFactory;
+use App\Models\Policy\PolicyGroupListFactory;
+use App\Models\Punch\PunchControlFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\Policy\ExceptionPolicyFactory;
+use App\Models\Policy\HolidayPolicyListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Company\BranchListFactory;
+use DateInterval;
+use DateTime;
+
 class UserDateTotalFactory extends Factory {
 
     protected $table = 'user_date_total';

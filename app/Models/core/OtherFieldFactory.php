@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Company\CompanyListFactory;
+
 class OtherFieldFactory extends Factory {
 	protected $table = 'other_field';
 	protected $pk_sequence_name = 'other_field_id_seq'; //PK Sequence name

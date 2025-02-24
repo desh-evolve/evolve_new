@@ -2,6 +2,10 @@
 
 namespace App\Models\Core;
 
+use App\Models\Company\CompanyListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\Users\UserListFactory;
+
 class CurrencyFactory extends Factory {
 	protected $table = 'currency';
 	protected $pk_sequence_name = 'currency_id_seq'; //PK Sequence name
@@ -343,7 +347,7 @@ class CurrencyFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = new CompanyListFactory();
+		$clf = new CompanyListFactory(); 
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',

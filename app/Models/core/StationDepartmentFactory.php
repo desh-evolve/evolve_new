@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Department\DepartmentListFactory;
+
 class StationDepartmentFactory extends Factory {
 	protected $table = 'station_department';
 	protected $pk_sequence_name = 'station_department_id_seq'; //PK Sequence name

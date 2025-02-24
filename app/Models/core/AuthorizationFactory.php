@@ -2,6 +2,11 @@
 
 namespace App\Models\Core;
 
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Request\RequestListFactory;
+use App\Models\Users\UserListFactory;
+
 class AuthorizationFactory extends Factory {
 	protected $table = 'authorizations';
 	protected $pk_sequence_name = 'authorizations_id_seq'; //PK Sequence name
@@ -188,7 +193,7 @@ class AuthorizationFactory extends Factory {
 
 			switch ( $this->getObjectType() ) {
 				case 90: //TimeSheet
-					$this->obj_handler = new PayPeriodTimeSheetVerifyListFactory();
+					$this->obj_handler = new PayPeriodTimeSheetVerifyListFactory(); 
 					break;
 				case 50: //Requests
 				case 1010:
@@ -196,7 +201,7 @@ class AuthorizationFactory extends Factory {
 				case 1030:
 				case 1040:
 				case 1100:
-					$this->obj_handler = new RequestListFactory();
+					$this->obj_handler = new RequestListFactory(); 
 					break;
 			}
 

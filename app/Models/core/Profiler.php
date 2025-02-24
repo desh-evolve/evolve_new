@@ -2,35 +2,6 @@
 
 namespace App\Models\Core;
 
-/*
- * $Revision: 3508 $
- * $Id: Profiler.class.php 3508 2010-04-19 19:46:03Z ipso $
- * $Date: 2010-04-19 12:46:03 -0700 (Mon, 19 Apr 2010) $
- */
-/********************************************************************************\
- * Copyright (C) Carl Taylor (cjtaylor@adepteo.com)                             *
- * Copyright (C) Torben Nehmer (torben@nehmer.net) for Code Cleanup             *
- *                                                                              *
- * This program is free software; you can redistribute it and/or                *
- * modify it under the terms of the GNU General Public License                  *
- * as published by the Free Software Foundation; either version 2               *
- * of the License, or (at your option) any later version.                       *
- *                                                                              *
- * This program is distributed in the hope that it will be useful,              *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of               *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                *
- * GNU General Public License for more details.                                 *
- *                                                                              *
- * You should have received a copy of the GNU General Public License            *
- * along with this program; if not, write to the Free Software                  *
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.  *
-\********************************************************************************/
-
-/// Enable multiple timers to aid profiling of performance over sections of code
-
-/**
- * @package Core
- */
 class Profiler {
     var $description;
     var $startTime;
@@ -162,7 +133,7 @@ class Profiler {
             echo"============================================================================\n";
             print( "Calls                    Time  Routine\n");
             echo"-----------------------------------------------------------------------------\n";
-            while (list ($key, $val) = each ($this->description)) {
+            while (list ($key, $val) = each($this->description)) {
                 $t = $this->elapsedTime($key);
                 if ( isset($this->running[$key]) ) {
                     $total = $this->running[$key];

@@ -2,6 +2,10 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -39,7 +43,7 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -71,7 +75,7 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -110,7 +114,7 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

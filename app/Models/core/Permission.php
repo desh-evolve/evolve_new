@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Hierarchy\HierarchyListFactory;
+
 class Permission {
 	function getPermissions( $user_id, $company_id ) {
 

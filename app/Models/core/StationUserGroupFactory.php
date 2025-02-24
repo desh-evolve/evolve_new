@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserGroupListFactory;
+
 class StationUserGroupFactory extends Factory {
 	protected $table = 'station_user_group';
 	protected $pk_sequence_name = 'station_user_group_id_seq'; //PK Sequence name
@@ -43,7 +45,7 @@ class StationUserGroupFactory extends Factory {
 		if ( is_object($this->group_obj) ) {
 			return $this->group_obj;
 		} else {
-			$uglf = new UserGroupListFactory();
+			$uglf = new UserGroupListFactory(); 
 			$uglf->getById( $this->getGroup() );
 			if ( $uglf->getRecordCount() == 1 ) {
 				$this->group_obj = $uglf->getCurrent();

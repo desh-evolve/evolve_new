@@ -2,6 +2,10 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class PermissionControlListFactory extends PermissionControlFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -39,7 +43,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -67,7 +71,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -95,7 +99,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -131,9 +135,10 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		//Debug::Text('Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -176,9 +181,10 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		//Debug::Text('Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -212,7 +218,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		//Debug::Text('Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -335,9 +341,10 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;

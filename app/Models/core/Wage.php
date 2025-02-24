@@ -2,6 +2,15 @@
 
 namespace App\Models\Core;
 
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
+use App\Models\Users\UserDeductionListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserWageFactory;
+use App\Models\Users\UserWageListFactory;
+
 class Wage {
 	var $user_id = NULL;
 	var $pay_period_id = NULL;

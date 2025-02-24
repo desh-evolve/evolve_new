@@ -1,6 +1,12 @@
 <?php
 
 namespace App\Models\Core;
+
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Punch\PunchControlListFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserPreferenceListFactory;
 use Illuminate\Support\Facades\Log;
 
 class UserDateFactory extends Factory {

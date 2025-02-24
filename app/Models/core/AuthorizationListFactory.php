@@ -2,6 +2,12 @@
 
 namespace App\Models\Core;
 
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Request\RequestFactory;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class AuthorizationListFactory extends AuthorizationFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {

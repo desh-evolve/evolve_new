@@ -2,6 +2,13 @@
 
 namespace App\Models\Core;
 
+use App\Models\Company\BranchListFactory;
+use App\Models\Company\CompanyListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserPreferenceFactory;
+
 include_once('Net/IPv4.php');
 
 class StationFactory extends Factory {
@@ -253,7 +260,7 @@ class StationFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = new CompanyListFactory();
+			$clf = new CompanyListFactory(); 
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -668,7 +675,7 @@ class StationFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = new UserGroupListFactory();
+			$lf_b = new UserGroupListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
@@ -1554,7 +1561,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_2',
 											$value,
-											TTi28n::gettext('User Value 2 is invalid'),
+											TTi18n::gettext('User Value 2 is invalid'),
 											2,255) ) {
 
 			$this->data['user_value_2'] = $value;
@@ -1579,7 +1586,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_3',
 											$value,
-											TTi38n::gettext('User Value 3 is invalid'),
+											TTi18n::gettext('User Value 3 is invalid'),
 											3,255) ) {
 
 			$this->data['user_value_3'] = $value;
@@ -1604,7 +1611,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_4',
 											$value,
-											TTi48n::gettext('User Value 4 is invalid'),
+											TTi18n::gettext('User Value 4 is invalid'),
 											4,255) ) {
 
 			$this->data['user_value_4'] = $value;
@@ -1629,7 +1636,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_5',
 											$value,
-											TTi58n::gettext('User Value 5 is invalid'),
+											TTi18n::gettext('User Value 5 is invalid'),
 											5,255) ) {
 
 			$this->data['user_value_5'] = $value;

@@ -1,7 +1,13 @@
 <?php
 
 namespace App\Models\Core;
+
+use App\Models\Company\BranchListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use IteratorAggregate;
 
 class StationListFactory extends StationFactory implements IteratorAggregate {
 
@@ -41,7 +47,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -89,9 +95,9 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 		}
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -119,7 +125,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -145,7 +151,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -170,7 +176,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 							AND deleted = 0';
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$station_id);
 		}
@@ -200,7 +206,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -231,7 +237,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -265,7 +271,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -293,7 +299,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 			$type = $type_key;
 		}
 
-		$ulf = new UserListFactory();
+		$ulf = new UserListFactory(); 
 		$ulf->getById( $user_id );
 		if ( $ulf->getRecordCount() != 1 ) {
 			return FALSE;
@@ -354,7 +360,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 		//Debug::text('Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 		//Debug::arr($ph, 'PH: ', __FILE__, __LINE__, __METHOD__, 10);
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -469,9 +475,9 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

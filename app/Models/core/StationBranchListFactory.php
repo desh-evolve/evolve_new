@@ -2,6 +2,9 @@
 
 namespace App\Models\Core;
 
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class StationBranchListFactory extends StationBranchFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -38,7 +41,7 @@ class StationBranchListFactory extends StationBranchFactory implements IteratorA
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -64,7 +67,7 @@ class StationBranchListFactory extends StationBranchFactory implements IteratorA
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

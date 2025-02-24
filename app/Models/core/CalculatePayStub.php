@@ -2,6 +2,26 @@
 
 namespace App\Models\Core;
 
+use App\Models\Accrual\AccrualListFactory;
+use App\Models\Company\AllowanceFactory;
+use App\Models\Company\AllowanceListFactory;
+use App\Models\Holiday\HolidayListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\PayStub\PayStubFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\PayStub\PayStubMiddlePayFactory;
+use App\Models\PayStub\PayStubMiddlePayListFactory;
+use App\Models\Policy\PremiumPolicyListFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Users\UserGenericStatusFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserWageListFactory;
+use DateTime;
+
 class CalculatePayStub extends PayStubFactory {
 
 	var $wage_obj = NULL;
@@ -21,7 +41,7 @@ class CalculatePayStub extends PayStubFactory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = new UserListFactory();
+		$ulf = new UserListFactory(); 
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -162,7 +182,7 @@ class CalculatePayStub extends PayStubFactory {
 	}
 
 	function getDeductionObjectArrayForSorting( $obj ) {
-		//$psealf = new PayStubEntryAccountListFactory();
+		//$psealf = TTnew( 'PayStubEntryAccountListFactory' );
 		//$type_map_arr = $psealf->getByTypeArrayByCompanyIdAndStatusId( $this->getUserObject()->getCompany(), 10 );
 		$type_map_arr = $this->getPayStubEntryAccountsTypeArray();
 
@@ -172,7 +192,7 @@ class CalculatePayStub extends PayStubFactory {
 			return FALSE;
 		}
 
-		if ( get_class($obj) == 'UserDeductionListFactory() {
+		if ( get_class($obj) == 'UserDeductionListFactory' ) {
 			if ( !is_object( $obj->getCompanyDeductionObject() ) ) {
 				return FALSE;
 			}
@@ -223,7 +243,7 @@ class CalculatePayStub extends PayStubFactory {
 			$arr['affect_accounts'] = $obj->getCompanyDeductionObject()->getPayStubEntryAccount();
 
 			return $arr;
-		} elseif ( get_class($obj) == 'PayStubAmendmentListFactory() {
+		} elseif ( get_class($obj) == 'PayStubAmendmentListFactory' ) {
 			$arr['type'] = get_class( $obj );
 			$arr['obj_id'] = $obj->getId();
 			$arr['id'] = substr($arr['type'],0,1).$obj->getId();
@@ -336,7 +356,7 @@ class CalculatePayStub extends PayStubFactory {
 			$pay_stub->setTemp(TRUE);
 
 			//Check for current pay stub ID so we can compare against it.
-			$pslf = new PayStubListFactory();
+			$pslf = TTnew( 'PayStubListFactory' );
 			$pslf->getByUserIdAndPayPeriodId( $this->getUser(), $this->getPayPeriod() );
 			if ( $pslf->getRecordCount() > 0 ) {
 				$old_pay_stub_id = $pslf->getCurrent()->getId();
@@ -429,7 +449,7 @@ class CalculatePayStub extends PayStubFactory {
 		}
                 /////////////////////////////////////////Added by Thusitha start//////////////////////////////////////////////
                 $pgplf = new PremiumPolicyListFactory();
-               // $pslf = new PayStubListFactory();
+               // $pslf = TTnew( 'PayStubListFactory' );
                 //echo $this->getUser();                exit();
                 $pgplf->getByPolicyGroupUserId($this->getUser());
                 
@@ -476,12 +496,12 @@ class CalculatePayStub extends PayStubFactory {
                 }
 		/////////////////////////////////////////Added by Thusitha end//////////////////////////////////////////////
 		//Get all PS amendments and Tax / Deductions so we can determine the proper order to calculate them in.
-		$psalf = new PayStubAmendmentListFactory();
+		$psalf = TTnew( 'PayStubAmendmentListFactory' );
 		$psalf->getByUserIdAndAuthorizedAndStartDateAndEndDate( $this->getUser(), TRUE, $this->getPayPeriodObject()->getStartDate(), $this->getPayPeriodObject()->getEndDate() );
 
 		//                echo '<br>';
 		//                print_r($psalf->getRecordCount());
-		$udlf = new UserDeductionListFactory();
+		$udlf = TTnew( 'UserDeductionListFactory' );
 		$udlf->getByCompanyIdAndUserId( $this->getUserObject()->getCompany(), $this->getUserObject()->getId() );
 
 		//                echo '<br>';
@@ -499,7 +519,7 @@ class CalculatePayStub extends PayStubFactory {
 
 				if ( isset($data_arr['obj']) AND is_object($data_arr['obj']) ) {
 
-					if ( $data_arr['type'] == 'UserDeductionListFactory() {
+					if ( $data_arr['type'] == 'UserDeductionListFactory' ) {
 
 						$ud_obj = $data_arr['obj'];
 
@@ -573,7 +593,7 @@ class CalculatePayStub extends PayStubFactory {
 								}
 						}
 						unset($amount, $ud_obj);
-					} elseif ( $data_arr['type'] == 'PayStubAmendmentListFactory() {
+					} elseif ( $data_arr['type'] == 'PayStubAmendmentListFactory' ) {
 						$psa_obj = $data_arr['obj'];
 
 						Debug::text('Found Pay Stub Amendment: ID: '. $psa_obj->getID() .' Entry Name ID: '. $psa_obj->getPayStubEntryNameId() .' Type: '. $psa_obj->getType() , __FILE__, __LINE__, __METHOD__,10);
@@ -628,7 +648,7 @@ class CalculatePayStub extends PayStubFactory {
 				//TimeTrex wouldn't delete these temporary pay stubs.
 				//Moving this code outside that IF statement so it only depends on EnableCorrection()
 				//to be TRUE should fix that issue.
-				$pslf = new PayStubListFactory();
+				$pslf = TTnew( 'PayStubListFactory' );
 				$pslf->getById( $pay_stub_id );
 				if ( $pslf->getRecordCount() > 0 ) {
 					$tmp_ps_obj = $pslf->getCurrent();
@@ -681,7 +701,7 @@ class CalculatePayStub extends PayStubFactory {
 
 		//echo '<pre>';
 
-		$pay_stub = new PayStubFactory();
+		$pay_stub = TTnew( 'PayStubFactory' );
 		$pay_stub->StartTransaction();
 
 		$old_pay_stub_id = NULL;
@@ -799,10 +819,10 @@ class CalculatePayStub extends PayStubFactory {
 		}
 
 		//Get all PS amendments and Tax / Deductions so we can determine the proper order to calculate them in.
-		$psalf = new PayStubAmendmentListFactory();
+		$psalf = TTnew( 'PayStubAmendmentListFactory' );
 		$psalf->getByUserIdAndAuthorizedAndStartDateAndEndDate( $this->getUser(), TRUE, $this->getPayPeriodObject()->getStartDate(), $this->getPayPeriodObject()->getEndDate() );
 
-		$udlf = new UserDeductionListFactory();
+		$udlf = TTnew( 'UserDeductionListFactory' );
 		$udlf->getByCompanyIdAndUserIdForMid( $this->getUserObject()->getCompany(), $this->getUserObject()->getId() );
 
 		$deduction_order_arr = $this->getOrderedDeductionAndPSAmendment( $udlf, $psalf );
@@ -814,7 +834,7 @@ class CalculatePayStub extends PayStubFactory {
 
 				if ( isset($data_arr['obj']) AND is_object($data_arr['obj']) ) {
 
-					if ( $data_arr['type'] == 'UserDeductionListFactory() {
+					if ( $data_arr['type'] == 'UserDeductionListFactory' ) {
 
 						$ud_obj = $data_arr['obj'];
 
@@ -856,7 +876,7 @@ class CalculatePayStub extends PayStubFactory {
 								}
 						}
 						unset($amount, $ud_obj);
-					} elseif ( $data_arr['type'] == 'PayStubAmendmentListFactory() {
+					} elseif ( $data_arr['type'] == 'PayStubAmendmentListFactory' ) {
 						$psa_obj = $data_arr['obj'];
 
 						Debug::text('Found Pay Stub Amendment: ID: '. $psa_obj->getID() .' Entry Name ID: '. $psa_obj->getPayStubEntryNameId() .' Type: '. $psa_obj->getType() , __FILE__, __LINE__, __METHOD__,10);
@@ -906,7 +926,7 @@ class CalculatePayStub extends PayStubFactory {
 				//TimeTrex wouldn't delete these temporary pay stubs.
 				//Moving this code outside that IF statement so it only depends on EnableCorrection()
 				//to be TRUE should fix that issue.
-				$pslf = new PayStubListFactory();
+				$pslf = TTnew( 'PayStubListFactory' );
 				$pslf->getById( $pay_stub_id );
 				if ( $pslf->getRecordCount() > 0 ) {
 					$tmp_ps_obj = $pslf->getCurrent();

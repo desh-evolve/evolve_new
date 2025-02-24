@@ -2,6 +2,9 @@
 
 namespace App\Models\Core;
 
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class StationUserListFactory extends StationUserFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -38,7 +41,7 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -60,7 +63,7 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -86,7 +89,7 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 						AND	id = ?';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -107,7 +110,7 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -133,7 +136,7 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 						AND	id = ?';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -159,7 +162,7 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 						AND	user_id = ?';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

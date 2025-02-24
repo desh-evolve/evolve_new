@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {

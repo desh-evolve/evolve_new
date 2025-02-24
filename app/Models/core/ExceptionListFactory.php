@@ -2,6 +2,23 @@
 
 namespace App\Models\Core;
 
+use App\Models\Company\BranchFactory;
+use App\Models\Department\DepartmentFactory;
+use App\Models\PayPeriod\PayPeriodFactory;
+use App\Models\Policy\ExceptionPolicyControlFactory;
+use App\Models\Policy\ExceptionPolicyFactory;
+use App\Models\Policy\PolicyGroupFactory;
+use App\Models\Policy\PolicyGroupUserFactory;
+use App\Models\Punch\PunchControlFactory;
+use App\Models\Punch\PunchFactory;
+use App\Models\Request\RequestFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserTitleFactory;
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -146,9 +163,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 			return FALSE;
 		}
 
-		$uf = new UserFactory();
+		$uf = new UserFactory(); 
 		$udf = new UserDateFactory();
-		$epf = new ExceptionPolicyFactory();
+		$epf = new ExceptionPolicyFactory(); 
 
 		$ph = array(
 					':company_id' => $company_id,
@@ -192,8 +209,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$uf = new UserFactory();
 		$udf = new UserDateFactory();
 		$epf = new ExceptionPolicyFactory();
-		$ppf = new PayPeriodFactory();
-		$rf = new RequestFactory();
+		$ppf = new PayPeriodFactory(); 
+		$rf = new RequestFactory(); 
 /*
 							b.date_stamp as user_date_stamp,
 							d.severity_id as severity_id,
@@ -486,9 +503,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$uf = new UserFactory();
 		$udf = new UserDateFactory();
 
-		$pguf = new PolicyGroupUserFactory();
-		$pgf = new PolicyGroupFactory();
-		$epcf = new ExceptionPolicyControlFactory();
+		$pguf = new PolicyGroupUserFactory(); 
+		$pgf = new PolicyGroupFactory(); 
+		$epcf = new ExceptionPolicyControlFactory(); 
 
 		//Get total date units
 		switch (strtolower($time_period)) {
@@ -732,9 +749,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		$udf = new UserDateFactory();
 		$uf = new UserFactory();
-		$bf = new BranchFactory();
-		$df = new DepartmentFactory();
-		$ugf = new UserGroupFactory();
+		$bf = new BranchFactory(); 
+		$df = new DepartmentFactory(); 
+		$ugf = new UserGroupFactory(); 
 		$utf = new UserTitleFactory();
 		$ppf = new PayPeriodFactory();
 		$epf = new ExceptionPolicyFactory();

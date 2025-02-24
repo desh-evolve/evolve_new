@@ -2,6 +2,22 @@
 
 namespace App\Models\Core;
 
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Company\BranchListFactory;
+use App\Models\Company\CompanyFactory;
+use App\Models\Leaves\AbsenceLeaveListFactory;
+use App\Models\Leaves\AbsenceLeaveUserEntryRecordListFactory;
+use App\Models\Leaves\AbsenceLeaveUserFactory;
+use App\Models\Leaves\AbsenceLeaveUserListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Policy\AccrualPolicyMilestoneListFactory;
+use App\Models\Schedule\ScheduleFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserWageFactory;
+use App\Models\Users\UserWageListFactory;
+
 class AJAX_Server {
 
 	function getCurrentUserFullName() {
@@ -874,7 +890,7 @@ class AJAX_Server {
 			return FALSE;
 		}
 		$ablf = new AccrualBalanceListFactory();
-        $apmlf = new AccrualPolicyMilestoneListFactory(); 
+        $apmlf = new AccrualPolicyMilestoneListFactory();
         $apf = new AccrualPolicyListFactory();
         $ulf = new UserListFactory();
         $allf = new AbsenceLeaveListFactory();

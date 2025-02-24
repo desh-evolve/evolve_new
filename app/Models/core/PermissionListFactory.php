@@ -2,6 +2,9 @@
 
 namespace App\Models\Core;
 
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class PermissionListFactory extends PermissionFactory implements IteratorAggregate {
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
@@ -38,7 +41,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -70,7 +73,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -114,7 +117,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -149,7 +152,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 				';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

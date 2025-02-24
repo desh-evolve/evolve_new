@@ -2,6 +2,9 @@
 
 namespace App\Models\Core;
 
+use App\Models\Company\CompanyListFactory;
+use App\Models\Users\UserListFactory;
+
 class PermissionControlFactory extends Factory {
 	protected $table = 'permission_control';
 	protected $pk_sequence_name = 'permission_control_id_seq'; //PK Sequence name

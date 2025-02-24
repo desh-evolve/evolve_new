@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserListFactory;
+
 class PermissionUserFactory extends Factory {
 	protected $table = 'permission_user';
 	protected $pk_sequence_name = 'permission_user_id_seq'; //PK Sequence name
@@ -34,7 +36,7 @@ class PermissionUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = new UserListFactory();
+			$ulf = new UserListFactory(); 
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();

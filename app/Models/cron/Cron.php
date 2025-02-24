@@ -2,6 +2,11 @@
 
 namespace App\Models\Cron;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+
 class Cron {
 
 	static protected $limits = array(

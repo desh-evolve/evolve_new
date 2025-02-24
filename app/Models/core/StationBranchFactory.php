@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use App\Models\Company\BranchListFactory;
+
 class StationBranchFactory extends Factory {
 	protected $table = 'station_branch';
 	protected $pk_sequence_name = 'station_branch_id_seq'; //PK Sequence name

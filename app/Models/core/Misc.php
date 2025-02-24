@@ -2,6 +2,12 @@
 
 namespace App\Models\Core;
 
+use App\Models\Accrual\AccrualListFactory;
+use App\Models\Company\CompanyFactory;
+use App\Models\Company\CompanyListFactory;
+use App\Models\Report\TimesheetDetailReport;
+use DateTime;
+
 class Misc {
 	/*
 		this method assumes that the form has one or more

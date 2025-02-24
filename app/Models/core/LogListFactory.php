@@ -2,6 +2,10 @@
 
 namespace App\Models\Core;
 
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
 class LogListFactory extends LogFactory implements IteratorAggregate {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
@@ -39,7 +43,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -53,7 +57,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 			return FALSE;
 		}
 
-		$uf = new UserFactory();
+		$uf = new UserFactory(); 
 
 		$ph = array(
 					'id' => $id,
@@ -70,7 +74,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -111,7 +115,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -192,9 +196,10 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;
@@ -259,7 +264,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 		Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -364,9 +369,10 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
+			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 
 		return $this;

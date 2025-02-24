@@ -2,8 +2,15 @@
 
 namespace App\Models\Core;
 
-class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
+use App\Models\PayPeriod\PayPeriodFactory;
+use App\Models\Punch\PunchControlFactory;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
+use IteratorAggregate;
+
+class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
+	
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -42,7 +49,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -65,7 +72,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -88,9 +95,9 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -122,7 +129,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -170,7 +177,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -191,7 +198,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -212,7 +219,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -237,7 +244,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -268,7 +275,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					ORDER BY id ASC
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
                 
                
@@ -314,7 +321,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -359,7 +366,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -394,7 +401,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -438,7 +445,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -550,7 +557,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -585,7 +592,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 						AND deleted = ?
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -647,7 +654,7 @@ and udt.deleted = 0";
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
         }
@@ -698,7 +705,7 @@ and udt.deleted = 0";
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
         }
