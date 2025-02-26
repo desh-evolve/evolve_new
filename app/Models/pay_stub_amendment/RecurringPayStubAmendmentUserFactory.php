@@ -2,6 +2,7 @@
 
 namespace App\Models\PayStubAmendment;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class RecurringPayStubAmendmentUserFactory extends Factory {
 	protected $table = 'recurring_ps_amendment_user';

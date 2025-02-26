@@ -1,7 +1,13 @@
 <?php
 
 namespace App\Models\Policy;
-use App\Models\Core\Factory; 
+
+use App\Models\Company\CompanyGenericMapFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class SchedulePolicyFactory extends Factory {
 	protected $table = 'schedule_policy';
@@ -204,7 +210,7 @@ class SchedulePolicyFactory extends Factory {
 	}
 
 	function getBreakPolicy() {
-		return CompanyGenericMapListFactory::getArrayByCompanyIDAndObjectTypeIDAndObjectID( $this->getCompany(), 165, $this->getID() );
+		return CompanyGenericMapFactory::getArrayByCompanyIDAndObjectTypeIDAndObjectID( $this->getCompany(), 165, $this->getID() );
 	}
 	function setBreakPolicy($ids) {
 		Debug::text('Setting Break Policy IDs : ', __FILE__, __LINE__, __METHOD__, 10);

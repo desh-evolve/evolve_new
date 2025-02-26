@@ -2,6 +2,8 @@
 
 namespace App\Models\Other;
 
+use App\Models\Core\Debug;
+
 class SugarCRM {
     private $soap_client_obj = NULL;
     private $session_id = NULL;

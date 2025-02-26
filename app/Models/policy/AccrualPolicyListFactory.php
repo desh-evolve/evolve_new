@@ -1,6 +1,12 @@
 <?php
 
 namespace App\Models\Policy;
+
+use App\Models\Company\CompanyGenericMapFactory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorAggregate {

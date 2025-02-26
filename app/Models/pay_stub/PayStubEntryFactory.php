@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Models\PayStub;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
 
 class PayStubEntryFactory extends Factory {
 	protected $table = 'pay_stub_entry';

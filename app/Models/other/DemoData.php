@@ -2,6 +2,14 @@
 
 namespace App\Models\Other;
 
+use App\Models\Company\CompanyDeductionFactory;
+use App\Models\Core\CalculatePayStub;
+use App\Models\Core\Debug;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+use App\Models\Core\UserDateFactory;
+use App\Models\PayStub\PayStubEntryAccountFactory;
+
 class DemoData {
 
 	protected $user_name_postfix = '1';

@@ -12,7 +12,9 @@
  * Matthias Blaser <mb@adfinis.ch>
  */
 
- namespace App\Models\Other;
+namespace App\Models\Other;
+
+use Exception;
 
 class Telnet {
 

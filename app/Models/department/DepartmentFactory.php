@@ -1,7 +1,15 @@
 <?php
 
 namespace App\Models\Department;
+
+use App\Models\Company\CompanyGenericTagMapFactory;
+use App\Models\Company\CompanyGenericTagMapListFactory;
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class DepartmentFactory extends Factory {
 	protected $table = 'department';

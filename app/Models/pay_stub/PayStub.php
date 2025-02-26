@@ -2,6 +2,8 @@
 
 namespace App\Models\PayStub;
 
+use App\Models\Core\Debug;
+
 class PayStub extends PayStubFactory {
 	protected $tmp_data = NULL;
 

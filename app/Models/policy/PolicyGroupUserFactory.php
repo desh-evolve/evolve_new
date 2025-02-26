@@ -2,6 +2,8 @@
 
 namespace App\Models\Policy;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class PolicyGroupUserFactory extends Factory {
 	protected $table = 'policy_group_user';

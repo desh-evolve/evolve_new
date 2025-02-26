@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Hierarchy;
+
+use App\Models\Users\UserFactory;
 use IteratorAggregate;
 
 class HierarchyControlListFactory extends HierarchyControlFactory implements IteratorAggregate {
@@ -40,7 +42,7 @@ class HierarchyControlListFactory extends HierarchyControlFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -68,7 +70,7 @@ class HierarchyControlListFactory extends HierarchyControlFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -100,9 +102,9 @@ class HierarchyControlListFactory extends HierarchyControlFactory implements Ite
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -173,7 +175,7 @@ class HierarchyControlListFactory extends HierarchyControlFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -208,7 +210,7 @@ class HierarchyControlListFactory extends HierarchyControlFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -315,9 +317,9 @@ class HierarchyControlListFactory extends HierarchyControlFactory implements Ite
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

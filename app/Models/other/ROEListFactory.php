@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Models\Other;
+
+use App\Models\Core\Debug;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class ROEListFactory extends ROEFactory implements IteratorAggregate {

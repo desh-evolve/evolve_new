@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\PayStubAmendment;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class RecurringPayStubAmendmentUserListFactory extends RecurringPayStubAmendmentUserFactory implements IteratorAggregate {

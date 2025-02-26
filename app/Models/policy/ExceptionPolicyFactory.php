@@ -3,6 +3,12 @@
 namespace App\Models\Policy;
 use App\Models\Core\Factory;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Option;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
+use App\Models\Core\TTDate;
+
 class ExceptionPolicyFactory extends Factory {
 	protected $table = 'exception_policy';
 	protected $pk_sequence_name = 'exception_policy_id_seq'; //PK Sequence name

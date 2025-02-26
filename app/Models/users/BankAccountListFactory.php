@@ -1,6 +1,12 @@
 <?php
 
-namespace App\Models\Users; 
+namespace App\Models\Users;
+
+use App\Models\Company\BranchFactory;
+use App\Models\Core\CurrencyFactory;
+use App\Models\Core\Misc;
+use App\Models\Department\DepartmentFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class BankAccountListFactory extends BankAccountFactory implements IteratorAggregate {

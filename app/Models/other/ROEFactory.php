@@ -1,7 +1,19 @@
 <?php
 
 namespace App\Models\Other;
+
+use App\Models\Core\CalculatePayStub;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
+use App\Models\Core\Validator;
+use App\Models\PayStubAmendment\PayStubAmendmentFactory;
+use App\Models\Users\UserGenericStatusFactory;
 
 class ROEFactory extends Factory {
 	protected $table = 'roe';

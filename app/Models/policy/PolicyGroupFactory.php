@@ -1,7 +1,14 @@
 <?php
 
 namespace App\Models\Policy;
+
+use App\Models\Company\CompanyGenericMapFactory;
+use App\Models\Company\CompanyGenericMapListFactory;
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class PolicyGroupFactory extends Factory {
 	protected $table = 'policy_group';

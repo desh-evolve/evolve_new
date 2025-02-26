@@ -1,6 +1,23 @@
 <?php
 
-namespace App\Models\Punch; 
+namespace App\Models\Punch;
+
+use App\Models\Company\BranchFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\StationFactory;
+use App\Models\Core\TTDate;
+use App\Models\Core\UserDateFactory;
+use App\Models\Department\DepartmentFactory;
+use App\Models\PayPeriod\PayPeriodFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleFactory;
+use App\Models\Users\UserWageFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PunchListFactory extends PunchFactory implements IteratorAggregate {

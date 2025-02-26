@@ -1,6 +1,12 @@
 <?php
 
 namespace App\Models\Department;
+
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class DepartmentListFactory extends DepartmentFactory implements IteratorAggregate {
@@ -42,7 +48,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -90,9 +96,9 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -119,7 +125,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -145,7 +151,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -173,7 +179,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -206,7 +212,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -275,7 +281,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 		if ( $this->getRecordCount() > 0 ) {
 			Debug::text('Rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -390,9 +396,9 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Models\Users;
-use App\Models\Core\Factory; 
+use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class BonusDecemberUserFactory  extends Factory {
     //put your code here

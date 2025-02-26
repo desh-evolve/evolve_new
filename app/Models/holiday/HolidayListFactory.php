@@ -1,6 +1,14 @@
 <?php
 
 namespace App\Models\Holiday;
+
+use App\Models\Company\CompanyGenericMapFactory;
+use App\Models\Core\Misc;
+use App\Models\Policy\HolidayPolicyFactory;
+use App\Models\Policy\PolicyGroupFactory;
+use App\Models\Policy\PolicyGroupUserFactory;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class HolidayListFactory extends HolidayFactory implements IteratorAggregate {

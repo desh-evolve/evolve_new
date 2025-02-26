@@ -1,6 +1,14 @@
 <?php
 
 namespace App\Models\PayPeriod;
+
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\PayStub\PayStubFactory;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate {

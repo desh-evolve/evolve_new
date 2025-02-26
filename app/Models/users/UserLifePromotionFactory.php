@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Models\Users;
-use App\Models\Core\Factory; 
+use App\Models\Core\Factory;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
 
 class UserLifePromotionFactory  extends Factory {
     //put your code here

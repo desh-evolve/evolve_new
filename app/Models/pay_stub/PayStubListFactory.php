@@ -1,6 +1,12 @@
 <?php
 
  namespace App\Models\PayStub;
+
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PayStubListFactory extends PayStubFactory implements IteratorAggregate {

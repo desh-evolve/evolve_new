@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models\Users; 
+namespace App\Models\Users;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implements IteratorAggregate {

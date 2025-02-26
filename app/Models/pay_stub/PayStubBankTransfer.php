@@ -3,6 +3,8 @@
 
 namespace App\Models\PayStub;
 
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
 use App\Models\Core\TTPDF;
 
 class PayStubBankTransfer extends TTPDF{

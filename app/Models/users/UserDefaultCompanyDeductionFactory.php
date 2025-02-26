@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Models\Users;
-use App\Models\Core\Factory; 
+
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class UserDefaultCompanyDeductionFactory extends Factory {
 	protected $table = 'user_default_company_deduction';

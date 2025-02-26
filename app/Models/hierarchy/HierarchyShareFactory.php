@@ -2,6 +2,7 @@
 
 namespace App\Models\Hierarchy;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class HierarchyShareFactory extends Factory {
 	protected $table = 'hierarchy_share';

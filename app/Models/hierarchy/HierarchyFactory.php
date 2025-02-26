@@ -1,7 +1,12 @@
 <?php
 
 namespace App\Models\Hierarchy;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\FastTree;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class HierarchyFactory extends Factory {
 
@@ -193,7 +198,7 @@ class HierarchyFactory extends Factory {
 		return TRUE;
 	}
 
-	function Save() {
+	function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		$this->StartTransaction();
 
 		$this->getFastTreeObject()->setTree( $this->getHierarchyControl() );

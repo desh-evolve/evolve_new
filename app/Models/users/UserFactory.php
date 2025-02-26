@@ -2,7 +2,18 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company\CompanyGenericTagMapFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
 use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Permission;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLDAP;
+use App\Models\Core\TTLog;
+use DateTime;
 
 class UserFactory extends Factory {
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Hierarchy;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implements IteratorAggregate {

@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Models\Hierarchy;
+
+use App\Models\Core\Debug;
+use App\Models\Core\FastTree;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserListFactory;
 use IteratorAggregate;
 
 class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate {

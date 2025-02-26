@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Models\Holiday;
+
+use App\Models\Core\Misc;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class RecurringHolidayListFactory extends RecurringHolidayFactory implements IteratorAggregate {

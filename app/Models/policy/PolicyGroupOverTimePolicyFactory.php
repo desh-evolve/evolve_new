@@ -3,6 +3,8 @@
 namespace App\Models\Policy;
 use App\Models\Core\Factory;
 
+use App\Models\Core\TTi18n;
+
 class PolicyGroupOverTimePolicyFactory extends Factory {
 	protected $table = 'policy_group_over_time_policy';
 	protected $pk_sequence_name = 'policy_group_over_time_policy_id_seq'; //PK Sequence name

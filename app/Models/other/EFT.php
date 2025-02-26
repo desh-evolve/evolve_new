@@ -59,13 +59,12 @@ $eft->compile();
 $eft->save('/tmp/eft01.txt');
 */
 
-/**
- * @package Module_Other
- */
 
  namespace App\Models\Other;
 
- 
+use App\Models\Core\Debug;
+use App\Models\Core\TTDate;
+
 class EFT {
 
 	var $file_format_options = array( '1464','105', 'HSBC', 'BEANSTREAM' );

@@ -1,6 +1,16 @@
 <?php
 
-namespace App\Models\Users; 
+namespace App\Models\Users;
+
+use App\Models\Company\BranchFactory;
+use App\Models\Company\WageGroupFactory;
+use App\Models\Core\CurrencyFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+use App\Models\Department\DepartmentFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class UserWageListFactory extends UserWageFactory implements IteratorAggregate {

@@ -2,6 +2,7 @@
 
 namespace App\Models\Message;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class MessageSenderFactory extends Factory {
 	protected $table = 'message_sender';

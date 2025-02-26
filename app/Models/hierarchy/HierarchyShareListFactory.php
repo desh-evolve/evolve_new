@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Hierarchy;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class HierarchyShareListFactory extends HierarchyShareFactory implements IteratorAggregate {

@@ -84,6 +84,13 @@
 namespace App\Models\PayStub;
 use App\Models\Core\Factory;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+
 require_once( 'Numbers/Words.php');
 
 class PayStubFactory extends Factory {

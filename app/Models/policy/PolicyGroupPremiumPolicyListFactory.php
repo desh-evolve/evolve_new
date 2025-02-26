@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Policy;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PolicyGroupPremiumPolicyListFactory extends PolicyGroupPremiumPolicyFactory implements IteratorAggregate {

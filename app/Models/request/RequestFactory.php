@@ -1,7 +1,15 @@
 <?php
 
 namespace App\Models\Request;
-use App\Models\Core\Factory; 
+
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
+use App\Models\Core\UserDateFactory;
 
 class RequestFactory extends Factory {
 	protected $table = 'request';

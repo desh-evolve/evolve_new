@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Leaves;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAggregate {

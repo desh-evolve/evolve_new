@@ -1,7 +1,12 @@
 <?php
 
 namespace App\Models\Hierarchy;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\Option;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class HierarchyObjectTypeFactory extends Factory {
 	protected $table = 'hierarchy_object_type';

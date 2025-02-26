@@ -1,6 +1,19 @@
 <?php
 
 namespace App\Models\PayPeriod;
+
+use App\Models\Company\BranchFactory;
+use App\Models\Core\AuthorizationFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Department\DepartmentFactory;
+use App\Models\Hierarchy\HierarchyLevelFactory;
+use App\Models\Hierarchy\HierarchyUserFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserTitleFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactory implements IteratorAggregate {

@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Models\Users; 
+namespace App\Models\Users;
+
+use DateTime;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class BonusDecemberListFactory  extends  BonusDecemberFactory implements IteratorAggregate {

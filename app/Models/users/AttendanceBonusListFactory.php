@@ -1,12 +1,14 @@
 <?php
 
 
-namespace App\Models\Users; 
+namespace App\Models\Users;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class AttendanceBonusListFactory extends AttendanceBonusFactory implements IteratorAggregate {
     //put your code here
-    
+	
     function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*

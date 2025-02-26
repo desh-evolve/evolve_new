@@ -2,6 +2,7 @@
 
 namespace App\Models\Policy;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class PolicyGroupAccrualPolicyFactory extends Factory {
 	protected $table = 'policy_group_accrual_policy';

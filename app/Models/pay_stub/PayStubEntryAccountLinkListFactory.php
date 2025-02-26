@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\PayStub;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PayStubEntryAccountLinkListFactory extends PayStubEntryAccountLinkFactory implements IteratorAggregate {

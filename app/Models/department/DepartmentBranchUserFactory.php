@@ -2,6 +2,7 @@
 
 namespace App\Models\Department;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class DepartmentBranchUserFactory extends Factory {
 	protected $table = 'department_branch_user';

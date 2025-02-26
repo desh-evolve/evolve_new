@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Department;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class DepartmentBranchUserListFactory extends DepartmentBranchUserFactory implements IteratorAggregate {
@@ -39,7 +41,7 @@ class DepartmentBranchUserListFactory extends DepartmentBranchUserFactory implem
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -52,19 +54,19 @@ class DepartmentBranchUserListFactory extends DepartmentBranchUserFactory implem
 		$dbf = new DepartmentBranchFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a, '. $dbf->getTable() .' as b
 					where	b.id = a.department_branch_id
-						AND department_branch_id = ?
+						AND department_branch_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

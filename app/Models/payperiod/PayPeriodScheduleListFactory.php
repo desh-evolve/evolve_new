@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Models\PayPeriod;
+
+use App\Models\Core\Misc;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements IteratorAggregate {

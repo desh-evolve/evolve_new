@@ -1,6 +1,21 @@
 <?php
 
 namespace App\Models\PayStub;
+
+use App\Models\Company\BranchFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Department\DepartmentFactory;
+use App\Models\PayPeriod\PayPeriodFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleUserFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserTitleFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAggregate {

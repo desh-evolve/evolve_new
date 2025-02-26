@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Models\Users; 
+namespace App\Models\Users;
+
+use App\Models\Core\Debug;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class UserIdentificationListFactory extends UserIdentificationFactory implements IteratorAggregate {

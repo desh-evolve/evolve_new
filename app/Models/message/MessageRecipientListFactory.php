@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Models\Message;
+
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class MessageRecipientListFactory extends MessageRecipientFactory implements IteratorAggregate {

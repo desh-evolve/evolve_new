@@ -2,7 +2,10 @@
 
 
 namespace App\Models\Leaves;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
 
 class LeaveRequestFactory  extends Factory {
     //put your code here

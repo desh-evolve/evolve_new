@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Department;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class DepartmentBranchListFactory extends DepartmentBranchFactory implements IteratorAggregate {
@@ -40,7 +42,7 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

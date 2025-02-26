@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Models\PayPeriod;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Factory;
+use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 class PayPeriodScheduleUserFactory extends Factory {
 	protected $table = 'pay_period_schedule_user';
