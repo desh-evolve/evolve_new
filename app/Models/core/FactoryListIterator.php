@@ -38,6 +38,17 @@ class FactoryListIterator extends IteratorIterator {
 
     function current(): mixed {
 		if (isset($this->obj->rs) && $this->obj->rs) {
+			/*
+			============================================
+			//old code
+			$this->obj = new $this->class_name();
+
+			$this->obj->rs = $this->rs;
+			$this->obj->data = $this->obj->rs->fields; //Orignal 
+			============================================
+			*/
+
+			//new code (desh - 2025-02-26)
 			// Reset object during each iteration to prevent data persistence
 			$this->obj = new $this->class_name();
 			$this->obj->rs = $this->rs;
@@ -47,7 +58,9 @@ class FactoryListIterator extends IteratorIterator {
 			//$this->obj->data = $this->obj->rs;
 			
 			// If your result set is a collection/array of rows, you might need:
-			$this->obj->data = $this->obj->rs[key($this->obj->rs)] ?? null;
+			$this->obj->data = (array)$this->obj->rs[key($this->obj->rs)] ?? [];
+			
+			
 		}
 		return $this->obj;
 	}

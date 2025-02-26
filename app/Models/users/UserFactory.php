@@ -1393,6 +1393,7 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
+
 	function setCompany($id) {
 		$id = trim($id);
 

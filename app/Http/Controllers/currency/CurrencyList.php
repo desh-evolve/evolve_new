@@ -99,7 +99,7 @@ class CurrencyList extends Controller
         global $current_company;
 
         $delete = strtolower($action) == 'delete';
-        $clf = TTnew('CurrencyListFactory');
+        $clf = new CurrencyListFactory();
 
         if (!empty($ids) && is_array($ids)) {
             foreach ($ids as $id) {

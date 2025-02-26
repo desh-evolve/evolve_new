@@ -15,8 +15,10 @@ use App\Models\PayStub\PayStubFactory;
 use App\Models\PayStub\PayStubListFactory;
 use App\Models\PayStub\PayStubMiddlePayFactory;
 use App\Models\PayStub\PayStubMiddlePayListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
 use App\Models\Policy\PremiumPolicyListFactory;
 use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Users\UserDeductionListFactory;
 use App\Models\Users\UserGenericStatusFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserWageListFactory;
@@ -182,7 +184,7 @@ class CalculatePayStub extends PayStubFactory {
 	}
 
 	function getDeductionObjectArrayForSorting( $obj ) {
-		//$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		//$psealf = new PayStubEntryAccountListFactory();
 		//$type_map_arr = $psealf->getByTypeArrayByCompanyIdAndStatusId( $this->getUserObject()->getCompany(), 10 );
 		$type_map_arr = $this->getPayStubEntryAccountsTypeArray();
 
@@ -356,7 +358,7 @@ class CalculatePayStub extends PayStubFactory {
 			$pay_stub->setTemp(TRUE);
 
 			//Check for current pay stub ID so we can compare against it.
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$pslf->getByUserIdAndPayPeriodId( $this->getUser(), $this->getPayPeriod() );
 			if ( $pslf->getRecordCount() > 0 ) {
 				$old_pay_stub_id = $pslf->getCurrent()->getId();
@@ -449,7 +451,7 @@ class CalculatePayStub extends PayStubFactory {
 		}
                 /////////////////////////////////////////Added by Thusitha start//////////////////////////////////////////////
                 $pgplf = new PremiumPolicyListFactory();
-               // $pslf = TTnew( 'PayStubListFactory' );
+               // $pslf = new PayStubListFactory();
                 //echo $this->getUser();                exit();
                 $pgplf->getByPolicyGroupUserId($this->getUser());
                 
@@ -496,12 +498,12 @@ class CalculatePayStub extends PayStubFactory {
                 }
 		/////////////////////////////////////////Added by Thusitha end//////////////////////////////////////////////
 		//Get all PS amendments and Tax / Deductions so we can determine the proper order to calculate them in.
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$psalf = new PayStubAmendmentListFactory();
 		$psalf->getByUserIdAndAuthorizedAndStartDateAndEndDate( $this->getUser(), TRUE, $this->getPayPeriodObject()->getStartDate(), $this->getPayPeriodObject()->getEndDate() );
 
 		//                echo '<br>';
 		//                print_r($psalf->getRecordCount());
-		$udlf = TTnew( 'UserDeductionListFactory' );
+		$udlf = new UserDeductionListFactory();
 		$udlf->getByCompanyIdAndUserId( $this->getUserObject()->getCompany(), $this->getUserObject()->getId() );
 
 		//                echo '<br>';
@@ -648,7 +650,7 @@ class CalculatePayStub extends PayStubFactory {
 				//TimeTrex wouldn't delete these temporary pay stubs.
 				//Moving this code outside that IF statement so it only depends on EnableCorrection()
 				//to be TRUE should fix that issue.
-				$pslf = TTnew( 'PayStubListFactory' );
+				$pslf = new PayStubListFactory();
 				$pslf->getById( $pay_stub_id );
 				if ( $pslf->getRecordCount() > 0 ) {
 					$tmp_ps_obj = $pslf->getCurrent();
@@ -701,7 +703,7 @@ class CalculatePayStub extends PayStubFactory {
 
 		//echo '<pre>';
 
-		$pay_stub = TTnew( 'PayStubFactory' );
+		$pay_stub = new PayStubFactory();
 		$pay_stub->StartTransaction();
 
 		$old_pay_stub_id = NULL;
@@ -819,10 +821,10 @@ class CalculatePayStub extends PayStubFactory {
 		}
 
 		//Get all PS amendments and Tax / Deductions so we can determine the proper order to calculate them in.
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$psalf = new PayStubAmendmentListFactory();
 		$psalf->getByUserIdAndAuthorizedAndStartDateAndEndDate( $this->getUser(), TRUE, $this->getPayPeriodObject()->getStartDate(), $this->getPayPeriodObject()->getEndDate() );
 
-		$udlf = TTnew( 'UserDeductionListFactory' );
+		$udlf = new UserDeductionListFactory();
 		$udlf->getByCompanyIdAndUserIdForMid( $this->getUserObject()->getCompany(), $this->getUserObject()->getId() );
 
 		$deduction_order_arr = $this->getOrderedDeductionAndPSAmendment( $udlf, $psalf );
@@ -926,7 +928,7 @@ class CalculatePayStub extends PayStubFactory {
 				//TimeTrex wouldn't delete these temporary pay stubs.
 				//Moving this code outside that IF statement so it only depends on EnableCorrection()
 				//to be TRUE should fix that issue.
-				$pslf = TTnew( 'PayStubListFactory' );
+				$pslf = new PayStubListFactory();
 				$pslf->getById( $pay_stub_id );
 				if ( $pslf->getRecordCount() > 0 ) {
 					$tmp_ps_obj = $pslf->getCurrent();
