@@ -1118,7 +1118,7 @@ class EFT_File_Format_ACH Extends EFT {
 	private function compileFileHeader() {
 		$line[] = '1'; //1 Record
 		$line[] = '01'; //Priority code
-		$line[] = $this->padRecord( $this->getDataCenter(), 10, 'AN');; //Immidiate destination - '072000805' - Standard Federal Bank
+		$line[] = $this->padRecord( $this->getDataCenter(), 10, 'AN'); //Immidiate destination - '072000805' - Standard Federal Bank
 		$line[] = $this->padRecord( $this->getOriginatorID(), 10, 'N'); //Immediate Origin - Recommend IRS Federal Tax ID Number
 
 		$line[] = $this->padRecord( date('ymd', $this->getFileCreationDate() ), 6, 'N');

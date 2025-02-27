@@ -1773,13 +1773,18 @@ class UserFactory extends Factory {
 		return $encrypted_password;
 	}
 	function checkPassword($password, $check_password_policy = TRUE ) {
-		global $config_vars;
+		echo 'check userfactory=>check password';
+		print_r($this->getPassword());
+		exit;
 
+		$config_vars = config('evolve');  // Load config directly from Laravel config
 		$password = html_entity_decode( $password );
-
+		
 		//Check if LDAP is enabled
 		$ldap_authentication_type_id = 0;
-		if ( DEMO_MODE != TRUE AND function_exists('ldap_connect') AND !isset($config_vars['other']['enable_ldap']) OR ( isset($config_vars['other']['enable_ldap']) AND $config_vars['other']['enable_ldap'] == TRUE ) ) {
+		
+		if ( DEMO_MODE != TRUE AND function_exists('ldap_connect') AND !isset($config_vars['other']['enable_ldap']) 
+			OR ( isset($config_vars['other']['enable_ldap']) AND $config_vars['other']['enable_ldap'] == TRUE ) ) {
 			//Check company object to make sure LDAP is enabled.
 			$c_obj = $this->getCompanyObject();
 			if ( is_object($this->getCompanyObject()) ) {
@@ -1808,9 +1813,8 @@ class UserFactory extends Factory {
 		} else {
 			Debug::Text('LDAP authentication disabled due to config or extension missing...', __FILE__, __LINE__, __METHOD__,10);
 		}
-
+		
 		$password = $this->encryptPassword( trim(strtolower($password)) );
-
 		//Don't check local TT passwords if LDAP Only authentication is enabled. Still accept override passwords though.
 		if ( $ldap_authentication_type_id != 2 AND $password == $this->getPassword() ) {
 			//If the passwords match, confirm that the password hasn't exceeded its maximum age.
@@ -1821,15 +1825,13 @@ class UserFactory extends Factory {
 			} else {
 				return TRUE; //Password accepted.
 			}
-		} elseif ( isset($config_vars['other']['override_password_prefix'])
-						AND $config_vars['other']['override_password_prefix'] != '' ) {
+		} elseif ( isset($config_vars['other']['override_password_prefix']) AND $config_vars['other']['override_password_prefix'] != '' ) {
 			//Check override password
 			if ( $password == $this->encryptPassword( trim( trim( strtolower($config_vars['other']['override_password_prefix']) ).substr($this->getUserName(),0,2) ) ) ) {
 				TTLog::addEntry( $this->getId(), 510, TTi18n::getText('Override Password successful from IP Address').': '. $_SERVER['REMOTE_ADDR'], NULL, $this->getTable() );
 				return TRUE;
 			}
 		}
-
 		return FALSE;
 	}
 	function getPassword() {

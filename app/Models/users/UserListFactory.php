@@ -69,7 +69,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						status_id = :status_id
 						AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -93,7 +93,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						AND status_id = :status_id
 						AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -130,7 +130,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						where	id = :id
 							AND deleted = 0';
 
-			$this->rs = DB::select($query, $ph);;
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -159,7 +159,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					where	employee_number = :employee_number
 						AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}     	
@@ -171,618 +171,517 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
          */        
 	function getAllJobSkillsUniqueOptions() {
 
-//		$query = '
-//					select 	job_skills
-//					from	'. $this->getTable() .'
-//					where   job_skills != null
-//						AND deleted = 0';
-//                
-//		$this->rs = $this->db->Execute($query);
-//                echo "ARSP --------------------------------------<br/>";
-//                print_r($this);
-//                echo "<pre>";
-//                print_r($this);
-//                echo "<pre>";
-            
-		$ulf = new UserListFactory();
-		$ulf->getAll();
-            
-		foreach ($ulf as $user) {
-                    
-                    if($user->getJobSkills() != '' OR $user->getJobSkills() != NULL)
-                    {
-                        
-                        // split the phrase by any number of commas or space characters,
-                        // which include " ", \r, \t, \n and \f
-                        $keywords = preg_split("/[\s,]+/", $user->getJobSkills());
-                        
-                        $array[] = $keywords;
-                    }
-		}
-                        
-                //$final = array();
-                foreach ($array as $value)
-                {
-                    foreach ($value as $val )
-                    {
-                        $final[] = $val;
-                    }
-                }
-//                print_r($final);
-//                exit();
-                
-                $result = array_unique($final);
-//                print_r($result);
-//                exit();
+		//		$query = '
+		//					select 	job_skills
+		//					from	'. $this->getTable() .'
+		//					where   job_skills != null
+		//						AND deleted = 0';
+		//                
+		//		$this->rs = $this->db->Execute($query);
+		//                echo "ARSP --------------------------------------<br/>";
+		//                print_r($this);
+		//                echo "<pre>";
+		//                print_r($this);
+		//                echo "<pre>";
+					
+				$ulf = new UserListFactory();
+				$ulf->getAll();
+					
+				foreach ($ulf as $user) {
+							
+							if($user->getJobSkills() != '' OR $user->getJobSkills() != NULL)
+							{
+								
+								// split the phrase by any number of commas or space characters,
+								// which include " ", \r, \t, \n and \f
+								$keywords = preg_split("/[\s,]+/", $user->getJobSkills());
+								
+								$array[] = $keywords;
+							}
+				}
+								
+						//$final = array();
+						foreach ($array as $value)
+						{
+							foreach ($value as $val )
+							{
+								$final[] = $val;
+							}
+						}
+		//                print_r($final);
+		//                exit();
+						
+						$result = array_unique($final);
+		//                print_r($result);
+		//                exit();
 
-                
+						
 
-                
-//                print_r($result);
-//                exit();
-		return $result;
-	}         
-		
+						
+		//                print_r($result);
+		//                exit();
+				return $result;
+			}         
+				
 
-	function getByIdAndCompanyId($id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		if ( $id == '') {
-			return FALSE;
-		}
+			function getByIdAndCompanyId($id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+				if ( $id == '') {
+					return FALSE;
+				}
 
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
 
-		$ph = array(
-					':company_id' => $company_id,
-					);
+				$ph = array(
+							':company_id' => $company_id,
+							);
 
-		$query = '
-					select 	*
-					from 	'. $this->getTable() .'
-					where	company_id = :company_id
-						AND	id in ('. $this->getListSQL($id, $ph) .')
-						AND deleted = 0';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict );
+				$query = '
+							select 	*
+							from 	'. $this->getTable() .'
+							where	company_id = :company_id
+								AND	id in ('. $this->getListSQL($id, $ph) .')
+								AND deleted = 0';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict );
 
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
 
-		//$this->rs = DB::select($query, $ph);;
+				//$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}
 
-	function getByUserName($user_name, $where = NULL, $order = NULL) {
-		if ( $user_name == '') {
-			return FALSE;
-		}
+			function getByUserName($user_name, $where = NULL, $order = NULL) {
+				if ( $user_name == '') {
+					return FALSE;
+				}
 
-		$ph = array(
-					':user_name' => $user_name,
-					);
+				$ph = array(
+							':user_name' => $user_name,
+							);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where	user_name = :user_name
-						AND deleted = 0';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where	user_name = :user_name
+								AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}
 
 
-	function getByHomeEmailOrWorkEmail( $email ) {
-		$email = trim(strtolower($email));
+			function getByHomeEmailOrWorkEmail( $email ) {
+				$email = trim(strtolower($email));
 
-		if ( $email == '') {
-			return FALSE;
-		}
+				if ( $email == '') {
+					return FALSE;
+				}
 
-		if ( $this->Validator->isEmail('email', $email ) == FALSE ) {
-			return FALSE;
-		}
+				if ( $this->Validator->isEmail('email', $email ) == FALSE ) {
+					return FALSE;
+				}
 
-		$ph = array(
-					':home_email' => $email,
-					':work_email' => $email,
-					);
+				$ph = array(
+							':home_email' => $email,
+							':work_email' => $email,
+							);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where
-						( lower(home_email) = :home_email
-							OR lower(work_email) = :work_email )
-						AND deleted = 0';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where
+								( lower(home_email) = :home_email
+									OR lower(work_email) = :work_email )
+								AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}
 
-	function getByPasswordResetKey( $key ) {
-		$key = trim($key);
+			function getByPasswordResetKey( $key ) {
+				$key = trim($key);
 
-		if ( $this->Validator->isRegEx('email', $key, NULL, '/^[a-z0-9]{32}$/i' ) == FALSE ) {
-			return FALSE;
-		}
+				if ( $this->Validator->isRegEx('email', $key, NULL, '/^[a-z0-9]{32}$/i' ) == FALSE ) {
+					return FALSE;
+				}
 
-		$ph = array(
-					':key' => $key,
-					);
+				$ph = array(
+							':key' => $key,
+							);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where
-						password_reset_key = :key
-						AND deleted = 0';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where
+								password_reset_key = :key
+								AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}
 
-	function getByUserNameAndCompanyId($user_name, $company_id, $where = NULL, $order = NULL) {
-		if ( $user_name == '') {
-			return FALSE;
-		}
+			function getByUserNameAndCompanyId($user_name, $company_id, $where = NULL, $order = NULL) {
+				if ( $user_name == '') {
+					return FALSE;
+				}
 
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		$ph = array(
-					':user_name' => $user_name,
-					':company_id' => $company_id,
-					);
+				$ph = array(
+							':user_name' => $user_name,
+							':company_id' => $company_id,
+							);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where 	company_id = :user_name
-						AND user_name = :company_id
-						AND deleted = 0';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where 	company_id = :user_name
+								AND user_name = :company_id
+								AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}
 
-	function getByUserNameAndStatus($user_name, $status, $where = NULL, $order = NULL) {
-		if ( $user_name == '') {
-			return FALSE;
-		}
+			function getByUserNameAndStatus($user_name, $status, $where = NULL, $order = NULL) {
+				if ( $user_name == '') {
+					return FALSE;
+				}
 
-		$key = Option::getByValue($status, $this->getOptions('status') );
-		if ($key !== FALSE) {
-			$status = $key;
-		}
+				$key = Option::getByValue($status, $this->getOptions('status') );
+				
+				if ($key !== FALSE) {
+					$status = $key;
+				}
 
-		$ph = array(
+				$ph = array(
 					':user_name' => $user_name,
 					':status' => $status,
-					);
+				);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where	user_name = :user_name
-						AND status_id = :status
-						AND deleted = 0';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where	user_name = :user_name
+								AND status_id = :status
+								AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}
 
-	function getByPhoneIdAndStatus($phone_id, $status, $where = NULL, $order = NULL) {
-		if ( $phone_id == '') {
-			return FALSE;
-		}
+			function getByPhoneIdAndStatus($phone_id, $status, $where = NULL, $order = NULL) {
+				if ( $phone_id == '') {
+					return FALSE;
+				}
 
-		$key = Option::getByValue($status, $this->getOptions('status') );
-		if ($key !== FALSE) {
-			$status = $key;
-		}
+				$key = Option::getByValue($status, $this->getOptions('status') );
+				if ($key !== FALSE) {
+					$status = $key;
+				}
 
-		$ph = array(
-					':phone_id' => $phone_id,
-					':status' => $status,
-					);
+				$ph = array(
+							':phone_id' => $phone_id,
+							':status' => $status,
+							);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where	phone_id = :phone_id
-						AND status_id = :status
-						AND deleted = 0';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where	phone_id = :phone_id
+								AND status_id = :status
+								AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}
 
-/*
-	function getByIButtonIdAndStatus($id, $status, $where = NULL, $order = NULL) {
-		if ( $id == '') {
-			return FALSE;
-		}
+		/*
+			function getByIButtonIdAndStatus($id, $status, $where = NULL, $order = NULL) {
+				if ( $id == '') {
+					return FALSE;
+				}
 
-		$key = Option::getByValue($status, $this->getOptions('status') );
-		if ($key !== FALSE) {
-			$status = $key;
-		}
+				$key = Option::getByValue($status, $this->getOptions('status') );
+				if ($key !== FALSE) {
+					$status = $key;
+				}
 
-		$ph = array(
-					'id' => $id,
-					'status' => $status,
-					);
+				$ph = array(
+							'id' => $id,
+							'status' => $status,
+							);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where	ibutton_id = ?
-						AND status_id = ?
-						AND deleted = 0';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where	ibutton_id = ?
+								AND status_id = ?
+								AND deleted = 0';
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
-*/
-        
-       function getByCompanyIdandBirthday($company_id,$birth_date=Null) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				return $this;
+			}
+		*/
+				
+			function getByCompanyIdandBirthday($company_id,$birth_date=Null) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		$ph = array(
-			':company_id' => $company_id,
-           	':birth_date'  => $birth_date,
-		);
-
-		$query = "
-					select 	*
-					from	". $this->getTable() ."
-					where	company_id = :company_id
-                                                AND DATE_FORMAT(FROM_UNIXTIME(birth_date),'%m-%d') = DATE_FORMAT(NOW(),'%m-%d')
-                                                   OR (
-            (
-                DATE_FORMAT(NOW(),'%Y') % 4 <> 0
-                OR (
-                        DATE_FORMAT(NOW(),'%Y') % 100 = 0
-                        AND DATE_FORMAT(NOW(),'%Y') % 400 <> 0
-                    )
-            )
-            AND DATE_FORMAT(NOW(),'%m-%d') = '03-01'
-            AND DATE_FORMAT(FROM_UNIXTIME(birth_date),'%m-%d') = '02-29'
-        )
-						AND deleted = 0";
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}     	
-	 
-        
-        
-        
-	function getByIdAndStatus($id, $status, $where = NULL, $order = NULL) {
-		if ( $id == '') {
-			return FALSE;
-		}
-
-		$key = Option::getByValue($status, $this->getOptions('status') );
-		if ($key !== FALSE) {
-			$status = $key;
-		}
-
-		$ph = array(
-					':id' => $id,
-					':status' => $status,
-					);
-
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where	id = :id
-						AND status_id = :status
-						AND deleted = 0';
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}
-
-	function getByCurrencyID($id, $where = NULL, $order = NULL) {
-		if ( $id == '') {
-			return FALSE;
-		}
-
-		$ph = array(
-					':id' => $id,
-					);
-
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where 	currency_id = :id
-						AND deleted = 0';
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}
-
-	function getByCompanyIDAndGroupID($company_id, $id, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $id == '') {
-			return FALSE;
-		}
-
-		$ph = array(
+				$ph = array(
 					':company_id' => $company_id,
-					':id' => $id,
-					);
+					':birth_date'  => $birth_date,
+				);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where 	company_id = :company_id
-						AND group_id = :id
-						AND deleted = 0';
+				$query = "
+							select 	*
+							from	". $this->getTable() ."
+							where	company_id = :company_id
+														AND DATE_FORMAT(FROM_UNIXTIME(birth_date),'%m-%d') = DATE_FORMAT(NOW(),'%m-%d')
+														OR (
+					(
+						DATE_FORMAT(NOW(),'%Y') % 4 <> 0
+						OR (
+								DATE_FORMAT(NOW(),'%Y') % 100 = 0
+								AND DATE_FORMAT(NOW(),'%Y') % 400 <> 0
+							)
+					)
+					AND DATE_FORMAT(NOW(),'%m-%d') = '03-01'
+					AND DATE_FORMAT(FROM_UNIXTIME(birth_date),'%m-%d') = '02-29'
+				)
+								AND deleted = 0";
 
-		$this->rs = DB::select($query, $ph);;
+				$this->rs = DB::select($query, $ph);
 
-		return $this;
-	}
+				return $this;
+			}     	
+			
+				
+				
+				
+			function getByIdAndStatus($id, $status, $where = NULL, $order = NULL) {
+				if ( $id == '') {
+					return FALSE;
+				}
 
-	function getByCompanyIDAndIButtonId($company_id, $id, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				$key = Option::getByValue($status, $this->getOptions('status') );
+				if ($key !== FALSE) {
+					$status = $key;
+				}
 
-		if ( $id == '') {
-			return FALSE;
-		}
+				$ph = array(
+							':id' => $id,
+							':status' => $status,
+							);
 
-		$ph = array(
-					':company_id' => $company_id,
-					':id' => $id,
-					);
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where	id = :id
+								AND status_id = :status
+								AND deleted = 0';
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where 	company_id = :company_id
-						AND ibutton_id = :id
-						AND deleted = 0';
+				$this->rs = DB::select($query, $ph);
 
-		$this->rs = DB::select($query, $ph);;
+				return $this;
+			}
 
-		return $this;
-	}
+			function getByCurrencyID($id, $where = NULL, $order = NULL) {
+				if ( $id == '') {
+					return FALSE;
+				}
 
-	function getByCompanyIDAndRFId($company_id, $id, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				$ph = array(
+							':id' => $id,
+							);
 
-		if ( $id == '') {
-			return FALSE;
-		}
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where 	currency_id = :id
+								AND deleted = 0';
 
-		$ph = array(
-					':company_id' => $company_id,
-					':id' => $id,
-					);
+				$this->rs = DB::select($query, $ph);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where 	company_id = :company_id
-						AND rf_id = :id
-						AND deleted = 0';
+				return $this;
+			}
 
-		$this->rs = DB::select($query, $ph);;
+			function getByCompanyIDAndGroupID($company_id, $id, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		return $this;
-	}
+				if ( $id == '') {
+					return FALSE;
+				}
 
-	function getByCompanyIDAndEmployeeNumber($company_id, $employee_number, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				$ph = array(
+							':company_id' => $company_id,
+							':id' => $id,
+							);
 
-		if ( $employee_number == '') {
-			return FALSE;
-		}
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where 	company_id = :company_id
+								AND group_id = :id
+								AND deleted = 0';
 
-		$ph = array(
-					':company_id' => $company_id,
-					':employee_number' => $employee_number,
-					);
+				$this->rs = DB::select($query, $ph);
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where 	company_id = :company_id
-						AND employee_number = :employee_number
-						AND deleted = 0';
+				return $this;
+			}
 
-		$this->rs = DB::select($query, $ph);;
+			function getByCompanyIDAndIButtonId($company_id, $id, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		return $this;
-	}
+				if ( $id == '') {
+					return FALSE;
+				}
 
-	function getByCompanyIDAndStationIDAndStatusAndDate($company_id, $station_id, $status_id, $date = NULL, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				$ph = array(
+							':company_id' => $company_id,
+							':id' => $id,
+							);
 
-		if ( $station_id == '') {
-			return FALSE;
-		}
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where 	company_id = :company_id
+								AND ibutton_id = :id
+								AND deleted = 0';
 
-		if ( $status_id == '') {
-			return FALSE;
-		}
+				$this->rs = DB::select($query, $ph);
 
-		if ( $date == '') {
-			$date = 0;
-		}
+				return $this;
+			}
 
-		if ( $order == NULL ) {
-			$order = array( 'a.id' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
+			function getByCompanyIDAndRFId($company_id, $id, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		$sf = new StationFactory();
-		$sugf = new StationUserGroupFactory();
-		$sbf = new StationBranchFactory();
-		$sdf = new StationDepartmentFactory();
-		$siuf = new StationIncludeUserFactory();
-		$seuf = new StationExcludeUserFactory();
+				if ( $id == '') {
+					return FALSE;
+				}
 
-		$ph = array(
-					':company_id' => $company_id,
-					':station_id' => $station_id,
-					':status_id' => $status_id,
-					//'date' => $date,
-					//'date2' => $date,
-					);
+				$ph = array(
+							':company_id' => $company_id,
+							':id' => $id,
+							);
 
-		$query = '
-					select 	a.*
-					from 	'. $this->getTable() .' as a,
-							'. $sf->getTable() .' as z
-					where	a.company_id = :company_id
-						AND z.id = :station_id
-						AND a.status_id = :status_id
-						AND
-							(
-								(
-									(
-										z.user_group_selection_type_id = 10
-											OR ( z.user_group_selection_type_id = 20 AND a.group_id in ( select b.group_id from '. $sugf->getTable() .' as b WHERE z.id = b.station_id ) )
-											OR ( z.user_group_selection_type_id = 30 AND a.group_id not in ( select b.group_id from '. $sugf->getTable() .' as b WHERE z.id = b.station_id ) )
-									)
-									AND
-									(
-										z.branch_selection_type_id = 10
-											OR ( z.branch_selection_type_id = 20 AND a.default_branch_id in ( select c.branch_id from '. $sbf->getTable() .' as c WHERE z.id = c.station_id ) )
-											OR ( z.branch_selection_type_id = 30 AND a.default_branch_id not in ( select c.branch_id from '. $sbf->getTable() .' as c WHERE z.id = c.station_id ) )
-									)
-									AND
-									(
-										z.department_selection_type_id = 10
-											OR ( z.department_selection_type_id = 20 AND a.default_department_id in ( select d.department_id from '. $sdf->getTable() .' as d WHERE z.id = d.station_id ) )
-											OR ( z.department_selection_type_id = 30 AND a.default_department_id not in ( select d.department_id from '. $sdf->getTable() .' as d WHERE z.id = d.station_id ) )
-									)
-									AND a.id not in ( select f.user_id from '. $seuf->getTable() .' as f WHERE z.id = f.station_id )
-								)
-								OR a.id in ( select e.user_id from '. $siuf->getTable() .' as e WHERE z.id = e.station_id )
-							)';
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where 	company_id = :company_id
+								AND rf_id = :id
+								AND deleted = 0';
 
-		if ( isset($date) AND $date > 0 ) {
-			//Append the same date twice for created and updated.
-			$ph[':created_date'] = $date;
-			$ph[':updated_date'] = $date;
-			$query  .=	' AND ( a.created_date >= :created_date OR a.updated_date >= :updated_date )';
-			unset($date_filter);
-		}
+				$this->rs = DB::select($query, $ph);
 
-		$query .= ' AND ( a.deleted = 0 AND z.deleted = 0 )';
+				return $this;
+			}
 
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict );
+			function getByCompanyIDAndEmployeeNumber($company_id, $employee_number, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
+				if ( $employee_number == '') {
+					return FALSE;
+				}
 
-		return $this;
-	}
+				$ph = array(
+							':company_id' => $company_id,
+							':employee_number' => $employee_number,
+							);
 
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where 	company_id = :company_id
+								AND employee_number = :employee_number
+								AND deleted = 0';
 
-	function getByCompanyIDAndStationIDAndStatusAndDateAndValidUserIDs($company_id, $station_id, $status_id, $date = NULL, $valid_user_ids = array(), $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
+				$this->rs = DB::select($query, $ph);
 
-		if ( $station_id == '') {
-			return FALSE;
-		}
+				return $this;
+			}
 
-		if ( $status_id == '') {
-			return FALSE;
-		}
+			function getByCompanyIDAndStationIDAndStatusAndDate($company_id, $station_id, $status_id, $date = NULL, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
 
-		if ( $date == '') {
-			$date = 0;
-		}
+				if ( $station_id == '') {
+					return FALSE;
+				}
 
-		if ( $order == NULL ) {
-			$order = array( 'a.id' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
+				if ( $status_id == '') {
+					return FALSE;
+				}
 
-		$sf = new StationFactory();
-		$sugf = new StationUserGroupFactory();
-		$sbf = new StationBranchFactory();
-		$sdf = new StationDepartmentFactory();
-		$siuf = new StationIncludeUserFactory();
-		$seuf = new StationExcludeUserFactory();
-		$uif = new UserIdentificationFactory();
+				if ( $date == '') {
+					$date = 0;
+				}
 
-		$ph = array(
-					':company_id' => $company_id,
-					':station_id' => $station_id,
-					':status_id' => $status_id,
-					//'date' => $date,
-					//'date2' => $date,
-					);
+				if ( $order == NULL ) {
+					$order = array( 'a.id' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
 
-		//Also include users with user_identifcation rows that have been *created* after the given date
-		//so the first supervisor/admin enrolled on a timeclock is properly updated to lock the menu.
-		$query = '
-					select 	a.*
-					from 	'. $this->getTable() .' as a
+				$sf = new StationFactory();
+				$sugf = new StationUserGroupFactory();
+				$sbf = new StationBranchFactory();
+				$sdf = new StationDepartmentFactory();
+				$siuf = new StationIncludeUserFactory();
+				$seuf = new StationExcludeUserFactory();
 
-					LEFT JOIN '. $sf->getTable() .' as z ON (1=1)
-					LEFT JOIN '. $uif->getTable() .' as uif ON ( a.id = uif.user_id )
-					where	a.company_id = :company_id
-						AND z.id = :station_id
-						AND a.status_id = :status_id
-						AND
-							(
-								(
+				$ph = array(
+							':company_id' => $company_id,
+							':station_id' => $station_id,
+							':status_id' => $status_id,
+							//'date' => $date,
+							//'date2' => $date,
+							);
+
+				$query = '
+							select 	a.*
+							from 	'. $this->getTable() .' as a,
+									'. $sf->getTable() .' as z
+							where	a.company_id = :company_id
+								AND z.id = :station_id
+								AND a.status_id = :status_id
+								AND
 									(
 										(
 											(
@@ -805,1475 +704,1577 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 											AND a.id not in ( select f.user_id from '. $seuf->getTable() .' as f WHERE z.id = f.station_id )
 										)
 										OR a.id in ( select e.user_id from '. $siuf->getTable() .' as e WHERE z.id = e.station_id )
-									)
+									)';
+
+				if ( isset($date) AND $date > 0 ) {
+					//Append the same date twice for created and updated.
+					$ph[':created_date'] = $date;
+					$ph[':updated_date'] = $date;
+					$query  .=	' AND ( a.created_date >= :created_date OR a.updated_date >= :updated_date )';
+					unset($date_filter);
+				}
+
+				$query .= ' AND ( a.deleted = 0 AND z.deleted = 0 )';
+
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+
+			function getByCompanyIDAndStationIDAndStatusAndDateAndValidUserIDs($company_id, $station_id, $status_id, $date = NULL, $valid_user_ids = array(), $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $station_id == '') {
+					return FALSE;
+				}
+
+				if ( $status_id == '') {
+					return FALSE;
+				}
+
+				if ( $date == '') {
+					$date = 0;
+				}
+
+				if ( $order == NULL ) {
+					$order = array( 'a.id' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+
+				$sf = new StationFactory();
+				$sugf = new StationUserGroupFactory();
+				$sbf = new StationBranchFactory();
+				$sdf = new StationDepartmentFactory();
+				$siuf = new StationIncludeUserFactory();
+				$seuf = new StationExcludeUserFactory();
+				$uif = new UserIdentificationFactory();
+
+				$ph = array(
+							':company_id' => $company_id,
+							':station_id' => $station_id,
+							':status_id' => $status_id,
+							//'date' => $date,
+							//'date2' => $date,
+							);
+
+				//Also include users with user_identifcation rows that have been *created* after the given date
+				//so the first supervisor/admin enrolled on a timeclock is properly updated to lock the menu.
+				$query = '
+							select 	a.*
+							from 	'. $this->getTable() .' as a
+
+							LEFT JOIN '. $sf->getTable() .' as z ON (1=1)
+							LEFT JOIN '. $uif->getTable() .' as uif ON ( a.id = uif.user_id )
+							where	a.company_id = :company_id
+								AND z.id = :station_id
+								AND a.status_id = :status_id
+								AND
+									(
+										(
+											(
+												(
+													(
+														z.user_group_selection_type_id = 10
+															OR ( z.user_group_selection_type_id = 20 AND a.group_id in ( select b.group_id from '. $sugf->getTable() .' as b WHERE z.id = b.station_id ) )
+															OR ( z.user_group_selection_type_id = 30 AND a.group_id not in ( select b.group_id from '. $sugf->getTable() .' as b WHERE z.id = b.station_id ) )
+													)
+													AND
+													(
+														z.branch_selection_type_id = 10
+															OR ( z.branch_selection_type_id = 20 AND a.default_branch_id in ( select c.branch_id from '. $sbf->getTable() .' as c WHERE z.id = c.station_id ) )
+															OR ( z.branch_selection_type_id = 30 AND a.default_branch_id not in ( select c.branch_id from '. $sbf->getTable() .' as c WHERE z.id = c.station_id ) )
+													)
+													AND
+													(
+														z.department_selection_type_id = 10
+															OR ( z.department_selection_type_id = 20 AND a.default_department_id in ( select d.department_id from '. $sdf->getTable() .' as d WHERE z.id = d.station_id ) )
+															OR ( z.department_selection_type_id = 30 AND a.default_department_id not in ( select d.department_id from '. $sdf->getTable() .' as d WHERE z.id = d.station_id ) )
+													)
+													AND a.id not in ( select f.user_id from '. $seuf->getTable() .' as f WHERE z.id = f.station_id )
+												)
+												OR a.id in ( select e.user_id from '. $siuf->getTable() .' as e WHERE z.id = e.station_id )
+											)
+
+									';
+
+				if ( isset($date) AND $date > 0 ) {
+					//Append the same date twice for created and updated.
+					$ph[':created_date'] = (int)$date;
+					$ph[':updated_date'] = (int)$date;
+					$ph[':created_date'] = (int)$date;
+					$query  .=	' 		AND ( a.created_date >= :created_date OR a.updated_date >= :updated_date OR uif.created_date >= :created_date )
+										)';
+				} else {
+						$query  .=	'   )';
+				}
+
+				if ( isset($valid_user_ids) AND is_array($valid_user_ids) AND count($valid_user_ids) > 0 ) {
+					$query  .=	' OR a.id in ('. $this->getListSQL($valid_user_ids, $ph) .') ';
+				}
+
+				$query .= '			)
+								AND ( a.deleted = 0 AND z.deleted = 0 )';
+
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+				
+				
+						
+			function getByMachineId($id) {
+				if ( $id == '') {
+					return FALSE;
+				}
+
+				
+				
+					$ph = array(
+								':punch_machine_user_id' => $id,
+								);
+
+					$query = '
+								select 	*
+								from 	'. $this->getTable() .'
+								where	punch_machine_user_id = :punch_machine_user_id
+									AND deleted = 0';
+
+					$this->rs = DB::select($query, $ph);
+
+					
+				
+
+				return $this;
+			}
+			
+				
+				
+				
+				
+			function getByCompanyId($company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	*
+							from 	'. $this->getTable() .'
+							where	company_id = :company_id
+								AND deleted = 0';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+			function getByCompanyIdAndLongitudeAndLatitude($company_id, $longitude, $latitude, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $order == NULL ) {
+					$order = array( 'longitude' => 'asc', 'latitude' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	*
+							from 	'. $this->getTable() .'
+							where	company_id = :company_id ';
+
+				//isset() returns false on NULL.
+				$query .= $this->getWhereClauseSQL( 'longitude', $longitude, 'numeric', $ph );
+				$query .= $this->getWhereClauseSQL( 'latitude', $latitude, 'numeric', $ph );
+				$query .= '	AND deleted = 0';
+
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+			function getByCompanyIdArray($company_id, $include_blank = TRUE, $include_disabled = TRUE, $last_name_first = TRUE ) {
+
+				$ulf = new UserListFactory();
+				$ulf->getByCompanyId($company_id);
+
+				if ( $include_blank == TRUE ) {
+					$user_list[0] = '--';
+				}
+
+				foreach ($ulf as $user) {
+					if ( $user->getStatus() > 10 ) { //INACTIVE
+						$status = '('.Option::getByKey( $user->getStatus(), $user->getOptions('status') ).') ';
+					} else {
+						$status = NULL;
+					}
+
+					if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $user->getStatus() == 10 ) ) {
+						$user_list[$user->getID()] = $status.$user->getEmployeeNumber().' '.$user->getFullName($last_name_first);
+					}
+				}
+
+				if ( isset($user_list) ) {
+					return $user_list;
+				}
+
+				return FALSE;
+			}
+
+
+			function getByCompanyIdArrayWithEPFNo($company_id, $include_blank = TRUE, $include_disabled = TRUE, $last_name_first = TRUE ) {
+
+				$ulf = new UserListFactory();
+
+				$order = array( 'id' => 'asc' );
+				$ulf->getByCompanyId($company_id, NULL, NULL, NULL, $order);
+
+				if ( $include_blank == TRUE ) {
+					$user_list[0] = '--';
+				}
+
+				foreach ($ulf as $user) {
+					if ( $user->getStatus() > 10 ) { //INACTIVE
+						$status = '('.Option::getByKey( $user->getStatus(), $user->getOptions('status') ).') ';
+					} else {
+						$status = NULL;
+					}
+
+					if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $user->getStatus() == 10 ) ) {
+						$user_list[$user->getID()] = $status.$user->getEpfMembershipNo().' - '.$user->getFullName($last_name_first);
+						
+						//$epfnos[] = $user->getEpfMembershipNo();
+
+					}
+				}
+				//echo '<br><br><br><br><br><br><br><br><br><br><br><br><br>';
+
+				//array_multisort($user_list_new);
+
+				//echo "<pre>"; print_r($user_list);
+
+				if ( isset($user_list) ) {
+					return $user_list;
+				}
+
+				return FALSE;
+			}
+
+
+
+			function getArrayByListFactory($lf, $include_blank = TRUE, $include_disabled = TRUE ) {
+				if ( !is_object($lf) ) {
+					return FALSE;
+				}
+
+				if ( $include_blank == TRUE ) {
+					$list[0] = '--';
+				
+				}
+				foreach ($lf as $obj) {
+					if ( !isset($status_options) ) {
+						$status_options = $obj->getOptions('status');
+					}
+
+					if ( $obj->getStatus() > 10 ) { //INACTIVE
+						$status = '('.Option::getByKey( $obj->getStatus(), $status_options ).') ';
+						//$status = '(INACTIVE) ';
+					} else {
+						$status = NULL;
+					}
+
+					if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $obj->getStatus() == 10 ) ) {
+						$list[$obj->getID()] = $status.$obj->getEpfMembershipNo().' - '.$obj->getFullName(TRUE);
+					}
+				}
+
+				if ( isset($list) ) {
+					return $list;
+				}
+
+				return FALSE;
+			}
+
+			function getDeletedByCompanyIdAndDate($company_id, $date, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $date == '') {
+					return FALSE;
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							':created_date' => $date,
+							':updated_date' => $date,
+							':deleted_date' => $date,
+							);
+
+				//INCLUDE Deleted rows in this query.
+				$query = '
+							select 	*
+							from	'. $this->getTable() .'
+							where
+									company_id = :company_id
+								AND
+									( created_date >= :created_date OR updated_date >= :updated_date OR deleted_date >= :deleted_date )
+								AND deleted = 1
+							';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+
+				}
+
+				return $this;
+			}
+
+			function getIsModifiedByCompanyIdAndDate($company_id, $date, $where = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $date == '') {
+					return FALSE;
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							':created_date' => $date,
+							':updated_date' => $date,
+							':uif_created_date' => $date,
+							);
+							
+				$uif = new UserIdentificationFactory();
+
+				//INCLUDE Deleted rows in this query.
+				//Also include users with user_identifcation rows that have been *created* after the given date
+				//so the first supervisor/admin enrolled on a timeclock is properly updated to lock the menu.
+				$query = '
+							select 	a.*
+							from	'. $this->getTable() .' as a
+							LEFT JOIN '. $uif->getTable() .' as uif ON ( a.id = uif.user_id )
+							where
+									a.company_id = :company_id
+								AND
+									( a.created_date >= :created_date OR a.updated_date >= :updated_date OR uif.created_date >= :uif_created_date )
+							';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order );
+
+				$this->rs = $this->db->SelectLimit($query, 1, -1, $ph);
+				if ( $this->getRecordCount() > 0 ) {
+					Debug::text('User rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
+
+					return TRUE;
+				}
+
+				Debug::text('User rows have NOT been modified', __FILE__, __LINE__, __METHOD__,10);
+
+				return FALSE;
+			}
+
+			function getHighestEmployeeNumberByCompanyId($id, $where = NULL, $order = NULL) {
+				if ( $id == '' ) {
+					return FALSE;
+				}
+
+				$ph = array(
+							':id' => $id,
+							':id2' => $id,
+							);
+
+				//employee_number is a varchar field, so we can't reliably cast it to an integer
+				//however if we left pad it, we can get a similar effect.
+				//Eventually we can change it to an integer field.
+				$query = '
+							select 	*
+							from	'. $this->getTable() .' as a
+							where	company_id = :id
+								AND id = ( select id
+											from '. $this->getTable() .'
+											where company_id = :id2
+												AND employee_number != \'\'
+												AND employee_number IS NOT NULL
+												AND deleted = 0
+											ORDER BY LPAD( employee_number, 10, \'0\' ) DESC
+											LIMIT 1
+											)
+								AND deleted = 0
+							LIMIT 1
+								';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order );
+
+				$this->rs = DB::select($query, $ph);
+
+				return $this;
+			}
+
+				/**
+				 * ARSP NOTE-->
+				 * I ADDED THIS CODE FOR THUNDER AND NEON
+				 */
+				function getHighestEmployeeNumberOnlyByCompanyId($id, $where = NULL, $order = NULL) {
+				if ( $id == '' ) {
+					return FALSE;
+				}
+
+				$ph = array(
+							':id' => $id,
+							':id2' => $id,
+							);
+
+				//employee_number is a varchar field, so we can't reliably cast it to an integer
+				//however if we left pad it, we can get a similar effect.
+				//Eventually we can change it to an integer field.
+				$query = '
+							select 	*
+							from	'. $this->getTable() .' as a
+							where	company_id = :id
+								AND id = ( select id
+											from '. $this->getTable() .'
+											where company_id = :id2
+												AND employee_number_only != \'\'
+												AND employee_number_only IS NOT NULL
+												AND deleted = 0
+											ORDER BY LPAD( employee_number_only, 10, \'0\' ) DESC
+											LIMIT 1
+											)
+								AND deleted = 0
+							LIMIT 1
+								';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order );
+
+				$this->rs = DB::select($query, $ph);
+
+				return $this;
+			} 
+				
+				/**
+				 * ARSP NOTE-->
+				 * I ADDED THIS CODE FOR THUNDER AND NEON
+				 */
+				function getHighestEmployeeNumberOnlyByBranchId($id, $where = NULL, $order = NULL) {
+				if ( $id == 0 ) {
+					return FALSE;
+				}
+
+				$ph = array(
+							':id' => $id,
+							':id2' => $id,
+							);
+
+				//employee_number is a varchar field, so we can't reliably cast it to an integer
+				//however if we left pad it, we can get a similar effect.
+				//Eventually we can change it to an integer field.
+				$query = '
+							select 	*
+							from	'. $this->getTable() .' as a
+							where	default_branch_id = :id                                                
+								AND id = ( select id
+											from '. $this->getTable() .'
+											where default_branch_id = :id2
+												AND employee_number_only != \'\'
+												AND employee_number_only IS NOT NULL
+												AND deleted = 0
+											ORDER BY LPAD( employee_number_only, 10, \'0\' ) DESC
+											LIMIT 1
+											)
+								AND deleted = 0
+							LIMIT 1
+								';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order );
+
+				$this->rs = DB::select($query, $ph);
+
+				return $this;
+			}           
+				
+				function getSearchByArrayCriteria( $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+				if ( !is_array($order) ) {
+					//Use Filter Data ordering if its set.
+					if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
+						$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
+					}
+				}
+
+				$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
+				if ( $order == NULL ) {
+					$order = array( 'company_id' => 'asc', 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
+					$strict = FALSE;
+				} else {
+					//Do order by column conversions, because if we include these columns in the SQL
+					//query, they contaminate the data array.
+					if ( isset($order['default_branch']) ) {
+						$order['b.name'] = $order['default_branch'];
+						unset($order['default_branch']);
+					}
+					if ( isset($order['default_department']) ) {
+						$order['c.name'] = $order['default_department'];
+						unset($order['default_department']);
+					}
+					if ( isset($order['user_group']) ) {
+						$order['d.name'] = $order['user_group'];
+						unset($order['user_group']);
+					}
+					if ( isset($order['title']) ) {
+						$order['e.name'] = $order['title'];
+						unset($order['title']);
+					}
+
+					//Always try to order by status first so INACTIVE employees go to the bottom.
+					if ( !isset($order['status_id']) ) {
+						$order = Misc::prependArray( array('status_id' => 'asc'), $order );
+					}
+					//Always sort by last name,first name after other columns
+					if ( !isset($order['last_name']) ) {
+						$order['last_name'] = 'asc';
+					}
+					if ( !isset($order['first_name']) ) {
+						$order['first_name'] = 'asc';
+					}
+					$strict = TRUE;
+				}
+				//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
+				//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
+
+				if ( isset($filter_data['company_ids']) ) {
+					$filter_data['company_id'] = $filter_data['company_ids'];
+				}
+
+				if ( isset($filter_data['exclude_user_ids']) ) {
+					$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
+				}
+				if ( isset($filter_data['include_user_ids']) ) {
+					$filter_data['id'] = $filter_data['include_user_ids'];
+				}
+				if ( isset($filter_data['user_status_ids']) ) {
+					$filter_data['status_id'] = $filter_data['user_status_ids'];
+				}
+				if ( isset($filter_data['user_title_ids']) ) {
+					$filter_data['title_id'] = $filter_data['user_title_ids'];
+				}
+				if ( isset($filter_data['group_ids']) ) {
+					$filter_data['group_id'] = $filter_data['group_ids'];
+				}
+				if ( isset($filter_data['branch_ids']) ) {
+					$filter_data['default_branch_id'] = $filter_data['branch_ids'];
+				}
+				if ( isset($filter_data['department_ids']) ) {
+					$filter_data['default_department_id'] = $filter_data['department_ids'];
+				}
+				if ( isset($filter_data['currency_ids']) ) {
+					$filter_data['currency_id'] = $filter_data['currency_ids'];
+				}
+
+				$bf = new BranchFactory();
+				$df = new DepartmentFactory();
+				$ugf = new UserGroupFactory();
+				$utf = new UserTitleFactory();
+
+				$ph = array();
+
+				$query = '
+							select 	a.*
+							from 	'. $this->getTable() .' as a
+								LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
+								LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
+								LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
+								LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
+							where	1=1
+							';
+
+				if ( isset($filter_data['company_id']) AND isset($filter_data['company_id'][0]) AND !in_array(-1, (array)$filter_data['company_id']) ) {
+					$query  .=	' AND a.company_id in ('. $this->getListSQL($filter_data['company_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+				}
+				if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+				}
+				if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
+					$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
+					$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
+					if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
+						$uglf = new UserGroupListFactory();
+						$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $filter_data['company_id'], $filter_data['group_id'], TRUE);
+					}
+					$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
+					$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
+					$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
+					$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
+					$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
+					$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
+					$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
+				}
+				if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
+					$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
+				}
+				if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
+					$ph[':city'] = strtolower(trim($filter_data['city']));
+					$query  .=	' AND lower(a.city) LIKE :city';
+				}
+				if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
+					$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
+					$query  .=	' AND lower(a.first_name) LIKE :first_name';
+				}
+				if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
+					$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
+					$query  .=	' AND lower(a.last_name) LIKE :last_name';
+				}
+				if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
+					$ph[':home_phone'] = trim($filter_data['home_phone']);
+					$query  .=	' AND a.home_phone LIKE :home_phone';
+				}
+				if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
+					$ph[':employee_number'] = trim($filter_data['employee_number']);
+					$query  .=	' AND a.employee_number LIKE :employee_number';
+				}
+				if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
+					$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
+					$query  .=	' AND lower(a.user_name) LIKE :user_name';
+				}
+				if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
+					$ph[':sin'] = trim($filter_data['sin']);
+					$query  .=	' AND a.sin LIKE :sin';
+				}
+
+				$query .= 	'
+								AND a.deleted = 0
+							';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+			function getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+					
+				//  echo '<pre>'; print_r($filter_data); echo '<pre>';  die;
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( !is_array($order) ) {
+					//Use Filter Data ordering if its set.
+					if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
+						$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
+					}
+				}
+
+				$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
+				if ( $order == NULL ) {
+					$order = array( 'punch_machine_user_id'=>'asc', 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
+					$strict = FALSE;
+				} else {
+					//Do order by column conversions, because if we include these columns in the SQL
+					//query, they contaminate the data array.
+					if ( isset($order['default_branch']) ) {
+						$order['b.name'] = $order['default_branch'];
+						unset($order['default_branch']);
+					}
+					if ( isset($order['default_department']) ) {
+						$order['c.name'] = $order['default_department'];
+						unset($order['default_department']);
+					}
+					if ( isset($order['user_group']) ) {
+						$order['d.name'] = $order['user_group'];
+						unset($order['user_group']);
+					}
+					if ( isset($order['title']) ) {
+						$order['e.name'] = $order['title'];
+						unset($order['title']);
+					}
+
+					if ( !isset($order['punch_machine_user_id']) ) {
+						$order = Misc::prependArray( array('punch_machine_user_id' => 'asc'), $order );
+					}
+					//Always try to order by status first so INACTIVE employees go to the bottom.
+					if ( isset($order['status_id']) ) {
+						$order = Misc::prependArray( array('status_id' => 'asc'), $order );
+					}
+					//Always sort by last name,first name after other columns
+					if ( isset($order['last_name']) ) {
+						$order['last_name'] = 'asc';
+					}
+					if ( isset($order['first_name']) ) {
+						$order['first_name'] = 'asc';
+					}
+					$strict = TRUE;
+				}
+				//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
+				//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
+
+				if ( isset($filter_data['exclude_user_ids']) ) {
+					$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
+				}
+				if ( isset($filter_data['include_user_ids']) ) {
+					$filter_data['id'] = $filter_data['include_user_ids'];
+				}
+				if ( isset($filter_data['user_status_ids']) ) {
+					$filter_data['status_id'] = $filter_data['user_status_ids'];
+				}
+				if ( isset($filter_data['user_title_ids']) ) {
+					$filter_data['title_id'] = $filter_data['user_title_ids'];
+				}
+				if ( isset($filter_data['group_ids']) ) {
+					$filter_data['group_id'] = $filter_data['group_ids'];
+				}
+				if ( isset($filter_data['branch_ids']) ) {
+					$filter_data['default_branch_id'] = $filter_data['branch_ids'];
+				}
+				if ( isset($filter_data['department_ids']) ) {
+					$filter_data['default_department_id'] = $filter_data['department_ids'];
+				}
+				if ( isset($filter_data['currency_ids']) ) {
+					$filter_data['currency_id'] = $filter_data['currency_ids'];
+				}
+
+				$bf = new BranchFactory();
+				$df = new DepartmentFactory();
+				$ugf = new UserGroupFactory();
+				$utf = new UserTitleFactory();
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	a.*
+							from 	'. $this->getTable() .' as a
+								LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
+								LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
+								LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
+								LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
+							where	a.company_id = :company_id ';
+						
+				//     $query  .=	' AND a.basis_of_employment in ('. $this->getListSQL($filter_data['basis_of_employment'][0], $ph) .') ';
+				if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+				}
+				if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+				}
+				if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
+					$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
+					$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
+					if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
+						$uglf = new UserGroupListFactory();
+						$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
+					}
+					$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
+					$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
+					$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
+					$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
+					$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
+					$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
+					$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
+				}
+				if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
+					$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
+				}
+				if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
+					$ph[':city'] = strtolower(trim($filter_data['city']));
+					$query  .=	' AND lower(a.city) LIKE :city';
+				}
+				if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
+					$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
+					$query  .=	' AND lower(a.first_name) LIKE :first_name';
+				}
+				if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
+					$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
+					$query  .=	' AND lower(a.last_name) LIKE :last_name';
+				}
+				if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
+					$ph[':home_phone'] = trim($filter_data['home_phone']);
+					$query  .=	' AND a.home_phone LIKE :home_phone';
+				}
+				if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
+					$ph[':employee_number'] = trim($filter_data['employee_number']);
+					$query  .=	' AND a.employee_number LIKE :employee_number';
+				}
+						//////////////eranda
+						if ( isset($filter_data['basis_of_employment']) ) {
+					//$ph[] = trim($filter_data['basis_of_employment']);
+					$query  .=	' AND a.basis_of_employment = '.$filter_data['basis_of_employment'].'';
+				}
+						//////////
+				if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
+					$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
+					$query  .=	' AND lower(a.user_name) LIKE :user_name';
+				}
+				if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
+					$ph[':sin'] = trim($filter_data['sin']);
+					$query  .=	' AND a.sin LIKE :sin';
+				}
+						
+
+				$query .= 	'
+								AND a.deleted = 0
+							';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+				
+				function getSearchByCompanyIdAndArrayCriteriaForOT( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( !is_array($order) ) {
+					//Use Filter Data ordering if its set.
+					if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
+						$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
+					}
+				}
+
+				$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
+					$strict = FALSE;
+				} else {
+					//Do order by column conversions, because if we include these columns in the SQL
+					//query, they contaminate the data array.
+					if ( isset($order['default_branch']) ) {
+						$order['b.name'] = $order['default_branch'];
+						unset($order['default_branch']);
+					}
+					if ( isset($order['default_department']) ) {
+						$order['c.name'] = $order['default_department'];
+						unset($order['default_department']);
+					}
+					if ( isset($order['user_group']) ) {
+						$order['d.name'] = $order['user_group'];
+						unset($order['user_group']);
+					}
+					if ( isset($order['title']) ) {
+						$order['e.name'] = $order['title'];
+						unset($order['title']);
+					}
+
+					//Always try to order by status first so INACTIVE employees go to the bottom.
+					if ( !isset($order['status_id']) ) {
+						$order = Misc::prependArray( array('status_id' => 'asc'), $order );
+					}
+					//Always sort by last name,first name after other columns
+					if ( !isset($order['last_name']) ) {
+						$order['last_name'] = 'asc';
+					}
+					if ( !isset($order['first_name']) ) {
+						$order['first_name'] = 'asc';
+					}
+					$strict = TRUE;
+				}
+				//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
+				//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
+
+				if ( isset($filter_data['exclude_user_ids']) ) {
+					$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
+				}
+				if ( isset($filter_data['include_user_ids']) ) {
+					$filter_data['id'] = $filter_data['include_user_ids'];
+				}
+				if ( isset($filter_data['user_status_ids']) ) {
+					$filter_data['status_id'] = $filter_data['user_status_ids'];
+				}
+				if ( isset($filter_data['user_title_ids']) ) {
+					$filter_data['title_id'] = $filter_data['user_title_ids'];
+				}
+				if ( isset($filter_data['group_ids']) ) {
+					$filter_data['group_id'] = $filter_data['group_ids'];
+				}
+				if ( isset($filter_data['branch_ids']) ) {
+					$filter_data['default_branch_id'] = $filter_data['branch_ids'];
+				}
+				if ( isset($filter_data['department_ids']) ) {
+					$filter_data['default_department_id'] = $filter_data['department_ids'];
+				}
+				if ( isset($filter_data['currency_ids']) ) {
+					$filter_data['currency_id'] = $filter_data['currency_ids'];
+				}
+
+				$bf = new BranchFactory();
+				$df = new DepartmentFactory();
+				$ugf = new UserGroupFactory();
+				$utf = new UserTitleFactory();
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	a.*
+							from 	'. $this->getTable() .' as a
+								LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
+								LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
+								LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
+								LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
+							where	a.company_id = :company_id
+							';
+
+				if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+				}
+				if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+				}
+				if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
+					$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
+					$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
+					if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
+						$uglf = new UserGroupListFactory();
+						$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
+					}
+					$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
+					$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
+					$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
+					$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
+					$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
+					$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
+					$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
+				}
+				if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
+					$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
+				}
+				if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
+					$ph[':city'] = strtolower(trim($filter_data['city']));
+					$query  .=	' AND lower(a.city) LIKE :city';
+				}
+				if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
+					$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
+					$query  .=	' AND lower(a.first_name) LIKE :first_name';
+				}
+				if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
+					$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
+					$query  .=	' AND lower(a.last_name) LIKE :last_name';
+				}
+				if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
+					$ph[':home_phone'] = trim($filter_data['home_phone']);
+					$query  .=	' AND a.home_phone LIKE :home_phone';
+				}
+				if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
+					$ph[':employee_number'] = trim($filter_data['employee_number']);
+					$query  .=	' AND a.employee_number LIKE :employee_number';
+				}
+				if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
+					$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
+					$query  .=	' AND lower(a.user_name) LIKE :user_name';
+				}
+				if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
+					$ph[':sin'] = trim($filter_data['sin']);
+					$query  .=	' AND a.sin LIKE :sin';
+				}
+
+				$query .= 	'   AND a.group_id in (4,6)    
+								AND a.deleted = 0
+							';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+				
+				function getSearchByCompanyIdAndArrayCriteriaForOP( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( !is_array($order) ) {
+					//Use Filter Data ordering if its set.
+					if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
+						$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
+					}
+				}
+
+				$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
+					$strict = FALSE;
+				} else {
+					//Do order by column conversions, because if we include these columns in the SQL
+					//query, they contaminate the data array.
+					if ( isset($order['default_branch']) ) {
+						$order['b.name'] = $order['default_branch'];
+						unset($order['default_branch']);
+					}
+					if ( isset($order['default_department']) ) {
+						$order['c.name'] = $order['default_department'];
+						unset($order['default_department']);
+					}
+					if ( isset($order['user_group']) ) {
+						$order['d.name'] = $order['user_group'];
+						unset($order['user_group']);
+					}
+					if ( isset($order['title']) ) {
+						$order['e.name'] = $order['title'];
+						unset($order['title']);
+					}
+
+					//Always try to order by status first so INACTIVE employees go to the bottom.
+					if ( !isset($order['status_id']) ) {
+						$order = Misc::prependArray( array('status_id' => 'asc'), $order );
+					}
+					//Always sort by last name,first name after other columns
+					if ( !isset($order['last_name']) ) {
+						$order['last_name'] = 'asc';
+					}
+					if ( !isset($order['first_name']) ) {
+						$order['first_name'] = 'asc';
+					}
+					$strict = TRUE;
+				}
+				//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
+				//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
+
+				if ( isset($filter_data['exclude_user_ids']) ) {
+					$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
+				}
+				if ( isset($filter_data['include_user_ids']) ) {
+					$filter_data['id'] = $filter_data['include_user_ids'];
+				}
+				if ( isset($filter_data['user_status_ids']) ) {
+					$filter_data['status_id'] = $filter_data['user_status_ids'];
+				}
+				if ( isset($filter_data['user_title_ids']) ) {
+					$filter_data['title_id'] = $filter_data['user_title_ids'];
+				}
+				if ( isset($filter_data['group_ids']) ) {
+					$filter_data['group_id'] = $filter_data['group_ids'];
+				}
+				if ( isset($filter_data['branch_ids']) ) {
+					$filter_data['default_branch_id'] = $filter_data['branch_ids'];
+				}
+				if ( isset($filter_data['department_ids']) ) {
+					$filter_data['default_department_id'] = $filter_data['department_ids'];
+				}
+				if ( isset($filter_data['currency_ids']) ) {
+					$filter_data['currency_id'] = $filter_data['currency_ids'];
+				}
+
+				$bf = new BranchFactory();
+				$df = new DepartmentFactory();
+				$ugf = new UserGroupFactory();
+				$utf = new UserTitleFactory();
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	a.*
+							from 	'. $this->getTable() .' as a
+								LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
+								LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
+								LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
+								LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
+							where	a.company_id = :company_id
+							';
+
+				if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+				}
+				if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
+					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+				}
+				if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
+					$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
+					$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
+					if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
+						$uglf = new UserGroupListFactory();
+						$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
+					}
+					$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
+					$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
+					$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
+					$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
+					$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
+					$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
+				}
+				if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
+					$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
+				}
+				if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
+					$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
+				}
+				if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
+					$ph[':city'] = strtolower(trim($filter_data['city']));
+					$query  .=	' AND lower(a.city) LIKE :city';
+				}
+				if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
+					$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
+					$query  .=	' AND lower(a.first_name) LIKE :first_name';
+				}
+				if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
+					$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
+					$query  .=	' AND lower(a.last_name) LIKE :last_name';
+				}
+				if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
+					$ph[':home_phone'] = trim($filter_data['home_phone']);
+					$query  .=	' AND a.home_phone LIKE :home_phone';
+				}
+				if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
+					$ph[':employee_number'] = trim($filter_data['employee_number']);
+					$query  .=	' AND a.employee_number LIKE :employee_number';
+				}
+				if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
+					$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
+					$query  .=	' AND lower(a.user_name) LIKE :user_name';
+				}
+				if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
+					$ph[':sin'] = trim($filter_data['sin']);
+					$query  .=	' AND a.sin LIKE :sin';
+				}
+
+				$query .= 	'  AND a.group_id = 3  
+								AND a.deleted = 0
+							';
+				$query .= $this->getWhereSQL( $where );
+				$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
+
+				if ($limit == NULL) {
+					$this->rs = DB::select($query, $ph);
+				} else {
+					$this->rs = DB::select($query, $ph);
+					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+				}
+
+				return $this;
+			}
+
+				
+			function getSearchByCompanyIdAndBranchIdAndDepartmentIdAndStatusId($company_id, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	*
+							from 	'. $this->getTable() .'
+							where	company_id = :company_id
+							';
+
+				if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, (array)$status_id) ) {
+					$query  .=	' AND status_id in ('. $this->getListSQL($status_id, $ph) .') ';
+				}
+				if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, (array)$branch_id) ) {
+					$query  .=	' AND default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
+				}
+				if ( $department_id != '' AND ( isset($department_id[0]) AND !in_array(-1, (array)$department_id) ) ) {
+					$query  .=	' AND default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
+				}
+
+				$query .= 	'
+								AND deleted = 0
+							';
+				$query .= $this->getSortSQL( $order, $strict );
+
+				$this->rs = DB::select($query, $ph);
+
+				return $this;
+			}
+
+			function getSearchByCompanyIdAndGroupIdAndSubGroupsAndBranchIdAndDepartmentIdAndStatusId($company_id, $group_id, $include_sub_groups, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+
+				if ( $include_sub_groups == TRUE
+					AND ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) ) {
+					$uglf = new UserGroupListFactory();
+					$group_id = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $group_id, TRUE);
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	*
+							from 	'. $this->getTable() .'
+							where	company_id = :company_id
+							';
+
+				if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, (array)$status_id) ) {
+					$query  .=	' AND status_id in ('. $this->getListSQL($status_id, $ph) .') ';
+				}
+				if ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) {
+					$query  .=	' AND group_id in ('. $this->getListSQL($group_id, $ph) .') ';
+				}
+				if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, (array)$branch_id) ) {
+					$query  .=	' AND default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
+				}
+				if ( $department_id != '' AND ( isset($department_id[0]) AND !in_array(-1, (array)$department_id) ) ) {
+					$query  .=	' AND default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
+				}
+
+				$query .= 	'
+								AND deleted = 0
+							';
+				$query .= $this->getSortSQL( $order, $strict );
+
+				$this->rs = DB::select($query, $ph);
+
+				return $this;
+			}
+
+				/**
+				*ARSP NOTE --> THIS CODE ADDED BY ME FOR THUNDER & NEON 
+				*/        
+			function getSearchByJobSkills($job_skill) {
+					
+						$job_skill = '%'.$job_skill.'%';
+					
+				if ( $job_skill == '') {
+					return FALSE;
+				}
+
+				/*
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+				*/
+
+				$ph = array(
+							':job_skills' => $job_skill,
+							);
+
+				$query = '
+							select 	*
+							from 	'. $this->getTable() .'
+							where	job_skills LIKE  :job_skills                                      
+							';
+
+				$query .= 	'
+								AND deleted = 0
+							';
+						//echo $query;
+						$order = array('first_name' => 'asc');
+				//$query .= $this->getSortSQL( $order, $strict );
+
+				$this->rs = DB::select($query, $ph);
+						//var_dump($this);
+
+				return $this;
+			}	
+			
+			function getSearchByCompanyIdAndUserIDAndGroupIdAndSubGroupsAndBranchIdAndDepartmentIdAndStatusId($company_id, $user_id, $group_id, $include_sub_groups, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $user_id == '') {
+					return FALSE;
+				}
+
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+
+				if ( $include_sub_groups == TRUE
+					AND ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) ) {
+					$uglf = new UserGroupListFactory();
+					$group_id = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $group_id, TRUE);
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	*
+							from 	'. $this->getTable() .'
+							where	company_id = :company_id
+								AND	id in ('. $this->getListSQL($user_id, $ph) .')
+							';
+
+				if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, (array)$status_id) ) {
+					$query  .=	' AND status_id in ('. $this->getListSQL($status_id, $ph) .') ';
+				}
+				if ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) {
+					$query  .=	' AND group_id in ('. $this->getListSQL($group_id, $ph) .') ';
+				}
+				if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, (array)$branch_id) ) {
+					$query  .=	' AND default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
+				}
+				if ( $department_id != '' AND ( isset($department_id[0]) AND !in_array(-1, (array)$department_id) ) ) {
+					$query  .=	' AND default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
+				}
+
+				$query .= 	'
+								AND deleted = 0
+							';
+				$query .= $this->getSortSQL( $order, $strict );
+
+				$this->rs = DB::select($query, $ph);
+
+				return $this;
+			}
+
+			function getSearchByCompanyIdAndStatusIdAndBranchIdAndDepartmentIdAndUserTitleIdAndIncludeIdAndExcludeId($company_id, $status_id, $branch_id, $department_id, $user_title_id = NULL, $include_user_id = NULL, $exclude_user_id = NULL, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
+
+				$ph = array(
+							':company_id' => $company_id,
+							);
+
+				$query = '
+							select 	a.*
+							from 	'. $this->getTable() .' as a
+							where 	a.company_id = :company_id
 
 							';
 
-		if ( isset($date) AND $date > 0 ) {
-			//Append the same date twice for created and updated.
-			$ph[':created_date'] = (int)$date;
-			$ph[':updated_date'] = (int)$date;
-			$ph[':created_date'] = (int)$date;
-			$query  .=	' 		AND ( a.created_date >= :created_date OR a.updated_date >= :updated_date OR uif.created_date >= :created_date )
-								)';
-		} else {
-				$query  .=	'   )';
-		}
+				$filter_query = NULL;
+				if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, $status_id) ) {
+					$filter_query  .=	' AND a.status_id in ('. $this->getListSQL($status_id, $ph) .') ';
+				}
+				if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, $branch_id) ) {
+					$filter_query  .=	' AND a.default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
+				}
+				if ( $department_id != '' AND isset($department_id[0]) AND !in_array(-1, $department_id) ) {
+					$filter_query  .=	' AND a.default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
+				}
+				if ( $user_title_id != '' AND isset($user_title_id[0]) AND !in_array(-1, $user_title_id) ) {
+					$filter_query  .=	' AND a.title_id in ('. $this->getListSQL($user_title_id, $ph) .') ';
+				}
+				if ( $exclude_user_id != '' AND isset($exclude_user_id[0]) ) {
+					$filter_query  .=	' AND a.id not in ('. $this->getListSQL($exclude_user_id, $ph) .') ';
+				}
 
-		if ( isset($valid_user_ids) AND is_array($valid_user_ids) AND count($valid_user_ids) > 0 ) {
-			$query  .=	' OR a.id in ('. $this->getListSQL($valid_user_ids, $ph) .') ';
-		}
+				//If Branch,Dept,Status,Exclude are set, we need to prepend
+				//the company_id filter.
+				if ( isset($filter_query) AND $filter_query != '' ) {
+					$query .= $filter_query;
+					$include_user_by_or = TRUE;
+				} else {
+					$include_user_by_or = FALSE;
+				}
 
-		$query .= '			)
-						AND ( a.deleted = 0 AND z.deleted = 0 )';
+				if ( $include_user_id != '' AND isset($include_user_id[0]) ) {
+					$ph[':company_id'] = $company_id;
 
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict );
+					//If other criteria are set, we OR this filter.
+					//otherwise we just leave it as is.
+					if ( $include_user_by_or == TRUE ) {
+						$query .= ' OR ';
+					} else {
+						$query .= ' AND ';
+					}
+					$query  .=	' ( a.company_id = :company_id AND a.id in ('. $this->getListSQL($include_user_id, $ph) .') ) ';
+				}
 
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
+				$query .= 	'
+								AND a.deleted = 0
+							';
+				$query .= $this->getSortSQL( $order, $strict );
 
-		return $this;
-	}
+				$this->rs = DB::select($query, $ph);
 
-        
-        
-                
-       function getByMachineId($id) {
-		if ( $id == '') {
-			return FALSE;
-		}
-
-		
-		
-			$ph = array(
-						':punch_machine_user_id' => $id,
-						);
-
-			$query = '
-						select 	*
-						from 	'. $this->getTable() .'
-						where	punch_machine_user_id = :punch_machine_user_id
-							AND deleted = 0';
-
-			$this->rs = DB::select($query, $ph);;
-
-			
-		
-
-		return $this;
-	}
-	
-        
-        
-        
-        
-	function getByCompanyId($company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	*
-					from 	'. $this->getTable() .'
-					where	company_id = :company_id
-						AND deleted = 0';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict );
-
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
-
-		return $this;
-	}
-
-	function getByCompanyIdAndLongitudeAndLatitude($company_id, $longitude, $latitude, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $order == NULL ) {
-			$order = array( 'longitude' => 'asc', 'latitude' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	*
-					from 	'. $this->getTable() .'
-					where	company_id = :company_id ';
-
-		//isset() returns false on NULL.
-		$query .= $this->getWhereClauseSQL( 'longitude', $longitude, 'numeric', $ph );
-		$query .= $this->getWhereClauseSQL( 'latitude', $latitude, 'numeric', $ph );
-		$query .= '	AND deleted = 0';
-
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict );
-
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
-
-		return $this;
-	}
-
-	function getByCompanyIdArray($company_id, $include_blank = TRUE, $include_disabled = TRUE, $last_name_first = TRUE ) {
-
-		$ulf = new UserListFactory();
-		$ulf->getByCompanyId($company_id);
-
-		if ( $include_blank == TRUE ) {
-			$user_list[0] = '--';
-		}
-
-		foreach ($ulf as $user) {
-			if ( $user->getStatus() > 10 ) { //INACTIVE
-				$status = '('.Option::getByKey( $user->getStatus(), $user->getOptions('status') ).') ';
-			} else {
-				$status = NULL;
+				return $this;
 			}
 
-			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $user->getStatus() == 10 ) ) {
-				$user_list[$user->getID()] = $status.$user->getEmployeeNumber().' '.$user->getFullName($last_name_first);
-			}
-		}
-
-		if ( isset($user_list) ) {
-			return $user_list;
-		}
-
-		return FALSE;
-	}
-
-
-	function getByCompanyIdArrayWithEPFNo($company_id, $include_blank = TRUE, $include_disabled = TRUE, $last_name_first = TRUE ) {
-
-		$ulf = new UserListFactory();
-
-		$order = array( 'id' => 'asc' );
-		$ulf->getByCompanyId($company_id, NULL, NULL, NULL, $order);
-
-		if ( $include_blank == TRUE ) {
-			$user_list[0] = '--';
-		}
-
-		foreach ($ulf as $user) {
-			if ( $user->getStatus() > 10 ) { //INACTIVE
-				$status = '('.Option::getByKey( $user->getStatus(), $user->getOptions('status') ).') ';
-			} else {
-				$status = NULL;
-			}
-
-			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $user->getStatus() == 10 ) ) {
-				$user_list[$user->getID()] = $status.$user->getEpfMembershipNo().' - '.$user->getFullName($last_name_first);
-				
-    			//$epfnos[] = $user->getEpfMembershipNo();
-
-			}
-		}
-		//echo '<br><br><br><br><br><br><br><br><br><br><br><br><br>';
-
-		//array_multisort($user_list_new);
-
-		//echo "<pre>"; print_r($user_list);
-
-		if ( isset($user_list) ) {
-			return $user_list;
-		}
-
-		return FALSE;
-	}
-
-
-
-	function getArrayByListFactory($lf, $include_blank = TRUE, $include_disabled = TRUE ) {
-		if ( !is_object($lf) ) {
-			return FALSE;
-		}
-
-		if ( $include_blank == TRUE ) {
-			$list[0] = '--';
-		
-		}
-		foreach ($lf as $obj) {
-			if ( !isset($status_options) ) {
-				$status_options = $obj->getOptions('status');
-			}
-
-			if ( $obj->getStatus() > 10 ) { //INACTIVE
-				$status = '('.Option::getByKey( $obj->getStatus(), $status_options ).') ';
-				//$status = '(INACTIVE) ';
-			} else {
-				$status = NULL;
-			}
-
-			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $obj->getStatus() == 10 ) ) {
-				$list[$obj->getID()] = $status.$obj->getEpfMembershipNo().' - '.$obj->getFullName(TRUE);
-			}
-		}
-
-		if ( isset($list) ) {
-			return $list;
-		}
-
-		return FALSE;
-	}
-
-	function getDeletedByCompanyIdAndDate($company_id, $date, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $date == '') {
-			return FALSE;
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					':created_date' => $date,
-					':updated_date' => $date,
-					':deleted_date' => $date,
-					);
-
-		//INCLUDE Deleted rows in this query.
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where
-							company_id = :company_id
-						AND
-							( created_date >= :created_date OR updated_date >= :updated_date OR deleted_date >= :deleted_date )
-						AND deleted = 1
-					';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
-
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-
-		}
-
-		return $this;
-	}
-
-	function getIsModifiedByCompanyIdAndDate($company_id, $date, $where = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $date == '') {
-			return FALSE;
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					':created_date' => $date,
-					':updated_date' => $date,
-					':uif_created_date' => $date,
-					);
-					
-		$uif = new UserIdentificationFactory();
-
-		//INCLUDE Deleted rows in this query.
-		//Also include users with user_identifcation rows that have been *created* after the given date
-		//so the first supervisor/admin enrolled on a timeclock is properly updated to lock the menu.
-		$query = '
-					select 	a.*
-					from	'. $this->getTable() .' as a
-					LEFT JOIN '. $uif->getTable() .' as uif ON ( a.id = uif.user_id )
-					where
-							a.company_id = :company_id
-						AND
-							( a.created_date >= :created_date OR a.updated_date >= :updated_date OR uif.created_date >= :uif_created_date )
-					';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
-
-		$this->rs = $this->db->SelectLimit($query, 1, -1, $ph);
-		if ( $this->getRecordCount() > 0 ) {
-			Debug::text('User rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-
-			return TRUE;
-		}
-
-		Debug::text('User rows have NOT been modified', __FILE__, __LINE__, __METHOD__,10);
-
-		return FALSE;
-	}
-
-	function getHighestEmployeeNumberByCompanyId($id, $where = NULL, $order = NULL) {
-		if ( $id == '' ) {
-			return FALSE;
-		}
-
-		$ph = array(
-					':id' => $id,
-					':id2' => $id,
-					);
-
-		//employee_number is a varchar field, so we can't reliably cast it to an integer
-		//however if we left pad it, we can get a similar effect.
-		//Eventually we can change it to an integer field.
-		$query = '
-					select 	*
-					from	'. $this->getTable() .' as a
-					where	company_id = :id
-						AND id = ( select id
-									from '. $this->getTable() .'
-									where company_id = :id2
-										AND employee_number != \'\'
-										AND employee_number IS NOT NULL
-										AND deleted = 0
-									ORDER BY LPAD( employee_number, 10, \'0\' ) DESC
-									LIMIT 1
-									)
-						AND deleted = 0
-					LIMIT 1
-						';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}
-
-        /**
-         * ARSP NOTE-->
-         * I ADDED THIS CODE FOR THUNDER AND NEON
-         */
-        function getHighestEmployeeNumberOnlyByCompanyId($id, $where = NULL, $order = NULL) {
-		if ( $id == '' ) {
-			return FALSE;
-		}
-
-		$ph = array(
-					':id' => $id,
-					':id2' => $id,
-					);
-
-		//employee_number is a varchar field, so we can't reliably cast it to an integer
-		//however if we left pad it, we can get a similar effect.
-		//Eventually we can change it to an integer field.
-		$query = '
-					select 	*
-					from	'. $this->getTable() .' as a
-					where	company_id = :id
-						AND id = ( select id
-									from '. $this->getTable() .'
-									where company_id = :id2
-										AND employee_number_only != \'\'
-										AND employee_number_only IS NOT NULL
-										AND deleted = 0
-									ORDER BY LPAD( employee_number_only, 10, \'0\' ) DESC
-									LIMIT 1
-									)
-						AND deleted = 0
-					LIMIT 1
-						';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	} 
-        
-        /**
-         * ARSP NOTE-->
-         * I ADDED THIS CODE FOR THUNDER AND NEON
-         */
-        function getHighestEmployeeNumberOnlyByBranchId($id, $where = NULL, $order = NULL) {
-		if ( $id == 0 ) {
-			return FALSE;
-		}
-
-		$ph = array(
-					':id' => $id,
-					':id2' => $id,
-					);
-
-		//employee_number is a varchar field, so we can't reliably cast it to an integer
-		//however if we left pad it, we can get a similar effect.
-		//Eventually we can change it to an integer field.
-		$query = '
-					select 	*
-					from	'. $this->getTable() .' as a
-					where	default_branch_id = :id                                                
-						AND id = ( select id
-									from '. $this->getTable() .'
-									where default_branch_id = :id2
-										AND employee_number_only != \'\'
-										AND employee_number_only IS NOT NULL
-										AND deleted = 0
-									ORDER BY LPAD( employee_number_only, 10, \'0\' ) DESC
-									LIMIT 1
-									)
-						AND deleted = 0
-					LIMIT 1
-						';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}           
-        
-        function getSearchByArrayCriteria( $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
-		if ( !is_array($order) ) {
-			//Use Filter Data ordering if its set.
-			if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
-				$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
-			}
-		}
-
-		$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
-		if ( $order == NULL ) {
-			$order = array( 'company_id' => 'asc', 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
-			$strict = FALSE;
-		} else {
-			//Do order by column conversions, because if we include these columns in the SQL
-			//query, they contaminate the data array.
-			if ( isset($order['default_branch']) ) {
-				$order['b.name'] = $order['default_branch'];
-				unset($order['default_branch']);
-			}
-			if ( isset($order['default_department']) ) {
-				$order['c.name'] = $order['default_department'];
-				unset($order['default_department']);
-			}
-			if ( isset($order['user_group']) ) {
-				$order['d.name'] = $order['user_group'];
-				unset($order['user_group']);
-			}
-			if ( isset($order['title']) ) {
-				$order['e.name'] = $order['title'];
-				unset($order['title']);
-			}
-
-			//Always try to order by status first so INACTIVE employees go to the bottom.
-			if ( !isset($order['status_id']) ) {
-				$order = Misc::prependArray( array('status_id' => 'asc'), $order );
-			}
-			//Always sort by last name,first name after other columns
-			if ( !isset($order['last_name']) ) {
-				$order['last_name'] = 'asc';
-			}
-			if ( !isset($order['first_name']) ) {
-				$order['first_name'] = 'asc';
-			}
-			$strict = TRUE;
-		}
-		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
-		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( isset($filter_data['company_ids']) ) {
-			$filter_data['company_id'] = $filter_data['company_ids'];
-		}
-
-		if ( isset($filter_data['exclude_user_ids']) ) {
-			$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
-		}
-		if ( isset($filter_data['include_user_ids']) ) {
-			$filter_data['id'] = $filter_data['include_user_ids'];
-		}
-		if ( isset($filter_data['user_status_ids']) ) {
-			$filter_data['status_id'] = $filter_data['user_status_ids'];
-		}
-		if ( isset($filter_data['user_title_ids']) ) {
-			$filter_data['title_id'] = $filter_data['user_title_ids'];
-		}
-		if ( isset($filter_data['group_ids']) ) {
-			$filter_data['group_id'] = $filter_data['group_ids'];
-		}
-		if ( isset($filter_data['branch_ids']) ) {
-			$filter_data['default_branch_id'] = $filter_data['branch_ids'];
-		}
-		if ( isset($filter_data['department_ids']) ) {
-			$filter_data['default_department_id'] = $filter_data['department_ids'];
-		}
-		if ( isset($filter_data['currency_ids']) ) {
-			$filter_data['currency_id'] = $filter_data['currency_ids'];
-		}
-
-		$bf = new BranchFactory();
-		$df = new DepartmentFactory();
-		$ugf = new UserGroupFactory();
-		$utf = new UserTitleFactory();
-
-		$ph = array();
-
-		$query = '
-					select 	a.*
-					from 	'. $this->getTable() .' as a
-						LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
-						LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
-						LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
-						LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
-					where	1=1
-					';
-
-		if ( isset($filter_data['company_id']) AND isset($filter_data['company_id'][0]) AND !in_array(-1, (array)$filter_data['company_id']) ) {
-			$query  .=	' AND a.company_id in ('. $this->getListSQL($filter_data['company_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
-		}
-		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
-		}
-		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
-			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
-				$uglf = new UserGroupListFactory();
-				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $filter_data['company_id'], $filter_data['group_id'], TRUE);
-			}
-			$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
-			$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
-			$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
-			$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
-			$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
-		}
-		if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
-			$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
-		}
-		if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
-			$ph[':city'] = strtolower(trim($filter_data['city']));
-			$query  .=	' AND lower(a.city) LIKE :city';
-		}
-		if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
-			$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
-			$query  .=	' AND lower(a.first_name) LIKE :first_name';
-		}
-		if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
-			$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
-			$query  .=	' AND lower(a.last_name) LIKE :last_name';
-		}
-		if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
-			$ph[':home_phone'] = trim($filter_data['home_phone']);
-			$query  .=	' AND a.home_phone LIKE :home_phone';
-		}
-		if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
-			$ph[':employee_number'] = trim($filter_data['employee_number']);
-			$query  .=	' AND a.employee_number LIKE :employee_number';
-		}
-		if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
-			$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
-			$query  .=	' AND lower(a.user_name) LIKE :user_name';
-		}
-		if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
-			$ph[':sin'] = trim($filter_data['sin']);
-			$query  .=	' AND a.sin LIKE :sin';
-		}
-
-		$query .= 	'
-						AND a.deleted = 0
-					';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
-
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
-
-		return $this;
-	}
-
-	function getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
-            
-           //  echo '<pre>'; print_r($filter_data); echo '<pre>';  die;
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( !is_array($order) ) {
-			//Use Filter Data ordering if its set.
-			if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
-				$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
-			}
-		}
-
-		$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
-		if ( $order == NULL ) {
-			$order = array( 'punch_machine_user_id'=>'asc', 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
-			$strict = FALSE;
-		} else {
-			//Do order by column conversions, because if we include these columns in the SQL
-			//query, they contaminate the data array.
-			if ( isset($order['default_branch']) ) {
-				$order['b.name'] = $order['default_branch'];
-				unset($order['default_branch']);
-			}
-			if ( isset($order['default_department']) ) {
-				$order['c.name'] = $order['default_department'];
-				unset($order['default_department']);
-			}
-			if ( isset($order['user_group']) ) {
-				$order['d.name'] = $order['user_group'];
-				unset($order['user_group']);
-			}
-			if ( isset($order['title']) ) {
-				$order['e.name'] = $order['title'];
-				unset($order['title']);
-			}
-
-			if ( !isset($order['punch_machine_user_id']) ) {
-				$order = Misc::prependArray( array('punch_machine_user_id' => 'asc'), $order );
-			}
-			//Always try to order by status first so INACTIVE employees go to the bottom.
-			if ( isset($order['status_id']) ) {
-				$order = Misc::prependArray( array('status_id' => 'asc'), $order );
-			}
-			//Always sort by last name,first name after other columns
-			if ( isset($order['last_name']) ) {
-				$order['last_name'] = 'asc';
-			}
-			if ( isset($order['first_name']) ) {
-				$order['first_name'] = 'asc';
-			}
-			$strict = TRUE;
-		}
-		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
-		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( isset($filter_data['exclude_user_ids']) ) {
-			$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
-		}
-		if ( isset($filter_data['include_user_ids']) ) {
-			$filter_data['id'] = $filter_data['include_user_ids'];
-		}
-		if ( isset($filter_data['user_status_ids']) ) {
-			$filter_data['status_id'] = $filter_data['user_status_ids'];
-		}
-		if ( isset($filter_data['user_title_ids']) ) {
-			$filter_data['title_id'] = $filter_data['user_title_ids'];
-		}
-		if ( isset($filter_data['group_ids']) ) {
-			$filter_data['group_id'] = $filter_data['group_ids'];
-		}
-		if ( isset($filter_data['branch_ids']) ) {
-			$filter_data['default_branch_id'] = $filter_data['branch_ids'];
-		}
-		if ( isset($filter_data['department_ids']) ) {
-			$filter_data['default_department_id'] = $filter_data['department_ids'];
-		}
-		if ( isset($filter_data['currency_ids']) ) {
-			$filter_data['currency_id'] = $filter_data['currency_ids'];
-		}
-
-		$bf = new BranchFactory();
-		$df = new DepartmentFactory();
-		$ugf = new UserGroupFactory();
-		$utf = new UserTitleFactory();
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	a.*
-					from 	'. $this->getTable() .' as a
-						LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
-						LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
-						LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
-						LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
-					where	a.company_id = :company_id ';
-                
-           //     $query  .=	' AND a.basis_of_employment in ('. $this->getListSQL($filter_data['basis_of_employment'][0], $ph) .') ';
-		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
-		}
-		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
-		}
-		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
-			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
-				$uglf = new UserGroupListFactory();
-				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
-			}
-			$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
-			$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
-			$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
-			$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
-			$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
-		}
-		if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
-			$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
-		}
-		if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
-			$ph[':city'] = strtolower(trim($filter_data['city']));
-			$query  .=	' AND lower(a.city) LIKE :city';
-		}
-		if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
-			$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
-			$query  .=	' AND lower(a.first_name) LIKE :first_name';
-		}
-		if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
-			$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
-			$query  .=	' AND lower(a.last_name) LIKE :last_name';
-		}
-		if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
-			$ph[':home_phone'] = trim($filter_data['home_phone']);
-			$query  .=	' AND a.home_phone LIKE :home_phone';
-		}
-		if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
-			$ph[':employee_number'] = trim($filter_data['employee_number']);
-			$query  .=	' AND a.employee_number LIKE :employee_number';
-		}
-                //////////////eranda
-                if ( isset($filter_data['basis_of_employment']) ) {
-			//$ph[] = trim($filter_data['basis_of_employment']);
-			$query  .=	' AND a.basis_of_employment = '.$filter_data['basis_of_employment'].'';
-		}
-                //////////
-		if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
-			$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
-			$query  .=	' AND lower(a.user_name) LIKE :user_name';
-		}
-		if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
-			$ph[':sin'] = trim($filter_data['sin']);
-			$query  .=	' AND a.sin LIKE :sin';
-		}
-                
-
-		$query .= 	'
-						AND a.deleted = 0
-					';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
-
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
-
-		return $this;
-	}
-
-        
-        function getSearchByCompanyIdAndArrayCriteriaForOT( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( !is_array($order) ) {
-			//Use Filter Data ordering if its set.
-			if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
-				$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
-			}
-		}
-
-		$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
-			$strict = FALSE;
-		} else {
-			//Do order by column conversions, because if we include these columns in the SQL
-			//query, they contaminate the data array.
-			if ( isset($order['default_branch']) ) {
-				$order['b.name'] = $order['default_branch'];
-				unset($order['default_branch']);
-			}
-			if ( isset($order['default_department']) ) {
-				$order['c.name'] = $order['default_department'];
-				unset($order['default_department']);
-			}
-			if ( isset($order['user_group']) ) {
-				$order['d.name'] = $order['user_group'];
-				unset($order['user_group']);
-			}
-			if ( isset($order['title']) ) {
-				$order['e.name'] = $order['title'];
-				unset($order['title']);
-			}
-
-			//Always try to order by status first so INACTIVE employees go to the bottom.
-			if ( !isset($order['status_id']) ) {
-				$order = Misc::prependArray( array('status_id' => 'asc'), $order );
-			}
-			//Always sort by last name,first name after other columns
-			if ( !isset($order['last_name']) ) {
-				$order['last_name'] = 'asc';
-			}
-			if ( !isset($order['first_name']) ) {
-				$order['first_name'] = 'asc';
-			}
-			$strict = TRUE;
-		}
-		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
-		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( isset($filter_data['exclude_user_ids']) ) {
-			$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
-		}
-		if ( isset($filter_data['include_user_ids']) ) {
-			$filter_data['id'] = $filter_data['include_user_ids'];
-		}
-		if ( isset($filter_data['user_status_ids']) ) {
-			$filter_data['status_id'] = $filter_data['user_status_ids'];
-		}
-		if ( isset($filter_data['user_title_ids']) ) {
-			$filter_data['title_id'] = $filter_data['user_title_ids'];
-		}
-		if ( isset($filter_data['group_ids']) ) {
-			$filter_data['group_id'] = $filter_data['group_ids'];
-		}
-		if ( isset($filter_data['branch_ids']) ) {
-			$filter_data['default_branch_id'] = $filter_data['branch_ids'];
-		}
-		if ( isset($filter_data['department_ids']) ) {
-			$filter_data['default_department_id'] = $filter_data['department_ids'];
-		}
-		if ( isset($filter_data['currency_ids']) ) {
-			$filter_data['currency_id'] = $filter_data['currency_ids'];
-		}
-
-		$bf = new BranchFactory();
-		$df = new DepartmentFactory();
-		$ugf = new UserGroupFactory();
-		$utf = new UserTitleFactory();
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	a.*
-					from 	'. $this->getTable() .' as a
-						LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
-						LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
-						LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
-						LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
-					where	a.company_id = :company_id
-					';
-
-		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
-		}
-		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
-		}
-		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
-			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
-				$uglf = new UserGroupListFactory();
-				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
-			}
-			$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
-			$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
-			$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
-			$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
-			$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
-		}
-		if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
-			$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
-		}
-		if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
-			$ph[':city'] = strtolower(trim($filter_data['city']));
-			$query  .=	' AND lower(a.city) LIKE :city';
-		}
-		if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
-			$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
-			$query  .=	' AND lower(a.first_name) LIKE :first_name';
-		}
-		if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
-			$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
-			$query  .=	' AND lower(a.last_name) LIKE :last_name';
-		}
-		if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
-			$ph[':home_phone'] = trim($filter_data['home_phone']);
-			$query  .=	' AND a.home_phone LIKE :home_phone';
-		}
-		if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
-			$ph[':employee_number'] = trim($filter_data['employee_number']);
-			$query  .=	' AND a.employee_number LIKE :employee_number';
-		}
-		if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
-			$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
-			$query  .=	' AND lower(a.user_name) LIKE :user_name';
-		}
-		if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
-			$ph[':sin'] = trim($filter_data['sin']);
-			$query  .=	' AND a.sin LIKE :sin';
-		}
-
-		$query .= 	'   AND a.group_id in (4,6)    
-						AND a.deleted = 0
-					';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
-
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
-
-		return $this;
-	}
-
-        
-        function getSearchByCompanyIdAndArrayCriteriaForOP( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( !is_array($order) ) {
-			//Use Filter Data ordering if its set.
-			if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {
-				$order = array(Misc::trimSortPrefix($filter_data['sort_column']) => $filter_data['sort_order']);
-			}
-		}
-
-		$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
-			$strict = FALSE;
-		} else {
-			//Do order by column conversions, because if we include these columns in the SQL
-			//query, they contaminate the data array.
-			if ( isset($order['default_branch']) ) {
-				$order['b.name'] = $order['default_branch'];
-				unset($order['default_branch']);
-			}
-			if ( isset($order['default_department']) ) {
-				$order['c.name'] = $order['default_department'];
-				unset($order['default_department']);
-			}
-			if ( isset($order['user_group']) ) {
-				$order['d.name'] = $order['user_group'];
-				unset($order['user_group']);
-			}
-			if ( isset($order['title']) ) {
-				$order['e.name'] = $order['title'];
-				unset($order['title']);
-			}
-
-			//Always try to order by status first so INACTIVE employees go to the bottom.
-			if ( !isset($order['status_id']) ) {
-				$order = Misc::prependArray( array('status_id' => 'asc'), $order );
-			}
-			//Always sort by last name,first name after other columns
-			if ( !isset($order['last_name']) ) {
-				$order['last_name'] = 'asc';
-			}
-			if ( !isset($order['first_name']) ) {
-				$order['first_name'] = 'asc';
-			}
-			$strict = TRUE;
-		}
-		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
-		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( isset($filter_data['exclude_user_ids']) ) {
-			$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
-		}
-		if ( isset($filter_data['include_user_ids']) ) {
-			$filter_data['id'] = $filter_data['include_user_ids'];
-		}
-		if ( isset($filter_data['user_status_ids']) ) {
-			$filter_data['status_id'] = $filter_data['user_status_ids'];
-		}
-		if ( isset($filter_data['user_title_ids']) ) {
-			$filter_data['title_id'] = $filter_data['user_title_ids'];
-		}
-		if ( isset($filter_data['group_ids']) ) {
-			$filter_data['group_id'] = $filter_data['group_ids'];
-		}
-		if ( isset($filter_data['branch_ids']) ) {
-			$filter_data['default_branch_id'] = $filter_data['branch_ids'];
-		}
-		if ( isset($filter_data['department_ids']) ) {
-			$filter_data['default_department_id'] = $filter_data['department_ids'];
-		}
-		if ( isset($filter_data['currency_ids']) ) {
-			$filter_data['currency_id'] = $filter_data['currency_ids'];
-		}
-
-		$bf = new BranchFactory();
-		$df = new DepartmentFactory();
-		$ugf = new UserGroupFactory();
-		$utf = new UserTitleFactory();
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	a.*
-					from 	'. $this->getTable() .' as a
-						LEFT JOIN '. $bf->getTable() .' as b ON a.default_branch_id = b.id
-						LEFT JOIN '. $df->getTable() .' as c ON a.default_department_id = c.id
-						LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
-						LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
-					where	a.company_id = :company_id
-					';
-
-		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
-		}
-		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
-		}
-		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
-			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
-				$uglf = new UserGroupListFactory();
-				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
-			}
-			$query  .=	' AND a.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND a.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND a.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
-			$query  .=	' AND a.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['currency_id']) AND isset($filter_data['currency_id'][0]) AND !in_array(-1, (array)$filter_data['currency_id']) ) {
-			$query  .=	' AND a.currency_id in ('. $this->getListSQL($filter_data['currency_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['sex_id']) AND isset($filter_data['sex_id'][0]) AND !in_array(-1, (array)$filter_data['sex_id']) ) {
-			$query  .=	' AND a.sex_id in ('. $this->getListSQL($filter_data['sex_id'], $ph) .') ';
-		}
-		if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
-			$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';
-		}
-		if ( isset($filter_data['province']) AND isset($filter_data['province'][0]) AND !in_array( -1, (array)$filter_data['province']) AND !in_array( '00', (array)$filter_data['province']) ) {
-			$query  .=	' AND a.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
-		}
-		if ( isset($filter_data['city']) AND trim($filter_data['city']) != '' ) {
-			$ph[':city'] = strtolower(trim($filter_data['city']));
-			$query  .=	' AND lower(a.city) LIKE :city';
-		}
-		if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
-			$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
-			$query  .=	' AND lower(a.first_name) LIKE :first_name';
-		}
-		if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
-			$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
-			$query  .=	' AND lower(a.last_name) LIKE :last_name';
-		}
-		if ( isset($filter_data['home_phone']) AND trim($filter_data['home_phone']) != '' ) {
-			$ph[':home_phone'] = trim($filter_data['home_phone']);
-			$query  .=	' AND a.home_phone LIKE :home_phone';
-		}
-		if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
-			$ph[':employee_number'] = trim($filter_data['employee_number']);
-			$query  .=	' AND a.employee_number LIKE :employee_number';
-		}
-		if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
-			$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
-			$query  .=	' AND lower(a.user_name) LIKE :user_name';
-		}
-		if ( isset($filter_data['sin']) AND trim($filter_data['sin']) != '' ) {
-			$ph[':sin'] = trim($filter_data['sin']);
-			$query  .=	' AND a.sin LIKE :sin';
-		}
-
-		$query .= 	'  AND a.group_id = 3  
-						AND a.deleted = 0
-					';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
-
-		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
-		} else {
-			$this->rs = DB::select($query, $ph);;
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
-		}
-
-		return $this;
-	}
-
-        
-	function getSearchByCompanyIdAndBranchIdAndDepartmentIdAndStatusId($company_id, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	*
-					from 	'. $this->getTable() .'
-					where	company_id = :company_id
-					';
-
-		if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, (array)$status_id) ) {
-			$query  .=	' AND status_id in ('. $this->getListSQL($status_id, $ph) .') ';
-		}
-		if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, (array)$branch_id) ) {
-			$query  .=	' AND default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
-		}
-		if ( $department_id != '' AND ( isset($department_id[0]) AND !in_array(-1, (array)$department_id) ) ) {
-			$query  .=	' AND default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
-		}
-
-		$query .= 	'
-						AND deleted = 0
-					';
-		$query .= $this->getSortSQL( $order, $strict );
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}
-
-	function getSearchByCompanyIdAndGroupIdAndSubGroupsAndBranchIdAndDepartmentIdAndStatusId($company_id, $group_id, $include_sub_groups, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
-
-		if ( $include_sub_groups == TRUE
-			AND ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) ) {
-			$uglf = new UserGroupListFactory();
-			$group_id = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $group_id, TRUE);
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	*
-					from 	'. $this->getTable() .'
-					where	company_id = :company_id
-					';
-
-		if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, (array)$status_id) ) {
-			$query  .=	' AND status_id in ('. $this->getListSQL($status_id, $ph) .') ';
-		}
-		if ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) {
-			$query  .=	' AND group_id in ('. $this->getListSQL($group_id, $ph) .') ';
-		}
-		if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, (array)$branch_id) ) {
-			$query  .=	' AND default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
-		}
-		if ( $department_id != '' AND ( isset($department_id[0]) AND !in_array(-1, (array)$department_id) ) ) {
-			$query  .=	' AND default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
-		}
-
-		$query .= 	'
-						AND deleted = 0
-					';
-		$query .= $this->getSortSQL( $order, $strict );
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}
-
-        /**
-         *ARSP NOTE --> THIS CODE ADDED BY ME FOR THUNDER & NEON 
-         */        
-    function getSearchByJobSkills($job_skill) {
-            
-                $job_skill = '%'.$job_skill.'%';
-            
-		if ( $job_skill == '') {
-			return FALSE;
-		}
-
+			function getReportByCompanyIdAndUserIDList($company_id, $user_ids, $order = NULL) {
+				if ( $company_id == '') {
+					return FALSE;
+				}
+
+				if ( $user_ids == '') {
+					return FALSE;
+				}
 		/*
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
+				if ( $order == NULL ) {
+					$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
+					$strict = FALSE;
+				} else {
+					$strict = TRUE;
+				}
 		*/
 
-		$ph = array(
-					':job_skills' => $job_skill,
-					);
-
-		$query = '
-					select 	*
-					from 	'. $this->getTable() .'
-					where	job_skills LIKE  :job_skills                                      
-					';
-
-		$query .= 	'
-						AND deleted = 0
-					';
-                //echo $query;
-                $order = array('first_name' => 'asc');
-		//$query .= $this->getSortSQL( $order, $strict );
-
-		$this->rs = DB::select($query, $ph);;
-                //var_dump($this);
-
-		return $this;
-	}	
-	
-	function getSearchByCompanyIdAndUserIDAndGroupIdAndSubGroupsAndBranchIdAndDepartmentIdAndStatusId($company_id, $user_id, $group_id, $include_sub_groups, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $user_id == '') {
-			return FALSE;
-		}
-
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
-
-		if ( $include_sub_groups == TRUE
-			AND ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) ) {
-			$uglf = new UserGroupListFactory();
-			$group_id = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $group_id, TRUE);
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	*
-					from 	'. $this->getTable() .'
-					where	company_id = :company_id
-						AND	id in ('. $this->getListSQL($user_id, $ph) .')
-					';
-
-		if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, (array)$status_id) ) {
-			$query  .=	' AND status_id in ('. $this->getListSQL($status_id, $ph) .') ';
-		}
-		if ( $group_id != '' AND isset($group_id[0]) AND !in_array(-1, (array)$group_id) ) {
-			$query  .=	' AND group_id in ('. $this->getListSQL($group_id, $ph) .') ';
-		}
-		if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, (array)$branch_id) ) {
-			$query  .=	' AND default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
-		}
-		if ( $department_id != '' AND ( isset($department_id[0]) AND !in_array(-1, (array)$department_id) ) ) {
-			$query  .=	' AND default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
-		}
-
-		$query .= 	'
-						AND deleted = 0
-					';
-		$query .= $this->getSortSQL( $order, $strict );
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}
-
-	function getSearchByCompanyIdAndStatusIdAndBranchIdAndDepartmentIdAndUserTitleIdAndIncludeIdAndExcludeId($company_id, $status_id, $branch_id, $department_id, $user_title_id = NULL, $include_user_id = NULL, $exclude_user_id = NULL, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
-
-		$ph = array(
-					':company_id' => $company_id,
-					);
-
-		$query = '
-					select 	a.*
-					from 	'. $this->getTable() .' as a
-					where 	a.company_id = :company_id
-
-					';
-
-		$filter_query = NULL;
-		if ( $status_id != '' AND isset($status_id[0]) AND !in_array(-1, $status_id) ) {
-			$filter_query  .=	' AND a.status_id in ('. $this->getListSQL($status_id, $ph) .') ';
-		}
-		if ( $branch_id != '' AND isset($branch_id[0]) AND !in_array(-1, $branch_id) ) {
-			$filter_query  .=	' AND a.default_branch_id in ('. $this->getListSQL($branch_id, $ph) .') ';
-		}
-		if ( $department_id != '' AND isset($department_id[0]) AND !in_array(-1, $department_id) ) {
-			$filter_query  .=	' AND a.default_department_id in ('. $this->getListSQL($department_id, $ph) .') ';
-		}
-		if ( $user_title_id != '' AND isset($user_title_id[0]) AND !in_array(-1, $user_title_id) ) {
-			$filter_query  .=	' AND a.title_id in ('. $this->getListSQL($user_title_id, $ph) .') ';
-		}
-		if ( $exclude_user_id != '' AND isset($exclude_user_id[0]) ) {
-			$filter_query  .=	' AND a.id not in ('. $this->getListSQL($exclude_user_id, $ph) .') ';
-		}
-
-		//If Branch,Dept,Status,Exclude are set, we need to prepend
-		//the company_id filter.
-		if ( isset($filter_query) AND $filter_query != '' ) {
-			$query .= $filter_query;
-			$include_user_by_or = TRUE;
-		} else {
-			$include_user_by_or = FALSE;
-		}
-
-		if ( $include_user_id != '' AND isset($include_user_id[0]) ) {
-			$ph[':company_id'] = $company_id;
-
-			//If other criteria are set, we OR this filter.
-			//otherwise we just leave it as is.
-			if ( $include_user_by_or == TRUE ) {
-				$query .= ' OR ';
-			} else {
-				$query .= ' AND ';
-			}
-			$query  .=	' ( a.company_id = :company_id AND a.id in ('. $this->getListSQL($include_user_id, $ph) .') ) ';
-		}
-
-		$query .= 	'
-						AND a.deleted = 0
-					';
-		$query .= $this->getSortSQL( $order, $strict );
-
-		$this->rs = DB::select($query, $ph);;
-
-		return $this;
-	}
-
-	function getReportByCompanyIdAndUserIDList($company_id, $user_ids, $order = NULL) {
-		if ( $company_id == '') {
-			return FALSE;
-		}
-
-		if ( $user_ids == '') {
-			return FALSE;
-		}
-/*
-		if ( $order == NULL ) {
-			$order = array( 'status_id' => 'asc', 'last_name' => 'asc' );
-			$strict = FALSE;
-		} else {
-			$strict = TRUE;
-		}
-*/
-
-//		$utf = new UserTaxFactory();
-//					LEFT JOIN '. $utf->getTable() .' as b ON a.id = b.user_id AND (b.deleted=0 OR b.deleted IS NULL)
+		//		$utf = new UserTaxFactory();
+		//					LEFT JOIN '. $utf->getTable() .' as b ON a.id = b.user_id AND (b.deleted=0 OR b.deleted IS NULL)
 		$baf = new BankAccountFactory();
 
 		$ph = array(
@@ -2291,7 +2292,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				';
 		$query .= $this->getSortSQL( $order, FALSE );
 
-		$this->rs = DB::select($query, $ph);;
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -2544,9 +2545,9 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		//Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);;
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = DB::select($query, $ph);;
+			$this->rs = DB::select($query, $ph);
 			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
 

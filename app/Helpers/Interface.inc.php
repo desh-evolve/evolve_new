@@ -16,6 +16,8 @@ use App\Models\Core\StationListFactory;
 use App\Models\Core\SystemSettingListFactory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\URLBuilder;
+use App\Models\Cron\CronJobListFactory;
+use App\Models\Message\MessageControlListFactory;
 use Illuminate\Support\Facades\View;
 
 /*
@@ -204,13 +206,15 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 }
 unset($clf);
 
+/*
 // Get system settings from database
 $sslf = new SystemSettingListFactory();
-$data = $sslf->getAll()->rs;
+$system_settings = $sslf->getAll()->rs;
 
-foreach ($data as $item) {
+foreach ($system_settings as $item) {
     $system_settings[$item->name] = $item->value;
 }
+*/
 
 //print_r($system_settings['system_version']);exit;
         

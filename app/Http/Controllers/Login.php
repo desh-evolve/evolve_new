@@ -56,13 +56,16 @@ class Login extends Controller
     public function login(){
         $user_name = $_POST['user_name'];
         $password = $_POST['password'];
-        
+
         $validator = new Validator();
 
         //Debug::setVerbosity( 11 );
         Debug::Text('User Name: '. $user_name, __FILE__, __LINE__, __METHOD__,10);
         $authentication = new Authentication();
-
+        echo 'auth check';
+        print_r($authentication->Login($user_name, $password));
+        echo '<br>';
+        exit;
         if ( $authentication->Login($user_name, $password) ) {
             echo '1<br>';
             $authentication->Check();

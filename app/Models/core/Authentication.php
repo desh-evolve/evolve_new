@@ -201,20 +201,42 @@ class Authentication {
 		return FALSE;
 	}
 
+	/*
 	function checkPassword($user_name, $password) {
 		//Use UserFactory to set name.
 		$ulf = new UserListFactory();
 
 		$ulf->getByUserNameAndStatus(strtolower(trim($user_name)), 10 ); //Active
-
+		
 		foreach ($ulf as $user) {
+			echo '<br>hi<br>';
 			if ( $user->checkPassword($password) ) {
 				$this->setObject( $user->getID() );
-
 				return TRUE;
 			} else {
 				return FALSE;
 			}
+		}
+
+		return FALSE;
+	}
+	*/
+
+	function checkPassword($user_name, $password) {
+		//Use UserFactory to set name.
+		$ulf = new UserListFactory();
+
+		$users = $ulf->getByUserNameAndStatus(strtolower(trim($user_name)), 10 ); //Active
+		$this->data = $users->rs;
+		if($users->rs){
+			if ( $ulf->checkPassword($password) ) {
+				$this->setObject( $user->getID() );
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}else{
+			return FALSE;
 		}
 
 		return FALSE;
@@ -483,13 +505,14 @@ class Authentication {
 		$ipAddress = request()->ip();
 		$key = "login_attempts_{$ipAddress}";
 		
+		/*
 		// Prevent brute force attacks
 		if (RateLimiter::tooManyAttempts($key, 20)) {
 			Log::warning("Excessive failed login attempts from $ipAddress. Locking for 15 minutes.");
 			sleep(5);
 			return false;
 		}
-
+		*/
 		$password_result = false;
 
 		switch (strtolower($type)) {
