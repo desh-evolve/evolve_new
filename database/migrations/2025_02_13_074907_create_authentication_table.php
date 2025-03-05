@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('authentication', function (Blueprint $table) {
             $table->id();
-            $table->string('session_id', 250);
+            $table->string('session_id');
             $table->unsignedBigInteger('user_id');
             $table->string('ip_address', 250)->nullable();
             $table->integer('created_date');

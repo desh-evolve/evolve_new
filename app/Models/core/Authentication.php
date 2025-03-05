@@ -179,8 +179,10 @@ class Authentication {
 	}
 
 	private function genSessionID() {
-		return md5( uniqid( dechex( mt_srand() ) ) );
-	}
+		return $_COOKIE['SessionID'];
+		//return md5(uniqid(dechex(mt_rand()), true));
+		//return bin2hex(random_bytes(16));
+	}	
 
 	public function checkCompanyStatus( $user_name ) {
 		$ulf = new UserListFactory();
@@ -432,7 +434,6 @@ class Authentication {
 
 	private function Write() {
 		
-
 		$ph = array(
 			':session_id' => $this->getSessionID(),
 			':user_id' => $this->getObject()->getID(),
@@ -459,27 +460,28 @@ class Authentication {
 	}
 
 	private function Read() {
+		
 		$ph = array(
-					':session_id' => $this->getSessionID(),
-					':ip_address' => $this->getIPAddress(),
-					':updated_date' => ( TTDate::getTime() - $this->getIdle() ),
-					);
-
+			':session_id' => $this->getSessionID(),
+			':ip_address' => $this->getIPAddress(),
+			':updated_date' => ( TTDate::getTime() - $this->getIdle() ),
+		);
 
 		$query = 'select session_id,user_id,ip_address,created_date,updated_date from authentication
-					WHERE session_id = :session_id
-						AND ip_address = :ip_address
-						AND updated_date >= :updated_date
-						';
-
+			WHERE session_id = :session_id
+			AND ip_address = :ip_address
+			AND updated_date >= :updated_date
+		';
+		
 		//Debug::text('Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
-
+		
 		//$result = $this->db->GetRow($query, $ph);
 		$result = DB::select($query, $ph);
+		//print_r($ph);exit;
 		// Get the first result
-		$result = !empty($result) ? $result[0] : [];
-
+		$result = !empty($result) ? $result : [];
 		if ( count($result) > 0) {
+			$result = (array)$result[0];
 			$this->setSessionID($result['session_id']);
 			$this->setIPAddress($result['ip_address']);
 			$this->setCreatedDate($result['created_date']);
@@ -626,20 +628,21 @@ class Authentication {
 		Debug::text('Session ID: '. $session_id .' URL: '. $_SERVER['REQUEST_URI'], __FILE__, __LINE__, __METHOD__, 10);
 		//Checks session cookie, returns user_id;
 		if ( isset( $session_id ) ) {
-
+			
 			/*
-				Bind session ID to IP address to aid in preventing session ID theft,
-				if this starts to cause problems
-				for users behind load balancing proxies, allow them to choose to
-				bind session IDs to just the first 1-3 quads of their IP address
-				as well as the MD5 of their user-agent string.
-				Could also use "behind proxy IP address" if one is supplied.
+			Bind session ID to IP address to aid in preventing session ID theft,
+			if this starts to cause problems
+			for users behind load balancing proxies, allow them to choose to
+			bind session IDs to just the first 1-3 quads of their IP address
+			as well as the MD5 of their user-agent string.
+			Could also use "behind proxy IP address" if one is supplied.
 			*/
 			$this->setSessionID( $session_id );
 			$this->setIPAddress();
-
+			//echo 'read:';
+			//print_r($this->Read());exit;
 			if ( $this->Read() == TRUE ) {
-
+					
 				//touch UpdatedDate
 				$this->Update();
 

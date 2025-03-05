@@ -219,29 +219,29 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 */
 
 		$ph = array(
-					':user_id' => $user_id,
-					':date_stamp' => $this->db->BindDate( TTDate::getBeginDayEpoch( TTDate::getTime() ) ),
-					':status_id' => $pay_period_status,
-					);
+			':user_id' => $user_id,
+			':date_stamp' => date('Y-m-d H:i:s', TTDate::getBeginDayEpoch(TTDate::getTime())),
+			':status_id' => $pay_period_status,
+		);
 
 		$query = '
-					select 	d.severity_id as severity_id,
-							count(*) as total
-					from	'. $this->getTable() .' as a
-					LEFT JOIN '. $udf->getTable() .' as b ON a.user_date_id = b.id
-					LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
-					LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
-					LEFT JOIN '. $ppf->getTable() .' as e ON b.pay_period_id = e.id
-					where
-						b.user_id = :user_id
-						AND a.type_id = 50
-						AND b.date_stamp <= :date_stamp
-						AND e.status_id = :status_id
-						AND NOT EXISTS ( select z.id from '. $rf->getTable() .' as z where z.user_date_id = a.user_date_id AND z.status_id = 30 )
-						AND ( a.deleted = 0 AND b.deleted = 0 AND e.deleted=0)
-					GROUP BY d.severity_id
-					ORDER BY d.severity_id desc
-					';
+			select 	d.severity_id as severity_id,
+					count(*) as total
+			from	'. $this->getTable() .' as a
+			LEFT JOIN '. $udf->getTable() .' as b ON a.user_date_id = b.id
+			LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
+			LEFT JOIN '. $epf->getTable() .' as d ON a.exception_policy_id = d.id
+			LEFT JOIN '. $ppf->getTable() .' as e ON b.pay_period_id = e.id
+			where
+				b.user_id = :user_id
+				AND a.type_id = 50
+				AND b.date_stamp <= :date_stamp
+				AND e.status_id = :status_id
+				AND NOT EXISTS ( select z.id from '. $rf->getTable() .' as z where z.user_date_id = a.user_date_id AND z.status_id = 30 )
+				AND ( a.deleted = 0 AND b.deleted = 0 AND e.deleted=0)
+			GROUP BY d.severity_id
+			ORDER BY d.severity_id desc
+		';
 
 		$this->rs = DB::select($query, $ph);
 

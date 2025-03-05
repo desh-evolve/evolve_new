@@ -79,15 +79,17 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 
 	//echo 'Interface->$authentication->Check(): ';
 	//print_r($authentication->Check());exit;
-
+	//echo '$authentication->Check(): ';
+	//echo $authentication->Check();exit;
 	if ( $authentication->Check() === TRUE ) {
 		$profiler->startTimer( 'Interface.inc - Post-Authentication' );
 
 		/*
 		 * Get default interface data here. Things like User info, Company info etc...
 		 */
-
+		global $current_company;
 		$current_user = $authentication->getObject();
+		
 		Debug::text('User Authenticated: '. $current_user->getUserName() .' Created Date: '. $authentication->getCreatedDate(), __FILE__, __LINE__, __METHOD__, 10);
 
 		if ( isset($primary_company) AND PRIMARY_COMPANY_ID == $current_user->getCompany() ) {
@@ -95,7 +97,7 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 		} else {
 			$current_company = $clf->getByID( $current_user->getCompany() )->getCurrent();
 		}
-
+		
 		//Check to make sure the logged in user's information is all up to date.
 		//Make sure they also have permissions to edit information, otherwise don't redirect them.
 		if ( $current_user->isInformationComplete() == FALSE
@@ -276,13 +278,13 @@ if (isset($config_vars)) {
 	View::share('config_vars', $config_vars);
 }
 
- // Calendar language
- $language = TTi18n::getLanguage();
- View::share('CALENDAR_LANG', !empty($language) ? $language : 'en');
+// Calendar language
+$language = TTi18n::getLanguage();
+View::share('CALENDAR_LANG', !empty($language) ? $language : 'en');
 
 if ( isset($current_user) )  {
-	View::share('current_user', $currentUser);
-    View::share('current_user_prefs', $currentUser->preferences);
+	View::share('current_user', $current_user);
+    View::share('current_user_prefs', $current_user_prefs);
 
 	if ( !isset($skip_message_check) ) {
 		$profiler->startTimer( 'Interface.inc - Check for UNREAD messages...');
@@ -297,9 +299,11 @@ if ( isset($current_user) )  {
 		Debug::text('UnRead Messages: '. $unread_messages, __FILE__, __LINE__, __METHOD__, 10);
 		View::share('unread_messages', $unread_messages);
 		
-		if ($request->cookie('newMailPopUp')) {
+
+		if (isset($_COOKIE['newMailPopUp'])) {
 			View::share('newMailPopUp', $request->cookie('newMailPopUp'));
 		}
+
 		unset($mclf);
 		$profiler->stopTimer( 'Interface.inc - Check for UNREAD messages...');
 

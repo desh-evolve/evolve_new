@@ -15,11 +15,11 @@ class TTi18n {
 
 	static public function getLocaleHandler() {
 		if ( self::$locale_handler === NULL ) {
-			require_once('I18Nv2.php');
+			//require_once('I18Nv2.php');
 
             // If first param is not NULL, (eg 'en_US') then I18n throws php notices on debian/ubuntu.
 			//Set second param (paranoid) to TRUE so it doesn't break FPDF/TCPDF
-			self::$locale_handler = &I18Nv2::createLocale( NULL, TRUE );
+			//self::$locale_handler = &I18Nv2::createLocale( NULL, TRUE );
 		}
 
 		return self::$locale_handler;
@@ -164,7 +164,8 @@ class TTi18n {
 			//Add caching here if we find this loop is too slow.
 			$valid_locale = 'en_US';
 			foreach( $locale as $tmp_locale) {
-				$windows_locale = self::getLocaleHandler()->setLocale( $tmp_locale, 'LC_ALL');
+				//$windows_locale = self::getLocaleHandler()->setLocale( $tmp_locale, 'LC_ALL');
+				$windows_locale = true;
 				if ( $windows_locale !== FALSE ) {
 					Debug::Text('Found valid windows locale: '. $windows_locale .' Linux locale: '. $tmp_locale,  __FILE__, __LINE__, __METHOD__,10);
 					$valid_locale = $tmp_locale;
@@ -292,9 +293,9 @@ class TTi18n {
 			Debug::Text('Setting currency/numeric Locale to: '. $locale, __FILE__, __LINE__, __METHOD__,10);
 			//if ( self::getLocaleHandler()->setLocale( $locale, $category ) != $locale ) {
 			//Setting the locale in Windows can cause the locale names to not match at all, so check for FALSE
-			if ( self::getLocaleHandler()->setLocale( $locale, $category ) == FALSE ) {
-				Debug::Text('Failed setting currency/numeric locale: '. $locale, __FILE__, __LINE__, __METHOD__,10);
-			}
+			// if ( self::getLocaleHandler()->setLocale( $locale, $category ) == FALSE ) {
+			// 	Debug::Text('Failed setting currency/numeric locale: '. $locale, __FILE__, __LINE__, __METHOD__,10);
+			// }
 		}
 
 		if ( $locale != self::getLocale() AND in_array( $category, array( LC_ALL, LC_MESSAGES ) ) ) {
@@ -634,24 +635,24 @@ class TTi18n {
 				$decimal_places = $max_decimals;
 			}
 
-			if ( isset(self::getLocaleHandler()->numberFormats[I18Nv2_NUMBER_FLOAT]) ) {
-				$custom_format = self::getLocaleHandler()->numberFormats[I18Nv2_NUMBER_FLOAT];
-			} else {
-				$custom_format = array(
-									   'float' => array(
-														0 => 2,
-														1 => '.',
-														2 => ',',
-											        )
-									   );
-			}
+			// if ( isset(self::getLocaleHandler()->numberFormats[I18Nv2_NUMBER_FLOAT]) ) {
+			// 	$custom_format = self::getLocaleHandler()->numberFormats[I18Nv2_NUMBER_FLOAT];
+			// } else {
+			// 	$custom_format = array(
+			// 						   'float' => array(
+			// 											0 => 2,
+			// 											1 => '.',
+			// 											2 => ',',
+			// 								        )
+			// 						   );
+			// }
 
 			$custom_format[0] = $decimal_places;
-			self::getLocaleHandler()->numberFormats['long_float'] = $custom_format;
+			//self::getLocaleHandler()->numberFormats['long_float'] = $custom_format;
 
-			return self::getLocaleHandler()->formatNumber( $number, 'long_float' );
+			//return self::getLocaleHandler()->formatNumber( $number, 'long_float' );
 		} else {
-			return self::getLocaleHandler()->formatNumber( $number );
+			//return self::getLocaleHandler()->formatNumber( $number );
 		}
 	}
 
@@ -677,7 +678,7 @@ class TTi18n {
 			}
 		}
 
-		return $currency_code_left_str . self::getLocaleHandler()->formatCurrency( $amount, I18Nv2_CURRENCY_LOCAL ) . $currency_code_right_str;
+		//return $currency_code_left_str . self::getLocaleHandler()->formatCurrency( $amount, I18Nv2_CURRENCY_LOCAL ) . $currency_code_right_str;
 		//return $currency_code . self::getLocaleHandler()->formatCurrency( $amount, I18Nv2_CURRENCY_INTERNATIONAL );
 	}
 

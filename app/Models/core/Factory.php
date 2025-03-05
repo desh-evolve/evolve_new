@@ -1104,10 +1104,10 @@ class Factory {
 				}				
 				
 			}
-
+			
 			if (isset($sql_chunks)) {
 				$sql = implode(',', $sql_chunks);
-				return ' order by ' . DB::raw($sql);
+				return ' order by ' . $sql;
 			}
 		}
 

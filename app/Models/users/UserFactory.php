@@ -2,18 +2,42 @@
 
 namespace App\Models\Users;
 
+use App\Models\Accrual\AccrualListFactory;
+use App\Models\Company\BranchListFactory;
+use App\Models\Company\CompanyFactory;
+use App\Models\Company\CompanyGenericMapListFactory;
 use App\Models\Company\CompanyGenericTagMapFactory;
+use App\Models\Company\CompanyGenericTagMapListFactory;
 use App\Models\Company\CompanyListFactory;
+use App\Models\Core\CurrencyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\Permission;
+use App\Models\Core\PermissionControlListFactory;
+use App\Models\Core\PermissionFactory;
+use App\Models\Core\PermissionUserFactory;
+use App\Models\Core\PermissionUserListFactory;
+use App\Models\Core\StationExcludeUserFactory;
+use App\Models\Core\StationIncludeUserFactory;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLDAP;
 use App\Models\Core\TTLog;
+use App\Models\Core\TTMail;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyControlListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Hierarchy\HierarchyUserFactory;
+use App\Models\Hierarchy\HierarchyUserListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleUserFactory;
+use App\Models\PayPeriod\PayPeriodScheduleUserListFactory;
+use App\Models\Policy\PolicyGroupListFactory;
+use App\Models\Policy\PolicyGroupUserFactory;
+use App\Models\Policy\PolicyGroupUserListFactory;
 use DateTime;
 
 class UserFactory extends Factory {
@@ -1330,7 +1354,7 @@ class UserFactory extends Factory {
 		if ( is_object($this->user_preference_obj) ) {
 			return $this->user_preference_obj;
 		} else {
-			$uplf = TTnew( 'UserPreferenceListFactory' );
+			$uplf = new UserPreferenceListFactory();
 			$this->user_preference_obj = $uplf->getByUserId( $this->getId() )->getCurrent();
 
 			return $this->user_preference_obj;
@@ -1358,7 +1382,7 @@ class UserFactory extends Factory {
 			return $this->title_obj;
 		} else {
 
-			$utlf = TTnew( 'UserTitleListFactory' );
+			$utlf = new UserTitleListFactory();
 			$utlf->getById( $this->getTitle() );
 
 			if ( $utlf->getRecordCount() == 1 ) {
@@ -1375,7 +1399,7 @@ class UserFactory extends Factory {
 		if ( is_object($this->currency_obj) ) {
 			return $this->currency_obj;
 		} else {
-			$clf = TTnew( 'CurrencyListFactory' );
+			$clf = new CurrencyListFactory();
 
 			$clf->getById( $this->getCurrency() );
 			if ( $clf->getRecordCount() == 1 ) {
@@ -1399,7 +1423,7 @@ class UserFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -1487,7 +1511,7 @@ class UserFactory extends Factory {
 	function setGroup($id) {
 		$id = (int)trim($id);
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		if (	$id == 0
 				OR
 				$this->Validator->isResultSetWithRows(	'group',
@@ -1514,7 +1538,7 @@ class UserFactory extends Factory {
 		if ( isset($this->tmp_data['permission_control_id']) ) {
 			return $this->tmp_data['permission_control_id'];
 		} elseif ( $this->getCompany() > 0 AND $this->getID() > 0 ) {
-			$pclfb = TTnew( 'PermissionControlListFactory' );
+			$pclfb = new PermissionControlListFactory();
 			$pclfb->getByCompanyIdAndUserId( $this->getCompany(), $this->getID() );
 			if ( $pclfb->getRecordCount() > 0 ) {
 				return $pclfb->getCurrent()->getId();
@@ -1526,7 +1550,7 @@ class UserFactory extends Factory {
 	function setPermissionControl($id) {
 		$id = (int)trim($id);
 
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 
 		//Get currently logged in users permission level, so we can ensure they don't assign another user to a higher level.
 		global $current_user;
@@ -1574,7 +1598,7 @@ class UserFactory extends Factory {
 		if ( isset($this->tmp_data['pay_period_schedule_id']) ) {
 			return $this->tmp_data['pay_period_schedule_id'];
 		} elseif ( $this->getCompany() > 0 AND $this->getID() > 0 ) {
-			$ppslfb = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslfb = new PayPeriodScheduleListFactory();
 			$ppslfb->getByUserId( $this->getID() );
 			if ( $ppslfb->getRecordCount() > 0 ) {
 				return $ppslfb->getCurrent()->getId();
@@ -1586,7 +1610,7 @@ class UserFactory extends Factory {
 	function setPayPeriodSchedule($id) {
 		$id = (int)trim($id);
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule_id',
@@ -1607,7 +1631,7 @@ class UserFactory extends Factory {
 		if ( isset($this->tmp_data['policy_group_id']) ) {
 			return $this->tmp_data['policy_group_id'];
 		} elseif ( $this->getCompany() > 0 AND $this->getID() > 0 ) {
-			$pglf = TTnew( 'PolicyGroupListFactory' );
+			$pglf = new PolicyGroupListFactory();
 			$pglf->getByUserIds( $this->getID());
 			if ( $pglf->getRecordCount() > 0 ) {
 				return $pglf->getCurrent()->getId();
@@ -1619,7 +1643,7 @@ class UserFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = (int)trim($id);
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		if (	$id != ''
 				AND
@@ -1641,7 +1665,7 @@ class UserFactory extends Factory {
 
 	//Display each hierarchy that the employee is assigned too.
 	function getHierarchyControlDisplay() {
-		$hclf = TTnew( 'HierarchyControlListFactory' );
+		$hclf = new HierarchyControlListFactory();
 		$hclf->getObjectTypeAppendedListByCompanyIDAndUserID( $this->getCompany(), $this->getID() );
 		$data = $hclf->getArrayByListFactory( $hclf, FALSE, FALSE, TRUE );
 
@@ -1665,7 +1689,7 @@ class UserFactory extends Factory {
 		if ( isset($this->tmp_data['hierarchy_control']) ) {
 			return $this->tmp_data['hierarchy_control'];
 		} elseif ( $this->getCompany() > 0 AND $this->getID() > 0 ) {
-			$hclf = TTnew( 'HierarchyControlListFactory' );
+			$hclf = new HierarchyControlListFactory();
 			$hclf->getObjectTypeAppendedListByCompanyIDAndUserID( $this->getCompany(), $this->getID() );
 			return $hclf->getArrayByListFactory( $hclf, FALSE, TRUE, FALSE );
 		}
@@ -1679,7 +1703,7 @@ class UserFactory extends Factory {
 
 		//array passed in is hierarchy_object_type_id => hierarchy_control_id
 		if ( is_array($data) ) {
-			$hclf = TTnew( 'HierarchyControlListFactory' );
+			$hclf = new HierarchyControlListFactory();
 			//Debug::Arr($data,'Hierarchy Control Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 			foreach( $data as $hierarchy_object_type_id => $hierarchy_control_id ) {
@@ -1881,7 +1905,7 @@ class UserFactory extends Factory {
 				}
 
 				if ( $this->getId() > 0 ) {
-					$uilf = TTnew( 'UserIdentificationListFactory' );
+					$uilf = new UserIdentificationListFactory();
 					$uilf->getByUserIdAndTypeIdAndValue( $this->getId(), 5, $this->encryptPassword( $password ) );
 					if ( $uilf->getRecordCount() > 0 ) {
 						$update_password = FALSE;
@@ -2047,7 +2071,7 @@ class UserFactory extends Factory {
 	function checkIButton($id) {
 		$id = trim($id);
 
-		$uilf = TTnew( 'UserIdentificationListFactory' );
+		$uilf = new UserIdentificationListFactory();
 		$uilf->getByUserIdAndTypeIdAndValue( $this->getId(), 10, $id );
 		if ( $uilf->getRecordCount() == 1 ) {
 			return TRUE;
@@ -2715,7 +2739,7 @@ class UserFactory extends Factory {
 	function checkRFID($id) {
 		$id = trim($id);
 
-		$uilf = TTnew( 'UserIdentificationListFactory' );
+		$uilf = new UserIdentificationListFactory();
 		$uilf->getByUserIdAndTypeIdAndValue( $this->getId(), 40, $id );
 		if ( $uilf->getRecordCount() == 1 ) {
 			return TRUE;
@@ -2791,7 +2815,7 @@ class UserFactory extends Factory {
 	function setTitle($id) {
 		$id = (int)trim($id);
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		if (
 				$id == 0
 				OR
@@ -2846,7 +2870,7 @@ class UserFactory extends Factory {
 	function setDefaultBranch($id) {
 		$id = (int)trim($id);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		if (
 				$id == 0
 				OR
@@ -2873,7 +2897,7 @@ class UserFactory extends Factory {
 	function setDefaultDepartment($id) {
 		$id = (int)trim($id);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		if (
 				$id == 0
 				OR
@@ -3510,7 +3534,7 @@ class UserFactory extends Factory {
 	function setCountry($country) {
 		$country = trim($country);
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		if ( $this->Validator->inArrayKey(		'country',
 												$country,
@@ -3537,7 +3561,7 @@ class UserFactory extends Factory {
 
 		//Debug::Text('Country: '. $this->getCountry() .' Province: '. $province, __FILE__, __LINE__, __METHOD__,10);
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		$options_arr = $cf->getOptions('province');
 		if ( isset($options_arr[$this->getCountry()]) ) {
@@ -4146,7 +4170,7 @@ class UserFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Currency ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$culf = TTnew( 'CurrencyListFactory' );
+		$culf = new CurrencyListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'currency_id',
@@ -4744,7 +4768,7 @@ class UserFactory extends Factory {
 		if ( $this->getDeleted() == FALSE AND $this->getPermissionControl() !== FALSE ) {
 			Debug::text('Permission Group is set...', __FILE__, __LINE__, __METHOD__, 10);
 
-			$pclf = TTnew( 'PermissionControlListFactory' );
+			$pclf = new PermissionControlListFactory();
 			$pclf->getByCompanyIdAndUserID( $this->getCompany(), $this->getId() );
 			if ( $pclf->getRecordCount() > 0 ) {
 				Debug::text('Already assigned to a Permission Group...', __FILE__, __LINE__, __METHOD__, 10);
@@ -4757,7 +4781,7 @@ class UserFactory extends Factory {
 					Debug::text('Permission Group has changed...', __FILE__, __LINE__, __METHOD__, 10);
 
 					//Remove user from current schedule.
-					$pulf = TTnew( 'PermissionUserListFactory' );
+					$pulf = new PermissionUserListFactory();
 					$pulf->getByPermissionControlIdAndUserID( $pc_obj->getId(), $this->getId() );
 					Debug::text('Record Count: '. $pulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 					if ( $pulf->getRecordCount() > 0 ) {
@@ -4778,7 +4802,7 @@ class UserFactory extends Factory {
 				Debug::text('Adding user to Permission Group...', __FILE__, __LINE__, __METHOD__, 10);
 
 				//Add to new permission group
-				$puf = TTnew( 'PermissionUserFactory' );
+				$puf = new PermissionUserFactory();
 				$puf->setPermissionControl( $this->getPermissionControl() );
 				$puf->setUser( $this->getID() );
 
@@ -4786,7 +4810,7 @@ class UserFactory extends Factory {
 					$puf->Save();
 
 					//Clear permission class for this employee.
-					$pf = TTnew( 'PermissionFactory' );
+					$pf = new PermissionFactory();
 					$pf->clearCache( $this->getID(), $this->getCompany() );
 				}
 			}
@@ -4798,7 +4822,7 @@ class UserFactory extends Factory {
 
 			$add_pay_period_schedule = FALSE;
 
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 			$ppslf->getByUserId( $this->getId() );
 			if ( $ppslf->getRecordCount() > 0 ) {
 				$pps_obj = $ppslf->getCurrent();
@@ -4810,7 +4834,7 @@ class UserFactory extends Factory {
 					Debug::text('Changing Pay Period Schedule...', __FILE__, __LINE__, __METHOD__, 10);
 
 					//Remove user from current schedule.
-					$ppsulf = TTnew( 'PayPeriodScheduleUserListFactory' );
+					$ppsulf = new PayPeriodScheduleUserListFactory();
 					$ppsulf->getByPayPeriodScheduleIdAndUserID( $pps_obj->getId(), $this->getId() );
 					Debug::text('Record Count: '. $ppsulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 					if ( $ppsulf->getRecordCount() > 0 ) {
@@ -4828,7 +4852,7 @@ class UserFactory extends Factory {
 
 			if ( $this->getPayPeriodSchedule() !== FALSE AND $add_pay_period_schedule == TRUE ) {
 				//Add to new pay period schedule
-				$ppsuf = TTnew( 'PayPeriodScheduleUserFactory' );
+				$ppsuf = new PayPeriodScheduleUserFactory();
 				$ppsuf->setPayPeriodSchedule( $this->getPayPeriodSchedule() );
 				$ppsuf->setUser( $this->getID() );
 
@@ -4842,7 +4866,7 @@ class UserFactory extends Factory {
 		if ( $this->getDeleted() == FALSE AND $this->getPolicyGroup() !== FALSE ) {
 			Debug::text('Policy Group is set...', __FILE__, __LINE__, __METHOD__, 10);
 
-			$pglf = TTnew( 'PolicyGroupListFactory' );
+			$pglf = new PolicyGroupListFactory();
 			$pglf->getByUserIds( $this->getId() );
 			if ( $pglf->getRecordCount() > 0 ) {
 				$pg_obj = $pglf->getCurrent();
@@ -4854,7 +4878,7 @@ class UserFactory extends Factory {
 					Debug::text('Changing Policy Group...', __FILE__, __LINE__, __METHOD__, 10);
 
 					//Remove user from current schedule.
-					$pgulf = TTnew( 'PolicyGroupUserListFactory' );
+					$pgulf = new PolicyGroupUserListFactory();
 					$pgulf->getByPolicyGroupIdAndUserId( $pg_obj->getId(), $this->getId() );
 					Debug::text('Record Count: '. $pgulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 					if ( $pgulf->getRecordCount() > 0 ) {
@@ -4872,7 +4896,7 @@ class UserFactory extends Factory {
 
 			if ( $this->getPolicyGroup() !== FALSE AND $add_policy_group == TRUE ) {
 				//Add to new policy group
-				$pguf = TTnew( 'PolicyGroupUserFactory' );
+				$pguf = new PolicyGroupUserFactory();
 				$pguf->setPolicyGroup( $this->getPolicyGroup() );
 				$pguf->setUser( $this->getID() );
 
@@ -4890,7 +4914,7 @@ class UserFactory extends Factory {
 			//Debug::Arr($hierarchy_control_data, 'Setting hierarchy control data...', __FILE__, __LINE__, __METHOD__, 10);
 
 			if ( is_array( $hierarchy_control_data ) ) {
-				$hclf = TTnew( 'HierarchyControlListFactory' );
+				$hclf = new HierarchyControlListFactory();
 				$hclf->getObjectTypeAppendedListByCompanyIDAndUserID( $this->getCompany(), $this->getID() );
 				$existing_hierarchy_control_data = array_unique( array_values( (array)$hclf->getArrayByListFactory( $hclf, FALSE, TRUE, FALSE ) ) );
 				//Debug::Arr($existing_hierarchy_control_data, 'Existing hierarchy control data...', __FILE__, __LINE__, __METHOD__, 10);
@@ -4902,7 +4926,7 @@ class UserFactory extends Factory {
 				if ( is_array($hierarchy_control_delete_diff) ) {
 					foreach( $hierarchy_control_delete_diff as $hierarchy_control_id ) {
 						if ( $hierarchy_control_id != 0 ) {
-							$hulf = TTnew( 'HierarchyUserListFactory' );
+							$hulf = new HierarchyUserListFactory();
 							$hulf->getByHierarchyControlAndUserID( $hierarchy_control_id, $this->getID() );
 							if ( $hulf->getRecordCount() > 0 ) {
 								Debug::text('Deleting user from hierarchy control ID: '. $hierarchy_control_id, __FILE__, __LINE__, __METHOD__, 10);
@@ -4920,7 +4944,7 @@ class UserFactory extends Factory {
 					foreach( $hierarchy_control_add_diff as $hierarchy_control_id ) {
 						Debug::text('Hierarchy data changed...', __FILE__, __LINE__, __METHOD__, 10);
 						if ( $hierarchy_control_id != 0 ) {
-							$huf = TTnew( 'HierarchyUserFactory' );
+							$huf = new HierarchyUserFactory();
 							$huf->setHierarchyControl( $hierarchy_control_id );
 							$huf->setUser( $this->getId() );
 							if ( $huf->isValid() ) {
@@ -4937,7 +4961,7 @@ class UserFactory extends Factory {
 		if ( $this->getDeleted() == FALSE AND $this->getPasswordUpdatedDate() >= (time()-10) ) { //If the password was updated in the last 10 seconds.
 			Debug::text('Password changed, saving it for historical purposes... Password: '. $this->getPassword(), __FILE__, __LINE__, __METHOD__, 10);
 
-			$uif = TTnew( 'UserIdentificationFactory' );
+			$uif = new UserIdentificationFactory();
 			$uif->setUser( $this->getID() );
 			$uif->setType( 5 ); //Password History
 			$uif->setNumber( 0 );
@@ -4961,7 +4985,7 @@ class UserFactory extends Factory {
 		}
 
 		if ( isset($this->is_new) AND $this->is_new == TRUE ) {
-			$udlf = TTnew( 'UserDefaultListFactory' );
+			$udlf = new UserDefaultListFactory();
 			$udlf->getByCompanyId( $this->getCompany() );
 			if ( $udlf->getRecordCount() > 0 ) {
 				Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
@@ -4972,7 +4996,7 @@ class UserFactory extends Factory {
 				$company_deduction_ids = $udf_obj->getCompanyDeduction();
 				if ( is_array($company_deduction_ids) AND count($company_deduction_ids) > 0 ) {
 					foreach( $company_deduction_ids as $company_deduction_id ) {
-						$udf = TTnew( 'UserDeductionFactory' );
+						$udf = new UserDeductionFactory();
 						$udf->setUser( $this->getId() );
 						$udf->setCompanyDeduction( $company_deduction_id );
 						if ( $udf->isValid() ) {
@@ -4983,7 +5007,7 @@ class UserFactory extends Factory {
 				unset($company_deduction_ids, $company_deduction_id, $udf);
 
 				Debug::text('Inserting Default Prefs...', __FILE__, __LINE__, __METHOD__, 10);
-				$upf = TTnew( 'UserPreferenceFactory' );
+				$upf = new UserPreferenceFactory();
 				$upf->setUser( $this->getId() );
 				$upf->setLanguage( $udf_obj->getLanguage() );
 				$upf->setDateFormat( $udf_obj->getDateFormat() );
@@ -5010,13 +5034,13 @@ class UserFactory extends Factory {
 			//Delete any accruals for them as well.
 
 			//Pay Period Schedule
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 			$ppslf->getByUserId( $this->getId() );
 			if ( $ppslf->getRecordCount() > 0 ) {
 				$pps_obj = $ppslf->getCurrent();
 
 				//Remove user from current schedule.
-				$ppsulf = TTnew( 'PayPeriodScheduleUserListFactory' );
+				$ppsulf = new PayPeriodScheduleUserListFactory();
 				$ppsulf->getByPayPeriodScheduleIdAndUserID( $pps_obj->getId(), $this->getId() );
 				Debug::text('Record Count: '. $ppsulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 				if ( $ppsulf->getRecordCount() > 0 ) {
@@ -5028,12 +5052,12 @@ class UserFactory extends Factory {
 			}
 
 			//Policy Group
-			$pglf = TTnew( 'PolicyGroupListFactory' );
+			$pglf = new PolicyGroupListFactory();
 			$pglf->getByUserIds( $this->getId() );
 			if ( $pglf->getRecordCount() > 0 ) {
 				$pg_obj = $pglf->getCurrent();
 
-				$pgulf = TTnew( 'PolicyGroupUserListFactory' );
+				$pgulf = new PolicyGroupUserListFactory();
 				$pgulf->getByPolicyGroupIdAndUserId( $pg_obj->getId(), $this->getId() );
 				Debug::text('Record Count: '. $pgulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 				if ( $pgulf->getRecordCount() > 0 ) {
@@ -5045,11 +5069,11 @@ class UserFactory extends Factory {
 			}
 
 			//Hierarchy
-			$hclf = TTnew( 'HierarchyControlListFactory' );
+			$hclf = new HierarchyControlListFactory();
 			$hclf->getByCompanyId( $this->getCompany() );
 			if ( $hclf->getRecordCount() > 0 ) {
 				foreach( $hclf as $hc_obj ) {
-					$hf = TTnew( 'HierarchyListFactory' );
+					$hf = new HierarchyListFactory();
 					$hf->setUser( $this->getID() );
 					$hf->setHierarchyControl( $hc_obj->getId() );
 					$hf->Delete();
@@ -5059,7 +5083,7 @@ class UserFactory extends Factory {
 			}
 
 			//Accrual balances
-			$alf = TTnew( 'AccrualListFactory' );
+			$alf = new AccrualListFactory();
 			$alf->getByUserIdAndCompanyId( $this->getId(), $this->getCompany() );
 			if ( $alf->getRecordCount()> 0 ) {
 				foreach( $alf as $a_obj ) {
@@ -5071,8 +5095,8 @@ class UserFactory extends Factory {
 			}
 
 			//Station employee critiera
-			$siuf = TTnew( 'StationIncludeUserFactory' );
-			$seuf = TTnew( 'StationExcludeUserFactory' );
+			$siuf = new StationIncludeUserFactory();
+			$seuf = new StationExcludeUserFactory();
 
 			$query = 'delete from '. $siuf->getTable() .' where user_id = '. (int)$this->getId();
 			$this->db->Execute($query);
@@ -5081,7 +5105,7 @@ class UserFactory extends Factory {
 			$this->db->Execute($query);
 
 			//Job employee criteria
-			$cgmlf = TTnew( 'CompanyGenericMapListFactory' );
+			$cgmlf = new CompanyGenericMapListFactory();
 			$cgmlf->getByCompanyIDAndObjectTypeAndMapID( $this->getCompany(), array(1040,1050), $this->getID() );
 			if ( $cgmlf->getRecordCount() > 0 ) {
 				foreach( $cgmlf as $cgm_obj ) {

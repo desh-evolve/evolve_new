@@ -18,6 +18,7 @@ use App\Models\Core\Option;
 use App\Models\Core\Pager;
 use App\Models\Core\TTi18n;
 use App\Models\Core\URLBuilder;
+use Illuminate\Support\Facades\View;
 
 class CurrencyList extends Controller
 {
@@ -31,13 +32,12 @@ class CurrencyList extends Controller
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
     
-        //print_r($basePath . '/app/Helpers/global.inc.php');exit;
-        global $permission, $smarty, $current_company, $current_user_prefs;
-        
-        
-        $this->permission = $permission;
-        $this->company = $current_company;
-        $this->userPrefs = $current_user_prefs;
+       
+        //$permission;
+        //$current_company;
+        //$current_user_prefs;
+        $this->userPrefs = View::shared('current_user_prefs');
+        $this->company = View::shared('current_company');
     }
 
     public function index()
@@ -70,7 +70,7 @@ class CurrencyList extends Controller
 
     private function handleAction($action, $ids, $sort_array, $page)
     {
-        global $current_company, $smarty, $current_user_prefs;
+        $current_company = $this->company;
         
         switch ($action) {
             case 'update_rates':
@@ -116,12 +116,13 @@ class CurrencyList extends Controller
 
     private function showCurrencyList($sort_array, $page)
     {
-        global $current_company, $current_user_prefs, $smarty;
-        
+        $current_user_prefs = $this->userPrefs;
+        $current_company = $this->company;
+
         BreadCrumb::setCrumb('Currency List');
         $clf = new CurrencyListFactory();
 
-        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, null, $sort_array);
+        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
         $pager = new Pager($clf);
         $iso_code_options = $clf->getISOCodesArray();
         

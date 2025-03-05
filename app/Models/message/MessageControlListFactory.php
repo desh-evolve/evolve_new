@@ -71,27 +71,27 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 			$uf = new UserFactory();
 
 			$ph = array(
-						'user_id' => $user_id,
-						'company_id' => $company_id,
+						':user_id' => $user_id,
+						':company_id' => $company_id,
 						);
 
 			//Need to include all threads that user has posted to.
 			$query = '
-						SELECT count(*)
-						FROM '. $mrf->getTable() .' as a
-							LEFT JOIN '. $msf->getTable() .' 	as b ON a.message_sender_id = b.id
-							LEFT JOIN '. $uf->getTable() .' 	as bb ON b.user_id = bb.id
-							LEFT JOIN '. $this->getTable() .' 	as c ON b.message_control_id = c.id
-							LEFT JOIN '. $uf->getTable() .' 	as d ON c.object_type_id = 5 AND c.object_id = d.id
-						WHERE
-								a.user_id = ?
-								AND bb.company_id = ?
-								AND c.object_type_id in (5,50,90)
-								AND a.status_id = 10
-								AND ( a.deleted = 0 AND c.deleted = 0 )
-						';
+				SELECT count(*)
+				FROM '. $mrf->getTable() .' as a
+					LEFT JOIN '. $msf->getTable() .' 	as b ON a.message_sender_id = b.id
+					LEFT JOIN '. $uf->getTable() .' 	as bb ON b.user_id = bb.id
+					LEFT JOIN '. $this->getTable() .' 	as c ON b.message_control_id = c.id
+					LEFT JOIN '. $uf->getTable() .' 	as d ON c.object_type_id = 5 AND c.object_id = d.id
+				WHERE
+						a.user_id = :user_id
+						AND bb.company_id = :company_id
+						AND c.object_type_id in (5,50,90)
+						AND a.status_id = 10
+						AND ( a.deleted = 0 AND c.deleted = 0 )
+			';
 
-			$unread_messages = (int)$this->db->GetOne($query, $ph);
+			$unread_messages = (int)DB::select($query, $ph);
 			$this->saveCache($unread_messages,$user_id);
 		}
 
