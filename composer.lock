@@ -6118,7 +6118,7 @@
                 "exception",
                 "handling",
                 "library",
-                "throwable",
+                "catch (Throwable $e) ",
                 "whoops"
             ],
             "support": {

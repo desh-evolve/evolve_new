@@ -7,11 +7,12 @@ use App\Models\Users\UserIdentificationListFactory;
 use App\Models\Users\UserListFactory;
 
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
-
+use Throwable;
 
 class Authentication {
 	protected $name = 'SessionID';
@@ -129,7 +130,7 @@ class Authentication {
 
 		try {
 			DB::update($query, $ph);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -146,11 +147,13 @@ class Authentication {
 		if ( !empty($user_id) ) {
 
 			$ulf = new UserListFactory();
-
 			$ulf->getByID($user_id);
 
-			foreach ($ulf as $user) {
-				$this->obj = $user;
+			
+			$ulf->data = (array)$ulf->rs[0];
+			
+			foreach ($ulf->data as $user) {
+				$this->obj = $ulf;
 
 				return TRUE;
 			}
@@ -227,10 +230,10 @@ class Authentication {
 		$ulf = new UserListFactory();
 
 		$users = $ulf->getByUserNameAndStatus(strtolower(trim($user_name)), 10 ); //Active
-		$this->data = $users->rs;
+		
 		if($users->rs){
 			if ( $ulf->checkPassword($password) ) {
-				$this->setObject( $user->getID() );
+				$this->setObject( $ulf->getID() );
 				return TRUE;
 			} else {
 				return FALSE;
@@ -373,17 +376,15 @@ class Authentication {
 	}
 
 	private function UpdateLastLoginDate() {
-		$ph = array(
-					':last_login_date' => TTDate::getTime(),
-					':user_id' => (int)$this->getObject()->getID(),
-					);
-
-		$query = 'update users set last_login_date = :last_login_date
-					where id = :user_id';
-
+		$query = 'UPDATE users SET last_login_date = ? WHERE id = ?';
+		$ph = [
+			TTDate::getTime(),
+			(int) $this->getObject()->getID(),
+		];
+		
 		try {
 			DB::update($query, $ph);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -397,12 +398,11 @@ class Authentication {
 					);
 
 		$query = 'update authentication set updated_date = :updated_date
-					where session_id = :session_id
-					';
+					where session_id = :session_id';
 
 		try {
-			DB::select($query, $ph);
-		} catch (Exception $e) {
+			DB::update($query, $ph);
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -422,8 +422,8 @@ class Authentication {
 							OR ('. TTDate::getTime() .' - updated_date) > 86400';
 
 		try {
-			DB::select($query, $ph);
-		} catch (Exception $e) {
+			DB::delete($query, $ph);
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -431,25 +431,27 @@ class Authentication {
 	}
 
 	private function Write() {
+		
+
 		$ph = array(
-					':session_id' => $this->getSessionID(),
-					':user_id' => $this->getObject()->getID(),
-					':ip_address' => $this->getIPAddress(),
-					':created_date' => $this->getCreatedDate(),
-					':updated_date' => $this->getUpdatedDate()
-					);
+			':session_id' => $this->getSessionID(),
+			':user_id' => $this->getObject()->getID(),
+			':ip_address' => $this->getIPAddress(),
+			':created_date' => $this->getCreatedDate(),
+			':updated_date' => $this->getUpdatedDate()
+		);
 
 		$query = 'insert into authentication (session_id,user_id,ip_address,created_date,updated_date)
-						VALUES(
-								:session_id,
-								:user_id,
-								:ip_address,
-								:created_date,
-								:updated_date
-							)';
+					VALUES(
+							:session_id,
+							:user_id,
+							:ip_address,
+							:created_date,
+							:updated_date
+						)';
 		try {
 			DB::insert($query, $ph);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -506,6 +508,7 @@ class Authentication {
 		$key = "login_attempts_{$ipAddress}";
 		
 		/*
+		// check here => remove this after developing login
 		// Prevent brute force attacks
 		if (RateLimiter::tooManyAttempts($key, 20)) {
 			Log::warning("Excessive failed login attempts from $ipAddress. Locking for 15 minutes.");

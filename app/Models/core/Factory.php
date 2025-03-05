@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Throwable;
 
 class Factory {
 	public $data = array();
@@ -25,8 +26,6 @@ class Factory {
     protected $Validator;
 
 	function __construct() {
-		global $db, $cache;
-
 		$this->db = DB::connection();
         $this->cache = Cache::store();
 		$this->Validator = new Validator();
@@ -1182,7 +1181,7 @@ class Factory {
 				$save_error_handlers = $this->db->IgnoreErrors(); //Prevent a cache write error from causing a transaction rollback.
 				try {
 					$rs = $this->db->CacheExecute(604800, $query);
-				} catch (Exception $e) {
+				} catch (Throwable $e) {
 					if ( $e->getCode() == -32000 OR $e->getCode() == -32001 ) { //Cache write error/cache file lock error.
 						//Likely a cache write error occurred, fall back to non-cached query and log this error.
 						Debug::Text('ERROR: Unable to write cache file, likely due to permissions or locking! Code: '. $e->getCode() .' Msg: '. $e->getMessage(), __FILE__, __LINE__, __METHOD__,10);
@@ -1191,7 +1190,7 @@ class Factory {
 					//Execute non-cached query
 					try {
     					$rs = DB::select($query);
-					} catch (Exception $e) {
+					} catch (Throwable $e) {
 						throw new DBError($e);
 					}
 				}
@@ -1200,7 +1199,7 @@ class Factory {
 				//$rs = $this->db->Execute($query);
 				$rs = DB::select($query);
 			}
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -1225,7 +1224,7 @@ class Factory {
 		try {
 			$rs = $this->getEmptyRecordSet( $this->getId() );
 			$this->old_data = $rs->fields; //Store old data in memory for detailed audit log.
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 		if (!$rs) {
@@ -1259,7 +1258,7 @@ class Factory {
 
 		try {
 			$rs = $this->getEmptyRecordSet();
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -1275,20 +1274,23 @@ class Factory {
 		return $query;
 	}
 
-	function StartTransaction() {
-		Debug::text('StartTransaction(): Transaction Count: '. $this->db->transCnt .' Trans Off: '. $this->db->transOff, __FILE__, __LINE__, __METHOD__, 9);
-		return $this->db->StartTrans();
-	}
+	public function startTransaction()
+    {
+        Log::debug('StartTransaction: Starting database transaction.');
+        DB::beginTransaction();
+    }
 
-	function FailTransaction() {
-		Debug::text('FailTransaction(): Transaction Count: '. $this->db->transCnt .' Trans Off: '. $this->db->transOff, __FILE__, __LINE__, __METHOD__, 9);
-		return $this->db->FailTrans();
-	}
+    public function failTransaction()
+    {
+        Log::debug('FailTransaction: Rolling back database transaction.');
+        DB::rollBack();
+    }
 
-	function CommitTransaction() {
-		Debug::text('CommitTransaction(): Transaction Count: '. $this->db->transCnt .' Trans Off: '. $this->db->transOff, __FILE__, __LINE__, __METHOD__, 9);
-		return $this->db->CompleteTrans();
-	}
+    public function commitTransaction()
+    {
+        Log::debug('CommitTransaction: Committing database transaction.');
+        DB::commit();
+    }
 
 	//Call class specific validation function just before saving.
 	function isValid() {
@@ -1301,23 +1303,16 @@ class Factory {
 	}
 
 	function getNextInsertId() {
-		return $this->db->GenID( $this->pk_sequence_name );
+		// Implement your logic to get next insert ID
+        return DB::table($this->getTable())->max('id') + 1;
 	}
 
+	//check here => rewrite save function
 	//Determines to insert or update, and does it.
 	//Have this handle created, createdby, updated, updatedby.
+	/*
 	function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		$this->StartTransaction();
-
-		//Run Pre-Save function
-		//This is called before validate so it can do extra calculations,etc before validation.
-		//Should this AND validate() NOT be called when delete flag is set?
-		if ( method_exists($this,'preSave') ) {
-			Debug::text('Calling preSave()' , __FILE__, __LINE__, __METHOD__,10);
-			if ( $this->preSave() === FALSE ) {
-				throw new GeneralError('preSave() failed.');
-			}
-		}
 
 		//Don't validate when deleting, so we can delete records that may have some invalid options.
 		//However we can still manually call this function to check if we need too.
@@ -1345,6 +1340,7 @@ class Factory {
 			unset($time);
 
 			$insert_id = $this->getID();
+
 			if ( $insert_id == FALSE ) {
 				//Append insert ID to data array.
 				$insert_id = $this->getNextInsertId();
@@ -1355,7 +1351,7 @@ class Factory {
 
 			try {
 				$query = $this->getInsertQuery();
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
 				throw new DBError($e);
 			}
 
@@ -1365,7 +1361,7 @@ class Factory {
 			Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
 
 			//Update
-			$query = $this->getUpdateQuery(); //Don't pass data, too slow
+			$  = $this->getUpdateQuery(); //Don't pass data, too slow
 
 			//Debug::Arr($this->data, 'Save(): Query: ', __FILE__, __LINE__, __METHOD__,10);
 			$retval = TRUE;
@@ -1385,23 +1381,9 @@ class Factory {
 			if ( is_string($query) AND $query != '' ) {
 				try {
 					$this->db->Execute($query);
-				} catch (Exception $e) {
+				} catch (Throwable $e) {
 					//Comment this out to see some errors on MySQL.
 					//throw new DBError($e);
-				}
-			}
-
-			if ( method_exists($this,'addLog') ) {
-				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
-				//tables like PayPeriodSchedule, so addLog() can't get the user information.
-				$this->addLog( $log_action );
-			}
-
-			//Run postSave function.
-			if ( method_exists($this,'postSave') ) {
-				Debug::text('Calling postSave()' , __FILE__, __LINE__, __METHOD__,10);
-				if ( $this->postSave( array_diff_assoc( $this->old_data, $this->data ) ) === FALSE ) {
-					throw new GeneralError('postSave() failed.');
 				}
 			}
 
@@ -1425,6 +1407,90 @@ class Factory {
 
 		return FALSE; //This should return false here?
 	}
+	*/
+
+	function Save($reset_data = TRUE, $force_lookup = FALSE) {
+		DB::beginTransaction();
+
+		try {
+			// Validate the model before saving (if not deleted)
+			if (!$this->getDeleted() && !$this->isValid()) {
+				throw new \Exception('Invalid Data, not saving.');
+			}
+
+			// Get the table name dynamically
+			$table = $this->getTable();
+
+			// Get the data dynamically
+			$data = $this->data;
+
+			// Determine if we're inserting a new record or updating an existing one
+			if ($this->isNew($force_lookup)) {
+
+				//Insert
+				$time = TTDate::getTime();
+
+				if ( $this->getCreatedDate() == '' ) {
+					$this->setCreatedDate($time);
+				}
+				if ( $this->getCreatedBy() == '' ) {
+					$this->setCreatedBy();
+				}
+
+				//Set updated date at the same time, so we can easily select last
+				//updated, or last created records.
+				$this->setUpdatedDate($time);
+				$this->setUpdatedBy();
+
+				unset($time);
+
+				// Perform the insert and get the insert ID
+				$insert_id = DB::table($table)->insertGetId($data);
+				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
+
+				// Set the insert ID in the model
+				$this->setId($insert_id);
+
+				// Return the ID of the newly created record
+				$retval = $insert_id;
+				$log_action = 10; // 'Add'
+			} else {
+				Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
+
+				// Perform the update
+				DB::table($table)
+					->where('id', $this->getId())
+					->update($data);
+
+				// Return true to indicate success
+				$retval = true;
+				$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
+			}
+
+			if ( method_exists($this,'addLog') ) {
+				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
+				//tables like PayPeriodSchedule, so addLog() can't get the user information.
+				$this->addLog( $log_action );
+			}
+
+			// Clear the data if requested
+			if ($reset_data) {
+				$this->clearData();
+			}
+
+			// Commit the transaction
+			DB::commit();
+
+			return $retval;
+		} catch (\Exception $e) {
+			// Roll back the transaction on error
+			DB::rollBack();
+			print_r($e->getMessage());exit;
+			Log::error('Save failed: ' . $e->getMessage());
+			throw new \Exception('Save failed.');
+		}
+
+	}
 
 	function Delete() {
 		Debug::text('Delete: '. $this->getId(), __FILE__, __LINE__, __METHOD__, 9);
@@ -1445,7 +1511,7 @@ class Factory {
 					$this->addLog( 31 );
 				}
 
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
 				throw new DBError($e);
 			}
 
@@ -1483,7 +1549,7 @@ class Factory {
 
 			try {
 				$this->db->Execute($query, $ph);
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
 				throw new DBError($e);
 			}
 

@@ -2,6 +2,7 @@
 
 namespace App\Models\Core;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class TTLDAP {
 	var $data = NULL;
@@ -202,7 +203,7 @@ class TTLDAP {
 							Debug::Text('aLDAP Bind Authentication Mode...', __FILE__, __LINE__, __METHOD__,10);
 							//Attempt to connect with the raw user_name first, if that fails, try with a full BindDN
 							$connection_result = $ldap->Connect( $this->getHost(), $user_name, $password, $this->getBaseDN() );
-						} catch ( exception $e ) {
+						} catch (Throwable $e)  {
 							Debug::Text('bLDAP Bind Authentication Mode...', __FILE__, __LINE__, __METHOD__,10);
 							$connection_result = $ldap->Connect( $this->getHost(), $this->getBindDN( $user_name ), $password, $this->getBaseDN() );
 						}
@@ -212,7 +213,7 @@ class TTLDAP {
 					}
 					Debug::Text('LDAP Connection Result: '. (int)$connection_result, __FILE__, __LINE__, __METHOD__,10);
 				}
-			} catch ( exception $e ) {
+			} catch (Throwable $e)  {
 				Debug::Text('LDAP Connection Failed!: '. $e->getMessage() , __FILE__, __LINE__, __METHOD__,10);
 			}
 
@@ -275,7 +276,7 @@ class TTLDAP {
 					if ( $retval == FALSE ) {
 						Debug::Arr($ldap_data, 'LDAP Data: ', __FILE__, __LINE__, __METHOD__,10);
 					}
-				} catch ( exception $e ) {
+				} catch (Throwable $e)  {
 					Debug::Text('LDAP Filter Failed!: '. $e->getMessage() , __FILE__, __LINE__, __METHOD__,10);
 				}
 			} elseif ( $this->isBindAuthentication() === TRUE AND $connection_result === TRUE ) {

@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use Exception;
+use Throwable;
 
 class BreadCrumb {
 	static $home_name = 'Home';
@@ -39,7 +40,7 @@ class BreadCrumb {
 					LIMIT 1';
 		try {
 			$rs = $db->Execute($query, $ph);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -74,7 +75,7 @@ class BreadCrumb {
 		}
 		try {
 			$db->Execute($query, $ph);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -98,7 +99,7 @@ class BreadCrumb {
 
 		try {
 			$rs = $db->Execute($query, $ph);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 
@@ -137,7 +138,7 @@ class BreadCrumb {
 
 		try {
 			$rs = $db->Execute($query, $ph);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
 

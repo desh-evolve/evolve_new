@@ -47,7 +47,6 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 		if ( $id == '' ) {
 			return FALSE;
 		}
-
 		$this->rs = $this->getCache($id);
 
 		if ($this->rs === FALSE) {
@@ -76,7 +75,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 				$this->saveCache($this->rs, $id);
 			}
 		}
-
+		
 		return $this;
 	}
 

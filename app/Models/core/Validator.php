@@ -10,8 +10,8 @@ class Validator {
 	//Checks a result set for one or more rows.
 	function isResultSetWithRows($label, $rs, $msg = NULL) {
 		//Debug::Arr($rs, 'ResultSet: ', __FILE__, __LINE__, __METHOD__, $this->verbosity);
-
-		if ( is_object($rs) ) {
+		
+		if ( is_array($rs) || is_object($rs) ) {
 			foreach($rs as $result) {
 				return TRUE;
 			}

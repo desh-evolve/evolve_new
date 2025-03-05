@@ -3,76 +3,73 @@
 namespace App\Models\Core;
 
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
-class DBError extends Exception {
-   function __construct($e) {
-      global $db, $skip_db_error;
+class DBError extends Exception
+{
+    public function __construct(Exception $e)
+    {
+        // Rollback any database transaction
+        DB::rollBack();
 
-      if ( isset($skip_db_error_exception) AND $skip_db_error_exception === TRUE ) { //Used by system_check script.
-         return TRUE;
-      }
+        // Log database error
+        Log::error('Database Error: ' . $e->getMessage(), [
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString(),
+        ]);
 
-      $db->FailTrans();
+        // Redirect to a maintenance page
+        exit($this->handleRedirect('DBError'));
+    }
 
-      //print_r($e);
-      //adodb_pr($e);
-
-      //Log database error
-      if ( isset($e->message) ) {
-         Debug::Text($e->message, __FILE__, __LINE__, __METHOD__,10);
-      }
-
-      if ( isset($e->trace) ) {
-         $e = strip_tags( adodb_backtrace($e->trace) );
-         Debug::Arr( $e, 'Exception...', __FILE__, __LINE__, __METHOD__,10);
-      }
-
-      Debug::Arr( Debug::backTrace(), ' BackTrace: ', __FILE__, __LINE__, __METHOD__,10);
-
-      //Dump debug buffer.
-      Debug::Display();
-      Debug::writeToLog();
-      Debug::emailLog();
-
-      Redirect::Page( URLBuilder::getURL( array('exception' => 'DBError'), Environment::getBaseURL().'DownForMaintenance.php') );
-
-      ob_flush();
-      ob_clean();
-
-      exit;
-   }
+    private function handleRedirect(string $errorType)
+    {
+        return Redirect::to(route('maintenance'))->with('exception', $errorType)->send();
+    }
 }
 
-class GeneralError extends Exception {
-   function __construct($message) {
-      global $db;
+class GeneralError extends Exception
+{
+    public function __construct(string $message)
+    {
+        // Rollback any database transaction
+        DB::rollBack();
 
-      //debug_print_backtrace();
-      $db->FailTrans();
+        // Log the error
+        Log::error('General Error: ' . $message, [
+            'file' => $this->getFile(),
+            'line' => $this->getLine(),
+            'trace' => $this->getTraceAsString(),
+        ]);
 
-      echo "======================================================================<br>\n";
-      echo "EXCEPTION!<br>\n";
-      echo "======================================================================<br>\n";
-      echo "<b>Error message: </b>".$message ."<br>\n";
-      echo "<b>Error code: </b>".$this->getCode()."<br>\n";
-      echo "<b>Script Name: </b>".$this->getFile()."<br>\n";
-      echo "<b>Line Number: </b>".$this->getLine()."<br>\n";
-      echo "======================================================================<br>\n";
-      echo "EXCEPTION!<br>\n";
-      echo "======================================================================<br>\n";
+        // Output error message (for debugging in development)
+        if (app()->environment('local')) {
+            die($this->formatExceptionMessage($message));
+        }
 
-      Debug::Arr( Debug::backTrace(), ' BackTrace: ', __FILE__, __LINE__, __METHOD__,10);
+        // Redirect to a maintenance page
+        exit($this->handleRedirect('GeneralError'));
+    }
 
-      //Dump debug buffer.
-      Debug::Display();
-      Debug::writeToLog();
-      Debug::emailLog();
-      ob_flush();
-      ob_clean();
+    private function formatExceptionMessage(string $message): string
+    {
+        return "
+        <div style='border: 1px solid red; padding: 10px; font-family: Arial;'>
+            <h3 style='color: red;'>EXCEPTION!</h3>
+            <p><strong>Error Message:</strong> {$message}</p>
+            <p><strong>Error Code:</strong> {$this->getCode()}</p>
+            <p><strong>File:</strong> {$this->getFile()}</p>
+            <p><strong>Line:</strong> {$this->getLine()}</p>
+        </div>";
+    }
 
-      Redirect::Page( URLBuilder::getURL( array('exception' => 'GeneralError'), Environment::getBaseURL().'DownForMaintenance.php') );
-
-      exit;
-   }
+    private function handleRedirect(string $errorType)
+    {
+        return Redirect::to(route('maintenance'))->with('exception', $errorType)->send();
+    }
 }
+
 ?>

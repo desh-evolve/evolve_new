@@ -5,6 +5,7 @@ namespace App\Models\Core;
 use App\Models\PayPeriod\PayPeriodListFactory;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class TTDate {
 	static protected $time_zone = 'GMT';
@@ -220,7 +221,7 @@ class TTDate {
 			Debug::text('Converting time: '. $epoch .' to TimeZone: '. $timezone .' Offset: '. $new_timezone_offset, __FILE__, __LINE__, __METHOD__, 10);
 
 			return $epoch - ( $old_timezone_offset - $new_timezone_offset );
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			return $epoch;
 		}
 

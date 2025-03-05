@@ -9,6 +9,7 @@ use App\Models\Core\TTDate;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Exception;
+use Throwable;
 
 class CustomDatabaseService
 {
@@ -42,7 +43,7 @@ class CustomDatabaseService
 
             // Return the DB connection (similar to the original)
             return $db;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             // Handle any connection errors
             Debug::Text('Error connecting to the database!', __FILE__, __LINE__, __METHOD__, 1);
             throw new DBError($e);

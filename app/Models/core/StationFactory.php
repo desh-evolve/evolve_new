@@ -8,8 +8,10 @@ use App\Models\Department\DepartmentListFactory;
 use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceFactory;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
-include_once('Net/IPv4.php');
+//include_once('Net/IPv4.php');
 
 class StationFactory extends Factory {
 	protected $table = 'station';
@@ -274,17 +276,12 @@ class StationFactory extends Factory {
 		$id = trim($id);
 
 		$clf = new CompanyListFactory();
-
-		if ( $this->Validator->isResultSetWithRows(	'company',
-													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
-													) ) {
+		$rs = $clf->getByID($id)->rs;
+		if ( $this->Validator->isResultSetWithRows(	'company', $rs, TTi18n::gettext('Company is invalid') ) ) {
 
 			$this->data['company_id'] = $id;
-
 			return TRUE;
 		}
-
 		return FALSE;
 	}
 
@@ -346,12 +343,14 @@ class StationFactory extends Factory {
 
 	function isUniqueStation($station) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'station' => $station,
+					':company_id' => $this->getCompany(),
+					':station' => $station,
 					);
 
-		$query = 'select id from '. $this->table .' where company_id = ? AND station_id = ? AND deleted=0';
-		$id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->table .' where company_id = :company_id AND station_id = :station AND deleted=0';
+
+		$id = DB::selectOne($query, $ph);
+
 		Debug::Arr($id,'Unique Station: '. $station, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {
@@ -361,7 +360,6 @@ class StationFactory extends Factory {
 				return TRUE;
 			}
 		}
-
 		return FALSE;
 	}
 

@@ -3,6 +3,7 @@
 namespace App\Models\Users;
 
 use App\Models\Company\CompanyGenericTagMapFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
 use App\Models\Core\Factory;
@@ -118,7 +119,7 @@ class UserFactory extends Factory {
 										'-1130-address1' => TTi18n::gettext('Address 1'),
 										'-1140-address2' => TTi18n::gettext('Address 2'),
 										
-    /* ARSP ADD CODE---> */             '-1145-nic' => TTi18n::gettext('Nic'),
+    	/* ARSP ADD CODE---> */             '-1145-nic' => TTi18n::gettext('Nic'),
 
 										'-1150-city' => TTi18n::gettext('City'),
 										'-1160-province' => TTi18n::gettext('Province/State'),
@@ -1340,7 +1341,7 @@ class UserFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf =  new CompanyListFactory();
 			$clf->getById( $this->getCompany() );
 			if ( $clf->getRecordCount() == 1 ) {
 				$this->company_obj = $clf->getCurrent();
@@ -1773,12 +1774,11 @@ class UserFactory extends Factory {
 		return $encrypted_password;
 	}
 	function checkPassword($password, $check_password_policy = TRUE ) {
-		echo 'check userfactory=>check password';
-		print_r($this->getPassword());
-		exit;
-
+		
 		$config_vars = config('evolve');  // Load config directly from Laravel config
 		$password = html_entity_decode( $password );
+		
+		$this->data = (array)$this->rs[0];
 		
 		//Check if LDAP is enabled
 		$ldap_authentication_type_id = 0;
@@ -1813,8 +1813,8 @@ class UserFactory extends Factory {
 		} else {
 			Debug::Text('LDAP authentication disabled due to config or extension missing...', __FILE__, __LINE__, __METHOD__,10);
 		}
-		
 		$password = $this->encryptPassword( trim(strtolower($password)) );
+		
 		//Don't check local TT passwords if LDAP Only authentication is enabled. Still accept override passwords though.
 		if ( $ldap_authentication_type_id != 2 AND $password == $this->getPassword() ) {
 			//If the passwords match, confirm that the password hasn't exceeded its maximum age.

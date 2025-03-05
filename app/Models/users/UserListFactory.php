@@ -114,11 +114,13 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 	}
 
 	function getById($id) {
+		
 		if ( $id == '') {
 			return FALSE;
 		}
-
+		
 		$this->rs = $this->getCache($id);
+
 		if ( $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
@@ -131,10 +133,8 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 							AND deleted = 0';
 
 			$this->rs = DB::select($query, $ph);
-
 			$this->saveCache($this->rs,$id);
 		}
-
 		return $this;
 	}
 	

@@ -15,6 +15,7 @@
 namespace App\Models\Other;
 
 use Exception;
+use Throwable;
 
 class Telnet {
 
@@ -163,7 +164,7 @@ class Telnet {
 			$this->write($password);
 			$this->setPrompt( $prompt );
 			$this->waitPrompt();
-    	} catch(Exception $e){
+    	} catch (Throwable $e) {
 
     		throw new Exception("Login failed.");
     	}
