@@ -24,42 +24,42 @@ class RequestFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Missed Punch'), 				//request_punch
-										20 => TTi18n::gettext('Punch Adjustment'), 			//request_punch_adjust
-										30 => TTi18n::gettext('Absence (incl. Vacation)'), 	//request_absence
-										40 => TTi18n::gettext('Schedule Adjustment'), 		//request_schedule
-										100 => TTi18n::gettext('Other'), 					//request_other
+										10 => ('Missed Punch'), 				//request_punch
+										20 => ('Punch Adjustment'), 			//request_punch_adjust
+										30 => ('Absence (incl. Vacation)'), 	//request_absence
+										40 => ('Schedule Adjustment'), 		//request_schedule
+										100 => ('Other'), 					//request_other
 									);
 				break;
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('INCOMPLETE'),
-										20 => TTi18n::gettext('OPEN'),
-										30 => TTi18n::gettext('PENDING'), //Used to be "Pending Authorizion"
-										40 => TTi18n::gettext('AUTHORIZATION OPEN'),
-										50 => TTi18n::gettext('AUTHORIZED'), //Used to be "Active"
-										55 => TTi18n::gettext('DECLINED'), //Used to be "AUTHORIZATION DECLINED"
-										60 => TTi18n::gettext('DISABLED')
+										10 => ('INCOMPLETE'),
+										20 => ('OPEN'),
+										30 => ('PENDING'), //Used to be "Pending Authorizion"
+										40 => ('AUTHORIZATION OPEN'),
+										50 => ('AUTHORIZED'), //Used to be "Active"
+										55 => ('DECLINED'), //Used to be "AUTHORIZATION DECLINED"
+										60 => ('DISABLED')
 									);
 				break;
 			case 'columns':
 				$retval = array(
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
-										'-1060-title' => TTi18n::gettext('Title'),
-										'-1070-user_group' => TTi18n::gettext('Group'),
-										'-1080-default_branch' => TTi18n::gettext('Branch'),
-										'-1090-default_department' => TTi18n::gettext('Department'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
+										'-1060-title' => ('Title'),
+										'-1070-user_group' => ('Group'),
+										'-1080-default_branch' => ('Branch'),
+										'-1090-default_department' => ('Department'),
 
-										'-1110-date_stamp' => TTi18n::gettext('Date'),
-										'-1120-status' => TTi18n::gettext('Status'),
-										'-1130-type' => TTi18n::gettext('Type'),
+										'-1110-date_stamp' => ('Date'),
+										'-1120-status' => ('Status'),
+										'-1130-type' => ('Type'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -173,7 +173,7 @@ class RequestFactory extends Factory {
 
 		if (  $this->Validator->isResultSetWithRows(	'user_date',
 														$udlf->getByID($id),
-														TTi18n::gettext('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already')
+														('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already')
 														) ) {
 			$this->data['user_date_id'] = $id;
 
@@ -232,7 +232,7 @@ class RequestFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -255,7 +255,7 @@ class RequestFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$value,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $value;
@@ -295,7 +295,7 @@ class RequestFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(	'authorization_level',
 											$value,
-											TTi18n::gettext('Incorrect authorization level') ) ) {
+											('Incorrect authorization level') ) ) {
 
 			$this->data['authorization_level'] = $value;
 
@@ -317,7 +317,7 @@ class RequestFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'message',
 												$text,
-												TTi18n::gettext('Invalid message length'),
+												('Invalid message length'),
 												5,
 												1024) ) {
 
@@ -335,13 +335,13 @@ class RequestFactory extends Factory {
 				AND $this->getMessage() == FALSE ) {
 			$this->Validator->isTRUE(		'message',
 											FALSE,
-											TTi18n::gettext('Invalid message length') );
+											('Invalid message length') );
 		}
 
 		if ( $this->getUserDateID() == FALSE ) {
 			$this->Validator->isTRUE(		'user_date',
 											FALSE,
-											TTi18n::gettext('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already') );
+											('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already') );
 		}
 
 		//Check to make sure this user has superiors to send a request too, otherwise we can't save the request.
@@ -352,7 +352,7 @@ class RequestFactory extends Factory {
 		if ( !is_array($request_parent_level_user_ids) OR count($request_parent_level_user_ids) == 0 ) {
 			$this->Validator->isTRUE(		'message',
 											FALSE,
-											TTi18n::gettext('No supervisors are assigned to you at this time, please try again later') );
+											('No supervisors are assigned to you at this time, please try again later') );
 		}
 
 		return TRUE;
@@ -402,7 +402,7 @@ class RequestFactory extends Factory {
 			$mcf->setObjectType( 50 ); //Messages don't break out request types like hierarchies do.
 			$mcf->setObject( $this->getID() );
 			$mcf->setParent( 0 );
-			$mcf->setSubject( Option::getByKey( $this->getType(), $this->getOptions('type') ) .' '. TTi18n::gettext('request from') .': '. $this->getUserObject()->getFullName(TRUE) );
+			$mcf->setSubject( Option::getByKey( $this->getType(), $this->getOptions('type') ) .' '. ('request from') .': '. $this->getUserObject()->getFullName(TRUE) );
 			$mcf->setBody( $this->getMessage() );
 
 			if ( $mcf->isValid() ) {
@@ -516,7 +516,7 @@ class RequestFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Request - Type').': '. Option::getByKey( $this->getType(), $this->getOptions('type') ), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Request - Type').': '. Option::getByKey( $this->getType(), $this->getOptions('type') ), NULL, $this->getTable(), $this );
 	}
 }
 ?>

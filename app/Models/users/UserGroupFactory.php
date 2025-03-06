@@ -23,12 +23,12 @@ class UserGroupFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1000-name' => TTi18n::gettext('Name'),
+										'-1000-name' => ('Name'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -91,7 +91,7 @@ class UserGroupFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -139,7 +139,7 @@ class UserGroupFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -157,7 +157,7 @@ class UserGroupFactory extends Factory {
 				AND $this->getId() == $this->getParent() ) {
 				$this->Validator->isTrue(	'parent',
 											FALSE,
-											TTi18n::gettext('Cannot re-parent group to itself')
+											('Cannot re-parent group to itself')
 											);
 		} else {
 			if ( $this->isNew() == FALSE ) {
@@ -173,7 +173,7 @@ class UserGroupFactory extends Factory {
 					Debug::Text(' Objects cant be re-parented to their own children...' , __FILE__, __LINE__, __METHOD__,10);
 					$this->Validator->isTrue(	'parent',
 												FALSE,
-												TTi18n::gettext('Unable to change parent to a child of itself')
+												('Unable to change parent to a child of itself')
 												);
 				}
 			}
@@ -260,7 +260,7 @@ class UserGroupFactory extends Factory {
 
 					$this->Validator->isTrue(	'name',
 												FALSE,
-												TTi18n::gettext('Name is already in use')
+												('Name is already in use')
 												);
 					$retval = FALSE;
 				}
@@ -334,7 +334,7 @@ class UserGroupFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee Group'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee Group'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

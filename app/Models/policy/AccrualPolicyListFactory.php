@@ -264,7 +264,7 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		$aplf->getByCompanyId($company_id);
 
 		if ( $include_blank == TRUE ) {
-			$list[0] = TTi18n::gettext('-- None --');
+			$list[0] = ('-- None --');
 		}
 
 		foreach ($aplf as $ap_obj) {

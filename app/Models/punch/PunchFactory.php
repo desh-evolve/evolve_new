@@ -25,52 +25,52 @@ class PunchFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('In'),
-										20 => TTi18n::gettext('Out'),
+										10 => ('In'),
+										20 => ('Out'),
 									);
 				break;
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Normal'),
-										20 => TTi18n::gettext('Lunch'),
-										30 => TTi18n::gettext('Break'),
+										10 => ('Normal'),
+										20 => ('Lunch'),
+										30 => ('Break'),
 									);
 				break;
 			case 'transfer':
 				$retval = array(
-										0 => TTi18n::gettext('No'),
-										1 => TTi18n::gettext('Yes'),
+										0 => ('No'),
+										1 => ('Yes'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										//'-1005-user_status' => TTi18n::gettext('Employee Status'),
-										'-1010-title' => TTi18n::gettext('Title'),
-										'-1039-group' => TTi18n::gettext('Group'),
-										'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1050-default_department' => TTi18n::gettext('Default Department'),
-										'-1160-branch' => TTi18n::gettext('Branch'),
-										'-1170-department' => TTi18n::gettext('Department'),
+										'-1000-first_name' => ('First Name'),
+										'-1002-last_name' => ('Last Name'),
+										//'-1005-user_status' => ('Employee Status'),
+										'-1010-title' => ('Title'),
+										'-1039-group' => ('Group'),
+										'-1040-default_branch' => ('Default Branch'),
+										'-1050-default_department' => ('Default Department'),
+										'-1160-branch' => ('Branch'),
+										'-1170-department' => ('Department'),
 
-										'-1180-job' => TTi18n::gettext('Job'),
-										'-1190-job_item' => TTi18n::gettext('Task'),
+										'-1180-job' => ('Job'),
+										'-1190-job_item' => ('Task'),
 
-										'-1200-type' => TTi18n::gettext('Type'),
-										'-1202-status' => TTi18n::gettext('Status'),
-										'-1210-date_stamp' => TTi18n::gettext('Date'),
-										'-1220-time_stamp' => TTi18n::gettext('Time'),
+										'-1200-type' => ('Type'),
+										'-1202-status' => ('Status'),
+										'-1210-date_stamp' => ('Date'),
+										'-1220-time_stamp' => ('Time'),
 
-										'-1310-station_station_id' => TTi18n::gettext('Station ID'),
-										'-1320-station_type' => TTi18n::gettext('Station Type'),
-										'-1330-station_source' => TTi18n::gettext('Station Source'),
-										'-1340-station_description' => TTi18n::gettext('Station Description'),
+										'-1310-station_station_id' => ('Station ID'),
+										'-1320-station_type' => ('Station Type'),
+										'-1330-station_source' => ('Station Source'),
+										'-1340-station_description' => ('Station Description'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -268,7 +268,7 @@ class PunchFactory extends Factory {
 		//make sure its an non-zero INT.
 		if (  $this->Validator->isNumeric(	'punch_control',
 											$id,
-											TTi18n::gettext('Invalid Punch Control ID')
+											('Invalid Punch Control ID')
 										) ) {
 			$this->data['punch_control_id'] = $id;
 
@@ -278,7 +278,7 @@ class PunchFactory extends Factory {
 /*
 		if (  $this->Validator->isResultSetWithRows(	'punch_control',
 														$pclf->getByID($id),
-														TTi18n::gettext('Invalid Punch Control ID')
+														('Invalid Punch Control ID')
 														) ) {
 			$this->data['punch_control_id'] = $id;
 
@@ -328,7 +328,7 @@ class PunchFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -398,7 +398,7 @@ class PunchFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -425,7 +425,7 @@ class PunchFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(		'station',
 															$slf->getByID($id),
-															TTi18n::gettext('Station does not exist')
+															('Station does not exist')
 															) ) {
 */
 			$this->data['station_id'] = $id;
@@ -749,7 +749,7 @@ class PunchFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'time_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect time stamp'))
+												('Incorrect time stamp'))
 
 			) {
 
@@ -781,7 +781,7 @@ class PunchFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'original_time_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect original time stamp'))
+												('Incorrect original time stamp'))
 
 			) {
 
@@ -812,7 +812,7 @@ class PunchFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'actual_time_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect actual time stamp'))
+												('Incorrect actual time stamp'))
 
 			) {
 
@@ -838,7 +838,7 @@ class PunchFactory extends Factory {
 				OR
 				$this->Validator->isFloat(	'longitude',
 											$value,
-											TTi18n::gettext('Longitude is invalid')
+											('Longitude is invalid')
 											) ) {
 			$this->data['longitude'] = $value;
 
@@ -862,7 +862,7 @@ class PunchFactory extends Factory {
 				OR
 				$this->Validator->isFloat(	'latitude',
 											$value,
-											TTi18n::gettext('Latitude is invalid')
+											('Latitude is invalid')
 											) ) {
 			$this->data['latitude'] = $value;
 
@@ -1233,7 +1233,7 @@ class PunchFactory extends Factory {
 				AND $this->getPunchControlID() == FALSE ) {
 			$this->Validator->isTRUE(	'punch_control',
 										FALSE,
-										TTi18n::gettext('Invalid Punch Control ID'));
+										('Invalid Punch Control ID'));
 		}
 
 		if ( is_object( $this->getPunchControlObject() )
@@ -1242,7 +1242,7 @@ class PunchFactory extends Factory {
 				AND $this->getPunchControlObject()->getUserDateObject()->getPayPeriodObject()->getIsLocked() == TRUE ) {
 			$this->Validator->isTRUE(	'pay_period',
 										FALSE,
-										TTi18n::gettext('Pay Period is Currently Locked') );
+										('Pay Period is Currently Locked') );
 		}
 
 		return TRUE;
@@ -1491,9 +1491,9 @@ class PunchFactory extends Factory {
 
 						if ( $tmp_date_break_totals[$row['date_stamp']][$row['type_id']]['total_time'] > 0 ) {
 							if (  $row['type_id'] == 20 ) {
-								$break_name = TTi18n::gettext('Lunch Time');
+								$break_name = ('Lunch Time');
 							} else {
-								$break_name = TTi18n::gettext('Break Time');
+								$break_name = ('Break Time');
 							}
 
 							$date_break_totals[$row['date_stamp']][$row['type_id']] = array(
@@ -1713,7 +1713,7 @@ class PunchFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Punch - Employee').': '. UserListFactory::getFullNameById( $this->getUser() ) . TTi18n::getText(' Timestamp').': '. TTDate::getDate('DATE+TIME', $this->getTimeStamp() ) , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Punch - Employee').': '. UserListFactory::getFullNameById( $this->getUser() ) . (' Timestamp').': '. TTDate::getDate('DATE+TIME', $this->getTimeStamp() ) , NULL, $this->getTable(), $this );
 	}
 }
 ?>

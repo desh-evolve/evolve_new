@@ -18,7 +18,7 @@ class DepartmentBranchUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'department_branch',
 															$dblf->getByID($id),
-															TTi18n::gettext('Department Branch is invalid')
+															('Department Branch is invalid')
 															) ) {
 			$this->data['department_branch_id'] = $id;
 		
@@ -39,7 +39,7 @@ class DepartmentBranchUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('User is invalid')
+															('User is invalid')
 															) ) {
 			$this->data['user_id'] = $id;
 		

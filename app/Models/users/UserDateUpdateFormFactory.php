@@ -71,24 +71,24 @@ class UserDateUpdateFormFactory extends Factory {
 			case 'columns':
 				$retval = array(
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										//'-1099-group' => TTi18n::gettext('Group'),
-//										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+										'-1090-title' => ('Title'),
+										//'-1099-group' => ('Group'),
+//										'-1100-default_branch' => ('Branch'),
+										'-1110-default_department' => ('Department'),
 
-										//'-5010-transit' => TTi18n::gettext('Transit/Routing'),
-										//'-5020-account' => TTi18n::gettext('Account'),
-										//'-5030-institution' => TTi18n::gettext('Institution'),
+										//'-5010-transit' => ('Transit/Routing'),
+										//'-5020-account' => ('Account'),
+										//'-5030-institution' => ('Institution'),
                                     
-                                                                                '-1290-note' => TTi18n::gettext('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                                                                                '-1290-note' => ('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -176,7 +176,7 @@ class UserDateUpdateFormFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'note',
 														$value,
-														TTi18n::gettext('Note is too long'),
+														('Note is too long'),
 														1,
 														2048)
 			) {
@@ -214,7 +214,7 @@ class UserDateUpdateFormFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Invalid Default Branch')
+														('Invalid Default Branch')
 													) ) {
 
 			$this->data['default_branch_id'] = $id;
@@ -251,7 +251,7 @@ class UserDateUpdateFormFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'title',
 														$utlf->getByID($id),
-														TTi18n::gettext('Title is invalid')
+														('Title is invalid')
 													) ) {
 
 			$this->data['title_id'] = $id;
@@ -274,7 +274,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setYearDate($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('year_date', $value, TTi18n::gettext('Year / Date is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('year_date', $value, ('Year / Date is too long'), 1, 2048)) {
                     $this->data['year_date'] = $value;
                     return FALSE;
 		}
@@ -293,7 +293,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setEpfNo($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('epf_no', $value, TTi18n::gettext('EPF Number is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('epf_no', $value, ('EPF Number is too long'), 1, 2048)) {
                     $this->data['epf_no'] = $value;
                     return FALSE;
 		}
@@ -312,7 +312,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setFullName($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('full_name', $value, TTi18n::gettext('Full Name is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('full_name', $value, ('Full Name is too long'), 1, 2048)) {
                     $this->data['full_name'] = $value;
                     return FALSE;
 		}
@@ -331,7 +331,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setNic($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('nic', $value, TTi18n::gettext('NIC is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('nic', $value, ('NIC is too long'), 1, 2048)) {
                     $this->data['nic'] = $value;
                     return FALSE;
 		}
@@ -350,7 +350,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setContactMobile($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('contact_mobile', $value, TTi18n::gettext('Contact Mobile is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('contact_mobile', $value, ('Contact Mobile is too long'), 1, 2048)) {
                     $this->data['contact_mobile'] = $value;
                     return FALSE;
 		}
@@ -369,7 +369,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setContactHome($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('contact_home', $value, TTi18n::gettext('Contact Home is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('contact_home', $value, ('Contact Home is too long'), 1, 2048)) {
                     $this->data['contact_home'] = $value;
                     return FALSE;
 		}
@@ -388,7 +388,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setPassportNo($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('passport_no', $value, TTi18n::gettext('Passport Number is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('passport_no', $value, ('Passport Number is too long'), 1, 2048)) {
                     $this->data['passport_no'] = $value;
                     return FALSE;
 		}
@@ -407,7 +407,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setDrivingLicenceNo($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('driving_licence_no', $value, TTi18n::gettext('Driving License Number is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('driving_licence_no', $value, ('Driving License Number is too long'), 1, 2048)) {
                     $this->data['driving_licence_no'] = $value;
                     return FALSE;
 		}
@@ -426,7 +426,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setPermenentAddress($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('permenent_address', $value, TTi18n::gettext('Permenent Address is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('permenent_address', $value, ('Permenent Address is too long'), 1, 2048)) {
                     $this->data['permenent_address'] = $value;
                     return FALSE;
 		}
@@ -445,7 +445,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setPresentAddress($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('present_address', $value, TTi18n::gettext('Present Address is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('present_address', $value, ('Present Address is too long'), 1, 2048)) {
                     $this->data['present_address'] = $value;
                     return FALSE;
 		}
@@ -464,7 +464,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setContactPerson($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('contact_person', $value, TTi18n::gettext('Contact Person is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('contact_person', $value, ('Contact Person is too long'), 1, 2048)) {
                     $this->data['contact_person'] = $value;
                     return FALSE;
 		}
@@ -483,7 +483,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setAddressContactPerson($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('address_contact_person', $value, TTi18n::gettext('Address Contact Person is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('address_contact_person', $value, ('Address Contact Person is too long'), 1, 2048)) {
                     $this->data['address_contact_person'] = $value;
                     return FALSE;
 		}
@@ -502,7 +502,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setTelContactPerson($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('tel_contact_person', $value, TTi18n::gettext('Telephone Contact Person is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('tel_contact_person', $value, ('Telephone Contact Person is too long'), 1, 2048)) {
                     $this->data['tel_contact_person'] = $value;
                     return FALSE;
 		}
@@ -521,7 +521,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setMaritialStatus($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('maritial_status', $value, TTi18n::gettext('Maritial Status is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('maritial_status', $value, ('Maritial Status is too long'), 1, 2048)) {
                     $this->data['maritial_status'] = $value;
                     return FALSE;
 		}
@@ -540,7 +540,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setSpouseName($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('spouse_name', $value, TTi18n::gettext('Spouse Name is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('spouse_name', $value, ('Spouse Name is too long'), 1, 2048)) {
                     $this->data['spouse_name'] = $value;
                     return FALSE;
 		}
@@ -559,7 +559,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setContactSpouse($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('contact_spouse', $value, TTi18n::gettext('Contact Spouse is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('contact_spouse', $value, ('Contact Spouse is too long'), 1, 2048)) {
                     $this->data['contact_spouse'] = $value;
                     return FALSE;
 		}
@@ -578,7 +578,7 @@ class UserDateUpdateFormFactory extends Factory {
 	function setChild($value,$num) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('child'.$num, $value, TTi18n::gettext('Child fields is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('child'.$num, $value, ('Child fields is too long'), 1, 2048)) {
                     $this->data['child'.$num] = $value;
                     return FALSE;
 		}
@@ -612,7 +612,7 @@ class UserDateUpdateFormFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Invalid Default Department')
+														('Invalid Default Department')
 													) ) {
 
 			$this->data['default_department_id'] = $id;
@@ -655,7 +655,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'first_worked_date',
 												$epoch,
-												TTi18n::gettext('Incorrect First Worked Date'))
+												('Incorrect First Worked Date'))
 			) {
 
 			//$this->data['first_worked_date'] = $epoch;
@@ -669,7 +669,7 @@ class UserDateUpdateFormFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'first_worked_date',
 												FALSE,
-												TTi18n::gettext('Incorrect first worked date'));
+												('Incorrect first worked date'));
 			}                    
                     
 		}
@@ -704,7 +704,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_worked_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Last Worked Date'))
+												('Incorrect Last Worked Date'))
 			) {
 
 			//$this->data['first_worked_date'] = $epoch;
@@ -718,7 +718,7 @@ class UserDateUpdateFormFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'last_worked_date',
 												FALSE,
-												TTi18n::gettext('Incorrect last worked date'));
+												('Incorrect last worked date'));
 			}                    
                     
 		}
@@ -738,7 +738,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -764,7 +764,7 @@ class UserDateUpdateFormFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -811,7 +811,7 @@ class UserDateUpdateFormFactory extends Factory {
 //		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
 //			$this->Validator->isTRUE(		'account',
 //											FALSE,
-//											TTi18n::gettext('Bank account already exists') );
+//											('Bank account already exists') );
 //
 //			return FALSE;
 //		}
@@ -820,28 +820,28 @@ class UserDateUpdateFormFactory extends Factory {
 //		if ( $this->getDefaultBranch() == 0 ) {
 //			$this->Validator->isTrue(		'default_branch',
 //											FALSE,
-//											TTi18n::gettext('Default Branch must be specified') );
+//											('Default Branch must be specified') );
 //		} 
 //                
 //                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 //		if ( $this->getDefaultDepartment() == 0 ) {
 //			$this->Validator->isTrue(		'default_department',
 //											FALSE,
-//											TTi18n::gettext('Default Department must be specified') );
+//											('Default Department must be specified') );
 //		}   
 //                
 //                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 //		if ( $this->getTitle() == 0 ) {
 //			$this->Validator->isTrue(		'title',
 //											FALSE,
-//											TTi18n::gettext('Employee Title must be specified') );
+//											('Employee Title must be specified') );
 //		}        
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getLastWorkedDate() != '' AND $this->getFirstWorkedDate() != '' AND $this->getLastWorkedDate() < $this->getFirstWorkedDate() ) {
 			$this->Validator->isTrue(		'last_worked_date',
 											FALSE,
-											TTi18n::gettext('Conflicting last worked date'));
+											('Conflicting last worked date'));
 		}                
 
 		return TRUE;
@@ -925,11 +925,11 @@ class UserDateUpdateFormFactory extends Factory {
          */          
 	function addLog( $log_action ) {
 		if ( $this->getUser() == '' ) {
-			$log_description = TTi18n::getText('Company');
+			$log_description = ('Company');
 		} else {
-			$log_description = TTi18n::getText('Employee');
+			$log_description = ('Employee');
 		}
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
 	}
 
 }

@@ -13,13 +13,13 @@ class RecurringScheduleTemplateControlFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1030-name' => TTi18n::gettext('Name'),
-										'-1040-description' => TTi18n::gettext('Description'),
+										'-1030-name' => ('Name'),
+										'-1040-description' => ('Description'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -71,7 +71,7 @@ class RecurringScheduleTemplateControlFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -94,12 +94,12 @@ class RecurringScheduleTemplateControlFactory extends Factory {
 /*
 				AND	$this->Validator->isTrue(	'name',
 												$this->isUniqueName($name),
-												TTi18n::gettext('Name is already in use')
+												('Name is already in use')
 												)
 */
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -123,7 +123,7 @@ class RecurringScheduleTemplateControlFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'description',
 											$description,
-											TTi18n::gettext('Description is invalid'),
+											('Description is invalid'),
 											0,255) ) {
 
 			$this->data['description'] = $description;
@@ -184,7 +184,7 @@ class RecurringScheduleTemplateControlFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Recurring Schedule Template'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Recurring Schedule Template'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

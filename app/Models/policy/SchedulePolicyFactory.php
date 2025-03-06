@@ -23,16 +23,16 @@ class SchedulePolicyFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1020-name' => TTi18n::gettext('Name'),
-										'-1030-meal_policy' => TTi18n::gettext('Meal Policy'),
-										'-1040-absence_policy' => TTi18n::gettext('Absence Policy'),
-										'-1050-over_time_policy' => TTi18n::gettext('Overtime Policy'),
-										'-1060-start_stop_window' => TTi18n::gettext('Window'),
+										'-1020-name' => ('Name'),
+										'-1030-meal_policy' => ('Meal Policy'),
+										'-1040-absence_policy' => ('Absence Policy'),
+										'-1050-over_time_policy' => ('Overtime Policy'),
+										'-1060-start_stop_window' => ('Window'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -144,7 +144,7 @@ class SchedulePolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -166,7 +166,7 @@ class SchedulePolicyFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -198,7 +198,7 @@ class SchedulePolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'meal_policy',
 														$mplf->getByID($id),
-														TTi18n::gettext('Meal Policy is invalid')
+														('Meal Policy is invalid')
 													) ) {
 
 			$this->data['meal_policy_id'] = $id;
@@ -237,7 +237,7 @@ class SchedulePolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'over_time_policy',
 														$otplf->getByID($id),
-														TTi18n::gettext('Invalid Overtime Policy ID')
+														('Invalid Overtime Policy ID')
 														) ) {
 			$this->data['over_time_policy_id'] = $id;
 
@@ -268,7 +268,7 @@ class SchedulePolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'absence_policy',
 														$aplf->getByID($id),
-														TTi18n::gettext('Invalid Absence Policy ID')
+														('Invalid Absence Policy ID')
 														) ) {
 			$this->data['absence_policy_id'] = $id;
 
@@ -289,7 +289,7 @@ class SchedulePolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'start_stop_window',
 													$int,
-													TTi18n::gettext('Incorrect Start/Stop window')) ) {
+													('Incorrect Start/Stop window')) ) {
 			$this->data['start_stop_window'] = $int;
 
 			return TRUE;
@@ -377,7 +377,7 @@ class SchedulePolicyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Schedule Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Schedule Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

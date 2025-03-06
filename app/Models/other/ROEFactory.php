@@ -29,19 +29,19 @@ class ROEFactory extends Factory {
 		switch( $name ) {
 			case 'code':
 				$retval = array(
-											'A' 	=> TTi18n::gettext('(A) Shortage of Work'),
-											'B' 	=> TTi18n::gettext('(B) Strike Or Lockout'),
-											'C' 	=> TTi18n::gettext('(C) Return to School'),
-											'D' 	=> TTi18n::gettext('(D) Illness or Injury'),
-											'E' 	=> TTi18n::gettext('(E) Quit'),
-											'F' 	=> TTi18n::gettext('(F) Maternity'),
-											'G' 	=> TTi18n::gettext('(G) Retirement'),
-											'H' 	=> TTi18n::gettext('(H) Work Sharing'),
-											'J' 	=> TTi18n::gettext('(J) Apprentice Training'),
-											'M' 	=> TTi18n::gettext('(M) Dismissal'),
-											'N' 	=> TTi18n::gettext('(N) Leave of Absence'),
-											'P' 	=> TTi18n::gettext('(P) Parental'),
-											'K' 	=> TTi18n::gettext('(K) Other')
+											'A' 	=> ('(A) Shortage of Work'),
+											'B' 	=> ('(B) Strike Or Lockout'),
+											'C' 	=> ('(C) Return to School'),
+											'D' 	=> ('(D) Illness or Injury'),
+											'E' 	=> ('(E) Quit'),
+											'F' 	=> ('(F) Maternity'),
+											'G' 	=> ('(G) Retirement'),
+											'H' 	=> ('(H) Work Sharing'),
+											'J' 	=> ('(J) Apprentice Training'),
+											'M' 	=> ('(M) Dismissal'),
+											'N' 	=> ('(N) Leave of Absence'),
+											'P' 	=> ('(P) Parental'),
+											'K' 	=> ('(K) Other')
 									);
 				break;
 
@@ -90,7 +90,7 @@ class ROEFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -121,7 +121,7 @@ class ROEFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'pay_period_type_id',
 											$value,
-											TTi18n::gettext('Incorrect pay period type'),
+											('Incorrect pay period type'),
 											$ppsf->getOptions('type')) ) {
 
 			$this->data['pay_period_type_id'] = $value;
@@ -149,7 +149,7 @@ class ROEFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'code_id',
 											$value,
-											TTi18n::gettext('Incorrect code'),
+											('Incorrect code'),
 											$this->getOptions('code')) ) {
 
 			$this->data['code_id'] = $value;
@@ -172,7 +172,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'first_date',
 												$epoch,
-												TTi18n::gettext('Invalid first date')) ) {
+												('Invalid first date')) ) {
 
 			$this->data['first_date'] = $epoch;
 
@@ -199,7 +199,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_date',
 												$epoch,
-												TTi18n::gettext('Invalid last date')) ) {
+												('Invalid last date')) ) {
 
 			$this->data['last_date'] = $epoch;
 
@@ -222,7 +222,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'pay_period_end_date',
 												$epoch,
-												TTi18n::gettext('Invalid final pay period end date')) ) {
+												('Invalid final pay period end date')) ) {
 
 			$this->data['pay_period_end_date'] = $epoch;
 
@@ -244,7 +244,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'recall_date',
 												$epoch,
-												TTi18n::gettext('Invalid recall date')) ) {
+												('Invalid recall date')) ) {
 
 			$this->data['recall_date'] = $epoch;
 
@@ -267,7 +267,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'insurable_hours',
 												$value,
-												TTi18n::gettext('Invalid insurable hours')) ) {
+												('Invalid insurable hours')) ) {
 
 			$this->data['insurable_hours'] = $value;
 
@@ -289,7 +289,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'insurable_earnings',
 												$value,
-												TTi18n::gettext('Invalid insurable earnings')) ) {
+												('Invalid insurable earnings')) ) {
 
 			$this->data['insurable_earnings'] = $value;
 
@@ -311,7 +311,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'vacation_pay',
 												$value,
-												TTi18n::gettext('Invalid vacation pay')) ) {
+												('Invalid vacation pay')) ) {
 
 			$this->data['vacation_pay'] = $value;
 
@@ -336,7 +336,7 @@ class ROEFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'serial',
 												$value,
-												TTi18n::gettext('Invalid serial'),
+												('Invalid serial'),
 												9,
 												15) ) {
 
@@ -360,7 +360,7 @@ class ROEFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'comments',
 												$value,
-												TTi18n::gettext('Invalid comments'),
+												('Invalid comments'),
 												0,
 												1024) ) {
 
@@ -580,7 +580,7 @@ class ROEFactory extends Factory {
 		Debug::Text('Pay Period ID: '. $pay_period_id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( is_numeric($pay_period_id) == FALSE ) {
-			UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '.TTi18n::gettext('Pay Stub'), 10, TTi18n::gettext('Pay Period is invalid!'), NULL );
+			UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '.('Pay Stub'), 10, ('Pay Period is invalid!'), NULL );
 
 			return FALSE;
 		}
@@ -611,7 +611,7 @@ class ROEFactory extends Factory {
 			$cps->calculate();
 			Debug::Text('Done Calculating Pay Stub', __FILE__, __LINE__, __METHOD__,10);
 		} else {
-			UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE), 20, TTi18n::gettext('Not generating final pay stub!'), NULL );
+			UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE), 20, ('Not generating final pay stub!'), NULL );
 		}
 
 		//FIXME: Alert the user if they don't have enough information in TimeTrex to get accurate values.
@@ -657,7 +657,7 @@ class ROEFactory extends Factory {
 		//Note, this includes the current pay stub we just generated
 		Debug::Text('Total Insurable Earnings: '. $total_earnings, __FILE__, __LINE__, __METHOD__,10);
 
-		UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '. TTi18n::gettext('Record of Employment'), 30, TTi18n::gettext('Insurable Hours:').' '. $total_hours .' '. TTi18n::gettext('Insurable Earnings:').' '. $total_earnings, NULL );
+		UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '. ('Record of Employment'), 30, ('Insurable Hours:').' '. $total_hours .' '. ('Insurable Earnings:').' '. $total_earnings, NULL );
 
 		//ReSave these
 		if ( $this->getId() != '' ) {
@@ -692,7 +692,7 @@ class ROEFactory extends Factory {
 		if ( $rlf->getRecordCount() > 0 ) {
 			$ppsf = TTnew( 'PayPeriodScheduleListFactory' );
 			$pay_period_type_options = array(
-											//5 => TTi18n::gettext('Manual'),
+											//5 => ('Manual'),
 											10  => 'W',
 											20  => 'B',
 											30  => 'S',
@@ -1053,7 +1053,7 @@ class ROEFactory extends Factory {
 
 		if ( $this->isNew() AND $this->getEnableReleaseAccruals() == TRUE ) {
 			//Create PS amendment releasing all accruals
-			UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '. TTi18n::gettext('Pay Stub Amendment'), 30, TTi18n::gettext('Releasing all employee accruals'), NULL );
+			UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '. ('Pay Stub Amendment'), 30, ('Releasing all employee accruals'), NULL );
 
 			PayStubAmendmentFactory::releaseAllAccruals( $this->getUser(), $this->getLastDate() );
 		}
@@ -1086,7 +1086,7 @@ class ROEFactory extends Factory {
 				if ( $user_obj->isValid() ) {
 					$user_obj->Save();
 
-					UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '. TTi18n::gettext('Employee Record'), 30, TTi18n::gettext('Setting employee termination date to:').' '. TTDate::getDate('DATE', $this->getLastDate() ), NULL );
+					UserGenericStatusFactory::queueGenericStatus( $this->getUserObject()->getFullName(TRUE).' - '. ('Employee Record'), 30, ('Setting employee termination date to:').' '. TTDate::getDate('DATE', $this->getLastDate() ), NULL );
 				}
 			}
 
@@ -1097,7 +1097,7 @@ class ROEFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('ROE'), NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action, ('ROE'), NULL, $this->getTable() );
 	}
 }
 ?>

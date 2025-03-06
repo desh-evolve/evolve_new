@@ -22,22 +22,22 @@ class DepartmentFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('ENABLED'),
-										20 => TTi18n::gettext('DISABLED')
+										10 => ('ENABLED'),
+										20 => ('DISABLED')
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-status' => TTi18n::gettext('Status'),
-										'-1020-manual_id' => TTi18n::gettext('Code'),
-										'-1030-name' => TTi18n::gettext('Name'),
+										'-1010-status' => ('Status'),
+										'-1020-manual_id' => ('Code'),
+										'-1030-name' => ('Name'),
 
-										'-1300-tag' => TTi18n::gettext('Tags'),
+										'-1300-tag' => ('Tags'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -89,7 +89,7 @@ class DepartmentFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -114,7 +114,7 @@ class DepartmentFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -181,17 +181,17 @@ class DepartmentFactory extends Factory {
 
 		if (	$this->Validator->isNumeric(	'manual_id',
 												$value,
-												TTi18n::gettext('Code is invalid'))
+												('Code is invalid'))
 				AND
 				$this->Validator->isLength(	'manual_id',
 											$value,
-											TTi18n::gettext('Code has too many digits'),
+											('Code has too many digits'),
 											0,
 											10)
 				AND
 				$this->Validator->isTrue(		'manual_id',
 												$this->isUniqueManualID($value),
-												TTi18n::gettext('Code is already in use, please enter a different one'))
+												('Code is already in use, please enter a different one'))
 												) {
 
 			$this->data['manual_id'] = $value;
@@ -243,13 +243,13 @@ class DepartmentFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'name',
 												$name,
-												TTi18n::gettext('Department name is too short or too long'),
+												('Department name is too short or too long'),
 												2,
 												100)
 					AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($name),
-														TTi18n::gettext('Department already exists'))
+														('Department already exists'))
 
 												) {
 
@@ -324,7 +324,7 @@ class DepartmentFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'branch',
 														$dbf->Validator->isValid(),
-														TTi18n::gettext('Branch selection is invalid'))) {
+														('Branch selection is invalid'))) {
 						$dbf->save();
 					}
 				}
@@ -350,7 +350,7 @@ class DepartmentFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id1',
 											$value,
-											TTi18n::gettext('Other ID 1 is invalid'),
+											('Other ID 1 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id1'] = $value;
@@ -375,7 +375,7 @@ class DepartmentFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id2',
 											$value,
-											TTi18n::gettext('Other ID 2 is invalid'),
+											('Other ID 2 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id2'] = $value;
@@ -400,7 +400,7 @@ class DepartmentFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id3',
 											$value,
-											TTi18n::gettext('Other ID 3 is invalid'),
+											('Other ID 3 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id3'] = $value;
@@ -425,7 +425,7 @@ class DepartmentFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id4',
 											$value,
-											TTi18n::gettext('Other ID 4 is invalid'),
+											('Other ID 4 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id4'] = $value;
@@ -450,7 +450,7 @@ class DepartmentFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id5',
 											$value,
-											TTi18n::gettext('Other ID 5 is invalid'),
+											('Other ID 5 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id5'] = $value;
@@ -608,7 +608,7 @@ class DepartmentFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Department') .': '. $this->getName(), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Department') .': '. $this->getName(), NULL, $this->getTable(), $this );
 	}
 }
 ?>

@@ -48,7 +48,7 @@ class CalculatePayStub extends PayStubFactory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -72,7 +72,7 @@ class CalculatePayStub extends PayStubFactory {
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_period',
 														$pplf->getByID($id),
-														TTi18n::gettext('Invalid Pay Period')
+														('Invalid Pay Period')
 														) ) {
 			$this->data['pay_period_id'] = $id;
 
@@ -335,7 +335,7 @@ class CalculatePayStub extends PayStubFactory {
 			return FALSE;
 		}
 
-		$generic_queue_status_label = $this->getUserObject()->getFullName(TRUE).' - '. TTi18n::gettext('Pay Stub');
+		$generic_queue_status_label = $this->getUserObject()->getFullName(TRUE).' - '. ('Pay Stub');
 
 		if ( $epoch == NULL OR $epoch == '' ) {
 			$epoch = TTDate::getTime();
@@ -413,7 +413,7 @@ class CalculatePayStub extends PayStubFactory {
 			Debug::text('Pay Stub already exists', __FILE__, __LINE__, __METHOD__,10);
 			$this->CommitTransaction();
 
-			UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 20, TTi18n::gettext('Pay Stub for this employee already exists, skipping...'), NULL );
+			UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 20, ('Pay Stub for this employee already exists, skipping...'), NULL );
 
 			return FALSE;
 		}
@@ -689,7 +689,7 @@ class CalculatePayStub extends PayStubFactory {
 			return FALSE;
 		}
 
-		$generic_queue_status_label = $this->getUserObject()->getFullName(TRUE).' - '. TTi18n::gettext('Pay Stub');
+		$generic_queue_status_label = $this->getUserObject()->getFullName(TRUE).' - '. ('Pay Stub');
 
 		if ( $epoch == NULL OR $epoch == '' ) {
 			$epoch = TTDate::getTime();
@@ -767,7 +767,7 @@ class CalculatePayStub extends PayStubFactory {
 			Debug::text('Pay Stub already exists', __FILE__, __LINE__, __METHOD__,10);
 			$this->CommitTransaction();
 
-			UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 20, TTi18n::gettext('Pay Stub for this employee already exists, skipping...'), NULL );
+			UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 20, ('Pay Stub for this employee already exists, skipping...'), NULL );
 
 			return FALSE;
 		}

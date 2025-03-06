@@ -29,15 +29,15 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
         
 	//PAGE TOTAL
         $this->setXY( Misc::AdjustXY(70, 0), Misc::AdjustXY(0, -40) );
-        $this->Cell(0, 10, TTi18n::gettext('PAGE TOTAL : ').$this->getAliasNbPages(), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('PAGE TOTAL : ').$this->getAliasNbPages(), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         //EMPLOYER'S REGISTRATION NO
 	$this->setXY( Misc::AdjustXY(10, 0), Misc::AdjustXY(0, -36) );
-        $this->Cell(0, 10, TTi18n::gettext('EMPLOYER\'S REGISTRATION NO : ').$_SESSION['header_data']['epf_registration_no'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('EMPLOYER\'S REGISTRATION NO : ').$_SESSION['header_data']['epf_registration_no'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         //EMPLOYER NAME
 	$this->setXY( Misc::AdjustXY(10, 0), Misc::AdjustXY(0, -32) );
-        $this->Cell(0, 10, TTi18n::gettext('NAME & ADDRESS OF EMPLOYER : ').$_SESSION['header_data']['employer_name'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('NAME & ADDRESS OF EMPLOYER : ').$_SESSION['header_data']['employer_name'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
         //EMPLOYER ADDRESS LINE 1
@@ -57,45 +57,45 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
         
         //TELEPHONE NO
 	$this->setXY( Misc::AdjustXY(10, 0), Misc::AdjustXY(0, -20) );
-        $this->Cell(0, 10, TTi18n::gettext('TELEPHONE NO : ').$_SESSION['header_data']['phone'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('TELEPHONE NO : ').$_SESSION['header_data']['phone'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
         //FAX NO
 	$this->setXY( Misc::AdjustXY(10, 0), Misc::AdjustXY(0, -16) );
-        $this->Cell(0, 10, TTi18n::gettext('FAX NO : ').$_SESSION['header_data']['fax'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('FAX NO : ').$_SESSION['header_data']['fax'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
         //Duly completed returns should...
 	$this->setXY( Misc::AdjustXY(10, 0), Misc::AdjustXY(0, -12) );
-        $this->Cell(0, 10, TTi18n::gettext('Duly completed returns should be sent to :  Manager - Member Accounts, '), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Duly completed returns should be sent to :  Manager - Member Accounts, '), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
         //Employees Trust Fund Board
 	$this->setXY( Misc::AdjustXY(61.5, 0), Misc::AdjustXY(0, -9) );
-        $this->Cell(0, 10, TTi18n::gettext('Employees\' Trust Fund Board'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Employees\' Trust Fund Board'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
         //Date Line
 	$this->setXY( Misc::AdjustXY(117, 0), Misc::AdjustXY(0, -21) );
         
-        $this->Cell(0, 10, TTi18n::gettext('_ _ _ _ _ _ _ _ _ _ _ _ _ _ '), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('_ _ _ _ _ _ _ _ _ _ _ _ _ _ '), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         //Date
 	$this->setXY( Misc::AdjustXY(128, 0), Misc::AdjustXY(0, -18) );        
         
-        $this->Cell(0, 10, TTi18n::gettext('Date'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Date'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
 
         //Signature Line
 	$this->setXY( Misc::AdjustXY(177, 0), Misc::AdjustXY(0, -21) );
         
-        $this->Cell(0, 10, TTi18n::gettext('_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _  '), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _  '), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         //Signature
 	$this->setXY( Misc::AdjustXY(205, 0), Misc::AdjustXY(0, -18) );        
         
-        $this->Cell(0, 10, TTi18n::gettext('Signature of Employer'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Signature of Employer'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
 
@@ -104,13 +104,13 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
         
 	$this->setXY( Misc::AdjustXY(160, 0), Misc::AdjustXY(0, -40) );        
         
-        $this->Cell(0, 10, TTi18n::gettext('I certify thatall the particulars given above are correct and that no part of the contributions that should be'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('I certify thatall the particulars given above are correct and that no part of the contributions that should be'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         
         //paid by us has...
 	$this->setXY( Misc::AdjustXY(160, 0), Misc::AdjustXY(0, -35) );        
         
-        $this->Cell(0, 10, TTi18n::gettext('paid by us has been deducted from any employee\'s earnings.'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('paid by us has been deducted from any employee\'s earnings.'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
 
     }
@@ -136,7 +136,7 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(100, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('EMPLOYEES\' TRUST FUND BOARD'), $border, 0, 'C');    
+	$this->Cell(75,5, ('EMPLOYEES\' TRUST FUND BOARD'), $border, 0, 'C');    
         
         
 	// FORM II RETURN
@@ -144,7 +144,7 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(25, $adjust_x), Misc::AdjustXY(8, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('FORM II RETURN'), $border, 0, 'L');    
+	$this->Cell(75,5, ('FORM II RETURN'), $border, 0, 'L');    
         
         
 	//Return for the period
@@ -161,7 +161,7 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
             $set = "July to Dec ".$_SESSION['header_data']['pay_period_year'];
         }
 
-	$this->Cell(75,5, TTi18n::gettext('Return for the period '.$set), $border, 0, 'L');    
+	$this->Cell(75,5, ('Return for the period '.$set), $border, 0, 'L');    
         
         
         
@@ -170,7 +170,7 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(85, $adjust_x), Misc::AdjustXY(15, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('Please read instructions before completing this form'), $border, 0, 'L');    
+	$this->Cell(75,5, ('Please read instructions before completing this form'), $border, 0, 'L');    
         
      
 	// Delete inapplicable words
@@ -178,7 +178,7 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(185, $adjust_x), Misc::AdjustXY(15, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('Delete inapplicable words'), $border, 0, 'L');    
+	$this->Cell(75,5, ('Delete inapplicable words'), $border, 0, 'L');    
         
         
 	// TOTAL NO OF EMPLOYEE
@@ -186,7 +186,7 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(235, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('TOTAL NO OF EMPLOYEE : '.$_SESSION['header_data']['total_employee']), $border, 0, 'L');            
+	$this->Cell(75,5, ('TOTAL NO OF EMPLOYEE : '.$_SESSION['header_data']['total_employee']), $border, 0, 'L');            
         
         
 
@@ -195,7 +195,7 @@ class PayStubListFactoryFormCSixMonth extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(235, $adjust_x), Misc::AdjustXY(15, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('Page No : '.$this->getAliasNumPage().'/'.$this->getAliasNbPages()), $border, 0, 'L');    
+	$this->Cell(75,5, ('Page No : '.$this->getAliasNumPage().'/'.$this->getAliasNbPages()), $border, 0, 'L');    
         
         
         //

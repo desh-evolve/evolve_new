@@ -43,13 +43,13 @@ class AuthorizationFactory extends Factory {
 			case 'columns':
 				$retval = array(
 
-										'-1010-created_by' => TTi18n::gettext('Name'),
-										'-1020-created_date' => TTi18n::gettext('Date'),
-										'-1030-authorized' => TTi18n::gettext('Authorized'),
-										//'-1100-object_type' => TTi18n::gettext('Object Type'),
+										'-1010-created_by' => ('Name'),
+										'-1020-created_date' => ('Date'),
+										'-1030-authorized' => ('Authorized'),
+										//'-1100-object_type' => ('Object Type'),
 
-										//'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										//'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										//'-2020-updated_by' => ('Updated By'),
+										//'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -223,7 +223,7 @@ class AuthorizationFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'object_type',
 											$type,
-											TTi18n::gettext('Object Type is invalid'),
+											('Object Type is invalid'),
 											$this->getOptions('object_type')) ) {
 
 			$this->data['object_type_id'] = $type;
@@ -246,7 +246,7 @@ class AuthorizationFactory extends Factory {
 
 		if (	$this->Validator->isResultSetWithRows(	'object',
 														$this->getObjectHandler()->getByID($id),
-														TTi18n::gettext('Object ID is invalid')
+														('Object ID is invalid')
 														) ) {
 			$this->data['object_id'] = $id;
 
@@ -289,7 +289,7 @@ class AuthorizationFactory extends Factory {
 				AND $this->isValidParent() === FALSE ) {
 			$this->Validator->isTrue(		'parent',
 											FALSE,
-											TTi18n::gettext('User authorizing this object is not a parent of it'));
+											('User authorizing this object is not a parent of it'));
 
 			return FALSE;
 		}
@@ -418,11 +418,11 @@ class AuthorizationFactory extends Factory {
 
 	function addLog( $log_action ) {
 		if ($this->getAuthorized() === TRUE ) {
-			$authorized =  TTi18n::getText('True');
+			$authorized =  ('True');
 		} else {
-			$authorized =  TTi18n::getText('False');
+			$authorized =  ('False');
 		}
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Authorization Object Type').': '.$this->getObjectType() .' '. TTi18n::getText('Authorized').': '. $authorized, NULL , $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Authorization Object Type').': '.$this->getObjectType() .' '. ('Authorized').': '. $authorized, NULL , $this->getTable() );
 	}
 }
 ?>

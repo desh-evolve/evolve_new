@@ -21,13 +21,13 @@ class HolidayFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1010-name' => TTi18n::gettext('Name'),
-										'-1020-date_stamp' => TTi18n::gettext('Date'),
+										'-1010-name' => ('Name'),
+										'-1020-date_stamp' => ('Date'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -103,7 +103,7 @@ class HolidayFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'holiday_policy',
 													$hplf->getByID($id),
-													TTi18n::gettext('Holiday Policy is invalid')
+													('Holiday Policy is invalid')
 													) ) {
 
 			$this->data['holiday_policy_id'] = $id;
@@ -153,11 +153,11 @@ class HolidayFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'date_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect date'))
+												('Incorrect date'))
 					AND
 						$this->Validator->isTrue(		'date_stamp',
 														$this->isUniqueDateStamp($epoch),
-														TTi18n::gettext('Date is already in use by another Holiday'))
+														('Date is already in use by another Holiday'))
 
 			) {
 
@@ -168,7 +168,7 @@ class HolidayFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'date_stamp',
 												FALSE,
-												TTi18n::gettext('Incorrect date'));
+												('Incorrect date'));
 			}
 		}
 
@@ -239,12 +239,12 @@ class HolidayFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 					AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($name),
-														TTi18n::gettext('Name is already in use in this year, or within 30 days'))
+														('Name is already in use in this year, or within 30 days'))
 
 						) {
 
@@ -426,7 +426,7 @@ class HolidayFactory extends Factory {
 		if ( $this->Validator->hasError('date_stamp') == FALSE AND $this->getDateStamp() == '' ) {
 			$this->Validator->isTrue(		'date_stamp',
 											FALSE,
-											TTi18n::gettext('Date is invalid'));
+											('Date is invalid'));
 		}
 
 		return TRUE;
@@ -499,7 +499,7 @@ class HolidayFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Holiday'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Holiday'), NULL, $this->getTable(), $this );
 	}
 
 }

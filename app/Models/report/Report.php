@@ -67,13 +67,13 @@ class Report {
 		switch( $name ) {
 			case 'page_orientation':
 				$retval = array(
-								'P' => TTi18n::getText('Portrait'),
-								'L' => TTi18n::getText('Landscape'),
+								'P' => ('Portrait'),
+								'L' => ('Landscape'),
 							   );
 				break;
 			case 'font_size':
 				$retval = array(
-								0 => '-'.TTi18n::getText('Default').'-',
+								0 => '-'.('Default').'-',
 								25 => ' 25%',
 								50 => ' 50%',
 								75 => ' 75%',
@@ -90,17 +90,17 @@ class Report {
 				break;
 			case 'chart_type':
 				$retval = array(
-								10 => TTi18n::getText('Bar - Horizontal'), //'horizontal_bar'
-								15 => TTi18n::getText('Bar - Vertical'), //'vertical_bar'
-								//20 => TTi18n::getText('Line'), //'line'
-								//30 => TTi18n::getText('Pie'), //'pie'
+								10 => ('Bar - Horizontal'), //'horizontal_bar'
+								15 => ('Bar - Vertical'), //'vertical_bar'
+								//20 => ('Line'), //'line'
+								//30 => ('Pie'), //'pie'
 							   );
 				break;
 			case 'chart_display_mode':
 				$retval = array(
-								10 => TTi18n::getText('Below Table'), //'below_table'
-								20 => TTi18n::getText('Above Table'), //'above_table'
-								30 => TTi18n::getText('Chart Only'), //'chart_only'
+								10 => ('Below Table'), //'below_table'
+								20 => ('Above Table'), //'above_table'
+								30 => ('Chart Only'), //'chart_only'
 							   );
 				break;
 
@@ -109,10 +109,10 @@ class Report {
 			//
 			case 'metadata_columns':
 				$options = array(
-								'columns' => array( 'format' => TTi18n::getText('Format'), 'format2' => TTi18n::getText('SubFormat') ),
-								'group_by' => array( 'aggregate' => TTi18n::getText('Aggregate') ),
-								'sub_total_by' => array( 'aggregate' => TTi18n::getText('Aggregate') ),
-								'sort_order' =>	array( 'sort_order' => TTi18n::getText('Sort') )
+								'columns' => array( 'format' => ('Format'), 'format2' => ('SubFormat') ),
+								'group_by' => array( 'aggregate' => ('Aggregate') ),
+								'sub_total_by' => array( 'aggregate' => ('Aggregate') ),
+								'sort_order' =>	array( 'sort_order' => ('Sort') )
 							);
 				if ( isset($params) AND $params != '' AND isset($options[$params]) ) {
 					$retval = $options[$params];
@@ -130,8 +130,8 @@ class Report {
 								//'precision' => array( 1 => '1 Decimal Place', 1 => '2 Decimal Places',  )
 								//'numeric' => array( 0 => 'w/Seperator', 1 => 'w/o Seperator' )
 								//'full_name' = array( 0 => 'First Name', 1 => 'Last Name', 2 => 'First & Last Name', 3 => 'Last & First Name' ),
-								'aggregate' => array( FALSE => TTi18n::getText('Group By'), 'min' => TTi18n::getText('Min'), 'avg' => TTi18n::getText('Avg'), 'max' => TTi18n::getText('Max'), 'sum' => TTi18n::getText('Sum'), 'count' => TTi18n::getText('Count') ),
-								'sort' => array( 'ASC' => TTi18n::getText('ASC'), 'DESC' => TTi18n::getText('DESC') )
+								'aggregate' => array( FALSE => ('Group By'), 'min' => ('Min'), 'avg' => ('Avg'), 'max' => ('Max'), 'sum' => ('Sum'), 'count' => ('Count') ),
+								'sort' => array( 'ASC' => ('ASC'), 'DESC' => ('DESC') )
 							);
 				if ( isset($params) AND $params != '' AND isset($options[$params]) ) {
 					$retval = $options[$params];
@@ -737,7 +737,7 @@ class Report {
 		$this->profiler->startTimer( 'group' );
 
 		if ( is_array( $this->formatGroupConfig() ) AND count( $this->formatGroupConfig() ) > 0 ) {
-			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, TTi18n::getText('Grouping Data...') );
+			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, ('Grouping Data...') );
 
 			$this->data = Group::GroupBy( $this->data, $this->formatGroupConfig() );
 
@@ -755,7 +755,7 @@ class Report {
 	function sort() {
 		$this->profiler->startTimer( 'sort' );
 		if ( is_array( $this->getSortConfig() ) AND count( $this->getSortConfig() ) > 0 ) {
-			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, TTi18n::getText('Sorting Data...') );
+			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, ('Sorting Data...') );
 
 			Debug::Arr($this->getSortConfig(), 'Sort Config: ', __FILE__, __LINE__, __METHOD__,10);
 			$this->data = Sort::arrayMultiSort( $this->data, $this->getSortConfig() );
@@ -803,7 +803,7 @@ class Report {
 		$this->profiler->startTimer( 'subTotal' );
 		if ( is_array( $this->getSubTotalConfig() ) AND count($this->getSubTotalConfig()) > 0 ) {
 
-			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->formatSubTotalConfig()), NULL, TTi18n::getText('Totaling Data...') );
+			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->formatSubTotalConfig()), NULL, ('Totaling Data...') );
 
 			$sub_total_data = array();
 			$i=0;
@@ -918,9 +918,9 @@ class Report {
 						break;
 					case 'boolean':
 						if ( $value == TRUE ) {
-							$retval = TTi18n::getText('Yes');
+							$retval = ('Yes');
 						} else {
-							$retval = TTi18n::getText('No');
+							$retval = ('No');
 						}
 					default:
 						break;
@@ -950,9 +950,9 @@ class Report {
 						break;
 					case 'boolean':
 						if ( $value == TRUE ) {
-							$retval = TTi18n::getText('Yes');
+							$retval = ('Yes');
 						} else {
-							$retval = TTi18n::getText('No');
+							$retval = ('No');
 						}
 						break;
 					default:
@@ -985,7 +985,7 @@ class Report {
 
 	function _postProcess( $format = NULL ) {
 		if ( is_array($this->data) AND count($this->data) > 0 ) {
-			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, TTi18n::getText('Post-Processing Data...') );
+			$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, ('Post-Processing Data...') );
 
 			//Get column formatting data.
 			$column_format_config = $this->getColumnFormatConfig();
@@ -1021,43 +1021,43 @@ class Report {
 	//Returns the full description block of text.
 	function getDescriptionBlock( $html = FALSE, $relative_time_period = FALSE ) {
 		//Don't include the report name.
-		//$body = TTI18n::getText('Report').': '. $this->title."\n\n";
+		//$body = ('Report').': '. $this->title."\n\n";
 		$body = '';
 
 		//Report Name
 		$report_name = $this->getDescription('report_name');
 		if ( $report_name != '' ) {
-			$body .= TTi18n::getText('Name').': '. $report_name."\n";
+			$body .= ('Name').': '. $report_name."\n";
 		}
 
 		//Time Period: start/end date, or pay period.
 		$description = $this->getDescription('time_period', array( 'relative_time_period' => $relative_time_period ) );
 		if ( $description != '' ) {
-			$body .= TTi18n::getText('Time Period').': '. $description."\n";
+			$body .= ('Time Period').': '. $description."\n";
 		}
 
 		//Filter:
 		$description = $this->getDescription('filter');
 		if ( $description != '' ) {
-			$body .= TTi18n::getText('Filter').': '. $description."\n";
+			$body .= ('Filter').': '. $description."\n";
 		}
 
 		//Group:
 		$description = $this->getDescription('group');
 		if ( $description != '' ) {
-			$body .= TTi18n::getText('Group'). ': '. $description."\n";
+			$body .= ('Group'). ': '. $description."\n";
 		}
 
 		//SubTotal:
 		$description = $this->getDescription('sub_total');
 		if ( $description != '' ) {
-			$body .= TTi18n::getText('SubTotal').': '. $description."\n";
+			$body .= ('SubTotal').': '. $description."\n";
 		}
 
 		//Sort:
 		$description = $this->getDescription('sort');
 		if ( $description != '' ) {
-			$body .= TTi18n::getText('Sort').': ' . $description."\n";
+			$body .= ('Sort').': ' . $description."\n";
 		}
 
 		if ( $html == TRUE ){
@@ -1087,9 +1087,9 @@ class Report {
 					}
 
 					if ( isset($pay_period_names) ) {
-						$retval = TTi18n::getText('Pay Periods').': '. implode(', ', $pay_period_names );
+						$retval = ('Pay Periods').': '. implode(', ', $pay_period_names );
 					} else {
-						$retval = TTi18n::getText('Pay Periods').': '. TTi18n::getText('N/A');
+						$retval = ('Pay Periods').': '. ('N/A');
 					}
 					unset($pplf, $pay_period_options, $pay_period_id, $pay_period_names);
 				} elseif ( isset($config['time_period']) ) {
@@ -1106,15 +1106,15 @@ class Report {
 						if ( isset($config['start_date']) AND $config['start_date'] != '' ) {
 							$retval .= TTDate::getDate('DATE', $config['start_date']);
 						} else {
-							$retval .= TTi18n::getText('N/A');
+							$retval .= ('N/A');
 						}
 
-						$retval .= ' '. TTi18n::getText('to') .' ';
+						$retval .= ' '. ('to') .' ';
 
 						if ( isset($config['end_date']) AND $config['end_date'] != '' ) {
 							$retval .= TTDate::getDate('DATE', $config['end_date']);
 						} else {
-							$retval .= TTi18n::getText('N/A');
+							$retval .= ('N/A');
 						}
 
 						$retval .= ' ]';
@@ -1221,7 +1221,7 @@ class Report {
 
 		$this->start_time = microtime(TRUE);
 
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), 2, NULL, TTi18n::getText('Querying Database...') ); //Iterations need to be 2, otherwise progress bar is not created.
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), 2, NULL, ('Querying Database...') ); //Iterations need to be 2, otherwise progress bar is not created.
 		$this->getProgressBarObject()->set( $this->getAMFMessageID(), 2 );
 
 		$this->_preOutput( $format );
@@ -1339,16 +1339,16 @@ class Report {
 			}
 
 			$body = '<html><body>';
-			$body .= TTI18n::getText('Report').': '. $this->title.'<br><br>';
+			$body .= ('Report').': '. $this->title.'<br><br>';
 			$body .= $this->getDescriptionBlock( TRUE );
 			$body .= '</body></html>';
 			//Debug::Text('Email Subject: '. $subject, __FILE__, __LINE__, __METHOD__,10);
 			//Debug::Text('Email Body: '. $body, __FILE__, __LINE__, __METHOD__,10);
 
-			TTLog::addEntry( 0, 500, TTi18n::getText('Emailing Report').': '. $this->title .' '. TTi18n::getText('To') .': '. $primary_email, NULL, $this->getTable() );
+			TTLog::addEntry( 0, 500, ('Emailing Report').': '. $this->title .' '. ('To') .': '. $primary_email, NULL, $this->getTable() );
 
 			$headers = array(
-								'From'    => '"'. APPLICATION_NAME .' - '. TTi18n::gettext('Reports') .'"<DoNotReply@'. Misc::getHostName( FALSE ) .'>',
+								'From'    => '"'. APPLICATION_NAME .' - '. ('Reports') .'"<DoNotReply@'. Misc::getHostName( FALSE ) .'>',
 								'Subject' => $subject,
 								'Cc'	  => $secondary_email,
 							 );
@@ -1584,7 +1584,7 @@ class Report {
 			//Report Name
 			$report_name = $this->getDescription('report_name');
 			if ( $report_name != '' ) {
-				$this->pdf->Cell(15, $this->_pdf_fontSize(3), TTi18n::getText('Name').':' , 0, 0, 'L', 0, '', 1);
+				$this->pdf->Cell(15, $this->_pdf_fontSize(3), ('Name').':' , 0, 0, 'L', 0, '', 1);
 				$this->pdf->Cell(100, $this->_pdf_fontSize(3), $report_name, 0, 0, 'L', 0, '', 1);
 				$this->pdf->Ln();
 			}
@@ -1592,7 +1592,7 @@ class Report {
 			//Time Period: start/end date, or pay period.
 			$description = $this->getDescription('time_period');
 			if ( $description != '' ) {
-				$this->pdf->Cell(15, $this->_pdf_fontSize(3), TTi18n::getText('Time Period').':' , 0, 0, 'L', 0, '', 1);
+				$this->pdf->Cell(15, $this->_pdf_fontSize(3), ('Time Period').':' , 0, 0, 'L', 0, '', 1);
 				$this->pdf->Cell(100, $this->_pdf_fontSize(3), $description, 0, 0, 'L', 0, '', 1);
 				$this->pdf->Ln();
 			}
@@ -1600,7 +1600,7 @@ class Report {
 			//Filter:
 			$description = $this->getDescription('filter');
 			if ( $description != '' ) {
-				$this->pdf->Cell(15, $this->_pdf_fontSize(3), TTi18n::getText('Filter').':' , 0, 0, 'L', 0, '', 1);
+				$this->pdf->Cell(15, $this->_pdf_fontSize(3), ('Filter').':' , 0, 0, 'L', 0, '', 1);
 				$this->pdf->Cell(100, $this->_pdf_fontSize(3), $description, 0, 0, 'L', 0, '', 1);
 				$this->pdf->Ln();
 			}
@@ -1608,7 +1608,7 @@ class Report {
 			//Group:
 			$description = $this->getDescription('group');
 			if ( $description != '' ) {
-				$this->pdf->Cell(15, $this->_pdf_fontSize(3), TTi18n::getText('Group').':' , 0, 0, 'L', 0, '', 1);
+				$this->pdf->Cell(15, $this->_pdf_fontSize(3), ('Group').':' , 0, 0, 'L', 0, '', 1);
 				$this->pdf->Cell(100, $this->_pdf_fontSize(3), $description, 0, 0, 'L', 0, '', 1);
 				$this->pdf->Ln();
 			}
@@ -1616,7 +1616,7 @@ class Report {
 			//SubTotal:
 			$description = $this->getDescription('sub_total');
 			if ( $description != '' ) {
-				$this->pdf->Cell(15, $this->_pdf_fontSize(3), TTi18n::getText('SubTotal').':' , 0, 0, 'L', 0, '', 1);
+				$this->pdf->Cell(15, $this->_pdf_fontSize(3), ('SubTotal').':' , 0, 0, 'L', 0, '', 1);
 				$this->pdf->Cell(100, $this->_pdf_fontSize(3), $description, 0, 0, 'L', 0, '', 1);
 				$this->pdf->Ln();
 			}
@@ -1624,7 +1624,7 @@ class Report {
 			//Sort:
 			$description = $this->getDescription('sort');
 			if ( $description != '' ) {
-				$this->pdf->Cell(15, $this->_pdf_fontSize(3), TTi18n::getText('Sort').':' , 0, 0, 'L', 0, '', 1);
+				$this->pdf->Cell(15, $this->_pdf_fontSize(3), ('Sort').':' , 0, 0, 'L', 0, '', 1);
 				$this->pdf->Cell(100, $this->_pdf_fontSize(3), $description, 0, 0, 'L', 0, '', 1);
 				$this->pdf->Ln();
 			}
@@ -1632,10 +1632,10 @@ class Report {
 			//Generated Date/User top right.
 			$this->pdf->setY( ( ($this->pdf->getY()-6) < $logo_image_y ) ? $logo_image_y : $this->pdf->getY()-6 );
 			$this->pdf->setX( $this->pdf->getPageWidth()-$margins['right']-50 );
-			$this->pdf->Cell(50, $this->_pdf_fontSize(3), TTi18n::getText('Generated').': '. TTDate::getDate('DATE+TIME', time() ), 0, 0, 'R', 0, '', 1);
+			$this->pdf->Cell(50, $this->_pdf_fontSize(3), ('Generated').': '. TTDate::getDate('DATE+TIME', time() ), 0, 0, 'R', 0, '', 1);
 			$this->pdf->Ln();
 			$this->pdf->setX( $this->pdf->getPageWidth()-$margins['right']-50 );
-			$this->pdf->Cell(50, $this->_pdf_fontSize(3), TTi18n::getText('Generated For').': '. $this->getUserObject()->getFullName(), 0, 0, 'R', 0, '', 1);
+			$this->pdf->Cell(50, $this->_pdf_fontSize(3), ('Generated For').': '. $this->getUserObject()->getFullName(), 0, 0, 'R', 0, '', 1);
 			$this->pdf->Ln( $this->_pdf_fontSize( 4 ) );
 
 			$this->_pdf_drawLine(1);
@@ -1720,11 +1720,11 @@ class Report {
 		//Jump to end of page.
 		$this->pdf->setY( $this->pdf->getPageHeight()-$margins['bottom']-$margins['top']-10 );
 
-		$this->pdf->Cell( ($this->pdf->getPageWidth()-$margins['right']), $this->_pdf_fontSize(5), TTi18n::getText('Page').' '. $this->pdf->PageNo() .' of '. $this->pdf->getAliasNbPages(), 0, 0, 'C', 0 );
+		$this->pdf->Cell( ($this->pdf->getPageWidth()-$margins['right']), $this->_pdf_fontSize(5), ('Page').' '. $this->pdf->PageNo() .' of '. $this->pdf->getAliasNbPages(), 0, 0, 'C', 0 );
 		$this->pdf->Ln();
 
 		$this->pdf->SetFont($this->config['other']['default_font'], '', $this->_pdf_fontSize(6) );
-		$this->pdf->Cell( ($this->pdf->getPageWidth()-$margins['right']), $this->_pdf_fontSize(5), TTi18n::gettext('Report Generated By').' '. APPLICATION_NAME .' v'. APPLICATION_VERSION, 0, 0, 'C', 0 );
+		$this->pdf->Cell( ($this->pdf->getPageWidth()-$margins['right']), $this->_pdf_fontSize(5), ('Report Generated By').' '. APPLICATION_NAME .' v'. APPLICATION_VERSION, 0, 0, 'C', 0 );
 
 		$this->pdf->setX( $x );
 		$this->pdf->setY( $y );
@@ -1795,7 +1795,7 @@ class Report {
 		$this->pdf->SetCreator( APPLICATION_NAME );
 		$this->pdf->SetAuthor( APPLICATION_NAME );
 		$this->pdf->SetTitle( $this->title );
-		$this->pdf->SetSubject( APPLICATION_NAME .' '. TTi18n::getText('Report') );
+		$this->pdf->SetSubject( APPLICATION_NAME .' '. ('Report') );
 
 		$this->pdf->setMargins( $this->config['other']['left_margin'], $this->config['other']['top_margin'], $this->config['other']['right_margin'] );
 		$this->pdf->SetAutoPageBreak(FALSE);
@@ -1869,7 +1869,7 @@ class Report {
 	function _pdf_Table() {
 		$this->profiler->startTimer( 'PDF Table' );
 
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, TTi18n::getText('Generating PDF...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->data), NULL, ('Generating PDF...') );
 
 		$border = 0;
 
@@ -1932,7 +1932,7 @@ class Report {
 				$blank_row = TRUE;
 				if ( $r == 0 AND ( isset($row['_total']) AND $row['_total'] == TRUE ) ) {
 					Debug::Text('Last row is grand total, no actual data to display...', __FILE__, __LINE__, __METHOD__,10);
-					$error_msg = TTi18n::getText('NO DATA MATCHES CRITERIA');
+					$error_msg = ('NO DATA MATCHES CRITERIA');
 					$this->pdf->SetFont($this->config['other']['default_font'],'B', $this->_pdf_fontSize(16) );
 					$this->pdf->Cell( $this->pdf->getPageWidth(), 20, '['. $error_msg .']', 0, 0, 'C', 0, '', 0 );
 				} else {
@@ -1963,14 +1963,14 @@ class Report {
 							if ( ( isset($row['_subtotal']) AND $row['_subtotal'] == TRUE ) ) {
 								//Debug::Text(' SubTotal Row... SI: '. $sub_total_columns_count .' C: '. $c .' Row SI: '. $total_row_sub_total_columns, __FILE__, __LINE__, __METHOD__,10);
 								if ( $c == $sub_total_columns_count ) {
-									$value = TTi18n::getText('SubTotal').'['. $sub_total_rows[$total_row_sub_total_columns] .']:';
+									$value = ('SubTotal').'['. $sub_total_rows[$total_row_sub_total_columns] .']:';
 								} elseif ( $c < ($total_row_sub_total_columns-1) ) {
 									$value = '';
 								}
 							} else {
 								//Debug::Text(' C: '. $c .' Row SI: '. $sub_total_columns_count, __FILE__, __LINE__, __METHOD__,10);
 								if ( $c == $sub_total_columns_count ) {
-									$value = TTi18n::getText('Grand Total').'['. $total_rows .']:';
+									$value = ('Grand Total').'['. $total_rows .']:';
 								}
 							}
 
@@ -2068,11 +2068,11 @@ class Report {
 		} else {
 			Debug::Text('No data or columns to display...', __FILE__, __LINE__, __METHOD__,10);
 			if ( !is_array($columns) OR count($columns) == 0 ) {
-				$error_msg = TTi18n::getText('NO DISPLAY COLUMNS SELECTED');
+				$error_msg = ('NO DISPLAY COLUMNS SELECTED');
 			} elseif ( !is_array($this->data) OR count($this->data) == 0 ) {
-				$error_msg = TTi18n::getText('NO DATA MATCHES CRITERIA');
+				$error_msg = ('NO DATA MATCHES CRITERIA');
 			} else {
-				$error_msg = TTi18n::getText('UNABLE TO DISPLAY REPORT');
+				$error_msg = ('UNABLE TO DISPLAY REPORT');
 			}
 
 			$this->pdf->SetFont($this->config['other']['default_font'],'B', $this->_pdf_fontSize(16) );

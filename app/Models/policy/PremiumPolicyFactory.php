@@ -22,80 +22,80 @@ class PremiumPolicyFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Date/Time'),
-										20 => TTi18n::gettext('Shift Differential'),
-										30 => TTi18n::gettext('Meal/Break'),
-										40 => TTi18n::gettext('Callback'),
-										50 => TTi18n::gettext('Minimum Shift Time'),
-										90 => TTi18n::gettext('Holiday'),
-										100 => TTi18n::gettext('Advanced'),
+										10 => ('Date/Time'),
+										20 => ('Shift Differential'),
+										30 => ('Meal/Break'),
+										40 => ('Callback'),
+										50 => ('Minimum Shift Time'),
+										90 => ('Holiday'),
+										100 => ('Advanced'),
 									);
 				break;
 			case 'pay_type':
 				//How to calculate flat rate. Base it off the DIFFERENCE between there regular hourly rate
 				//and the premium. So the PS Account could be postitive or negative amount
 				$retval = array(
-										10 => TTi18n::gettext('Pay Multiplied By Factor'),
-										20 => TTi18n::gettext('Pay + Premium'), //This is the same a Flat Hourly Rate (Absolute)
-										30 => TTi18n::gettext('Flat Hourly Rate (Relative to Wage)'), //This is a relative rate based on their hourly rate.
+										10 => ('Pay Multiplied By Factor'),
+										20 => ('Pay + Premium'), //This is the same a Flat Hourly Rate (Absolute)
+										30 => ('Flat Hourly Rate (Relative to Wage)'), //This is a relative rate based on their hourly rate.
 									);
 				break;
 			case 'branch_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Branches'),
-										20 => TTi18n::gettext('Only Selected Branches'),
-										30 => TTi18n::gettext('All Except Selected Branches'),
+										10 => ('All Branches'),
+										20 => ('Only Selected Branches'),
+										30 => ('All Except Selected Branches'),
 									);
 				break;
 			case 'department_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Departments'),
-										20 => TTi18n::gettext('Only Selected Departments'),
-										30 => TTi18n::gettext('All Except Selected Departments'),
+										10 => ('All Departments'),
+										20 => ('Only Selected Departments'),
+										30 => ('All Except Selected Departments'),
 									);
 				break;
 			case 'job_group_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Job Groups'),
-										20 => TTi18n::gettext('Only Selected Job Groups'),
-										30 => TTi18n::gettext('All Except Selected Job Groups'),
+										10 => ('All Job Groups'),
+										20 => ('Only Selected Job Groups'),
+										30 => ('All Except Selected Job Groups'),
 									);
 				break;
 			case 'job_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Jobs'),
-										20 => TTi18n::gettext('Only Selected Jobs'),
-										30 => TTi18n::gettext('All Except Selected Jobs'),
+										10 => ('All Jobs'),
+										20 => ('Only Selected Jobs'),
+										30 => ('All Except Selected Jobs'),
 									);
 				break;
 			case 'job_item_group_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Task Groups'),
-										20 => TTi18n::gettext('Only Selected Task Groups'),
-										30 => TTi18n::gettext('All Except Selected Task Groups'),
+										10 => ('All Task Groups'),
+										20 => ('Only Selected Task Groups'),
+										30 => ('All Except Selected Task Groups'),
 									);
 				break;
 			case 'job_item_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Tasks'),
-										20 => TTi18n::gettext('Only Selected Tasks'),
-										30 => TTi18n::gettext('All Except Selected Tasks'),
+										10 => ('All Tasks'),
+										20 => ('Only Selected Tasks'),
+										30 => ('All Except Selected Tasks'),
 									);
 				break;
 
 			case 'columns':
 				$retval = array(
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1030-name' => TTi18n::gettext('Name'),
+										'-1010-type' => ('Type'),
+										'-1030-name' => ('Name'),
 
-										'-1040-pay_type' => TTi18n::gettext('Pay Type'),
-										'-1040-rate' => TTi18n::gettext('Rate'),
-										'-1050-accrual_rate' => TTi18n::gettext('Accrual Rate'),
+										'-1040-pay_type' => ('Pay Type'),
+										'-1040-rate' => ('Rate'),
+										'-1050-accrual_rate' => ('Accrual Rate'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -214,7 +214,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -242,7 +242,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -264,7 +264,7 @@ class PremiumPolicyFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -293,7 +293,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'pay_type_id',
 											$value,
-											TTi18n::gettext('Incorrect Pay Type'),
+											('Incorrect Pay Type'),
 											$this->getOptions('pay_type')) ) {
 
 			$this->data['pay_type_id'] = $value;
@@ -327,7 +327,7 @@ class PremiumPolicyFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'start_date',
 												$epoch,
-												TTi18n::gettext('Incorrect start date'))
+												('Incorrect start date'))
 			) {
 
 			$this->data['start_date'] = $epoch;
@@ -360,7 +360,7 @@ class PremiumPolicyFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'end_date',
 												$epoch,
-												TTi18n::gettext('Incorrect end date'))
+												('Incorrect end date'))
 			) {
 
 			$this->data['end_date'] = $epoch;
@@ -389,7 +389,7 @@ class PremiumPolicyFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'start_time',
 												$epoch,
-												TTi18n::gettext('Incorrect Start time'))
+												('Incorrect Start time'))
 			) {
 
 			$this->data['start_time'] = $epoch;
@@ -418,7 +418,7 @@ class PremiumPolicyFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'end_time',
 												$epoch,
-												TTi18n::gettext('Incorrect End time'))
+												('Incorrect End time'))
 			) {
 
 			$this->data['end_time'] = $epoch;
@@ -445,7 +445,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'daily_trigger_time',
 													$int,
-													TTi18n::gettext('Incorrect Daily Trigger Time')) ) {
+													('Incorrect Daily Trigger Time')) ) {
 			$this->data['daily_trigger_time'] = $int;
 
 			return TRUE;
@@ -470,7 +470,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'weekly_trigger_time',
 													$int,
-													TTi18n::gettext('Incorrect weekly Trigger Time')) ) {
+													('Incorrect weekly Trigger Time')) ) {
 			$this->data['weekly_trigger_time'] = $int;
 
 			return TRUE;
@@ -596,7 +596,7 @@ class PremiumPolicyFactory extends Factory {
 		if 	( $int == 0
 				OR $this->Validator->isNumeric(		'maximum_no_break_time',
 													$int,
-													TTi18n::gettext('Incorrect Maximum Time Without Break')) ) {
+													('Incorrect Maximum Time Without Break')) ) {
 			$this->data['maximum_no_break_time'] = $int;
 
 			return TRUE;
@@ -622,7 +622,7 @@ class PremiumPolicyFactory extends Factory {
 		if 	(	$int == 0
 				OR $this->Validator->isNumeric(		'minimum_break_time',
 													$int,
-													TTi18n::gettext('Incorrect Minimum Break Time')) ) {
+													('Incorrect Minimum Break Time')) ) {
 			$this->data['minimum_break_time'] = $int;
 
 			return TRUE;
@@ -648,7 +648,7 @@ class PremiumPolicyFactory extends Factory {
 		if 	( $int == 0
 				OR $this->Validator->isNumeric(		'minimum_time_between_shift',
 													$int,
-													TTi18n::gettext('Incorrect Minimum Time Between Shifts')) ) {
+													('Incorrect Minimum Time Between Shifts')) ) {
 			$this->data['minimum_time_between_shift'] = $int;
 
 			return TRUE;
@@ -674,7 +674,7 @@ class PremiumPolicyFactory extends Factory {
 		if 	(	$int == 0
 				OR $this->Validator->isNumeric(		'minimum_first_shift_time',
 													$int,
-													TTi18n::gettext('Incorrect Minimum First Shift Time')) ) {
+													('Incorrect Minimum First Shift Time')) ) {
 			$this->data['minimum_first_shift_time'] = $int;
 
 			return TRUE;
@@ -700,7 +700,7 @@ class PremiumPolicyFactory extends Factory {
 		if 	(	$int == 0
 				OR $this->Validator->isNumeric(		'minimum_shift_time',
 													$int,
-													TTi18n::gettext('Incorrect Minimum Shift Time')) ) {
+													('Incorrect Minimum Shift Time')) ) {
 			$this->data['minimum_shift_time'] = $int;
 
 			return TRUE;
@@ -726,7 +726,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'minimum_time',
 													$int,
-													TTi18n::gettext('Incorrect Minimum Time')) ) {
+													('Incorrect Minimum Time')) ) {
 			$this->data['minimum_time'] = $int;
 
 			return TRUE;
@@ -751,7 +751,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'maximum_time',
 													$int,
-													TTi18n::gettext('Incorrect Maximum Time')) ) {
+													('Incorrect Maximum Time')) ) {
 			$this->data['maximum_time'] = $int;
 
 			return TRUE;
@@ -802,7 +802,7 @@ class PremiumPolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'wage_group',
 													$wglf->getByID($id),
-													TTi18n::gettext('Wage Group is invalid')
+													('Wage Group is invalid')
 													) ) {
 
 			$this->data['wage_group_id'] = $id;
@@ -829,7 +829,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'rate',
 												$int,
-												TTi18n::gettext('Incorrect Rate')) ) {
+												('Incorrect Rate')) ) {
 			$this->data['rate'] = $int;
 
 			return TRUE;
@@ -854,7 +854,7 @@ class PremiumPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'accrual_rate',
 												$int,
-												TTi18n::gettext('Incorrect Accrual Rate')) ) {
+												('Incorrect Accrual Rate')) ) {
 			$this->data['accrual_rate'] = $int;
 
 			return TRUE;
@@ -883,7 +883,7 @@ class PremiumPolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'accrual_policy',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accrual_policy_id'] = $id;
@@ -915,7 +915,7 @@ class PremiumPolicyFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account_id',
 														$psealf->getById($id),
-														TTi18n::gettext('Invalid Pay Stub Account')
+														('Invalid Pay Stub Account')
 														) ) {
 			$this->data['pay_stub_entry_account_id'] = $id;
 
@@ -963,7 +963,7 @@ class PremiumPolicyFactory extends Factory {
 		if ( $value == 0
 				OR $this->Validator->inArrayKey(	'branch_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Branch Selection Type'),
+											('Incorrect Branch Selection Type'),
 											$this->getOptions('branch_selection_type')) ) {
 
 			$this->data['branch_selection_type_id'] = $value;
@@ -1041,7 +1041,7 @@ class PremiumPolicyFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'branch',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Branch is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Branch is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1067,7 +1067,7 @@ class PremiumPolicyFactory extends Factory {
 		if ( $value == 0
 				OR $this->Validator->inArrayKey(	'department_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Department Selection Type'),
+											('Incorrect Department Selection Type'),
 											$this->getOptions('department_selection_type')) ) {
 
 			$this->data['department_selection_type_id'] = $value;
@@ -1144,7 +1144,7 @@ class PremiumPolicyFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'department',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Department is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Department is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1173,7 +1173,7 @@ class PremiumPolicyFactory extends Factory {
 		if ( $value == 0
 				OR $this->Validator->inArrayKey(	'job_group_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Job Group Selection Type'),
+											('Incorrect Job Group Selection Type'),
 											$this->getOptions('job_group_selection_type')) ) {
 
 			$this->data['job_group_selection_type_id'] = $value;
@@ -1245,7 +1245,7 @@ class PremiumPolicyFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'job_group',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Job Group is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Job Group is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1271,7 +1271,7 @@ class PremiumPolicyFactory extends Factory {
 		if ( $value == 0
 				OR $this->Validator->inArrayKey(	'job_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Job Selection Type'),
+											('Incorrect Job Selection Type'),
 											$this->getOptions('job_selection_type')) ) {
 
 			$this->data['job_selection_type_id'] = $value;
@@ -1343,7 +1343,7 @@ class PremiumPolicyFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'job',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Job is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Job is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1369,7 +1369,7 @@ class PremiumPolicyFactory extends Factory {
 		if ( $value == 0
 				OR $this->Validator->inArrayKey(	'job_item_group_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Task Group Selection Type'),
+											('Incorrect Task Group Selection Type'),
 											$this->getOptions('job_item_group_selection_type')) ) {
 
 			$this->data['job_item_group_selection_type_id'] = $value;
@@ -1441,7 +1441,7 @@ class PremiumPolicyFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'job_item_group',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Task Group is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Task Group is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1467,7 +1467,7 @@ class PremiumPolicyFactory extends Factory {
 		if ( $value == 0
 				OR $this->Validator->inArrayKey(	'job_item_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Task Selection Type'),
+											('Incorrect Task Selection Type'),
 											$this->getOptions('job_item_selection_type')) ) {
 
 			$this->data['job_item_selection_type_id'] = $value;
@@ -1539,7 +1539,7 @@ class PremiumPolicyFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'job',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected JobItem is invalid').' ('. $obj->getName() .')' )) {
+														('Selected JobItem is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1750,7 +1750,7 @@ class PremiumPolicyFactory extends Factory {
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This premium policy is in use'));
+											('This premium policy is in use'));
 			}
 		}
 
@@ -1872,7 +1872,7 @@ class PremiumPolicyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Premium Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Premium Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

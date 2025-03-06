@@ -5,7 +5,7 @@ namespace App\Models\Report;
 class PayrollExportReport extends TimesheetSummaryReport {
 
 	function __construct() {
-		$this->title = TTi18n::getText('Payroll Export Report');
+		$this->title = ('Payroll Export Report');
 		$this->file_name = 'payroll_export';
 
 		//Don't call TimesheetSummaryReport __construct(), skip one level lower to the Report class instead.
@@ -28,23 +28,23 @@ class PayrollExportReport extends TimesheetSummaryReport {
 		switch( $name ) {
 			case 'export_type':
 				$retval = array(
-								0 => TTi18n::gettext('-- Please Choose --'),
-								'adp' 				=> TTi18n::gettext('ADP'),
-								'paychex_preview' 	=> TTi18n::gettext('Paychex Preview'),
-								'paychex_online' 	=> TTi18n::gettext('Paychex Online Payroll'),
-								'ceridian_insync' 	=> TTi18n::gettext('Ceridian Insync'),
-								'millenium' 		=> TTi18n::gettext('Millenium'),
-								'quickbooks' 		=> TTi18n::gettext('QuickBooks Pro'),
-								'surepayroll' 		=> TTi18n::gettext('SurePayroll'),
-								'chris21' 			=> TTi18n::gettext('Chris21'),
-								'csv' 				=> TTi18n::gettext('Generic Excel/CSV'),
-								//'other' 			=> TTi18n::gettext('-- Other --'),
+								0 => ('-- Please Choose --'),
+								'adp' 				=> ('ADP'),
+								'paychex_preview' 	=> ('Paychex Preview'),
+								'paychex_online' 	=> ('Paychex Online Payroll'),
+								'ceridian_insync' 	=> ('Ceridian Insync'),
+								'millenium' 		=> ('Millenium'),
+								'quickbooks' 		=> ('QuickBooks Pro'),
+								'surepayroll' 		=> ('SurePayroll'),
+								'chris21' 			=> ('Chris21'),
+								'csv' 				=> ('Generic Excel/CSV'),
+								//'other' 			=> ('-- Other --'),
 								);
 				break;
 			case 'export_policy':
 				$static_columns = array();
 
-				$columns = array(					'-0010-regular_time' => TTi18n::gettext('Regular Time'),
+				$columns = array(					'-0010-regular_time' => ('Regular Time'),
 													);
 
 				$columns = Misc::prependArray( $static_columns, $columns);
@@ -54,7 +54,7 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				$otplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $otplf->getRecordCount() > 0 ) {
 					foreach ($otplf as $otp_obj ) {
-						$otp_columns['-0020-over_time_policy-'.$otp_obj->getId()] = TTi18n::gettext('Overtime').': '.$otp_obj->getName();
+						$otp_columns['-0020-over_time_policy-'.$otp_obj->getId()] = ('Overtime').': '.$otp_obj->getName();
 					}
 
 					$columns = array_merge( $columns, $otp_columns);
@@ -65,7 +65,7 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				$pplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $pplf->getRecordCount() > 0 ) {
 					foreach ($pplf as $pp_obj ) {
-						$pp_columns['-0030-premium_policy-'.$pp_obj->getId()] = TTi18n::gettext('Premium').': '.$pp_obj->getName();
+						$pp_columns['-0030-premium_policy-'.$pp_obj->getId()] = ('Premium').': '.$pp_obj->getName();
 					}
 
 					$columns = array_merge( $columns, $pp_columns);
@@ -77,7 +77,7 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				$aplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $aplf->getRecordCount() > 0 ) {
 					foreach ($aplf as $ap_obj ) {
-						$ap_columns['-0040-absence_policy-'.$ap_obj->getId()] = TTi18n::gettext('Absence').': '.$ap_obj->getName();
+						$ap_columns['-0040-absence_policy-'.$ap_obj->getId()] = ('Absence').': '.$ap_obj->getName();
 					}
 
 					$columns = array_merge( $columns, $ap_columns);
@@ -123,14 +123,14 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				break;
 			case 'hour_column_name':
 				$hour_column_name_map = array(
-								'adp' 				=> TTi18n::gettext('ADP Hours Code'),
-								'paychex_preview' 	=> TTi18n::gettext('Paychex Hours Code'),
-								'paychex_online' 	=> TTi18n::gettext('Paychex Hours Code'),
-								'ceridian_insync' 	=> TTi18n::gettext('Ceridian Hours Code'),
-								'millenium' 		=> TTi18n::gettext('Millenium Hours Code'),
-								'quickbooks' 		=> TTi18n::gettext('Quickbooks Payroll Item Name'),
-								'surepayroll' 		=> TTi18n::gettext('Payroll Code'),
-								'csv' 				=> TTi18n::gettext('Hours Code'),
+								'adp' 				=> ('ADP Hours Code'),
+								'paychex_preview' 	=> ('Paychex Hours Code'),
+								'paychex_online' 	=> ('Paychex Hours Code'),
+								'ceridian_insync' 	=> ('Ceridian Hours Code'),
+								'millenium' 		=> ('Millenium Hours Code'),
+								'quickbooks' 		=> ('Quickbooks Payroll Item Name'),
+								'surepayroll' 		=> ('Payroll Code'),
+								'csv' 				=> ('Hours Code'),
 								);
 
 				if (  isset($params['export_type']) AND isset($hour_column_name_map[$params['export_type']]) ) {
@@ -140,22 +140,22 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				}
 				break;
 			case 'adp_hour_column_options':
-				$retval['adp_hour_column_options'][0] = TTi18n::gettext('-- DO NOT EXPORT --');
-				$retval['adp_hour_column_options']['-0010-regular_time'] = TTi18n::gettext('Regular Time');
-				$retval['adp_hour_column_options']['-0020-overtime'] = TTi18n::gettext('Overtime');
+				$retval['adp_hour_column_options'][0] = ('-- DO NOT EXPORT --');
+				$retval['adp_hour_column_options']['-0010-regular_time'] = ('Regular Time');
+				$retval['adp_hour_column_options']['-0020-overtime'] = ('Overtime');
 				for ( $i=3; $i <= 4; $i++ ) {
-					$retval['adp_hour_column_options']['-003'.$i.'-'.$i] = TTi18n::gettext('Hours') .' '. $i;
+					$retval['adp_hour_column_options']['-003'.$i.'-'.$i] = ('Hours') .' '. $i;
 				}
 				break;
 			case 'adp_company_code_options':
 			case 'adp_batch_options':
 			case 'adp_temp_dept_options':
 				$retval = array(
-								0 => TTi18n::gettext('-- Custom --'),
-								'-0010-default_branch_manual_id' => TTi18n::gettext('Default Branch: Code'),
-								'-0020-default_department_manual_id' => TTi18n::gettext('Default Department: Code'),
-								'-0030-branch_manual_id' => TTi18n::gettext('Branch: Code'),
-								'-0040-department_manual_id' => TTi18n::gettext('Department: Code'),
+								0 => ('-- Custom --'),
+								'-0010-default_branch_manual_id' => ('Default Branch: Code'),
+								'-0020-default_department_manual_id' => ('Default Department: Code'),
+								'-0030-branch_manual_id' => ('Branch: Code'),
+								'-0040-department_manual_id' => ('Department: Code'),
 								);
 
 				$oflf = TTnew( 'OtherFieldListFactory' );
@@ -163,20 +163,20 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				//Put a colon or underscore in the name, thats how we know it needs to be replaced.
 
 				//Get Branch other fields.
-				$default_branch_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 4, '-1000-default_branch_', TTi18n::getText('Default Branch').': ' );
+				$default_branch_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 4, '-1000-default_branch_', ('Default Branch').': ' );
 				if (  !is_array($default_branch_options) ) {
 					$default_branch_options = array();
 				}
-				$default_department_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 5, '-2000-default_department_', TTi18n::getText('Default Department').': ' );
+				$default_department_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 5, '-2000-default_department_', ('Default Department').': ' );
 				if (  !is_array($default_department_options) ) {
 					$default_department_options = array();
 				}
 
-				$branch_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 4, '-3000-branch_', TTi18n::getText('Branch').': ' );
+				$branch_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 4, '-3000-branch_', ('Branch').': ' );
 				if ( !is_array($branch_options) ) {
 					$branch_options = array();
 				}
-				$department_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 5, '-4000-department_', TTi18n::getText('Department').': ' );
+				$department_options = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), 5, '-4000-department_', ('Department').': ' );
 				if ( !is_array($department_options) ) {
 					$department_options = array();
 				}
@@ -185,11 +185,11 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				break;
 			case 'quickbooks_proj_options':
 				$retval = array(
-								0 => TTi18n::gettext('-- NONE --'),
-								'default_branch' => TTi18n::gettext('Default Branch'),
-								'default_department' => TTi18n::gettext('Default Department'),
-								'group' => TTi18n::gettext('Group'),
-								'title' => TTi18n::gettext('Title'),
+								0 => ('-- NONE --'),
+								'default_branch' => ('Default Branch'),
+								'default_department' => ('Default Department'),
+								'group' => ('Group'),
+								'title' => ('Title'),
 								);
 				break;
 			default:

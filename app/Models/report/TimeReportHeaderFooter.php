@@ -18,7 +18,7 @@ class TimeReportHeaderFooter extends TTPDF{
         $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
          $this->SetFont('','', 6);
          $this->setXY( Misc::AdjustXY(75, 0), Misc::AdjustXY(0, -15) );
-        $this->Cell(0, 10, TTi18n::gettext('Generated on').' '. Date('Y/M/d - h:i'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Generated on').' '. Date('Y/M/d - h:i'), 0, false, 'L', 0, '', 0, false, 'T', 'M');
 
 
     }
@@ -67,11 +67,11 @@ class TimeReportHeaderFooter extends TTPDF{
 			//from
 			$this->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
 	
-			$this->Cell(30,5,TTi18n::gettext('From:').' ', $border, 0, 'R');
+			$this->Cell(30,5,('From:').' ', $border, 0, 'R');
 			//to
 			$this->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
 	
-			$this->Cell(30,5,TTi18n::gettext('To:').' ', $border, 0, 'R');
+			$this->Cell(30,5,('To:').' ', $border, 0, 'R');
 	
 					
 					
@@ -133,19 +133,19 @@ class TimeReportHeaderFooter extends TTPDF{
 
 		$this->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(21, $adjust_y) );
 
-		$this->Cell(175, 5, TTi18n::gettext($_SESSION['header_data']['heading']), $border, 0, 'L', 0); 
+		$this->Cell(175, 5, ($_SESSION['header_data']['heading']), $border, 0, 'L', 0); 
 //                echo '<pre>';                print_r($_SESSION['header_data']); die;
                 
                  if($_SESSION['header_data']['payperiod_end_date']!= ""){
                     $this->SetFont('','B',8); 
                     $this->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(23, $adjust_y) ); 
-                    $this->Cell(250, 5, TTi18n::gettext("".$_SESSION['header_data']['payperiod_end_date']), $border, 0, 'R', 0); 
+                    $this->Cell(250, 5, ("".$_SESSION['header_data']['payperiod_end_date']), $border, 0, 'R', 0); 
                  }
                  
                  if($_SESSION['header_data']['department_list']!= ""){
                     $this->SetFont('','B',8); 
                     $this->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(28, $adjust_y) ); 
-                    $this->MultiCell(250, 5, TTi18n::gettext("Department(s): ".$_SESSION['header_data']['department_list']), $border, 'R', 'R', 0); 
+                    $this->MultiCell(250, 5, ("Department(s): ".$_SESSION['header_data']['department_list']), $border, 'R', 'R', 0); 
                 }
                 
                     

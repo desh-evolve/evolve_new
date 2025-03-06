@@ -56,14 +56,14 @@ class CompanyGenericTagFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-					'-1010-object_type' => TTi18n::gettext('Object'),
-					'-1020-name' => TTi18n::gettext('Name'),
-					'-1030-description' => TTi18n::gettext('Description'),
+					'-1010-object_type' => ('Object'),
+					'-1020-name' => ('Name'),
+					'-1030-description' => ('Description'),
 
-					'-2000-created_by' => TTi18n::gettext('Created By'),
-					'-2010-created_date' => TTi18n::gettext('Created Date'),
-					'-2020-updated_by' => TTi18n::gettext('Updated By'),
-					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+					'-2000-created_by' => ('Created By'),
+					'-2010-created_date' => ('Created Date'),
+					'-2020-updated_by' => ('Updated By'),
+					'-2030-updated_date' => ('Updated Date'),
 				);
 				break;
 			case 'list_columns':
@@ -118,7 +118,7 @@ class CompanyGenericTagFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -140,7 +140,7 @@ class CompanyGenericTagFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'object_type',
 											$type,
-											TTi18n::gettext('Object Type is invalid'),
+											('Object Type is invalid'),
 											$this->getOptions('object_type')) ) {
 
 			$this->data['object_type_id'] = $type;
@@ -199,18 +199,18 @@ class CompanyGenericTagFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'name',
 												$name,
-												TTi18n::gettext('Tag is too short or too long'),
+												('Tag is too short or too long'),
 												2,
 												100)
 				AND
 				$this->Validator->isRegEx(		'name',
 												$name,
-												TTi18n::gettext('Incorrect characters in tag'),
+												('Incorrect characters in tag'),
 												$this->name_validator_regex)
 				AND
 				$this->Validator->isTrue(		'name',
 												$this->isUniqueName($name),
-												TTi18n::gettext('Tag already exists'))
+												('Tag already exists'))
 												) {
 
 			$this->data['name'] = $name;
@@ -252,7 +252,7 @@ class CompanyGenericTagFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'description',
 											$description,
-											TTi18n::gettext('Description is invalid'),
+											('Description is invalid'),
 											0,255) ) {
 
 			$this->data['description'] = $description;
@@ -414,7 +414,7 @@ class CompanyGenericTagFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Tag') .': '. $this->getName() , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Tag') .': '. $this->getName() , NULL, $this->getTable(), $this );
 	}
 
 }

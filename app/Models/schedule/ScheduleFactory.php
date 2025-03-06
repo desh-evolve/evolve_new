@@ -17,45 +17,45 @@ class ScheduleFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Committed'),
-										20 => TTi18n::gettext('Recurring')
+										10 => ('Committed'),
+										20 => ('Recurring')
 									);
 				break;
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('Working'),
-										20 => TTi18n::gettext('Absent'),
+										10 => ('Working'),
+										20 => ('Absent'),
 										//Not displayed on schedules, used to overwrite recurring schedule if we want to change a 8AM-5PM recurring schedule
 										//with a 6PM-11PM schedule? Although this can be done with an absence shift as well...
-										//90 => TTi18n::gettext('Hidden'),
+										//90 => ('Hidden'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-user_status' => TTi18n::gettext('Employee Status'),
-										'-1010-title' => TTi18n::gettext('Title'),
-										'-1039-group' => TTi18n::gettext('Group'),
-										'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1050-default_department' => TTi18n::gettext('Default Department'),
-										'-1160-branch' => TTi18n::gettext('Branch'),
-										'-1170-department' => TTi18n::gettext('Department'),
-										'-1200-status' => TTi18n::gettext('Status'),
-										'-1210-schedule_policy_id' => TTi18n::gettext('Schedule Policy'),
-										'-1220-start_time' => TTi18n::gettext('Start Time'),
-										'-1230-end_time' => TTi18n::gettext('End Time'),
-										'-1240-total_time' => TTi18n::gettext('Total Time'),
+										'-1000-first_name' => ('First Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-user_status' => ('Employee Status'),
+										'-1010-title' => ('Title'),
+										'-1039-group' => ('Group'),
+										'-1040-default_branch' => ('Default Branch'),
+										'-1050-default_department' => ('Default Department'),
+										'-1160-branch' => ('Branch'),
+										'-1170-department' => ('Department'),
+										'-1200-status' => ('Status'),
+										'-1210-schedule_policy_id' => ('Schedule Policy'),
+										'-1220-start_time' => ('Start Time'),
+										'-1230-end_time' => ('End Time'),
+										'-1240-total_time' => ('Total Time'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$retval['-1180-job'] = TTi18n::gettext('Job');
-					$retval['-1190-job_item'] = TTi18n::gettext('Task');
+					$retval['-1180-job'] = ('Job');
+					$retval['-1190-job_item'] = ('Task');
 				}
 				break;
 			case 'list_columns':
@@ -202,7 +202,7 @@ class ScheduleFactory extends Factory {
 		if ( $id > 0 AND
 				$this->Validator->isResultSetWithRows(	'user_id',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->tmp_data['user_id'] = $id;
 
@@ -274,7 +274,7 @@ class ScheduleFactory extends Factory {
 					AND
 					$this->Validator->isResultSetWithRows(	'user_date',
 															$udlf->getByID($id),
-															TTi18n::gettext('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already')
+															('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already')
 															)
 				)
 				) {
@@ -303,7 +303,7 @@ class ScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -326,7 +326,7 @@ class ScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'start_time',
 												$epoch,
-												TTi18n::gettext('Incorrect start time'))
+												('Incorrect start time'))
 
 			) {
 
@@ -350,7 +350,7 @@ class ScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'end_time',
 												$epoch,
-												TTi18n::gettext('Incorrect end time'))
+												('Incorrect end time'))
 
 			) {
 
@@ -396,7 +396,7 @@ class ScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'total_time',
 													$int,
-													TTi18n::gettext('Incorrect total time')) ) {
+													('Incorrect total time')) ) {
 			$this->data['total_time'] = $int;
 
 			return TRUE;
@@ -426,7 +426,7 @@ class ScheduleFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'schedule_policy',
 														$splf->getByID($id),
-														TTi18n::gettext('Schedule Policy is invalid')
+														('Schedule Policy is invalid')
 													) ) {
 
 			$this->data['schedule_policy_id'] = $id;
@@ -457,7 +457,7 @@ class ScheduleFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'absence_policy',
 														$aplf->getByID($id),
-														TTi18n::gettext('Invalid Absence Policy ID')
+														('Invalid Absence Policy ID')
 														) ) {
 			$this->data['absence_policy_id'] = $id;
 
@@ -483,7 +483,7 @@ class ScheduleFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Branch does not exist')
+														('Branch does not exist')
 														) ) {
 			$this->data['branch_id'] = $id;
 
@@ -509,7 +509,7 @@ class ScheduleFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Department does not exist')
+														('Department does not exist')
 														) ) {
 			$this->data['department_id'] = $id;
 
@@ -541,7 +541,7 @@ class ScheduleFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job',
 														$jlf->getByID($id),
-														TTi18n::gettext('Job does not exist')
+														('Job does not exist')
 														) ) {
 			$this->data['job_id'] = $id;
 
@@ -573,7 +573,7 @@ class ScheduleFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job_item',
 														$jilf->getByID($id),
-														TTi18n::gettext('Job Item does not exist')
+														('Job Item does not exist')
 														) ) {
 			$this->data['job_item_id'] = $id;
 
@@ -727,7 +727,7 @@ class ScheduleFactory extends Factory {
 		Debug::text('Found Scheduled Rows: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		Debug::Arr($absence_policy_paid_type_options, 'Paid Absences: ', __FILE__, __LINE__, __METHOD__, 10);
 		if ( $slf->getRecordCount() > 0 ) {
-			$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, TTi18n::getText('Processing Committed Shifts...') );
+			$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, ('Processing Committed Shifts...') );
 
 			foreach( $slf as $s_obj ) {
 				//Debug::text('Schedule ID: '. $s_obj->getId() .' User ID: '. $s_obj->getColumn('user_id') .' Start Time: '. $s_obj->getStartTime(), __FILE__, __LINE__, __METHOD__, 10);
@@ -846,7 +846,7 @@ class ScheduleFactory extends Factory {
 			$rstlf->getSearchByCompanyIdAndArrayCriteria( $current_user->getCompany(), $filter_data );
 			Debug::text('Found Recurring Schedule Template Rows: '. $rstlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 			if ( $rstlf->getRecordCount() > 0 ) {
-				$this->getProgressBarObject()->start( $this->getAMFMessageID(), $rstlf->getRecordCount(), NULL, TTi18n::getText('Processing Recurring Shifts...') );
+				$this->getProgressBarObject()->start( $this->getAMFMessageID(), $rstlf->getRecordCount(), NULL, ('Processing Recurring Shifts...') );
 
 				foreach( $rstlf as $rst_obj ) {
 					//Debug::text('Recurring Schedule Template ID: '. $rst_obj->getID() , __FILE__, __LINE__, __METHOD__, 10);
@@ -1206,7 +1206,7 @@ class ScheduleFactory extends Factory {
 
 						$pdf->setXY( $left_margin, $top_margin);
 						$pdf->SetFont('freesans','B',25);
-						$pdf->Cell(0,25, $user_obj->getFullName(). ' - '. TTi18n::getText('Schedule'), $border, 0, 'C');
+						$pdf->Cell(0,25, $user_obj->getFullName(). ' - '. ('Schedule'), $border, 0, 'C');
 						$pdf->Ln();
 					}
 
@@ -1431,13 +1431,13 @@ class ScheduleFactory extends Factory {
 			Debug::Text('UserDateID is INVALID! ID: '. $this->getUserDateID(), __FILE__, __LINE__, __METHOD__,10);
 			$this->Validator->isTrue(		'user_date',
 											FALSE,
-											TTi18n::gettext('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already'));
+											('Date/Time is incorrect or pay period does not exist for this date. Please create a pay period schedule if you have not done so already'));
 		}
 
 		if ( is_object( $this->getUserDateObject() ) AND $this->getUserDateObject()->getPayPeriodObject()->getIsLocked() == TRUE ) {
 			$this->Validator->isTrue(		'user_date',
 											FALSE,
-											TTi18n::gettext('Pay Period is Currently Locked'));
+											('Pay Period is Currently Locked'));
 		}
 
 		//Ignore conflicting time check when EnableOverwrite is set, as we will just be deleting any conflicting shift anyways.
@@ -1455,7 +1455,7 @@ class ScheduleFactory extends Factory {
 					Debug::text('Conflicting Schedule Shift ID:'. $conflicting_schedule_shift_obj->getId() .' Schedule Shift ID: '. $this->getId() , __FILE__, __LINE__, __METHOD__, 10);
 					$this->Validator->isTrue(		'start_time',
 													FALSE,
-													TTi18n::gettext('Conflicting start time'));
+													('Conflicting start time'));
 				}
 			}
 		} else {
@@ -1670,7 +1670,7 @@ class ScheduleFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Schedule'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Schedule'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

@@ -823,7 +823,7 @@ class FastTree {
 
 		if ( $include_root == TRUE ) {
 			return array( 0 => array( 	'id' => 0,
-										'name' => TTi18n::getText('Root'),
+										'name' => ('Root'),
 										'level' => 0,
 										'children' => $nested )
 										);

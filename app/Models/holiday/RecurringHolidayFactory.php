@@ -22,56 +22,56 @@ class RecurringHolidayFactory extends Factory {
 		switch( $name ) {
 			case 'special_day':
 				$retval = array(
-										0 => TTi18n::gettext('N/A'),
-										1 => TTi18n::gettext('Good Friday'),
-										5 => TTi18n::gettext('Easter Sunday'),
+										0 => ('N/A'),
+										1 => ('Good Friday'),
+										5 => ('Easter Sunday'),
 									);
 				break;
 
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Static'),
-										20 => TTi18n::gettext('Dynamic: Week Interval'),
-										30 => TTi18n::gettext('Dynamic: Pivot Day')
+										10 => ('Static'),
+										20 => ('Dynamic: Week Interval'),
+										30 => ('Dynamic: Pivot Day')
 									);
 				break;
 			case 'week_interval':
 				$retval = array(
-										1 => TTi18n::gettext('1st'),
-										2 => TTi18n::gettext('2nd'),
-										3 => TTi18n::gettext('3rd'),
-										4 => TTi18n::gettext('4th'),
-										5 => TTi18n::gettext('5th')
+										1 => ('1st'),
+										2 => ('2nd'),
+										3 => ('3rd'),
+										4 => ('4th'),
+										5 => ('5th')
 									);
 				break;
 
 			case 'pivot_day_direction':
 				$retval = array(
-										10 => TTi18n::gettext('Before'),
-										20 => TTi18n::gettext('After'),
-										30 => TTi18n::gettext('On or Before'),
-										40 => TTi18n::gettext('On or After'),
+										10 => ('Before'),
+										20 => ('After'),
+										30 => ('On or Before'),
+										40 => ('On or After'),
 									);
 				break;
 			case 'always_week_day':
 				$retval = array(
 											//Adjust holiday to next weekday
-											0 => TTi18n::gettext('No'),
-											1 => TTi18n::gettext('Yes - Previous Week Day'),
-											2 => TTi18n::gettext('Yes - Next Week Day'),
-											3 => TTi18n::gettext('Yes - Closest Week Day'),
+											0 => ('No'),
+											1 => ('Yes - Previous Week Day'),
+											2 => ('Yes - Next Week Day'),
+											3 => ('Yes - Closest Week Day'),
 										);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-name' => TTi18n::gettext('Name'),
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1020-next_date' => TTi18n::gettext('Next Date'),
+										'-1010-name' => ('Name'),
+										'-1010-type' => ('Type'),
+										'-1020-next_date' => ('Next Date'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -144,7 +144,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -167,7 +167,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'special_day',
 											$value,
-											TTi18n::gettext('Incorrect Special Day'),
+											('Incorrect Special Day'),
 											$this->getOptions('special_day')) ) {
 
 			$this->data['special_day'] = $value;
@@ -195,7 +195,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -220,7 +220,7 @@ class RecurringHolidayFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'pivot_day_direction',
 											$value,
-											TTi18n::gettext('Incorrect Pivot Day Direction'),
+											('Incorrect Pivot Day Direction'),
 											$this->getOptions('pivot_day_direction')) ) {
 
 			$this->data['pivot_day_direction_id'] = $value;
@@ -262,12 +262,12 @@ class RecurringHolidayFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 					AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($name),
-														TTi18n::gettext('Name is already in use'))
+														('Name is already in use'))
 
 						) {
 
@@ -295,7 +295,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'week_interval',
 													$int,
-													TTi18n::gettext('Incorrect Week Interval')) ) {
+													('Incorrect Week Interval')) ) {
 			$this->data['week_interval'] = $int;
 
 			return TRUE;
@@ -320,7 +320,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'day_of_week',
 													$int,
-													TTi18n::gettext('Incorrect Day Of Week')) ) {
+													('Incorrect Day Of Week')) ) {
 			$this->data['day_of_week'] = $int;
 
 			return TRUE;
@@ -346,7 +346,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'day_of_month',
 													$int,
-													TTi18n::gettext('Incorrect Day Of Month')) ) {
+													('Incorrect Day Of Month')) ) {
 			$this->data['day_of_month'] = $int;
 
 			return TRUE;
@@ -371,7 +371,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'month',
 													$int,
-													TTi18n::gettext('Incorrect Month')) ) {
+													('Incorrect Month')) ) {
 			$this->data['month_int'] = $int;
 
 			return TRUE;
@@ -391,7 +391,7 @@ class RecurringHolidayFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'always_week_day_id',
 											$int,
-											TTi18n::gettext('Incorrect always on week day adjustment'),
+											('Incorrect always on week day adjustment'),
 											$this->getOptions('always_week_day') ) ) {
 
 			$this->data['always_week_day_id'] = $int;
@@ -866,7 +866,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... New Years', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('New Years Day') );
+				$rhf->setName( ('New Years Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -879,7 +879,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Thursday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Thursday') );
+				$rhf->setName( ('Good Thursday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 2 );
 
@@ -890,7 +890,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Friday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Friday') );
+				$rhf->setName( ('Good Friday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 1 );
 
@@ -901,7 +901,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Juan Santamaria Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Juan Santamaria Day') );
+				$rhf->setName( ('Juan Santamaria Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 11 );
@@ -914,7 +914,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Labour Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Labour Day') );
+				$rhf->setName( ('Labour Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -927,7 +927,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Anexion de Guanacaste Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Anexion de Guanacaste Day') );
+				$rhf->setName( ('Anexion de Guanacaste Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 25 );
@@ -940,7 +940,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Virgen de los Angeles Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Virgen de los Angeles Day') );
+				$rhf->setName( ('Virgen de los Angeles Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 2 );
@@ -953,7 +953,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Mothers  Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Mothers Day') );
+				$rhf->setName( ('Mothers Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 15 );
@@ -966,7 +966,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Independence Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
  				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Independence Day CR') );
+				$rhf->setName( ('Independence Day CR') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 15 );
@@ -979,7 +979,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Culture Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Culture Day') );
+				$rhf->setName( ('Culture Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 12 );
@@ -992,7 +992,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Christmas', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Christmas') );
+				$rhf->setName( ('Christmas') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 25 );
@@ -1008,7 +1008,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... New Years', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('New Years Day') );
+				$rhf->setName( ('New Years Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1021,7 +1021,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Wednesday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Wednesday') );
+				$rhf->setName( ('Good Wednesday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 3 );
 
@@ -1032,7 +1032,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Thursday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Thursday') );
+				$rhf->setName( ('Good Thursday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 2 );
 
@@ -1043,7 +1043,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Friday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Friday') );
+				$rhf->setName( ('Good Friday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 1 );
 
@@ -1054,7 +1054,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Labour Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Labour Day') );
+				$rhf->setName( ('Labour Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1067,7 +1067,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Army Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Army Day') );
+				$rhf->setName( ('Army Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 30 );
@@ -1080,7 +1080,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Virgin Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Virgin Day') );
+				$rhf->setName( ('Virgin Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 15 );
@@ -1093,7 +1093,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Independence Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Independence Day CR') );
+				$rhf->setName( ('Independence Day CR') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 15 );
@@ -1106,7 +1106,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... 1944 Revolution Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('1944 Revolution Day') );
+				$rhf->setName( ('1944 Revolution Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 20 );
@@ -1119,7 +1119,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... All Saint Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('All Saint Day') );
+				$rhf->setName( ('All Saint Day') );
 				$rhf->setType( 30 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1133,7 +1133,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Christmas Eve', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Christmas Eve') );
+				$rhf->setName( ('Christmas Eve') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 24 );
@@ -1146,7 +1146,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Christmas', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Christmas') );
+				$rhf->setName( ('Christmas') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 25 );
@@ -1163,7 +1163,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... New Years', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('New Years Day') );
+				$rhf->setName( ('New Years Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1176,7 +1176,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Thursday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Thursday') );
+				$rhf->setName( ('Good Thursday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 2 );
 
@@ -1187,7 +1187,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Friday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Friday') );
+				$rhf->setName( ('Good Friday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 1 );
 
@@ -1198,7 +1198,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Saturday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Saturday') );
+				$rhf->setName( ('Good Saturday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 2 );
 
@@ -1209,7 +1209,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Labour Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Labour Day') );
+				$rhf->setName( ('Labour Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1222,7 +1222,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Independence Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Independence Day') );
+				$rhf->setName( ('Independence Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 15 );
@@ -1235,7 +1235,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Morazan Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Morazan Day') );
+				$rhf->setName( ('Morazan Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 3 );
@@ -1248,7 +1248,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Culture Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Culture Day') );
+				$rhf->setName( ('Culture Day') );
 				$rhf->setType( 30 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 12 );
@@ -1262,7 +1262,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Armed Forces Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Armed Forces Day') );
+				$rhf->setName( ('Armed Forces Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 21 );
@@ -1275,7 +1275,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Christmas', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Christmas') );
+				$rhf->setName( ('Christmas') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 25 );
@@ -1292,7 +1292,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... New Years', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('New Years Day') );
+				$rhf->setName( ('New Years Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1305,7 +1305,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Thursday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Thursday') );
+				$rhf->setName( ('Good Thursday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 2 );
 
@@ -1316,7 +1316,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Friday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Friday') );
+				$rhf->setName( ('Good Friday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 1 );
 
@@ -1327,7 +1327,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Labour Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Labour Day') );
+				$rhf->setName( ('Labour Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1340,7 +1340,7 @@ class RecurringHolidayFactory extends Factory {
  				Debug::text('Saving.... Bank Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Bank Day') );
+				$rhf->setName( ('Bank Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 30 );
@@ -1353,7 +1353,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... San Salvador Party', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('San Salvador Party') );
+				$rhf->setName( ('San Salvador Party') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 4 );
@@ -1366,7 +1366,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Independence Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Independence Day') );
+				$rhf->setName( ('Independence Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 15 );
@@ -1379,7 +1379,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Columbus Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Columbus Day') );
+				$rhf->setName( ('Columbus Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 12 );
@@ -1392,7 +1392,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... All Saints Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('All Saints Day') );
+				$rhf->setName( ('All Saints Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 2 );
@@ -1405,7 +1405,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... First Cry of Independence', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('First Cry of Independence') );
+				$rhf->setName( ('First Cry of Independence') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 5 );
@@ -1418,7 +1418,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Christmas', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Christmas') );
+				$rhf->setName( ('Christmas') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 25 );
@@ -1435,7 +1435,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... New Years', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('New Years Day') );
+				$rhf->setName( ('New Years Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1448,7 +1448,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Thursday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Thursday') );
+				$rhf->setName( ('Good Thursday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 2 );
 
@@ -1459,7 +1459,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Friday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Friday') );
+				$rhf->setName( ('Good Friday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 1 );
 
@@ -1470,7 +1470,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Labour Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Labour Day') );
+				$rhf->setName( ('Labour Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1483,7 +1483,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Revolution Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Revolution Day') );
+				$rhf->setName( ('Revolution Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 19 );
@@ -1496,7 +1496,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... San Jacinto Battle', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('San Jacinto Battle') );
+				$rhf->setName( ('San Jacinto Battle') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 14 );
@@ -1509,7 +1509,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Independence Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Independence Day') );
+				$rhf->setName( ('Independence Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 15 );
@@ -1522,7 +1522,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Christmas', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Christmas') );
+				$rhf->setName( ('Christmas') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
  				$rhf->setDayOfMonth( 25 );
@@ -1539,7 +1539,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... New Years', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('New Years Day') );
+				$rhf->setName( ('New Years Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
  				$rhf->setDayOfMonth( 1 );
@@ -1552,7 +1552,7 @@ class RecurringHolidayFactory extends Factory {
   				Debug::text('Saving.... Martyr`s Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
  				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Martyr`s Day') );
+				$rhf->setName( ('Martyr`s Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 9 );
@@ -1565,7 +1565,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Good Friday/Easter', __FILE__, __LINE__, __METHOD__, 10);
 	 			$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Good Friday') );
+				$rhf->setName( ('Good Friday') );
 				$rhf->setType( 20 );
 				$rhf->setSpecialDay( 1 );
 
@@ -1576,7 +1576,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Labour Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Labour Day') );
+				$rhf->setName( ('Labour Day') );
  				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 1 );
@@ -1589,7 +1589,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Separation Day (from Colombia)', __FILE__, __LINE__, __METHOD__, 10);
  				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Separation Day from Colombia') );
+				$rhf->setName( ('Separation Day from Colombia') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 3 );
@@ -1602,7 +1602,7 @@ class RecurringHolidayFactory extends Factory {
 	 			Debug::text('Saving.... Flag Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-	 			$rhf->setName( TTi18n::gettext('Flag Day') );
+	 			$rhf->setName( ('Flag Day') );
 				$rhf->setType( 10 );
  				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 4 );
@@ -1615,7 +1615,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Primer Grito de Independencia de la Villa de los Santos', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Primer Grito de Independencia de la Villa de los Santos') );
+				$rhf->setName( ('Primer Grito de Independencia de la Villa de los Santos') );
  				$rhf->setType( 10 );
  				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 10 );
@@ -1628,7 +1628,7 @@ class RecurringHolidayFactory extends Factory {
  				Debug::text('Saving.... Independence Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
  				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Independence Day') );
+				$rhf->setName( ('Independence Day') );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
  				$rhf->setDayOfMonth( 28 );
@@ -1641,7 +1641,7 @@ class RecurringHolidayFactory extends Factory {
  				Debug::text('Saving.... Mothers Day', __FILE__, __LINE__, __METHOD__, 10);
 				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Mothers Day') );
+				$rhf->setName( ('Mothers Day') );
  				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 8 );
@@ -1654,7 +1654,7 @@ class RecurringHolidayFactory extends Factory {
 				Debug::text('Saving.... Christmas', __FILE__, __LINE__, __METHOD__, 10);
  				$rhf = TTnew( 'RecurringHolidayFactory' );
 				$rhf->setCompany( $company_id );
-				$rhf->setName( TTi18n::gettext('Christmas')  );
+				$rhf->setName( ('Christmas')  );
 				$rhf->setType( 10 );
 				$rhf->setSpecialDay( 0 );
 				$rhf->setDayOfMonth( 25 );
@@ -1743,7 +1743,7 @@ class RecurringHolidayFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Recurring Holiday'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Recurring Holiday'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

@@ -18,12 +18,12 @@ class UserTitleFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1000-name' => TTi18n::gettext('Name'),
+										'-1000-name' => ('Name'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -69,7 +69,7 @@ class UserTitleFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -133,13 +133,13 @@ class UserTitleFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'name',
 												$name,
-												TTi18n::gettext('Name is too short or too long'),
+												('Name is too short or too long'),
 												2,
 												100)
 					AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($name),
-														TTi18n::gettext('Title already exists'))
+														('Title already exists'))
 
 												) {
 
@@ -218,7 +218,7 @@ class UserTitleFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee Title'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee Title'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

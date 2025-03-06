@@ -22,7 +22,7 @@ class PolicyGroupOverTimePolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
-															TTi18n::gettext('Policy Group is invalid')
+															('Policy Group is invalid')
 															) ) {
 			$this->data['policy_group_id'] = $id;
 
@@ -46,7 +46,7 @@ class PolicyGroupOverTimePolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'over_time_policy',
 													$otplf->getByID($id),
-													TTi18n::gettext('Selected Overtime Policy is invalid')
+													('Selected Overtime Policy is invalid')
 															)
 			) {
 

@@ -98,7 +98,7 @@ class CompanyGenericMapFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -120,7 +120,7 @@ class CompanyGenericMapFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'object_type',
 											$type,
-											TTi18n::gettext('Object Type is invalid'),
+											('Object Type is invalid'),
 											$this->getOptions('object_type')) ) {
 
 			$this->data['object_type_id'] = $type;
@@ -145,7 +145,7 @@ class CompanyGenericMapFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(	'object_id',
 										$id,
-										TTi18n::gettext('Object ID is invalid')
+										('Object ID is invalid')
 										) ) {
 			$this->data['object_id'] = $id;
 
@@ -169,7 +169,7 @@ class CompanyGenericMapFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(	'map_id',
 										$id,
-										TTi18n::gettext('Map ID is invalid')
+										('Map ID is invalid')
 										) ) {
 			$this->data['map_id'] = $id;
 
@@ -296,7 +296,7 @@ class CompanyGenericMapFactory extends Factory {
 	function addLog( $log_action ) {
 		$retval = FALSE;
 		if ( $this->getObjectType() > 0 ) {
-			$description = TTi18n::getText('Generic Object Mapping');
+			$description = ('Generic Object Mapping');
 			switch( $this->getObjectType() ) {
 				case 110:
 				case 120:
@@ -312,63 +312,63 @@ class CompanyGenericMapFactory extends Factory {
 							$lf = new OverTimePolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Overtime Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Overtime Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 120:
 							$lf = new PremiumPolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Premium Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Premium Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 130:
 							$lf = new RoundIntervalPolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Rounding Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Rounding Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 140:
 							$lf = new AccrualPolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Accrual Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Accrual Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 150:
 							$lf = new MealPolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Meal Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Meal Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 160:
 							$lf = new BreakPolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Break Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Break Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 170:
 							$lf = new AbsencePolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Absence Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Absence Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 180:
 							$lf = new HolidayPolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Holiday Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Holiday Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 						case 190: //Not handled with generic mapping currently.
 							$lf = new ExceptionPolicyListFactory();
 							$lf->getById( $this->getMapId() );
 							if ( $lf->getRecordCount() > 0 ) {
-								$description = TTi18n::getText('Exception Policy').': '. $lf->getCurrent()->getName();
+								$description = ('Exception Policy').': '. $lf->getCurrent()->getName();
 							}
 							break;
 					}
@@ -380,7 +380,7 @@ class CompanyGenericMapFactory extends Factory {
 					$lf = new BreakPolicyListFactory();
 					$lf->getById( $this->getMapId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = TTi18n::getText('Break Policy').': '. $lf->getCurrent()->getName();
+						$description = ('Break Policy').': '. $lf->getCurrent()->getName();
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -391,7 +391,7 @@ class CompanyGenericMapFactory extends Factory {
 					$lf = new BranchListFactory();
 					$lf->getById( $this->getMapId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = TTi18n::getText('Branch').': '. $lf->getCurrent()->getName();
+						$description = ('Branch').': '. $lf->getCurrent()->getName();
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -401,7 +401,7 @@ class CompanyGenericMapFactory extends Factory {
 					$lf = new DepartmentListFactory();
 					$lf->getById( $this->getMapId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = TTi18n::getText('Department').': '. $lf->getCurrent()->getName();
+						$description = ('Department').': '. $lf->getCurrent()->getName();
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -411,7 +411,7 @@ class CompanyGenericMapFactory extends Factory {
 					$lf = new UserGroupListFactory();
 					$lf->getById( $this->getMapId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = TTi18n::getText('Employee Group').': '. $lf->getCurrent()->getName();
+						$description = ('Employee Group').': '. $lf->getCurrent()->getName();
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -422,18 +422,18 @@ class CompanyGenericMapFactory extends Factory {
 					switch( $this->getObjectType() ) {
 						case 1040:
 							$table_name = 'job_include_user';
-							$type = TTi18n::getText('Include');
+							$type = ('Include');
 							break;
 						case 1050:
 							$table_name = 'job_exclude_user';
-							$type = TTi18n::getText('Exclude');
+							$type = ('Exclude');
 							break;
 					}
 
 					$lf = new UserListFactory();
 					$lf->getById( $this->getMapId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = $type.' '. TTi18n::getText('Employee').': '. $lf->getCurrent()->getFullName();
+						$description = $type.' '. ('Employee').': '. $lf->getCurrent()->getFullName();
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -444,7 +444,7 @@ class CompanyGenericMapFactory extends Factory {
 					$lf = new JobItemGroupListFactory();
 					$lf->getById( $this->getMapId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = TTi18n::getText('Task Group').': '. $lf->getCurrent()->getName();
+						$description = ('Task Group').': '. $lf->getCurrent()->getName();
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -455,18 +455,18 @@ class CompanyGenericMapFactory extends Factory {
 					switch( $this->getObjectType() ) {
 						case 1070:
 							$table_name = 'job_include_job_item';
-							$type = TTi18n::getText('Include');
+							$type = ('Include');
 							break;
 						case 1080:
 							$table_name = 'job_exclude_job_item';
-							$type = TTi18n::getText('Exclude');
+							$type = ('Exclude');
 							break;
 					}
 
 					$lf = new JobItemListFactory();
 					$lf->getById( $this->getMapId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = $type.' '. TTi18n::getText('Task').': '. $lf->getCurrent()->getName();
+						$description = $type.' '. ('Task').': '. $lf->getCurrent()->getName();
 					}
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description .' Record Count: '. $lf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -476,7 +476,7 @@ class CompanyGenericMapFactory extends Factory {
 					$table_name = 'payment_gateway_credit_card_type';
 
 					$cpf = new ClientPaymentFactory();
-					$description = TTi18n::getText('Credit Card Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('credit_card_type') );
+					$description = ('Credit Card Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('credit_card_type') );
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
 					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );
@@ -486,7 +486,7 @@ class CompanyGenericMapFactory extends Factory {
 					$table_name = 'payment_gateway_bank_account_type';
 
 					$cpf = new ClientPaymentFactory();
-					$description = TTi18n::getText('Bank Account Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('bank_account_type') );
+					$description = ('Bank Account Type').': '. Option::getByKey( $this->getMapId(), $cpf->getOptions('bank_account_type') );
 
 					Debug::text('Action: '. $log_action .' MapID: '. $this->getMapID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
 					$retval = TTLog::addEntry( $this->getObjectId(), $log_action, $description, NULL, $table_name );

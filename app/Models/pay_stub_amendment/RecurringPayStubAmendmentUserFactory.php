@@ -18,7 +18,7 @@ class RecurringPayStubAmendmentUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'recurring_ps_amendment',
 															$rpsalf->getByID($id),
-															TTi18n::gettext('Recurring PS Amendment is invalid')
+															('Recurring PS Amendment is invalid')
 															) ) {
 			$this->data['recurring_ps_amendment_id'] = $id;
 
@@ -39,7 +39,7 @@ class RecurringPayStubAmendmentUserFactory extends Factory {
 		if ( $id == -1
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('User is invalid')
+															('User is invalid')
 															) ) {
 			$this->data['user_id'] = $id;
 

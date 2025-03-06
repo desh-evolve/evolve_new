@@ -117,7 +117,7 @@ class HierarchyFactory extends Factory {
 		if ( $this->getUser() == $this->getParent() ) {
 				$this->Validator->isTrue(	'parent',
 											FALSE,
-											TTi18n::gettext('User is the same as parent')
+											('User is the same as parent')
 											);
 		}
 
@@ -153,7 +153,7 @@ class HierarchyFactory extends Factory {
 			if ( $user_company_id != $parent_company_id ) {
 					$this->Validator->isTrue(	'parent',
 												FALSE,
-												TTi18n::gettext('User or parent has incorrect company')
+												('User or parent has incorrect company')
 												);
 			}
 
@@ -166,7 +166,7 @@ class HierarchyFactory extends Factory {
 					Debug::Text(' Objects cant be re-parented to their own children...' , __FILE__, __LINE__, __METHOD__,10);
 					$this->Validator->isTrue(	'parent',
 												FALSE,
-												TTi18n::gettext('Unable to change parent to a child of itself')
+												('Unable to change parent to a child of itself')
 												);
 				}
 			}
@@ -183,7 +183,7 @@ class HierarchyFactory extends Factory {
 
 					$this->Validator->isTrue(	'parent',
 												FALSE,
-												TTi18n::gettext('Unable to change parent to a child of itself')
+												('Unable to change parent to a child of itself')
 												);
 
 				} else {
@@ -214,7 +214,7 @@ class HierarchyFactory extends Factory {
 
 				$this->Validator->isTrue(	'user',
 											FALSE,
-											TTi18n::gettext('Employee is already assigned to this hierarchy')
+											('Employee is already assigned to this hierarchy')
 											);
 				$retval = FALSE;
 			}
@@ -260,7 +260,7 @@ class HierarchyFactory extends Factory {
 		}
 		*/
 
-		TTLog::addEntry( $this->getUser(), $log_action, TTi18n::getText('Hierarchy Tree - Control ID: ').$this->getHierarchyControl(), NULL, $this->getTable() );
+		TTLog::addEntry( $this->getUser(), $log_action, ('Hierarchy Tree - Control ID: ').$this->getHierarchyControl(), NULL, $this->getTable() );
 
 		$this->CommitTransaction();
 		//$this->FailTransaction();
@@ -293,7 +293,7 @@ class HierarchyFactory extends Factory {
 				Debug::Text(' NOT Deleting already set shared flag ', __FILE__, __LINE__, __METHOD__,10);
 			}
 
-			TTLog::addEntry( $this->getUser(), 30, TTi18n::getText('Hierarchy Tree - Control ID: ').$this->getHierarchyControl() , NULL, $this->getTable() );
+			TTLog::addEntry( $this->getUser(), 30, ('Hierarchy Tree - Control ID: ').$this->getHierarchyControl() , NULL, $this->getTable() );
 
 			$this->CommitTransaction();
 			*/

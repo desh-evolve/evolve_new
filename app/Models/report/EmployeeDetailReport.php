@@ -5,7 +5,7 @@ namespace App\Models\Report;
 class EmployeeDetailReport extends Report {
 
         function __construct() {
-                $this->title = TTi18n::getText('TimeSheet Detail Report');
+                $this->title = ('TimeSheet Detail Report');
                 $this->file_name = 'timesheet_detail_report';
 
                 parent::__construct();

@@ -28,26 +28,26 @@ class OverTimePolicyFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Daily'),
-										20 => TTi18n::gettext('Weekly'),
-										30 => TTi18n::gettext('Bi-Weekly'), //Need to recalculate two weeks ahead, instead of just one.
-										40 => TTi18n::gettext('Sunday'),
-										50 => TTi18n::gettext('Monday'),
-										60 => TTi18n::gettext('Tuesday'),
-										70 => TTi18n::gettext('Wednesday'),
-										80 => TTi18n::gettext('Thursday'),
-										90 => TTi18n::gettext('Friday'),
-										100 => TTi18n::gettext('Saturday'),
-										150 => TTi18n::gettext('2 Or More Days Consecutively Worked'),
-										151 => TTi18n::gettext('3 Or More Days Consecutively Worked'),
-										152 => TTi18n::gettext('4 Or More Days Consecutively Worked'),
-										153 => TTi18n::gettext('5 Or More Days Consecutively Worked'),
-										154 => TTi18n::gettext('6 Or More Days Consecutively Worked'),
-										155 => TTi18n::gettext('7 Or More Days Consecutively Worked'),
-										180 => TTi18n::gettext('Poya Holiday'),
-                                                                                190 => TTi18n::gettext('Statutory Holiday'),
-										200 => TTi18n::gettext('Over Schedule (Daily) / No Schedule'),
-										210 => TTi18n::gettext('Over Schedule (Weekly) / No Schedule')
+										10 => ('Daily'),
+										20 => ('Weekly'),
+										30 => ('Bi-Weekly'), //Need to recalculate two weeks ahead, instead of just one.
+										40 => ('Sunday'),
+										50 => ('Monday'),
+										60 => ('Tuesday'),
+										70 => ('Wednesday'),
+										80 => ('Thursday'),
+										90 => ('Friday'),
+										100 => ('Saturday'),
+										150 => ('2 Or More Days Consecutively Worked'),
+										151 => ('3 Or More Days Consecutively Worked'),
+										152 => ('4 Or More Days Consecutively Worked'),
+										153 => ('5 Or More Days Consecutively Worked'),
+										154 => ('6 Or More Days Consecutively Worked'),
+										155 => ('7 Or More Days Consecutively Worked'),
+										180 => ('Poya Holiday'),
+                                                                                190 => ('Statutory Holiday'),
+										200 => ('Over Schedule (Daily) / No Schedule'),
+										210 => ('Over Schedule (Weekly) / No Schedule')
 									);
 				break;
 			case 'calculation_order':
@@ -76,17 +76,17 @@ class OverTimePolicyFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1020-name' => TTi18n::gettext('Name'),
+										'-1010-type' => ('Type'),
+										'-1020-name' => ('Name'),
 
-										'-1030-trigger_time' => TTi18n::gettext('Active After'),
-										'-1040-rate' => TTi18n::gettext('Rate'),
-										'-1050-accrual_rate' => TTi18n::gettext('Accrual Rate'),
+										'-1030-trigger_time' => ('Active After'),
+										'-1040-rate' => ('Rate'),
+										'-1050-accrual_rate' => ('Accrual Rate'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -167,7 +167,7 @@ class OverTimePolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -195,7 +195,7 @@ class OverTimePolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -217,7 +217,7 @@ class OverTimePolicyFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -245,7 +245,7 @@ class OverTimePolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'trigger_time',
 													$int,
-													TTi18n::gettext('Incorrect Trigger Time')) ) {
+													('Incorrect Trigger Time')) ) {
 			$this->data['trigger_time'] = $int;
 
 			return TRUE;
@@ -271,7 +271,7 @@ class OverTimePolicyFactory extends Factory {
 
 		if ($this->Validator->isNumeric('max_time',
 			$int,
-			TTi18n::gettext('Incorrect Max Time')) ) {
+			('Incorrect Max Time')) ) {
 			$this->data['max_time'] = $int;
 
 			return TRUE;
@@ -301,7 +301,7 @@ class OverTimePolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'rate',
 												$int,
-												TTi18n::gettext('Incorrect Rate')) ) {
+												('Incorrect Rate')) ) {
 			$this->data['rate'] = $int;
 
 			return TRUE;
@@ -326,7 +326,7 @@ class OverTimePolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'wage_group',
 													$wglf->getByID($id),
-													TTi18n::gettext('Wage Group is invalid')
+													('Wage Group is invalid')
 													) ) {
 
 			$this->data['wage_group_id'] = $id;
@@ -353,7 +353,7 @@ class OverTimePolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'accrual_rate',
 												$int,
-												TTi18n::gettext('Incorrect Accrual Rate')) ) {
+												('Incorrect Accrual Rate')) ) {
 			$this->data['accrual_rate'] = $int;
 
 			return TRUE;
@@ -382,7 +382,7 @@ class OverTimePolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'accrual_policy',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accrual_policy_id'] = $id;
@@ -414,7 +414,7 @@ class OverTimePolicyFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account_id',
 														$psealf->getById($id),
-														TTi18n::gettext('Invalid Pay Stub Account')
+														('Invalid Pay Stub Account')
 														) ) {
 			$this->data['pay_stub_entry_account_id'] = $id;
 
@@ -432,7 +432,7 @@ class OverTimePolicyFactory extends Factory {
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This overtime policy is in use'));
+											('This overtime policy is in use'));
 
 			}
 		}
@@ -508,7 +508,7 @@ class OverTimePolicyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('OverTime Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('OverTime Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

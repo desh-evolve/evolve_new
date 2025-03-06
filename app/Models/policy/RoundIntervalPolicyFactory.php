@@ -25,26 +25,26 @@ class RoundIntervalPolicyFactory extends Factory {
 		switch( $name ) {
 			case 'round_type':
 				$retval = array(
-										10 => TTi18n::gettext('Down'),
-										20 => TTi18n::gettext('Average'),
-										30 => TTi18n::gettext('Up')
+										10 => ('Down'),
+										20 => ('Average'),
+										30 => ('Up')
 									);
 				break;
 
 			case 'punch_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Punches'),
-										20 => TTi18n::gettext('All In (incl. Lunch)'),
-										30 => TTi18n::gettext('All Out (incl. Lunch)'),
-										40 => TTi18n::gettext('In'),
-										50 => TTi18n::gettext('Out'),
-										60 => TTi18n::gettext('Lunch - In'),
-										70 => TTi18n::gettext('Lunch - Out'),
-										80 => TTi18n::gettext('Break - In'),
-										90 => TTi18n::gettext('Break - Out'),
-										100 => TTi18n::gettext('Lunch Total'),
-										110 => TTi18n::gettext('Break Total'),
-										120 => TTi18n::gettext('Day Total'),
+										10 => ('All Punches'),
+										20 => ('All In (incl. Lunch)'),
+										30 => ('All Out (incl. Lunch)'),
+										40 => ('In'),
+										50 => ('Out'),
+										60 => ('Lunch - In'),
+										70 => ('Lunch - Out'),
+										80 => ('Break - In'),
+										90 => ('Break - Out'),
+										100 => ('Lunch Total'),
+										110 => ('Break Total'),
+										120 => ('Day Total'),
 									);
 				break;
 			case 'punch_type_relation':
@@ -59,15 +59,15 @@ class RoundIntervalPolicyFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-punch_type' => TTi18n::gettext('Punch Type'),
-										'-1020-round_type' => TTi18n::gettext('Round Type'),
-										'-1030-name' => TTi18n::gettext('Name'),
-										'-1030-round_interval' => TTi18n::gettext('Interval'),
+										'-1010-punch_type' => ('Punch Type'),
+										'-1020-round_type' => ('Round Type'),
+										'-1030-name' => ('Name'),
+										'-1030-round_interval' => ('Interval'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -140,7 +140,7 @@ class RoundIntervalPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -198,7 +198,7 @@ class RoundIntervalPolicyFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -227,7 +227,7 @@ class RoundIntervalPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'round_type',
 											$value,
-											TTi18n::gettext('Incorrect Round Type'),
+											('Incorrect Round Type'),
 											$this->getOptions('round_type')) ) {
 
 			$this->data['round_type_id'] = $value;
@@ -255,7 +255,7 @@ class RoundIntervalPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'punch_type',
 											$value,
-											TTi18n::gettext('Incorrect Punch Type'),
+											('Incorrect Punch Type'),
 											$this->getOptions('punch_type')) ) {
 
 			$this->data['punch_type_id'] = $value;
@@ -278,7 +278,7 @@ class RoundIntervalPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'interval',
 													$value,
-													TTi18n::gettext('Incorrect Interval')) ) {
+													('Incorrect Interval')) ) {
 
 			//If someone is using hour parse format ie: 0.12 we need to round to the nearest
 			//minute other wise it'll be like 7mins and 23seconds messing up rounding.
@@ -304,7 +304,7 @@ class RoundIntervalPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'grace',
 													$value,
-													TTi18n::gettext('Incorrect grace value')) ) {
+													('Incorrect grace value')) ) {
 
 			//If someone is using hour parse format ie: 0.12 we need to round to the nearest
 			//minute other wise it'll be like 7mins and 23seconds messing up rounding.
@@ -396,7 +396,7 @@ class RoundIntervalPolicyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Round Interval Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Round Interval Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

@@ -22,8 +22,8 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('Enabled'),
-										20 => TTi18n::gettext('Disabled'),
+										10 => ('Enabled'),
+										20 => ('Disabled'),
 									);
 				break;
 			
@@ -71,7 +71,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -95,7 +95,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 		$uf = TTnew( 'UserListFactory' );
 		if (	$this->Validator->isResultSetWithRows(	'user_id',
 											$uf->getById($id),
-											TTi18n::gettext('User is invalid'),
+											('User is invalid'),
 											2,50)
 						) {
 
@@ -121,7 +121,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 		$alf = TTnew( 'AbsencePolicyListFactory' );
 		if (	$this->Validator->isResultSetWithRows(	'absence_policy_id',
 											$alf->getById($id),
-											TTi18n::gettext('Absence Policy  is invalid'),
+											('Absence Policy  is invalid'),
 											2,50)
 						) {
 
@@ -147,7 +147,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 		$alf = TTnew( 'AbsenceLeaveListFactory' );
 		if (	$this->Validator->isResultSetWithRows(	'absence_leave_id',
 											$alf->getById($id),
-											TTi18n::gettext('Absence Leave is invalid'),
+											('Absence Leave is invalid'),
 											2,50)
 						) {
 
@@ -193,7 +193,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'time_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect time stamp'))
+												('Incorrect time stamp'))
 
 			) {
 
@@ -218,7 +218,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
                         
 		if (	$this->Validator->isFloat(	'amount',
                                                 $amount,
-                                                TTi18n::gettext('Amount is invalid') )
+                                                ('Amount is invalid') )
 						) {
 
 			$this->data['amount'] = $amount;
@@ -273,7 +273,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This absence policy is in use'));
+											('This absence policy is in use'));
 
 			}
 		}
@@ -353,7 +353,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Absence Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Absence Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

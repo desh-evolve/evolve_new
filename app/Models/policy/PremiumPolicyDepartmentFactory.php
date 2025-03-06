@@ -40,11 +40,11 @@ class PremiumPolicyDepartmentFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(	'premium_policy',
 													$id,
-													TTi18n::gettext('Selected Premium Policy is invalid')
+													('Selected Premium Policy is invalid')
 /*
 				$this->Validator->isResultSetWithRows(	'premium_policy',
 													$pplf->getByID($id),
-													TTi18n::gettext('Selected Premium Policy is invalid')
+													('Selected Premium Policy is invalid')
 */
 															)
 			) {
@@ -71,7 +71,7 @@ class PremiumPolicyDepartmentFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'department',
 													$dlf->getByID($id),
-													TTi18n::gettext('Selected Department is invalid')
+													('Selected Department is invalid')
 													) ) {
 			$this->data['department_id'] = $id;
 
@@ -131,7 +131,7 @@ class PremiumPolicyDepartmentFactory extends Factory {
 	function addLog( $log_action ) {
 		$obj = $this->getDepartmentObject();
 		if ( is_object($obj) ) {
-			return TTLog::addEntry( $this->getPremiumPolicy(), $log_action,  TTi18n::getText('Department').': '. $obj->getName(), NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getPremiumPolicy(), $log_action,  ('Department').': '. $obj->getName(), NULL, $this->getTable() );
 		}
 	}
 }

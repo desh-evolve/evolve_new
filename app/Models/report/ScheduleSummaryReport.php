@@ -5,7 +5,7 @@ namespace App\Models\Report;
 class ScheduleSummaryReport extends Report {
 
 	function __construct() {
-		$this->title = TTi18n::getText('Schedule Summary Report');
+		$this->title = ('Schedule Summary Report');
 		$this->file_name = 'schedule_summary_report';
 
 		parent::__construct();
@@ -35,66 +35,66 @@ class ScheduleSummaryReport extends Report {
 			case 'setup_fields':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-template' => TTi18n::gettext('Template'),
-										'-1010-time_period' => TTi18n::gettext('Time Period'),
+										'-1000-template' => ('Template'),
+										'-1010-time_period' => ('Time Period'),
 
-										'-2010-user_status_id' => TTi18n::gettext('Employee Status'),
-										'-2020-user_group_id' => TTi18n::gettext('Employee Group'),
-										'-2030-user_title_id' => TTi18n::gettext('Employee Title'),
-										'-2040-include_user_id' => TTi18n::gettext('Employee Include'),
-										'-2050-exclude_user_id' => TTi18n::gettext('Employee Exclude'),
-										'-2060-default_branch_id' => TTi18n::gettext('Default Branch'),
-										'-2070-default_department_id' => TTi18n::gettext('Default Department'),
-										'-2080-schedule_branch_id' => TTi18n::gettext('Schedule Branch'),
-										'-2090-schedule_department_id' => TTi18n::gettext('Schedule Department'),
+										'-2010-user_status_id' => ('Employee Status'),
+										'-2020-user_group_id' => ('Employee Group'),
+										'-2030-user_title_id' => ('Employee Title'),
+										'-2040-include_user_id' => ('Employee Include'),
+										'-2050-exclude_user_id' => ('Employee Exclude'),
+										'-2060-default_branch_id' => ('Default Branch'),
+										'-2070-default_department_id' => ('Default Department'),
+										'-2080-schedule_branch_id' => ('Schedule Branch'),
+										'-2090-schedule_department_id' => ('Schedule Department'),
 
-										'-3000-status_id' => TTi18n::gettext('Schedule Status'),
+										'-3000-status_id' => ('Schedule Status'),
 
-										'-5000-columns' => TTi18n::gettext('Display Columns'),
-										'-5010-group' => TTi18n::gettext('Group By'),
-										'-5020-sub_total' => TTi18n::gettext('SubTotal By'),
-										'-5030-sort' => TTi18n::gettext('Sort By'),
+										'-5000-columns' => ('Display Columns'),
+										'-5010-group' => ('Group By'),
+										'-5020-sub_total' => ('SubTotal By'),
+										'-5030-sort' => ('Sort By'),
 							   );
 				break;
 			case 'time_period':
 				$retval = TTDate::getTimePeriodOptions();
 				break;
 			case 'date_columns':
-				$retval = TTDate::getReportDateOptions( NULL, TTi18n::getText('Date'), 15, TRUE );
+				$retval = TTDate::getReportDateOptions( NULL, ('Date'), 15, TRUE );
 				break;
 			case 'static_columns':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1001-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-full_name' => TTi18n::gettext('Full Name'),
-										'-1030-employee_number' => TTi18n::gettext('Employee #'),
-										'-1040-status' => TTi18n::gettext('Status'),
-										'-1050-title' => TTi18n::gettext('Title'),
-										'-1060-province' => TTi18n::gettext('Province/State'),
-										'-1070-country' => TTi18n::gettext('Country'),
-										'-1080-user_group' => TTi18n::gettext('Group'),
-										'-1090-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1100-default_department' => TTi18n::gettext('Default Department'),
-										'-1110-currency' => TTi18n::gettext('Currency'),
+										'-1000-first_name' => ('First Name'),
+										'-1001-middle_name' => ('Middle Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-full_name' => ('Full Name'),
+										'-1030-employee_number' => ('Employee #'),
+										'-1040-status' => ('Status'),
+										'-1050-title' => ('Title'),
+										'-1060-province' => ('Province/State'),
+										'-1070-country' => ('Country'),
+										'-1080-user_group' => ('Group'),
+										'-1090-default_branch' => ('Default Branch'),
+										'-1100-default_department' => ('Default Department'),
+										'-1110-currency' => ('Currency'),
 
-										'-1200-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1210-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
-										'-1220-policy_group' => TTi18n::gettext('Policy Group'),
+										'-1200-permission_control' => ('Permission Group'),
+										'-1210-pay_period_schedule' => ('Pay Period Schedule'),
+										'-1220-policy_group' => ('Policy Group'),
 
 										//Handled in date_columns above.
-										//'-1230-pay_period' => TTi18n::gettext('Pay Period'),
+										//'-1230-pay_period' => ('Pay Period'),
 
-										'-1600-branch' => TTi18n::gettext('Branch'),
-										'-1610-department' => TTi18n::gettext('Department'),
-										'-1620-schedule_policy' => TTi18n::gettext('Schedule Policy'),
-										//'-1630-schedule_type' => TTi18n::gettext('Schedule Type'),
-										'-1640-schedule_status' => TTi18n::gettext('Schedule Status'),
-										'-1650-absence_policy' => TTi18n::gettext('Absence Policy'),
-										'-1660-date_stamp' => TTi18n::gettext('Date'),
-										'-1670-start_time' => TTi18n::gettext('Start Time'),
-										'-1680-end_time' => TTi18n::gettext('End Time'),
+										'-1600-branch' => ('Branch'),
+										'-1610-department' => ('Department'),
+										'-1620-schedule_policy' => ('Schedule Policy'),
+										//'-1630-schedule_type' => ('Schedule Type'),
+										'-1640-schedule_status' => ('Schedule Status'),
+										'-1650-absence_policy' => ('Absence Policy'),
+										'-1660-date_stamp' => ('Date'),
+										'-1670-start_time' => ('Start Time'),
+										'-1680-end_time' => ('End Time'),
 							   );
 
 				$retval = array_merge( $retval, $this->getOptions('date_columns') );
@@ -105,12 +105,12 @@ class ScheduleSummaryReport extends Report {
 										//Dynamic - Aggregate functions can be used
 
 										//Take into account wage groups. However hourly_rates for the same hour type, so we need to figure out an average hourly rate for each column?
-										'-2010-hourly_rate' => TTi18n::gettext('Hourly Rate'),
+										'-2010-hourly_rate' => ('Hourly Rate'),
 
-										'-2100-total_time' => TTi18n::gettext('Total Time'),
-										'-2110-total_time_wage' => TTi18n::gettext('Total Time Wage'),
+										'-2100-total_time' => ('Total Time'),
+										'-2110-total_time_wage' => ('Total Time Wage'),
 
-										'-4000-total_shift' => TTi18n::gettext('Total Shifts'), //Group counter...
+										'-4000-total_shift' => ('Total Shifts'), //Group counter...
 							);
 
 				break;
@@ -148,52 +148,52 @@ class ScheduleSummaryReport extends Report {
 				break;
 			case 'templates':
 				$retval = array(
-										'-1010-by_employee+work+total_time' => TTi18n::gettext('Work Time by Employee'),
-										'-1020-by_employee+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Employee'),
-										'-1030-by_title+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Title'),
+										'-1010-by_employee+work+total_time' => ('Work Time by Employee'),
+										'-1020-by_employee+work+total_time+total_time_wage' => ('Work Time+Wage by Employee'),
+										'-1030-by_title+work+total_time+total_time_wage' => ('Work Time+Wage by Title'),
 
-										'-1110-by_date_by_full_name+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Date/Employee'),
-										'-1120-by_full_name_by_date+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Employee/Date'),
+										'-1110-by_date_by_full_name+work+total_time+total_time_wage' => ('Work Time+Wage by Date/Employee'),
+										'-1120-by_full_name_by_date+work+total_time+total_time_wage' => ('Work Time+Wage by Employee/Date'),
 
-										'-1210-by_branch+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Branch'),
-										'-1220-by_department+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Department'),
-										'-1230-by_branch_by_department+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Branch/Department'),
+										'-1210-by_branch+work+total_time+total_time_wage' => ('Work Time+Wage by Branch'),
+										'-1220-by_department+work+total_time+total_time_wage' => ('Work Time+Wage by Department'),
+										'-1230-by_branch_by_department+work+total_time+total_time_wage' => ('Work Time+Wage by Branch/Department'),
 
-										'-1310-by_pay_period+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Pay Period'),
-										'-1320-by_pay_period_by_employee+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Pay Period/Employee'),
-										'-1330-by_pay_period_by_branch+work+total_time+total_time_wage' => TTi18n::gettext('Work  Time+Wage by Pay Period/Branch'),
-										'-1340-by_pay_period_by_department+work+total_time+total_time_wage' => TTi18n::gettext('Work  Time+Wage by Pay Period/Department'),
-										'-1350-by_pay_period_by_branch_by_department+work+total_time+total_time_wage' => TTi18n::gettext('Work  Time+Wage by Pay Period/Branch/Department'),
+										'-1310-by_pay_period+work+total_time+total_time_wage' => ('Work Time+Wage by Pay Period'),
+										'-1320-by_pay_period_by_employee+work+total_time+total_time_wage' => ('Work Time+Wage by Pay Period/Employee'),
+										'-1330-by_pay_period_by_branch+work+total_time+total_time_wage' => ('Work  Time+Wage by Pay Period/Branch'),
+										'-1340-by_pay_period_by_department+work+total_time+total_time_wage' => ('Work  Time+Wage by Pay Period/Department'),
+										'-1350-by_pay_period_by_branch_by_department+work+total_time+total_time_wage' => ('Work  Time+Wage by Pay Period/Branch/Department'),
 
-										'-1410-by_employee_by_pay_period+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Employee/Pay Period'),
-										'-1420-by_branch_by_pay_period+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Branch/Pay Period'),
-										'-1430-by_department_by_pay_period+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Department/Pay Period'),
-										'-1440-by_branch_by_department_by_pay_period+work+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Branch/Department/Pay Period'),
+										'-1410-by_employee_by_pay_period+work+total_time+total_time_wage' => ('Work Time+Wage by Employee/Pay Period'),
+										'-1420-by_branch_by_pay_period+work+total_time+total_time_wage' => ('Work Time+Wage by Branch/Pay Period'),
+										'-1430-by_department_by_pay_period+work+total_time+total_time_wage' => ('Work Time+Wage by Department/Pay Period'),
+										'-1440-by_branch_by_department_by_pay_period+work+total_time+total_time_wage' => ('Work Time+Wage by Branch/Department/Pay Period'),
 
-										'-1510-by_title_by_start_time+work+total_time+total_time_wage+total_shift' => TTi18n::gettext('Work Time+Wage+Total Shifts by Title/Start Time'),
-										'-1520-by_date_by_title+work+total_time+total_time_wage+total_shift' => TTi18n::gettext('Work Time+Wage+Total Shifts by Date/Title'),
+										'-1510-by_title_by_start_time+work+total_time+total_time_wage+total_shift' => ('Work Time+Wage+Total Shifts by Title/Start Time'),
+										'-1520-by_date_by_title+work+total_time+total_time_wage+total_shift' => ('Work Time+Wage+Total Shifts by Date/Title'),
 
-										'-2010-by_employee+absence+total_time' => TTi18n::gettext('Absence Time by Employee'),
-										'-2020-by_employee+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Employee'),
-										'-2030-by_title+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Title'),
+										'-2010-by_employee+absence+total_time' => ('Absence Time by Employee'),
+										'-2020-by_employee+absence+total_time+total_time_wage' => ('Absence Time+Wage by Employee'),
+										'-2030-by_title+absence+total_time+total_time_wage' => ('Absence Time+Wage by Title'),
 
-										'-2110-by_date_by_full_name+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Date/Employee'),
-										'-2120-by_full_name_by_date+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Employee/Date'),
+										'-2110-by_date_by_full_name+absence+total_time+total_time_wage' => ('Absence Time+Wage by Date/Employee'),
+										'-2120-by_full_name_by_date+absence+total_time+total_time_wage' => ('Absence Time+Wage by Employee/Date'),
 
-										'-2210-by_branch+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Branch'),
-										'-2220-by_department+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Department'),
-										'-2230-by_branch_by_department+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Branch/Department'),
+										'-2210-by_branch+absence+total_time+total_time_wage' => ('Absence Time+Wage by Branch'),
+										'-2220-by_department+absence+total_time+total_time_wage' => ('Absence Time+Wage by Department'),
+										'-2230-by_branch_by_department+absence+total_time+total_time_wage' => ('Absence Time+Wage by Branch/Department'),
 
-										'-2310-by_pay_period+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Pay Period'),
-										'-2320-by_pay_period_by_employee+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Pay Period/Employee'),
-										'-2330-by_pay_period_by_branch+absence+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Pay Period/Branch'),
-										'-2340-by_pay_period_by_department+absence+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Pay Period/Department'),
-										'-2350-by_pay_period_by_branch_by_department+absence+total_time+total_time_wage' => TTi18n::gettext('Work Time+Wage by Pay Period/Branch/Department'),
+										'-2310-by_pay_period+absence+total_time+total_time_wage' => ('Absence Time+Wage by Pay Period'),
+										'-2320-by_pay_period_by_employee+absence+total_time+total_time_wage' => ('Absence Time+Wage by Pay Period/Employee'),
+										'-2330-by_pay_period_by_branch+absence+total_time+total_time_wage' => ('Work Time+Wage by Pay Period/Branch'),
+										'-2340-by_pay_period_by_department+absence+total_time+total_time_wage' => ('Work Time+Wage by Pay Period/Department'),
+										'-2350-by_pay_period_by_branch_by_department+absence+total_time+total_time_wage' => ('Work Time+Wage by Pay Period/Branch/Department'),
 
-										'-2410-by_employee_by_pay_period+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Employee/Pay Period'),
-										'-2420-by_branch_by_pay_period+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Branch/Pay Period'),
-										'-2430-by_department_by_pay_period+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Department/Pay Period'),
-										'-2440-by_branch_by_department_by_pay_period+absence+total_time+total_time_wage' => TTi18n::gettext('Absence Time+Wage by Branch/Department/Pay Period'),
+										'-2410-by_employee_by_pay_period+absence+total_time+total_time_wage' => ('Absence Time+Wage by Employee/Pay Period'),
+										'-2420-by_branch_by_pay_period+absence+total_time+total_time_wage' => ('Absence Time+Wage by Branch/Pay Period'),
+										'-2430-by_department_by_pay_period+absence+total_time+total_time_wage' => ('Absence Time+Wage by Department/Pay Period'),
+										'-2440-by_branch_by_department_by_pay_period+absence+total_time+total_time_wage' => ('Absence Time+Wage by Branch/Department/Pay Period'),
 
 
 							   );
@@ -544,7 +544,7 @@ class ScheduleSummaryReport extends Report {
 		$slf = TTnew( 'ScheduleListFactory' );
 		$slf->getScheduleSummaryReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Total Rows: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, ('Retrieving Data...') );
 		if ( $slf->getRecordCount() > 0 ) {
 			foreach ( $slf as $key => $s_obj ) {
 				$hourly_rate = 0;
@@ -610,7 +610,7 @@ class ScheduleSummaryReport extends Report {
 		$ulf = TTnew( 'UserListFactory' );
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $ulf as $key => $u_obj ) {
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 
@@ -625,7 +625,7 @@ class ScheduleSummaryReport extends Report {
 
 	//PreProcess data such as calculating additional columns from raw data etc...
 	function _preProcess() {
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['schedule']), NULL, TTi18n::getText('Pre-Processing Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['schedule']), NULL, ('Pre-Processing Data...') );
 
 		//Merge time data with user data
 		$key=0;

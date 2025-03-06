@@ -39,13 +39,13 @@ class PayStubListFactoryFormC extends TTPDF{
         $this->SetFont('times','',10);
 
 	$this->setXY( Misc::AdjustXY(80, 0), Misc::AdjustXY(0, -12) );
-        $this->Cell(0, 10, TTi18n::gettext('Tel: ').$_SESSION['header_data']['phone'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Tel: ').$_SESSION['header_data']['phone'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         $this->setXY( Misc::AdjustXY(107, 0), Misc::AdjustXY(0, -12) );
-        $this->Cell(0, 10, TTi18n::gettext('Fax: ').$_SESSION['header_data']['fax'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Fax: ').$_SESSION['header_data']['fax'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         $this->setXY( Misc::AdjustXY(135, 0), Misc::AdjustXY(0, -12) );
-        $this->Cell(0, 10, TTi18n::gettext('Email: ').$_SESSION['header_data']['email'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Email: ').$_SESSION['header_data']['email'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
 
     }
@@ -80,7 +80,7 @@ class PayStubListFactoryFormC extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(90, 6), Misc::AdjustXY(0, 4) );
 
-	$this->Cell(75,5, TTi18n::gettext('FORM '), $border, 0, 'C');                
+	$this->Cell(75,5, ('FORM '), $border, 0, 'C');                
         
         
 	//print bold C
@@ -88,7 +88,7 @@ class PayStubListFactoryFormC extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(98, 6), Misc::AdjustXY(0, 2.5) );
 
-	$this->Cell(75,5, TTi18n::gettext('C'), $border, 0, 'C');      
+	$this->Cell(75,5, ('C'), $border, 0, 'C');      
         
         
 	//EPF Act No
@@ -96,7 +96,7 @@ class PayStubListFactoryFormC extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(135, 6), Misc::AdjustXY(0, 4) );
 
-	$this->Cell(75,5, TTi18n::gettext('EPF Act No. 15 of 1958'), $border, 0, 'C');          
+	$this->Cell(75,5, ('EPF Act No. 15 of 1958'), $border, 0, 'C');          
         
         
         
@@ -148,7 +148,7 @@ class PayStubListFactoryFormC extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(94, $adjust_x), Misc::AdjustXY(33, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('Cheque No : '), $border, 0, 'L');    
+	$this->Cell(75,5, ('Cheque No : '), $border, 0, 'L');    
         
         
         
@@ -167,7 +167,7 @@ class PayStubListFactoryFormC extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(94, $adjust_x), Misc::AdjustXY(38, $adjust_y) );
 
-	$this->Cell(75,5, TTi18n::gettext('Bank Name and Branch : '), $border, 0, 'L');      
+	$this->Cell(75,5, ('Bank Name and Branch : '), $border, 0, 'L');      
         
         
 	//Bank Name and Branch Values     
@@ -175,7 +175,7 @@ class PayStubListFactoryFormC extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(134, 6), Misc::AdjustXY(38, $adjust_y) );
 
-	//$this->Cell(65,5, TTi18n::gettext('Sampath City Office'), $border, 0, 'L');  
+	//$this->Cell(65,5, ('Sampath City Office'), $border, 0, 'L');  
 	$this->Cell(65,5, '', $border, 0, 'L');           
         
         
@@ -186,7 +186,7 @@ class PayStubListFactoryFormC extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(42, $adjust_y) );
 
-	$this->Cell(5,5, TTi18n::gettext('This form should be returned duly completed along with the contributions to the Superintendent / EPF in the envelope provided. '), $border, 0, 'L');   
+	$this->Cell(5,5, ('This form should be returned duly completed along with the contributions to the Superintendent / EPF in the envelope provided. '), $border, 0, 'L');   
         
 
 

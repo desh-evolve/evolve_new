@@ -11,8 +11,8 @@ class Pager {
 			//If there is no RS to return, something is seriously wrong. Check interface.inc.php?
 			//Make sure the ListFactory function is doing a pageselect
 			$this->rs = $arr->rs;
-
-			$this->count_rows = $arr->db->pageExecuteCountRows;
+			
+			$this->count_rows = count($arr->rs);
 
 			return TRUE;
 		}

@@ -21,7 +21,7 @@ class PolicyGroupPremiumPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
-															TTi18n::gettext('Policy Group is invalid')
+															('Policy Group is invalid')
 															) ) {
 			$this->data['policy_group_id'] = $id;
 
@@ -45,7 +45,7 @@ class PolicyGroupPremiumPolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'premium_policy',
 													$pplf->getByID($id),
-													TTi18n::gettext('Selected Premium Policy is invalid')
+													('Selected Premium Policy is invalid')
 															)
 			) {
 

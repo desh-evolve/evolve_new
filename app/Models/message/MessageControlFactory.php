@@ -24,8 +24,8 @@ class MessageControlFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('UNREAD'),
-										20 => TTi18n::gettext('READ')
+										10 => ('UNREAD'),
+										20 => ('READ')
 									);
 				break;
 			case 'type':
@@ -46,50 +46,50 @@ class MessageControlFactory extends Factory {
 			case 'object_type':
 			case 'object_name':
 				$retval = array(
-										5 => TTi18n::gettext('Email'), //Email from user to another
-										10 => TTi18n::gettext('Recurring Schedule'),
-										20 => TTi18n::gettext('Schedule Amendment'),
-										30 => TTi18n::gettext('Shift Amendment'),
-										40 => TTi18n::gettext('Authorization'),
-										50 => TTi18n::gettext('Request'),
-										60 => TTi18n::gettext('Job'),
-										70 => TTi18n::gettext('Task'),
-										80 => TTi18n::gettext('Client'),
-										90 => TTi18n::gettext('TimeSheet'),
-										100 => TTi18n::gettext('Employee') //For notes assigned to users?
+										5 => ('Email'), //Email from user to another
+										10 => ('Recurring Schedule'),
+										20 => ('Schedule Amendment'),
+										30 => ('Shift Amendment'),
+										40 => ('Authorization'),
+										50 => ('Request'),
+										60 => ('Job'),
+										70 => ('Task'),
+										80 => ('Client'),
+										90 => ('TimeSheet'),
+										100 => ('Employee') //For notes assigned to users?
 									);
 				break;
 			case 'folder':
 				$retval = array(
-										10 => TTi18n::gettext('Inbox'),
-										20 => TTi18n::gettext('Sent')
+										10 => ('Inbox'),
+										20 => ('Sent')
 									);
 				break;
 			case 'priority':
 				$retval = array(
-										10 => TTi18n::gettext('LOW'),
-										50 => TTi18n::gettext('NORMAL'),
-										100 => TTi18n::gettext('HIGH'),
-										110 => TTi18n::gettext('URGENT')
+										10 => ('LOW'),
+										50 => ('NORMAL'),
+										100 => ('HIGH'),
+										110 => ('URGENT')
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-from_first_name' => TTi18n::gettext('From: First Name'),
-										'-1020-from_middle_name' => TTi18n::gettext('From: Middle Name'),
-										'-1030-from_last_name' => TTi18n::gettext('From: Last Name'),
+										'-1010-from_first_name' => ('From: First Name'),
+										'-1020-from_middle_name' => ('From: Middle Name'),
+										'-1030-from_last_name' => ('From: Last Name'),
 
-										'-1110-to_first_name' => TTi18n::gettext('To: First Name'),
-										'-1120-to_middle_name' => TTi18n::gettext('To: Middle Name'),
-										'-1130-to_last_name' => TTi18n::gettext('To: Last Name'),
+										'-1110-to_first_name' => ('To: First Name'),
+										'-1120-to_middle_name' => ('To: Middle Name'),
+										'-1130-to_last_name' => ('To: Last Name'),
 
-										'-1200-subject' => TTi18n::gettext('Subject'),
-										'-1210-object_type' => TTi18n::gettext('Type'),
+										'-1200-subject' => ('Subject'),
+										'-1210-object_type' => ('Type'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										//'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										//'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										//'-2020-updated_by' => ('Updated By'),
+										//'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -229,7 +229,7 @@ class MessageControlFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isNumeric(				'parent',
 															$id,
-															TTi18n::gettext('Parent is invalid')
+															('Parent is invalid')
 															) ) {
 			$this->tmp_data['parent_id'] = $id;
 
@@ -289,7 +289,7 @@ class MessageControlFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'object_type',
 											$type,
-											TTi18n::gettext('Object Type is invalid'),
+											('Object Type is invalid'),
 											$this->getOptions('type')) ) {
 
 			$this->data['object_type_id'] = $type;
@@ -312,7 +312,7 @@ class MessageControlFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'object',
 													$this->getObjectHandler()->getByID($id),
-													TTi18n::gettext('Object ID is invalid')
+													('Object ID is invalid')
 													) ) {
 			$this->data['object_id'] = $id;
 
@@ -343,7 +343,7 @@ class MessageControlFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'priority',
 											$priority,
-											TTi18n::gettext('Invalid Priority'),
+											('Invalid Priority'),
 											$this->getOptions('priority')) ) {
 
 			$this->data['priority_id'] = $priority;
@@ -368,7 +368,7 @@ class MessageControlFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'subject',
 												$text,
-												TTi18n::gettext('Invalid Subject length'),
+												('Invalid Subject length'),
 												2,
 												100) ) {
 
@@ -392,7 +392,7 @@ class MessageControlFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'body',
 												$text,
-												TTi18n::gettext('Invalid Body length'),
+												('Invalid Body length'),
 												5,
 												1024) ) {
 
@@ -432,7 +432,7 @@ class MessageControlFactory extends Factory {
 			if ( $this->Validator->hasError( 'from' ) == FALSE AND $this->getFromUserId() == '' ) {
 				$this->Validator->isTrue(	'from',
 											FALSE,
-											TTi18n::gettext('Message sender is invalid') );
+											('Message sender is invalid') );
 
 			}
 
@@ -440,7 +440,7 @@ class MessageControlFactory extends Factory {
 			if ( $this->Validator->hasError( 'to' ) == FALSE AND $this->getToUserId() == FALSE AND $this->getObjectType() == 5 ) {
 				$this->Validator->isTrue(	'to',
 											FALSE,
-											TTi18n::gettext('Message recipient is invalid') );
+											('Message recipient is invalid') );
 			}
 		}
 
@@ -448,7 +448,7 @@ class MessageControlFactory extends Factory {
 		if ( $this->getObjectType() == '' ) {
 				$this->Validator->isTrue(	'object_type_id',
 											FALSE,
-											TTi18n::gettext('Object type is invalid') );
+											('Object type is invalid') );
 		}
 		*/
 
@@ -532,11 +532,11 @@ class MessageControlFactory extends Factory {
 		}
 		Debug::Text('Bcc: '. $bcc, __FILE__, __LINE__, __METHOD__,10);
 
-		$email_subject = TTi18n::gettext('New message waiting in').' '. APPLICATION_NAME;
-		$email_body  = TTi18n::gettext('*DO NOT REPLY TO THIS EMAIL - PLEASE USE THE LINK BELOW INSTEAD*')."\n\n";
-		$email_body  .= TTi18n::gettext('You have a new message waiting for you in').' '. APPLICATION_NAME."\n";
+		$email_subject = ('New message waiting in').' '. APPLICATION_NAME;
+		$email_body  = ('*DO NOT REPLY TO THIS EMAIL - PLEASE USE THE LINK BELOW INSTEAD*')."\n\n";
+		$email_body  .= ('You have a new message waiting for you in').' '. APPLICATION_NAME."\n";
 		if ( $this->getSubject() != '' ) {
-			$email_body .= TTi18n::gettext('Subject:').' '. $this->getSubject()."\n";
+			$email_body .= ('Subject:').' '. $this->getSubject()."\n";
 		}
 
 		$protocol = 'http';
@@ -544,7 +544,7 @@ class MessageControlFactory extends Factory {
 			$protocol .= 's';
 		}
 
-		$email_body .= TTi18n::gettext('Link').': <a href="'. $protocol .'://'. Misc::getHostName().Environment::getBaseURL().'">'. APPLICATION_NAME .' '. TTi18n::getText('Login') .'</a>';
+		$email_body .= ('Link').': <a href="'. $protocol .'://'. Misc::getHostName().Environment::getBaseURL().'">'. APPLICATION_NAME .' '. ('Login') .'</a>';
 
 		//Define subject/body variables here.
 		$search_arr = array(
@@ -582,7 +582,7 @@ class MessageControlFactory extends Factory {
 		$retval = $mail->Send();
 
 		if ( $retval == TRUE ) {
-			TTLog::addEntry( $this->getId(), 500,  TTi18n::getText('Email Message to').': '. $to .' Bcc: '. $headers['Bcc'], NULL, $this->getTable() );
+			TTLog::addEntry( $this->getId(), 500,  ('Email Message to').': '. $to .' Bcc: '. $headers['Bcc'], NULL, $this->getTable() );
 			return TRUE;
 		}
 

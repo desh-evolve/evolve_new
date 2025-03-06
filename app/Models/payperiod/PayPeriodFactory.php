@@ -22,39 +22,39 @@ class PayPeriodFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('OPEN'),
-										12 => TTi18n::gettext('Locked - Pending Approval'), //Go to this state as soon as date2 is passed
-										//15 => TTi18n::gettext('Locked - Pending Transaction'), //Go to this as soon as approved, or 48hrs before transaction date.
-										20 => TTi18n::gettext('CLOSED'), //Once paid
-										30 => TTi18n::gettext('Post Adjustment')
+										10 => ('OPEN'),
+										12 => ('Locked - Pending Approval'), //Go to this state as soon as date2 is passed
+										//15 => ('Locked - Pending Transaction'), //Go to this as soon as approved, or 48hrs before transaction date.
+										20 => ('CLOSED'), //Once paid
+										30 => ('Post Adjustment')
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1020-status' => TTi18n::gettext('Status'),
-										'-1030-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
+										'-1010-type' => ('Type'),
+										'-1020-status' => ('Status'),
+										'-1030-pay_period_schedule' => ('Pay Period Schedule'),
 
-										'-1040-start_date' => TTi18n::gettext('Start Date'),
-										'-1050-end_date' => TTi18n::gettext('End Date'),
-										'-1060-transaction_date' => TTi18n::gettext('Transaction Date'),
+										'-1040-start_date' => ('Start Date'),
+										'-1050-end_date' => ('End Date'),
+										'-1060-transaction_date' => ('Transaction Date'),
 
-										'-1500-total_punches' => TTi18n::gettext('Punches'),
-										'-1505-pending_requests' => TTi18n::gettext('Pending Requests'),
-										'-1510-exceptions_critical' => TTi18n::gettext('Critical'),
-										'-1510-exceptions_high' => TTi18n::gettext('High'),
-										'-1512-exceptions_medium' => TTi18n::gettext('Medium'),
-										'-1514-exceptions_low' => TTi18n::gettext('Low'),
-										'-1520-verified_timesheets' => TTi18n::gettext('Verified'),
-										'-1522-pending_timesheets' => TTi18n::gettext('Pending'),
-										'-1524-total_timesheets' => TTi18n::gettext('Total'),
-										'-1530-ps_amendments' => TTi18n::gettext('PS Amendments'),
-										'-1540-pay_stubs' => TTi18n::gettext('Pay Stubs'),
+										'-1500-total_punches' => ('Punches'),
+										'-1505-pending_requests' => ('Pending Requests'),
+										'-1510-exceptions_critical' => ('Critical'),
+										'-1510-exceptions_high' => ('High'),
+										'-1512-exceptions_medium' => ('Medium'),
+										'-1514-exceptions_low' => ('Low'),
+										'-1520-verified_timesheets' => ('Verified'),
+										'-1522-pending_timesheets' => ('Pending'),
+										'-1524-total_timesheets' => ('Total'),
+										'-1530-ps_amendments' => ('PS Amendments'),
+										'-1540-pay_stubs' => ('Pay Stubs'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -150,7 +150,7 @@ class PayPeriodFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -172,19 +172,19 @@ class PayPeriodFactory extends Factory {
 		$status = (int)trim($status);
 
 		$status_options = $this->getOptions('status');
-		$validate_msg = TTi18n::gettext('Invalid Status');
+		$validate_msg = ('Invalid Status');
 
 		Debug::Text('Current Status: '. $this->getStatus() .' New Status: '. $status, __FILE__, __LINE__, __METHOD__,10);
 		switch ( $this->getStatus() ) {
 			case 20: //Closed
 				$valid_statuses = array( 20, 30 );
 				$status_options = Misc::arrayIntersectByKey( $valid_statuses, $status_options );
-				$validate_msg = TTi18n::gettext('Status can only be changed from Closed to Post Adjustment');
+				$validate_msg = ('Status can only be changed from Closed to Post Adjustment');
 				break;
 			case 30: //Post Adjustment
 				$valid_statuses = array( 20, 30 );
 				$status_options = Misc::arrayIntersectByKey( $valid_statuses, $status_options );
-				$validate_msg = TTi18n::gettext('Status can only be changed from Post Adjustment to Closed');
+				$validate_msg = ('Status can only be changed from Post Adjustment to Closed');
 				break;
 			default:
 				break;
@@ -218,7 +218,7 @@ class PayPeriodFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule',
 															$ppslf->getByID($id),
-															TTi18n::gettext('Incorrect Pay Period Schedule')
+															('Incorrect Pay Period Schedule')
 															) ) {
 			$this->data['pay_period_schedule_id'] = $id;
 
@@ -313,11 +313,11 @@ class PayPeriodFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'start_date',
 												$epoch,
-												TTi18n::gettext('Incorrect start date'))
+												('Incorrect start date'))
 				AND
 				$this->Validator->isTrue(		'start_date',
 												$this->isValidStartDate($epoch),
-												TTi18n::gettext('Conflicting start date'))
+												('Conflicting start date'))
 
 			) {
 
@@ -346,7 +346,7 @@ class PayPeriodFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'end_date',
 												$epoch,
-												TTi18n::gettext('Incorrect end date')) ) {
+												('Incorrect end date')) ) {
 
 			//$this->data['end_date'] = $epoch;
 			$this->data['end_date'] = $epoch;
@@ -373,7 +373,7 @@ class PayPeriodFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'transaction_date',
 												$epoch,
-												TTi18n::gettext('Incorrect transaction date')) ) {
+												('Incorrect transaction date')) ) {
 
 			$this->data['transaction_date'] = $epoch;
 
@@ -397,7 +397,7 @@ class PayPeriodFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'advance_end_date',
 												$epoch,
-												TTi18n::gettext('Incorrect advance end date')) ) {
+												('Incorrect advance end date')) ) {
 
 			$this->data['advance_end_date'] = $epoch;
 
@@ -428,7 +428,7 @@ class PayPeriodFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'advance_transaction_date',
 												$epoch,
-												TTi18n::gettext('Incorrect advance transaction date')) ) {
+												('Incorrect advance transaction date')) ) {
 
 			$this->data['advance_transaction_date'] = $epoch;
 
@@ -507,7 +507,7 @@ class PayPeriodFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'tainted_date',
 												$epoch,
-												TTi18n::gettext('Incorrect tainted date') ) ) {
+												('Incorrect tainted date') ) ) {
 
 			$this->data['tainted_date'] = $epoch;
 
@@ -541,7 +541,7 @@ class PayPeriodFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'tainted_by',
 													$ulf->getByID($id),
-													TTi18n::gettext('Incorrect tainted employee')
+													('Incorrect tainted employee')
 													) ) {
 
 			$this->data['tainted_by'] = $id;
@@ -824,19 +824,19 @@ class PayPeriodFactory extends Factory {
 		if ( $this->getStartDate() != '' AND $this->getEndDate() != '' AND $this->getEndDate() <= $this->getStartDate() ) {
 			$this->Validator->isTrue(		'end_date',
 											FALSE,
-											TTi18n::gettext('Conflicting end date'));
+											('Conflicting end date'));
 		}
 
 		if ( $this->getEndDate() != '' AND $this->getTransactionDate() != '' AND $this->getTransactionDate() < $this->getEndDate() ) {
 			$this->Validator->isTrue(		'transaction_date',
 											FALSE,
-											TTi18n::gettext('Conflicting transaction date'));
+											('Conflicting transaction date'));
 		}
 
 		if ( ( $this->getStatus() == 20 OR $this->getStatus() == 30 ) AND $this->getEndDate() > 0 AND TTDate::getBeginDayEpoch( time() ) <= $this->getEndDate() ) {
 			$this->Validator->isTrue(		'status_id',
 											FALSE,
-											TTi18n::gettext('Invalid status, unable to lock or close pay periods before their end date.'));
+											('Invalid status, unable to lock or close pay periods before their end date.'));
 
 		}
 
@@ -848,19 +848,19 @@ class PayPeriodFactory extends Factory {
 			if ( $this->getAdvanceEndDate() != '' ) {
 				$this->Validator->isTrue(		'advance_end_date',
 												FALSE,
-												TTi18n::gettext('Advance end date is set') );
+												('Advance end date is set') );
 			}
 
 			if ( $this->getAdvanceTransactionDate() != '' ) {
 				$this->Validator->isTrue(		'advance_transaction_date',
 												FALSE,
-												TTi18n::gettext('Advance transaction date is set') );
+												('Advance transaction date is set') );
 			}
 		} elseif ( $this->getPayPeriodSchedule() == '' ) { // Used to be != for some reason?
 			Debug::text('Pay Period Schedule not found: '. $this->getPayPeriodSchedule(), __FILE__, __LINE__, __METHOD__, 10);
 			$this->Validator->isTrue(		'pay_period_schedule_id',
 											FALSE,
-											TTi18n::gettext('Incorrect Pay Period Schedule') );
+											('Incorrect Pay Period Schedule') );
 		}
 
 		return TRUE;
@@ -896,10 +896,10 @@ class PayPeriodFactory extends Factory {
 		} else {
 			if ( $this->getStatus() == 20 ) { //Closed
 				//Mark pay stubs as PAID once the pay period is closed?
-				TTLog::addEntry( $this->getId(), 20,  TTi18n::getText('Setting Pay Period to Closed'), NULL, $this->getTable() );
+				TTLog::addEntry( $this->getId(), 20,  ('Setting Pay Period to Closed'), NULL, $this->getTable() );
 				$this->setPayStubStatus(40);
 			} elseif ( $this->getStatus() == 30 ) {
-				TTLog::addEntry( $this->getId(), 20,  TTi18n::getText('Setting Pay Period to Post-Adjustment'), NULL, $this->getTable() );
+				TTLog::addEntry( $this->getId(), 20,  ('Setting Pay Period to Post-Adjustment'), NULL, $this->getTable() );
 			}
 
 			if ( $this->getEnableImportData() == TRUE ) {
@@ -1025,7 +1025,7 @@ class PayPeriodFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Pay Period') .' - '. TTi18n::getText('Start Date') .': '. TTDate::getDate('DATE+TIME', $this->getStartDate() ) .' '. TTi18n::getText('End Date') .': '. TTDate::getDate('DATE+TIME', $this->getEndDate() ) .' '. TTi18n::getText('Transaction Date') .': '. TTDate::getDate('DATE+TIME', $this->getTransactionDate() ), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Pay Period') .' - '. ('Start Date') .': '. TTDate::getDate('DATE+TIME', $this->getStartDate() ) .' '. ('End Date') .': '. TTDate::getDate('DATE+TIME', $this->getEndDate() ) .' '. ('Transaction Date') .': '. TTDate::getDate('DATE+TIME', $this->getTransactionDate() ), NULL, $this->getTable(), $this );
 	}
 }
 ?>

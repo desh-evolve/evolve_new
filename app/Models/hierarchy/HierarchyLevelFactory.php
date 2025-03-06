@@ -22,13 +22,13 @@ class HierarchyLevelFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1010-level' => TTi18n::gettext('Level'),
-										'-1020-user' => TTi18n::gettext('Superior'),
+										'-1010-level' => ('Level'),
+										'-1020-user' => ('Superior'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -106,7 +106,7 @@ class HierarchyLevelFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'hierarchy_control_id',
 															$hclf->getByID($id),
-															TTi18n::gettext('Invalid Hierarchy Control')
+															('Invalid Hierarchy Control')
 															)
 				) {
 			$this->data['hierarchy_control_id'] = $id;
@@ -135,7 +135,7 @@ class HierarchyLevelFactory extends Factory {
 				AND
 				$this->Validator->isNumeric(		'level',
 													$int,
-													TTi18n::gettext('Level is invalid')) ) {
+													('Level is invalid')) ) {
 			$this->data['level'] = $int;
 
 			return TRUE;
@@ -173,7 +173,7 @@ class HierarchyLevelFactory extends Factory {
 				(
 				$this->Validator->isResultSetWithRows(	'user',
 														$ulf->getByID($id),
-														TTi18n::gettext('No superior defined for level').' ('. (int)$this->getLevel().')'
+														('No superior defined for level').' ('. (int)$this->getLevel().')'
 														)
 				AND
 				(
@@ -181,7 +181,7 @@ class HierarchyLevelFactory extends Factory {
 					AND
 					$this->Validator->isNotResultSetWithRows(	'user',
 																$hulf->getByHierarchyControlAndUserId( $this->getHierarchyControl(), $id ),
-																TTi18n::gettext( $ulf->getCurrent()->getFullName() .' is assigned as both a superior and subordinate')
+																( $ulf->getCurrent()->getFullName() .' is assigned as both a superior and subordinate')
 																)
 					)
 					AND
@@ -190,7 +190,7 @@ class HierarchyLevelFactory extends Factory {
 						AND
 						$this->Validator->isNotResultSetWithRows(	'user',
 																$hllf->getByHierarchyControlIdAndUserIdAndExcludeId( $this->getHierarchyControl(), $id, $this->getID() ),
-																TTi18n::gettext( $ulf->getCurrent()->getFullName() .' is already assigned as a superior')
+																( $ulf->getCurrent()->getFullName() .' is already assigned as a superior')
 																)
 
 					)
@@ -358,7 +358,7 @@ class HierarchyLevelFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getHierarchyControl(), $log_action, TTi18n::getText('Superior') .': '. $u_obj->getFullName() .' '. TTi18n::getText('Level').': '. $this->getLevel(), NULL, $this->getTable(), $this );
+			return TTLog::addEntry( $this->getHierarchyControl(), $log_action, ('Superior') .': '. $u_obj->getFullName() .' '. ('Level').': '. $this->getLevel(), NULL, $this->getTable(), $this );
 		}
 
 		return FALSE;

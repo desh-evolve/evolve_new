@@ -29,36 +29,36 @@ class ExceptionFactory extends Factory {
 				// - Supervisor authorizes the exception, or makes a correction, leaves a note or something.
 				//	 - Exception no longer appears on timesheet/exception list.
 				$retval = array(
-										5  => TTi18n::gettext('Pre-Mature'),
-										30 => TTi18n::gettext('PENDING AUTHORIZATION'),
-										40 => TTi18n::gettext('AUTHORIZATION OPEN'),
-										50 => TTi18n::gettext('ACTIVE'),
-										55 => TTi18n::gettext('AUTHORIZATION DECLINED'),
-										60 => TTi18n::gettext('DISABLED'),
-										70 => TTi18n::gettext('Corrected')
+										5  => ('Pre-Mature'),
+										30 => ('PENDING AUTHORIZATION'),
+										40 => ('AUTHORIZATION OPEN'),
+										50 => ('ACTIVE'),
+										55 => ('AUTHORIZATION DECLINED'),
+										60 => ('DISABLED'),
+										70 => ('Corrected')
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										//'-1005-user_status' => TTi18n::gettext('Employee Status'),
-										'-1010-title' => TTi18n::gettext('Title'),
-										'-1039-group' => TTi18n::gettext('Group'),
-										'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1050-default_department' => TTi18n::gettext('Default Department'),
-										'-1160-branch' => TTi18n::gettext('Branch'),
-										'-1170-department' => TTi18n::gettext('Department'),
+										'-1000-first_name' => ('First Name'),
+										'-1002-last_name' => ('Last Name'),
+										//'-1005-user_status' => ('Employee Status'),
+										'-1010-title' => ('Title'),
+										'-1039-group' => ('Group'),
+										'-1040-default_branch' => ('Default Branch'),
+										'-1050-default_department' => ('Default Department'),
+										'-1160-branch' => ('Branch'),
+										'-1170-department' => ('Department'),
 
-										'-1040-date_stamp' => TTi18n::gettext('Date'),
-										'-1050-severity' => TTi18n::gettext('Severity'),
-										'-1060-exception_policy_type' => TTi18n::gettext('Exception'),
-										'-1070-exception_policy_type_id' => TTi18n::gettext('Code'),
+										'-1040-date_stamp' => ('Date'),
+										'-1050-severity' => ('Severity'),
+										'-1060-exception_policy_type' => ('Exception'),
+										'-1070-exception_policy_type_id' => ('Code'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -165,7 +165,7 @@ class ExceptionFactory extends Factory {
 
 		if (  $this->Validator->isResultSetWithRows(	'user_date',
 														$udlf->getByID($id),
-														TTi18n::gettext('Invalid User Date ID')
+														('Invalid User Date ID')
 														) ) {
 			$this->data['user_date_id'] = $id;
 
@@ -195,7 +195,7 @@ class ExceptionFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'exception_policy',
 														$eplf->getByID($id),
-														TTi18n::gettext('Invalid Exception Policy ID')
+														('Invalid Exception Policy ID')
 														) ) {
 			$this->data['exception_policy_id'] = $id;
 
@@ -226,7 +226,7 @@ class ExceptionFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'punch_control',
 														$pclf->getByID($id),
-														TTi18n::gettext('Invalid Punch Control ID')
+														('Invalid Punch Control ID')
 														) ) {
 			$this->data['punch_control_id'] = $id;
 
@@ -256,7 +256,7 @@ class ExceptionFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'punch',
 														$plf->getByID($id),
-														TTi18n::gettext('Invalid Punch ID')
+														('Invalid Punch ID')
 														) ) {
 			$this->data['punch_id'] = $id;
 
@@ -283,7 +283,7 @@ class ExceptionFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -479,12 +479,12 @@ class ExceptionFactory extends Factory {
 			$bcc = NULL;
 		}
 
-		$exception_email_subject = ' #exception_name# (#exception_code#) '. TTi18n::gettext('exception for') .' #employee_first_name# #employee_last_name# '. TTi18n::gettext('on') .' #date#';
-		$exception_email_body  = TTi18n::gettext('Employee:').' #employee_first_name# #employee_last_name#'."\n";
-		$exception_email_body .= TTi18n::gettext('Date:').' #date#'."\n";
-		$exception_email_body .= TTi18n::gettext('Exception:').' #exception_name# (#exception_code#)'."\n";
-		$exception_email_body .= TTi18n::gettext('Severity:').' #exception_severity#'."\n";
-		$exception_email_body .= TTi18n::gettext('Link:').' <a href="http://'. Misc::getHostName().Environment::getBaseURL().'">'.APPLICATION_NAME.' '. TTi18n::gettext('Login') .'</a>';
+		$exception_email_subject = ' #exception_name# (#exception_code#) '. ('exception for') .' #employee_first_name# #employee_last_name# '. ('on') .' #date#';
+		$exception_email_body  = ('Employee:').' #employee_first_name# #employee_last_name#'."\n";
+		$exception_email_body .= ('Date:').' #date#'."\n";
+		$exception_email_body .= ('Exception:').' #exception_name# (#exception_code#)'."\n";
+		$exception_email_body .= ('Severity:').' #exception_severity#'."\n";
+		$exception_email_body .= ('Link:').' <a href="http://'. Misc::getHostName().Environment::getBaseURL().'">'.APPLICATION_NAME.' '. ('Login') .'</a>';
 
 		//Define subject/body variables here.
 		$search_arr = array(
@@ -532,7 +532,7 @@ class ExceptionFactory extends Factory {
 		$retval = $mail->Send();
 
 		if ( $retval == TRUE ) {
-			TTLog::addEntry( $this->getId(), 500,  TTi18n::getText('Email Exception to').': '. $to .' Bcc: '. $headers['Bcc'], NULL, $this->getTable() );
+			TTLog::addEntry( $this->getId(), 500,  ('Email Exception to').': '. $to .' Bcc: '. $headers['Bcc'], NULL, $this->getTable() );
 			return TRUE;
 		}
 

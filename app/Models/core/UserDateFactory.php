@@ -51,7 +51,7 @@ class UserDateFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -110,7 +110,7 @@ class UserDateFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'pay_period',
 														$pplf->getByID($id),
-														TTi18n::gettext('Invalid Pay Period')
+														('Invalid Pay Period')
 														) ) {
 			$this->data['pay_period_id'] = $id;
 
@@ -139,7 +139,7 @@ class UserDateFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'date_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect date'))
+												('Incorrect date'))
 			) {
 
 			if 	( $epoch > 0 ) {
@@ -149,7 +149,7 @@ class UserDateFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'date_stamp',
 												FALSE,
-												TTi18n::gettext('Incorrect date'));
+												('Incorrect date'));
 			}
 
 
@@ -263,14 +263,14 @@ class UserDateFactory extends Factory {
 			if ( $this->getPayPeriodObject()->getIsLocked() == TRUE ) {
 				$this->Validator->isTRUE(	'pay_period',
 											FALSE,
-											TTi18n::gettext('Pay Period is Currently Locked') );
+											('Pay Period is Currently Locked') );
 			}
 		}
 
 		//Make sure this is a UNIQUE user_date row.
 		$this->Validator->isTRUE(	'date_stamp',
 									$this->isUnique(),
-									TTi18n::gettext('Employee can not have duplicate entries on the same day') );
+									('Employee can not have duplicate entries on the same day') );
 
 
 		//Make sure the date isn't BEFORE the first pay period.
@@ -281,12 +281,12 @@ class UserDateFactory extends Factory {
 			if ( $this->getDateStamp() < $first_pp_obj->getStartDate() ) {
 				$this->Validator->isTRUE(	'pay_period',
 											FALSE,
-											TTi18n::gettext('Pay Period Missing').'(b)' );
+											('Pay Period Missing').'(b)' );
 			}
 		} else {
 			$this->Validator->isTRUE(	'pay_period',
 										FALSE,
-										TTi18n::gettext('Pay Period Missing') );
+										('Pay Period Missing') );
 		}
 
 		return TRUE;

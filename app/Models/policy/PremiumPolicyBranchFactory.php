@@ -40,11 +40,11 @@ class PremiumPolicyBranchFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(	'premium_policy',
 													$id,
-													TTi18n::gettext('Selected Premium Policy is invalid')
+													('Selected Premium Policy is invalid')
 /*
 				$this->Validator->isResultSetWithRows(	'premium_policy',
 													$pplf->getByID($id),
-													TTi18n::gettext('Selected Premium Policy is invalid')
+													('Selected Premium Policy is invalid')
 */
 															)
 			) {
@@ -71,7 +71,7 @@ class PremiumPolicyBranchFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'branch',
 													$blf->getByID($id),
-													TTi18n::gettext('Selected Branch is invalid')
+													('Selected Branch is invalid')
 													) ) {
 			$this->data['branch_id'] = $id;
 
@@ -131,7 +131,7 @@ class PremiumPolicyBranchFactory extends Factory {
 	function addLog( $log_action ) {
 		$obj = $this->getBranchObject();
 		if ( is_object($obj) ) {
-			return TTLog::addEntry( $this->getPremiumPolicy(), $log_action,  TTi18n::getText('Branch').': '. $obj->getName(), NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getPremiumPolicy(), $log_action,  ('Branch').': '. $obj->getName(), NULL, $this->getTable() );
 		}
 	}
 }

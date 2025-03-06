@@ -38,17 +38,17 @@ class CurrencyList extends Controller
         //$current_user_prefs;
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
+        $this->permission = View::shared('permission');
     }
 
     public function index()
     {
-        // if (!$this->permission->Check('currency', 'enabled') || 
-        //     !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
-        //     return $this->permission->Redirect(false);
-        // }
-
+        //if (!$this->permission->Check('currency', 'enabled') || 
+        //    !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
+        //    return $this->permission->Redirect(false);
+        //}
         
-        //$smarty->assign('title', TTi18n::gettext('Currency List'));
+        //$smarty->assign('title', ('Currency List'));
 
         extract(FormVariables::GetVariables([
             'action', 'page', 'sort_column', 'sort_order', 'ids'
@@ -63,38 +63,56 @@ class CurrencyList extends Controller
         $sort_array = $sort_column != '' ? [$sort_column => $sort_order] : null;
         
         Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
-        
-        $action = Misc::findSubmitButton();
-        $this->handleAction($action, $ids, $sort_array, $page);
-    }
 
-    private function handleAction($action, $ids, $sort_array, $page)
-    {
+        $current_user_prefs = $this->userPrefs;
         $current_company = $this->company;
+
+        BreadCrumb::setCrumb('Currency List');
+        $clf = new CurrencyListFactory();
+        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
+        $pager = new Pager($clf);
+        $iso_code_options = $clf->getISOCodesArray();
         
-        switch ($action) {
-            case 'update_rates':
-                CurrencyFactory::updateCurrencyRates($current_company->getId());
-                Redirect::Page(URLBuilder::getURL(NULL, 'CurrencyList.php'));
-                break;
-
-            case 'add':
-                Redirect::Page(URLBuilder::getURL(NULL, 'EditCurrency.php'));
-                break;
-
-            case 'delete':
-            case 'undelete':
-                $this->deleteOrUndelete($action, $ids);
-                Redirect::Page(URLBuilder::getURL(NULL, 'CurrencyList.php'));
-                break;
-
-            default:
-                $this->showCurrencyList($sort_array, $page);
-                break;
+        $currencies = [];
+        $base_currency = false;
+        
+        foreach ($clf->rs as $c_obj) {
+            if ($c_obj->is_base === true) {
+                $base_currency = true;
+            }
+            $currencies[] = [
+                'id' => $c_obj->id,
+                'status_id' => $c_obj->status_id,
+                'name' => $c_obj->name,
+                'iso_code' => $c_obj->iso_code,
+                'currency_name' => Option::getByKey($c_obj->iso_code, $iso_code_options),
+                'conversion_rate' => $c_obj->conversion_rate,
+                'auto_update' => $c_obj->auto_update,
+                'is_base' => $c_obj->is_base,
+                'is_default' => $c_obj->is_default,
+                'deleted' => $c_obj->deleted
+            ];
         }
+        
+        $data = [
+            'title' => 'Currency List',
+            'currencies' => $currencies,
+            'base_currency' => $base_currency,
+            'sort_column' => $sort_array['sort_column'] ?? '',
+            'sort_order' => $sort_array['sort_order'] ?? '',
+            'paging_data' => $pager->getPageVariables()
+        ];
+        
+        return view('currency.list', $data);
+
     }
 
-    private function deleteOrUndelete($action, $ids)
+    public function updateRates($current_company){
+        CurrencyFactory::updateCurrencyRates($current_company->getId());
+    }
+    
+
+    public function deleteOrUndelete($action, $ids)
     {
         global $current_company;
 
@@ -112,56 +130,6 @@ class CurrencyList extends Controller
                 }
             }
         }
-    }
-
-    private function showCurrencyList($sort_array, $page)
-    {
-        $current_user_prefs = $this->userPrefs;
-        $current_company = $this->company;
-
-        BreadCrumb::setCrumb('Currency List');
-        $clf = new CurrencyListFactory();
-
-        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
-        $pager = new Pager($clf);
-        $iso_code_options = $clf->getISOCodesArray();
-        
-        $currencies = [];
-        $base_currency = false;
-
-        foreach ($clf as $c_obj) {
-            if ($c_obj->getBase() === true) {
-                $base_currency = true;
-            }
-            $currencies[] = [
-                'id' => $c_obj->GetId(),
-                'status_id' => $c_obj->getStatus(),
-                'name' => $c_obj->getName(),
-                'iso_code' => $c_obj->getISOCode(),
-                'currency_name' => Option::getByKey($c_obj->getISOCode(), $iso_code_options),
-                'conversion_rate' => $c_obj->getConversionRate(),
-                'auto_update' => $c_obj->getAutoUpdate(),
-                'is_base' => $c_obj->getBase(),
-                'is_default' => $c_obj->getDefault(),
-                'deleted' => $c_obj->getDeleted()
-            ];
-        }
-
-        //$smarty->assign_by_ref('currencies', $currencies);
-        //$smarty->assign_by_ref('base_currency', $base_currency);
-        //$smarty->assign_by_ref('sort_column', $sort_array['sort_column'] ?? '');
-        //$smarty->assign_by_ref('sort_order', $sort_array['sort_order'] ?? '');
-        //$smarty->assign_by_ref('paging_data', $pager->getPageVariables());
-
-        $data = [
-            'currencies' => $currencies,
-            'base_currency' => $base_currency,
-            'sort_column' => $sort_array['sort_column'] ?? '',
-            'sort_order' => $sort_array['sort_order'] ?? '',
-            'paging_data' => $pager->getPageVariables()
-        ];
-        
-        return view('currency/CurrencyList', $data);
     }
 
 }

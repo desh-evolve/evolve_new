@@ -57,7 +57,7 @@ class PayStubEntryFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'pay_stub',
 													$pslf->getByID($id),
-													TTi18n::gettext('Invalid Pay Stub')
+													('Invalid Pay Stub')
 													) ) {
 			$this->data['pay_stub_id'] = $id;
 
@@ -85,7 +85,7 @@ class PayStubEntryFactory extends Factory {
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_stub_entry_name_id',
 														$result,
-														TTi18n::gettext('Invalid Entry Account Id')
+														('Invalid Entry Account Id')
 														) ) {
 			Debug::text('TRUE: '. $id .' matches result: '. $result->getCurrent()->getId() , __FILE__, __LINE__, __METHOD__,10);
 			$this->data['pay_stub_entry_name_id'] = $result->getCurrent()->getId();
@@ -113,7 +113,7 @@ class PayStubEntryFactory extends Factory {
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_stub_amendment_id',
 														$result,
-														TTi18n::gettext('Invalid Pay Stub Amendment Id')
+														('Invalid Pay Stub Amendment Id')
 														) ) {
 			//Debug::text('TRUE: '. $id .' -: '. $result->getCurrent()->getId() , __FILE__, __LINE__, __METHOD__,10);
 			$this->data['pay_stub_amendment_id'] = $result->getCurrent()->getId();
@@ -142,17 +142,17 @@ class PayStubEntryFactory extends Factory {
 				(
 				$this->Validator->isFloat(				'rate',
 														$value,
-														TTi18n::gettext('Invalid Rate') )
+														('Invalid Rate') )
 				AND
 				$this->Validator->isLength(				'rate',
 											$value,
-											TTi18n::gettext('Rate has too many digits'),
+											('Rate has too many digits'),
 											0,
 											21) //Need to include decimal.
 				AND
 				$this->Validator->isLengthBeforeDecimal('rate',
 											$value,
-											TTi18n::gettext('Rate has too many digits before the decimal'),
+											('Rate has too many digits before the decimal'),
 											0,
 											16)
 				)
@@ -187,17 +187,17 @@ class PayStubEntryFactory extends Factory {
 				(
 				$this->Validator->isFloat(				'units',
 														$value,
-														TTi18n::gettext('Invalid Units') )
+														('Invalid Units') )
 				AND
 				$this->Validator->isLength(				'units',
 											$value,
-											TTi18n::gettext('Units has too many digits'),
+											('Units has too many digits'),
 											0,
 											21) //Need to include decimal
 				AND
 				$this->Validator->isLengthBeforeDecimal('units',
 											$value,
-											TTi18n::gettext('Units has too many digits before the decimal'),
+											('Units has too many digits before the decimal'),
 											0,
 											16)
 				)
@@ -229,7 +229,7 @@ class PayStubEntryFactory extends Factory {
 
 		if (  $this->Validator->isFloat(				'ytd_units',
 														$value,
-														TTi18n::gettext('Invalid YTD Units')
+														('Invalid YTD Units')
 														) ) {
 			$this->data['ytd_units'] = $value;
 
@@ -286,17 +286,17 @@ class PayStubEntryFactory extends Factory {
 
 		if (  $this->Validator->isFloat(				'amount',
 														$value,
-														TTi18n::gettext('Invalid Amount') )
+														('Invalid Amount') )
 				AND
 				$this->Validator->isLength(				'amount',
 											$value,
-											TTi18n::gettext('Amount has too many digits'),
+											('Amount has too many digits'),
 											0,
 											21) //Need to include decimal
 				AND
 				$this->Validator->isLengthBeforeDecimal('amount',
 											$value,
-											TTi18n::gettext('Amount has too many digits before the decimal'),
+											('Amount has too many digits before the decimal'),
 											0,
 											16)
 			) {
@@ -325,7 +325,7 @@ class PayStubEntryFactory extends Factory {
 
 		if (  $this->Validator->isFloat(				'ytd_amount',
 														$value,
-														TTi18n::gettext('Invalid YTD Amount')
+														('Invalid YTD Amount')
 														) ) {
 			$this->data['ytd_amount'] = round( $value,2);
 
@@ -345,7 +345,7 @@ class PayStubEntryFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'description',
 												$text,
-												TTi18n::gettext('Invalid Description Length'),
+												('Invalid Description Length'),
 												2,
 												100) ) {
 
@@ -427,14 +427,14 @@ class PayStubEntryFactory extends Factory {
 			//var_dump( $this->getAmount() );
 			$this->Validator->isTrue(		'amount',
 											FALSE,
-											TTi18n::gettext('Invalid Amount'));
+											('Invalid Amount'));
 		}
 
 		if ( $this->getPayStubEntryNameId() == '' ) {
 			Debug::text('PayStubEntryNameID is NULL: ' , __FILE__, __LINE__, __METHOD__,10);
 			$this->Validator->isTrue(		'pay_stub_entry_name_id',
 											FALSE,
-											TTi18n::gettext('Invalid Entry Account Id'));
+											('Invalid Entry Account Id'));
 		}
 
 		/*
@@ -443,13 +443,13 @@ class PayStubEntryFactory extends Factory {
 		if ( $this->getRate() != NULL AND $this->getUnits() == NULL ) {
 			$this->Validator->isTrue(		'units',
 											FALSE,
-											TTi18n::gettext('Invalid Units'));
+											('Invalid Units'));
 		}
 
 		if ( $this->getUnits() != NULL AND $this->getRate() == NULL ) {
 			$this->Validator->isTrue(		'rate',
 											FALSE,
-											TTi18n::gettext('Invalid Rate'));
+											('Invalid Rate'));
 		}
 		*/
 
@@ -461,7 +461,7 @@ class PayStubEntryFactory extends Factory {
 			Debug::text('Validate: Rate: '. $this->getRate() .' Units: '. $this->getUnits() .' Amount: '. $this->getAmount() .' Calc: Rate: '. $this->getRate() .' Units: '. $this->getUnits() .' Total: '. ( $this->getRate() * $this->getUnits() ), __FILE__, __LINE__, __METHOD__,10);
 			$this->Validator->isTrue(		'amount',
 											FALSE,
-											TTi18n::gettext('Invalid Amount, calculation is incorrect.'));
+											('Invalid Amount, calculation is incorrect.'));
 		}
 		*/
 		//Make sure YTD values are set
@@ -472,14 +472,14 @@ class PayStubEntryFactory extends Factory {
 
 			$this->Validator->isTrue(		'ytd_amount',
 											FALSE,
-											TTi18n::gettext('Invalid YTD Amount'));
+											('Invalid YTD Amount'));
 
 		}
 
 		if ( $this->getYTDUnits() === NULL ) {
 			$this->Validator->isTrue(		'ytd_units',
 											FALSE,
-											TTi18n::gettext('Invalid YTD Units'));
+											('Invalid YTD Units'));
 
 		}
 

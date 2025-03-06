@@ -22,7 +22,7 @@ class PermissionUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'permission_control',
 															$pclf->getByID($id),
-															TTi18n::gettext('Permission Group is invalid')
+															('Permission Group is invalid')
 															) ) {
 			$this->data['permission_control_id'] = $id;
 
@@ -74,11 +74,11 @@ class PermissionUserFactory extends Factory {
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Selected Employee is invalid')
+															('Selected Employee is invalid')
 															)
 				AND	$this->Validator->isTrue(		'user',
 													$this->isUniqueUser($id),
-													TTi18n::gettext('Selected Employee is already assigned to another Permission Group')
+													('Selected Employee is already assigned to another Permission Group')
 													)
 			) {
 
@@ -141,7 +141,7 @@ class PermissionUserFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getPermissionControl(), $log_action, TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getPermissionControl(), $log_action, ('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
 		}
 
 		return FALSE;

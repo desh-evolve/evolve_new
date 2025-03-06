@@ -19,22 +19,22 @@ class BankAccountFactory extends Factory {
 			case 'columns':
 				$retval = array(
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										'-1099-group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+										'-1090-title' => ('Title'),
+										'-1099-group' => ('Group'),
+										'-1100-default_branch' => ('Branch'),
+										'-1110-default_department' => ('Department'),
 
-										'-5010-transit' => TTi18n::gettext('Transit/Routing'),
-										'-5020-account' => TTi18n::gettext('Account'),
-										'-5030-institution' => TTi18n::gettext('Institution'),
+										'-5010-transit' => ('Transit/Routing'),
+										'-5020-account' => ('Account'),
+										'-5030-institution' => ('Institution'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -81,7 +81,7 @@ class BankAccountFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -107,7 +107,7 @@ class BankAccountFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -155,11 +155,11 @@ class BankAccountFactory extends Factory {
 		if (
 						$this->Validator->isNumeric(	'institution',
 														$value,
-														TTi18n::gettext('Invalid institution number, must be digits only'))
+														('Invalid institution number, must be digits only'))
 				AND
 						$this->Validator->isLength(		'institution',
 														$value,
-														TTi18n::gettext('Invalid institution number length'),
+														('Invalid institution number length'),
 														2,
 														3)
 			) {
@@ -195,11 +195,11 @@ class BankAccountFactory extends Factory {
 //		if (
 //						$this->Validator->isNumeric(	'transit',
 //														$value,
-//														TTi18n::gettext('Invalid transit number, must be digits only'))
+//														('Invalid transit number, must be digits only'))
 //				AND
 //						$this->Validator->isLength(		'transit',
 //														$value,
-//														TTi18n::gettext('Invalid transit number length'),
+//														('Invalid transit number length'),
 //														2,
 //														15)
 //			) {
@@ -227,11 +227,11 @@ class BankAccountFactory extends Factory {
 		if (
 						$this->Validator->isNumeric(	'transit',
 														$value,
-														TTi18n::gettext('Invalid Bank Code, must be digits only '))
+														('Invalid Bank Code, must be digits only '))
 				AND
 						$this->Validator->isLength(		'transit',
 														$value,
-														TTi18n::gettext('Invalid Bank Code length'),
+														('Invalid Bank Code length'),
 														2,
 														15)
 			) {
@@ -281,7 +281,7 @@ class BankAccountFactory extends Factory {
 		if (
 						$this->Validator->isLength(		'bank_name',
 														$value,
-														TTi18n::gettext('Incorrect Bank Name length'),
+														('Incorrect Bank Name length'),
 														1,
 														100)
 			) {
@@ -319,7 +319,7 @@ class BankAccountFactory extends Factory {
 		if (
 						$this->Validator->isLength(		'bank_branch',
 														$value,
-														TTi18n::gettext('Incorrect Bank Branch Length'),
+														('Incorrect Bank Branch Length'),
 														1,
 														100)
 			) {
@@ -362,7 +362,7 @@ class BankAccountFactory extends Factory {
 		if (
 						$this->Validator->isLength(		'account',
 														$value,
-														TTi18n::gettext('Invalid account number length'),
+														('Invalid account number length'),
 														3,
 														20)
 			) {
@@ -380,7 +380,7 @@ class BankAccountFactory extends Factory {
 		if ( $this->getDeleted() == FALSE AND $this->isUnique() == FALSE ) {
 			$this->Validator->isTRUE(		'account',
 											FALSE,
-											TTi18n::gettext('Bank account already exists') );
+											('Bank account already exists') );
 
 			return FALSE;
 		}
@@ -455,11 +455,11 @@ class BankAccountFactory extends Factory {
 
 	function addLog( $log_action ) {
 		if ( $this->getUser() == '' ) {
-			$log_description = TTi18n::getText('Company');
+			$log_description = ('Company');
 		} else {
-			$log_description = TTi18n::getText('Employee');
+			$log_description = ('Employee');
 		}
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
 	}
 
 }

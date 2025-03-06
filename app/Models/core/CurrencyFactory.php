@@ -5,6 +5,7 @@ namespace App\Models\Core;
 use App\Models\Company\CompanyListFactory;
 use App\Models\PayStub\PayStubListFactory;
 use App\Models\Users\UserListFactory;
+use Exception;
 
 class CurrencyFactory extends Factory {
 	protected $table = 'currency';
@@ -16,8 +17,8 @@ class CurrencyFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('ENABLED'),
-										20 => TTi18n::gettext('DISABLED')
+										10 => ('ENABLED'),
+										20 => ('DISABLED')
 									);
 				break;
 			case 'country_currency':
@@ -268,22 +269,22 @@ class CurrencyFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1000-status' => TTi18n::gettext('Status'),
-										'-1010-name' => TTi18n::gettext('Name'),
-										'-1020-symbol' => TTi18n::gettext('Symbol'),
-										'-1020-iso_code' => TTi18n::gettext('ISO Code'),
-										'-1030-conversion_rate' => TTi18n::gettext('Conversion Rate'),
-										'-1040-auto_update' => TTi18n::gettext('Auto Update'),
-										'-1050-actual_rate' => TTi18n::gettext('Actual Rate'),
-										'-1060-actual_rate_updated_date' => TTi18n::gettext('Last Downloaded Date'),
-										'-1070-rate_modify_percent' => TTi18n::gettext('Rate Modify Percent'),
-										'-1080-is_default' => TTi18n::gettext('Default Currency'),
-										'-1090-is_base' => TTi18n::gettext('Base Currency'),
+										'-1000-status' => ('Status'),
+										'-1010-name' => ('Name'),
+										'-1020-symbol' => ('Symbol'),
+										'-1020-iso_code' => ('ISO Code'),
+										'-1030-conversion_rate' => ('Conversion Rate'),
+										'-1040-auto_update' => ('Auto Update'),
+										'-1050-actual_rate' => ('Actual Rate'),
+										'-1060-actual_rate_updated_date' => ('Last Downloaded Date'),
+										'-1070-rate_modify_percent' => ('Rate Modify Percent'),
+										'-1080-is_default' => ('Default Currency'),
+										'-1090-is_base' => ('Base Currency'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -334,7 +335,13 @@ class CurrencyFactory extends Factory {
 	}
 
 	function getISOCodesArray() {
-		return TTi18n::getCurrencyArray();
+		$filePath = base_path('resources/other/currency_iso_list.php'); // Correct Laravel path
+
+        if (!file_exists($filePath)) {
+            throw new Exception("Currency file not found: " . $filePath);
+        }
+		
+        return require $filePath; // Load and return the array
 	}
 
 	function getCompany() {
@@ -352,7 +359,7 @@ class CurrencyFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -379,7 +386,7 @@ class CurrencyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -426,13 +433,13 @@ class CurrencyFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'name',
 												$name,
-												TTi18n::gettext('Name is too short or too long'),
+												('Name is too short or too long'),
 												2,
 												100)
 					AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($name),
-														TTi18n::gettext('Currency already exists'))
+														('Currency already exists'))
 
 												) {
 
@@ -456,7 +463,7 @@ class CurrencyFactory extends Factory {
 
 		if 	(	$this->Validator->inArrayKey(	'iso_code',
 												$value,
-												TTi18n::gettext('ISO code is invalid'),
+												('ISO code is invalid'),
 												$this->getISOCodesArray() ) ) {
 
 			$this->data['iso_code'] = $value;
@@ -486,7 +493,7 @@ class CurrencyFactory extends Factory {
 
 		if (	$this->Validator->isFloat(	'conversion_rate',
 											$value,
-											TTi18n::gettext('Incorrect Conversion Rate')) ) {
+											('Incorrect Conversion Rate')) ) {
 
 			$this->data['conversion_rate'] = $value;
 
@@ -523,7 +530,7 @@ class CurrencyFactory extends Factory {
 				AND
 				$this->Validator->isFloat(	'actual_rate',
 											$value,
-											TTi18n::gettext('Incorrect Actual Rate')) ) {
+											('Incorrect Actual Rate')) ) {
 
 			$this->data['actual_rate'] = $value;
 
@@ -549,7 +556,7 @@ class CurrencyFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'actual_rate_updated_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Updated Date') ) ) {
+												('Incorrect Updated Date') ) ) {
 
 			$this->data['actual_rate_updated_date'] = $epoch;
 
@@ -577,7 +584,7 @@ class CurrencyFactory extends Factory {
 
 		if (	$this->Validator->isFloat(	'rate_modify_percent',
 											$value,
-											TTi18n::gettext('Incorrect Modify Percent')) ) {
+											('Incorrect Modify Percent')) ) {
 
 			$this->data['rate_modify_percent'] = $value;
 
@@ -617,7 +624,7 @@ class CurrencyFactory extends Factory {
 				AND
 				$this->Validator->isTrue(		'is_default',
 												$this->isUniqueDefault(),
-												TTi18n::gettext('There is already a default currency set')
+												('There is already a default currency set')
 												)
 			) {
 
@@ -661,7 +668,7 @@ class CurrencyFactory extends Factory {
 				AND
 				$this->Validator->isTrue(		'is_base',
 												$this->isUniqueBase(),
-												TTi18n::gettext('There is already a base currency set')
+												('There is already a base currency set')
 												)
 			) {
 
@@ -825,7 +832,7 @@ class CurrencyFactory extends Factory {
 			if ( $invalid == TRUE ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This currency is in use'));
+											('This currency is in use'));
 			}
 		}
 
@@ -918,7 +925,7 @@ class CurrencyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Currency').': '. $this->getISOCode() .' '.  TTi18n::getText('Rate').': '. $this->getConversionRate(), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Currency').': '. $this->getISOCode() .' '.  ('Rate').': '. $this->getConversionRate(), NULL, $this->getTable(), $this );
 	}
 
 }

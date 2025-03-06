@@ -24,11 +24,11 @@ class RecurringScheduleUserFactory extends Factory {
 		if (
 			  $this->Validator->isNumeric(	'recurring_schedule_control_id',
 											$id,
-											TTi18n::gettext('Recurring Schedule is invalid')
+											('Recurring Schedule is invalid')
 			/*
 			$this->Validator->isResultSetWithRows(			'recurring_schedule',
 															$rsclf->getByID($id),
-															TTi18n::gettext('Recurring Schedule is invalid')
+															('Recurring Schedule is invalid')
 			*/
 															) ) {
 			$this->data['recurring_schedule_control_id'] = $id;
@@ -67,12 +67,12 @@ class RecurringScheduleUserFactory extends Factory {
 
 				AND $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Selected Employee is invalid')
+															('Selected Employee is invalid')
 															)
 /*
 				AND	$this->Validator->isTrue(		'user',
 													$this->isUniqueUser($id),
-													TTi18n::gettext('Selected Employee is already assigned to another Pay Period')
+													('Selected Employee is already assigned to another Pay Period')
 													)
 */
 			) {
@@ -136,7 +136,7 @@ class RecurringScheduleUserFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getRecurringScheduleControl(), $log_action, TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getRecurringScheduleControl(), $log_action, ('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
 		}
 
 		return FALSE;

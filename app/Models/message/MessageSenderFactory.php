@@ -20,7 +20,7 @@ class MessageSenderFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -49,7 +49,7 @@ class MessageSenderFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'parent',
 															$mslf->getByID($id),
-															TTi18n::gettext('Parent is invalid')
+															('Parent is invalid')
 															) ) {
 			$this->data['parent_id'] = $id;
 
@@ -73,7 +73,7 @@ class MessageSenderFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'message_control_id',
 													$mclf->getByID($id),
-													TTi18n::gettext('Message Control is invalid')
+													('Message Control is invalid')
 													) ) {
 			$this->data['message_control_id'] = $id;
 

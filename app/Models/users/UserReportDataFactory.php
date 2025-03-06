@@ -21,15 +21,15 @@ class UserReportDataFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1010-name' => TTi18n::gettext('Name'),
-										'-1020-description' => TTi18n::gettext('Description'),
-										'-1030-script_name' => TTi18n::gettext('Report'),
-										'-1040-is_default' => TTi18n::gettext('Default'),
+										'-1010-name' => ('Name'),
+										'-1020-description' => ('Description'),
+										'-1030-script_name' => ('Report'),
+										'-1040-is_default' => ('Default'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -113,7 +113,7 @@ class UserReportDataFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(			'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Invalid Company')
+															('Invalid Company')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -137,7 +137,7 @@ class UserReportDataFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -159,7 +159,7 @@ class UserReportDataFactory extends Factory {
 		$value = self::handleScriptName( trim($value) );
 		if (	$this->Validator->isLength(	'script',
 											$value,
-											TTi18n::gettext('Invalid script'),
+											('Invalid script'),
 											1,250)
 						) {
 
@@ -230,12 +230,12 @@ class UserReportDataFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Invalid name'),
+											('Invalid name'),
 											1,100)
 				AND
 				$this->Validator->isTrue(		'name',
 												$this->isUniqueName($name),
-												TTi18n::gettext('Name already exists'))
+												('Name already exists'))
 
 						) {
 
@@ -272,7 +272,7 @@ class UserReportDataFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'description',
 											$description,
-											TTi18n::gettext('Description is invalid'),
+											('Description is invalid'),
 											0,1024) ) {
 
 			$this->data['description'] = $description;
@@ -298,7 +298,7 @@ class UserReportDataFactory extends Factory {
 		if ( $this->getName() == '' ) {
 			$this->Validator->isTRUE(	'name',
 										FALSE,
-										TTi18n::gettext('Invalid name'));
+										('Invalid name'));
 		}
 
 		return TRUE;
@@ -332,7 +332,7 @@ class UserReportDataFactory extends Factory {
 			return TRUE;
 		}
 
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Saved Report Data'), NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Saved Report Data'), NULL, $this->getTable() );
 	}
 
 

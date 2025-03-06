@@ -27,16 +27,16 @@ class AccrualFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-					10 => TTi18n::gettext('Banked'), //System
-					20 => TTi18n::gettext('Used'), //System
-					30 => TTi18n::gettext('Awarded'),
-					40 => TTi18n::gettext('Un-Awarded'),
-					50 => TTi18n::gettext('Gift'),
-					55 => TTi18n::gettext('Paid Out'),
-					60 => TTi18n::gettext('Rollover Adjustment'),
-					70 => TTi18n::gettext('Initial Balance'),
-					75 => TTi18n::gettext('Accrual Policy'), //System
-					80 => TTi18n::gettext('Other')
+					10 => ('Banked'), //System
+					20 => ('Used'), //System
+					30 => ('Awarded'),
+					40 => ('Un-Awarded'),
+					50 => ('Gift'),
+					55 => ('Paid Out'),
+					60 => ('Rollover Adjustment'),
+					70 => ('Initial Balance'),
+					75 => ('Accrual Policy'), //System
+					80 => ('Other')
 				);
 				break;
 			case 'system_type':
@@ -47,24 +47,24 @@ class AccrualFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-					'-1010-first_name' => TTi18n::gettext('First Name'),
-					'-1020-last_name' => TTi18n::gettext('Last Name'),
+					'-1010-first_name' => ('First Name'),
+					'-1020-last_name' => ('Last Name'),
 
-					'-1030-accrual_policy' => TTi18n::gettext('Accrual Policy'),
-					'-1040-type' => TTi18n::gettext('Type'),
-					//'-1050-time_stamp' => TTi18n::gettext('Date'),
-					'-1050-date_stamp' => TTi18n::gettext('Date'), //Date stamp is combination of time_stamp and user_date.date_stamp columns.
-					'-1060-amount' => TTi18n::gettext('Amount'),
+					'-1030-accrual_policy' => ('Accrual Policy'),
+					'-1040-type' => ('Type'),
+					//'-1050-time_stamp' => ('Date'),
+					'-1050-date_stamp' => ('Date'), //Date stamp is combination of time_stamp and user_date.date_stamp columns.
+					'-1060-amount' => ('Amount'),
 
-					'-1090-title' => TTi18n::gettext('Title'),
-					'-1099-group' => TTi18n::gettext('Group'),
-					'-1100-default_branch' => TTi18n::gettext('Branch'),
-					'-1110-default_department' => TTi18n::gettext('Department'),
+					'-1090-title' => ('Title'),
+					'-1099-group' => ('Group'),
+					'-1100-default_branch' => ('Branch'),
+					'-1110-default_department' => ('Department'),
 
-					'-2000-created_by' => TTi18n::gettext('Created By'),
-					'-2010-created_date' => TTi18n::gettext('Created Date'),
-					'-2020-updated_by' => TTi18n::gettext('Updated By'),
-					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+					'-2000-created_by' => ('Created By'),
+					'-2010-created_date' => ('Created Date'),
+					'-2020-updated_by' => ('Updated By'),
+					'-2030-updated_date' => ('Updated Date'),
 				);
 				break;
 			case 'list_columns':
@@ -138,7 +138,7 @@ class AccrualFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user_id',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -168,7 +168,7 @@ class AccrualFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'accrual_policy_id',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accrual_policy_id'] = $id;
@@ -196,7 +196,7 @@ class AccrualFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -229,7 +229,7 @@ class AccrualFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'user_date_total',
 															$udtlf->getByID($id),
-															TTi18n::gettext('User Date Total ID is invalid')
+															('User Date Total ID is invalid')
 															) ) {
 			$this->data['user_date_total_id'] = $id;
 
@@ -255,7 +255,7 @@ class AccrualFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'times_tamp',
 												$epoch,
-												TTi18n::gettext('Incorrect time stamp'))
+												('Incorrect time stamp'))
 
 			) {
 
@@ -291,7 +291,7 @@ class AccrualFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'leave_requset_id',
 													$lrlf->getByID($id),
-													TTi18n::gettext('Leave Request is invalid')
+													('Leave Request is invalid')
 													) ) {
                     
                                                                                                 
@@ -350,11 +350,11 @@ class AccrualFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'amount',
 													$int,
-													TTi18n::gettext('Incorrect Amount'))
+													('Incorrect Amount'))
 				AND
 				$this->Validator->isTrue(		'amount',
 													$this->isValidAmount($int),
-													TTi18n::gettext('Amount does not match type, try using a negative or positive value instead'))
+													('Amount does not match type, try using a negative or positive value instead'))
 				) {
 			$this->data['amount'] = $int;
 
@@ -381,7 +381,7 @@ class AccrualFactory extends Factory {
 		if ( $this->getAccrualPolicyID() == FALSE OR $this->getAccrualPolicyID() == 0 ) {
 			$this->Validator->isTrue(		'accrual_policy_id',
 											FALSE,
-											TTi18n::gettext('Please select an accrual policy'));
+											('Please select an accrual policy'));
 
 		}
 
@@ -526,7 +526,7 @@ class AccrualFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Accrual') .' - '. TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) .' '. TTi18n::getText('Type') .': '. Option::getByKey( $this->getType(), $this->getOptions('type') ) .' '. TTi18n::getText('Date') .': '.  TTDate::getDate('DATE', $this->getTimeStamp() ) .' '. TTi18n::getText('Total Time') .': '. TTDate::getTimeUnit( $this->getAmount() ), NULL, $this->getTable(), $this );
+			return TTLog::addEntry( $this->getId(), $log_action, ('Accrual') .' - '. ('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) .' '. ('Type') .': '. Option::getByKey( $this->getType(), $this->getOptions('type') ) .' '. ('Date') .': '.  TTDate::getDate('DATE', $this->getTimeStamp() ) .' '. ('Total Time') .': '. TTDate::getTimeUnit( $this->getAmount() ), NULL, $this->getTable(), $this );
 		}
 
 		return FALSE;

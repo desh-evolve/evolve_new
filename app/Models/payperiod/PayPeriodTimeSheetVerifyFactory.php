@@ -26,36 +26,36 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('INCOMPLETE'),
-										20 => TTi18n::gettext('OPEN'),
-										30 => TTi18n::gettext('PENDING AUTHORIZATION'),
-										40 => TTi18n::gettext('AUTHORIZATION OPEN'),
-										45 => TTi18n::gettext('PENDING EMPLOYEE VERIFICATION'), //Fully authorized, waiting on employee verification.
-										50 => TTi18n::gettext('Verified'),
-										55 => TTi18n::gettext('AUTHORIZATION DECLINED'),
-										60 => TTi18n::gettext('DISABLED')
+										10 => ('INCOMPLETE'),
+										20 => ('OPEN'),
+										30 => ('PENDING AUTHORIZATION'),
+										40 => ('AUTHORIZATION OPEN'),
+										45 => ('PENDING EMPLOYEE VERIFICATION'), //Fully authorized, waiting on employee verification.
+										50 => ('Verified'),
+										55 => ('AUTHORIZATION DECLINED'),
+										60 => ('DISABLED')
 									);
 				break;
 
 				
 			case 'columns':
 				$retval = array(
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
-										'-1060-title' => TTi18n::gettext('Title'),
-										'-1070-user_group' => TTi18n::gettext('Group'),
-										'-1080-default_branch' => TTi18n::gettext('Branch'),
-										'-1090-default_department' => TTi18n::gettext('Department'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
+										'-1060-title' => ('Title'),
+										'-1070-user_group' => ('Group'),
+										'-1080-default_branch' => ('Branch'),
+										'-1090-default_department' => ('Department'),
 
-										'-1110-start_date' => TTi18n::gettext('Start Date'),
-										'-1112-end_date' => TTi18n::gettext('End Date'),
-										'-1115-transaction_date' => TTi18n::gettext('Transaction Date'),
-										'-1120-status' => TTi18n::gettext('Status'),
+										'-1110-start_date' => ('Start Date'),
+										'-1112-end_date' => ('End Date'),
+										'-1115-transaction_date' => ('Transaction Date'),
+										'-1120-status' => ('Status'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -155,7 +155,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'pay_period',
 														$pplf->getByID($id),
-														TTi18n::gettext('Invalid Pay Period')
+														('Invalid Pay Period')
 														) ) {
 			$this->data['pay_period_id'] = $id;
 
@@ -192,7 +192,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -219,7 +219,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$value,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $value;
@@ -261,7 +261,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'user_verified_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Date')) ) {
+												('Incorrect Date')) ) {
 
 			$this->data['user_verified_date'] = $epoch;
 
@@ -301,7 +301,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(	'authorization_level',
 											$value,
-											TTi18n::gettext('Incorrect authorization level') ) ) {
+											('Incorrect authorization level') ) ) {
 
 			$this->data['authorization_level'] = $value;
 
@@ -349,22 +349,22 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 
 		//If no verification object exists, we assume "No" for verification status.
 		if ( $status_id == 50 ) {
-			$retval = TTi18n::gettext('Yes');
+			$retval = ('Yes');
 		} elseif ( $status_id == 30 OR $status_id == 45 ) {
-			$retval = TTi18n::gettext('Pending');
+			$retval = ('Pending');
 		} elseif ( $status_id == 55 )  {
-			$retval = TTi18n::gettext('Declined');
+			$retval = ('Declined');
 		} else {
-			$retval = TTi18n::gettext('No');
+			$retval = ('No');
 		}
 
 		return $retval;
 	}
 
 	function getVerificationStatusDisplay() {
-		$retval = TTi18n::getText('Not Verified');
+		$retval = ('Not Verified');
 		if ( $this->getUserVerifiedDate() == TRUE AND $this->getAuthorized() == TRUE ) {
-			$retval = TTi18n::getText('Verified @').' '.TTDate::getDate('DATE+TIME', $this->getUserVerifiedDate() ); //Date verification took place for employee.
+			$retval = ('Verified @').' '.TTDate::getDate('DATE+TIME', $this->getUserVerifiedDate() ); //Date verification took place for employee.
 		} else {
 			if ( $this->isNew() == TRUE
 					AND TTDate::getTime() >= $this->getPayPeriodObject()->getTimeSheetVerifyWindowStartDate()
@@ -392,7 +392,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 	function getVerificationConfirmationMessage() {
 		$pp_obj = $this->getPayPeriodObject();
 		if ( is_object( $pp_obj ) ) {
-			$retval = TTi18n::getText('I hereby certify that this timesheet for the pay period of').' '. TTDate::getDate('DATE', $pp_obj->getStartDate() ) .' '. TTi18n::getText('to') .' '. TTDate::getDate('DATE', $pp_obj->getEndDate() ) .' '. TTi18n::getText('is accurate and correct.');
+			$retval = ('I hereby certify that this timesheet for the pay period of').' '. TTDate::getDate('DATE', $pp_obj->getStartDate() ) .' '. ('to') .' '. TTDate::getDate('DATE', $pp_obj->getEndDate() ) .' '. ('is accurate and correct.');
 
 			return $retval;
 		}
@@ -760,7 +760,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 
 	function addLog( $log_action ) {
 		//Should the object_id be the pay period ID instead, that way its easier to find the audit logs?
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('TimeSheet Verify').' - '. TTi18n::getText('Employee') .': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. TTi18n::getText('Pay Period') .': '.  TTDate::getDate('DATE', $this->getPayPeriodObject()->getStartDate() ) .' -> '. TTDate::getDate('DATE', $this->getPayPeriodObject()->getEndDate() ), NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action, ('TimeSheet Verify').' - '. ('Employee') .': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. ('Pay Period') .': '.  TTDate::getDate('DATE', $this->getPayPeriodObject()->getStartDate() ) .' -> '. TTDate::getDate('DATE', $this->getPayPeriodObject()->getEndDate() ), NULL, $this->getTable() );
 	}
 }
 ?>

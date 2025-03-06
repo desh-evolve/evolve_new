@@ -54,7 +54,7 @@ class HierarchyUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'hierarchy_control_id',
 														$hclf->getByID($id),
-														TTi18n::gettext('Invalid Hierarchy Control')
+														('Invalid Hierarchy Control')
 														)
 			) {
 			$this->data['hierarchy_control_id'] = $id;
@@ -112,16 +112,16 @@ class HierarchyUserFactory extends Factory {
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Selected Employee is invalid')
+															('Selected Employee is invalid')
 															)
 				AND
 				$this->Validator->isNotResultSetWithRows(	'user',
 															$hllf->getByHierarchyControlIdAndUserId( $this->getHierarchyControl(), $id ),
-															TTi18n::gettext( 'Selected employee is assigned as both a superior and subordinate')
+															( 'Selected employee is assigned as both a superior and subordinate')
 															)
 				AND	$this->Validator->isTrue(		'user',
 													$this->isUniqueUser($id),
-													TTi18n::gettext('Selected Employee is already assigned to another hierarchy')
+													('Selected Employee is already assigned to another hierarchy')
 													)
 			) {
 
@@ -184,7 +184,7 @@ class HierarchyUserFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getHierarchyControl(), $log_action, TTi18n::getText('Suborindate').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getHierarchyControl(), $log_action, ('Suborindate').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
 		}
 
 		return FALSE;

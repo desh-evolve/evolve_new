@@ -50,7 +50,7 @@ class CompanyGenericTagMapFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'object_type',
 											$type,
-											TTi18n::gettext('Object Type is invalid'),
+											('Object Type is invalid'),
 											$this->getOptions('object_type')) ) {
 
 			$this->data['object_type_id'] = $type;
@@ -75,7 +75,7 @@ class CompanyGenericTagMapFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(	'object_id',
 										$id,
-										TTi18n::gettext('Object ID is invalid')
+										('Object ID is invalid')
 										) ) {
 			$this->data['object_id'] = $id;
 
@@ -97,7 +97,7 @@ class CompanyGenericTagMapFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(	'tag_id',
 										$id,
-										TTi18n::gettext('Tag ID is invalid')
+										('Tag ID is invalid')
 										) ) {
 			$this->data['tag_id'] = $id;
 
@@ -225,7 +225,7 @@ class CompanyGenericTagMapFactory extends Factory {
 		$retval = FALSE;
 		if ( $this->getObjectType() > 0 ) {
 			//Get Tag name.
-			$description = TTi18n::getText('Tag');
+			$description = ('Tag');
 			if ( is_object( $this->getTagObject() ) ) {
 				$description .= ': '. $this->getTagObject()->getName();
 			}
@@ -270,7 +270,7 @@ class CompanyGenericTagMapFactory extends Factory {
 					$lf = new CompanyListFactory();
 					$lf->getById( $this->getObjectId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description = ' - '.TTi18n::getText('Company').': '. $lf->getCurrent()->getName();
+						$description = ' - '.('Company').': '. $lf->getCurrent()->getName();
 					}
 
 					Debug::text('Action: '. $log_action .' TagID: '. $this->getTagID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);
@@ -280,7 +280,7 @@ class CompanyGenericTagMapFactory extends Factory {
 					$lf = new UserListFactory();
 					$lf->getById( $this->getObjectId() );
 					if ( $lf->getRecordCount() > 0 ) {
-						$description .= ' - '.TTi18n::getText('Employee').': '. $lf->getCurrent()->getFullName();
+						$description .= ' - '.('Employee').': '. $lf->getCurrent()->getFullName();
 					}
 
 					Debug::text('Action: '. $log_action .' TagID: '. $this->getTagID() .' ObjectID: '. $this->getObjectID() .' Description: '. $description, __FILE__, __LINE__, __METHOD__, 10);

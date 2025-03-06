@@ -39,13 +39,13 @@ class PayStubListFactoryFormE_payments extends TTPDF{
         $this->SetFont('times','',10);
 
 	$this->setXY( Misc::AdjustXY(80, 0), Misc::AdjustXY(0, -12) );
-        $this->Cell(0, 10, TTi18n::gettext('Tel: ').$_SESSION['header_data']['phone'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Tel: ').$_SESSION['header_data']['phone'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         $this->setXY( Misc::AdjustXY(107, 0), Misc::AdjustXY(0, -12) );
-        $this->Cell(0, 10, TTi18n::gettext('Fax: ').$_SESSION['header_data']['fax'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Fax: ').$_SESSION['header_data']['fax'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
         $this->setXY( Misc::AdjustXY(135, 0), Misc::AdjustXY(0, -12) );
-        $this->Cell(0, 10, TTi18n::gettext('Email: ').$_SESSION['header_data']['email'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, ('Email: ').$_SESSION['header_data']['email'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
         
 
     }
@@ -62,12 +62,12 @@ class PayStubListFactoryFormE_payments extends TTPDF{
 	// FORM II RETURN
 	$this->SetFont('','B',11);
         $this->setXY( Misc::AdjustXY(25, 12), Misc::AdjustXY(8, $adjust_y) );
-        $this->Cell(75,5, TTi18n::gettext('e-Returns'), $border, 0, 'L'); 
+        $this->Cell(75,5, ('e-Returns'), $border, 0, 'L'); 
        
 // TOTAL NO OF EMPLOYEE
 	$this->SetFont('','',7);
         $this->setXY( Misc::AdjustXY(235, $adjust_x), Misc::AdjustXY(14, $adjust_y) );
-        $this->Cell(75,5, TTi18n::gettext('The Report returns on : '.date('Y-M-d')), $border, 0, 'L');            
+        $this->Cell(75,5, ('The Report returns on : '.date('Y-M-d')), $border, 0, 'L');            
         
         
         
@@ -82,7 +82,7 @@ class PayStubListFactoryFormE_payments extends TTPDF{
 
 	$this->setXY( Misc::AdjustXY(90, 6), Misc::AdjustXY(0, 4) );
 
-	$this->Cell(75,5, TTi18n::gettext('PAYMENTS DETAILS '), $border, 0, 'C');                
+	$this->Cell(75,5, ('PAYMENTS DETAILS '), $border, 0, 'C');                
         
          
       

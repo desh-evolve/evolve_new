@@ -30,25 +30,25 @@ class AccrualPolicyMilestoneFactory extends Factory {
 		switch( $name ) {
 			case 'length_of_service_unit':
 				$retval = array(
-										10 => TTi18n::gettext('Day(s)'),
-										20 => TTi18n::gettext('Week(s)'),
-										30 => TTi18n::gettext('Month(s)'),
-										40 => TTi18n::gettext('Year(s)'),
-										50 => TTi18n::gettext('Hour(s)'),
+										10 => ('Day(s)'),
+										20 => ('Week(s)'),
+										30 => ('Month(s)'),
+										40 => ('Year(s)'),
+										50 => ('Hour(s)'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-length_of_service' => TTi18n::gettext('Length Of Service'),
-										'-1020-length_of_service_unit' => TTi18n::gettext('Units'),
-										'-1030-accrual_rate' => TTi18n::gettext('Accrual Rate'),
-										'-1050-maximum_time' => TTi18n::gettext('Maximum Time'),
-										'-1050-rollover_time' => TTi18n::gettext('Rollover Time'),
+										'-1010-length_of_service' => ('Length Of Service'),
+										'-1020-length_of_service_unit' => ('Units'),
+										'-1030-accrual_rate' => ('Accrual Rate'),
+										'-1050-maximum_time' => ('Maximum Time'),
+										'-1050-rollover_time' => ('Rollover Time'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -121,7 +121,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'accrual_policy',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accrual_policy_id'] = $id;
@@ -148,7 +148,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'length_of_service'.$this->getLabelID(),
 													$int,
-													TTi18n::gettext('Length of service is invalid')) ) {
+													('Length of service is invalid')) ) {
 
 			$this->data['length_of_service_days'] = bcmul( $int, $this->length_of_service_multiplier[$this->getLengthOfServiceUnit()], 4);
 
@@ -174,7 +174,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'length_of_service'.$this->getLabelID(),
 													$int,
-													TTi18n::gettext('Length of service is invalid')) ) {
+													('Length of service is invalid')) ) {
 
 			$this->data['length_of_service'] = $int;
 
@@ -201,7 +201,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'length_of_service_unit_id'.$this->getLabelID(),
 											$value,
-											TTi18n::gettext('Incorrect Length of service unit'),
+											('Incorrect Length of service unit'),
 											$this->getOptions('length_of_service_unit')) ) {
 
 			$this->data['length_of_service_unit_id'] = $value;
@@ -226,7 +226,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 				AND
 				$this->Validator->isNumeric(		'accrual_rate'.$this->getLabelID(),
 													$int,
-													TTi18n::gettext('Incorrect Accrual Rate')) ) {
+													('Incorrect Accrual Rate')) ) {
 			$this->data['accrual_rate'] = $int;
 
 			return TRUE;
@@ -249,7 +249,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(		'maximum_time'.$this->getLabelID(),
 													$int,
-													TTi18n::gettext('Incorrect Maximum Time')) ) {
+													('Incorrect Maximum Time')) ) {
 			$this->data['maximum_time'] = $int;
 
 			return TRUE;
@@ -272,7 +272,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(		'minimum_time'.$this->getLabelID(),
 													$int,
-													TTi18n::gettext('Incorrect Minimum Time')) ) {
+													('Incorrect Minimum Time')) ) {
 			$this->data['minimum_time'] = $int;
 
 			return TRUE;
@@ -295,7 +295,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(		'rollover_time'.$this->getLabelID(),
 													$int,
-													TTi18n::gettext('Incorrect Rollover Time')) ) {
+													('Incorrect Rollover Time')) ) {
 			$this->data['rollover_time'] = $int;
 
 			return TRUE;
@@ -369,7 +369,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getAccrualPolicy(), $log_action,  TTi18n::getText('Accrual Policy Milestone') .' (ID: '. $this->getID() .')' , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getAccrualPolicy(), $log_action,  ('Accrual Policy Milestone') .' (ID: '. $this->getID() .')' , NULL, $this->getTable(), $this );
 	}
 }
 ?>

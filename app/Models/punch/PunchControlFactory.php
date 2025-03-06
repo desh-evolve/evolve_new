@@ -324,7 +324,7 @@ class PunchControlFactory extends Factory {
 		$udlf = TTnew( 'UserDateListFactory' );
 		if (  $this->Validator->isResultSetWithRows(	'user_date',
 														$udlf->getByID($id),
-														TTi18n::gettext('Invalid User Date ID')
+														('Invalid User Date ID')
 														) ) {
 
 			if ( $this->getUserDateID() !== $id AND $this->getOldUserDateID() != $this->getUserDateID() ) {
@@ -360,7 +360,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Branch does not exist')
+														('Branch does not exist')
 														) ) {
 			$this->data['branch_id'] = $id;
 
@@ -390,7 +390,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Department does not exist')
+														('Department does not exist')
 														) ) {
 			$this->data['department_id'] = $id;
 
@@ -422,7 +422,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job',
 														$jlf->getByID($id),
-														TTi18n::gettext('Job does not exist')
+														('Job does not exist')
 														) ) {
 			$this->data['job_id'] = $id;
 
@@ -454,7 +454,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job_item',
 														$jilf->getByID($id),
-														TTi18n::gettext('Job Item does not exist')
+														('Job Item does not exist')
 														) ) {
 			$this->data['job_item_id'] = $id;
 
@@ -482,7 +482,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isFloat(			'quantity',
 													$val,
-													TTi18n::gettext('Incorrect quantity')) ) {
+													('Incorrect quantity')) ) {
 			$this->data['quantity'] = $val;
 
 			return TRUE;
@@ -509,7 +509,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isFloat(			'bad_quantity',
 													$val,
-													TTi18n::gettext('Incorrect bad quantity')) ) {
+													('Incorrect bad quantity')) ) {
 			$this->data['bad_quantity'] = $val;
 
 			return TRUE;
@@ -529,7 +529,7 @@ class PunchControlFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'total_time',
 													$int,
-													TTi18n::gettext('Incorrect total time')) ) {
+													('Incorrect total time')) ) {
 			$this->data['total_time'] = $int;
 
 			return TRUE;
@@ -553,7 +553,7 @@ class PunchControlFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'actual_total_time',
 													$int,
-													TTi18n::gettext('Incorrect actual total time')) ) {
+													('Incorrect actual total time')) ) {
 			$this->data['actual_total_time'] = $int;
 
 			return TRUE;
@@ -582,7 +582,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'meal_policy',
 														$mplf->getByID($id),
-														TTi18n::gettext('Meal Policy is invalid')
+														('Meal Policy is invalid')
 													) ) {
 
 			$this->data['meal_policy_id'] = $id;
@@ -605,7 +605,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'note',
 												$val,
-												TTi18n::gettext('Note is too short or too long'),
+												('Note is too short or too long'),
 												0,
 												1024) ) {
 
@@ -631,7 +631,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id1',
 											$value,
-											TTi18n::gettext('Other ID 1 is invalid'),
+											('Other ID 1 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id1'] = $value;
@@ -656,7 +656,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id2',
 											$value,
-											TTi18n::gettext('Other ID 2 is invalid'),
+											('Other ID 2 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id2'] = $value;
@@ -681,7 +681,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id3',
 											$value,
-											TTi18n::gettext('Other ID 3 is invalid'),
+											('Other ID 3 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id3'] = $value;
@@ -706,7 +706,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id4',
 											$value,
-											TTi18n::gettext('Other ID 4 is invalid'),
+											('Other ID 4 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id4'] = $value;
@@ -731,7 +731,7 @@ class PunchControlFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id5',
 											$value,
-											TTi18n::gettext('Other ID 5 is invalid'),
+											('Other ID 5 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id5'] = $value;
@@ -1038,22 +1038,22 @@ class PunchControlFactory extends Factory {
 		if ( $this->getUserDateObject() == FALSE OR $this->getUserDateObject()->getPayPeriodObject() == FALSE ) {
 			$this->Validator->isTRUE(	'pay_period',
 										FALSE,
-										TTi18n::gettext('Date/Time is incorrect, or pay period does not exist for this date. Please create a pay period schedule if you have not done so already') );
+										('Date/Time is incorrect, or pay period does not exist for this date. Please create a pay period schedule if you have not done so already') );
 		} elseif ( $this->getUserDateObject() == FALSE OR $this->getUserDateObject()->getPayPeriodObject()->getIsLocked() == TRUE ) {
 			$this->Validator->isTRUE(	'pay_period',
 										FALSE,
-										TTi18n::gettext('Pay Period is Currently Locked') );
+										('Pay Period is Currently Locked') );
 		}
 
 		//Skip these checks if they are deleting a punch.
 		if ( is_object( $this->getPunchObject() ) AND $this->getPunchObject()->getDeleted() == FALSE ) {
 			$plf = $this->getPLFByPunchControlID();
 			if ( $plf !== NULL AND ( ( $this->isNew() AND $plf->getRecordCount() == 2 ) OR $plf->getRecordCount() > 2 ) ) {
-				//TTi18n::gettext('Punch Control can not have more than two punches. Please use the Add Punch button instead')
+				//('Punch Control can not have more than two punches. Please use the Add Punch button instead')
 				//They might be trying to insert a punch inbetween two others?
 				$this->Validator->isTRUE(	'punch_control',
 											FALSE,
-											TTi18n::gettext('Time conflicts with another punch on this day (c)'));
+											('Time conflicts with another punch on this day (c)'));
 			}
 
 			$shift_data = $this->getShiftData();
@@ -1066,11 +1066,11 @@ class PunchControlFactory extends Factory {
 						if ( $punch_data['status_id'] == 10 ) {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
-														TTi18n::gettext('In punches cannot occur twice in the same punch pair, you may want to make this an out punch instead'));
+														('In punches cannot occur twice in the same punch pair, you may want to make this an out punch instead'));
 						} else {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
-														TTi18n::gettext('Out punches cannot occur twice in the same punch pair, you may want to make this an in punch instead'));
+														('Out punches cannot occur twice in the same punch pair, you may want to make this an in punch instead'));
 						}
 					}
 
@@ -1083,7 +1083,7 @@ class PunchControlFactory extends Factory {
 						if ( $this->getPunchObject()->getTimeStamp() == $punch_data['time_stamp'] AND $this->getPunchObject()->getStatus() == $punch_data['status_id'] ) {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
-														TTi18n::gettext('Time and status match that of another punch, this could be due to rounding (a)') );
+														('Time and status match that of another punch, this could be due to rounding (a)') );
 						}
 					}
 
@@ -1092,7 +1092,7 @@ class PunchControlFactory extends Factory {
 						if ( $this->getPunchObject()->getTimeStamp() == $punch_data['time_stamp'] AND $this->getPunchObject()->getStatus() != $punch_data['status_id'] ) {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
-														TTi18n::gettext('Time matches another punch in the same punch pair, this could be due to rounding (b)') );
+														('Time matches another punch in the same punch pair, this could be due to rounding (b)') );
 						}
 					}
 
@@ -1107,11 +1107,11 @@ class PunchControlFactory extends Factory {
 					if ( $this->getPunchObject()->getStatus() == 10 AND isset($punches[$this->getID()][20]) AND $this->getPunchObject()->getTimeStamp() > $punches[$this->getID()][20]['time_stamp'] ) {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
-														TTi18n::gettext('In punches cannot occur after an out punch, in the same punch pair'));
+														('In punches cannot occur after an out punch, in the same punch pair'));
 					} elseif ( $this->getPunchObject()->getStatus() == 20 AND isset($punches[$this->getID()][10]) AND $this->getPunchObject()->getTimeStamp() < $punches[$this->getID()][10]['time_stamp'] ) {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
-														TTi18n::gettext('Out punches cannot occur before an in punch, in the same punch pair'));
+														('Out punches cannot occur before an in punch, in the same punch pair'));
 					} else {
 						Debug::text('bPunch does not match any other punch pair.', __FILE__, __LINE__, __METHOD__,10);
 
@@ -1124,7 +1124,7 @@ class PunchControlFactory extends Factory {
 										OR ( isset($punches[$punch_neighbors['next']][20]) AND $this->getPunchObject()->getTimeStamp() > $punches[$punch_neighbors['next']][20]['time_stamp'] ) ) {
 								$this->Validator->isTRUE(	'time_stamp',
 															FALSE,
-															TTi18n::gettext('Time conflicts with another punch on this day').' (a)');
+															('Time conflicts with another punch on this day').' (a)');
 							}
 						}
 
@@ -1134,7 +1134,7 @@ class PunchControlFactory extends Factory {
 										OR ( isset($punches[$punch_neighbors['prev']][20]) AND $this->getPunchObject()->getTimeStamp() < $punches[$punch_neighbors['prev']][20]['time_stamp'] ) ) {
 								$this->Validator->isTRUE(	'time_stamp',
 															FALSE,
-															TTi18n::gettext('Time conflicts with another punch on this day').' (b)');
+															('Time conflicts with another punch on this day').' (b)');
 							}
 						}
 					}
@@ -1145,7 +1145,7 @@ class PunchControlFactory extends Factory {
 					if ( $shift_data['total_time'] > $maximum_shift_time ) {
 						$this->Validator->isTRUE(	'time_stamp',
 													FALSE,
-													TTi18n::gettext('Punch exceeds maximum shift time of') .' '. TTDate::getTimeUnit( $maximum_shift_time )  .' '. TTi18n::getText('hrs set for this pay period schedule') );
+													('Punch exceeds maximum shift time of') .' '. TTDate::getTimeUnit( $maximum_shift_time )  .' '. ('hrs set for this pay period schedule') );
 					}
 				}
 				unset($punches);
@@ -1162,13 +1162,13 @@ class PunchControlFactory extends Factory {
 					if ( is_object( $this->getUserDateObject() ) AND $j_obj->isAllowedUser( $this->getUserDateObject()->getUser() ) == FALSE ) {
 						$this->Validator->isTRUE(	'job',
 													FALSE,
-													TTi18n::gettext('Employee is not assigned to this job') );
+													('Employee is not assigned to this job') );
 					}
 
 					if ( $j_obj->isAllowedItem( $this->getJobItem() ) == FALSE ) {
 						$this->Validator->isTRUE(	'job_item',
 													FALSE,
-													TTi18n::gettext('Task is not assigned to this job') );
+													('Task is not assigned to this job') );
 					}
 				}
 			}
@@ -1236,7 +1236,7 @@ class PunchControlFactory extends Factory {
 				Debug::text('Pay Period is verified, deleting verification records: '. $pptsvlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 				foreach( $pptsvlf as $pptsv_obj ) {
 					if ( is_object( $this->getPunchObject() ) ) {
-						TTLog::addEntry( $pptsv_obj->getId(), 500,  TTi18n::getText('TimeSheet Modified After Verification').': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. TTi18n::getText('Punch').': '. TTDate::getDate('DATE+TIME', $this->getPunchObject()->getTimeStamp() ) , NULL, $pptsvlf->getTable() );
+						TTLog::addEntry( $pptsv_obj->getId(), 500,  ('TimeSheet Modified After Verification').': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. ('Punch').': '. TTDate::getDate('DATE+TIME', $this->getPunchObject()->getTimeStamp() ) , NULL, $pptsvlf->getTable() );
 					}
 					$pptsv_obj->setDeleted( TRUE );
 					if ( $pptsv_obj->isValid() ) {
@@ -1708,7 +1708,7 @@ class PunchControlFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Punch Control - Employee').': '. UserListFactory::getFullNameById( $this->getUser() ), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Punch Control - Employee').': '. UserListFactory::getFullNameById( $this->getUser() ), NULL, $this->getTable(), $this );
 	}
 }
 ?>

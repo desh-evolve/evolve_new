@@ -69,7 +69,7 @@ class AttendanceBonusUserFactory    extends Factory{
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows( 'bonus',
 										$ablf->getByID($id),
-										TTi18n::gettext('Invalid Attendance Bonus')
+										('Invalid Attendance Bonus')
 									) ) {
 			$this->data['bonus_attendance_id'] = $id;
 
@@ -100,7 +100,7 @@ class AttendanceBonusUserFactory    extends Factory{
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -129,7 +129,7 @@ class AttendanceBonusUserFactory    extends Factory{
 				
 				$this->Validator->isFloat(	'nopay',
 											$nopay,
-											TTi18n::gettext('Incorrect Nopay'))
+											('Incorrect Nopay'))
 				
 				
 				) {
@@ -163,7 +163,7 @@ class AttendanceBonusUserFactory    extends Factory{
 				
 				$this->Validator->isFloat(	'leave_balance',
 											$leave_balance,
-											TTi18n::gettext('Incorrect Leave Balance'))
+											('Incorrect Leave Balance'))
 				
 				
 				) {
@@ -198,27 +198,27 @@ class AttendanceBonusUserFactory    extends Factory{
 		if (
 				$this->Validator->isNotNull('amount',
 											$wage,
-											TTi18n::gettext('Please specify a Bonus'))
+											('Please specify a Bonus'))
 				AND
 				$this->Validator->isFloat(	'amount',
 											$wage,
-											TTi18n::gettext('Incorrect Bonus'))
+											('Incorrect Bonus'))
 				AND
 				$this->Validator->isLength(	'amount',
 											$wage,
-											TTi18n::gettext('Bonus has too many digits'),
+											('Bonus has too many digits'),
 											0,
 											21) //Need to include decimal.
 				AND
 				$this->Validator->isLengthBeforeDecimal(	'amount',
 											$wage,
-											TTi18n::gettext('Bonus has too many digits before the decimal'),
+											('Bonus has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'amount',
 											$wage,
-											TTi18n::gettext('Bonus has too many digits after the decimal'),
+											('Bonus has too many digits after the decimal'),
 											0,
 											4)
 				) {

@@ -26,7 +26,7 @@ class PolicyGroupUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
-															TTi18n::gettext('Policy Group is invalid')
+															('Policy Group is invalid')
 															) ) {
 			$this->data['policy_group_id'] = $id;
 
@@ -80,11 +80,11 @@ class PolicyGroupUserFactory extends Factory {
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Selected Employee is invalid')
+															('Selected Employee is invalid')
 															)
 				AND	$this->Validator->isTrue(		'user',
 													$this->isUniqueUser($id),
-													TTi18n::gettext('Selected Employee is already assigned to another Policy Group')
+													('Selected Employee is already assigned to another Policy Group')
 													)
 			) {
 
@@ -147,7 +147,7 @@ class PolicyGroupUserFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getPolicyGroup(), $log_action, TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getPolicyGroup(), $log_action, ('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
 		}
 
 		return FALSE;

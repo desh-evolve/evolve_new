@@ -52,7 +52,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -96,7 +96,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'current_department',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Department')
+															('Invalid Department')
 															) ) {
 			$this->data['current_department'] = $id;
 
@@ -128,7 +128,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'new_department',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid New Department')
+															('Invalid New Department')
 															) ) {
 			$this->data['new_department'] = $id;
 
@@ -153,7 +153,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 		if 	(	( $epoch !== FALSE AND $epoch == '' )
 				OR $this->Validator->isDate(	'transfer_date',
 												$epoch,
-												TTi18n::gettext('Transfer date is invalid, try specifying the year with four digits.')) ) {
+												('Transfer date is invalid, try specifying the year with four digits.')) ) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['transfer_date'] = ( $epoch != 0 AND $epoch != '' ) ? TTDate::getMiddleDayEpoch( $epoch ) : '' ; //Allow blank birthdate.

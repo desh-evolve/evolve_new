@@ -160,7 +160,7 @@ class BreadCrumb {
 		}
 
 		//var_dump($crumbs);
-		$links[] = '<a href="'. Environment::getBaseURL() .'">'. TTi18n::gettext(self::$home_name) .'</a>';
+		$links[] = '<a href="'. Environment::getBaseURL() .'">'. (self::$home_name) .'</a>';
 
 		if ( $crumbs != FALSE) {
 			$total_crumbs = count($crumbs);
@@ -170,10 +170,10 @@ class BreadCrumb {
 
 				} else {
 					if ($i == $total_crumbs) {
-							$links[] = TTi18n::gettext($crumb['name']);
+							$links[] = ($crumb['name']);
 					} else {
 						if ( $crumb['name'] != 'Home' ) {
-							$links[] = '<a href="'.$crumb['url'].'">'.TTi18n::gettext($crumb['name']).'</a>';
+							$links[] = '<a href="'.$crumb['url'].'">'.($crumb['name']).'</a>';
 						}
 					}
 				}

@@ -19,7 +19,7 @@ class Option {
 		//       BUT... such string comparisons are messy and we really should be using getByKey for most everything.
 		//		 Exceptions can be made by passing false for $value_is_translated.
 		if ( $value_is_translated == TRUE ) {
-			$value = TTi18n::gettext( $value );
+			$value = ( $value );
 		}
 		if ( is_array( $value ) ) {
 			return FALSE;
@@ -45,7 +45,7 @@ class Option {
 		//       BUT... such string comparisons are messy and we really should be using getByKey for most everything.
 		//		 Exceptions can be made by passing false for $value_is_translated.
 		if ( $value_is_translated == TRUE ) {
-			$value = TTi18n::gettext( $value );
+			$value = ( $value );
 		}
 		if ( is_array( $value ) ) {
 			return FALSE;

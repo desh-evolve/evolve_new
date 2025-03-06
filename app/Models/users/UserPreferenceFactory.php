@@ -24,12 +24,12 @@ class UserPreferenceFactory extends Factory {
 			// I18n: No need to use gettext because these options only appear for english.
 			case 'date_format':
 				$retval = array(
-											'd-M-y'		=> TTi18n::gettext('25-Feb-01 (dd-mmm-yy)'),
-											'd-M-Y'		=> TTi18n::gettext('25-Feb-2001 (dd-mmm-yyyy)'),
+											'd-M-y'		=> ('25-Feb-01 (dd-mmm-yy)'),
+											'd-M-Y'		=> ('25-Feb-2001 (dd-mmm-yyyy)'),
 //PHP 5.1.2 fails to parse these with strtotime it looks like
 //											'd/M/y' 	=> '25/Feb/01 (dd/mmm/yy)',
 //											'd/M/Y' 	=> '25/Feb/2001 (dd/mmm/yyyy)',
-											'dMY' 		=> TTi18n::gettext('25Feb2001 (ddmmmyyyy)'),
+											'dMY' 		=> ('25Feb2001 (ddmmmyyyy)'),
 											'd/m/Y' 	=> '25/02/2001 (dd/mm/yyyy)',
 											'd/m/y' 	=> '25/02/01 (dd/mm/yy)',
 											'd-m-y' 	=> '25-02-01 (dd-mm-yy)',
@@ -39,13 +39,13 @@ class UserPreferenceFactory extends Factory {
 											'm-d-y'		=> '02-25-01 (mm-dd-yy)',
 											'm-d-Y'		=> '02-25-2001 (mm-dd-yyyy)',
 											'Y-m-d' 	=> '2001-02-25 (yyyy-mm-dd)',
-											'M-d-y' 	=> TTi18n::gettext('Feb-25-01 (mmm-dd-yy)'),
-											'M-d-Y' 	=> TTi18n::gettext('Feb-25-2001 (mmm-dd-yyyy)'),
-											'l, F d Y' 	=> TTi18n::gettext('Sunday, February 25 2001'),
-											'D, F d Y' 	=> TTi18n::gettext('Sun, February 25 2001'),
-											'D, M d Y' 	=> TTi18n::gettext('Sun, Feb 25 2001'),
-											'D, d-M-Y' 	=> TTi18n::gettext('Sun, 25-Feb-2001'),
-											'D, dMY' 	=> TTi18n::gettext('Sun, 25Feb2001')
+											'M-d-y' 	=> ('Feb-25-01 (mmm-dd-yy)'),
+											'M-d-Y' 	=> ('Feb-25-2001 (mmm-dd-yyyy)'),
+											'l, F d Y' 	=> ('Sunday, February 25 2001'),
+											'D, F d Y' 	=> ('Sun, February 25 2001'),
+											'D, M d Y' 	=> ('Sun, Feb 25 2001'),
+											'D, d-M-Y' 	=> ('Sun, 25-Feb-2001'),
+											'D, dMY' 	=> ('Sun, 25Feb2001')
 									);
 
 				if ( defined('TIMETREX_API') == TRUE AND TIMETREX_API == TRUE ) {
@@ -119,14 +119,14 @@ class UserPreferenceFactory extends Factory {
 				break;
 			case 'time_format':
 				$retval = array(
-											//'g:i:s A' 	=> TTi18n::gettext('8:09:11 PM'),
-											'g:i A' 	=> TTi18n::gettext('8:09 PM'),
-											//'g:i:s a' 	=> TTi18n::gettext('8:09:11 pm'),
-											'g:i a' 	=> TTi18n::gettext('8:09 pm'),
-											//'G:i:s' 	=> TTi18n::gettext('20:09:11'),
-											'G:i' 		=> TTi18n::gettext('20:09'),
-											'g:i A T' 	=> TTi18n::gettext('8:09 PM GMT'),
-											'G:i T' 	=> TTi18n::gettext('20:09 GMT')
+											//'g:i:s A' 	=> ('8:09:11 PM'),
+											'g:i A' 	=> ('8:09 PM'),
+											//'g:i:s a' 	=> ('8:09:11 pm'),
+											'g:i a' 	=> ('8:09 pm'),
+											//'G:i:s' 	=> ('20:09:11'),
+											'G:i' 		=> ('20:09'),
+											'g:i A T' 	=> ('8:09 PM GMT'),
+											'G:i T' 	=> ('20:09 GMT')
 									);
 				break;
 			case 'js_time_format':
@@ -149,11 +149,11 @@ class UserPreferenceFactory extends Factory {
 				break;
 			case 'time_unit_format':
 				$retval = array(
-											10 	=> TTi18n::gettext('hh:mm (2:15)'),
-											12 	=> TTi18n::gettext('hh:mm:ss (2:15:59)'),
-											20 	=> TTi18n::gettext('Hours (2.25)'),
-											22 	=> TTi18n::gettext('Hours (2.141)'),
-											30 	=> TTi18n::gettext('Minutes (135)')
+											10 	=> ('hh:mm (2:15)'),
+											12 	=> ('hh:mm:ss (2:15:59)'),
+											20 	=> ('Hours (2.25)'),
+											22 	=> ('Hours (2.141)'),
+											30 	=> ('Minutes (135)')
 									);
 				break;
 
@@ -1196,20 +1196,20 @@ class UserPreferenceFactory extends Factory {
 				break;
 			case 'timesheet_view':
 				$retval = array(
-											10 	=> TTi18n::gettext('Calendar'),
-											20 	=> TTi18n::gettext('List')
+											10 	=> ('Calendar'),
+											20 	=> ('List')
 									);
 				break;
 
 			case 'start_week_day':
 				$retval = array(
-											0 	=> TTi18n::gettext('Sunday'),
-											1 	=> TTi18n::gettext('Monday'),
-											2 	=> TTi18n::gettext('Tuesday'),
-											3 	=> TTi18n::gettext('Wednesday'),
-											4 	=> TTi18n::gettext('Thursday'),
-											5 	=> TTi18n::gettext('Friday'),
-											6 	=> TTi18n::gettext('Saturday'),
+											0 	=> ('Sunday'),
+											1 	=> ('Monday'),
+											2 	=> ('Tuesday'),
+											3 	=> ('Wednesday'),
+											4 	=> ('Thursday'),
+											5 	=> ('Friday'),
+											6 	=> ('Saturday'),
 									);
 				break;
 			case 'language':
@@ -1222,35 +1222,35 @@ class UserPreferenceFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-user_status' => TTi18n::gettext('Employee Status'),
-										'-1010-title' => TTi18n::gettext('Title'),
-										'-1020-user_group' => TTi18n::gettext('Group'),
-										'-1030-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1040-default_department' => TTi18n::gettext('Default Department'),
-										'-1040-default_department' => TTi18n::gettext('Default Department'),
+										'-1000-first_name' => ('First Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-user_status' => ('Employee Status'),
+										'-1010-title' => ('Title'),
+										'-1020-user_group' => ('Group'),
+										'-1030-default_branch' => ('Default Branch'),
+										'-1040-default_department' => ('Default Department'),
+										'-1040-default_department' => ('Default Department'),
 
-										'-1150-city' => TTi18n::gettext('City'),
-										'-1160-province' => TTi18n::gettext('Province/State'),
-										'-1170-country' => TTi18n::gettext('Country'),
+										'-1150-city' => ('City'),
+										'-1160-province' => ('Province/State'),
+										'-1170-country' => ('Country'),
 
-										'-1120-language_display' => TTi18n::gettext('Language'),
-										'-1130-date_format_display' => TTi18n::gettext('Date Format'),
-										'-1140-time_format_display' => TTi18n::gettext('Time Format'),
-										'-1150-time_zone_display' => TTi18n::gettext('TimeZone'),
-										'-1160-time_unit_format_display' => TTi18n::gettext('Time Unit Format'),
-										'-1170-items_per_page' => TTi18n::gettext('Items Per Page'),
-										//'-1180-timesheet_view_display' => TTi18n::gettext('TimeSheet View'),
-										'-1190-start_week_day_display' => TTi18n::gettext('Start Weekday'),
-										//'-1100-enable_email_notification_exception' => TTi18n::gettext('Email Notification Exception'),
-										//'-1110-enable_email_notification_message' => TTi18n::gettext('Email Notification Message'),
-										//'-1120-enable_email_notification_home' => TTi18n::gettext('Email Notification Home'),
+										'-1120-language_display' => ('Language'),
+										'-1130-date_format_display' => ('Date Format'),
+										'-1140-time_format_display' => ('Time Format'),
+										'-1150-time_zone_display' => ('TimeZone'),
+										'-1160-time_unit_format_display' => ('Time Unit Format'),
+										'-1170-items_per_page' => ('Items Per Page'),
+										//'-1180-timesheet_view_display' => ('TimeSheet View'),
+										'-1190-start_week_day_display' => ('Start Weekday'),
+										//'-1100-enable_email_notification_exception' => ('Email Notification Exception'),
+										//'-1110-enable_email_notification_message' => ('Email Notification Message'),
+										//'-1120-enable_email_notification_home' => ('Email Notification Home'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -1346,7 +1346,7 @@ class UserPreferenceFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -1375,7 +1375,7 @@ class UserPreferenceFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'language',
 											$value,
-											TTi18n::gettext('Incorrect language'),
+											('Incorrect language'),
 											$language_options ) ) {
 
 			$this->data['language'] = $value;
@@ -1394,12 +1394,12 @@ class UserPreferenceFactory extends Factory {
 			$split_str = explode(' ', $options[$this->getDateFormat()] );
 			if ( isset( $split_str[0] ) ) {
 				if ( strlen( $split_str[0] ) <= 8 ) {
-					return TTi18n::gettext($options[$this->getDateFormat()]);
+					return ($options[$this->getDateFormat()]);
 				} else {
-					return TTi18n::gettext($split_str[0]);
+					return ($split_str[0]);
 				}
 			}
-			return TTi18n::gettext($options[$this->getDateFormat()]);
+			return ($options[$this->getDateFormat()]);
 		}
 
 		return FALSE;
@@ -1434,7 +1434,7 @@ class UserPreferenceFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'date_format',
 												$date_format,
-												TTi18n::gettext('Incorrect date format'),
+												('Incorrect date format'),
 												Misc::trimSortPrefix( $this->getOptions('date_format') ) ) ) {
 
 			$this->data['date_format'] = $date_format;
@@ -1480,7 +1480,7 @@ class UserPreferenceFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'time_format',
 											$time_format,
-											TTi18n::gettext('Incorrect time format'),
+											('Incorrect time format'),
 											$this->getOptions('time_format')) ) {
 
 			$this->data['time_format'] = $time_format;
@@ -1549,7 +1549,7 @@ class UserPreferenceFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'time_zone',
 											$time_zone,
-											TTi18n::gettext('Incorrect time zone'),
+											('Incorrect time zone'),
 											Misc::trimSortPrefix( $this->getOptions('time_zone') ) ) ) {
 
 			$this->data['time_zone'] = $time_zone;
@@ -1582,7 +1582,7 @@ class UserPreferenceFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'time_unit_format',
 											$time_unit_format,
-											TTi18n::gettext('Incorrect time units'),
+											('Incorrect time units'),
 											$this->getOptions('time_unit_format')) ) {
 
 			$this->data['time_unit_format'] = $time_unit_format;
@@ -1612,7 +1612,7 @@ class UserPreferenceFactory extends Factory {
 
 			$this->Validator->isTrue(		'items_per_page',
 											FALSE,
-											TTi18n::gettext('Items per page must be between 5 and 2000'));
+											('Items per page must be between 5 and 2000'));
 		}
 
 		return FALSE;
@@ -1655,7 +1655,7 @@ class UserPreferenceFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'timesheet_view',
 											$value,
-											TTi18n::gettext('Incorrect default TimeSheet view'),
+											('Incorrect default TimeSheet view'),
 											$this->getOptions('timesheet_view')) ) {
 
 			$this->data['timesheet_view'] = $value;
@@ -1683,7 +1683,7 @@ class UserPreferenceFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'start_week_day',
 											$value,
-											TTi18n::gettext('Incorrect day to start a week on'),
+											('Incorrect day to start a week on'),
 											$this->getOptions('start_week_day')) ) {
 
 			$this->data['start_week_day'] = $value;
@@ -1732,14 +1732,14 @@ class UserPreferenceFactory extends Factory {
 		if ( $this->getUser() == '' ) {
 			$this->Validator->isTRUE(	'user',
 										FALSE,
-										TTi18n::gettext('Invalid User') );
+										('Invalid User') );
 
 		}
 
 		if ( $this->getDateFormat() == '' ) {
 			$this->Validator->isTRUE(	'date_format',
 										FALSE,
-										TTi18n::gettext('Incorrect date format') );
+										('Incorrect date format') );
 
 		}
 
@@ -1889,7 +1889,7 @@ class UserPreferenceFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee Preferences') , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee Preferences') , NULL, $this->getTable(), $this );
 	}
 }
 ?>

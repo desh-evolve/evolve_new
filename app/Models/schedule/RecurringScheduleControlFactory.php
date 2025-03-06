@@ -15,24 +15,24 @@ class RecurringScheduleControlFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
 
-										'-1030-recurring_schedule_template_control' => TTi18n::gettext('Template'),
-										'-1040-recurring_schedule_template_control_description' => TTi18n::gettext('Description'),
-										'-1050-start_date' => TTi18n::gettext('Start Date'),
-										'-1060-end_date' => TTi18n::gettext('End Date'),
-										'-1070-auto_fill' => TTi18n::gettext('Auto Pilot'),
+										'-1030-recurring_schedule_template_control' => ('Template'),
+										'-1040-recurring_schedule_template_control_description' => ('Description'),
+										'-1050-start_date' => ('Start Date'),
+										'-1060-end_date' => ('End Date'),
+										'-1070-auto_fill' => ('Auto Pilot'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										'-1099-user_group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+										'-1090-title' => ('Title'),
+										'-1099-user_group' => ('Group'),
+										'-1100-default_branch' => ('Branch'),
+										'-1110-default_department' => ('Department'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -99,7 +99,7 @@ class RecurringScheduleControlFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -124,7 +124,7 @@ class RecurringScheduleControlFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'recurring_schedule_template_control_id',
 													$rstclf->getByID($id),
-													TTi18n::gettext('Recurring Schedule Template is invalid')
+													('Recurring Schedule Template is invalid')
 													) ) {
 
 			$this->data['recurring_schedule_template_control_id'] = $id;
@@ -149,7 +149,7 @@ class RecurringScheduleControlFactory extends Factory {
 				AND
 				$this->Validator->isNumeric(		'week',
 													$int,
-													TTi18n::gettext('Week is invalid')) ) {
+													('Week is invalid')) ) {
 			$this->data['start_week'] = $int;
 
 			return TRUE;
@@ -174,7 +174,7 @@ class RecurringScheduleControlFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'start_date',
 												$epoch,
-												TTi18n::gettext('Incorrect start date'))
+												('Incorrect start date'))
 			) {
 
 			$this->data['start_date'] = $epoch;
@@ -207,7 +207,7 @@ class RecurringScheduleControlFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'end_date',
 												$epoch,
-												TTi18n::gettext('Incorrect end date'))
+												('Incorrect end date'))
 			) {
 
 			$this->data['end_date'] = $epoch;
@@ -288,7 +288,7 @@ class RecurringScheduleControlFactory extends Factory {
 
 						if ( $this->Validator->isTrue(		'user',
 															$rsuf->Validator->isValid(),
-															TTi18n::gettext('Selected Employee is invalid').' ('. $obj->getFullName() .')' )) {
+															('Selected Employee is invalid').' ('. $obj->getFullName() .')' )) {
 							$rsuf->save();
 						}
 					}
@@ -542,7 +542,7 @@ class RecurringScheduleControlFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Recurring Schedule'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Recurring Schedule'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

@@ -20,12 +20,12 @@ class ExceptionPolicyControlFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1030-name' => TTi18n::gettext('Name'),
+										'-1030-name' => ('Name'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -88,7 +88,7 @@ class ExceptionPolicyControlFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -110,7 +110,7 @@ class ExceptionPolicyControlFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -131,7 +131,7 @@ class ExceptionPolicyControlFactory extends Factory {
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This absence policy is in use'));
+											('This absence policy is in use'));
 
 			}
 		}
@@ -196,7 +196,7 @@ class ExceptionPolicyControlFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Exception Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Exception Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

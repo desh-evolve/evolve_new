@@ -21,7 +21,7 @@ class PolicyGroupAccrualPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
-															TTi18n::gettext('Policy Group is invalid')
+															('Policy Group is invalid')
 															) ) {
 			$this->data['policy_group_id'] = $id;
 
@@ -45,7 +45,7 @@ class PolicyGroupAccrualPolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'over_time_policy',
 														$aplf->getByID($id),
-														TTi18n::gettext('Selected Accrual Policy is invalid')
+														('Selected Accrual Policy is invalid')
 															)
 			) {
 

@@ -26,26 +26,26 @@ class LeaveRequestFactory  extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Paid'),
-										12 => TTi18n::gettext('Paid (Above Salary)'),
-										20 => TTi18n::gettext('Unpaid'),
-										30 => TTi18n::gettext('Dock'),
+										10 => ('Paid'),
+										12 => ('Paid (Above Salary)'),
+										20 => ('Unpaid'),
+										30 => ('Dock'),
 									);
 				break;
 			case 'leave_method': //Types that are considered paid.
 				$retval = array(
-										1 => TTi18n::gettext('Full Day Leave'),
-										2 => TTi18n::gettext('Half day Leave'),
-										3 => TTi18n::gettext('Short Leave'),
+										1 => ('Full Day Leave'),
+										2 => ('Half day Leave'),
+										3 => ('Short Leave'),
 										
 									);
 				break;
                         case 'leave_status': //Types that are considered paid.
 				$retval = array(
-										10 => TTi18n::gettext('ACTIVE'),
-										20 => TTi18n::gettext('COVER REJECTED'),
-										30 => TTi18n::gettext('SUPERVISOR REJECTED'),
-                                                                                40 => TTi18n::gettext('HR REJECTED'),
+										10 => ('ACTIVE'),
+										20 => ('COVER REJECTED'),
+										30 => ('SUPERVISOR REJECTED'),
+                                                                                40 => ('HR REJECTED'),
 										
 									);
 				break;
@@ -107,7 +107,7 @@ class LeaveRequestFactory  extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -145,7 +145,7 @@ class LeaveRequestFactory  extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 													$ulf->getByID($id),
-													TTi18n::gettext('User is invalid')
+													('User is invalid')
 													) ) {
 
 			$this->data['user_id'] = $id;
@@ -185,7 +185,7 @@ class LeaveRequestFactory  extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'designation',
 													$ulf->getByID($id),
-													TTi18n::gettext('Designation is invalid')
+													('Designation is invalid')
 													) ) {
 
 			$this->data['designation_id'] = $id;
@@ -229,7 +229,7 @@ class LeaveRequestFactory  extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'accrualpolicy',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accurals_policy_id'] = $id;

@@ -24,7 +24,7 @@ class BonusDecemberFactory  extends Factory{
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -54,11 +54,11 @@ class BonusDecemberFactory  extends Factory{
 		if (
 				$this->Validator->isNotNull('y_number',
 											$ynumber,
-											TTi18n::gettext('Please specify a Y number'))
+											('Please specify a Y number'))
 				AND
 				$this->Validator->isFloat(	'y_number',
 											$ynumber,
-											TTi18n::gettext('Incorrect Y number'))
+											('Incorrect Y number'))
 				
 				) {
 
@@ -84,7 +84,7 @@ class BonusDecemberFactory  extends Factory{
 		if 	(	( $epoch !== FALSE AND $epoch == '' )
 				OR $this->Validator->isDate(	'start_date',
 												$epoch,
-												TTi18n::gettext('Start date is invalid.')) ) {
+												('Start date is invalid.')) ) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['start_date'] = ( $epoch != 0 AND $epoch != '' ) ? TTDate::getMiddleDayEpoch( $epoch ) : '' ; //Allow blank birthdate.
@@ -109,7 +109,7 @@ class BonusDecemberFactory  extends Factory{
 		if 	(	( $epoch !== FALSE AND $epoch == '' )
 				OR $this->Validator->isDate(	'end_date',
 												$epoch,
-												TTi18n::gettext('End date is invalid.')) ) {
+												('End date is invalid.')) ) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['end_date'] = ( $epoch != 0 AND $epoch != '' ) ? TTDate::getMiddleDayEpoch( $epoch ) : '' ; //Allow blank birthdate.

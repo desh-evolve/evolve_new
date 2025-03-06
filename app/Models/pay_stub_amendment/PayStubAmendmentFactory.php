@@ -38,20 +38,20 @@ class PayStubAmendmentFactory extends Factory {
 				break;
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('NEW'),
-										20 => TTi18n::gettext('OPEN'),
-										30 => TTi18n::gettext('PENDING AUTHORIZATION'),
-										40 => TTi18n::gettext('AUTHORIZATION OPEN'),
-										50 => TTi18n::gettext('ACTIVE'),
-										52 => TTi18n::gettext('IN USE'),
-										55 => TTi18n::gettext('PAID'),
-										60 => TTi18n::gettext('DISABLED')
+										10 => ('NEW'),
+										20 => ('OPEN'),
+										30 => ('PENDING AUTHORIZATION'),
+										40 => ('AUTHORIZATION OPEN'),
+										50 => ('ACTIVE'),
+										52 => ('IN USE'),
+										55 => ('PAID'),
+										60 => ('DISABLED')
 									);
 				break;
 			case 'type':
 				$retval = array(
-											10 => TTi18n::gettext('Fixed'),
-											20 => TTi18n::gettext('Percent')
+											10 => ('Fixed'),
+											20 => ('Percent')
 										);
 				break;
 			case 'pay_stub_account_type':
@@ -62,28 +62,28 @@ class PayStubAmendmentFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-user_status' => TTi18n::gettext('Employee Status'),
-										'-1010-title' => TTi18n::gettext('Title'),
-										'-1020-user_group' => TTi18n::gettext('Group'),
-										'-1030-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1040-default_department' => TTi18n::gettext('Default Department'),
+										'-1000-first_name' => ('First Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-user_status' => ('Employee Status'),
+										'-1010-title' => ('Title'),
+										'-1020-user_group' => ('Group'),
+										'-1030-default_branch' => ('Default Branch'),
+										'-1040-default_department' => ('Default Department'),
 
-										'-1110-status' => TTi18n::gettext('Status'),
-										'-1120-type' => TTi18n::gettext('Type'),
-										'-1130-pay_stub_entry_name' => TTi18n::gettext('Account'),
-										'-1140-effective_date' => TTi18n::gettext('Effective Date'),
-										'-1150-amount' => TTi18n::gettext('Amount'),
-										'-1160-rate' => TTi18n::gettext('Rate'),
-										'-1170-units' => TTi18n::gettext('Units'),
-										'-1180-description' => TTi18n::gettext('Description'),
-										'-1190-ytd_adjustment' => TTi18n::gettext('YTD Adjustment'),
+										'-1110-status' => ('Status'),
+										'-1120-type' => ('Type'),
+										'-1130-pay_stub_entry_name' => ('Account'),
+										'-1140-effective_date' => ('Effective Date'),
+										'-1150-amount' => ('Amount'),
+										'-1160-rate' => ('Rate'),
+										'-1170-units' => ('Units'),
+										'-1180-description' => ('Description'),
+										'-1190-ytd_adjustment' => ('YTD Adjustment'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -218,7 +218,7 @@ class PayStubAmendmentFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user_id',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -245,7 +245,7 @@ class PayStubAmendmentFactory extends Factory {
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_stub_entry_name_id',
 														$result,
-														TTi18n::gettext('Invalid Pay Stub Account')
+														('Invalid Pay Stub Account')
 														) ) {
 
 			$this->data['pay_stub_entry_name_id'] = $id;
@@ -264,7 +264,7 @@ class PayStubAmendmentFactory extends Factory {
 
 		if (  $this->Validator->isResultSetWithRows(	'name',
 														$result,
-														TTi18n::gettext('Invalid Entry Name')
+														('Invalid Entry Name')
 														) ) {
 
 			$this->data['pay_stub_entry_name_id'] = $result->getCurrent()->getId();
@@ -294,7 +294,7 @@ class PayStubAmendmentFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'recurring_ps_amendment_id',
 														$rpsalf,
-														TTi18n::gettext('Invalid Recurring Pay Stub Amendment ID')
+														('Invalid Recurring Pay Stub Amendment ID')
 														) ) {
 
 			$this->data['recurring_ps_amendment_id'] = $id;
@@ -318,7 +318,7 @@ class PayStubAmendmentFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'effective_date',
 												$epoch,
-												TTi18n::gettext('Incorrect effective date')) ) {
+												('Incorrect effective date')) ) {
 
 			$this->data['effective_date'] = $epoch;
 
@@ -345,7 +345,7 @@ class PayStubAmendmentFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -373,7 +373,7 @@ class PayStubAmendmentFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -405,23 +405,23 @@ class PayStubAmendmentFactory extends Factory {
 				(
 				$this->Validator->isFloat(				'rate',
 														$value,
-														TTi18n::gettext('Invalid Rate') )
+														('Invalid Rate') )
 				AND
 				$this->Validator->isLength(				'rate',
 											$value,
-											TTi18n::gettext('Rate has too many digits'),
+											('Rate has too many digits'),
 											0,
 											21) //Need to include decimal.
 				AND
 				$this->Validator->isLengthBeforeDecimal('rate',
 											$value,
-											TTi18n::gettext('Rate has too many digits before the decimal'),
+											('Rate has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'rate',
 											$value,
-											TTi18n::gettext('Rate has too many digits after the decimal'),
+											('Rate has too many digits after the decimal'),
 											0,
 											4)
 				)
@@ -458,23 +458,23 @@ class PayStubAmendmentFactory extends Factory {
 				(
 				$this->Validator->isFloat(				'units',
 														$value,
-														TTi18n::gettext('Invalid Units') )
+														('Invalid Units') )
 				AND
 				$this->Validator->isLength(				'units',
 											$value,
-											TTi18n::gettext('Units has too many digits'),
+											('Units has too many digits'),
 											0,
 											21) //Need to include decimal
 				AND
 				$this->Validator->isLengthBeforeDecimal('units',
 											$value,
-											TTi18n::gettext('Units has too many digits before the decimal'),
+											('Units has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'units',
 											$value,
-											TTi18n::gettext('Units has too many digits after the decimal'),
+											('Units has too many digits after the decimal'),
 											0,
 											4)
 				)
@@ -621,23 +621,23 @@ class PayStubAmendmentFactory extends Factory {
 
 		if (  $this->Validator->isFloat(				'amount',
 														$value,
-														TTi18n::gettext('Invalid Amount') )
+														('Invalid Amount') )
 				AND
 				$this->Validator->isLength(				'amount',
 											$value,
-											TTi18n::gettext('Amount has too many digits'),
+											('Amount has too many digits'),
 											0,
 											21) //Need to include decimal
 				AND
 				$this->Validator->isLengthBeforeDecimal('amount',
 											$value,
-											TTi18n::gettext('Amount has too many digits before the decimal'),
+											('Amount has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'amount',
 											$value,
-											TTi18n::gettext('Amount has too many digits after the decimal'),
+											('Amount has too many digits after the decimal'),
 											0,
 											4)
 			) {
@@ -667,7 +667,7 @@ class PayStubAmendmentFactory extends Factory {
 
 		if (  $this->Validator->isFloat(				'percent_amount',
 														$value,
-														TTi18n::gettext('Invalid Percent')
+														('Invalid Percent')
 														) ) {
 			$this->data['percent_amount'] = round( $value, 2);
 
@@ -695,7 +695,7 @@ class PayStubAmendmentFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'percent_amount_entry_name',
 														$psealf,
-														TTi18n::gettext('Invalid Percent Of')
+														('Invalid Percent Of')
 														) ) {
 
 			$this->data['percent_amount_entry_name_id'] = $id;
@@ -720,7 +720,7 @@ class PayStubAmendmentFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'description',
 												$text,
-												TTi18n::gettext('Invalid Description Length'),
+												('Invalid Description Length'),
 												2,
 												100) ) {
 
@@ -860,7 +860,7 @@ class PayStubAmendmentFactory extends Factory {
 				Debug::Text('Amount is NULL...', __FILE__, __LINE__, __METHOD__,10);
 				$this->Validator->isTrue(		'amount',
 												FALSE,
-												TTi18n::gettext('Invalid Amount'));
+												('Invalid Amount'));
 			}
 
 			//Make sure amount is sane given the rate and units.
@@ -871,7 +871,7 @@ class PayStubAmendmentFactory extends Factory {
 				Debug::text('Validate: Rate: '. $this->getRate() .' Units: '. $this->getUnits() .' Amount: '. $this->getAmount() .' Calc: Rate: '. $this->getRate() .' Units: '. $this->getUnits() .' Total: '. Misc::MoneyFormat( bcmul( $this->getRate(), $this->getUnits() ), FALSE), __FILE__, __LINE__, __METHOD__,10);
 				$this->Validator->isTrue(		'amount',
 												FALSE,
-												TTi18n::gettext('Invalid Amount, calculation is incorrect'));
+												('Invalid Amount, calculation is incorrect'));
 			}
 		} else {
 
@@ -967,7 +967,7 @@ class PayStubAmendmentFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Pay Stub Amendment - Employee').': '. UserListFactory::getFullNameById( $this->getUser() ) .' '.  TTi18n::getText('Amount').': '. $this->getAmount(), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Pay Stub Amendment - Employee').': '. UserListFactory::getFullNameById( $this->getUser() ) .' '.  ('Amount').': '. $this->getAmount(), NULL, $this->getTable(), $this );
 	}
 }
 ?>

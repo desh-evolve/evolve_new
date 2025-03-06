@@ -23,29 +23,29 @@ class UserKpiFactory extends Factory {
 			case 'columns':
 				$retval = array(
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										//'-1099-group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+										'-1090-title' => ('Title'),
+										//'-1099-group' => ('Group'),
+										'-1100-default_branch' => ('Branch'),
+										'-1110-default_department' => ('Department'),
                                     
-                                    						'-1200-start_date' => TTi18n::gettext('Start Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-										'-1210-end_date' => TTi18n::gettext('End Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                                                                                '-1210-review_date' => TTi18n::gettext('Review Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                                    						'-1200-start_date' => ('Start Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+										'-1210-end_date' => ('End Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                                                                                '-1210-review_date' => ('Review Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
 
-										//'-5010-transit' => TTi18n::gettext('Transit/Routing'),
-										//'-5020-account' => TTi18n::gettext('Account'),
-										//'-5030-institution' => TTi18n::gettext('Institution'),
+										//'-5010-transit' => ('Transit/Routing'),
+										//'-5020-account' => ('Account'),
+										//'-5030-institution' => ('Institution'),
                                     
-                                                                                //'-1290-note' => TTi18n::gettext('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                                                                                //'-1290-note' => ('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -123,7 +123,7 @@ class UserKpiFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'start_date',
 												$epoch,
-												TTi18n::gettext('Incorrect start date'))
+												('Incorrect start date'))
 			) {
 
 			$this->data['start_date'] = $epoch;
@@ -156,7 +156,7 @@ class UserKpiFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'end_date',
 												$epoch,
-												TTi18n::gettext('Incorrect end date'))
+												('Incorrect end date'))
 			) {
 
 			$this->data['end_date'] = $epoch;
@@ -205,13 +205,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea1',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea1',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -251,13 +251,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea2',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea2',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -295,13 +295,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea3',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea3',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -339,13 +339,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea4',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea4',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -383,13 +383,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea5',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea5',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -427,13 +427,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea6',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea6',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -471,13 +471,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea7',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea7',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -515,13 +515,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea8',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea8',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -559,13 +559,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea9',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea9',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -603,13 +603,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea10',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea10',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -647,13 +647,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea11',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea11',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -691,13 +691,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorea12',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorea12',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -738,13 +738,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scoreb1',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scoreb1',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -784,13 +784,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scoreb2',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scoreb2',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -828,13 +828,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scoreb3',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scoreb3',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -872,13 +872,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scoreb4',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scoreb4',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -916,13 +916,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scoreb5',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scoreb5',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -960,13 +960,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scoreb6',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scoreb6',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1007,13 +1007,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorec1',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorec1',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1053,13 +1053,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorec2',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorec2',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1097,13 +1097,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorec3',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorec3',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1141,13 +1141,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorec4',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorec4',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1185,13 +1185,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorec5',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorec5',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1229,13 +1229,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scorec6',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scorec6',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1278,13 +1278,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scored1',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scored1',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1324,13 +1324,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scored2',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scored2',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1368,13 +1368,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scored3',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scored3',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1412,13 +1412,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scored4',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scored4',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1456,13 +1456,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scored5',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scored5',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1500,13 +1500,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'scored6',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'scored6',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Score range is 0-10')
+														('Score range is 0-10')
 													)                        
                         
                         ) {
@@ -1550,7 +1550,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka1',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1586,7 +1586,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka2',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1622,7 +1622,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka3',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1658,7 +1658,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka4',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1694,7 +1694,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka5',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1730,7 +1730,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka6',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1766,7 +1766,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka7',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1802,7 +1802,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka8',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1838,7 +1838,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka9',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1874,7 +1874,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka10',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1910,7 +1910,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka11',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1946,7 +1946,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarka12',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -1984,7 +1984,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkb1',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2020,7 +2020,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkb2',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2056,7 +2056,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkb3',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2092,7 +2092,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkb4',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2128,7 +2128,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkb5',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2164,7 +2164,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkb6',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2203,7 +2203,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkc1',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2239,7 +2239,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkc2',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2275,7 +2275,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkc3',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2312,7 +2312,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkc4',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2348,7 +2348,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkc5',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2384,7 +2384,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkc6',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2423,7 +2423,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkd1',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2459,7 +2459,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkd2',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2495,7 +2495,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkd3',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2532,7 +2532,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkd4',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2568,7 +2568,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkd5',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2604,7 +2604,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'remarkd6',
 														$value,
-														TTi18n::gettext('Remark is too long'),
+														('Remark is too long'),
 														1,
 														2048)
 			) {
@@ -2647,13 +2647,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'avg_key_peformance',
 												$value,
-												TTi18n::gettext('Invalid key performance')
+												('Invalid key performance')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'avg_key_peformance',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('key performance range is 0-100')
+														('key performance range is 0-100')
 													)                        
                         
                         ) {
@@ -2686,13 +2686,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'total_score_genaral',
 												$value,
-												TTi18n::gettext('Invalid total genaral score')
+												('Invalid total genaral score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'total_score_genaral',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Total genaral score range is 0-100')
+														('Total genaral score range is 0-100')
 													)                        
                         
                         ) {
@@ -2733,7 +2733,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback1',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -2769,7 +2769,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback2',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -2806,7 +2806,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback3',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -2842,7 +2842,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback4',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -2878,7 +2878,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback5',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -2914,7 +2914,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback6',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -2950,7 +2950,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback7',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -2986,7 +2986,7 @@ class UserKpiFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'feedback8',
 														$value,
-														TTi18n::gettext('Feedback is too long'),
+														('Feedback is too long'),
 														1,
 														2048)
 			) {
@@ -3009,13 +3009,13 @@ class UserKpiFactory extends Factory {
 
 		if ( $value == NULL OR $this->Validator->isNumeric(		'total_score',
 												$value,
-												TTi18n::gettext('Invalid Score')
+												('Invalid Score')
 										)
                         
                         AND 
 				$this->Validator->isTrue(	'total_score',
 														$this->checkScoreRange($value),
-														TTi18n::gettext('Total Score range is 0-10')
+														('Total Score range is 0-10')
 													)                        
                         
                         ) {
@@ -3058,7 +3058,7 @@ class UserKpiFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'review_date',
 												$epoch,
-												TTi18n::gettext('Incorrect review date'))
+												('Incorrect review date'))
 			) {
 
 			//$this->data['first_worked_date'] = $epoch;
@@ -3072,7 +3072,7 @@ class UserKpiFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'review_date',
 												FALSE,
-												TTi18n::gettext('Incorrect review date'));
+												('Incorrect review date'));
 			}                    
                     
 		}
@@ -3106,7 +3106,7 @@ class UserKpiFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Invalid Default Branch')
+														('Invalid Default Branch')
 													) ) {
 
 			$this->data['default_branch_id'] = $id;
@@ -3142,7 +3142,7 @@ class UserKpiFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'title',
 														$utlf->getByID($id),
-														TTi18n::gettext('Title is invalid')
+														('Title is invalid')
 													) ) {
 
 			$this->data['title_id'] = $id;
@@ -3178,7 +3178,7 @@ class UserKpiFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Invalid Default Department')
+														('Invalid Default Department')
 													) ) {
 
 			$this->data['default_department_id'] = $id;
@@ -3203,7 +3203,7 @@ class UserKpiFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -3229,7 +3229,7 @@ class UserKpiFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -3276,7 +3276,7 @@ class UserKpiFactory extends Factory {
 //		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
 //			$this->Validator->isTRUE(		'account',
 //											FALSE,
-//											TTi18n::gettext('Bank account already exists') );
+//											('Bank account already exists') );
 //
 //			return FALSE;
 //		}
@@ -3285,28 +3285,28 @@ class UserKpiFactory extends Factory {
 		if ( $this->getDefaultBranch() == 0 ) {
 			$this->Validator->isTrue(		'default_branch',
 											FALSE,
-											TTi18n::gettext('Default Branch must be specified') );
+											('Default Branch must be specified') );
 		} 
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getDefaultDepartment() == 0 ) {
 			$this->Validator->isTrue(		'default_department',
 											FALSE,
-											TTi18n::gettext('Default Department must be specified') );
+											('Default Department must be specified') );
 		}   
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getTitle() == 0 ) {
 			$this->Validator->isTrue(		'title',
 											FALSE,
-											TTi18n::gettext('Employee Title must be specified') );
+											('Employee Title must be specified') );
 		}        
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getEndDate() != '' AND $this->getStartDate() != '' AND $this->getEndDate() < $this->getStartDate() ) {
 			$this->Validator->isTrue(		'end_date',
 											FALSE,
-											TTi18n::gettext('Conflicting end date'));
+											('Conflicting end date'));
 		}                
 
 		return TRUE;
@@ -3390,11 +3390,11 @@ class UserKpiFactory extends Factory {
          */          
 	function addLog( $log_action ) {
 		if ( $this->getUser() == '' ) {
-			$log_description = TTi18n::getText('Company');
+			$log_description = ('Company');
 		} else {
-			$log_description = TTi18n::getText('Employee');
+			$log_description = ('Employee');
 		}
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
 	}
 
 }

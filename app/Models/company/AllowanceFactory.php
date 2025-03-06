@@ -38,7 +38,7 @@ class AllowanceFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user_id',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -85,7 +85,7 @@ class AllowanceFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'payperiod_id',
 														$pplf->getByID($id),
-														TTi18n::gettext('Invalid Pay Period')
+														('Invalid Pay Period')
 														) ) {
 			$this->data['payperiod_id'] = $id;
 
@@ -111,7 +111,7 @@ class AllowanceFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'worked_days',
 													$int,
-													TTi18n::gettext('Incorrect Worked Days'))
+													('Incorrect Worked Days'))
 				
 				) {
 			$this->data['worked_days'] = $int;
@@ -140,7 +140,7 @@ class AllowanceFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'late_days',
 													$int,
-													TTi18n::gettext('Incorrect Late Days'))
+													('Incorrect Late Days'))
 				
 				) {
 			$this->data['late_days'] = $int;
@@ -169,7 +169,7 @@ class AllowanceFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'nopay_days',
 													$int,
-													TTi18n::gettext('Incorrect nopay Days'))
+													('Incorrect nopay Days'))
 				
 				) {
 			$this->data['nopay_days'] = $int;
@@ -199,7 +199,7 @@ class AllowanceFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'fullday_leave_days',
 													$int,
-													TTi18n::gettext('Incorrect Fullday leave days'))
+													('Incorrect Fullday leave days'))
 				
 				) {
 			$this->data['fullday_leave_days'] = $int;
@@ -229,7 +229,7 @@ class AllowanceFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'halfday_leave_days',
 													$int,
-													TTi18n::gettext('Incorrect Fullday leave days'))
+													('Incorrect Fullday leave days'))
 				
 				) {
 			$this->data['halfday_leave_days'] = $int;

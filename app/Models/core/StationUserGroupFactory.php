@@ -24,11 +24,11 @@ class StationUserGroupFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(	'station',
 													$id,
-													TTi18n::gettext('Selected Station is invalid')
+													('Selected Station is invalid')
 /*
 				$this->Validator->isResultSetWithRows(	'station',
 													$slf->getByID($id),
-													TTi18n::gettext('Selected Station is invalid')
+													('Selected Station is invalid')
 */
 															)
 			) {
@@ -70,7 +70,7 @@ class StationUserGroupFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'group',
 													$uglf->getByID($id),
-													TTi18n::gettext('Selected Group is invalid')
+													('Selected Group is invalid')
 													) ) {
 			$this->data['group_id'] = $id;
 
@@ -130,7 +130,7 @@ class StationUserGroupFactory extends Factory {
 	function addLog( $log_action ) {
 		$g_obj = $this->getGroupObject();
 		if ( is_object($g_obj) ) {
-			return TTLog::addEntry( $this->getStation(), $log_action, TTi18n::getText('Group').': '. $g_obj->getName() , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getStation(), $log_action, ('Group').': '. $g_obj->getName() , NULL, $this->getTable() );
 		}
 
 		return FALSE;

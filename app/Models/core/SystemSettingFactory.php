@@ -36,12 +36,12 @@ class SystemSettingFactory extends Factory {
 		$value = trim($value);
 		if (	$this->Validator->isLength(	'name',
 											$value,
-											TTi18n::gettext('Name is too short or too long'),
+											('Name is too short or too long'),
 											1,250)
 				AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($value),
-														TTi18n::gettext('Name already exists')
+														('Name already exists')
 														)
 
 						) {
@@ -65,7 +65,7 @@ class SystemSettingFactory extends Factory {
 		$value = trim($value);
 		if (	$this->Validator->isLength(	'value',
 											$value,
-											TTi18n::gettext('Value is too short or too long'),
+											('Value is too short or too long'),
 											1,4096)
 						) {
 
@@ -136,7 +136,7 @@ class SystemSettingFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('System Setting - Name').': '. $this->getName() .' '. TTi18n::getText('Value').': '. $this->getValue(), NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('System Setting - Name').': '. $this->getName() .' '. ('Value').': '. $this->getValue(), NULL, $this->getTable() );
 	}
 }
 ?>

@@ -15,30 +15,30 @@ class RecurringScheduleTemplateFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1010-week' => TTi18n::gettext('Week'),
+										'-1010-week' => ('Week'),
 
-										'-1101-sun' => TTi18n::gettext('S'),
-										'-1102-mon' => TTi18n::gettext('M'),
-										'-1103-tue' => TTi18n::gettext('T'),
-										'-1104-wed' => TTi18n::gettext('W'),
-										'-1105-thu' => TTi18n::gettext('T'),
-										'-1106-fri' => TTi18n::gettext('F'),
-										'-1107-sat' => TTi18n::gettext('S'),
+										'-1101-sun' => ('S'),
+										'-1102-mon' => ('M'),
+										'-1103-tue' => ('T'),
+										'-1104-wed' => ('W'),
+										'-1105-thu' => ('T'),
+										'-1106-fri' => ('F'),
+										'-1107-sat' => ('S'),
 
-										'-1200-start_time' => TTi18n::gettext('In'),
-										'-1210-end_time' => TTi18n::gettext('Out'),
+										'-1200-start_time' => ('In'),
+										'-1210-end_time' => ('Out'),
 
-										'-1220-schedule_policy' => TTi18n::gettext('Schedule Policy'),
+										'-1220-schedule_policy' => ('Schedule Policy'),
 
-										'-1230-branch' => TTi18n::gettext('Branch'),
-										'-1240-department' => TTi18n::gettext('Department'),
-										'-1250-job' => TTi18n::gettext('Job'),
-										'-1260-job_item' => TTi18n::gettext('Task'),
+										'-1230-branch' => ('Branch'),
+										'-1240-department' => ('Department'),
+										'-1250-job' => ('Job'),
+										'-1260-job_item' => ('Task'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -131,7 +131,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'recurring_schedule_template_control',
 													$rstclf->getByID($id),
-													TTi18n::gettext('Recurring Schedule Template Control is invalid')
+													('Recurring Schedule Template Control is invalid')
 													) ) {
 
 			$this->data['recurring_schedule_template_control_id'] = $id;
@@ -156,7 +156,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 				AND
 				$this->Validator->isNumeric(		'week'.$this->getLabelID(),
 													$int,
-													TTi18n::gettext('Week is invalid')) ) {
+													('Week is invalid')) ) {
 			$this->data['week'] = $int;
 
 			return TRUE;
@@ -269,7 +269,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'start_time'.$this->getLabelID(),
 												$epoch,
-												TTi18n::gettext('Incorrect In time'))
+												('Incorrect In time'))
 
 			) {
 
@@ -297,7 +297,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'end_time'.$this->getLabelID(),
 												$epoch,
-												TTi18n::gettext('Incorrect Out time'))
+												('Incorrect Out time'))
 
 			) {
 
@@ -350,7 +350,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'schedule_policy',
 														$splf->getByID($id),
-														TTi18n::gettext('Schedule Policy is invalid')
+														('Schedule Policy is invalid')
 													) ) {
 
 			$this->data['schedule_policy_id'] = $id;
@@ -380,7 +380,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Branch does not exist')
+														('Branch does not exist')
 														) ) {
 			$this->data['branch_id'] = $id;
 
@@ -407,7 +407,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Department does not exist')
+														('Department does not exist')
 														) ) {
 			$this->data['department_id'] = $id;
 
@@ -439,7 +439,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job',
 														$jlf->getByID($id),
-														TTi18n::gettext('Job does not exist')
+														('Job does not exist')
 														) ) {
 			$this->data['job_id'] = $id;
 
@@ -471,7 +471,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job_item',
 														$jilf->getByID($id),
-														TTi18n::gettext('Job Item does not exist')
+														('Job Item does not exist')
 														) ) {
 			$this->data['job_item_id'] = $id;
 
@@ -786,7 +786,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getRecurringScheduleTemplateControl(), $log_action, TTi18n::getText('Recurring Schedule Week').': '. $this->getWeek(), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getRecurringScheduleTemplateControl(), $log_action, ('Recurring Schedule Week').': '. $this->getWeek(), NULL, $this->getTable(), $this );
 	}
 }
 ?>

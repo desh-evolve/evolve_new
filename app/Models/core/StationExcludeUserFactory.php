@@ -24,11 +24,11 @@ class StationExcludeUserFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(	'station',
 													$id,
-													TTi18n::gettext('Selected Station is invalid')
+													('Selected Station is invalid')
 /*
 				$this->Validator->isResultSetWithRows(	'station',
 													$slf->getByID($id),
-													TTi18n::gettext('Selected Station is invalid')
+													('Selected Station is invalid')
 */
 															)
 			) {
@@ -70,7 +70,7 @@ class StationExcludeUserFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'exclude_user',
 													$ulf->getByID($id),
-													TTi18n::gettext('Selected User is invalid')
+													('Selected User is invalid')
 													) ) {
 			$this->data['user_id'] = $id;
 
@@ -130,7 +130,7 @@ class StationExcludeUserFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getStation(), $log_action, TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getStation(), $log_action, ('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
 		}
 
 		return FALSE;

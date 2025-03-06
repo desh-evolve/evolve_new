@@ -22,7 +22,7 @@ class LogDetailFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$llf->getByID($id),
-															TTi18n::gettext('System log is invalid')
+															('System log is invalid')
 															) ) {
 			$this->data['system_log_id'] = $id;
 
@@ -44,7 +44,7 @@ class LogDetailFactory extends Factory {
 
 		if (	$this->Validator->isString(		'field',
 												$value,
-												TTi18n::gettext('Field is invalid'))
+												('Field is invalid'))
 			) {
 			$this->data['field'] = $id;
 
@@ -67,7 +67,7 @@ class LogDetailFactory extends Factory {
 		if (
 				$this->Validator->isLength(		'old_value',
 												$text,
-												TTi18n::gettext('Old value is invalid'),
+												('Old value is invalid'),
 												0,
 												1024)
 
@@ -93,7 +93,7 @@ class LogDetailFactory extends Factory {
 		if (
 				$this->Validator->isLength(		'new_value',
 												$text,
-												TTi18n::gettext('New value is invalid'),
+												('New value is invalid'),
 												0,
 												1024)
 
@@ -121,31 +121,31 @@ class LogDetailFactory extends Factory {
 			//Handle global fields
 			$columns = array();
 			$global_columns = array(
-							'user_id' => TTi18n::getText('Employee'),
-							'currency_id' => TTi18n::getText('Currency'),
-							'branch_id' => TTi18n::getText('Branch'),
-							'department_id' => TTi18n::getText('Department'),
-							'group_id' => TTi18n::getText('Group'),
-							'job_id' => TTi18n::getText('Job'),
-							'job_item_id' => TTi18n::getText('Task'),
-							'exception_policy_control_id' => TTi18n::getText('Exception Policy'),
-							'accrual_policy_id' => TTi18n::getText('Accrual Policy'),
-							'absence_policy_id' => TTi18n::getText('Absence Policy'),
-							'round_interval_policy_id' => TTi18n::getText('Rounding Policy'),
-							'pay_stub_entry_account_id' => TTi18n::getText('Pay Stub Account'),
-							'wage_group_id' => TTi18n::getText('Wage Group'),
-							'company_deduction_id' => TTi18n::getText('Tax / Deduction'),
+							'user_id' => ('Employee'),
+							'currency_id' => ('Currency'),
+							'branch_id' => ('Branch'),
+							'department_id' => ('Department'),
+							'group_id' => ('Group'),
+							'job_id' => ('Job'),
+							'job_item_id' => ('Task'),
+							'exception_policy_control_id' => ('Exception Policy'),
+							'accrual_policy_id' => ('Accrual Policy'),
+							'absence_policy_id' => ('Absence Policy'),
+							'round_interval_policy_id' => ('Rounding Policy'),
+							'pay_stub_entry_account_id' => ('Pay Stub Account'),
+							'wage_group_id' => ('Wage Group'),
+							'company_deduction_id' => ('Tax / Deduction'),
 
-							'client_id' => TTi18n::getText('Client'),
-							'product_id' => TTi18n::getText('Product'),
-							'invoice_district_id' => TTi18n::getText('District'),
-							'total_time' => TTi18n::getText('Total Time'),
+							'client_id' => ('Client'),
+							'product_id' => ('Product'),
+							'invoice_district_id' => ('District'),
+							'total_time' => ('Total Time'),
 
-							'other_id1' => TTi18n::getText('Other ID1'), //Need to find the proper names for these eventually.
-							'other_id2' => TTi18n::getText('Other ID2'),
-							'other_id3' => TTi18n::getText('Other ID3'),
-							'other_id4' => TTi18n::getText('Other ID4'),
-							'other_id5' => TTi18n::getText('Other ID5'),
+							'other_id1' => ('Other ID1'), //Need to find the proper names for these eventually.
+							'other_id2' => ('Other ID2'),
+							'other_id3' => ('Other ID3'),
+							'other_id4' => ('Other ID4'),
+							'other_id5' => ('Other ID5'),
 							);
 
 			//Handle class specific fields.
@@ -153,10 +153,10 @@ class LogDetailFactory extends Factory {
 				case 'StationFactory':
 				case 'StationListFactory':
 					$columns = array(
-									'partial_push_frequency' => TTi18n::getText('Partial Push Frequency'),
-									'push_frequency' => TTi18n::getText('Push Frequency'),
-									'poll_frequency' => TTi18n::getText('Poll Frequency'),
-									'enable_auto_punch_status' => TTi18n::getText('Enable Auto Punch Status'),
+									'partial_push_frequency' => ('Partial Push Frequency'),
+									'push_frequency' => ('Push Frequency'),
+									'poll_frequency' => ('Poll Frequency'),
+									'enable_auto_punch_status' => ('Enable Auto Punch Status'),
 									);
 					break;
 				case 'MealPolicyFactory':
@@ -164,124 +164,124 @@ class LogDetailFactory extends Factory {
 				case 'BreakPolicyFactory':
 				case 'BreakPolicyListFactory':
 					$columns = array(
-									'start_window' => TTi18n::getText('Start Window'),
-									'window_length' => TTi18n::getText('Window Length'),
-									'minimum_punch_time' => TTi18n::getText('Minimum Punch Time'),
-									'maximum_punch_time' => TTi18n::getText('Maximum Punch Time'),
+									'start_window' => ('Start Window'),
+									'window_length' => ('Window Length'),
+									'minimum_punch_time' => ('Minimum Punch Time'),
+									'maximum_punch_time' => ('Maximum Punch Time'),
 									);
 					break;
 				case 'AccrualPolicyFactory':
 				case 'AccrualPolicyListFactory':
 					$columns = array(
-									'enable_pay_stub_balance_display' => TTi18n::getText('Display Balance on Pay Stub'),
-									'minimum_time' => TTi18n::getText('Minimum Time'),
-									'maximum_time' => TTi18n::getText('Maximum Time'),
-									'apply_frequency_id' => TTi18n::getText('Frequency'),
-									'apply_frequency_month' => TTi18n::getText('Frequency Month'),
-									'apply_frequency_day_of_month' => TTi18n::getText('Frequency Day of Month'),
-									'apply_frequency_day_of_week' => TTi18n::getText('Frequency Day of Week'),
-									'apply_frequency_hire_date' => TTi18n::getText('Frequency Hire Date'),
-									'milestone_rollover_month' => TTi18n::getText('Rollover Month'),
-									'milestone_rollover_day_of_month' => TTi18n::getText('Rollover Day of Month'),
-									'milestone_rollover_hire_date' => TTi18n::getText('Rollover Hire Date'),
-									'minimum_employed_days' => TTi18n::getText('Minimum Employed Days'),
+									'enable_pay_stub_balance_display' => ('Display Balance on Pay Stub'),
+									'minimum_time' => ('Minimum Time'),
+									'maximum_time' => ('Maximum Time'),
+									'apply_frequency_id' => ('Frequency'),
+									'apply_frequency_month' => ('Frequency Month'),
+									'apply_frequency_day_of_month' => ('Frequency Day of Month'),
+									'apply_frequency_day_of_week' => ('Frequency Day of Week'),
+									'apply_frequency_hire_date' => ('Frequency Hire Date'),
+									'milestone_rollover_month' => ('Rollover Month'),
+									'milestone_rollover_day_of_month' => ('Rollover Day of Month'),
+									'milestone_rollover_hire_date' => ('Rollover Hire Date'),
+									'minimum_employed_days' => ('Minimum Employed Days'),
 									);
 					break;
 				case 'AccrualPolicyMilestoneFactory':
 				case 'AccrualPolicyMilestoneListFactory':
 					$columns = array(
-									'length_of_service_days' => TTi18n::getText('Length Of Service in Days'),
+									'length_of_service_days' => ('Length Of Service in Days'),
 									);
 					break;
 				case 'PremiumPolicyFactory':
 				case 'PremiumPolicyListFactory':
 					$columns = array(
-									'minimum_time' => TTi18n::getText('Minimum Time'),
-									'maximum_time' => TTi18n::getText('Maximum Time'),
-									'include_break_policy' => TTi18n::getText('Include Break Policy in Calculation'),
-									'include_meal_policy' => TTi18n::getText('Include Meal Policy in Calculation'),
-									'include_partial_punch' => TTi18n::getText('Include Partial Punches'),
-									'daily_trigger_time' => TTi18n::getText('Active After Daily (Regular) Hours'),
-									'weekly_trigger_time' => TTi18n::getText('Active After Weekly (Regular) Hours'),
-									'start_time' => TTi18n::getText('Start Time'),
-									'end_time' => TTi18n::getText('End Time'),
-									'start_date' => TTi18n::getText('Start Date'),
-									'end_date' => TTi18n::getText('End Date'),
-									'sun' => TTi18n::getText('Effective Day: Sun'),
-									'mon' => TTi18n::getText('Effective Day: Mon'),
-									'tue' => TTi18n::getText('Effective Day: Tue'),
-									'wed' => TTi18n::getText('Effective Day: Wed'),
-									'thu' => TTi18n::getText('Effective Day: Thu'),
-									'fri' => TTi18n::getText('Effective Day: Fri'),
-									'sat' => TTi18n::getText('Effective Day: Sat'),
-									'exclude_default_branch' => TTi18n::getText('Exclude Default Branch'),
-									'exclude_default_department' => TTi18n::getText('Exclude Default Department'),
-									'branch_selection_type_id' => TTi18n::getText('Branch Selection Type'),
-									'department_selection_type_id' => TTi18n::getText('Department Selection Type'),
-									'minimum_break_time' => TTi18n::getText('Minimum Time Recognized As Break'),
-									'maximum_no_break_time' => TTi18n::getText('Maximum Time Without A Break'),
+									'minimum_time' => ('Minimum Time'),
+									'maximum_time' => ('Maximum Time'),
+									'include_break_policy' => ('Include Break Policy in Calculation'),
+									'include_meal_policy' => ('Include Meal Policy in Calculation'),
+									'include_partial_punch' => ('Include Partial Punches'),
+									'daily_trigger_time' => ('Active After Daily (Regular) Hours'),
+									'weekly_trigger_time' => ('Active After Weekly (Regular) Hours'),
+									'start_time' => ('Start Time'),
+									'end_time' => ('End Time'),
+									'start_date' => ('Start Date'),
+									'end_date' => ('End Date'),
+									'sun' => ('Effective Day: Sun'),
+									'mon' => ('Effective Day: Mon'),
+									'tue' => ('Effective Day: Tue'),
+									'wed' => ('Effective Day: Wed'),
+									'thu' => ('Effective Day: Thu'),
+									'fri' => ('Effective Day: Fri'),
+									'sat' => ('Effective Day: Sat'),
+									'exclude_default_branch' => ('Exclude Default Branch'),
+									'exclude_default_department' => ('Exclude Default Department'),
+									'branch_selection_type_id' => ('Branch Selection Type'),
+									'department_selection_type_id' => ('Department Selection Type'),
+									'minimum_break_time' => ('Minimum Time Recognized As Break'),
+									'maximum_no_break_time' => ('Maximum Time Without A Break'),
 									);
 					break;
 				case 'HolidayPolicyFactory':
 				case 'HolidayPolicyListFactory':
 					$columns = array(
-									'time' => TTi18n::getText('Holiday Time'),
-									'worked_scheduled_days' => TTi18n::getText('Worked Before Type'),
-									'minimum_worked_days' => TTi18n::getText('Work Before Days'),
-									'minimum_worked_period_days' => TTi18n::getText('Work Before Limit Days'),
+									'time' => ('Holiday Time'),
+									'worked_scheduled_days' => ('Worked Before Type'),
+									'minimum_worked_days' => ('Work Before Days'),
+									'minimum_worked_period_days' => ('Work Before Limit Days'),
 
-									'worked_after_scheduled_days' => TTi18n::getText('Worked After Type'),
-									'minimum_worked_after_days' => TTi18n::getText('Work After Days'),
-									'minimum_worked_after_period_days' => TTi18n::getText('Work After Limit Days'),
+									'worked_after_scheduled_days' => ('Worked After Type'),
+									'minimum_worked_after_days' => ('Work After Days'),
+									'minimum_worked_after_period_days' => ('Work After Limit Days'),
 
-									'minimum_time' => TTi18n::getText('Minimum Time'),
-									'maximum_time' => TTi18n::getText('Maximum Time'),
-									'average_time_days' => TTi18n::getText('Days To Average Time Over'),
-									'average_time_worked_days' => TTi18n::getText('Worked Days Only'),
+									'minimum_time' => ('Minimum Time'),
+									'maximum_time' => ('Maximum Time'),
+									'average_time_days' => ('Days To Average Time Over'),
+									'average_time_worked_days' => ('Worked Days Only'),
 
-									'force_over_time_policy' => TTi18n::getText('Always Apply Over Time Policy'),
-									'include_over_time' => TTi18n::getText('Include Over Time in Average'),
-									'include_paid_absence_time' => TTi18n::getText('Include Paid Absence Time in Average'),
+									'force_over_time_policy' => ('Always Apply Over Time Policy'),
+									'include_over_time' => ('Include Over Time in Average'),
+									'include_paid_absence_time' => ('Include Paid Absence Time in Average'),
 
 									);
 					break;
 				case 'RecurringHolidayFactory':
 				case 'RecurringHolidayListFactory':
 					$columns = array(
-									'month_int' => TTi18n::getText('Month'),
-									'day_of_month' => TTi18n::getText('Day Of The Month'),
-									'day_of_week' => TTi18n::getText('Day Of Week'),
-									'week_interval' => TTi18n::getText('Week Interval'),
-									'pivot_day_direction_id' => TTi18n::getText('Pivot Day Direction'),
-									'special_day' => TTi18n::getText('Special Day'),
-									'always_week_day_id' => TTi18n::getText('Always On Week Day'),
+									'month_int' => ('Month'),
+									'day_of_month' => ('Day Of The Month'),
+									'day_of_week' => ('Day Of Week'),
+									'week_interval' => ('Week Interval'),
+									'pivot_day_direction_id' => ('Pivot Day Direction'),
+									'special_day' => ('Special Day'),
+									'always_week_day_id' => ('Always On Week Day'),
 									);
 					break;
 				case 'PayPeriodScheduleFactory':
 				case 'PayPeriodScheduleListFactory':
 					$columns = array(
-									'annual_pay_periods' => TTi18n::getText('Annual Pay Periods'),
-									'start_day_of_week' => TTi18n::getText('Pay Period Starts On'),
-									'start_week_day_id' => TTi18n::getText('Overtime Week'),
-									'shift_assigned_day_id' => TTi18n::getText('Assign Shifts To'),
-									'maximum_shift_time' => TTi18n::getText('Maximum Shift Time'),
-									'new_day_trigger_time' => TTi18n::getText('Minimum Time-Off Between Shifts'),
-									'timesheet_verify_type_id' => TTi18n::getText('TimeSheet Verification'),
-									'timesheet_verify_before_end_date' => TTi18n::getText('Verification Window Starts'),
-									'timesheet_verify_before_transaction_date' => TTi18n::getText('Verification Window Ends'),
-									'anchor_date' => TTi18n::getText('Initial Date'),
-									'transaction_date' => TTi18n::getText('Transaction Date'),
-									'transaction_date_bd' => TTi18n::getText('Transaction Always On Business Day'),
-									'primary_day_of_month' => TTi18n::getText('Primary Start Day'),
-									'primary_transaction_day_of_month' => TTi18n::getText('Primary Transaction Day'),
-									'secondary_day_of_month' => TTi18n::getText('Secondary Start Day'),
-									'secondary_transaction_day_of_month' => TTi18n::getText('Secondary Transaction Day'),
+									'annual_pay_periods' => ('Annual Pay Periods'),
+									'start_day_of_week' => ('Pay Period Starts On'),
+									'start_week_day_id' => ('Overtime Week'),
+									'shift_assigned_day_id' => ('Assign Shifts To'),
+									'maximum_shift_time' => ('Maximum Shift Time'),
+									'new_day_trigger_time' => ('Minimum Time-Off Between Shifts'),
+									'timesheet_verify_type_id' => ('TimeSheet Verification'),
+									'timesheet_verify_before_end_date' => ('Verification Window Starts'),
+									'timesheet_verify_before_transaction_date' => ('Verification Window Ends'),
+									'anchor_date' => ('Initial Date'),
+									'transaction_date' => ('Transaction Date'),
+									'transaction_date_bd' => ('Transaction Always On Business Day'),
+									'primary_day_of_month' => ('Primary Start Day'),
+									'primary_transaction_day_of_month' => ('Primary Transaction Day'),
+									'secondary_day_of_month' => ('Secondary Start Day'),
+									'secondary_transaction_day_of_month' => ('Secondary Transaction Day'),
 									);
 					break;
 				case 'RequestFactory':
 				case 'RequestListFactory':
 					$columns = array(
-									'authorization_level' => TTi18n::getText('Authorization Level'),
+									'authorization_level' => ('Authorization Level'),
 									);
 					break;
 				case 'PayStubAmendmentFactory':
@@ -289,14 +289,14 @@ class LogDetailFactory extends Factory {
 				case 'RecurringPayStubAmendmentFactory':
 				case 'RecurringPayStubAmendmentListFactory':
 					$columns = array(
-									'percent_amount' => TTi18n::getText('Percent'),
-									'percent_amount_entry_name_id' => TTi18n::getText('Percent Of'),
+									'percent_amount' => ('Percent'),
+									'percent_amount_entry_name_id' => ('Percent Of'),
 									);
 					break;
 				case 'RecurringScheduleControlFactory':
 				case 'RecurringScheduleControlListFactory':
 					$columns = array(
-									'start_week' => TTi18n::getText('Start Week'),
+									'start_week' => ('Start Week'),
 									);
 					break;
 				case 'RecurringScheduleTemplateControlFactory':
@@ -304,36 +304,36 @@ class LogDetailFactory extends Factory {
 				case 'RecurringScheduleTemplateFactory':
 				case 'RecurringScheduleTemplateListFactory':
 					$columns = array(
-									'recurring_schedule_template_control_id' => TTi18n::getText('Recurring Schedule Template'),
-									'mon' => TTi18n::getText('Monday'),
-									'tue' => TTi18n::getText('Tuesday'),
-									'wed' => TTi18n::getText('Wednesday'),
-									'thu' => TTi18n::getText('Thursday'),
-									'fri' => TTi18n::getText('Friday'),
-									'sat' => TTi18n::getText('Saturday'),
-									'sun' => TTi18n::getText('Sunday'),
+									'recurring_schedule_template_control_id' => ('Recurring Schedule Template'),
+									'mon' => ('Monday'),
+									'tue' => ('Tuesday'),
+									'wed' => ('Wednesday'),
+									'thu' => ('Thursday'),
+									'fri' => ('Friday'),
+									'sat' => ('Saturday'),
+									'sun' => ('Sunday'),
 									);
 					break;
 				case 'UserFactory':
 				case 'UserListFactory':
 					$columns = array(
-									'sex' => TTi18n::gettext('Sex'),
-									'second_last_name' => TTi18n::gettext('Second Surname'),
-									'password_updated_date' => TTi18n::gettext('Password Updated'),
+									'sex' => ('Sex'),
+									'second_last_name' => ('Second Surname'),
+									'password_updated_date' => ('Password Updated'),
 									);
 					break;
 				case 'UserPreferenceFactory':
 				case 'UserPreferenceListFactory':
 					$columns = array(
-									'language' => TTi18n::gettext('Language'),
-									'date_format' => TTi18n::gettext('Date Format'),
-									'time_format' => TTi18n::gettext('Time Format'),
-									'time_zone' => TTi18n::gettext('TimeZone'),
-									'time_unit_format' => TTi18n::gettext('Time Unit Format'),
-									'start_week_day' => TTi18n::gettext('Start Weekday'),
-									'enable_email_notification_exception' => TTi18n::gettext('Email Notification Exception'),
-									'enable_email_notification_message' => TTi18n::gettext('Email Notification Message'),
-									'enable_email_notification_home' => TTi18n::gettext('Email Notification Home'),
+									'language' => ('Language'),
+									'date_format' => ('Date Format'),
+									'time_format' => ('Time Format'),
+									'time_zone' => ('TimeZone'),
+									'time_unit_format' => ('Time Unit Format'),
+									'start_week_day' => ('Start Weekday'),
+									'enable_email_notification_exception' => ('Email Notification Exception'),
+									'enable_email_notification_message' => ('Email Notification Message'),
+									'enable_email_notification_home' => ('Email Notification Home'),
 									);
 					break;
 				case 'CompanyDeductionFactory':
@@ -341,36 +341,36 @@ class LogDetailFactory extends Factory {
 				case 'UserDeductionFactory':
 				case 'UserDeductionListFactory':
 					$columns = array(
-									'minimum_length_of_service_unit_id' => TTi18n::gettext('Minimum Length Of Service Units'),
-									'minimum_length_of_service_days' => TTi18n::gettext('Minimum Length Of Service Days'),
-									'minimum_length_of_service' => TTi18n::gettext('Minimum Length Of Service'),
-									'maximum_length_of_service_unit_id' => TTi18n::gettext('Maximum Length Of Service Units'),
-									'maximum_length_of_service_days' => TTi18n::gettext('Maximum Length Of Service Days'),
-									'maximum_length_of_service' => TTi18n::gettext('Maximum Length Of Service'),
-									'calculation_order' => TTi18n::gettext('Calculation Order'),
-									'include_account_amount_type_id' => TTi18n::gettext('Include PS Account Value'),
-									'exclude_account_amount_type_id' => TTi18n::gettext('Exclude PS Account Value'),
-									'user_value1' => TTi18n::gettext('Value 1'),
-									'user_value2' => TTi18n::gettext('Value 2'),
-									'user_value3' => TTi18n::gettext('Value 3'),
-									'user_value4' => TTi18n::gettext('Value 4'),
-									'user_value5' => TTi18n::gettext('Value 5'),
-									'user_value5' => TTi18n::gettext('Value 6'),
-									'user_value5' => TTi18n::gettext('Value 7'),
-									'user_value5' => TTi18n::gettext('Value 8'),
-									'user_value5' => TTi18n::gettext('Value 9'),
-									'user_value5' => TTi18n::gettext('Value 10'),
+									'minimum_length_of_service_unit_id' => ('Minimum Length Of Service Units'),
+									'minimum_length_of_service_days' => ('Minimum Length Of Service Days'),
+									'minimum_length_of_service' => ('Minimum Length Of Service'),
+									'maximum_length_of_service_unit_id' => ('Maximum Length Of Service Units'),
+									'maximum_length_of_service_days' => ('Maximum Length Of Service Days'),
+									'maximum_length_of_service' => ('Maximum Length Of Service'),
+									'calculation_order' => ('Calculation Order'),
+									'include_account_amount_type_id' => ('Include PS Account Value'),
+									'exclude_account_amount_type_id' => ('Exclude PS Account Value'),
+									'user_value1' => ('Value 1'),
+									'user_value2' => ('Value 2'),
+									'user_value3' => ('Value 3'),
+									'user_value4' => ('Value 4'),
+									'user_value5' => ('Value 5'),
+									'user_value5' => ('Value 6'),
+									'user_value5' => ('Value 7'),
+									'user_value5' => ('Value 8'),
+									'user_value5' => ('Value 9'),
+									'user_value5' => ('Value 10'),
 									);
 					break;
 				case 'JobFactory':
 				case 'JobListFactory':
 					$columns = array(
-									'supervisor_user_id' => TTi18n::gettext('Supervisor'),
-									'default_item_id' => TTi18n::gettext('Default Task'),
-									'user_branch_selection_type_id' => TTi18n::gettext('Branch Selection Type'),
-									'user_department_selection_type_id' => TTi18n::gettext('Department Selection Type'),
-									'user_group_selection_type_id' => TTi18n::gettext('Group Selection Type'),
-									'job_item_group_selection_type_id' => TTi18n::gettext('Task Group Selection Type'),
+									'supervisor_user_id' => ('Supervisor'),
+									'default_item_id' => ('Default Task'),
+									'user_branch_selection_type_id' => ('Branch Selection Type'),
+									'user_department_selection_type_id' => ('Department Selection Type'),
+									'user_group_selection_type_id' => ('Group Selection Type'),
+									'job_item_group_selection_type_id' => ('Task Group Selection Type'),
 									);
 					break;
 				case 'DocumentFactory':
@@ -378,48 +378,48 @@ class LogDetailFactory extends Factory {
 				case 'DocumentRevisionFactory':
 				case 'DocumentRevisionListFactory':
 					$columns = array(
-									'document_id' => TTi18n::gettext('Document'),
-									'mime_type' => TTi18n::gettext('MIME Type'),
-									'local_file_name' => TTi18n::gettext('Local File Name'),
+									'document_id' => ('Document'),
+									'mime_type' => ('MIME Type'),
+									'local_file_name' => ('Local File Name'),
 									);
 					break;
 				case 'ClientPaymentFactory':
 				case 'ClientPaymentListFactory':
 					$columns = array(
-									'cc_bank_phone' => TTi18n::gettext('Issuing Bank Phone Number'),
-									'cc_expire' => TTi18n::gettext('Expiry Date'),
-									'cc_name' => TTi18n::gettext('Card Holder Name'),
-									'cc_number' => TTi18n::gettext('Credit Card Number'),
-									'cc_check' => TTi18n::gettext('Security Code'),
-									'bank_account' => TTi18n::gettext('Bank Account'),
-									'bank_transit' => TTi18n::gettext('Bank Routing/Transit'),
-									'bank_institution' => TTi18n::gettext('Bank Institution'),
+									'cc_bank_phone' => ('Issuing Bank Phone Number'),
+									'cc_expire' => ('Expiry Date'),
+									'cc_name' => ('Card Holder Name'),
+									'cc_number' => ('Credit Card Number'),
+									'cc_check' => ('Security Code'),
+									'bank_account' => ('Bank Account'),
+									'bank_transit' => ('Bank Routing/Transit'),
+									'bank_institution' => ('Bank Institution'),
 									);
 					break;
 				case 'ProductFactory':
 				case 'ProductListFactory':
 					$columns = array(
-									'group_id' => TTi18n::gettext('Group'),
-									'minimum_purchase_quantity' => TTi18n::gettext('Minimum Purchase Quantity'),
-									'maximum_purchase_quantity' => TTi18n::gettext('Maximum Purchase Quantity'),
-									'price_locked' => TTi18n::gettext('Lock Price'),
-									'description_locked' => TTi18n::gettext('Lock Description '),
-									'dimension_unit_id' => TTi18n::gettext('Dimension Unit'),
-									'weight_unit_id' => TTi18n::gettext('Weight Unit'),
-									'origin_country' => TTi18n::gettext('Origin Country'),
-									'tariff_code' => TTi18n::gettext('Tariff Code'),
-									'customs_unit_value' => TTi18n::gettext('Customs Unit Value'),
-									'unit_cost' => TTi18n::gettext('Unit Cost'),
-									'unit_price_type_id' => TTi18n::gettext('Price Type'),
-									'upc' => TTi18n::gettext('UPC'),
+									'group_id' => ('Group'),
+									'minimum_purchase_quantity' => ('Minimum Purchase Quantity'),
+									'maximum_purchase_quantity' => ('Maximum Purchase Quantity'),
+									'price_locked' => ('Lock Price'),
+									'description_locked' => ('Lock Description '),
+									'dimension_unit_id' => ('Dimension Unit'),
+									'weight_unit_id' => ('Weight Unit'),
+									'origin_country' => ('Origin Country'),
+									'tariff_code' => ('Tariff Code'),
+									'customs_unit_value' => ('Customs Unit Value'),
+									'unit_cost' => ('Unit Cost'),
+									'unit_price_type_id' => ('Price Type'),
+									'upc' => ('UPC'),
 									);
 				case 'InvoiceFactory':
 				case 'InvoiceListFactory':
 					$columns = array(
-									'billing_contact_id' => TTi18n::gettext('Billing Contact'),
-									'shipping_contact_id' => TTi18n::gettext('Shipping Contact'),
-									'other_contact_id' => TTi18n::gettext('Other Contact'),
-									'shipping_policy_id' => TTi18n::gettext('Shipping Policy'),
+									'billing_contact_id' => ('Billing Contact'),
+									'shipping_contact_id' => ('Shipping Contact'),
+									'other_contact_id' => ('Other Contact'),
+									'shipping_policy_id' => ('Shipping Policy'),
 									);
 					break;
 
@@ -464,7 +464,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'department_id':
@@ -474,7 +474,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'title_id':
@@ -483,7 +483,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'currency_id':
@@ -492,7 +492,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'group_id':
@@ -501,7 +501,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'supervisor_user_id':
@@ -514,7 +514,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getFullName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'accrual_policy_id':
@@ -523,7 +523,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'schedule_policy_id':
@@ -532,7 +532,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'exception_policy_control_id':
@@ -541,7 +541,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'meal_policy_id':
@@ -550,7 +550,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'break_policy_id':
@@ -559,7 +559,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'absence_policy_id':
@@ -568,7 +568,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'over_time_policy_id':
@@ -577,7 +577,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'holiday_policy_id':
@@ -586,7 +586,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'round_interval_policy_id':
@@ -595,7 +595,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'wage_group_id':
@@ -604,7 +604,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'company_deduction_id':
@@ -613,7 +613,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'pay_stub_entry_account_id':
@@ -626,7 +626,7 @@ class LogDetailFactory extends Factory {
 					$type_options  = $lf->getOptions('type');
 					$retval = $type_options[$lf->getCurrent()->getType()] .' - '. $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 			case 'recurring_schedule_template_control_id':
@@ -635,7 +635,7 @@ class LogDetailFactory extends Factory {
 				if ( $lf->getRecordCount() > 0 ) {
 					$retval = $lf->getCurrent()->getName();
 				} else {
-					$retval = TTi18n::getText('--');
+					$retval = ('--');
 				}
 				break;
 
@@ -649,7 +649,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -661,7 +661,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -672,7 +672,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getCompanyName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -685,7 +685,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getFullName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -696,7 +696,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -707,7 +707,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -718,7 +718,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -729,7 +729,7 @@ class LogDetailFactory extends Factory {
 					if ( $lf->getRecordCount() > 0 ) {
 						$retval = $lf->getCurrent()->getName();
 					} else {
-						$retval = TTi18n::getText('--');
+						$retval = ('--');
 					}
 				}
 				break;
@@ -1189,7 +1189,7 @@ class LogDetailFactory extends Factory {
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
 						} else {
-							$retval = TTi18n::getText('--');
+							$retval = ('--');
 						}
 						break;
 					case 'user_branch_selection_type_id':
@@ -1220,7 +1220,7 @@ class LogDetailFactory extends Factory {
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
 						} else {
-							$retval = TTi18n::getText('--');
+							$retval = ('--');
 						}
 						break;
 					case 'estimate_time':
@@ -1238,7 +1238,7 @@ class LogDetailFactory extends Factory {
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
 						} else {
-							$retval = TTi18n::getText('--');
+							$retval = ('--');
 						}
 						break;
 					case 'template':
@@ -1256,7 +1256,7 @@ class LogDetailFactory extends Factory {
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
 						} else {
-							$retval = TTi18n::getText('--');
+							$retval = ('--');
 						}
 						break;
 				}
@@ -1278,7 +1278,7 @@ class LogDetailFactory extends Factory {
 						if ( $lf->getRecordCount() > 0 ) {
 							$retval = $lf->getCurrent()->getName();
 						} else {
-							$retval = TTi18n::getText('--');
+							$retval = ('--');
 						}
 						break;
 

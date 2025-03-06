@@ -18,7 +18,7 @@ class StationUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'station',
 															$slf->getByID($id),
-															TTi18n::gettext('Station is invalid')
+															('Station is invalid')
 															) ) {
 			$this->data['station_id'] = $id;
 
@@ -39,7 +39,7 @@ class StationUserFactory extends Factory {
 		if ( $id == -1
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('User is invalid')
+															('User is invalid')
 															) ) {
 			$this->data['user_id'] = $id;
 

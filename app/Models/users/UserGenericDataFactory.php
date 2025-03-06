@@ -40,7 +40,7 @@ class UserGenericDataFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(			'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Invalid Company')
+															('Invalid Company')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -64,7 +64,7 @@ class UserGenericDataFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -86,7 +86,7 @@ class UserGenericDataFactory extends Factory {
 		$value = self::handleScriptName( trim($value) );
 		if (	$this->Validator->isLength(	'script',
 											$value,
-											TTi18n::gettext('Invalid script'),
+											('Invalid script'),
 											1,250)
 						) {
 
@@ -157,12 +157,12 @@ class UserGenericDataFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Invalid name'),
+											('Invalid name'),
 											1,100)
 				AND
 				$this->Validator->isTrue(		'name',
 												$this->isUniqueName($name),
-												TTi18n::gettext('Name already exists'))
+												('Name already exists'))
 
 						) {
 
@@ -202,7 +202,7 @@ class UserGenericDataFactory extends Factory {
 		if ( $this->getName() == '' ) {
 			$this->Validator->isTRUE(	'name',
 										FALSE,
-										TTi18n::gettext('Invalid name'));
+										('Invalid name'));
 		}
 
 		return TRUE;
@@ -237,7 +237,7 @@ class UserGenericDataFactory extends Factory {
 			return TRUE;
 		}
 
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee/Company Generic Data'), NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee/Company Generic Data'), NULL, $this->getTable() );
 	}
 */
 
@@ -326,7 +326,7 @@ class UserGenericDataFactory extends Factory {
 			$ugdf->setCompany( $current_company->getId() );
 			$ugdf->setUser( $current_user->getId() );
 			$ugdf->setScript( self::handleScriptName( $_SERVER['SCRIPT_NAME'] ) );
-			$ugdf->setName( TTi18n::gettext('-Default-') );
+			$ugdf->setName( ('-Default-') );
 			$ugdf->setData( $filter_data );
 			$ugdf->setDefault( TRUE );
 		} elseif ( isset($filter_data['saved_search_id']) AND $filter_data['saved_search_id'] != '' ) {

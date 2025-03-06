@@ -23,10 +23,10 @@ class UserGenericStatusFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('Failed'),
-										20 => TTi18n::gettext('Warning'),
-										//25 => TTi18n::gettext('Notice'), //Friendly than a warning.
-										30 => TTi18n::gettext('Success'),
+										10 => ('Failed'),
+										20 => ('Warning'),
+										//25 => ('Notice'), //Friendly than a warning.
+										30 => ('Success'),
 									);
 				break;
 
@@ -50,7 +50,7 @@ class UserGenericStatusFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -76,7 +76,7 @@ class UserGenericStatusFactory extends Factory {
 		$val = trim($val);
 		if (	$this->Validator->isNumeric(	'batch_id',
 												$val,
-												TTi18n::gettext('Invalid Batch ID') )
+												('Invalid Batch ID') )
 						) {
 
 			$this->data['batch_id'] = $val;
@@ -104,7 +104,7 @@ class UserGenericStatusFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -126,7 +126,7 @@ class UserGenericStatusFactory extends Factory {
 		$val = trim($val);
 		if (	$this->Validator->isLength(	'label',
 											$val,
-											TTi18n::gettext('Invalid label'),
+											('Invalid label'),
 											1,1024)
 						) {
 
@@ -151,7 +151,7 @@ class UserGenericStatusFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'description',
 											$val,
-											TTi18n::gettext('Invalid description'),
+											('Invalid description'),
 											1,1024)
 						) {
 
@@ -176,7 +176,7 @@ class UserGenericStatusFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'link',
 											$val,
-											TTi18n::gettext('Invalid link'),
+											('Invalid link'),
 											1,1024)
 						) {
 

@@ -19,9 +19,9 @@ class UserCensusInformationFactory  extends Factory {
                     
                     case 'gender':
 				$retval = array(
-						   5 => TTi18n::gettext('Unspecified'),
-						   10 => TTi18n::gettext('Male'),
-						   20 => TTi18n::gettext('Female'),
+						   5 => ('Unspecified'),
+						   10 => ('Male'),
+						   20 => ('Female'),
 									);
                         
                         break;
@@ -52,7 +52,7 @@ class UserCensusInformationFactory  extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -75,7 +75,7 @@ class UserCensusInformationFactory  extends Factory {
         function setDependant($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('dependant', $value, TTi18n::gettext('Dependant Name is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('dependant', $value, ('Dependant Name is too long'), 1, 2048)) {
                     $this->data['dependant'] = $value;
                     return FALSE;
 		}
@@ -97,7 +97,7 @@ class UserCensusInformationFactory  extends Factory {
         function setName($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('name', $value, TTi18n::gettext('Name is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('name', $value, ('Name is too long'), 1, 250)) {
                     $this->data['name'] = $value;
                     return FALSE;
 		}
@@ -119,7 +119,7 @@ class UserCensusInformationFactory  extends Factory {
         function setRelationship($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('relationship', $value, TTi18n::gettext('Relationship is too long'), 1, 50)) {
+		if ($value == '' OR $this->Validator->isLength('relationship', $value, ('Relationship is too long'), 1, 50)) {
                     $this->data['relationship'] = $value;
                     return FALSE;
 		}
@@ -142,7 +142,7 @@ class UserCensusInformationFactory  extends Factory {
 		if 	(	( $epoch !== FALSE AND $epoch == '' )
 				OR $this->Validator->isDate(	'dob',
 												$epoch,
-												TTi18n::gettext('Birth date is invalid, try specifying the year with four digits.')) ) {
+												('Birth date is invalid, try specifying the year with four digits.')) ) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['dob'] = ( $epoch != 0 AND $epoch != '' ) ? TTDate::getMiddleDayEpoch( $epoch ) : '' ; //Allow blank birthdate.
@@ -167,7 +167,7 @@ class UserCensusInformationFactory  extends Factory {
 	function setNic($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('nic', $value, TTi18n::gettext('NIC is too long'), 1, 2048)) {
+		if ($value == '' OR $this->Validator->isLength('nic', $value, ('NIC is too long'), 1, 2048)) {
                     $this->data['nic'] = $value;
                     return FALSE;
 		}
@@ -189,7 +189,7 @@ class UserCensusInformationFactory  extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'gender',
 											$gender,
-											TTi18n::gettext('Invalid gender'),
+											('Invalid gender'),
 											$this->getOptions('gender') ) ) {
 
 			$this->data['gender'] = $gender;

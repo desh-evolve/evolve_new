@@ -7,7 +7,7 @@ class Form941Report extends Report {
 	protected $user_ids = array();
 
 	function __construct() {
-		$this->title = TTi18n::getText('Form 941 Report');
+		$this->title = ('Form 941 Report');
 		$this->file_name = 'form_941';
 
 		parent::__construct();
@@ -38,59 +38,59 @@ class Form941Report extends Report {
 			case 'setup_fields':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-template' => TTi18n::gettext('Template'),
-										'-1010-time_period' => TTi18n::gettext('Time Period'),
+										'-1000-template' => ('Template'),
+										'-1010-time_period' => ('Time Period'),
 
-										'-2010-user_status_id' => TTi18n::gettext('Employee Status'),
-										'-2020-user_group_id' => TTi18n::gettext('Employee Group'),
-										'-2030-user_title_id' => TTi18n::gettext('Employee Title'),
-										'-2040-include_user_id' => TTi18n::gettext('Employee Include'),
-										'-2050-exclude_user_id' => TTi18n::gettext('Employee Exclude'),
-										'-2060-default_branch_id' => TTi18n::gettext('Default Branch'),
-										'-2070-default_department_id' => TTi18n::gettext('Default Department'),
-										//'-2080-punch_branch_id' => TTi18n::gettext('Punch Branch'),
-										//'-2090-punch_department_id' => TTi18n::gettext('Punch Department'),
+										'-2010-user_status_id' => ('Employee Status'),
+										'-2020-user_group_id' => ('Employee Group'),
+										'-2030-user_title_id' => ('Employee Title'),
+										'-2040-include_user_id' => ('Employee Include'),
+										'-2050-exclude_user_id' => ('Employee Exclude'),
+										'-2060-default_branch_id' => ('Default Branch'),
+										'-2070-default_department_id' => ('Default Department'),
+										//'-2080-punch_branch_id' => ('Punch Branch'),
+										//'-2090-punch_department_id' => ('Punch Department'),
 
-										'-5000-columns' => TTi18n::gettext('Display Columns'),
-										'-5010-group' => TTi18n::gettext('Group By'),
-										'-5020-sub_total' => TTi18n::gettext('SubTotal By'),
-										'-5030-sort' => TTi18n::gettext('Sort By'),
+										'-5000-columns' => ('Display Columns'),
+										'-5010-group' => ('Group By'),
+										'-5020-sub_total' => ('SubTotal By'),
+										'-5030-sort' => ('Sort By'),
 							   );
 				break;
 			case 'time_period':
 				$retval = TTDate::getTimePeriodOptions();
 				break;
 			case 'date_columns':
-				$retval = TTDate::getReportDateOptions( NULL, TTi18n::getText('Date'), 13, TRUE );
+				$retval = TTDate::getReportDateOptions( NULL, ('Date'), 13, TRUE );
 				break;
 			case 'static_columns':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1001-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-full_name' => TTi18n::gettext('Full Name'),
-										'-1030-employee_number' => TTi18n::gettext('Employee #'),
-										'-1035-sin' => TTi18n::gettext('SIN/SSN'),
-										'-1040-status' => TTi18n::gettext('Status'),
-										'-1050-title' => TTi18n::gettext('Title'),
-										'-1060-province' => TTi18n::gettext('Province/State'),
-										'-1070-country' => TTi18n::gettext('Country'),
-										'-1080-group' => TTi18n::gettext('Group'),
-										'-1090-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1100-default_department' => TTi18n::gettext('Default Department'),
-										'-1110-currency' => TTi18n::gettext('Currency'),
-										//'-1111-current_currency' => TTi18n::gettext('Current Currency'),
+										'-1000-first_name' => ('First Name'),
+										'-1001-middle_name' => ('Middle Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-full_name' => ('Full Name'),
+										'-1030-employee_number' => ('Employee #'),
+										'-1035-sin' => ('SIN/SSN'),
+										'-1040-status' => ('Status'),
+										'-1050-title' => ('Title'),
+										'-1060-province' => ('Province/State'),
+										'-1070-country' => ('Country'),
+										'-1080-group' => ('Group'),
+										'-1090-default_branch' => ('Default Branch'),
+										'-1100-default_department' => ('Default Department'),
+										'-1110-currency' => ('Currency'),
+										//'-1111-current_currency' => ('Current Currency'),
 
-										//'-1110-verified_time_sheet' => TTi18n::gettext('Verified TimeSheet'),
-										//'-1120-pending_request' => TTi18n::gettext('Pending Requests'),
+										//'-1110-verified_time_sheet' => ('Verified TimeSheet'),
+										//'-1120-pending_request' => ('Pending Requests'),
 
 										//Handled in date_columns above.
-										//'-1450-pay_period' => TTi18n::gettext('Pay Period'),
+										//'-1450-pay_period' => ('Pay Period'),
 
-										'-1400-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1410-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
-										'-1420-policy_group' => TTi18n::gettext('Policy Group'),
+										'-1400-permission_control' => ('Permission Group'),
+										'-1410-pay_period_schedule' => ('Pay Period Schedule'),
+										'-1420-policy_group' => ('Policy Group'),
 							   );
 
 				$retval = array_merge( $retval, $this->getOptions('date_columns') );
@@ -99,13 +99,13 @@ class Form941Report extends Report {
 			case 'dynamic_columns':
 				$retval = array(
 										//Dynamic - Aggregate functions can be used
-										'-2010-wages' => TTi18n::gettext('Wages'), //Line 2
-										'-2020-income_tax' => TTi18n::gettext('Income Tax'), //Line 3
-										'-2030-social_security_wages' => TTi18n::gettext('Taxable Social Security Wages'), //Line 5a
-										'-2040-social_security_tips' => TTi18n::gettext('Taxable Social Security Tips'), //Line 5b
-										'-2050-medicare_wages' => TTi18n::gettext('Taxable Medicare Wages'), //Line 5c
-										'-2060-sick_wages' => TTi18n::gettext('Sick Pay'), //Line 7b
-										'-2070-eic' => TTi18n::gettext('Earned Income Credit (EIC)'), //Line 9
+										'-2010-wages' => ('Wages'), //Line 2
+										'-2020-income_tax' => ('Income Tax'), //Line 3
+										'-2030-social_security_wages' => ('Taxable Social Security Wages'), //Line 5a
+										'-2040-social_security_tips' => ('Taxable Social Security Tips'), //Line 5b
+										'-2050-medicare_wages' => ('Taxable Medicare Wages'), //Line 5c
+										'-2060-sick_wages' => ('Sick Pay'), //Line 7b
+										'-2070-eic' => ('Earned Income Credit (EIC)'), //Line 9
 							);
 				break;
 			case 'columns':
@@ -135,22 +135,22 @@ class Form941Report extends Report {
 				break;
 			case 'schedule_deposit':
 				$retval = array(
-									10 => TTi18n::gettext('Monthly'),
-									20 => TTi18n::gettext('Semi-Weekly')
+									10 => ('Monthly'),
+									20 => ('Semi-Weekly')
 								);
 				break;
 			case 'templates':
 				$retval = array(
-										'-1010-by_month' => TTi18n::gettext('by Month'),
-										'-1020-by_employee' => TTi18n::gettext('by Employee'),
-										'-1030-by_branch' => TTi18n::gettext('by Branch'),
-										'-1040-by_department' => TTi18n::gettext('by Department'),
-										'-1050-by_branch_by_department' => TTi18n::gettext('by Branch/Department'),
+										'-1010-by_month' => ('by Month'),
+										'-1020-by_employee' => ('by Employee'),
+										'-1030-by_branch' => ('by Branch'),
+										'-1040-by_department' => ('by Department'),
+										'-1050-by_branch_by_department' => ('by Branch/Department'),
 
-										'-1060-by_month_by_employee' => TTi18n::gettext('by Month/Employee'),
-										'-1070-by_month_by_branch' => TTi18n::gettext('by Month/Branch'),
-										'-1080-by_month_by_department' => TTi18n::gettext('by Month/Department'),
-										'-1090-by_month_by_branch_by_department' => TTi18n::gettext('by Month/Branch/Department'),
+										'-1060-by_month_by_employee' => ('by Month/Employee'),
+										'-1070-by_month_by_branch' => ('by Month/Branch'),
+										'-1080-by_month_by_department' => ('by Month/Department'),
+										'-1090-by_month_by_branch_by_department' => ('by Month/Branch/Department'),
 							   );
 
 				break;
@@ -478,7 +478,7 @@ class Form941Report extends Report {
 		$ulf = TTnew( 'UserListFactory' );
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $ulf as $key => $u_obj ) {
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
@@ -490,7 +490,7 @@ class Form941Report extends Report {
 
 	//PreProcess data such as calculating additional columns from raw data etc...
 	function _preProcess() {
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['pay_stub_entry']), NULL, TTi18n::getText('Pre-Processing Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['pay_stub_entry']), NULL, ('Pre-Processing Data...') );
 
 		//Merge time data with user data
 		$key=0;

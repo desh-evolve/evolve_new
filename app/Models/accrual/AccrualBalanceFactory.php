@@ -20,22 +20,22 @@ class AccrualBalanceFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-					'-1010-first_name' => TTi18n::gettext('First Name'),
-					'-1020-last_name' => TTi18n::gettext('Last Name'),
+					'-1010-first_name' => ('First Name'),
+					'-1020-last_name' => ('Last Name'),
 
-					'-1030-accrual_policy' => TTi18n::gettext('Accrual Policy'),
-					'-1040-accrual_policy_type' => TTi18n::gettext('Accrual Policy Type'),
-					'-1050-balance' => TTi18n::gettext('Balance'),
+					'-1030-accrual_policy' => ('Accrual Policy'),
+					'-1040-accrual_policy_type' => ('Accrual Policy Type'),
+					'-1050-balance' => ('Balance'),
 
-					'-1090-title' => TTi18n::gettext('Title'),
-					'-1099-group' => TTi18n::gettext('Group'),
-					'-1100-default_branch' => TTi18n::gettext('Branch'),
-					'-1110-default_department' => TTi18n::gettext('Department'),
+					'-1090-title' => ('Title'),
+					'-1099-group' => ('Group'),
+					'-1100-default_branch' => ('Branch'),
+					'-1110-default_department' => ('Department'),
 
-					'-2000-created_by' => TTi18n::gettext('Created By'),
-					'-2010-created_date' => TTi18n::gettext('Created Date'),
-					'-2020-updated_by' => TTi18n::gettext('Updated By'),
-					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+					'-2000-created_by' => ('Created By'),
+					'-2010-created_date' => ('Created Date'),
+					'-2020-updated_by' => ('Updated By'),
+					'-2030-updated_date' => ('Updated Date'),
 				);
 				break;
 			case 'list_columns':
@@ -87,7 +87,7 @@ class AccrualBalanceFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -117,7 +117,7 @@ class AccrualBalanceFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'accrual_policy',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accrual_policy_id'] = $id;
@@ -144,7 +144,7 @@ class AccrualBalanceFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'balance',
 													$int,
-													TTi18n::gettext('Incorrect Balance'))
+													('Incorrect Balance'))
 				) {
 			$this->data['balance'] = $int;
 

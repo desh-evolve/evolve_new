@@ -50,7 +50,7 @@ class ProgressBar {
 		}
 
 		if (  $msg == '' ) {
-			$msg = TTi18n::getText('Processing...');
+			$msg = ('Processing...');
 		}
 
 		$epoch = microtime(TRUE);
@@ -83,7 +83,7 @@ class ProgressBar {
 		}
 
 		if (  $msg == '' ) {
-			$msg = TTi18n::getText('Processing...');
+			$msg = ('Processing...');
 		}
 
 		$epoch = microtime(TRUE);

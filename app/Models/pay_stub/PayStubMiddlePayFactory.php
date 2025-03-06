@@ -135,7 +135,7 @@ class PayStubMiddlePayFactory extends Factory {
 
 															$ulf->getByID($id),
 
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 
 															) ) {
 
@@ -181,7 +181,7 @@ function getPayPeriod() {
 
 														$pplf->getByID($id),
 
-														TTi18n::gettext('Invalid Pay Period')
+														('Invalid Pay Period')
 
 														) ) {
 

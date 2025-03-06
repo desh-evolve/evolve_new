@@ -17,8 +17,8 @@ class MessageRecipientFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('UNREAD'),
-										20 => TTi18n::gettext('READ')
+										10 => ('UNREAD'),
+										20 => ('READ')
 									);
 				break;
 		}
@@ -37,7 +37,7 @@ class MessageRecipientFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -61,7 +61,7 @@ class MessageRecipientFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'message_sender_id',
 													$mslf->getByID($id),
-													TTi18n::gettext('Message Sender is invalid')
+													('Message Sender is invalid')
 													) ) {
 			$this->data['message_sender_id'] = $id;
 
@@ -85,7 +85,7 @@ class MessageRecipientFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'message_control_id',
 													$mclf->getByID($id),
-													TTi18n::gettext('Message Control is invalid')
+													('Message Control is invalid')
 													) ) {
 			$this->data['message_control_id'] = $id;
 
@@ -112,7 +112,7 @@ class MessageRecipientFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->setStatusDate();
@@ -141,7 +141,7 @@ class MessageRecipientFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'status_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Date')) ) {
+												('Incorrect Date')) ) {
 
 			$this->data['status_date'] = $epoch;
 
@@ -190,7 +190,7 @@ class MessageRecipientFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'ack_date',
 												$epoch,
-												TTi18n::gettext('Invalid Acknowledge Date') ) ) {
+												('Invalid Acknowledge Date') ) ) {
 
 			$this->data['ack_date'] = $epoch;
 

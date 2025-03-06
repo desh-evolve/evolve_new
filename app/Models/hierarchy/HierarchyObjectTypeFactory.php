@@ -19,42 +19,42 @@ class HierarchyObjectTypeFactory extends Factory {
 		switch( $name ) {
 			case 'object_type':
 				$retval = array(
-										//10 => TTi18n::gettext('Recurring Schedule'),
-										//20 => TTi18n::gettext('Schedule Amendment'),
-										//30 => TTi18n::gettext('Shift Amendment'),
-										//40 => TTi18n::gettext('Pay Stub Amendment')
-										//50 => TTi18n::gettext('Request'),
+										//10 => ('Recurring Schedule'),
+										//20 => ('Schedule Amendment'),
+										//30 => ('Shift Amendment'),
+										//40 => ('Pay Stub Amendment')
+										//50 => ('Request'),
 
 										//Add 1000 to request type_id's. Make sure no other objects pass 1000.
-										1010 => TTi18n::gettext('Request: Missed Punch'),
-										1020 => TTi18n::gettext('Request: Time Adjustment'),
-										1030 => TTi18n::gettext('Request: Absence (incl. Vacation)'),
-										1040 => TTi18n::gettext('Request: Schedule Adjustment'),
-										1100 => TTi18n::gettext('Request: Other'),
+										1010 => ('Request: Missed Punch'),
+										1020 => ('Request: Time Adjustment'),
+										1030 => ('Request: Absence (incl. Vacation)'),
+										1040 => ('Request: Schedule Adjustment'),
+										1100 => ('Request: Other'),
 
-										80 => TTi18n::gettext('Exception'),
-										90 => TTi18n::gettext('TimeSheet'),
-										100 => TTi18n::gettext('Permission')
+										80 => ('Exception'),
+										90 => ('TimeSheet'),
+										100 => ('Permission')
 									);
 				break;
 			case 'short_object_type': //Defines a short form of the names.
 				$retval = array(
-										//10 => TTi18n::gettext('Recurring Schedule'),
-										//20 => TTi18n::gettext('Schedule Amendment'),
-										//30 => TTi18n::gettext('Shift Amendment'),
-										//40 => TTi18n::gettext('Pay Stub Amendment')
-										//50 => TTi18n::gettext('Request'),
+										//10 => ('Recurring Schedule'),
+										//20 => ('Schedule Amendment'),
+										//30 => ('Shift Amendment'),
+										//40 => ('Pay Stub Amendment')
+										//50 => ('Request'),
 
 										//Add 1000 to request type_id's. Make sure no other objects pass 1000.
-										1010 => TTi18n::gettext('R:Missed Punch'),
-										1020 => TTi18n::gettext('R:Adjustment'),
-										1030 => TTi18n::gettext('R:Absence'),
-										1040 => TTi18n::gettext('R:Schedule'),
-										1100 => TTi18n::gettext('R:Other'),
+										1010 => ('R:Missed Punch'),
+										1020 => ('R:Adjustment'),
+										1030 => ('R:Absence'),
+										1040 => ('R:Schedule'),
+										1100 => ('R:Other'),
 
-										80 => TTi18n::gettext('Exception'),
-										90 => TTi18n::gettext('TimeSheet'),
-										100 => TTi18n::gettext('Permission')
+										80 => ('Exception'),
+										90 => ('TimeSheet'),
+										100 => ('Permission')
 									);
 				break;
 
@@ -90,7 +90,7 @@ class HierarchyObjectTypeFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'hierarchy_control_id',
 															$hclf->getByID($id),
-															TTi18n::gettext('Invalid Hierarchy Control')
+															('Invalid Hierarchy Control')
 															) ) {
 			$this->data['hierarchy_control_id'] = $id;
 
@@ -132,12 +132,12 @@ class HierarchyObjectTypeFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'object_type',
 											$id,
-											TTi18n::gettext('Object Type is invalid'),
+											('Object Type is invalid'),
 											$this->getOptions('object_type'))
 				AND
 						$this->Validator->isTrue(		'object_type',
 														$this->isUniqueObjectType($id),
-														TTi18n::gettext('Object Type is already assigned to another hierarchy'))
+														('Object Type is already assigned to another hierarchy'))
 
 			) {
 
@@ -206,7 +206,7 @@ class HierarchyObjectTypeFactory extends Factory {
 
 	function addLog( $log_action ) {
 		$object_type = Option::getByKey($this->getObjectType(), Misc::TrimSortPrefix( $this->getOptions('object_type') ) );
-		return TTLog::addEntry( $this->getHierarchyControl(), $log_action, TTi18n::getText('Object').': '. $object_type, NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getHierarchyControl(), $log_action, ('Object').': '. $object_type, NULL, $this->getTable() );
 	}
 }
 ?>

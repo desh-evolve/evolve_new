@@ -195,187 +195,187 @@ class CompanyDeductionFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('Enabled'),
-										20 => TTi18n::gettext('Disabled'),
+										10 => ('Enabled'),
+										20 => ('Disabled'),
 									);
 				break;
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Tax'),
-										20 => TTi18n::gettext('Deduction'),
-										30 => TTi18n::gettext('Other'),
+										10 => ('Tax'),
+										20 => ('Deduction'),
+										30 => ('Other'),
 									);
 				break;
 			case 'calculation':
 				$retval = array(
-										10 => TTi18n::gettext('Percent'),
-										15 => TTi18n::gettext('Advanced Percent'),
-										17 => TTi18n::gettext('Advanced Percent (Range Bracket)'),
-										18 => TTi18n::gettext('Advanced Percent (Tax Bracket)'),
-										19 => TTi18n::gettext('Advanced Percent (Tax Bracket Alt.)'),
-										20 => TTi18n::gettext('Fixed Amount'),
-										30 => TTi18n::gettext('Fixed Amount (Range Bracket)'),
+										10 => ('Percent'),
+										15 => ('Advanced Percent'),
+										17 => ('Advanced Percent (Range Bracket)'),
+										18 => ('Advanced Percent (Tax Bracket)'),
+										19 => ('Advanced Percent (Tax Bracket Alt.)'),
+										20 => ('Fixed Amount'),
+										30 => ('Fixed Amount (Range Bracket)'),
 
 										//Accrual/YTD formulas. - This requires custom Withdraw From/Deposit To accrual feature in PS account.
-										//50 => TTi18n::gettext('Accrual/YTD Percent'),
-										52 => TTi18n::gettext('Fixed Amount (w/Target)'),
+										//50 => ('Accrual/YTD Percent'),
+										52 => ('Fixed Amount (w/Target)'),
 
 										//US - Custom Formulas
-										80 => TTi18n::gettext('US - Advance EIC Formula'),
+										80 => ('US - Advance EIC Formula'),
 
 										//Canada - Custom Formulas CPP and EI
-										90 => TTi18n::gettext('Canada - CPP Formula'),
-										91 => TTi18n::gettext('Canada - EI Formula'),
+										90 => ('Canada - CPP Formula'),
+										91 => ('Canada - EI Formula'),
 
 										//Federal
-										100 => TTi18n::gettext('Federal Income Tax Formula'),
+										100 => ('Federal Income Tax Formula'),
 
 										//Province/State
-										200 => TTi18n::gettext('Province/State Income Tax Formula'),
+										200 => ('Province/State Income Tax Formula'),
 
 										//Sub-State/Tax Area
-										300 => TTi18n::gettext('District/County Income Tax Formula'),
+										300 => ('District/County Income Tax Formula'),
 									);
 				break;
 			case 'length_of_service_unit':
 				$retval = array(
-										10 => TTi18n::gettext('Day(s)'),
-										20 => TTi18n::gettext('Week(s)'),
-										30 => TTi18n::gettext('Month(s)'),
-										40 => TTi18n::gettext('Year(s)'),
-										50 => TTi18n::gettext('Hour(s)'),
+										10 => ('Day(s)'),
+										20 => ('Week(s)'),
+										30 => ('Month(s)'),
+										40 => ('Year(s)'),
+										50 => ('Hour(s)'),
 									);
 				break;
 			case 'account_amount_type':
 				$retval = array(
-										10 => TTi18n::gettext('Amount'),
-										20 => TTi18n::gettext('Units/Hours'),
-										30 => TTi18n::gettext('YTD Amount'),
-										40 => TTi18n::gettext('YTD Units/Hours'),
+										10 => ('Amount'),
+										20 => ('Units/Hours'),
+										30 => ('YTD Amount'),
+										40 => ('YTD Units/Hours'),
 									);
 				break;
 			case 'us_eic_filing_status': //EIC certificate
 				$retval = array(
-														10 => TTi18n::gettext('Single or Head of Household'),
-														20 => TTi18n::gettext('Married - Without Spouse Filing'),
-														30 => TTi18n::gettext('Married - With Spouse Filing'),
+														10 => ('Single or Head of Household'),
+														20 => ('Married - Without Spouse Filing'),
+														30 => ('Married - With Spouse Filing'),
 
 									);
 				break;
 			case 'federal_filing_status': //US
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married'),
+														10 => ('Single'),
+														20 => ('Married'),
 									);
 				break;
 			case 'state_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married - Spouse Works'),
-														30 => TTi18n::gettext('Married - Spouse does not Work'),
-														40 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married - Spouse Works'),
+														30 => ('Married - Spouse does not Work'),
+														40 => ('Head of Household'),
 									);
 				break;
 			case 'state_ga_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married - Filing Separately'),
-														30 => TTi18n::gettext('Married - Joint One Income'),
-														40 => TTi18n::gettext('Married - Joint Two Incomes'),
-														50 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married - Filing Separately'),
+														30 => ('Married - Joint One Income'),
+														40 => ('Married - Joint Two Incomes'),
+														50 => ('Head of Household'),
 									);
 				break;
 			case 'state_nj_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Rate "A"'),
-														20 => TTi18n::gettext('Rate "B"'),
-														30 => TTi18n::gettext('Rate "C"'),
-														40 => TTi18n::gettext('Rate "D"'),
-														50 => TTi18n::gettext('Rate "E"'),
+														10 => ('Rate "A"'),
+														20 => ('Rate "B"'),
+														30 => ('Rate "C"'),
+														40 => ('Rate "D"'),
+														50 => ('Rate "E"'),
 									);
 				break;
 			case 'state_nc_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married or Qualified Widow(er)'),
-														30 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married or Qualified Widow(er)'),
+														30 => ('Head of Household'),
 									);
 				break;
 			case 'state_ma_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Regular'),
-														20 => TTi18n::gettext('Head of Household'),
-														30 => TTi18n::gettext('Blind'),
-														40 => TTi18n::gettext('Head of Household and Blind')
+														10 => ('Regular'),
+														20 => ('Head of Household'),
+														30 => ('Blind'),
+														40 => ('Head of Household and Blind')
 									);
 				break;
 			case 'state_al_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Status "S" Claiming $1500'),
-														20 => TTi18n::gettext('Status "M" Claiming $3000'),
-														30 => TTi18n::gettext('Status "0"'),
-														40 => TTi18n::gettext('Head of Household'),
-														50 => TTi18n::gettext('Status "MS"')
+														10 => ('Status "S" Claiming $1500'),
+														20 => ('Status "M" Claiming $3000'),
+														30 => ('Status "0"'),
+														40 => ('Head of Household'),
+														50 => ('Status "MS"')
 									);
 				break;
 			case 'state_ct_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Status "A"'),
-														20 => TTi18n::gettext('Status "B"'),
-														30 => TTi18n::gettext('Status "C"'),
-														40 => TTi18n::gettext('Status "D"'),
-														//50 => TTi18n::gettext('Status "E"'), //Doesn't exist.
-														60 => TTi18n::gettext('Status "F"'),
+														10 => ('Status "A"'),
+														20 => ('Status "B"'),
+														30 => ('Status "C"'),
+														40 => ('Status "D"'),
+														//50 => ('Status "E"'), //Doesn't exist.
+														60 => ('Status "F"'),
 									);
 				break;
 			case 'state_wv_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Standard'),
-														20 => TTi18n::gettext('Optional Two Earners'),
+														10 => ('Standard'),
+														20 => ('Optional Two Earners'),
 									);
 				break;
 			case 'state_me_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married'),
-														30 => TTi18n::gettext('Married with 2 incomes'),
+														10 => ('Single'),
+														20 => ('Married'),
+														30 => ('Married with 2 incomes'),
 									);
 				break;
 			case 'state_de_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married (Filing Jointly)'),
-														30 => TTi18n::gettext('Married (Filing Separately)'),
+														10 => ('Single'),
+														20 => ('Married (Filing Jointly)'),
+														30 => ('Married (Filing Separately)'),
 									);
 				break;
 			case 'state_dc_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married (Filing Jointly)'),
-														30 => TTi18n::gettext('Married (Filing Separately)'),
-														40 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married (Filing Jointly)'),
+														30 => ('Married (Filing Separately)'),
+														40 => ('Head of Household'),
 									);
 				break;
 			case 'state_la_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married (Filing Jointly)'),
+														10 => ('Single'),
+														20 => ('Married (Filing Jointly)'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-status' => TTi18n::gettext('Status'),
-										'-1020-type' => TTi18n::gettext('Type'),
-										'-1030-name' => TTi18n::gettext('Name'),
-										'-1040-calculation' => TTi18n::gettext('Calculation'),
+										'-1010-status' => ('Status'),
+										'-1020-type' => ('Type'),
+										'-1030-name' => ('Name'),
+										'-1040-calculation' => ('Calculation'),
 
-										'-1040-start_date' => TTi18n::gettext('Start Date'),
-										'-1040-end_Date_date' => TTi18n::gettext('End Date'),
+										'-1040-start_date' => ('Start Date'),
+										'-1040-end_Date_date' => ('End Date'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -524,7 +524,7 @@ class CompanyDeductionFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -548,7 +548,7 @@ class CompanyDeductionFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -576,7 +576,7 @@ class CompanyDeductionFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -620,13 +620,13 @@ class CompanyDeductionFactory extends Factory {
 		if 	(
 					$this->Validator->isLength(		'name',
 													$value,
-													TTi18n::gettext('Name is too short or too long'),
+													('Name is too short or too long'),
 													2,
 													100)
 				AND
 				$this->Validator->isTrue(				'name',
 														$this->isUniqueName($value),
-														TTi18n::gettext('Name is already in use')
+														('Name is already in use')
 													)
 													) {
 
@@ -661,7 +661,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'start_date',
 												$epoch,
-												TTi18n::gettext('Incorrect start date'))
+												('Incorrect start date'))
 			) {
 
 			$this->data['start_date'] = $epoch;
@@ -694,7 +694,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'end_date',
 												$epoch,
-												TTi18n::gettext('Incorrect end date'))
+												('Incorrect end date'))
 			) {
 
 			$this->data['end_date'] = $epoch;
@@ -741,7 +741,7 @@ class CompanyDeductionFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'minimum_length_of_service',
 													$int,
-													TTi18n::gettext('Minimum length of service is invalid')) ) {
+													('Minimum length of service is invalid')) ) {
 
 			$this->data['minimum_length_of_service_days'] = bcmul( $int, $this->length_of_service_multiplier[$this->getMinimumLengthOfServiceUnit()], 4);
 
@@ -767,7 +767,7 @@ class CompanyDeductionFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'minimum_length_of_service',
 													$int,
-													TTi18n::gettext('Minimum length of service is invalid')) ) {
+													('Minimum length of service is invalid')) ) {
 
 			$this->data['minimum_length_of_service'] = $int;
 
@@ -790,7 +790,7 @@ class CompanyDeductionFactory extends Factory {
 		if ( $value == ''
 				OR $this->Validator->inArrayKey(	'minimum_length_of_service_unit_id',
 											$value,
-											TTi18n::gettext('Incorrect minimum length of service unit'),
+											('Incorrect minimum length of service unit'),
 											$this->getOptions('length_of_service_unit')) ) {
 
 			$this->data['minimum_length_of_service_unit_id'] = $value;
@@ -817,7 +817,7 @@ class CompanyDeductionFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'maximum_length_of_service',
 													$int,
-													TTi18n::gettext('Maximum length of service is invalid')) ) {
+													('Maximum length of service is invalid')) ) {
 
 			$this->data['maximum_length_of_service_days'] = bcmul( $int, $this->length_of_service_multiplier[$this->getMaximumLengthOfServiceUnit()], 4);
 
@@ -843,7 +843,7 @@ class CompanyDeductionFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'maximum_length_of_service',
 													$int,
-													TTi18n::gettext('Maximum length of service is invalid')) ) {
+													('Maximum length of service is invalid')) ) {
 
 			$this->data['maximum_length_of_service'] = $int;
 
@@ -866,7 +866,7 @@ class CompanyDeductionFactory extends Factory {
 		if ( $value == ''
 				OR $this->Validator->inArrayKey(	'maximum_length_of_service_unit_id',
 											$value,
-											TTi18n::gettext('Incorrect maximum length of service unit'),
+											('Incorrect maximum length of service unit'),
 											$this->getOptions('length_of_service_unit')) ) {
 
 			$this->data['maximum_length_of_service_unit_id'] = $value;
@@ -893,7 +893,7 @@ class CompanyDeductionFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'minimum_user_age',
 													$int,
-													TTi18n::gettext('Minimum employee age is invalid')) ) {
+													('Minimum employee age is invalid')) ) {
 
 			$this->data['minimum_user_age'] = $int;
 
@@ -944,7 +944,7 @@ class CompanyDeductionFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'maximum_user_age',
 													$int,
-													TTi18n::gettext('Maximum employee age is invalid')) ) {
+													('Maximum employee age is invalid')) ) {
 
 			$this->data['maximum_user_age'] = $int;
 
@@ -1091,7 +1091,7 @@ class CompanyDeductionFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'calculation',
 											$value,
-											TTi18n::gettext('Incorrect Calculation'),
+											('Incorrect Calculation'),
 											$this->getOptions('calculation')) ) {
 
 			$this->data['calculation_id'] = $value;
@@ -1114,7 +1114,7 @@ class CompanyDeductionFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(		'calculation_order',
 												$value,
-												TTi18n::gettext('Invalid Calculation Order')
+												('Invalid Calculation Order')
 										) ) {
 
 
@@ -1142,7 +1142,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'country',
 												$country,
-												TTi18n::gettext('Invalid Country'),
+												('Invalid Country'),
 												$cf->getOptions('country') ) ) {
 
 			$this->data['country'] = $country;
@@ -1177,7 +1177,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'province',
 												$province,
-												TTi18n::gettext('Invalid Province/State'),
+												('Invalid Province/State'),
 												$options ) ) {
 
 			$this->data['province'] = $province;
@@ -1227,7 +1227,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'district',
 												$district,
-												TTi18n::gettext('Invalid District'),
+												('Invalid District'),
 												$options ) ) {
 
 			$this->data['district'] = $district;
@@ -1252,7 +1252,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'company_value1',
 												$value,
-												TTi18n::gettext('Company Value 1 is too short or too long'),
+												('Company Value 1 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1278,7 +1278,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'company_value2',
 												$value,
-												TTi18n::gettext('Company Value 2 is too short or too long'),
+												('Company Value 2 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1304,7 +1304,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value1',
 												$value,
-												TTi18n::gettext('User Value 1 is too short or too long'),
+												('User Value 1 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1330,7 +1330,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value2',
 												$value,
-												TTi18n::gettext('User Value 2 is too short or too long'),
+												('User Value 2 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1356,7 +1356,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value3',
 												$value,
-												TTi18n::gettext('User Value 3 is too short or too long'),
+												('User Value 3 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1382,7 +1382,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value4',
 												$value,
-												TTi18n::gettext('User Value 4 is too short or too long'),
+												('User Value 4 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1408,7 +1408,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value5',
 												$value,
-												TTi18n::gettext('User Value 5 is too short or too long'),
+												('User Value 5 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1434,7 +1434,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value6',
 												$value,
-												TTi18n::gettext('User Value 6 is too short or too long'),
+												('User Value 6 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1460,7 +1460,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value7',
 												$value,
-												TTi18n::gettext('User Value 7 is too short or too long'),
+												('User Value 7 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1486,7 +1486,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value8',
 												$value,
-												TTi18n::gettext('User Value 8 is too short or too long'),
+												('User Value 8 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1512,7 +1512,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value9',
 												$value,
-												TTi18n::gettext('User Value 9 is too short or too long'),
+												('User Value 9 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1538,7 +1538,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value10',
 												$value,
-												TTi18n::gettext('User Value 10 is too short or too long'),
+												('User Value 10 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1610,7 +1610,7 @@ class CompanyDeductionFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['pay_stub_entry_account_id'] = $id;
@@ -1744,7 +1744,7 @@ class CompanyDeductionFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'include_account_amount_type_id',
 											$value,
-											TTi18n::gettext('Incorrect include account amount type'),
+											('Incorrect include account amount type'),
 											$this->getOptions('account_amount_type')) ) {
 
 			$this->data['include_account_amount_type_id'] = $value;
@@ -1819,7 +1819,7 @@ class CompanyDeductionFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'include_pay_stub_entry_account',
 														$cdpseaf->Validator->isValid(),
-														TTi18n::gettext('Include Pay Stub Account is invalid').' ('. $obj->getName() .')' )) {
+														('Include Pay Stub Account is invalid').' ('. $obj->getName() .')' )) {
 						$cdpseaf->save();
 					}
 				}
@@ -1844,7 +1844,7 @@ class CompanyDeductionFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'exclude_account_amount_type_id',
 											$value,
-											TTi18n::gettext('Incorrect exclude account amount type'),
+											('Incorrect exclude account amount type'),
 											$this->getOptions('account_amount_type')) ) {
 
 			$this->data['exclude_account_amount_type_id'] = $value;
@@ -1921,7 +1921,7 @@ class CompanyDeductionFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'exclude_pay_stub_entry_account',
 														$cdpseaf->Validator->isValid(),
-														TTi18n::gettext('Exclude Pay Stub Account is invalid').' ('. $obj->getName() .')' )) {
+														('Exclude Pay Stub Account is invalid').' ('. $obj->getName() .')' )) {
 						$cdpseaf->save();
 					}
 				}
@@ -1990,7 +1990,7 @@ class CompanyDeductionFactory extends Factory {
 
 						if ($this->Validator->isTrue(		'user',
 															$udf->Validator->isValid(),
-															TTi18n::gettext('Selected employee is invalid').' ('. $obj->getFullName() .')' )) {
+															('Selected employee is invalid').' ('. $obj->getFullName() .')' )) {
 							$udf->save();
 						}
 					}
@@ -2588,7 +2588,7 @@ class CompanyDeductionFactory extends Factory {
 				$cdf->setCompany( $company_id );
 				$cdf->setStatus( 10 ); //Enabled
 				$cdf->setType( 10 ); //Tax
-				$cdf->setName( TTi18n::gettext('Income Tax') );
+				$cdf->setName( ('Income Tax') );
 				$cdf->setCalculation( 100 );
 				$cdf->setCalculationOrder( 100 );
 				$cdf->setCountry( 'CR' );
@@ -4218,7 +4218,7 @@ class CompanyDeductionFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Tax / Deduction'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Tax / Deduction'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

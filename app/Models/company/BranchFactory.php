@@ -30,31 +30,31 @@ class BranchFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-					10 => TTi18n::gettext('ENABLED'),
-					20 => TTi18n::gettext('DISABLED')
+					10 => ('ENABLED'),
+					20 => ('DISABLED')
 				);
 				break;
 			case 'columns':
 				$retval = array(
-					'-1010-status' => TTi18n::gettext('Status'),
-					'-1020-manual_id' => TTi18n::gettext('Code'),
-					'-1030-name' => TTi18n::gettext('Name'),
+					'-1010-status' => ('Status'),
+					'-1020-manual_id' => ('Code'),
+					'-1030-name' => ('Name'),
 
-					'-1140-address1' => TTi18n::gettext('Address 1'),
-					'-1150-address2' => TTi18n::gettext('Address 2'),
-					'-1160-city' => TTi18n::gettext('City'),
-					'-1170-province' => TTi18n::gettext('Province/State'),
-					'-1180-country' => TTi18n::gettext('Country'),
-					'-1190-postal_code' => TTi18n::gettext('Postal Code'),
-					'-1200-work_phone' => TTi18n::gettext('Work Phone'),
-					'-1210-fax_phone' => TTi18n::gettext('Fax Phone'),
+					'-1140-address1' => ('Address 1'),
+					'-1150-address2' => ('Address 2'),
+					'-1160-city' => ('City'),
+					'-1170-province' => ('Province/State'),
+					'-1180-country' => ('Country'),
+					'-1190-postal_code' => ('Postal Code'),
+					'-1200-work_phone' => ('Work Phone'),
+					'-1210-fax_phone' => ('Fax Phone'),
 
-					'-1300-tag' => TTi18n::gettext('Tags'),
+					'-1300-tag' => ('Tags'),
 
-					'-2000-created_by' => TTi18n::gettext('Created By'),
-					'-2010-created_date' => TTi18n::gettext('Created Date'),
-					'-2020-updated_by' => TTi18n::gettext('Updated By'),
-					'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+					'-2000-created_by' => ('Created By'),
+					'-2010-created_date' => ('Created Date'),
+					'-2020-updated_by' => ('Updated By'),
+					'-2030-updated_date' => ('Updated Date'),
 				);
 				break;
 			case 'list_columns':
@@ -128,7 +128,7 @@ class BranchFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -155,7 +155,7 @@ class BranchFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -230,17 +230,17 @@ class BranchFactory extends Factory {
 
 		if (	$this->Validator->isNumeric(	'manual_id',
 												$value,
-												TTi18n::gettext('Code is invalid'))
+												('Code is invalid'))
 				AND
 				$this->Validator->isLength(	'manual_id',
 											$value,
-											TTi18n::gettext('Code has too many digits'),
+											('Code has too many digits'),
 											0,
 											10)
 				AND
 				$this->Validator->isTrue(		'manual_id',
 												$this->isUniqueManualID($value),
-												TTi18n::gettext('Code is already in use, please enter a different one'))
+												('Code is already in use, please enter a different one'))
 												) {
 
 			$this->data['manual_id'] = $value;
@@ -273,9 +273,9 @@ class BranchFactory extends Factory {
             
 	if ($value != NULL 
                 AND 
-                $this->Validator->isLength('branch_short_id', $value, TTi18n::gettext('Branch Short ID is too short or too long'), 1, 100)
+                $this->Validator->isLength('branch_short_id', $value, ('Branch Short ID is too short or too long'), 1, 100)
                 AND
-                $this->Validator->isTrue('branch_short_id', $this->isUniqueBranchShortID($value), TTi18n::gettext('Branch Short ID is already in use, please enter a different one'))
+                $this->Validator->isTrue('branch_short_id', $this->isUniqueBranchShortID($value), ('Branch Short ID is already in use, please enter a different one'))
         ) {
 
             $this->data['branch_short_id'] = $value;            
@@ -336,9 +336,9 @@ class BranchFactory extends Factory {
             
 	if ($value != NULL 
                 AND 
-                $this->Validator->isLength('epf_no', $value, TTi18n::gettext('EPF No is too short or too long'), 1, 100)
+                $this->Validator->isLength('epf_no', $value, ('EPF No is too short or too long'), 1, 100)
                 AND
-                $this->Validator->isTrue('epf_no', $this->isUniqueEpfNo($value), TTi18n::gettext('EPF No is already in use, please enter a different one'))
+                $this->Validator->isTrue('epf_no', $this->isUniqueEpfNo($value), ('EPF No is already in use, please enter a different one'))
         ) {
 
             $this->data['epf_no'] = $value;            
@@ -403,9 +403,9 @@ class BranchFactory extends Factory {
             
 	if ($value != NULL 
                 AND 
-                $this->Validator->isLength('etf_no', $value, TTi18n::gettext('ETF No is too short or too long'), 1, 100)
+                $this->Validator->isLength('etf_no', $value, ('ETF No is too short or too long'), 1, 100)
                 AND
-                $this->Validator->isTrue('etf_no', $this->isUniqueEtfNo($value), TTi18n::gettext('ETF No is already in use, please enter a different one'))
+                $this->Validator->isTrue('etf_no', $this->isUniqueEtfNo($value), ('ETF No is already in use, please enter a different one'))
         ) {
 
             $this->data['etf_no'] = $value;            
@@ -469,9 +469,9 @@ class BranchFactory extends Factory {
             
 	if ($value != NULL 
                 AND 
-                $this->Validator->isLength('tin_no', $value, TTi18n::gettext('TIN No is too short or too long'), 1, 100)
+                $this->Validator->isLength('tin_no', $value, ('TIN No is too short or too long'), 1, 100)
                 AND
-                $this->Validator->isTrue('tin_no', $this->isUniqueTinNo($value), TTi18n::gettext('TIN No is already in use, please enter a different one'))
+                $this->Validator->isTrue('tin_no', $this->isUniqueTinNo($value), ('TIN No is already in use, please enter a different one'))
         ) {
 
             $this->data['tin_no'] = $value;            
@@ -535,9 +535,9 @@ class BranchFactory extends Factory {
             
 	if ($value != NULL 
                 AND 
-                $this->Validator->isLength('business_reg_no', $value, TTi18n::gettext('Business Registration No is too short or too long'), 1, 100)
+                $this->Validator->isLength('business_reg_no', $value, ('Business Registration No is too short or too long'), 1, 100)
                 AND
-                $this->Validator->isTrue('business_reg_no', $this->isUniqueBusinessRegNo($value), TTi18n::gettext('Business Registration No is already in use, please enter a different one'))
+                $this->Validator->isTrue('business_reg_no', $this->isUniqueBusinessRegNo($value), ('Business Registration No is already in use, please enter a different one'))
         ) {
 
             $this->data['business_reg_no'] = $value;            
@@ -628,13 +628,13 @@ class BranchFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'name',
 												$name,
-												TTi18n::gettext('Name is too short or too long'),
+												('Name is too short or too long'),
 												2,
 												100)
 					AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($name),
-														TTi18n::gettext('Branch name already exists'))
+														('Branch name already exists'))
 
 												) {
 
@@ -679,12 +679,12 @@ class BranchFactory extends Factory {
 				AND
 					( $this->Validator->isRegEx(		'address1',
 												$address1,
-												TTi18n::gettext('Address1 contains invalid characters'),
+												('Address1 contains invalid characters'),
 												$this->address_validator_regex)
 				AND
 					$this->Validator->isLength(		'address1',
 													$address1,
-													TTi18n::gettext('Address1 is too short or too long'),
+													('Address1 is too short or too long'),
 													2,
 													250) ) ) {
 
@@ -710,12 +710,12 @@ class BranchFactory extends Factory {
 				AND (
 					$this->Validator->isRegEx(		'address2',
 													$address2,
-													TTi18n::gettext('Address2 contains invalid characters'),
+													('Address2 contains invalid characters'),
 													$this->address_validator_regex)
 				AND
 					$this->Validator->isLength(		'address2',
 													$address2,
-													TTi18n::gettext('Address2 is too short or too long'),
+													('Address2 is too short or too long'),
 													2,
 													250) ) ) {
 
@@ -740,12 +740,12 @@ class BranchFactory extends Factory {
 
 		if 	(	$this->Validator->isRegEx(		'city',
 												$city,
-												TTi18n::gettext('City contains invalid characters'),
+												('City contains invalid characters'),
 												$this->city_validator_regex)
 				AND
 					$this->Validator->isLength(		'city',
 													$city,
-													TTi18n::gettext('City name is too short or too long'),
+													('City name is too short or too long'),
 													2,
 													250) ) {
 
@@ -783,7 +783,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'province',
 												$province,
-												TTi18n::gettext('Invalid Province'),
+												('Invalid Province'),
 												$options ) ) {
 
 			$this->data['province'] = $province;
@@ -808,7 +808,7 @@ class BranchFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(		'country',
 												$country,
-												TTi18n::gettext('Invalid Country'),
+												('Invalid Country'),
 												$cf->getOptions('country') ) ) {
 
 			$this->data['country'] = $country;
@@ -835,12 +835,12 @@ class BranchFactory extends Factory {
 				(
 				$this->Validator->isPostalCode(		'postal_code',
 													$postal_code,
-													TTi18n::gettext('Postal/ZIP Code contains invalid characters, invalid format, or does not match Province/State'),
+													('Postal/ZIP Code contains invalid characters, invalid format, or does not match Province/State'),
 													$this->getCountry(), $this->getProvince() )
 				AND
 					$this->Validator->isLength(		'postal_code',
 													$postal_code,
-													TTi18n::gettext('Postal/ZIP Code is too short or too long'),
+													('Postal/ZIP Code is too short or too long'),
 													1,
 													10)
 				)
@@ -868,7 +868,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->isFloat(	'longitude',
 											$value,
-											TTi18n::gettext('Longitude is invalid')
+											('Longitude is invalid')
 											) ) {
 			$this->data['longitude'] = $value;
 
@@ -892,7 +892,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->isFloat(	'latitude',
 											$value,
-											TTi18n::gettext('Latitude is invalid')
+											('Latitude is invalid')
 											) ) {
 			$this->data['latitude'] = $value;
 
@@ -915,7 +915,7 @@ class BranchFactory extends Factory {
 		if 	(	$work_phone != NULL
 				AND $this->Validator->isPhoneNumber(	'work_phone',
 														$work_phone,
-														TTi18n::gettext('Work phone number is invalid')) ) {
+														('Work phone number is invalid')) ) {
 
 			$this->data['work_phone'] = $work_phone;
 
@@ -938,7 +938,7 @@ class BranchFactory extends Factory {
 		if 	(	$fax_phone != NULL
 				AND $this->Validator->isPhoneNumber(	'fax_phone',
 														$fax_phone,
-														TTi18n::gettext('Fax phone number is invalid')) ) {
+														('Fax phone number is invalid')) ) {
 
 			$this->data['fax_phone'] = $fax_phone;
 
@@ -962,7 +962,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id1',
 											$value,
-											TTi18n::gettext('Other ID 1 is invalid'),
+											('Other ID 1 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id1'] = $value;
@@ -987,7 +987,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id2',
 											$value,
-											TTi18n::gettext('Other ID 2 is invalid'),
+											('Other ID 2 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id2'] = $value;
@@ -1012,7 +1012,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id3',
 											$value,
-											TTi18n::gettext('Other ID 3 is invalid'),
+											('Other ID 3 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id3'] = $value;
@@ -1037,7 +1037,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id4',
 											$value,
-											TTi18n::gettext('Other ID 4 is invalid'),
+											('Other ID 4 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id4'] = $value;
@@ -1062,7 +1062,7 @@ class BranchFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id5',
 											$value,
-											TTi18n::gettext('Other ID 5 is invalid'),
+											('Other ID 5 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id5'] = $value;
@@ -1227,7 +1227,7 @@ class BranchFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Branch') .': '. $this->getName() , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Branch') .': '. $this->getName() , NULL, $this->getTable(), $this );
 	}
 
 }

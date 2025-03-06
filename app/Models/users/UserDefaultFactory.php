@@ -97,7 +97,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -122,7 +122,7 @@ class UserDefaultFactory extends Factory {
 
 		if (  $this->Validator->isResultSetWithRows(		'permission_control_id',
 															$pclf->getByID($id),
-															TTi18n::gettext('Permission Control is invalid')
+															('Permission Control is invalid')
 															) ) {
 			$this->data['permission_control_id'] = $id;
 
@@ -147,7 +147,7 @@ class UserDefaultFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule_id',
 															$ppslf->getByID($id),
-															TTi18n::gettext('Pay Period schedule is invalid')
+															('Pay Period schedule is invalid')
 															) ) {
 			$this->data['pay_period_schedule_id'] = $id;
 
@@ -172,7 +172,7 @@ class UserDefaultFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'policy_group_id',
 															$pglf->getByID($id),
-															TTi18n::gettext('Policy Group is invalid')
+															('Policy Group is invalid')
 															) ) {
 			$this->data['policy_group_id'] = $id;
 
@@ -197,7 +197,7 @@ class UserDefaultFactory extends Factory {
 				OR
 					$this->Validator->isLength(		'employee_number',
 													$value,
-													TTi18n::gettext('Employee number is too short or too long'),
+													('Employee number is too short or too long'),
 													1,
 													100) ) {
 
@@ -227,7 +227,7 @@ class UserDefaultFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'title',
 														$utlf->getByID($id),
-														TTi18n::gettext('Title is invalid')
+														('Title is invalid')
 													) ) {
 
 			$this->data['title_id'] = $id;
@@ -256,7 +256,7 @@ class UserDefaultFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Invalid Default Branch')
+														('Invalid Default Branch')
 													) ) {
 
 			$this->data['default_branch_id'] = $id;
@@ -285,7 +285,7 @@ class UserDefaultFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Invalid Default Department')
+														('Invalid Default Department')
 													) ) {
 
 			$this->data['default_department_id'] = $id;
@@ -312,7 +312,7 @@ class UserDefaultFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'currency',
 														$culf->getByID($id),
-														TTi18n::gettext('Invalid Currency')
+														('Invalid Currency')
 													) ) {
 
 			$this->data['currency_id'] = $id;
@@ -339,12 +339,12 @@ class UserDefaultFactory extends Factory {
 				(
 				$this->Validator->isRegEx(		'city',
 												$city,
-												TTi18n::gettext('City contains invalid characters'),
+												('City contains invalid characters'),
 												$this->city_validator_regex)
 				AND
 					$this->Validator->isLength(		'city',
 													$city,
-													TTi18n::gettext('City name is too short or too long'),
+													('City name is too short or too long'),
 													2,
 													250)
 				)
@@ -372,7 +372,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(		'country',
 												$country,
-												TTi18n::gettext('Invalid Country'),
+												('Invalid Country'),
 												$cf->getOptions('country') ) ) {
 
 			$this->data['country'] = $country;
@@ -409,7 +409,7 @@ class UserDefaultFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'province',
 												$province,
-												TTi18n::gettext('Invalid Province/State'),
+												('Invalid Province/State'),
 												$options ) ) {
 
 			$this->data['province'] = $province;
@@ -435,7 +435,7 @@ class UserDefaultFactory extends Factory {
 				OR
 				$this->Validator->isPhoneNumber(		'work_phone',
 														$work_phone,
-														TTi18n::gettext('Work phone number is invalid')) ) {
+														('Work phone number is invalid')) ) {
 
 			$this->data['work_phone'] = $work_phone;
 
@@ -458,7 +458,7 @@ class UserDefaultFactory extends Factory {
 		if ( 	$work_phone_ext == ''
 				OR $this->Validator->isLength(		'work_phone_ext',
 													$work_phone_ext,
-													TTi18n::gettext('Work phone number extension is too short or too long'),
+													('Work phone number extension is too short or too long'),
 													2,
 													10) ) {
 
@@ -484,7 +484,7 @@ class UserDefaultFactory extends Factory {
 		if 	(	$work_email == ''
 					OR	$this->Validator->isEmail(	'work_email',
 													$work_email,
-													TTi18n::gettext('Work Email address is invalid')) ) {
+													('Work Email address is invalid')) ) {
 
 			$this->data['work_email'] = $work_email;
 
@@ -510,7 +510,7 @@ class UserDefaultFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'hire_date',
 												$epoch,
-												TTi18n::gettext('Appointment Date is invalid')) ) {
+												('Appointment Date is invalid')) ) {
 
 			$this->data['hire_date'] = $epoch;
 
@@ -544,7 +544,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'language',
 											$value,
-											TTi18n::gettext('Incorrect language'),
+											('Incorrect language'),
 											$language_options ) ) {
 
 			$this->data['language'] = $value;
@@ -568,7 +568,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'date_format',
 											$date_format,
-											TTi18n::gettext('Incorrect date format'),
+											('Incorrect date format'),
 											Misc::trimSortPrefix( $upf->getOptions('date_format') )) ) {
 
 			$this->data['date_format'] = $date_format;
@@ -598,7 +598,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'time_format',
 											$time_format,
-											TTi18n::gettext('Incorrect time format'),
+											('Incorrect time format'),
 											$upf->getOptions('time_format')) ) {
 
 			$this->data['time_format'] = $time_format;
@@ -623,7 +623,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'time_zone',
 											$time_zone,
-											TTi18n::gettext('Incorrect time zone'),
+											('Incorrect time zone'),
 											Misc::trimSortPrefix( $upf->getOptions('time_zone') ) ) ) {
 
 			$this->data['time_zone'] = $time_zone;
@@ -654,7 +654,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'time_unit_format',
 											$time_unit_format,
-											TTi18n::gettext('Incorrect time units'),
+											('Incorrect time units'),
 											$upf->getOptions('time_unit_format')) ) {
 
 			$this->data['time_unit_format'] = $time_unit_format;
@@ -684,7 +684,7 @@ class UserDefaultFactory extends Factory {
 
 			$this->Validator->isTrue(		'items_per_page',
 											FALSE,
-											TTi18n::gettext('Items per page must be between 10 and 200'));
+											('Items per page must be between 10 and 200'));
 		}
 
 		return FALSE;
@@ -709,7 +709,7 @@ class UserDefaultFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'start_week_day',
 											$value,
-											TTi18n::gettext('Incorrect day to start a week on'),
+											('Incorrect day to start a week on'),
 											$upf->getOptions('start_week_day')) ) {
 
 			$this->data['start_week_day'] = $value;
@@ -805,7 +805,7 @@ class UserDefaultFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'company_deduction',
 														$udcdf->Validator->isValid(),
-														TTi18n::gettext('Deduction is invalid').' ('. $obj->getName() .')' )) {
+														('Deduction is invalid').' ('. $obj->getName() .')' )) {
 						$udcdf->save();
 					}
 				}
@@ -822,7 +822,7 @@ class UserDefaultFactory extends Factory {
 		if ( $this->getCompany() == FALSE ) {
 			$this->Validator->isTrue(		'company',
 											FALSE,
-											TTi18n::gettext('Company is invalid'));
+											('Company is invalid'));
 		}
 
 		return TRUE;
@@ -885,7 +885,7 @@ class UserDefaultFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee Default Information'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee Default Information'), NULL, $this->getTable(), $this );
 	}
 
 }

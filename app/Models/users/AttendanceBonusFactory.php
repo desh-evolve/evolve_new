@@ -53,7 +53,7 @@ class AttendanceBonusFactory   extends Factory{
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows( 'bonus',
 										$bdlf->getByID($id),
-										TTi18n::gettext('Invalid December Bonus')
+										('Invalid December Bonus')
 									) ) {
 			$this->data['bonus_december_id'] = $id;
 
@@ -92,7 +92,7 @@ class AttendanceBonusFactory   extends Factory{
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;

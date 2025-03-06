@@ -17,7 +17,7 @@ class HierarchyShareFactory extends Factory {
 		
 		if ( $this->Validator->isResultSetWithRows(	'hierarchy_control',
 															$hclf->getByID($id),
-															TTi18n::gettext('Hierarchy control is invalid')
+															('Hierarchy control is invalid')
 															) ) {
 			$this->data['hierarchy_control_id'] = $id;
 		
@@ -37,7 +37,7 @@ class HierarchyShareFactory extends Factory {
 		
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('User is invalid')
+															('User is invalid')
 															) ) {
 			$this->data['user_id'] = $id;
 		

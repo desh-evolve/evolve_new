@@ -54,18 +54,18 @@ class TTDate {
 		//       month forms are included in gettext() calls so that they
 		//       will be properly extracted for translation.
 		return array (
-				1 => TTi18n::gettext('Jan'),
-				2 => TTi18n::gettext('Feb'),
-				3 => TTi18n::gettext('Mar'),
-				4 => TTi18n::gettext('Apr'),
-				5 => TTi18n::gettext('May'),
-				6 => TTi18n::gettext('Jun'),
-				7 => TTi18n::gettext('Jul'),
-				8 => TTi18n::gettext('Aug'),
-				9 => TTi18n::gettext('Sep'),
-				10 => TTi18n::gettext('Oct'),
-				11 => TTi18n::gettext('Nov'),
-				12 => TTi18n::gettext('Dec'),
+				1 => ('Jan'),
+				2 => ('Feb'),
+				3 => ('Mar'),
+				4 => ('Apr'),
+				5 => ('May'),
+				6 => ('Jun'),
+				7 => ('Jul'),
+				8 => ('Aug'),
+				9 => ('Sep'),
+				10 => ('Oct'),
+				11 => ('Nov'),
+				12 => ('Dec'),
 				);
 	}
 
@@ -74,18 +74,18 @@ class TTDate {
 		//       month forms are included in gettext() calls so that they
 		//       will be properly extracted for translation.
 		return array (
-				1 => TTi18n::gettext('January'),
-				2 => TTi18n::gettext('February'),
-				3 => TTi18n::gettext('March'),
-				4 => TTi18n::gettext('April'),
-				5 => TTi18n::gettext('May'),
-				6 => TTi18n::gettext('June'),
-				7 => TTi18n::gettext('July'),
-				8 => TTi18n::gettext('August'),
-				9 => TTi18n::gettext('September'),
-				10 => TTi18n::gettext('October'),
-				11 => TTi18n::gettext('November'),
-				12 => TTi18n::gettext('December')
+				1 => ('January'),
+				2 => ('February'),
+				3 => ('March'),
+				4 => ('April'),
+				5 => ('May'),
+				6 => ('June'),
+				7 => ('July'),
+				8 => ('August'),
+				9 => ('September'),
+				10 => ('October'),
+				11 => ('November'),
+				12 => ('December')
 				);
 	}
 
@@ -620,13 +620,13 @@ class TTDate {
 	public static function getDayOfWeekArray( $translation = TRUE ) {
 		if ( $translation == TRUE AND is_array(self::$day_of_week_arr) == FALSE ) {
 			self::$day_of_week_arr = array(
-											0 => TTi18n::gettext('Sunday'),
-											1 => TTi18n::gettext('Monday'),
-											2 => TTi18n::gettext('Tuesday'),
-											3 => TTi18n::gettext('Wednesday'),
-											4 => TTi18n::gettext('Thursday'),
-											5 => TTi18n::gettext('Friday'),
-											6 => TTi18n::gettext('Saturday')
+											0 => ('Sunday'),
+											1 => ('Monday'),
+											2 => ('Tuesday'),
+											3 => ('Wednesday'),
+											4 => ('Thursday'),
+											5 => ('Friday'),
+											6 => ('Saturday')
 				);
 	    } else {
 			//Translated days of week can't be piped back into strtotime() for parsing.
@@ -1552,12 +1552,12 @@ class TTDate {
 
 			//Display only blank boxes if the date is before the filter start date, or after.
 			if ( $i >= $start_date AND $i <= $end_date ) {
-				$day_of_week = TTi18n::gettext( date('D', $i) ); // i18n: these short day strings may not be in .po file.
+				$day_of_week = ( date('D', $i) ); // i18n: these short day strings may not be in .po file.
 				$day_of_month = date('j', $i);
-				$month_name = TTi18n::gettext( date('F', $i) ); // i18n: these short month strings may not be defined in .po file.
+				$month_name = ( date('F', $i) ); // i18n: these short month strings may not be defined in .po file.
 			} else {
 				//Always have the day of the week at least.
-				//$day_of_week = TTi18n::gettext( date('D', $i) ); // i18n: these short day strings may not be in .po file.
+				//$day_of_week = ( date('D', $i) ); // i18n: these short day strings may not be in .po file.
 				$day_of_week = NULL;
 				$day_of_month = NULL;
 				$month_name = NULL;
@@ -1749,45 +1749,45 @@ class TTDate {
 			case ($epoch_since > 31536000):
 					//Years
 					$num = ( ( ( ( ($epoch_since / 60) / 60) / 24 ) / 30 )  / 12 );
-					$suffix = TTi18n::gettext('yr');
+					$suffix = ('yr');
 					break;
 			//case ($epoch_since > 2592000):
 			case ($epoch_since > ((3600 * 24) * 60)):
 					//Months the above number should be 2 months, so we don't get 0 months showing up.
 					$num = ( ( ( ( ($epoch_since / 60) / 60) / 24 ) / 30 ) );
-					$suffix = TTi18n::gettext('mth');
+					$suffix = ('mth');
 					break;
 			case ($epoch_since > 604800):
 					//Weeks
 					$num = ( ( ( ($epoch_since / 60) / 60) / 24 ) / 7 ) ;
-					$suffix = TTi18n::gettext('wk');
+					$suffix = ('wk');
 					break;
 			case ($epoch_since > 86400):
 					//Days
 					$num = ( ( ($epoch_since / 60) / 60) / 24 );
-					$suffix = TTi18n::gettext('day');
+					$suffix = ('day');
 					break;
 			case ($epoch_since > 3600):
 					//Hours
 					$num = ( ($epoch_since / 60) / 60);
-					$suffix = TTi18n::gettext('hr');
+					$suffix = ('hr');
 
 					break;
 			case ($epoch_since > 60):
 					//Mins
 					$num = ($epoch_since / 60);
-					$suffix = TTi18n::gettext('min');
+					$suffix = ('min');
 					break;
 			default:
 					//Secs
 					$num = $epoch_since;
-					$suffix = TTi18n::gettext('sec');
+					$suffix = ('sec');
 
 					break;
 		}
 
 		if ( $num > 1 ) {
-			$suffix .= TTi18n::gettext('s');
+			$suffix .= ('s');
 		}
 
 		//Debug::text(' Num: '. $num .' Suffix: '. $suffix, __FILE__, __LINE__, __METHOD__,10);
@@ -1822,55 +1822,55 @@ class TTDate {
 
 	public static function getTimePeriodOptions( $include_pay_period = TRUE ) {
 		$retarr = array(
-						'-1000-custom_date' => TTi18n::gettext('Custom Dates'), // Select Start/End dates from calendar.
-						//'-1005-custom_time' => TTi18n::gettext('Custom Date/Time'), // Select Start/End dates & time from calendar.
-						'-1008-custom_pay_period' => TTi18n::gettext('Custom Pay Periods'), //Select pay periods individually
-						'-1010-today' => TTi18n::gettext('Today'),
-						'-1020-yesterday' => TTi18n::gettext('Yesterday'),
-						'-1030-last_24_hours' => TTi18n::gettext('Last 24 Hours'),
-						'-1032-last_48_hours' => TTi18n::gettext('Last 48 Hours'),
-						'-1034-last_72_hours' => TTi18n::gettext('Last 72 Hours'),
+						'-1000-custom_date' => ('Custom Dates'), // Select Start/End dates from calendar.
+						//'-1005-custom_time' => ('Custom Date/Time'), // Select Start/End dates & time from calendar.
+						'-1008-custom_pay_period' => ('Custom Pay Periods'), //Select pay periods individually
+						'-1010-today' => ('Today'),
+						'-1020-yesterday' => ('Yesterday'),
+						'-1030-last_24_hours' => ('Last 24 Hours'),
+						'-1032-last_48_hours' => ('Last 48 Hours'),
+						'-1034-last_72_hours' => ('Last 72 Hours'),
 
-						'-1100-this_week' => TTi18n::gettext('This Week'),
-						'-1110-last_week' => TTi18n::gettext('Last Week'),
-						'-1112-last_2_weeks' => TTi18n::gettext('Last 2 Weeks'),
-						'-1120-last_7_days' => TTi18n::gettext('Last 7 Days'),
-						'-1122-last_14_days' => TTi18n::gettext('Last 14 Days'),
+						'-1100-this_week' => ('This Week'),
+						'-1110-last_week' => ('Last Week'),
+						'-1112-last_2_weeks' => ('Last 2 Weeks'),
+						'-1120-last_7_days' => ('Last 7 Days'),
+						'-1122-last_14_days' => ('Last 14 Days'),
 
-						'-1200-this_pay_period' => TTi18n::gettext('This Pay Period'), //Select one or more pay period schedules
-						'-1210-last_pay_period' => TTi18n::gettext('Last Pay Period'), //Select one or more pay period schedules
+						'-1200-this_pay_period' => ('This Pay Period'), //Select one or more pay period schedules
+						'-1210-last_pay_period' => ('Last Pay Period'), //Select one or more pay period schedules
 
-						'-1300-this_month' => TTi18n::gettext('This Month'),
-						'-1310-last_month' => TTi18n::gettext('Last Month'),
-						'-1312-last_2_months' => TTi18n::gettext('Last 2 Months'),
-						'-1320-last_30_days' => TTi18n::gettext('Last 30 Days'),
-						'-1322-last_60_days' => TTi18n::gettext('Last 60 Days'),
+						'-1300-this_month' => ('This Month'),
+						'-1310-last_month' => ('Last Month'),
+						'-1312-last_2_months' => ('Last 2 Months'),
+						'-1320-last_30_days' => ('Last 30 Days'),
+						'-1322-last_60_days' => ('Last 60 Days'),
 
-						'-1400-this_quarter' => TTi18n::gettext('This Quarter'),
-						'-1410-last_quarter' => TTi18n::gettext('Last Quarter'),
-						'-1420-last_90_days' => TTi18n::gettext('Last 90 Days'),
-						'-1430-this_year_1st_quarter' => TTi18n::gettext('1st Quarter (This Year)'),
-						'-1440-this_year_2nd_quarter' => TTi18n::gettext('2nd Quarter (This Year)'),
-						'-1450-this_year_3rd_quarter' => TTi18n::gettext('3rd Quarter (This Year)'),
-						'-1460-this_year_4th_quarter' => TTi18n::gettext('4th Quarter (This Year)'),
-						'-1470-last_year_1st_quarter' => TTi18n::gettext('1st Quarter (Last Year)'),
-						'-1480-last_year_2nd_quarter' => TTi18n::gettext('2nd Quarter (Last Year)'),
-						'-1490-last_year_3rd_quarter' => TTi18n::gettext('3rd Quarter (Last Year)'),
-						'-1500-last_year_4th_quarter' => TTi18n::gettext('4th Quarter (Last Year)'),
+						'-1400-this_quarter' => ('This Quarter'),
+						'-1410-last_quarter' => ('Last Quarter'),
+						'-1420-last_90_days' => ('Last 90 Days'),
+						'-1430-this_year_1st_quarter' => ('1st Quarter (This Year)'),
+						'-1440-this_year_2nd_quarter' => ('2nd Quarter (This Year)'),
+						'-1450-this_year_3rd_quarter' => ('3rd Quarter (This Year)'),
+						'-1460-this_year_4th_quarter' => ('4th Quarter (This Year)'),
+						'-1470-last_year_1st_quarter' => ('1st Quarter (Last Year)'),
+						'-1480-last_year_2nd_quarter' => ('2nd Quarter (Last Year)'),
+						'-1490-last_year_3rd_quarter' => ('3rd Quarter (Last Year)'),
+						'-1500-last_year_4th_quarter' => ('4th Quarter (Last Year)'),
 
-						'-1600-last_3_months' => TTi18n::gettext('Last 3 Months'),
-						'-1610-last_6_months' => TTi18n::gettext('Last 6 Months'),
-						'-1620-last_9_months' => TTi18n::gettext('Last 9 Months'),
-						'-1630-last_12_months' => TTi18n::gettext('Last 12 Months'),
-						'-1640-last_18_months' => TTi18n::gettext('Last 18 Months'),
-						'-1650-last_24_months' => TTi18n::gettext('Last 24 Months'),
+						'-1600-last_3_months' => ('Last 3 Months'),
+						'-1610-last_6_months' => ('Last 6 Months'),
+						'-1620-last_9_months' => ('Last 9 Months'),
+						'-1630-last_12_months' => ('Last 12 Months'),
+						'-1640-last_18_months' => ('Last 18 Months'),
+						'-1650-last_24_months' => ('Last 24 Months'),
 
-						'-1700-this_year' => TTi18n::gettext('This Year (Year-To-Date)'),
-						'-1710-last_year' => TTi18n::gettext('Last Year'),
-						'-1720-last_2_years' => TTi18n::gettext('Last Two Years'),
-						'-1730-last_3_years' => TTi18n::gettext('Last Three Years'),
-						'-1740-last_5_years' => TTi18n::gettext('Last Five Years'),
-						'-1990-all_years' => TTi18n::gettext('All Years'),
+						'-1700-this_year' => ('This Year (Year-To-Date)'),
+						'-1710-last_year' => ('Last Year'),
+						'-1720-last_2_years' => ('Last Two Years'),
+						'-1730-last_3_years' => ('Last Three Years'),
+						'-1740-last_5_years' => ('Last Five Years'),
+						'-1990-all_years' => ('All Years'),
 					   );
 		return $retarr;
 	}
@@ -2161,7 +2161,7 @@ class TTDate {
 		}
 
 		if ( $column_name == '' ) {
-			$column_name = TTi18n::gettext('Date');
+			$column_name = ('Date');
 		}
 
 		if ( $column_name_prefix != '' ) {
@@ -2170,39 +2170,39 @@ class TTDate {
 
 		$retarr = array(
 						'-'.$sort_prefix.'00-'. $column_name_prefix .'date_stamp' 				=> $column_name,
-						'-'.$sort_prefix.'01-'. $column_name_prefix .'time_stamp' 				=> $column_name.' - '. TTi18n::gettext('Time of Day'),
-						'-'.$sort_prefix.'01-'. $column_name_prefix .'date_time_stamp' 			=> $column_name.' - '. TTi18n::gettext('w/Time'),
+						'-'.$sort_prefix.'01-'. $column_name_prefix .'time_stamp' 				=> $column_name.' - '. ('Time of Day'),
+						'-'.$sort_prefix.'01-'. $column_name_prefix .'date_time_stamp' 			=> $column_name.' - '. ('w/Time'),
 
-						'-'.$sort_prefix.'10-'. $column_name_prefix .'date_dow' 				=> $column_name.' - '. TTi18n::gettext('Day of Week'),
-						'-'.$sort_prefix.'12-'. $column_name_prefix .'date_dow_week' 			=> $column_name.' - '. TTi18n::gettext('Day of Week+Week'),
-						'-'.$sort_prefix.'14-'. $column_name_prefix .'date_dow_month' 			=> $column_name.' - '. TTi18n::gettext('Day of Week+Month'),
-						'-'.$sort_prefix.'16-'. $column_name_prefix .'date_dow_month_year'		=> $column_name.' - '. TTi18n::gettext('Day of Week+Month+Year'),
-						'-'.$sort_prefix.'18-'. $column_name_prefix .'date_dow_dom_month_year'	=> $column_name.' - '. TTi18n::gettext('Day of Week+Day Of Month+Year'),
+						'-'.$sort_prefix.'10-'. $column_name_prefix .'date_dow' 				=> $column_name.' - '. ('Day of Week'),
+						'-'.$sort_prefix.'12-'. $column_name_prefix .'date_dow_week' 			=> $column_name.' - '. ('Day of Week+Week'),
+						'-'.$sort_prefix.'14-'. $column_name_prefix .'date_dow_month' 			=> $column_name.' - '. ('Day of Week+Month'),
+						'-'.$sort_prefix.'16-'. $column_name_prefix .'date_dow_month_year'		=> $column_name.' - '. ('Day of Week+Month+Year'),
+						'-'.$sort_prefix.'18-'. $column_name_prefix .'date_dow_dom_month_year'	=> $column_name.' - '. ('Day of Week+Day Of Month+Year'),
 
-						'-'.$sort_prefix.'20-'. $column_name_prefix .'date_week' 				=> $column_name.' - '. TTi18n::gettext('Week'),
-						'-'.$sort_prefix.'22-'. $column_name_prefix .'date_week_month' 			=> $column_name.' - '. TTi18n::gettext('Week+Month'),
-						'-'.$sort_prefix.'24-'. $column_name_prefix .'date_week_month_year'		=> $column_name.' - '. TTi18n::gettext('Week+Month+Year'),
+						'-'.$sort_prefix.'20-'. $column_name_prefix .'date_week' 				=> $column_name.' - '. ('Week'),
+						'-'.$sort_prefix.'22-'. $column_name_prefix .'date_week_month' 			=> $column_name.' - '. ('Week+Month'),
+						'-'.$sort_prefix.'24-'. $column_name_prefix .'date_week_month_year'		=> $column_name.' - '. ('Week+Month+Year'),
 
-						'-'.$sort_prefix.'30-'. $column_name_prefix .'date_dom' 				=> $column_name.' - '. TTi18n::gettext('Day of Month'),
-						'-'.$sort_prefix.'32-'. $column_name_prefix .'date_dom_month' 			=> $column_name.' - '. TTi18n::gettext('Day of Month+Month'),
-						'-'.$sort_prefix.'34-'. $column_name_prefix .'date_dom_month_year' 		=> $column_name.' - '. TTi18n::gettext('Day of Month+Month+Year'),
+						'-'.$sort_prefix.'30-'. $column_name_prefix .'date_dom' 				=> $column_name.' - '. ('Day of Month'),
+						'-'.$sort_prefix.'32-'. $column_name_prefix .'date_dom_month' 			=> $column_name.' - '. ('Day of Month+Month'),
+						'-'.$sort_prefix.'34-'. $column_name_prefix .'date_dom_month_year' 		=> $column_name.' - '. ('Day of Month+Month+Year'),
 
-						'-'.$sort_prefix.'40-'. $column_name_prefix .'date_month' 				=> $column_name.' - '. TTi18n::gettext('Month'),
-						'-'.$sort_prefix.'42-'. $column_name_prefix .'date_month_year'		 	=> $column_name.' - '. TTi18n::gettext('Month+Year'),
+						'-'.$sort_prefix.'40-'. $column_name_prefix .'date_month' 				=> $column_name.' - '. ('Month'),
+						'-'.$sort_prefix.'42-'. $column_name_prefix .'date_month_year'		 	=> $column_name.' - '. ('Month+Year'),
 
-						'-'.$sort_prefix.'50-'. $column_name_prefix .'date_quarter' 			=> $column_name.' - '. TTi18n::gettext('Quarter'),
-						'-'.$sort_prefix.'52-'. $column_name_prefix .'date_quarter_year'	 	=> $column_name.' - '. TTi18n::gettext('Quarter+Year'),
+						'-'.$sort_prefix.'50-'. $column_name_prefix .'date_quarter' 			=> $column_name.' - '. ('Quarter'),
+						'-'.$sort_prefix.'52-'. $column_name_prefix .'date_quarter_year'	 	=> $column_name.' - '. ('Quarter+Year'),
 
-						'-'.$sort_prefix.'60-'. $column_name_prefix .'date_year' 				=> $column_name.' - '. TTi18n::gettext('Year'),
+						'-'.$sort_prefix.'60-'. $column_name_prefix .'date_year' 				=> $column_name.' - '. ('Year'),
 					   );
 
 		if ( $include_pay_period == TRUE ) {
 			//Don't use the $column_name on these, as there is only one type of pay period columns.
 			$pay_period_arr = array(
-						'-'.$sort_prefix.'70-'. $column_name_prefix .'pay_period' 				=> TTi18n::gettext('Pay Period'),
-						'-'.$sort_prefix.'71-'. $column_name_prefix .'pay_period_start_date' 	=> TTi18n::gettext('Pay Period - Start Date'),
-						'-'.$sort_prefix.'72-'. $column_name_prefix .'pay_period_end_date' 		=> TTi18n::gettext('Pay Period - End Date'),
-						'-'.$sort_prefix.'73-'. $column_name_prefix .'pay_period_transaction_date' => TTi18n::gettext('Pay Period - Transaction Date'),
+						'-'.$sort_prefix.'70-'. $column_name_prefix .'pay_period' 				=> ('Pay Period'),
+						'-'.$sort_prefix.'71-'. $column_name_prefix .'pay_period_start_date' 	=> ('Pay Period - Start Date'),
+						'-'.$sort_prefix.'72-'. $column_name_prefix .'pay_period_end_date' 		=> ('Pay Period - End Date'),
+						'-'.$sort_prefix.'73-'. $column_name_prefix .'pay_period_transaction_date' => ('Pay Period - Transaction Date'),
 					);
 			$retarr = array_merge( $retarr, $pay_period_arr );
 		}

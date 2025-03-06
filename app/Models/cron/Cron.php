@@ -18,7 +18,7 @@ class Cron {
 					);
 
 	static function getOptions( $name, $interval = 1 ) {
-		$all_array_option = array( '*' => TTi18n::getText('-- All --') );
+		$all_array_option = array( '*' => ('-- All --') );
 
 		$retval = FALSE;
 		switch ( $name ) {

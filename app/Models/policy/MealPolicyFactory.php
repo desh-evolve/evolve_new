@@ -22,36 +22,36 @@ class MealPolicyFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Auto-Deduct'),
-										15 => TTi18n::gettext('Auto-Add'),
-										20 => TTi18n::gettext('Normal')
+										10 => ('Auto-Deduct'),
+										15 => ('Auto-Add'),
+										20 => ('Normal')
 									);
 				break;
 			case 'auto_detect_type':
 				$retval = array(
-										10 => TTi18n::gettext('Time Window'),
-										20 => TTi18n::gettext('Punch Time'),
+										10 => ('Time Window'),
+										20 => ('Punch Time'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1020-name' => TTi18n::gettext('Name'),
-										'-1030-amount' => TTi18n::gettext('Meal Time'),
-										'-1040-trigger_time' => TTi18n::gettext('Active After'),
+										'-1010-type' => ('Type'),
+										'-1020-name' => ('Name'),
+										'-1030-amount' => ('Meal Time'),
+										'-1040-trigger_time' => ('Active After'),
 
-										'-1050-auto_detect_type' => TTi18n::gettext('Auto Detect Meals By'),
-										//'-1060-start_window' => TTi18n::gettext('Start Window'),
-										//'-1070-window_length' => TTi18n::gettext('Window Length'),
-										//'-1080-minimum_punch_time' => TTi18n::gettext('Minimum Punch Time'),
-										//'-1090-maximum_punch_time' => TTi18n::gettext('Maximum Punch Time'),
+										'-1050-auto_detect_type' => ('Auto Detect Meals By'),
+										//'-1060-start_window' => ('Start Window'),
+										//'-1070-window_length' => ('Window Length'),
+										//'-1080-minimum_punch_time' => ('Minimum Punch Time'),
+										//'-1090-maximum_punch_time' => ('Maximum Punch Time'),
 
-										'-1100-include_lunch_punch_time' => TTi18n::gettext('Include Lunch Punch'),
+										'-1100-include_lunch_punch_time' => ('Include Lunch Punch'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -128,7 +128,7 @@ class MealPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -156,7 +156,7 @@ class MealPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -178,7 +178,7 @@ class MealPolicyFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -206,7 +206,7 @@ class MealPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'trigger_time',
 													$int,
-													TTi18n::gettext('Incorrect Trigger Time')) ) {
+													('Incorrect Trigger Time')) ) {
 			$this->data['trigger_time'] = $int;
 
 			return TRUE;
@@ -227,7 +227,7 @@ class MealPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'amount',
 													$value,
-													TTi18n::gettext('Incorrect Deduction Amount')) ) {
+													('Incorrect Deduction Amount')) ) {
 
 			$this->data['amount'] = $value;
 
@@ -254,7 +254,7 @@ class MealPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'auto_detect_type',
 											$value,
-											TTi18n::gettext('Incorrect Auto-Detect Type'),
+											('Incorrect Auto-Detect Type'),
 											$this->getOptions('auto_detect_type')) ) {
 
 			$this->data['auto_detect_type_id'] = $value;
@@ -279,7 +279,7 @@ class MealPolicyFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(		'start_window',
 													$value,
-													TTi18n::gettext('Incorrect Start Window')) ) {
+													('Incorrect Start Window')) ) {
 
 			$this->data['start_window'] = $value;
 
@@ -303,7 +303,7 @@ class MealPolicyFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(		'window_length',
 													$value,
-													TTi18n::gettext('Incorrect Window Length')) ) {
+													('Incorrect Window Length')) ) {
 
 			$this->data['window_length'] = $value;
 
@@ -327,7 +327,7 @@ class MealPolicyFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(		'minimum_punch_time',
 													$value,
-													TTi18n::gettext('Incorrect Minimum Punch Time')) ) {
+													('Incorrect Minimum Punch Time')) ) {
 
 			$this->data['minimum_punch_time'] = $value;
 
@@ -351,7 +351,7 @@ class MealPolicyFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(		'maximum_punch_time',
 													$value,
-													TTi18n::gettext('Incorrect Maximum Punch Time')) ) {
+													('Incorrect Maximum Punch Time')) ) {
 
 			$this->data['maximum_punch_time'] = $value;
 
@@ -399,7 +399,7 @@ class MealPolicyFactory extends Factory {
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This meal policy is in use'));
+											('This meal policy is in use'));
 
 			}
 		}
@@ -476,7 +476,7 @@ class MealPolicyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Meal Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Meal Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

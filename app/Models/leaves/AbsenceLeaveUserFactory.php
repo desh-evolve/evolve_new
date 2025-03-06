@@ -22,187 +22,187 @@ class AbsenceLeaveUserFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('Enabled'),
-										20 => TTi18n::gettext('Disabled'),
+										10 => ('Enabled'),
+										20 => ('Disabled'),
 									);
 				break;
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Tax'),
-										20 => TTi18n::gettext('Deduction'),
-										30 => TTi18n::gettext('Other'),
+										10 => ('Tax'),
+										20 => ('Deduction'),
+										30 => ('Other'),
 									);
 				break;
 			case 'calculation':
 				$retval = array(
-										10 => TTi18n::gettext('Percent'),
-										15 => TTi18n::gettext('Advanced Percent'),
-										17 => TTi18n::gettext('Advanced Percent (Range Bracket)'),
-										18 => TTi18n::gettext('Advanced Percent (Tax Bracket)'),
-										19 => TTi18n::gettext('Advanced Percent (Tax Bracket Alt.)'),
-										20 => TTi18n::gettext('Fixed Amount'),
-										30 => TTi18n::gettext('Fixed Amount (Range Bracket)'),
+										10 => ('Percent'),
+										15 => ('Advanced Percent'),
+										17 => ('Advanced Percent (Range Bracket)'),
+										18 => ('Advanced Percent (Tax Bracket)'),
+										19 => ('Advanced Percent (Tax Bracket Alt.)'),
+										20 => ('Fixed Amount'),
+										30 => ('Fixed Amount (Range Bracket)'),
 
 										//Accrual/YTD formulas. - This requires custom Withdraw From/Deposit To accrual feature in PS account.
-										//50 => TTi18n::gettext('Accrual/YTD Percent'),
-										52 => TTi18n::gettext('Fixed Amount (w/Target)'),
+										//50 => ('Accrual/YTD Percent'),
+										52 => ('Fixed Amount (w/Target)'),
 
 										//US - Custom Formulas
-										80 => TTi18n::gettext('US - Advance EIC Formula'),
+										80 => ('US - Advance EIC Formula'),
 
 										//Canada - Custom Formulas CPP and EI
-										90 => TTi18n::gettext('Canada - CPP Formula'),
-										91 => TTi18n::gettext('Canada - EI Formula'),
+										90 => ('Canada - CPP Formula'),
+										91 => ('Canada - EI Formula'),
 
 										//Federal
-										100 => TTi18n::gettext('Federal Income Tax Formula'),
+										100 => ('Federal Income Tax Formula'),
 
 										//Province/State
-										200 => TTi18n::gettext('Province/State Income Tax Formula'),
+										200 => ('Province/State Income Tax Formula'),
 
 										//Sub-State/Tax Area
-										300 => TTi18n::gettext('District/County Income Tax Formula'),
+										300 => ('District/County Income Tax Formula'),
 									);
 				break;
 			case 'length_of_service_unit':
 				$retval = array(
-										10 => TTi18n::gettext('Day(s)'),
-										20 => TTi18n::gettext('Week(s)'),
-										30 => TTi18n::gettext('Month(s)'),
-										40 => TTi18n::gettext('Year(s)'),
-										50 => TTi18n::gettext('Hour(s)'),
+										10 => ('Day(s)'),
+										20 => ('Week(s)'),
+										30 => ('Month(s)'),
+										40 => ('Year(s)'),
+										50 => ('Hour(s)'),
 									);
 				break;
 			case 'account_amount_type':
 				$retval = array(
-										10 => TTi18n::gettext('Amount'),
-										20 => TTi18n::gettext('Units/Hours'),
-										30 => TTi18n::gettext('YTD Amount'),
-										40 => TTi18n::gettext('YTD Units/Hours'),
+										10 => ('Amount'),
+										20 => ('Units/Hours'),
+										30 => ('YTD Amount'),
+										40 => ('YTD Units/Hours'),
 									);
 				break;
 			case 'us_eic_filing_status': //EIC certificate
 				$retval = array(
-														10 => TTi18n::gettext('Single or Head of Household'),
-														20 => TTi18n::gettext('Married - Without Spouse Filing'),
-														30 => TTi18n::gettext('Married - With Spouse Filing'),
+														10 => ('Single or Head of Household'),
+														20 => ('Married - Without Spouse Filing'),
+														30 => ('Married - With Spouse Filing'),
 
 									);
 				break;
 			case 'federal_filing_status': //US
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married'),
+														10 => ('Single'),
+														20 => ('Married'),
 									);
 				break;
 			case 'state_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married - Spouse Works'),
-														30 => TTi18n::gettext('Married - Spouse does not Work'),
-														40 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married - Spouse Works'),
+														30 => ('Married - Spouse does not Work'),
+														40 => ('Head of Household'),
 									);
 				break;
 			case 'state_ga_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married - Filing Separately'),
-														30 => TTi18n::gettext('Married - Joint One Income'),
-														40 => TTi18n::gettext('Married - Joint Two Incomes'),
-														50 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married - Filing Separately'),
+														30 => ('Married - Joint One Income'),
+														40 => ('Married - Joint Two Incomes'),
+														50 => ('Head of Household'),
 									);
 				break;
 			case 'state_nj_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Rate "A"'),
-														20 => TTi18n::gettext('Rate "B"'),
-														30 => TTi18n::gettext('Rate "C"'),
-														40 => TTi18n::gettext('Rate "D"'),
-														50 => TTi18n::gettext('Rate "E"'),
+														10 => ('Rate "A"'),
+														20 => ('Rate "B"'),
+														30 => ('Rate "C"'),
+														40 => ('Rate "D"'),
+														50 => ('Rate "E"'),
 									);
 				break;
 			case 'state_nc_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married or Qualified Widow(er)'),
-														30 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married or Qualified Widow(er)'),
+														30 => ('Head of Household'),
 									);
 				break;
 			case 'state_ma_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Regular'),
-														20 => TTi18n::gettext('Head of Household'),
-														30 => TTi18n::gettext('Blind'),
-														40 => TTi18n::gettext('Head of Household and Blind')
+														10 => ('Regular'),
+														20 => ('Head of Household'),
+														30 => ('Blind'),
+														40 => ('Head of Household and Blind')
 									);
 				break;
 			case 'state_al_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Status "S" Claiming $1500'),
-														20 => TTi18n::gettext('Status "M" Claiming $3000'),
-														30 => TTi18n::gettext('Status "0"'),
-														40 => TTi18n::gettext('Head of Household'),
-														50 => TTi18n::gettext('Status "MS"')
+														10 => ('Status "S" Claiming $1500'),
+														20 => ('Status "M" Claiming $3000'),
+														30 => ('Status "0"'),
+														40 => ('Head of Household'),
+														50 => ('Status "MS"')
 									);
 				break;
 			case 'state_ct_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Status "A"'),
-														20 => TTi18n::gettext('Status "B"'),
-														30 => TTi18n::gettext('Status "C"'),
-														40 => TTi18n::gettext('Status "D"'),
-														//50 => TTi18n::gettext('Status "E"'), //Doesn't exist.
-														60 => TTi18n::gettext('Status "F"'),
+														10 => ('Status "A"'),
+														20 => ('Status "B"'),
+														30 => ('Status "C"'),
+														40 => ('Status "D"'),
+														//50 => ('Status "E"'), //Doesn't exist.
+														60 => ('Status "F"'),
 									);
 				break;
 			case 'state_wv_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Standard'),
-														20 => TTi18n::gettext('Optional Two Earners'),
+														10 => ('Standard'),
+														20 => ('Optional Two Earners'),
 									);
 				break;
 			case 'state_me_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married'),
-														30 => TTi18n::gettext('Married with 2 incomes'),
+														10 => ('Single'),
+														20 => ('Married'),
+														30 => ('Married with 2 incomes'),
 									);
 				break;
 			case 'state_de_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married (Filing Jointly)'),
-														30 => TTi18n::gettext('Married (Filing Separately)'),
+														10 => ('Single'),
+														20 => ('Married (Filing Jointly)'),
+														30 => ('Married (Filing Separately)'),
 									);
 				break;
 			case 'state_dc_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married (Filing Jointly)'),
-														30 => TTi18n::gettext('Married (Filing Separately)'),
-														40 => TTi18n::gettext('Head of Household'),
+														10 => ('Single'),
+														20 => ('Married (Filing Jointly)'),
+														30 => ('Married (Filing Separately)'),
+														40 => ('Head of Household'),
 									);
 				break;
 			case 'state_la_filing_status':
 				$retval = array(
-														10 => TTi18n::gettext('Single'),
-														20 => TTi18n::gettext('Married (Filing Jointly)'),
+														10 => ('Single'),
+														20 => ('Married (Filing Jointly)'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-status' => TTi18n::gettext('Status'),
-										'-1020-type' => TTi18n::gettext('Type'),
-										'-1030-name' => TTi18n::gettext('Name'),
-										'-1040-calculation' => TTi18n::gettext('Calculation'),
+										'-1010-status' => ('Status'),
+										'-1020-type' => ('Type'),
+										'-1030-name' => ('Name'),
+										'-1040-calculation' => ('Calculation'),
 
-										'-1040-start_date' => TTi18n::gettext('Start Date'),
-										'-1040-end_Date_date' => TTi18n::gettext('End Date'),
+										'-1040-start_date' => ('Start Date'),
+										'-1040-end_Date_date' => ('End Date'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -245,27 +245,27 @@ class AbsenceLeaveUserFactory extends Factory {
 				break;
                 /*case 'basis_employment':
 				$retval = array(
-										3 => TTi18n::gettext('Permanent (With Probation)'),
-										4 => TTi18n::gettext('Permanent'),
-										6 => TTi18n::gettext('Consultant'),
-										1 => TTi18n::gettext('Contract'),
-										2 => TTi18n::gettext('Assignment'),
+										3 => ('Permanent (With Probation)'),
+										4 => ('Permanent'),
+										6 => ('Consultant'),
+										1 => ('Contract'),
+										2 => ('Assignment'),
 									);
 				break;*/
 				case 'basis_employment':
 				$retval = array(
-								1 => TTi18n::gettext('Contract'),
-								2 => TTi18n::gettext('Training'),
-								3 => TTi18n::gettext('Permanent (With Probation)'),
-								4 => TTi18n::gettext('Permanent (Confirmed)'),
-								5 => TTi18n::gettext('Resign'),
+								1 => ('Contract'),
+								2 => ('Training'),
+								3 => ('Permanent (With Probation)'),
+								4 => ('Permanent (Confirmed)'),
+								5 => ('Resign'),
 							);
 				break;
                 case 'leave_applicable':
 				$retval = array(
-										//1 => TTi18n::gettext('Hire Date'),
-										1 => TTi18n::gettext('Appointment Date'),
-										2 => TTi18n::gettext('2nd Calender Year'), 
+										//1 => ('Hire Date'),
+										1 => ('Appointment Date'),
+										2 => ('2nd Calender Year'), 
 									);
 				break;
 		}
@@ -317,7 +317,7 @@ class AbsenceLeaveUserFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -348,7 +348,7 @@ class AbsenceLeaveUserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status'] = $status;
@@ -377,7 +377,7 @@ class AbsenceLeaveUserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -399,7 +399,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -424,7 +424,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		$uf = TTnew( 'UserListFactory' );
 		if (	$this->Validator->isResultSetWithRows(	'user_id',
 											$uf->getById($id),
-											TTi18n::gettext('User is invalid'),
+											('User is invalid'),
 											2,50)
 						) {
 
@@ -449,7 +449,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		$alf = TTnew( 'AbsenceLeaveListFactory' );
 		if (	$this->Validator->isResultSetWithRows(	'absence_leave_id',
 											$alf->getById($id),
-											TTi18n::gettext('Absence Leave is invalid'),
+											('Absence Leave is invalid'),
 											2,50)
 						) {
 
@@ -474,7 +474,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		$alf = TTnew( 'AbsencePolicyListFactory' );
 		if (	$this->Validator->isResultSetWithRows(	'absence_policy_id',
 											$alf->getById($id),
-											TTi18n::gettext('Absence Policy  is invalid'),
+											('Absence Policy  is invalid'),
 											2,50)
 						) {
 
@@ -499,7 +499,7 @@ class AbsenceLeaveUserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'basis_employment',
 											$status,
-											TTi18n::gettext('Incorrect Basis of Employment'),
+											('Incorrect Basis of Employment'),
 											$this->getOptions('basis_employment')) ) {
 
 			$this->data['basis_employment'] = $status;
@@ -523,7 +523,7 @@ class AbsenceLeaveUserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'leave_applicable',
 											$status,
-											TTi18n::gettext('Incorrect Basis of Employment'),
+											('Incorrect Basis of Employment'),
 											$this->getOptions('leave_applicable')) ) {
 
 			$this->data['leave_applicable'] = $status;
@@ -551,7 +551,7 @@ class AbsenceLeaveUserFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'minimum_length_of_service',
 													$int,
-													TTi18n::gettext('Minimum length of service is invalid')) ) {
+													('Minimum length of service is invalid')) ) {
 
 			$this->data['minimum_length_of_service_days'] = bcmul( $int, $this->length_of_service_multiplier[$this->getMinimumLengthOfServiceUnit()], 4);
 
@@ -577,7 +577,7 @@ class AbsenceLeaveUserFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'minimum_length_of_service',
 													$int,
-													TTi18n::gettext('Minimum length of service is invalid')) ) {
+													('Minimum length of service is invalid')) ) {
 
 			$this->data['minimum_length_of_service'] = $int;
 
@@ -600,7 +600,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		if ( $value == ''
 				OR $this->Validator->inArrayKey(	'minimum_length_of_service_unit_id',
 											$value,
-											TTi18n::gettext('Incorrect minimum length of service unit'),
+											('Incorrect minimum length of service unit'),
 											$this->getOptions('length_of_service_unit')) ) {
 
 			$this->data['minimum_length_of_service_unit_id'] = $value;
@@ -627,7 +627,7 @@ class AbsenceLeaveUserFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'maximum_length_of_service',
 													$int,
-													TTi18n::gettext('Maximum length of service is invalid')) ) {
+													('Maximum length of service is invalid')) ) {
 
 			$this->data['maximum_length_of_service_days'] = bcmul( $int, $this->length_of_service_multiplier[$this->getMaximumLengthOfServiceUnit()], 4);
 
@@ -653,7 +653,7 @@ class AbsenceLeaveUserFactory extends Factory {
 				AND
 				$this->Validator->isFloat(			'maximum_length_of_service',
 													$int,
-													TTi18n::gettext('Maximum length of service is invalid')) ) {
+													('Maximum length of service is invalid')) ) {
 
 			$this->data['maximum_length_of_service'] = $int;
 
@@ -676,7 +676,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		if ( $value == ''
 				OR $this->Validator->inArrayKey(	'maximum_length_of_service_unit_id',
 											$value,
-											TTi18n::gettext('Incorrect maximum length of service unit'),
+											('Incorrect maximum length of service unit'),
 											$this->getOptions('length_of_service_unit')) ) {
 
 			$this->data['maximum_length_of_service_unit_id'] = $value;
@@ -700,7 +700,7 @@ class AbsenceLeaveUserFactory extends Factory {
                         
 		if (	$this->Validator->isFloat(	'amount',
                                                 $amount,
-                                                TTi18n::gettext('Leave day is invalid') )
+                                                ('Leave day is invalid') )
 						) {
 
 			$this->data['amount'] = $amount;
@@ -724,7 +724,7 @@ class AbsenceLeaveUserFactory extends Factory {
                         
 		if (	$this->Validator->isNotNull(	'leave_date_year',
                                                 $amount,
-                                                TTi18n::gettext('Leave Date is invalid') )
+                                                ('Leave Date is invalid') )
 						) {
 
 			$this->data['leave_date_year'] = $amount;
@@ -815,7 +815,7 @@ class AbsenceLeaveUserFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'rate',
 												$int,
-												TTi18n::gettext('Incorrect Rate')) ) {
+												('Incorrect Rate')) ) {
 			$this->data['rate'] = $int;
 
 			return TRUE;
@@ -840,7 +840,7 @@ class AbsenceLeaveUserFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'wage_group',
 													$wglf->getByID($id),
-													TTi18n::gettext('Wage Group is invalid')
+													('Wage Group is invalid')
 													) ) {
 
 			$this->data['wage_group_id'] = $id;
@@ -867,7 +867,7 @@ class AbsenceLeaveUserFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'accrual_rate',
 												$int,
-												TTi18n::gettext('Incorrect Accrual Rate')) ) {
+												('Incorrect Accrual Rate')) ) {
 			$this->data['accrual_rate'] = $int;
 
 			return TRUE;
@@ -896,7 +896,7 @@ class AbsenceLeaveUserFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'accrual_policy',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accrual_policy_id'] = $id;
@@ -929,7 +929,7 @@ class AbsenceLeaveUserFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account_id',
 														$psealf->getById($id),
-														TTi18n::gettext('Invalid Pay Stub Account')
+														('Invalid Pay Stub Account')
 														) ) {
 			$this->data['pay_stub_entry_account_id'] = $id;
 
@@ -947,7 +947,7 @@ class AbsenceLeaveUserFactory extends Factory {
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This absence policy is in use'));
+											('This absence policy is in use'));
 
 			}
 		}
@@ -1027,7 +1027,7 @@ class AbsenceLeaveUserFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Absence Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Absence Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

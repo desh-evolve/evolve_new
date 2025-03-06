@@ -27,40 +27,40 @@ class UserWageFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-											10 	=> TTi18n::gettext('Hourly'),
-											12	=> TTi18n::gettext('Salary (Weekly)'),
-											13	=> TTi18n::gettext('Salary (Bi-Weekly)'),
-											15	=> TTi18n::gettext('Salary (Monthly)'),
-											20	=> TTi18n::gettext('Salary (Annual)'),
-//											30	=> TTi18n::gettext('Min. Wage + Bonus (Salary)')
+											10 	=> ('Hourly'),
+											12	=> ('Salary (Weekly)'),
+											13	=> ('Salary (Bi-Weekly)'),
+											15	=> ('Salary (Monthly)'),
+											20	=> ('Salary (Annual)'),
+//											30	=> ('Min. Wage + Bonus (Salary)')
 									);
 				break;
 			case 'columns':
 				$retval = array(
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
 
-										'-1030-wage_group' => TTi18n::gettext('Wage Group'),
-										'-1040-type' => TTi18n::gettext('Type'),
-										'-1050-wage' => TTi18n::gettext('Wage'),
-										'-1060-effective_date' => TTi18n::gettext('Effective Date'),
+										'-1030-wage_group' => ('Wage Group'),
+										'-1040-type' => ('Type'),
+										'-1050-wage' => ('Wage'),
+										'-1060-effective_date' => ('Effective Date'),
 
-										'-1070-hourly_rate' => TTi18n::gettext('Hourly Rate'),
-										'-1070-labor_burden_percent' => TTi18n::gettext('Labor Burden Percent'),
-										'-1080-weekly_time' => TTi18n::gettext('Average Time/Week'),
+										'-1070-hourly_rate' => ('Hourly Rate'),
+										'-1070-labor_burden_percent' => ('Labor Burden Percent'),
+										'-1080-weekly_time' => ('Average Time/Week'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										'-1099-user_group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+										'-1090-title' => ('Title'),
+										'-1099-user_group' => ('Group'),
+										'-1100-default_branch' => ('Branch'),
+										'-1110-default_department' => ('Department'),
 
-										'-1290-note' => TTi18n::gettext('Note'),
+										'-1290-note' => ('Note'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -162,7 +162,7 @@ class UserWageFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -190,7 +190,7 @@ class UserWageFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'wage_group',
 														$wglf->getByID($id),
-														TTi18n::gettext('Group is invalid')
+														('Group is invalid')
 													) ) {
 
 			$this->data['wage_group_id'] = $id;
@@ -218,7 +218,7 @@ class UserWageFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -247,27 +247,27 @@ class UserWageFactory extends Factory {
 		if (
 				$this->Validator->isNotNull('wage',
 											$wage,
-											TTi18n::gettext('Please specify a wage'))
+											('Please specify a wage'))
 				AND
 				$this->Validator->isFloat(	'wage',
 											$wage,
-											TTi18n::gettext('Incorrect Wage'))
+											('Incorrect Wage'))
 				AND
 				$this->Validator->isLength(	'wage',
 											$wage,
-											TTi18n::gettext('Wage has too many digits'),
+											('Wage has too many digits'),
 											0,
 											21) //Need to include decimal.
 				AND
 				$this->Validator->isLengthBeforeDecimal(	'wage',
 											$wage,
-											TTi18n::gettext('Wage has too many digits before the decimal'),
+											('Wage has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'wage',
 											$wage,
-											TTi18n::gettext('Wage has too many digits after the decimal'),
+											('Wage has too many digits after the decimal'),
 											0,
 											4)
 				) {
@@ -301,27 +301,27 @@ class UserWageFactory extends Factory {
 		if (
 				$this->Validator->isNotNull('budgetary_allowance',
 											$wage,
-											TTi18n::gettext('Please specify a Budgetory Allowance'))
+											('Please specify a Budgetory Allowance'))
 				AND
 				$this->Validator->isFloat(	'budgetary_allowance',
 											$wage,
-											TTi18n::gettext('Incorrect Budgetory Allowance'))
+											('Incorrect Budgetory Allowance'))
 				AND
 				$this->Validator->isLength(	'budgetary_allowance',
 											$wage,
-											TTi18n::gettext('Budgetory Allowance has too many digits'),
+											('Budgetory Allowance has too many digits'),
 											0,
 											21) //Need to include decimal.
 				AND
 				$this->Validator->isLengthBeforeDecimal(	'budgetary_allowance',
 											$wage,
-											TTi18n::gettext('Budgetory Allowance has too many digits before the decimal'),
+											('Budgetory Allowance has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'budgetary_allowance',
 											$wage,
-											TTi18n::gettext('Budgetory Allowance has too many digits after the decimal'),
+											('Budgetory Allowance has too many digits after the decimal'),
 											0,
 											4)
 				) {
@@ -355,7 +355,7 @@ class UserWageFactory extends Factory {
 				OR
 				$this->Validator->isFloat(	'hourly_rate',
 											$rate,
-											TTi18n::gettext('Incorrect Hourly Rate')) ) {
+											('Incorrect Hourly Rate')) ) {
 
 			$this->data['hourly_rate'] = $rate;
 
@@ -382,7 +382,7 @@ class UserWageFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(	'weekly_time',
 											$value,
-											TTi18n::gettext('Incorrect Weekly Time')) ) {
+											('Incorrect Weekly Time')) ) {
 
 			$this->data['weekly_time'] = $value;
 
@@ -407,7 +407,7 @@ class UserWageFactory extends Factory {
 
 		if (	$this->Validator->isFloat(	'labor_burden_percent',
 											$value,
-											TTi18n::gettext('Incorrect Labor Burden Percent')) ) {
+											('Incorrect Labor Burden Percent')) ) {
 
 			$this->data['labor_burden_percent'] = $value;
 
@@ -476,7 +476,7 @@ class UserWageFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'effective_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Effective Date'))
+												('Incorrect Effective Date'))
 			) {
 
 			$this->data['effective_date'] = $epoch;
@@ -501,7 +501,7 @@ class UserWageFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'note',
 														$value,
-														TTi18n::gettext('Note is too long'),
+														('Note is too long'),
 														1,
 														2048)
 			) {
@@ -900,7 +900,7 @@ class UserWageFactory extends Factory {
 		if ( $this->getDeleted() == FALSE ) {
 				$this->Validator->isTrue(		'effective_date',
 												$this->isValidEffectiveDate( $this->getEffectiveDate() ),
-												TTi18n::gettext('An employees first wage entry must be effective on or before the employees Appointment Date'));
+												('An employees first wage entry must be effective on or before the employees Appointment Date'));
 		}
 
 		return TRUE;
@@ -991,7 +991,7 @@ class UserWageFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee Wage'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee Wage'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

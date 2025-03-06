@@ -71,11 +71,11 @@ class UserFactory extends Factory {
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
 										//Add "New Hire" status for employees going through the onboarding process or newly imported employees.
-										10 => TTi18n::gettext('Active'),
-										12 => TTi18n::gettext('Leave - Illness/Injury'),
-										14 => TTi18n::gettext('Leave - Maternity/Parental'),
-										16 => TTi18n::gettext('Leave - Other'),
-										20 => TTi18n::gettext('Terminated'),
+										10 => ('Active'),
+										12 => ('Leave - Illness/Injury'),
+										14 => ('Leave - Maternity/Parental'),
+										16 => ('Leave - Other'),
+										20 => ('Terminated'),
 									);
 				break;
                             
@@ -83,10 +83,10 @@ class UserFactory extends Factory {
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
 										//Add "New Hire" status for employees going through the onboarding process or newly imported employees.
-										10 => TTi18n::gettext('Mr'),
-										20 => TTi18n::gettext('Mrs'),
-										30 => TTi18n::gettext('Miss'),
-										40 => TTi18n::gettext('Hon'),
+										10 => ('Mr'),
+										20 => ('Mrs'),
+										30 => ('Miss'),
+										40 => ('Hon'),
 										
 									);
 				break;
@@ -94,82 +94,82 @@ class UserFactory extends Factory {
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
 										//Add "New Hire" status for employees going through the onboarding process or newly imported employees.
-										10 => TTi18n::gettext('Buddhist'),
-										20 => TTi18n::gettext('Christian'),
-										30 => TTi18n::gettext('Tamil'),
-										40 => TTi18n::gettext('Muslim'),
+										10 => ('Buddhist'),
+										20 => ('Christian'),
+										30 => ('Tamil'),
+										40 => ('Muslim'),
 										
 									);
 				break;
 			case 'sex':
 				$retval = array(
-										5 => TTi18n::gettext('Unspecified'),
-										10 => TTi18n::gettext('Male'),
-										20 => TTi18n::gettext('Female'),
+										5 => ('Unspecified'),
+										10 => ('Male'),
+										20 => ('Female'),
 									);
 				break;
                         case 'marital':
 				$retval = array(
-										5 => TTi18n::gettext('Unspecified'),
-										10 => TTi18n::gettext('Singale'),
-										20 => TTi18n::gettext('Marrid'),
+										5 => ('Unspecified'),
+										10 => ('Singale'),
+										20 => ('Marrid'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1005-company' => TTi18n::gettext('Company'),
-										'-1010-employee_number' => TTi18n::gettext('Employee #'),
-										'-1020-status' => TTi18n::gettext('Status'),
-										'-1030-user_name' => TTi18n::gettext('User Name'),
-										'-1040-phone_id' => TTi18n::gettext('Quick Punch ID'),
+										'-1005-company' => ('Company'),
+										'-1010-employee_number' => ('Employee #'),
+										'-1020-status' => ('Status'),
+										'-1030-user_name' => ('User Name'),
+										'-1040-phone_id' => ('Quick Punch ID'),
 
-										'-1060-first_name' => TTi18n::gettext('First Name'),
-										'-1070-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1080-last_name' => TTi18n::gettext('Last Name'),
+										'-1060-first_name' => ('First Name'),
+										'-1070-middle_name' => ('Middle Name'),
+										'-1080-last_name' => ('Last Name'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1091-job_skills' => TTi18n::gettext('JobSkills'),
-										'-1099-user_group' => TTi18n::gettext('Group'), //Update ImportUser class if sort order is changed for this.
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
-										'-1110-currency' => TTi18n::gettext('Currency'),
+										'-1090-title' => ('Title'),
+                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1091-job_skills' => ('JobSkills'),
+										'-1099-user_group' => ('Group'), //Update ImportUser class if sort order is changed for this.
+										'-1100-default_branch' => ('Branch'),
+										'-1110-default_department' => ('Department'),
+										'-1110-currency' => ('Currency'),
 
-										'-1112-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1112-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
-										'-1112-policy_group' => TTi18n::gettext('Policy Group'),
+										'-1112-permission_control' => ('Permission Group'),
+										'-1112-pay_period_schedule' => ('Pay Period Schedule'),
+										'-1112-policy_group' => ('Policy Group'),
 
-										'-1120-sex' => TTi18n::gettext('Sex'),
+										'-1120-sex' => ('Sex'),
 
-										'-1130-address1' => TTi18n::gettext('Address 1'),
-										'-1140-address2' => TTi18n::gettext('Address 2'),
+										'-1130-address1' => ('Address 1'),
+										'-1140-address2' => ('Address 2'),
 										
-    	/* ARSP ADD CODE---> */             '-1145-nic' => TTi18n::gettext('Nic'),
+    	/* ARSP ADD CODE---> */             '-1145-nic' => ('Nic'),
 
-										'-1150-city' => TTi18n::gettext('City'),
-										'-1160-province' => TTi18n::gettext('Province/State'),
-										'-1170-country' => TTi18n::gettext('Country'),
-										'-1180-postal_code' => TTi18n::gettext('Postal Code'),
-										'-1190-work_phone' => TTi18n::gettext('Work Phone'),
-										'-1191-work_phone_ext' => TTi18n::gettext('Work Phone Ext'),
-										'-1200-home_phone' => TTi18n::gettext('Home Phone'),
-										'-1210-mobile_phone' => TTi18n::gettext('Mobile Phone'),
-										'-1220-fax_phone' => TTi18n::gettext('Fax Phone'),
-										'-1230-home_email' => TTi18n::gettext('Home Email'),
-										'-1240-work_email' => TTi18n::gettext('Work Email'),
-										'-1250-birth_date' => TTi18n::gettext('Birth Date'),
-										'-1260-hire_date' => TTi18n::gettext('Appointment Date'),
-										'-1270-termination_date' => TTi18n::gettext('Termination Date'),
-										'-1280-sin' => TTi18n::gettext('SIN/SSN'),
-										'-1290-note' => TTi18n::gettext('Note'),
-                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1291-hire_note' => TTi18n::gettext('HireNote'),
-                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1292-termination_note' => TTi18n::gettext('TerminationNote'),                                    
+										'-1150-city' => ('City'),
+										'-1160-province' => ('Province/State'),
+										'-1170-country' => ('Country'),
+										'-1180-postal_code' => ('Postal Code'),
+										'-1190-work_phone' => ('Work Phone'),
+										'-1191-work_phone_ext' => ('Work Phone Ext'),
+										'-1200-home_phone' => ('Home Phone'),
+										'-1210-mobile_phone' => ('Mobile Phone'),
+										'-1220-fax_phone' => ('Fax Phone'),
+										'-1230-home_email' => ('Home Email'),
+										'-1240-work_email' => ('Work Email'),
+										'-1250-birth_date' => ('Birth Date'),
+										'-1260-hire_date' => ('Appointment Date'),
+										'-1270-termination_date' => ('Termination Date'),
+										'-1280-sin' => ('SIN/SSN'),
+										'-1290-note' => ('Note'),
+                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1291-hire_note' => ('HireNote'),
+                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1292-termination_note' => ('TerminationNote'),                                    
 										
-										'-1300-tag' => TTi18n::gettext('Tags'),
-										'-1400-hierarchy_control_display' => TTi18n::gettext('Hierarchy'),
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-1300-tag' => ('Tags'),
+										'-1400-hierarchy_control_display' => ('Hierarchy'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -206,18 +206,18 @@ class UserFactory extends Factory {
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
 										//Add "New Hire" status for employees going through the onboarding process or newly imported employees.
-										1 => TTi18n::gettext('1'),
-										2 => TTi18n::gettext('2'),
-										3 => TTi18n::gettext('3'),
-										4 => TTi18n::gettext('4'),
-										5 => TTi18n::gettext('5'),
-										6 => TTi18n::gettext('6'),
-										7 => TTi18n::gettext('7'),
-										8 => TTi18n::gettext('8'),
-										9 => TTi18n::gettext('9'),
-										10 => TTi18n::gettext('10'),
-										11 => TTi18n::gettext('11'),
-										12 => TTi18n::gettext('12'),
+										1 => ('1'),
+										2 => ('2'),
+										3 => ('3'),
+										4 => ('4'),
+										5 => ('5'),
+										6 => ('6'),
+										7 => ('7'),
+										8 => ('8'),
+										9 => ('9'),
+										10 => ('10'),
+										11 => ('11'),
+										12 => ('12'),
                                     
 									);
 				break;  
@@ -229,15 +229,15 @@ class UserFactory extends Factory {
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
 										//Add "New Hire" status for employees going through the onboarding process or newly imported employees.
-                                        0 => TTi18n::gettext('--'),
-										3 => TTi18n::gettext('3'),
-										6 => TTi18n::gettext('6'),
-										9 => TTi18n::gettext('9'),
-										12 => TTi18n::gettext('12'),
-										18 => TTi18n::gettext('18'),
-										24 => TTi18n::gettext('24'),
-										30 => TTi18n::gettext('30'),
-										36 => TTi18n::gettext('36'),
+                                        0 => ('--'),
+										3 => ('3'),
+										6 => ('6'),
+										9 => ('9'),
+										12 => ('12'),
+										18 => ('18'),
+										24 => ('24'),
+										30 => ('30'),
+										36 => ('36'),
                                     
 									);
 				break; 				
@@ -1427,7 +1427,7 @@ class UserFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -1455,7 +1455,7 @@ class UserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -1490,7 +1490,7 @@ class UserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'month',
 											$month,
-											TTi18n::gettext('Incorrect Month'),
+											('Incorrect Month'),
 											$this->getOptions('month')) ) {
 
 			$this->data['month'] = $month;
@@ -1516,7 +1516,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'group',
 														$uglf->getByID($id),
-														TTi18n::gettext('Group is invalid')
+														('Group is invalid')
 													) ) {
 
 			$this->data['group_id'] = $id;
@@ -1576,12 +1576,12 @@ class UserFactory extends Factory {
 				AND
 				$this->Validator->isResultSetWithRows(		'permission_control_id',
 															$pclf->getByIDAndLevel($id, $current_user_permission_level),
-															TTi18n::gettext('Permission Group is invalid')
+															('Permission Group is invalid')
 															)
 				AND
 				$this->Validator->isTrue(		'permission_control_id',
 												$modify_permissions,
-												TTi18n::gettext('Insufficient access to modify permissions for this employee')
+												('Insufficient access to modify permissions for this employee')
 												)
 				) {
 			$this->tmp_data['permission_control_id'] = $id;
@@ -1615,7 +1615,7 @@ class UserFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule_id',
 															$ppslf->getByID($id),
-															TTi18n::gettext('Pay Period schedule is invalid')
+															('Pay Period schedule is invalid')
 															) ) {
 			$this->tmp_data['pay_period_schedule_id'] = $id;
 
@@ -1651,7 +1651,7 @@ class UserFactory extends Factory {
 					$id == 0
 					OR $this->Validator->isResultSetWithRows(	'policy_group_id',
 																$pglf->getByID($id),
-																TTi18n::gettext('Policy Group is invalid')
+																('Policy Group is invalid')
 																)
 				)
 				) {
@@ -1713,7 +1713,7 @@ class UserFactory extends Factory {
 						OR
 						$this->Validator->isResultSetWithRows(		'hierarchy_control_id',
 																	$hclf->getByID($hierarchy_control_id),
-																	TTi18n::gettext('Hierarchy is invalid')
+																	('Hierarchy is invalid')
 																	) ) {
 					$this->tmp_data['hierarchy_control'][$hierarchy_object_type_id] = $hierarchy_control_id;
 				} else {
@@ -1758,18 +1758,18 @@ class UserFactory extends Factory {
 
 		if 	(	$this->Validator->isRegEx(		'user_name',
 												$user_name,
-												TTi18n::gettext('Incorrect characters in user name'),
+												('Incorrect characters in user name'),
 												$this->username_validator_regex)
 					AND
 						$this->Validator->isLength(		'user_name',
 														$user_name,
-														TTi18n::gettext('Incorrect user name length'),
+														('Incorrect user name length'),
 														3,
 														250)
 					AND
 						$this->Validator->isTrue(		'user_name',
 														$this->isUniqueUserName($user_name),
-														TTi18n::gettext('User name is already taken')
+														('User name is already taken')
 														)
 			) {
 
@@ -1827,7 +1827,7 @@ class UserFactory extends Factory {
 						return TRUE;
 					} elseif ( $ldap_authentication_type_id == 1 ) {
 						Debug::Text('LDAP authentication failed, falling back to local password...', __FILE__, __LINE__, __METHOD__,10);
-						TTLog::addEntry( $this->getId(), 510, TTi18n::getText('LDAP Authentication failed, falling back to local password for username').': '. $this->getUserName() . TTi18n::getText('IP Address') .': '.$_SERVER['REMOTE_ADDR'], $this->getId(), $this->getTable() );
+						TTLog::addEntry( $this->getId(), 510, ('LDAP Authentication failed, falling back to local password for username').': '. $this->getUserName() . ('IP Address') .': '.$_SERVER['REMOTE_ADDR'], $this->getId(), $this->getTable() );
 					}
 					unset($ldap);
 				} else {
@@ -1852,7 +1852,7 @@ class UserFactory extends Factory {
 		} elseif ( isset($config_vars['other']['override_password_prefix']) AND $config_vars['other']['override_password_prefix'] != '' ) {
 			//Check override password
 			if ( $password == $this->encryptPassword( trim( trim( strtolower($config_vars['other']['override_password_prefix']) ).substr($this->getUserName(),0,2) ) ) ) {
-				TTLog::addEntry( $this->getId(), 510, TTi18n::getText('Override Password successful from IP Address').': '. $_SERVER['REMOTE_ADDR'], NULL, $this->getTable() );
+				TTLog::addEntry( $this->getId(), 510, ('Override Password successful from IP Address').': '. $_SERVER['REMOTE_ADDR'], NULL, $this->getTable() );
 				return TRUE;
 			}
 		}
@@ -1872,7 +1872,7 @@ class UserFactory extends Factory {
 				AND
 				$this->Validator->isLength(		'password',
 												$password,
-												TTi18n::gettext('Incorrect password length'),
+												('Incorrect password length'),
 												4,
 												64) ) {
 
@@ -1887,21 +1887,21 @@ class UserFactory extends Factory {
 					$update_password = FALSE;
 					$this->Validator->isTrue(		'password',
 													FALSE,
-													TTi18n::gettext('Password is too short') );
+													('Password is too short') );
 				}
 
 				if ( Misc::getPasswordStrength( $password ) <= $c_obj->getPasswordMinimumStrength() ) {
 					$update_password = FALSE;
 					$this->Validator->isTrue(		'password',
 													FALSE,
-													TTi18n::gettext('Password is too weak, add additional numbers or special characters') );
+													('Password is too weak, add additional numbers or special characters') );
 				}
 
 				if ( $this->getPasswordUpdatedDate() != '' AND $this->getPasswordUpdatedDate() >= time()-($c_obj->getPasswordMinimumAge()*86400) ) {
 					$update_password = FALSE;
 					$this->Validator->isTrue(		'password',
 													FALSE,
-													TTi18n::gettext('Password must reach its minimum age before it can be changed again') );
+													('Password must reach its minimum age before it can be changed again') );
 				}
 
 				if ( $this->getId() > 0 ) {
@@ -1911,7 +1911,7 @@ class UserFactory extends Factory {
 						$update_password = FALSE;
 						$this->Validator->isTrue(		'password',
 														FALSE,
-														TTi18n::gettext('Password has already been used in the past, please choose a new one') );
+														('Password has already been used in the past, please choose a new one') );
 					}
 					unset($uilf);
 				}
@@ -1954,7 +1954,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'password_updated_date',
 												$epoch,
-												TTi18n::gettext('Password updated date is invalid')) ) {
+												('Password updated date is invalid')) ) {
 
 			$this->data['password_updated_date'] = $epoch;
 
@@ -1998,18 +1998,18 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isRegEx(		'phone_id',
 													$phone_id,
-													TTi18n::gettext('Quick Punch ID must be digits only'),
+													('Quick Punch ID must be digits only'),
 													$this->phoneid_validator_regex)
 				AND
 					$this->Validator->isLength(		'phone_id',
 													$phone_id,
-													TTi18n::gettext('Incorrect Quick Punch ID length'),
+													('Incorrect Quick Punch ID length'),
 													4,
 													8)
 				AND
 					$this->Validator->isTrue(		'phone_id',
 													$this->isUniquePhoneId($phone_id),
-													TTi18n::gettext('Quick Punch ID is already taken')
+													('Quick Punch ID is already taken')
 													)
 				)
 			) {
@@ -2048,12 +2048,12 @@ class UserFactory extends Factory {
 				OR (
 				$this->Validator->isRegEx(		'phone_password',
 												$phone_password,
-												TTi18n::gettext('Quick Punch password must be digits only'),
+												('Quick Punch password must be digits only'),
 												$this->phonepassword_validator_regex)
 				AND
 					$this->Validator->isLength(		'phone_password',
 													$phone_password,
-													TTi18n::gettext('Quick Punch password must be between 4 and 9 digits'),
+													('Quick Punch password must be between 4 and 9 digits'),
 													4,
 													9) ) ) {
 
@@ -2117,13 +2117,13 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isLength(		'ibutton_id',
 													$id,
-													TTi18n::gettext('Incorrect iButton ID length'),
+													('Incorrect iButton ID length'),
 													14,
 													64)
 				AND
 					$this->Validator->isTrue(		'ibutton_id',
 													$this->isUniqueIButtonId($id),
-													TTi18n::gettext('iButton ID is already taken')
+													('iButton ID is already taken')
 													)
 				)
 			) {
@@ -2153,7 +2153,7 @@ class UserFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'finger_print_1',
 														$value,
-														TTi18n::gettext('Fingerprint 1 is too long'),
+														('Fingerprint 1 is too long'),
 														1,
 														32000)
 			) {
@@ -2180,7 +2180,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'finger_print_1_updated_date',
 												$epoch,
-												TTi18n::gettext('Finger print 1 updated date is invalid')) ) {
+												('Finger print 1 updated date is invalid')) ) {
 
 			$this->data['finger_print_1_updated_date'] = $epoch;
 
@@ -2204,7 +2204,7 @@ class UserFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'finger_print_2',
 														$value,
-														TTi18n::gettext('Fingerprint 2 is too long'),
+														('Fingerprint 2 is too long'),
 														1,
 														32000)
 			) {
@@ -2231,7 +2231,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'finger_print_2_updated_date',
 												$epoch,
-												TTi18n::gettext('Finger print 2 updated date is invalid')) ) {
+												('Finger print 2 updated date is invalid')) ) {
 
 			$this->data['finger_print_2_updated_date'] = $epoch;
 
@@ -2255,7 +2255,7 @@ class UserFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'finger_print_3',
 														$value,
-														TTi18n::gettext('Fingerprint 3 is too long'),
+														('Fingerprint 3 is too long'),
 														1,
 														32000)
 			) {
@@ -2282,7 +2282,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'finger_print_3_updated_date',
 												$epoch,
-												TTi18n::gettext('Finger print 3 updated date is invalid')) ) {
+												('Finger print 3 updated date is invalid')) ) {
 
 			$this->data['finger_print_3_updated_date'] = $epoch;
 
@@ -2307,7 +2307,7 @@ class UserFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'finger_print_4',
 														$value,
-														TTi18n::gettext('Fingerprint 4 is too long'),
+														('Fingerprint 4 is too long'),
 														1,
 														32000)
 			) {
@@ -2334,7 +2334,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'finger_print_4_updated_date',
 												$epoch,
-												TTi18n::gettext('Finger print 4 updated date is invalid')) ) {
+												('Finger print 4 updated date is invalid')) ) {
 
 			$this->data['finger_print_4_updated_date'] = $epoch;
 
@@ -2437,11 +2437,11 @@ class UserFactory extends Factory {
 				OR (
 					$this->Validator->isNumeric(	'employee_number',
 													$value,
-													TTi18n::gettext('Employee number must only be digits'))
+													('Employee number must only be digits'))
 					AND
 					$this->Validator->isTrue(		'employee_number',
 														$this->isUniqueEmployeeNumber($value),
-														TTi18n::gettext('Employee number is already in use, please enter a different one'))
+														('Employee number is already in use, please enter a different one'))
 				)
 												) {
 			if ( $value != '' AND $value >= 0 ) {
@@ -2475,11 +2475,11 @@ class UserFactory extends Factory {
 //				OR (
 //					$this->Validator->isNumeric(	'employee_number',
 //													$value,
-//													TTi18n::gettext('Employee number must only be digits'))
+//													('Employee number must only be digits'))
 //					AND
 //					$this->Validator->isTrue(		'employee_number',
 //														$this->isUniqueEmployeeNumber($value),
-//														TTi18n::gettext('Employee number is already in use, please enter a different one'))
+//														('Employee number is already in use, please enter a different one'))
 //				)
                         $value != '' 
                         
@@ -2524,11 +2524,11 @@ class UserFactory extends Factory {
 				OR (
 					$this->Validator->isNumeric(	'employee_number_only',
 													$value,
-													TTi18n::gettext('Employee number must only be digits'))
+													('Employee number must only be digits'))
 					AND
 					$this->Validator->isTrue(		'employee_number_only',
 														$this->isUniqueEmployeeNumberOnly($value, $default_branch_id),//ARSP NOTE --> I ADDED EXTRA FIELD FOR THUNDER & NEON
-														TTi18n::gettext('Employee number is already in use, please enter a different one'))
+														('Employee number is already in use, please enter a different one'))
 				)
 												) {
 			if ( $value != '' AND $value >= 0 ) {
@@ -2650,11 +2650,11 @@ class UserFactory extends Factory {
 				OR (
 					$this->Validator->isNumeric(	'punch_machine_user_id',
 													$value,
-													TTi18n::gettext('Punch Machine User ID must only be digits'))
+													('Punch Machine User ID must only be digits'))
 					AND
 					$this->Validator->isTrue(		'punch_machine_user_id',
 														$this->isPunchMachineUserID($value),//ARSP NOTE --> I ADDED EXTRA FIELD FOR THUNDER & NEON
-														TTi18n::gettext('Punch Machine User ID is already in use, please enter a different one'))
+														('Punch Machine User ID is already in use, please enter a different one'))
 				)
 												) {
 			if ( $value != '' AND $value >= 0 ) {
@@ -2767,11 +2767,11 @@ class UserFactory extends Factory {
 				(
 				$this->Validator->isNumeric(	'rf_id',
 												$value,
-												TTi18n::gettext('RFID must only be digits'))
+												('RFID must only be digits'))
 				AND
 					$this->Validator->isTrue(		'rf_id',
 													$this->isUniqueRFID($value),
-													TTi18n::gettext('RFID is already in use, please enter a different one'))
+													('RFID is already in use, please enter a different one'))
 				) ) {
 			$this->data['rf_id'] = $value;
 
@@ -2795,7 +2795,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'rf_id_updated_date',
 												$epoch,
-												TTi18n::gettext('RFID updated date is invalid')) ) {
+												('RFID updated date is invalid')) ) {
 
 			$this->data['rf_id_updated_date'] = $epoch;
 
@@ -2821,7 +2821,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'title',
 														$utlf->getByID($id),
-														TTi18n::gettext('Title is invalid')
+														('Title is invalid')
 													) ) {
 
 			$this->data['title_id'] = $id;
@@ -2876,7 +2876,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Invalid Default Branch')
+														('Invalid Default Branch')
 													) ) {
 
 			$this->data['default_branch_id'] = $id;
@@ -2903,7 +2903,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Invalid Default Department')
+														('Invalid Default Department')
 													) ) {
 
 			$this->data['default_department_id'] = $id;
@@ -2939,12 +2939,12 @@ class UserFactory extends Factory {
 
 		if 	( /*	$this->Validator->isRegEx(		'first_name',
 												$first_name,
-												TTi18n::gettext('First name contains invalid characters'),
+												('First name contains invalid characters'),
 												$this->name_validator_regex)
 				AND */
 					$this->Validator->isLength(		'first_name',
 													$first_name,
-													TTi18n::gettext('First name is too short or too long'),
+													('First name is too short or too long'),
 													0,
 													50) ) {
 
@@ -2964,7 +2964,7 @@ class UserFactory extends Factory {
 
 		if 	(	$this->Validator->isRegEx(		'full_name',
 												$full_name,
-												TTi18n::gettext('Full name contains invalid characters'),
+												('Full name contains invalid characters'),
 												$this->name_validator_regex)
 				 ) {
 
@@ -3059,12 +3059,12 @@ class UserFactory extends Factory {
 				(
 				$this->Validator->isRegEx(		'middle_name',
 												$middle_name,
-												TTi18n::gettext('Middle name contains invalid characters'),
+												('Middle name contains invalid characters'),
 												$this->name_validator_regex)
 				AND
 					$this->Validator->isLength(		'middle_name',
 													$middle_name,
-													TTi18n::gettext('Middle name is too short or too long'),
+													('Middle name is too short or too long'),
 													1,
 													50)
 				)
@@ -3091,12 +3091,12 @@ class UserFactory extends Factory {
 
 		if 	(/*	$this->Validator->isRegEx(		'last_name',
 												$last_name,
-												TTi18n::gettext('Last name contains invalid characters'),
+												('Last name contains invalid characters'),
 												$this->name_validator_regex)
 				AND */
 					$this->Validator->isLength(		'last_name',
 													$last_name,
-													TTi18n::gettext('Last name is too short or too long'),
+													('Last name is too short or too long'),
 													2,
 													50) ) {
 
@@ -3128,7 +3128,7 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isRegEx(		'calling_name',
 													$calling_name,
-													TTi18n::gettext('Second last name contains invalid characters'),
+													('Second last name contains invalid characters'),
 													$this->name_validator_regex)
 					
 				)
@@ -3163,7 +3163,7 @@ class UserFactory extends Factory {
 		if 	(
 				$this->Validator->inArrayKey(	'religion',
 											$religion,
-											TTi18n::gettext('Invalid religion'),
+											('Invalid religion'),
 											$this->getOptions('religion') ) 
 			) {
 
@@ -3199,7 +3199,7 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isRegEx(		'name_with_initials',
 													$name_with_initials,
-													TTi18n::gettext('Second last name contains invalid characters'),
+													('Second last name contains invalid characters'),
 													$this->name_validator_regex)
 					
 				)
@@ -3252,12 +3252,12 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isRegEx(		'second_last_name',
 													$second_last_name,
-													TTi18n::gettext('Second last name contains invalid characters'),
+													('Second last name contains invalid characters'),
 													$this->name_validator_regex)
 					AND
 						$this->Validator->isLength(		'second_last_name',
 														$second_last_name,
-														TTi18n::gettext('Second last name is too short or too long'),
+														('Second last name is too short or too long'),
 														2,
 														50)
 				)
@@ -3283,7 +3283,7 @@ class UserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'sex',
 											$sex,
-											TTi18n::gettext('Invalid gender'),
+											('Invalid gender'),
 											$this->getOptions('sex') ) ) {
 
 			$this->data['sex_id'] = $sex;
@@ -3312,7 +3312,7 @@ class UserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'user_name_title_id',
 											$title,
-											TTi18n::gettext('Title name invalied'),
+											('Title name invalied'),
 											$this->getOptions('title') ) ) {
 
 			$this->data['user_name_title_id'] = $title;
@@ -3337,7 +3337,7 @@ class UserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'marital',
 											$marital,
-											TTi18n::gettext('Invalid marital status'),
+											('Invalid marital status'),
 											$this->getOptions('marital') ) ) {
 
 			$this->data['marital_id'] = $marital;
@@ -3364,12 +3364,12 @@ class UserFactory extends Factory {
 				(
 				$this->Validator->isRegEx(		'address1',
 												$address1,
-												TTi18n::gettext('Address1 contains invalid characters'),
+												('Address1 contains invalid characters'),
 												$this->address_validator_regex)
 				AND
 					$this->Validator->isLength(		'address1',
 													$address1,
-													TTi18n::gettext('Address1 is too short or too long'),
+													('Address1 is too short or too long'),
 													2,
 													250)
 				)
@@ -3398,12 +3398,12 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isRegEx(		'address2',
 													$address2,
-													TTi18n::gettext('Address2 contains invalid characters'),
+													('Address2 contains invalid characters'),
 													$this->address_validator_regex)
 				AND
 					$this->Validator->isLength(		'address2',
 													$address2,
-													TTi18n::gettext('Address2 is too short or too long'),
+													('Address2 is too short or too long'),
 													2,
 													250) ) ) {
 
@@ -3434,12 +3434,12 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isRegEx(		'address3',
 													$address2,
-													TTi18n::gettext('Address2 contains invalid characters'),
+													('Address2 contains invalid characters'),
 													$this->address_validator_regex)
 				AND
 					$this->Validator->isLength(		'address3',
 													$address2,
-													TTi18n::gettext('Address2 is too short or too long'),
+													('Address2 is too short or too long'),
 													2,
 													250) ) ) {
 
@@ -3469,12 +3469,12 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isRegEx(		'nic',
 													$nic,
-													TTi18n::gettext('NIC contains invalid characters'),
+													('NIC contains invalid characters'),
 													$this->nic_validator)
 //				AND
 //					$this->Validator->isLength(		'address2',
 //													$address2,
-//													TTi18n::gettext('Address2 is too short or too long'),
+//													('Address2 is too short or too long'),
 //													2,
 //													250)
                                         ) ) {
@@ -3505,12 +3505,12 @@ class UserFactory extends Factory {
 				(
 				$this->Validator->isRegEx(		'city',
 												$city,
-												TTi18n::gettext('City contains invalid characters'),
+												('City contains invalid characters'),
 												$this->city_validator_regex)
 				AND
 					$this->Validator->isLength(		'city',
 													$city,
-													TTi18n::gettext('City name is too short or too long'),
+													('City name is too short or too long'),
 													2,
 													250)
 				)
@@ -3538,7 +3538,7 @@ class UserFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(		'country',
 												$country,
-												TTi18n::gettext('Invalid Country'),
+												('Invalid Country'),
 												$cf->getOptions('country') ) ) {
 
 			$this->data['country'] = $country;
@@ -3575,7 +3575,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'province',
 												$province,
-												TTi18n::gettext('Invalid Province/State'),
+												('Invalid Province/State'),
 												$options ) ) {
 
 			$this->data['province'] = $province;
@@ -3602,12 +3602,12 @@ class UserFactory extends Factory {
 				(
 				$this->Validator->isPostalCode(		'postal_code',
 													$postal_code,
-													TTi18n::gettext('Postal/ZIP Code contains invalid characters, invalid format, or does not match Province/State'),
+													('Postal/ZIP Code contains invalid characters, invalid format, or does not match Province/State'),
 													$this->getCountry(), $this->getProvince() )
 				AND
 					$this->Validator->isLength(		'postal_code',
 													$postal_code,
-													TTi18n::gettext('Postal/ZIP Code is too short or too long'),
+													('Postal/ZIP Code is too short or too long'),
 													1,
 													10)
 				)
@@ -3635,7 +3635,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isFloat(	'longitude',
 											$value,
-											TTi18n::gettext('Longitude is invalid')
+											('Longitude is invalid')
 											) ) {
 			$this->data['longitude'] = $value;
 
@@ -3659,7 +3659,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isFloat(	'latitude',
 											$value,
-											TTi18n::gettext('Latitude is invalid')
+											('Latitude is invalid')
 											) ) {
 			$this->data['latitude'] = $value;
 
@@ -3684,7 +3684,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isPhoneNumber(		'work_phone',
 														$work_phone,
-														TTi18n::gettext('Work phone number is invalid')) ) {
+														('Work phone number is invalid')) ) {
 
 			$this->data['work_phone'] = $work_phone;
 
@@ -3707,7 +3707,7 @@ class UserFactory extends Factory {
 		if ( 	$work_phone_ext == ''
 				OR $this->Validator->isLength(		'work_phone_ext',
 													$work_phone_ext,
-													TTi18n::gettext('Work phone number extension is too short or too long'),
+													('Work phone number extension is too short or too long'),
 													2,
 													10) ) {
 
@@ -3734,7 +3734,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isPhoneNumber(		'home_phone',
 														$home_phone,
-														TTi18n::gettext('Home phone number is invalid')) ) {
+														('Home phone number is invalid')) ) {
 
 			$this->data['home_phone'] = $home_phone;
 
@@ -3757,7 +3757,7 @@ class UserFactory extends Factory {
 		if 	(	$mobile_phone == ''
 					OR $this->Validator->isPhoneNumber(	'mobile_phone',
 															$mobile_phone,
-															TTi18n::gettext('Mobile phone number is invalid')) ) {
+															('Mobile phone number is invalid')) ) {
 
 			$this->data['mobile_phone'] = $mobile_phone;
 
@@ -3790,7 +3790,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isPhoneNumber(		'immediate_contact_no',
 														$phone,
-														TTi18n::gettext('Immediate contact phone number is invalid')) ) {
+														('Immediate contact phone number is invalid')) ) {
 
 			$this->data['immediate_contact_no'] = $phone;
 
@@ -3823,12 +3823,12 @@ class UserFactory extends Factory {
 				(
 				$this->Validator->isRegEx(		'immediate_contact_person',
 												$name,
-												TTi18n::gettext('Immediate contact person contains invalid characters'),
+												('Immediate contact person contains invalid characters'),
 												$this->name_validator_regex)
 				AND
 					$this->Validator->isLength(		'immediate_contact_person',
 													$name,
-													TTi18n::gettext('Immediate contact person is too short or too long'),
+													('Immediate contact person is too short or too long'),
 													1,
 													50)
 				)
@@ -3867,7 +3867,7 @@ class UserFactory extends Factory {
 				(
 					$this->Validator->isLength(		'bond_period',
 													$name,
-													TTi18n::gettext('Bond Period is too short or too long'),
+													('Bond Period is too short or too long'),
 													1,
 													50)
 				)
@@ -3895,7 +3895,7 @@ class UserFactory extends Factory {
 		if 	(	$fax_phone == ''
 					OR $this->Validator->isPhoneNumber(	'fax_phone',
 															$fax_phone,
-															TTi18n::gettext('Fax phone number is invalid')) ) {
+															('Fax phone number is invalid')) ) {
 
 			$this->data['fax_phone'] = $fax_phone;
 
@@ -3925,7 +3925,7 @@ class UserFactory extends Factory {
 		if 	(	$personal_email == ''
 					OR $this->Validator->isEmailAdvanced(	'personal_email',
 													$personal_email,
-													TTi18n::gettext('Personal Email address is invalid'),
+													('Personal Email address is invalid'),
 													$error_threshold ) ) {
 
 			$this->data['personal_email'] = $personal_email;
@@ -3954,7 +3954,7 @@ class UserFactory extends Factory {
 		if 	(	$home_email == ''
 					OR $this->Validator->isEmailAdvanced(	'home_email',
 													$home_email,
-													TTi18n::gettext('Home Email address is invalid'),
+													('Home Email address is invalid'),
 													$error_threshold ) ) {
 
 			$this->data['home_email'] = $home_email;
@@ -3982,7 +3982,7 @@ class UserFactory extends Factory {
 		if 	(	$work_email == ''
 					OR	$this->Validator->isEmailAdvanced(	'work_email',
 													$work_email,
-													TTi18n::gettext('Office email address is invalid'),
+													('Office email address is invalid'),
 													$error_threshold) ) {
 
 			$this->data['work_email'] = $work_email;
@@ -4035,7 +4035,7 @@ class UserFactory extends Factory {
 		if 	(	( $epoch !== FALSE AND $epoch == '' )
 				OR $this->Validator->isDate(	'birth_date',
 												$epoch,
-												TTi18n::gettext('Birth date is invalid, try specifying the year with four digits.')) ) {
+												('Birth date is invalid, try specifying the year with four digits.')) ) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['birth_date'] = ( $epoch != 0 AND $epoch != '' ) ? TTDate::getMiddleDayEpoch( $epoch ) : '' ; //Allow blank birthdate.
@@ -4059,7 +4059,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'hire_date',
 												$epoch,
-												TTi18n::gettext('Appointment Date is invalid')) ) {
+												('Appointment Date is invalid')) ) {
 
 			//Use the beginning of the day epoch, so accrual policies that apply on the hired date still work.
 			$this->data['hire_date'] = TTDate::getBeginDayEpoch( $epoch );
@@ -4082,7 +4082,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'termination_date',
 												$epoch,
-												TTi18n::gettext('Termination date is invalid')) ) {
+												('Termination date is invalid')) ) {
 
 			if ( $epoch == '' ) {
 				$epoch = NULL; //Force to NULL if no termination date is set, this prevents "0" from being entered and causing problems with "is NULL" SQL queries.
@@ -4113,7 +4113,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'confirmed_date',
 												$epoch,
-												TTi18n::gettext('Confirmed date is invalid')) ) {
+												('Confirmed date is invalid')) ) {
 
 			if ( $epoch == '' ) {
 				$epoch = NULL; //Force to NULL if no termination date is set, this prevents "0" from being entered and causing problems with "is NULL" SQL queries.
@@ -4146,7 +4146,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'resign_date',
 												$epoch,
-												TTi18n::gettext('Resign date is invalid')) ) {
+												('Resign date is invalid')) ) {
 
 			if ( $epoch == '' ) {
 				$epoch = NULL; //Force to NULL if no termination date is set, this prevents "0" from being entered and causing problems with "is NULL" SQL queries.
@@ -4175,7 +4175,7 @@ class UserFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'currency_id',
 														$culf->getByID($id),
-														TTi18n::gettext('Invalid currency')
+														('Invalid currency')
 													) ) {
 
 			$this->data['currency_id'] = $id;
@@ -4225,7 +4225,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'sin',
 												$sin,
-												TTi18n::gettext('SIN is invalid'),
+												('SIN is invalid'),
 												6,
 												20)
 				) {
@@ -4252,7 +4252,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id1',
 											$value,
-											TTi18n::gettext('Other ID 1 is invalid'),
+											('Other ID 1 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id1'] = $value;
@@ -4277,7 +4277,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id2',
 											$value,
-											TTi18n::gettext('Other ID 2 is invalid'),
+											('Other ID 2 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id2'] = $value;
@@ -4302,7 +4302,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id3',
 											$value,
-											TTi18n::gettext('Other ID 3 is invalid'),
+											('Other ID 3 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id3'] = $value;
@@ -4327,7 +4327,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id4',
 											$value,
-											TTi18n::gettext('Other ID 4 is invalid'),
+											('Other ID 4 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id4'] = $value;
@@ -4352,7 +4352,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'other_id5',
 											$value,
-											TTi18n::gettext('Other ID 5 is invalid'),
+											('Other ID 5 is invalid'),
 											1,255) ) {
 
 			$this->data['other_id5'] = $value;
@@ -4377,7 +4377,7 @@ class UserFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'note',
 														$value,
-														TTi18n::gettext('Note is too long'),
+														('Note is too long'),
 														1,
 														2048)
 			) {
@@ -4411,7 +4411,7 @@ class UserFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'hire_note',
 														$value,
-														TTi18n::gettext('Hire Note is too long'),
+														('Hire Note is too long'),
 														1,
 														2048)
 			) {
@@ -4442,7 +4442,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isPhoneNumber(		'office_mobile',
 														$work_phone,
-														TTi18n::gettext('Office mobile number is invalid')) ) {
+														('Office mobile number is invalid')) ) {
 
 			$this->data['office_mobile'] = $work_phone;
 
@@ -4472,7 +4472,7 @@ class UserFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'termination_note',
 														$value,
-														TTi18n::gettext('Termination Note is too long'),
+														('Termination Note is too long'),
 														1,
 														2048)
 			) {
@@ -4524,19 +4524,19 @@ class UserFactory extends Factory {
 				$protocol = 'http';
 			}
 
-			$subject = TTi18n::gettext('Password Reset requested at '). TTDate::getDate('DATE+TIME', time() ) .' '. TTi18n::gettext('from') .' '. $_SERVER['REMOTE_ADDR'];
+			$subject = ('Password Reset requested at '). TTDate::getDate('DATE+TIME', time() ) .' '. ('from') .' '. $_SERVER['REMOTE_ADDR'];
 
 			$body = '<html><body>';
-			$body .= TTi18n::gettext('If you did not request your password to be reset, you may ignore this email.');
+			$body .= ('If you did not request your password to be reset, you may ignore this email.');
 			$body .= '<br><br>';
-			$body .= TTi18n::gettext('If you did request the password for') .' '. $this->getUserName() .' '. TTi18n::gettext('to be reset,');
-			$body .= TTi18n::gettext('please') .' <a href="'.$protocol .'://'.Misc::getHostName().Environment::getBaseURL() .'ForgotPassword.php?action:password_reset=null&key='. $this->getPasswordResetKey().'">'. TTi18n::gettext('click here') .'</a>';
+			$body .= ('If you did request the password for') .' '. $this->getUserName() .' '. ('to be reset,');
+			$body .= ('please') .' <a href="'.$protocol .'://'.Misc::getHostName().Environment::getBaseURL() .'ForgotPassword.php?action:password_reset=null&key='. $this->getPasswordResetKey().'">'. ('click here') .'</a>';
 			$body .= '</body></html>';
 
-			TTLog::addEntry( $this->getId(), 500, TTi18n::getText('Employee Password Reset By').': '. $_SERVER['REMOTE_ADDR'] .' '. TTi18n::getText('Key').': '. $this->getPasswordResetKey(), NULL, $this->getTable() );
+			TTLog::addEntry( $this->getId(), 500, ('Employee Password Reset By').': '. $_SERVER['REMOTE_ADDR'] .' '. ('Key').': '. $this->getPasswordResetKey(), NULL, $this->getTable() );
 
 			$headers = array(
-								'From'    => '"'. APPLICATION_NAME .' - '. TTi18n::gettext('Password Reset') .'"<DoNotReply@'. Misc::getHostName( FALSE ) .'>',
+								'From'    => '"'. APPLICATION_NAME .' - '. ('Password Reset') .'"<DoNotReply@'. Misc::getHostName( FALSE ) .'>',
 								'Subject' => $subject,
 								'Cc'	  => $secondary_email,
 							 );
@@ -4570,7 +4570,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'password_reset_key',
 											$value,
-											TTi18n::gettext('Password reset key is invalid'),
+											('Password reset key is invalid'),
 											1,255) ) {
 
 			$this->data['password_reset_key'] = $value;
@@ -4595,7 +4595,7 @@ class UserFactory extends Factory {
 				OR
 				$this->Validator->isDate(		'password_reset_date',
 												$epoch,
-												TTi18n::gettext('Password reset date is invalid')) ) {
+												('Password reset date is invalid')) ) {
 
 			$this->data['password_reset_date'] = $epoch;
 
@@ -4650,7 +4650,7 @@ class UserFactory extends Factory {
 		if ( $this->getUserName() == '' ) {
 			$this->Validator->isTrue(		'user_name',
 											FALSE,
-											TTi18n::gettext('User name not specified'));
+											('User name not specified'));
 		}
 
 		//Re-validate the province just in case the country was set AFTER the province.
@@ -4659,13 +4659,13 @@ class UserFactory extends Factory {
 		if ( $this->getCompany() == FALSE ) {
 			$this->Validator->isTrue(		'company',
 											FALSE,
-											TTi18n::gettext('Company is invalid'));
+											('Company is invalid'));
 		}
 
 		if ( $this->getCurrency() == FALSE ) {
 			$this->Validator->isTrue(		'currency_id',
 											FALSE,
-											TTi18n::gettext('Invalid currency'));
+											('Invalid currency'));
 		}
 
 		//Need to require password on new employees as the database column is NOT NULL.
@@ -4673,13 +4673,13 @@ class UserFactory extends Factory {
 		if ( $this->validate_only == FALSE AND $this->isNew() == TRUE AND ( $this->getPassword() == FALSE OR $this->getPassword() == '' ) ) {
 			$this->Validator->isTrue(		'password',
 											FALSE,
-											TTi18n::gettext('Please specify a password'));
+											('Please specify a password'));
 		}
 
 		if ( $this->getEmployeeNumber() == FALSE AND $this->getStatus() == 10 ) {
 			$this->Validator->isTrue(		'employee_number',
 											FALSE,
-											TTi18n::gettext('Employee number must be specified for ACTIVE employees') );
+											('Employee number must be specified for ACTIVE employees') );
 		}
 																																												if ( $this->isNew() == TRUE ) { $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); } }
 		return TRUE;
@@ -4697,7 +4697,7 @@ class UserFactory extends Factory {
 		if ( $this->getUserName() == '' ) {
 			$this->Validator->isTrue(		'user_name',
 											FALSE,
-											TTi18n::gettext('User name not specified'));
+											('User name not specified'));
 		}
 
 		//Re-validate the province just in case the country was set AFTER the province.
@@ -4706,13 +4706,13 @@ class UserFactory extends Factory {
 		if ( $this->getCompany() == FALSE ) {
 			$this->Validator->isTrue(		'company',
 											FALSE,
-											TTi18n::gettext('Company is invalid'));
+											('Company is invalid'));
 		}
 
 		if ( $this->getCurrency() == FALSE ) {
 			$this->Validator->isTrue(		'currency_id',
 											FALSE,
-											TTi18n::gettext('Invalid currency'));
+											('Invalid currency'));
 		}
 
 		//Need to require password on new employees as the database column is NOT NULL.
@@ -4720,19 +4720,19 @@ class UserFactory extends Factory {
 		if ( $this->validate_only == FALSE AND $this->isNew() == TRUE AND ( $this->getPassword() == FALSE OR $this->getPassword() == '' ) ) {
 			$this->Validator->isTrue(		'password',
 											FALSE,
-											TTi18n::gettext('Please specify a password'));
+											('Please specify a password'));
 		}
 
 		if ( $this->getEmployeeNumberOnly() == FALSE AND $this->getStatus() == 10 ) {
 			$this->Validator->isTrue(		'employee_number_only',
 											FALSE,
-											TTi18n::gettext('Employee number must be specified for ACTIVE employees') );
+											('Employee number must be specified for ACTIVE employees') );
 		}
                 
                 if ( $this->getDefaultBranch() == 0 AND $this->getStatus() == 10 ) {
 			$this->Validator->isTrue(		'default_branch',
 											FALSE,
-											TTi18n::gettext('Default Branch must be specified for ACTIVE employees') );
+											('Default Branch must be specified for ACTIVE employees') );
 		}                                
 																																												if ( $this->isNew() == TRUE ) { $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); } }
 		return TRUE;
@@ -5253,7 +5253,7 @@ class UserFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee').': '. $this->getFullName( FALSE, TRUE ) , NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee').': '. $this->getFullName( FALSE, TRUE ) , NULL, $this->getTable(), $this );
 	}
 }
 ?>

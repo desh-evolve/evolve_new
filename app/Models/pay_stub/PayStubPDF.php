@@ -266,9 +266,9 @@ class PayStubPDF {
 		$param["font"] = 'Helvetica-Bold';
 
 
-		$text = TTi18n::gettext('Start Date:').' '. $this->pay_period['start_date']."\n";
-		$text .= TTi18n::gettext('End Date:').' '. $this->pay_period['start_date']."\n";
-		$text .= TTi18n::gettext('Payment Date:').' '. $this->pay_period['transaction_date']."\n";
+		$text = ('Start Date:').' '. $this->pay_period['start_date']."\n";
+		$text .= ('End Date:').' '. $this->pay_period['start_date']."\n";
+		$text .= ('Payment Date:').' '. $this->pay_period['transaction_date']."\n";
 
 		$this->pdf->draw_paragraph(
 									$this->getPageTop(),

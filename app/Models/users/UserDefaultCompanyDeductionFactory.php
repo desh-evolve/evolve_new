@@ -26,7 +26,7 @@ class UserDefaultCompanyDeductionFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'user_default',
 														$udlf->getByID($id),
-														TTi18n::gettext('Employee Default settings is invalid')
+														('Employee Default settings is invalid')
 													) ) {
 
 			$this->data['user_default_id'] = $id;
@@ -53,7 +53,7 @@ class UserDefaultCompanyDeductionFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'company_deduction',
 														$cdlf->getByID($id),
-														TTi18n::gettext('Deduction is invalid')
+														('Deduction is invalid')
 													) ) {
 
 			$this->data['company_deduction_id'] = $id;

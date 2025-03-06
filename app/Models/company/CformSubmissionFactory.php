@@ -40,7 +40,7 @@ class CformSubmissionFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -66,7 +66,7 @@ class CformSubmissionFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'date_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect date'))
+												('Incorrect date'))
 			) {
 
 			if 	(	$epoch > 0 ) {
@@ -76,7 +76,7 @@ class CformSubmissionFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'date_stamp',
 												FALSE,
-												TTi18n::gettext('Incorrect date'));
+												('Incorrect date'));
 			}
 
 
@@ -97,7 +97,7 @@ class CformSubmissionFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(	'active_users',
 												$value,
-												TTi18n::gettext('Incorrect value')) ) {
+												('Incorrect value')) ) {
 
 			$this->data['active_users'] = $value;
 
@@ -119,7 +119,7 @@ class CformSubmissionFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(	'inactive_users',
 												$value,
-												TTi18n::gettext('Incorrect value')) ) {
+												('Incorrect value')) ) {
 
 			$this->data['inactive_users'] = $value;
 
@@ -141,7 +141,7 @@ class CformSubmissionFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(	'deleted_users',
 												$value,
-												TTi18n::gettext('Incorrect value')) ) {
+												('Incorrect value')) ) {
 
 			$this->data['deleted_users'] = $value;
 

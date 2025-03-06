@@ -21,7 +21,7 @@ class PolicyGroupRoundIntervalPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
-															TTi18n::gettext('Policy Group is invalid')
+															('Policy Group is invalid')
 															) ) {
 			$this->data['policy_group_id'] = $id;
 
@@ -45,7 +45,7 @@ class PolicyGroupRoundIntervalPolicyFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'round_inteval_policy',
 													$riplf->getByID($id),
-													TTi18n::gettext('Selected Interval Rounding Policy is invalid')
+													('Selected Interval Rounding Policy is invalid')
 															)
 			) {
 

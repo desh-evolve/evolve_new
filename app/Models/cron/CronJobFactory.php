@@ -33,8 +33,8 @@ class CronJobFactory extends Factory {
 				break;
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('READY'),
-										20 => TTi18n::gettext('RUNNING'),
+										10 => ('READY'),
+										20 => ('RUNNING'),
 									);
 				break;
 
@@ -60,7 +60,7 @@ class CronJobFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -83,7 +83,7 @@ class CronJobFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											1,250)
 						) {
 
@@ -127,7 +127,7 @@ class CronJobFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'minute',
 											$value,
-											TTi18n::gettext('Minute is invalid'),
+											('Minute is invalid'),
 											1,250)
 						) {
 
@@ -151,7 +151,7 @@ class CronJobFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'hour',
 											$value,
-											TTi18n::gettext('Hour is invalid'),
+											('Hour is invalid'),
 											1,250)
 						) {
 
@@ -175,7 +175,7 @@ class CronJobFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'day_of_month',
 											$value,
-											TTi18n::gettext('Day of Month is invalid'),
+											('Day of Month is invalid'),
 											1,250)
 						) {
 
@@ -199,7 +199,7 @@ class CronJobFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'month',
 											$value,
-											TTi18n::gettext('Month is invalid'),
+											('Month is invalid'),
 											1,250)
 						) {
 
@@ -223,7 +223,7 @@ class CronJobFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'day_of_week',
 											$value,
-											TTi18n::gettext('Day of Week is invalid'),
+											('Day of Week is invalid'),
 											1,250)
 						) {
 
@@ -247,7 +247,7 @@ class CronJobFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'command',
 											$value,
-											TTi18n::gettext('Command is invalid'),
+											('Command is invalid'),
 											1,250)
 						) {
 
@@ -275,7 +275,7 @@ class CronJobFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_run',
 												$epoch,
-												TTi18n::gettext('Incorrect last run'))
+												('Incorrect last run'))
 			) {
 
 			$this->data['last_run_date'] = $epoch;
@@ -376,7 +376,7 @@ class CronJobFactory extends Factory {
 				exec($command, $output, $retcode);
 				Debug::Arr($output, 'Time: '. (microtime(TRUE)-$start_time) .'s - Command RetCode: '. $retcode .' Output: ', __FILE__, __LINE__, __METHOD__, 10);
 
-				TTLog::addEntry( $this->getId(), 500,  TTi18n::getText('Executing Cron Job').': '. $this->getID() .' '.  TTi18n::getText('Command').': '. $command .' '.  TTi18n::getText('Return Code').': '. $retcode, NULL, $this->getTable() );
+				TTLog::addEntry( $this->getId(), 500,  ('Executing Cron Job').': '. $this->getID() .' '.  ('Command').': '. $command .' '.  ('Return Code').': '. $retcode, NULL, $this->getTable() );
 			} else {
 				Debug::text('WARNING: File does not exist, skipping: '. $script , __FILE__, __LINE__, __METHOD__, 10);
 			}
@@ -432,7 +432,7 @@ class CronJobFactory extends Factory {
 
 	function addLog( $log_action ) {
 		if ( $this->getExecuteFlag() == FALSE ) {
-			return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Cron Job'), NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getId(), $log_action,  ('Cron Job'), NULL, $this->getTable() );
 		}
 
 		return TRUE;

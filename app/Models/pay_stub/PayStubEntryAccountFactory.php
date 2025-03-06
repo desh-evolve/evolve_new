@@ -20,19 +20,19 @@ class PayStubEntryAccountFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => TTi18n::gettext('Enabled'),
-										20 => TTi18n::gettext('Disabled'),
+										10 => ('Enabled'),
+										20 => ('Disabled'),
 									);
 				break;
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Earning'),
-										20 => TTi18n::gettext('Employee Deduction'),
-										30 => TTi18n::gettext('Employer Deduction'),
-										40 => TTi18n::gettext('Total'),
-										50 => TTi18n::gettext('Accrual'),
-										//60 => TTi18n::gettext('Advance Earning'),
-										//65 => TTi18n::gettext('Advance Deduction'),
+										10 => ('Earning'),
+										20 => ('Employee Deduction'),
+										30 => ('Employer Deduction'),
+										40 => ('Total'),
+										50 => ('Accrual'),
+										//60 => ('Advance Earning'),
+										//65 => ('Advance Deduction'),
 									);
 				break;
 			case 'type_calculation_order':
@@ -48,18 +48,18 @@ class PayStubEntryAccountFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-status' => TTi18n::gettext('Status'),
-										'-1020-type' => TTi18n::gettext('Type'),
-										'-1030-name' => TTi18n::gettext('Name'),
+										'-1010-status' => ('Status'),
+										'-1020-type' => ('Type'),
+										'-1030-name' => ('Name'),
 
-										'-1140-ps_order' => TTi18n::gettext('Order'),
-										'-1150-debit_account' => TTi18n::gettext('Debit Account'),
-										'-1150-credit_account' => TTi18n::gettext('Credit Account'),
+										'-1140-ps_order' => ('Order'),
+										'-1150-debit_account' => ('Debit Account'),
+										'-1150-credit_account' => ('Credit Account'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -123,7 +123,7 @@ class PayStubEntryAccountFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -147,7 +147,7 @@ class PayStubEntryAccountFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -184,7 +184,7 @@ class PayStubEntryAccountFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type_id',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -223,7 +223,7 @@ class PayStubEntryAccountFactory extends Factory {
 					the PayStubEntryAccountListFactory.class.php
 					file.
 			*/
-			return TTi18n::gettext($this->data['name']);
+			return ($this->data['name']);
 		}
 
 		return FALSE;
@@ -234,13 +234,13 @@ class PayStubEntryAccountFactory extends Factory {
 		if 	(
 				$this->Validator->isLength(		'name',
 												$value,
-												TTi18n::gettext('Name is too short or too long'),
+												('Name is too short or too long'),
 												2,
 												100)
 				AND
 				$this->Validator->isTrue(				'name',
 														$this->isUniqueName($value),
-														TTi18n::gettext('Name is already in use')
+														('Name is already in use')
 													)
 													) {
 
@@ -264,7 +264,7 @@ class PayStubEntryAccountFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(		'ps_order',
 												$value,
-												TTi18n::gettext('Invalid Order')
+												('Invalid Order')
 										) ) {
 
 
@@ -290,7 +290,7 @@ class PayStubEntryAccountFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'debit_account',
 												$value,
-												TTi18n::gettext('Invalid Debit Account'),
+												('Invalid Debit Account'),
 												2,
 												250) ) {
 
@@ -316,7 +316,7 @@ class PayStubEntryAccountFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'credit_account',
 												$value,
-												TTi18n::gettext('Invalid Credit Account'),
+												('Invalid Credit Account'),
 												2,
 												250) ) {
 
@@ -365,7 +365,7 @@ class PayStubEntryAccountFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'accrual_pay_stub_entry_account_id',
 														$psealf,
-														TTi18n::gettext('Accrual account is invalid')
+														('Accrual account is invalid')
 													) ) {
 
 			$this->data['accrual_pay_stub_entry_account_id'] = $id;
@@ -926,7 +926,7 @@ class PayStubEntryAccountFactory extends Factory {
 		if ( $this->isNew() == FALSE AND $this->getAccrual() == $this->getId() ) {
 			$this->Validator->isTrue(				'accrual',
 													FALSE,
-													TTi18n::gettext('Accrual account is invalid')
+													('Accrual account is invalid')
 												);
 		}
 
@@ -982,7 +982,7 @@ class PayStubEntryAccountFactory extends Factory {
                                 
 				$this->Validator->isTrue(				'ps_order',
 														FALSE,
-														TTi18n::gettext('Order is invalid for this type of account, it must be between'). ' '. ($min_ps_order+1) . ' ' .$mm .' '. TTi18n::gettext('and') . ' ' . ($max_ps_order-1) );
+														('Order is invalid for this type of account, it must be between'). ' '. ($min_ps_order+1) . ' ' .$mm .' '. ('and') . ' ' . ($max_ps_order-1) );
 			}
 		}
 
@@ -1080,7 +1080,7 @@ class PayStubEntryAccountFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Pay Stub Account'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Pay Stub Account'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

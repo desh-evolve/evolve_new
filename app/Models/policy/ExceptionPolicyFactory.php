@@ -26,85 +26,85 @@ class ExceptionPolicyFactory extends Factory {
 			case 'type':
 				$retval = array(
 										//Schedule Exceptions
-										'S1' /* A */ => TTi18n::gettext('Unscheduled Absence'),
-										'S2' /* B */ => TTi18n::gettext('Not Scheduled'),
-										'S3' /* C */ => TTi18n::gettext('In Early'),
-										'S4' /* D */ => TTi18n::gettext('In Late'),
-										'S5' /* E */ => TTi18n::gettext('Out Early'),
-										'S6' /* F */ => TTi18n::gettext('Out Late'),
+										'S1' /* A */ => ('Unscheduled Absence'),
+										'S2' /* B */ => ('Not Scheduled'),
+										'S3' /* C */ => ('In Early'),
+										'S4' /* D */ => ('In Late'),
+										'S5' /* E */ => ('Out Early'),
+										'S6' /* F */ => ('Out Late'),
 
-										'S7' /* G */ => TTi18n::gettext('Over Daily Scheduled Time'),
-										'S8' /* H */ => TTi18n::gettext('Under Daily Scheduled Time'),
-										'S9' => TTi18n::gettext('Over Weekly Scheduled Time'),
-										//'S10' => TTi18n::gettext('Under Weekly Scheduled Time'), //Is this needed?
+										'S7' /* G */ => ('Over Daily Scheduled Time'),
+										'S8' /* H */ => ('Under Daily Scheduled Time'),
+										'S9' => ('Over Weekly Scheduled Time'),
+										//'S10' => ('Under Weekly Scheduled Time'), //Is this needed?
 
 										//Add setting to set some sort of "Grace" period, or early warning system? Approaching overtime?
 										//Have exception where they can set the cutoff in hours, and it triggers once the employee has exceeded the weekly hours.
-										'O1' => TTi18n::gettext('Over Daily Time'),
-										'O2' => TTi18n::gettext('Over Weekly Time'),
+										'O1' => ('Over Daily Time'),
+										'O2' => ('Over Weekly Time'),
 
 										//Punch Exceptions
-										'M1' /* K */ => TTi18n::gettext('Missing In Punch'),
-										'M2' /* L */ => TTi18n::gettext('Missing Out Punch'),
-										'M3' /* P */  => TTi18n::gettext('Missing Lunch In/Out Punch'),
-										'M4' => TTi18n::gettext('Missing Break In/Out Punch'),
+										'M1' /* K */ => ('Missing In Punch'),
+										'M2' /* L */ => ('Missing Out Punch'),
+										'M3' /* P */  => ('Missing Lunch In/Out Punch'),
+										'M4' => ('Missing Break In/Out Punch'),
 
-										'L1' /* M */ => TTi18n::gettext('Long Lunch'),
-										'L2' /* N */ => TTi18n::gettext('Short Lunch'),
-										'L3' /* O */ => TTi18n::gettext('No Lunch'),
+										'L1' /* M */ => ('Long Lunch'),
+										'L2' /* N */ => ('Short Lunch'),
+										'L3' /* O */ => ('No Lunch'),
 
-										'B1' => TTi18n::gettext('Long Break'),
-										'B2' => TTi18n::gettext('Short Break'),
-										'B3' => TTi18n::gettext('Too Many Breaks'),
-										'B4' => TTi18n::gettext('Too Few Breaks'),
-										'B5' => TTi18n::gettext('No Break'),
+										'B1' => ('Long Break'),
+										'B2' => ('Short Break'),
+										'B3' => ('Too Many Breaks'),
+										'B4' => ('Too Few Breaks'),
+										'B5' => ('No Break'),
 										//Worked too long without break/lunch, allow to set the time frame.
 										//Make grace period the amount of time a break has to exceed, and watch window the longest they can work without a break?
 										//No Break exception essentially handles this.
-										//'B6' => TTi18n::gettext('Worked Too Long without Break')
+										//'B6' => ('Worked Too Long without Break')
 
-										'V1' => TTi18n::gettext('TimeSheet Not Verified'),
+										'V1' => ('TimeSheet Not Verified'),
 
 										//Job Exceptions
-										'J1' /* T J1 */  => TTi18n::gettext('Not Allowed On Job'),
-										'J2' /* U J2 */  => TTi18n::gettext('Not Allowed On Task'),
-										'J3' /* V J3 */  => TTi18n::gettext('Job Completed'),
-										'J4' /* W J4 */  => TTi18n::gettext('No Job or Task'),
-										//'J5' => TTi18n::gettext('No Task'), //Make J4 No Job only?
+										'J1' /* T J1 */  => ('Not Allowed On Job'),
+										'J2' /* U J2 */  => ('Not Allowed On Task'),
+										'J3' /* V J3 */  => ('Job Completed'),
+										'J4' /* W J4 */  => ('No Job or Task'),
+										//'J5' => ('No Task'), //Make J4 No Job only?
 										//Add location based exceptions, ie: Restricted Location.
 									);
 				break;
 			case 'severity':
 				$retval = array(
-											10 => TTi18n::gettext('Low'), //Black
-											20 => TTi18n::gettext('Medium'), //Blue
-											25 => TTi18n::gettext('High'), //Orange
-											30 => TTi18n::gettext('Critical') //Rename to Critical: Red, was "High"
+											10 => ('Low'), //Black
+											20 => ('Medium'), //Blue
+											25 => ('High'), //Orange
+											30 => ('Critical') //Rename to Critical: Red, was "High"
 								);
 				break;
 			case 'email_notification':
 				$retval = array(
 											//Flex returns an empty object if 0 => None, so we make it a string and add a space infront ' 0' => None as a work around.
-											' 0' => TTi18n::gettext('None'),
-											10 => TTi18n::gettext('Employee'),
-											20 => TTi18n::gettext('Supervisor'),
-											//20 => TTi18n::gettext('Immediate Supervisor'),
-											//20 => TTi18n::gettext('All Supervisors'),
-											100 => TTi18n::gettext('Both')
+											' 0' => ('None'),
+											10 => ('Employee'),
+											20 => ('Supervisor'),
+											//20 => ('Immediate Supervisor'),
+											//20 => ('All Supervisors'),
+											100 => ('Both')
 								);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-active' => TTi18n::gettext('Active'),
-										'-1010-severity' => TTi18n::gettext('Severity'),
-										'-1010-grace' => TTi18n::gettext('Grace'),
-										'-1010-watch_window' => TTi18n::gettext('Watch Window'),
-										'-1010-email_notification' => TTi18n::gettext('Email Notification'),
+										'-1010-active' => ('Active'),
+										'-1010-severity' => ('Severity'),
+										'-1010-grace' => ('Grace'),
+										'-1010-watch_window' => ('Watch Window'),
+										'-1010-email_notification' => ('Email Notification'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 		}
@@ -145,7 +145,7 @@ class ExceptionPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'exception_policy_control',
 													$epclf->getByID($id),
-													TTi18n::gettext('Exception Policy Control is invalid')
+													('Exception Policy Control is invalid')
 													) ) {
 
 			$this->data['exception_policy_control_id'] = $id;
@@ -626,7 +626,7 @@ class ExceptionPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -654,7 +654,7 @@ class ExceptionPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'severity',
 											$value,
-											TTi18n::gettext('Incorrect Severity'),
+											('Incorrect Severity'),
 											$this->getOptions('severity')) ) {
 
 			$this->data['severity_id'] = $value;
@@ -678,7 +678,7 @@ class ExceptionPolicyFactory extends Factory {
 		if 	(	$value == 0
 				OR $this->Validator->isNumeric(		'watch_window',
 													$value,
-													TTi18n::gettext('Incorrect Watch Window')) ) {
+													('Incorrect Watch Window')) ) {
 
 			$this->data['watch_window'] = $value;
 
@@ -701,7 +701,7 @@ class ExceptionPolicyFactory extends Factory {
 		if 	(	$value == 0
 				OR $this->Validator->isNumeric(		'grace',
 													$value,
-													TTi18n::gettext('Incorrect grace value')) ) {
+													('Incorrect grace value')) ) {
 
 			$this->data['grace'] = $value;
 
@@ -724,7 +724,7 @@ class ExceptionPolicyFactory extends Factory {
 		if 	(	$value == 0
 				OR $this->Validator->isNumeric(		'demerit',
 													$value,
-													TTi18n::gettext('Incorrect demerit value')) ) {
+													('Incorrect demerit value')) ) {
 
 			$this->data['demerit'] = $value;
 
@@ -746,7 +746,7 @@ class ExceptionPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'email_notification',
 											$value,
-											TTi18n::gettext('Incorrect Email Notification'),
+											('Incorrect Email Notification'),
 											$this->getOptions('email_notification')) ) {
 
 			$this->data['email_notification_id'] = $value;
@@ -2637,7 +2637,7 @@ class ExceptionPolicyFactory extends Factory {
 	//This is called for every record everytime, and doesn't help much because of that.
 	//This has to be enabled to properly log modifications though.
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getExceptionPolicyControl(), $log_action, TTi18n::getText('Exception Policy') .' - '. TTi18n::getText('Type') .': '. Option::getByKey( $this->getType(), $this->getOptions('type') ), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getExceptionPolicyControl(), $log_action, ('Exception Policy') .' - '. ('Type') .': '. Option::getByKey( $this->getType(), $this->getOptions('type') ), NULL, $this->getTable(), $this );
 	}
 }
 ?>

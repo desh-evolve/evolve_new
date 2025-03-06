@@ -45,19 +45,19 @@ class UserDateTotalFactory extends Factory {
         switch ($name) {
             case 'status':
                 $retval = array(
-                    10 => TTi18n::gettext('System'),
-                    20 => TTi18n::gettext('Worked'),
-                    30 => TTi18n::gettext('Absence')
+                    10 => ('System'),
+                    20 => ('Worked'),
+                    30 => ('Absence')
                 );
                 break;
             case 'type':
                 $retval = array(
-                    10 => TTi18n::gettext('Total'),
-                    20 => TTi18n::gettext('Regular'),
-                    30 => TTi18n::gettext('Overtime'),
-                    40 => TTi18n::gettext('Premium'),
-                    100 => TTi18n::gettext('Lunch'),
-                    110 => TTi18n::gettext('Break')
+                    10 => ('Total'),
+                    20 => ('Regular'),
+                    30 => ('Overtime'),
+                    40 => ('Premium'),
+                    100 => ('Lunch'),
+                    110 => ('Break')
                 );
                 break;
             case 'status_type':
@@ -69,23 +69,23 @@ class UserDateTotalFactory extends Factory {
                 break;
             case 'columns':
                 $retval = array(
-                    '-1000-first_name' => TTi18n::gettext('First Name'),
-                    '-1002-last_name' => TTi18n::gettext('Last Name'),
-                    '-1005-user_status' => TTi18n::gettext('Employee Status'),
-                    '-1010-title' => TTi18n::gettext('Title'),
-                    '-1039-group' => TTi18n::gettext('Group'),
-                    '-1040-default_branch' => TTi18n::gettext('Default Branch'),
-                    '-1050-default_department' => TTi18n::gettext('Default Department'),
-                    '-1160-branch' => TTi18n::gettext('Branch'),
-                    '-1170-department' => TTi18n::gettext('Department'),
-                    '-1200-type' => TTi18n::gettext('Type'),
-                    '-1202-status' => TTi18n::gettext('Status'),
-                    '-1210-date_stamp' => TTi18n::gettext('Date'),
-                    '-1290-total_time' => TTi18n::gettext('Time'),
-                    '-2000-created_by' => TTi18n::gettext('Created By'),
-                    '-2010-created_date' => TTi18n::gettext('Created Date'),
-                    '-2020-updated_by' => TTi18n::gettext('Updated By'),
-                    '-2030-updated_date' => TTi18n::gettext('Updated Date'),
+                    '-1000-first_name' => ('First Name'),
+                    '-1002-last_name' => ('Last Name'),
+                    '-1005-user_status' => ('Employee Status'),
+                    '-1010-title' => ('Title'),
+                    '-1039-group' => ('Group'),
+                    '-1040-default_branch' => ('Default Branch'),
+                    '-1050-default_department' => ('Default Department'),
+                    '-1160-branch' => ('Branch'),
+                    '-1170-department' => ('Department'),
+                    '-1200-type' => ('Type'),
+                    '-1202-status' => ('Status'),
+                    '-1210-date_stamp' => ('Date'),
+                    '-1290-total_time' => ('Time'),
+                    '-2000-created_by' => ('Created By'),
+                    '-2010-created_date' => ('Created Date'),
+                    '-2020-updated_by' => ('Updated By'),
+                    '-2030-updated_date' => ('Updated Date'),
                 );
                 break;
             case 'list_columns':
@@ -335,7 +335,7 @@ class UserDateTotalFactory extends Factory {
 
         $udlf = new UserDateListFactory();
 
-        if ($this->Validator->isResultSetWithRows('user_date', $udlf->getByID($id), TTi18n::gettext('Date/Time is incorrect, or pay period does not exist for this date')
+        if ($this->Validator->isResultSetWithRows('user_date', $udlf->getByID($id), ('Date/Time is incorrect, or pay period does not exist for this date')
                 )) {
             $this->data['user_date_id'] = $id;
 
@@ -364,7 +364,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('over_time_policy_id', $otplf->getByID($id), TTi18n::gettext('Invalid Overtime Policy')
+                $this->Validator->isResultSetWithRows('over_time_policy_id', $otplf->getByID($id), ('Invalid Overtime Policy')
                 )) {
             $this->data['over_time_policy_id'] = $id;
 
@@ -393,7 +393,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('premium_policy_id', $pplf->getByID($id), TTi18n::gettext('Invalid Premium Policy ID')
+                $this->Validator->isResultSetWithRows('premium_policy_id', $pplf->getByID($id), ('Invalid Premium Policy ID')
                 )) {
             $this->data['premium_policy_id'] = $id;
 
@@ -423,7 +423,7 @@ class UserDateTotalFactory extends Factory {
         if (
                 $id == 0
                 OR
-                $this->Validator->isResultSetWithRows('absence_policy_id', $aplf->getByID($id), TTi18n::gettext('Invalid Accural Policy ID')
+                $this->Validator->isResultSetWithRows('absence_policy_id', $aplf->getByID($id), ('Invalid Accural Policy ID')
                 )) {
             $this->data['absence_policy_id'] = $id;
 
@@ -452,7 +452,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('meal_policy_id', $mplf->getByID($id), TTi18n::gettext('Invalid Meal Policy ID')
+                $this->Validator->isResultSetWithRows('meal_policy_id', $mplf->getByID($id), ('Invalid Meal Policy ID')
                 )) {
             $this->data['meal_policy_id'] = $id;
 
@@ -481,7 +481,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('break_policy_id', $bplf->getByID($id), TTi18n::gettext('Invalid Break Policy ID')
+                $this->Validator->isResultSetWithRows('break_policy_id', $bplf->getByID($id), ('Invalid Break Policy ID')
                 )) {
             $this->data['break_policy_id'] = $id;
 
@@ -510,7 +510,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('punch_control_id', $pclf->getByID($id), TTi18n::gettext('Invalid Punch Control ID')
+                $this->Validator->isResultSetWithRows('punch_control_id', $pclf->getByID($id), ('Invalid Punch Control ID')
                 )) {
             $this->data['punch_control_id'] = $id;
 
@@ -536,7 +536,7 @@ class UserDateTotalFactory extends Factory {
             $status = $key;
         }
 
-        if ($this->Validator->inArrayKey('status_id', $status, TTi18n::gettext('Incorrect Status'), $this->getOptions('status'))) {
+        if ($this->Validator->inArrayKey('status_id', $status, ('Incorrect Status'), $this->getOptions('status'))) {
 
             $this->data['status_id'] = $status;
 
@@ -562,7 +562,7 @@ class UserDateTotalFactory extends Factory {
             $value = $key;
         }
 
-        if ($this->Validator->inArrayKey('type_id', $value, TTi18n::gettext('Incorrect Type'), $this->getOptions('type'))) {
+        if ($this->Validator->inArrayKey('type_id', $value, ('Incorrect Type'), $this->getOptions('type'))) {
 
             $this->data['type_id'] = $value;
 
@@ -611,7 +611,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('branch_id', $blf->getByID($id), TTi18n::gettext('Branch does not exist')
+                $this->Validator->isResultSetWithRows('branch_id', $blf->getByID($id), ('Branch does not exist')
                 )) {
             $this->data['branch_id'] = $id;
 
@@ -640,7 +640,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('department_id', $dlf->getByID($id), TTi18n::gettext('Department does not exist')
+                $this->Validator->isResultSetWithRows('department_id', $dlf->getByID($id), ('Department does not exist')
                 )) {
             $this->data['department_id'] = $id;
 
@@ -671,7 +671,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('job_id', $jlf->getByID($id), TTi18n::gettext('Job does not exist')
+                $this->Validator->isResultSetWithRows('job_id', $jlf->getByID($id), ('Job does not exist')
                 )) {
             $this->data['job_id'] = $id;
 
@@ -702,7 +702,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($id == 0
                 OR
-                $this->Validator->isResultSetWithRows('job_item_id', $jilf->getByID($id), TTi18n::gettext('Job Item does not exist')
+                $this->Validator->isResultSetWithRows('job_item_id', $jilf->getByID($id), ('Job Item does not exist')
                 )) {
             $this->data['job_item_id'] = $id;
 
@@ -729,7 +729,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($val == 0
                 OR
-                $this->Validator->isFloat('quantity', $val, TTi18n::gettext('Incorrect quantity'))) {
+                $this->Validator->isFloat('quantity', $val, ('Incorrect quantity'))) {
             $this->data['quantity'] = $val;
 
             return TRUE;
@@ -756,7 +756,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($val == 0
                 OR
-                $this->Validator->isFloat('bad_quantity', $val, TTi18n::gettext('Incorrect bad quantity'))) {
+                $this->Validator->isFloat('bad_quantity', $val, ('Incorrect bad quantity'))) {
             $this->data['bad_quantity'] = $val;
 
             return TRUE;
@@ -785,7 +785,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($epoch == ''
                 OR
-                $this->Validator->isDate('start_time_stamp', $epoch, TTi18n::gettext('Incorrect start time stamp'))
+                $this->Validator->isDate('start_time_stamp', $epoch, ('Incorrect start time stamp'))
         ) {
 
             $this->data['start_time_stamp'] = $epoch;
@@ -813,7 +813,7 @@ class UserDateTotalFactory extends Factory {
 
         if ($epoch == ''
                 OR
-                $this->Validator->isDate('end_time_stamp', $epoch, TTi18n::gettext('Incorrect end time stamp'))
+                $this->Validator->isDate('end_time_stamp', $epoch, ('Incorrect end time stamp'))
         ) {
 
             $this->data['end_time_stamp'] = $epoch;
@@ -834,7 +834,7 @@ class UserDateTotalFactory extends Factory {
     function setTotalTime($int) {
         $int = (int) $int;
 
-        if ($this->Validator->isNumeric('total_time', $int, TTi18n::gettext('Incorrect total time'))) {
+        if ($this->Validator->isNumeric('total_time', $int, ('Incorrect total time'))) {
             $this->data['total_time'] = $int;
 
             return TRUE;
@@ -853,7 +853,7 @@ class UserDateTotalFactory extends Factory {
     function setActualTotalTime($int) {
         $int = (int) $int;
 
-        if ($this->Validator->isNumeric('actual_total_time', $int, TTi18n::gettext('Incorrect actual total time'))) {
+        if ($this->Validator->isNumeric('actual_total_time', $int, ('Incorrect actual total time'))) {
             $this->data['actual_total_time'] = $int;
 
             return TRUE;
@@ -878,10 +878,10 @@ class UserDateTotalFactory extends Factory {
     function getName() {
         switch ($this->getStatus() . $this->getType()) {
             case 1010:
-                $name = TTi18n::gettext('Total Time');
+                $name = ('Total Time');
                 break;
             case 1020:
-                $name = TTi18n::gettext('Regular Time');
+                $name = ('Regular Time');
                 break;
             case 1030:
                 if (is_object($this->getOverTimePolicyObject())) {
@@ -909,7 +909,7 @@ class UserDateTotalFactory extends Factory {
                 }
                 break;
             default:
-                $name = TTi18n::gettext('N/A');
+                $name = ('N/A');
                 break;
         }
 
@@ -4856,27 +4856,27 @@ class UserDateTotalFactory extends Factory {
         //Make sure status/type combinations are correct.
         if (!in_array($this->getType(), $this->getOptions('status_type', $this->getStatus()))) {
             Debug::text('Type doesnt match status: Type: ' . $this->getType() . ' Status: ' . $this->getStatus(), __FILE__, __LINE__, __METHOD__, 10);
-            $this->Validator->isTRUE('type', FALSE, TTi18n::gettext('Incorrect Type'));
+            $this->Validator->isTRUE('type', FALSE, ('Incorrect Type'));
         }
 
         //Check to make sure if this is an absence row, the absence policy is actually set.
         if ($this->getStatus() == 30 AND $this->getAbsencePolicyID() == FALSE) {
-            $this->Validator->isTRUE('absence_policy_id', FALSE, TTi18n::gettext('Invalid Absence Policy'));
+            $this->Validator->isTRUE('absence_policy_id', FALSE, ('Invalid Absence Policy'));
         }
 
         //Check to make sure if this is an overtime row, the overtime policy is actually set.
         if ($this->getStatus() == 10 AND $this->getType() == 30 AND $this->getOverTimePolicyID() == FALSE) {
-            $this->Validator->isTRUE('over_time_policy_id', FALSE, TTi18n::gettext('Invalid Overtime Policy'));
+            $this->Validator->isTRUE('over_time_policy_id', FALSE, ('Invalid Overtime Policy'));
         }
 
         //Check to make sure if this is an premium row, the premium policy is actually set.
         if ($this->getStatus() == 10 AND $this->getType() == 40 AND $this->getPremiumPolicyID() == FALSE) {
-            $this->Validator->isTRUE('premium_policy_id', FALSE, TTi18n::gettext('Invalid Premium Policy'));
+            $this->Validator->isTRUE('premium_policy_id', FALSE, ('Invalid Premium Policy'));
         }
 
         //Check to make sure if this is an meal row, the meal policy is actually set.
         if ($this->getStatus() == 10 AND $this->getType() == 100 AND $this->getMealPolicyID() == FALSE) {
-            $this->Validator->isTRUE('meal_policy_id', FALSE, TTi18n::gettext('Invalid Meal Policy'));
+            $this->Validator->isTRUE('meal_policy_id', FALSE, ('Invalid Meal Policy'));
         }
 
         //Make sure that we aren't trying to overwrite an already overridden entry made by the user for some special purpose.
@@ -4905,7 +4905,7 @@ class UserDateTotalFactory extends Factory {
             Debug::text('Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
             if ($udtlf->getRecordCount() > 0) {
                 Debug::text('Found an overridden row... NOT SAVING: ' . $udtlf->getCurrent()->getId(), __FILE__, __LINE__, __METHOD__, 10);
-                $this->Validator->isTRUE('absence_policy_id', FALSE, TTi18n::gettext('Similar entry already exists, not overriding'));
+                $this->Validator->isTRUE('absence_policy_id', FALSE, ('Similar entry already exists, not overriding'));
             }
         }
 
@@ -5091,7 +5091,7 @@ class UserDateTotalFactory extends Factory {
                     //Branch
                     $branch_name = $row['branch'];
                     if ($branch_name == '') {
-                        $branch_name = TTi18n::gettext('No Branch');
+                        $branch_name = ('No Branch');
                     }
                     if (!isset($retval[$row['date_stamp']]['branch_time']['branch_' . $row['branch_id']])) {
                         $retval[$row['date_stamp']]['branch_time']['branch_' . $row['branch_id']] = array('label' => $branch_name, 'total_time' => 0);
@@ -5102,7 +5102,7 @@ class UserDateTotalFactory extends Factory {
                     //Department
                     $department_name = $row['department'];
                     if ($department_name == '') {
-                        $department_name = TTi18n::gettext('No Department');
+                        $department_name = ('No Department');
                     }
                     if (!isset($retval[$row['date_stamp']]['department_time']['department_' . $row['department_id']])) {
                         $retval[$row['date_stamp']]['department_time']['department_' . $row['department_id']] = array('label' => $department_name, 'total_time' => 0);
@@ -5113,7 +5113,7 @@ class UserDateTotalFactory extends Factory {
                     //Job
                     $job_name = $row['job'];
                     if ($job_name == '') {
-                        $job_name = TTi18n::gettext('No Job');
+                        $job_name = ('No Job');
                     }
                     if (!isset($retval[$row['date_stamp']]['job_time']['job_' . $row['job_id']])) {
                         $retval[$row['date_stamp']]['job_time']['job_' . $row['job_id']] = array('label' => $job_name, 'total_time' => 0);
@@ -5124,7 +5124,7 @@ class UserDateTotalFactory extends Factory {
                     //Job Item/Task
                     $job_item_name = $row['job_item'];
                     if ($job_item_name == '') {
-                        $job_item_name = TTi18n::gettext('No Task');
+                        $job_item_name = ('No Task');
                     }
                     if (!isset($retval[$row['date_stamp']]['job_item_time']['job_item_' . $row['job_item_id']])) {
                         $retval[$row['date_stamp']]['job_item_time']['job_item_' . $row['job_item_id']] = array('label' => $job_item_name, 'total_time' => 0);
@@ -5269,7 +5269,7 @@ class UserDateTotalFactory extends Factory {
 
     function addLog($log_action) {
         if ($this->getOverride() == TRUE AND $this->getStatus() == 30) { //Absence
-            return TTLog::addEntry($this->getId(), $log_action, TTi18n::getText('Absence') . ' - ' . TTi18n::getText('Date') . ': ' . TTDate::getDate('DATE', $this->getUserDateObject()->getDateStamp()) . ' ' . TTi18n::getText('Total Time') . ': ' . TTDate::getTimeUnit($this->getTotalTime()), NULL, $this->getTable(), $this);
+            return TTLog::addEntry($this->getId(), $log_action, ('Absence') . ' - ' . ('Date') . ': ' . TTDate::getDate('DATE', $this->getUserDateObject()->getDateStamp()) . ' ' . ('Total Time') . ': ' . TTDate::getTimeUnit($this->getTotalTime()), NULL, $this->getTable(), $this);
         }
     }
 

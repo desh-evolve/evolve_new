@@ -24,7 +24,7 @@ class PayPeriodScheduleUserFactory extends Factory {
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule',
 															$ppslf->getByID($id),
-															TTi18n::gettext('Pay Period Schedule is invalid')
+															('Pay Period Schedule is invalid')
 															) ) {
 			$this->data['pay_period_schedule_id'] = $id;
 
@@ -80,11 +80,11 @@ class PayPeriodScheduleUserFactory extends Factory {
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Selected Employee is invalid')
+															('Selected Employee is invalid')
 															)
 				AND	$this->Validator->isTrue(		'user',
 													$this->isUniqueUser($id),
-													TTi18n::gettext('Selected Employee is already assigned to another Pay Period')
+													('Selected Employee is already assigned to another Pay Period')
 													)
 			) {
 
@@ -147,7 +147,7 @@ class PayPeriodScheduleUserFactory extends Factory {
 	function addLog( $log_action ) {
 		$u_obj = $this->getUserObject();
 		if ( is_object($u_obj) ) {
-			return TTLog::addEntry( $this->getPayPeriodSchedule(), $log_action, TTi18n::getText('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getPayPeriodSchedule(), $log_action, ('Employee').': '. $u_obj->getFullName( FALSE, TRUE ) , NULL, $this->getTable() );
 		}
 
 		return FALSE;

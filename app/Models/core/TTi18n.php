@@ -614,7 +614,7 @@ class TTi18n {
 
 	*/
 	static public function getCurrencyArray() {
-		require_once('I18Nv2/Currency.php');
+		//require_once('I18Nv2/Currency.php');
 
 		$c = new I18Nv2_Currency();
 

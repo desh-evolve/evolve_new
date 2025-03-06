@@ -67,7 +67,7 @@ class BonusDecemberUserFactory  extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows( 'bonus',
 															$bdlf->getByID($id),
-															TTi18n::gettext('Invalid December Bonus')
+															('Invalid December Bonus')
 															) ) {
 			$this->data['bonus_december_id'] = $id;
 
@@ -95,7 +95,7 @@ class BonusDecemberUserFactory  extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid Employee')
+															('Invalid Employee')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -122,27 +122,27 @@ class BonusDecemberUserFactory  extends Factory {
 		if (
 				$this->Validator->isNotNull('wage',
 											$wage,
-											TTi18n::gettext('Please specify a wage'))
+											('Please specify a wage'))
 				AND
 				$this->Validator->isFloat(	'wage',
 											$wage,
-											TTi18n::gettext('Incorrect Wage'))
+											('Incorrect Wage'))
 				AND
 				$this->Validator->isLength(	'wage',
 											$wage,
-											TTi18n::gettext('Wage has too many digits'),
+											('Wage has too many digits'),
 											0,
 											21) //Need to include decimal.
 				AND
 				$this->Validator->isLengthBeforeDecimal(	'wage',
 											$wage,
-											TTi18n::gettext('Wage has too many digits before the decimal'),
+											('Wage has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'wage',
 											$wage,
-											TTi18n::gettext('Wage has too many digits after the decimal'),
+											('Wage has too many digits after the decimal'),
 											0,
 											4)
 				) {
@@ -171,7 +171,7 @@ class BonusDecemberUserFactory  extends Factory {
 				(
 				$this->Validator->isNumeric(	'service_periods',
 												$value,
-												TTi18n::gettext('service periods must only be digits'))
+												('service periods must only be digits'))
 				
 				) ) {
 			$this->data['service_periods'] = $value;
@@ -200,7 +200,7 @@ class BonusDecemberUserFactory  extends Factory {
 				
 				$this->Validator->isFloat(	'kpp_mark',
 											$kppmarks,
-											TTi18n::gettext('Incorrect KPP'))
+											('Incorrect KPP'))
 				
 				
 				) {
@@ -231,27 +231,27 @@ class BonusDecemberUserFactory  extends Factory {
 		if (
 				$this->Validator->isNotNull('bonus_amount',
 											$wage,
-											TTi18n::gettext('Please specify a Bonus'))
+											('Please specify a Bonus'))
 				AND
 				$this->Validator->isFloat(	'bonus_amount',
 											$wage,
-											TTi18n::gettext('Incorrect Bonus'))
+											('Incorrect Bonus'))
 				AND
 				$this->Validator->isLength(	'bonus_amount',
 											$wage,
-											TTi18n::gettext('Bonus has too many digits'),
+											('Bonus has too many digits'),
 											0,
 											21) //Need to include decimal.
 				AND
 				$this->Validator->isLengthBeforeDecimal(	'bonus_amount',
 											$wage,
-											TTi18n::gettext('Bonus has too many digits before the decimal'),
+											('Bonus has too many digits before the decimal'),
 											0,
 											16)
 				AND
 				$this->Validator->isLengthAfterDecimal(	'bonus_amount',
 											$wage,
-											TTi18n::gettext('Bonus has too many digits after the decimal'),
+											('Bonus has too many digits after the decimal'),
 											0,
 											4)
 				) {

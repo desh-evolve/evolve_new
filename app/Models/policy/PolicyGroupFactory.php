@@ -22,13 +22,13 @@ class PolicyGroupFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1000-name' => TTi18n::gettext('Name'),
-										'-1100-total_users' => TTi18n::gettext('Employees'),
+										'-1000-name' => ('Name'),
+										'-1100-total_users' => ('Employees'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -99,7 +99,7 @@ class PolicyGroupFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -130,7 +130,7 @@ class PolicyGroupFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -198,7 +198,7 @@ class PolicyGroupFactory extends Factory {
 
 						if ($this->Validator->isTrue(		'user',
 															$pguf->Validator->isValid(),
-															TTi18n::gettext('Selected employee is invalid or already assigned to another policy group').' ('. $obj->getFullName() .')' )) {
+															('Selected employee is invalid or already assigned to another policy group').' ('. $obj->getFullName() .')' )) {
 							$pguf->save();
 						}
 					}
@@ -288,7 +288,7 @@ class PolicyGroupFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'exception_policy',
 														$epclf->getByID($id),
-														TTi18n::gettext('Exception Policy is invalid')
+														('Exception Policy is invalid')
 													) ) {
 
 			$this->data['exception_policy_control_id'] = $id;
@@ -373,7 +373,7 @@ class PolicyGroupFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Policy Group'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Policy Group'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

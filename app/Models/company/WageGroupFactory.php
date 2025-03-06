@@ -18,12 +18,12 @@ class WageGroupFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1030-name' => TTi18n::gettext('Name'),
+										'-1030-name' => ('Name'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'unique_columns': //Columns that are displayed by default.
@@ -65,7 +65,7 @@ class WageGroupFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$clf->getByID($id),
-															TTi18n::gettext('Company is invalid')
+															('Company is invalid')
 															) ) {
 			$this->data['company_id'] = $id;
 
@@ -107,13 +107,13 @@ class WageGroupFactory extends Factory {
 
 		if 	(	$this->Validator->isLength(		'name',
 												$name,
-												TTi18n::gettext('Name is too short or too long'),
+												('Name is too short or too long'),
 												2,
 												100)
 					AND
 						$this->Validator->isTrue(		'name',
 														$this->isUniqueName($name),
-														TTi18n::gettext('Group already exists'))
+														('Group already exists'))
 
 												) {
 
@@ -135,7 +135,7 @@ class WageGroupFactory extends Factory {
 			if ( $uwlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This wage group is in use'));
+											('This wage group is in use'));
 
 			}
 		}
@@ -196,7 +196,7 @@ class WageGroupFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Wage Group'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Wage Group'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

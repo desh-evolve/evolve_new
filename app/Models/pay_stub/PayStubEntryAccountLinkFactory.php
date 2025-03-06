@@ -38,7 +38,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -67,7 +67,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'total_gross',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['total_gross'] = $id;
@@ -98,7 +98,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'total_addtion',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['total_addtion'] = $id;
@@ -129,7 +129,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'total_employee_deduction',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['total_employee_deduction'] = $id;
@@ -158,7 +158,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'total_employer_deduction',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['total_employer_deduction'] = $id;
@@ -187,7 +187,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'total_net_pay',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['total_net_pay'] = $id;
@@ -216,7 +216,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'regular_time',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['regular_time'] = $id;
@@ -245,7 +245,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'employee_cpp',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['employee_cpp'] = $id;
@@ -274,7 +274,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'employee_ei',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['employee_ei'] = $id;
@@ -303,7 +303,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'monthly_advance',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['monthly_advance'] = $id;
@@ -332,7 +332,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'monthly_advance_deduction',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['monthly_advance_deduction'] = $id;
@@ -360,7 +360,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Pay Stub Account Links'), NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Pay Stub Account Links'), NULL, $this->getTable() );
 	}
 }
 ?>

@@ -5,7 +5,7 @@ namespace App\Models\Report;
 class ActiveShiftReport extends Report {
 
 	function __construct() {
-		$this->title = TTi18n::getText('Whos In Summary');
+		$this->title = ('Whos In Summary');
 		$this->file_name = 'whos_in_summary';
 
 		parent::__construct();
@@ -35,21 +35,21 @@ class ActiveShiftReport extends Report {
 			case 'setup_fields':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-template' => TTi18n::gettext('Template'),
-										'-1010-time_period' => TTi18n::gettext('Time Period'),
+										'-1000-template' => ('Template'),
+										'-1010-time_period' => ('Time Period'),
 
-										'-2010-user_status_id' => TTi18n::gettext('Employee Status'),
-										'-2020-user_group_id' => TTi18n::gettext('Employee Group'),
-										'-2030-user_title_id' => TTi18n::gettext('Employee Title'),
-										'-2040-include_user_id' => TTi18n::gettext('Employee Include'),
-										'-2050-exclude_user_id' => TTi18n::gettext('Employee Exclude'),
-										'-2060-default_branch_id' => TTi18n::gettext('Default Branch'),
-										'-2070-default_department_id' => TTi18n::gettext('Default Department'),
+										'-2010-user_status_id' => ('Employee Status'),
+										'-2020-user_group_id' => ('Employee Group'),
+										'-2030-user_title_id' => ('Employee Title'),
+										'-2040-include_user_id' => ('Employee Include'),
+										'-2050-exclude_user_id' => ('Employee Exclude'),
+										'-2060-default_branch_id' => ('Default Branch'),
+										'-2070-default_department_id' => ('Default Department'),
 
-										'-5000-columns' => TTi18n::gettext('Display Columns'),
-										'-5010-group' => TTi18n::gettext('Group By'),
-										'-5020-sub_total' => TTi18n::gettext('SubTotal By'),
-										'-5030-sort' => TTi18n::gettext('Sort By'),
+										'-5000-columns' => ('Display Columns'),
+										'-5010-group' => ('Group By'),
+										'-5020-sub_total' => ('SubTotal By'),
+										'-5030-sort' => ('Sort By'),
 							   );
 				break;
 			case 'time_period':
@@ -58,7 +58,7 @@ class ActiveShiftReport extends Report {
 			case 'date_columns':
 				/*
 				$retval = array_merge(
-									TTDate::getReportDateOptions( 'time_stamp', TTi18n::getText('Punch Time'), 19, FALSE ),
+									TTDate::getReportDateOptions( 'time_stamp', ('Punch Time'), 19, FALSE ),
 									array()
 								);
 				*/
@@ -66,57 +66,57 @@ class ActiveShiftReport extends Report {
 			case 'static_columns':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1001-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-full_name' => TTi18n::gettext('Full Name'),
+										'-1000-first_name' => ('First Name'),
+										'-1001-middle_name' => ('Middle Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-full_name' => ('Full Name'),
 
-										'-1010-user_name' => TTi18n::gettext('User Name'),
-										'-1020-phone_id' => TTi18n::gettext('PIN/Phone ID'),
+										'-1010-user_name' => ('User Name'),
+										'-1020-phone_id' => ('PIN/Phone ID'),
 
-										'-1030-employee_number' => TTi18n::gettext('Employee #'),
+										'-1030-employee_number' => ('Employee #'),
 
-										'-1050-title' => TTi18n::gettext('Title'),
-										'-1060-province' => TTi18n::gettext('Province/State'),
-										'-1070-country' => TTi18n::gettext('Country'),
-										'-1080-user_group' => TTi18n::gettext('Group'),
-										'-1090-default_branch' => TTi18n::gettext('Branch'), //abbreviate for space
-										'-1100-default_department' => TTi18n::gettext('Department'), //abbreviate for space
-										'-1110-currency' => TTi18n::gettext('Currency'),
+										'-1050-title' => ('Title'),
+										'-1060-province' => ('Province/State'),
+										'-1070-country' => ('Country'),
+										'-1080-user_group' => ('Group'),
+										'-1090-default_branch' => ('Branch'), //abbreviate for space
+										'-1100-default_department' => ('Department'), //abbreviate for space
+										'-1110-currency' => ('Currency'),
 
-										'-1200-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1210-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
-										'-1220-policy_group' => TTi18n::gettext('Policy Group'),
+										'-1200-permission_control' => ('Permission Group'),
+										'-1210-pay_period_schedule' => ('Pay Period Schedule'),
+										'-1220-policy_group' => ('Policy Group'),
 
-										'-1310-sex' => TTi18n::gettext('Sex'),
-										'-1320-address1' => TTi18n::gettext('Address 1'),
-										'-1330-address2' => TTi18n::gettext('Address 2'),
+										'-1310-sex' => ('Sex'),
+										'-1320-address1' => ('Address 1'),
+										'-1330-address2' => ('Address 2'),
 
-										'-1340-city' => TTi18n::gettext('City'),
-										'-1350-province' => TTi18n::gettext('Province/State'),
-										'-1360-country' => TTi18n::gettext('Country'),
-										'-1370-postal_code' => TTi18n::gettext('Postal Code'),
-										'-1380-work_phone' => TTi18n::gettext('Work Phone'),
-										'-1391-work_phone_ext' => TTi18n::gettext('Work Phone Ext'),
-										'-1400-home_phone' => TTi18n::gettext('Home Phone'),
-										'-1410-mobile_phone' => TTi18n::gettext('Mobile Phone'),
-										'-1420-fax_phone' => TTi18n::gettext('Fax Phone'),
-										'-1430-home_email' => TTi18n::gettext('Home Email'),
-										'-1440-work_email' => TTi18n::gettext('Work Email'),
-										'-1740-time_zone_display' => TTi18n::gettext('Time Zone'),
+										'-1340-city' => ('City'),
+										'-1350-province' => ('Province/State'),
+										'-1360-country' => ('Country'),
+										'-1370-postal_code' => ('Postal Code'),
+										'-1380-work_phone' => ('Work Phone'),
+										'-1391-work_phone_ext' => ('Work Phone Ext'),
+										'-1400-home_phone' => ('Home Phone'),
+										'-1410-mobile_phone' => ('Mobile Phone'),
+										'-1420-fax_phone' => ('Fax Phone'),
+										'-1430-home_email' => ('Home Email'),
+										'-1440-work_email' => ('Work Email'),
+										'-1740-time_zone_display' => ('Time Zone'),
 
-										'-1801-type' => TTi18n::gettext('Type'),
-										'-1802-status' => TTi18n::gettext('Status'),
-										'-1810-branch' => TTi18n::gettext('Branch'),
-										'-1820-department' => TTi18n::gettext('Department'),
-										'-1830-station_type' => TTi18n::gettext('Station Type'),
-										'-1840-station_station_id' => TTi18n::gettext('Station ID'),
-										'-1850-station_source' => TTi18n::gettext('Station Source'),
-										'-1860-station_description' => TTi18n::gettext('Station Description'),
+										'-1801-type' => ('Type'),
+										'-1802-status' => ('Status'),
+										'-1810-branch' => ('Branch'),
+										'-1820-department' => ('Department'),
+										'-1830-station_type' => ('Station Type'),
+										'-1840-station_station_id' => ('Station ID'),
+										'-1850-station_source' => ('Station Source'),
+										'-1860-station_description' => ('Station Description'),
 
-										'-1900-time_stamp' => TTi18n::gettext('Punch Time'),
-										'-1910-actual_time_stamp' => TTi18n::gettext('Actual Punch Time'),
-										'-2010-note' => TTi18n::gettext('Note'),
+										'-1900-time_stamp' => ('Punch Time'),
+										'-1910-actual_time_stamp' => ('Actual Punch Time'),
+										'-2010-note' => ('Note'),
 
 							   );
 
@@ -125,7 +125,7 @@ class ActiveShiftReport extends Report {
 				break;
 			case 'dynamic_columns':
 				$retval = array(
-										'-2000-total_user' => TTi18n::gettext('Total Employees'), //Group counter...
+										'-2000-total_user' => ('Total Employees'), //Group counter...
 							);
 
 				break;
@@ -161,25 +161,25 @@ class ActiveShiftReport extends Report {
 				break;
 			case 'templates':
 				$retval = array(
-										'-1010-by_status_by_employee' => TTi18n::gettext('Punches By Status'),
-										'-1020-by_type_by_employee' => TTi18n::gettext('Punches By Type'),
-										'-1030-by_status_by_type_by_employee' => TTi18n::gettext('Punches By Status/Type'),
-										'-1040-by_type_by_status_by_employee' => TTi18n::gettext('Punches By Type/Status'),
+										'-1010-by_status_by_employee' => ('Punches By Status'),
+										'-1020-by_type_by_employee' => ('Punches By Type'),
+										'-1030-by_status_by_type_by_employee' => ('Punches By Status/Type'),
+										'-1040-by_type_by_status_by_employee' => ('Punches By Type/Status'),
 
-										'-1050-by_employee' => TTi18n::gettext('Punches By Employee'),
+										'-1050-by_employee' => ('Punches By Employee'),
 
-										'-1060-by_default_branch_by_employee' => TTi18n::gettext('Punches By Default Branch'),
-										'-1070-by_default_department_by_employee' => TTi18n::gettext('Punches By Default Department'),
-										'-1080-by_default_branch_by_default_department_by_employee' => TTi18n::gettext('Punches By Default Branch/Department'),
+										'-1060-by_default_branch_by_employee' => ('Punches By Default Branch'),
+										'-1070-by_default_department_by_employee' => ('Punches By Default Department'),
+										'-1080-by_default_branch_by_default_department_by_employee' => ('Punches By Default Branch/Department'),
 
-										'-1090-by_branch_by_employee' => TTi18n::gettext('Punches By Branch'),
-										'-1100-by_department_by_employee' => TTi18n::gettext('Punches By Department'),
-										'-1110-by_branch_by_department_by_employee' => TTi18n::gettext('Punches By Branch/Department'),
+										'-1090-by_branch_by_employee' => ('Punches By Branch'),
+										'-1100-by_department_by_employee' => ('Punches By Department'),
+										'-1110-by_branch_by_department_by_employee' => ('Punches By Branch/Department'),
 
-										'-1120-by_station_by_employee' => TTi18n::gettext('Punches By Station'),
-										'-1130-by_station_type_by_employee' => TTi18n::gettext('Punches By Station Type'),
+										'-1120-by_station_by_employee' => ('Punches By Station'),
+										'-1130-by_station_type_by_employee' => ('Punches By Station Type'),
 
-										//'-1230-by_branch+total_user' => TTi18n::gettext('Total Employees By Branch'),
+										//'-1230-by_branch+total_user' => ('Total Employees By Branch'),
 							   );
 
 				break;
@@ -457,7 +457,7 @@ class ActiveShiftReport extends Report {
 		$ulf = TTnew( 'UserListFactory' );
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $ulf as $key => $u_obj ) {
 			//$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->data;
@@ -475,7 +475,7 @@ class ActiveShiftReport extends Report {
 		$uplf = TTnew( 'UserPreferenceListFactory' );
 		$uplf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Preference Rows: '. $uplf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $uplf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $uplf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $uplf as $key => $up_obj ) {
 			$this->tmp_data['user_preference'][$up_obj->getUser()] = (array)$up_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
@@ -486,7 +486,7 @@ class ActiveShiftReport extends Report {
 		$plf = TTnew( 'PunchListFactory' );
 		$plf->getAPIActiveShiftReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Active Shift Rows: '. $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $plf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $plf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $plf as $key => $p_obj ) {
 			$this->tmp_data['punch'][$p_obj->getColumn('user_id')] = (array)$p_obj->getObjectAsArray( $this->getColumnConfig() );
 			if ( $p_obj->getStatus() == 10 ) {
@@ -505,7 +505,7 @@ class ActiveShiftReport extends Report {
 
 	//PreProcess data such as calculating additional columns from raw data etc...
 	function _preProcess() {
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['punch']), NULL, TTi18n::getText('Pre-Processing Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['punch']), NULL, ('Pre-Processing Data...') );
 
 		//Use the punch data is the primary dataset and merge user/user preference data to it. This will make it
 		//so the report only shows employees with punches within the time period specified.

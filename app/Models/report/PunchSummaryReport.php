@@ -5,7 +5,7 @@ namespace App\Models\Report;
 class PunchSummaryReport extends Report {
 
 	function __construct() {
-		$this->title = TTi18n::getText('Punch Summary Report');
+		$this->title = ('Punch Summary Report');
 		$this->file_name = 'punch_summary_report';
 
 		parent::__construct();
@@ -36,33 +36,33 @@ class PunchSummaryReport extends Report {
 
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-template' => TTi18n::gettext('Template'),
-										'-1010-time_period' => TTi18n::gettext('Time Period'),
+										'-1000-template' => ('Template'),
+										'-1010-time_period' => ('Time Period'),
 
-										'-2010-user_status_id' => TTi18n::gettext('Employee Status'),
-										'-2020-user_group_id' => TTi18n::gettext('Employee Group'),
-										'-2030-user_title_id' => TTi18n::gettext('Employee Title'),
-										'-2040-include_user_id' => TTi18n::gettext('Employee Include'),
-										'-2050-exclude_user_id' => TTi18n::gettext('Employee Exclude'),
-										'-2060-default_branch_id' => TTi18n::gettext('Default Branch'),
-										'-2070-default_department_id' => TTi18n::gettext('Default Department'),
-										'-2080-punch_branch_id' => TTi18n::gettext('Punch Branch'),
-										'-2090-punch_department_id' => TTi18n::gettext('Punch Department'),
+										'-2010-user_status_id' => ('Employee Status'),
+										'-2020-user_group_id' => ('Employee Group'),
+										'-2030-user_title_id' => ('Employee Title'),
+										'-2040-include_user_id' => ('Employee Include'),
+										'-2050-exclude_user_id' => ('Employee Exclude'),
+										'-2060-default_branch_id' => ('Default Branch'),
+										'-2070-default_department_id' => ('Default Department'),
+										'-2080-punch_branch_id' => ('Punch Branch'),
+										'-2090-punch_department_id' => ('Punch Department'),
 
-										'-5000-columns' => TTi18n::gettext('Display Columns'),
-										'-5010-group' => TTi18n::gettext('Group By'),
-										'-5020-sub_total' => TTi18n::gettext('SubTotal By'),
-										'-5030-sort' => TTi18n::gettext('Sort By'),
+										'-5000-columns' => ('Display Columns'),
+										'-5010-group' => ('Group By'),
+										'-5020-sub_total' => ('SubTotal By'),
+										'-5030-sort' => ('Sort By'),
 							   );
 
 				if ( $this->getUserObject()->getCompanyObject()->getProductEdition() == 20 ) {
 					$professional_edition_setup_fields = array(
-										'-3010-job_id' => TTi18n::gettext('Job'),
-										'-3010-job_status_id' => TTi18n::gettext('Job Status'),
-										'-3030-job_branch_id' => TTi18n::gettext('Job Branch'),
-										'-3040-job_department_id' => TTi18n::gettext('Job Department'),
-										'-3050-job_group_id' => TTi18n::gettext('Job Group'),
-										'-3060-job_item_id' => TTi18n::gettext('Task'),
+										'-3010-job_id' => ('Job'),
+										'-3010-job_status_id' => ('Job Status'),
+										'-3030-job_branch_id' => ('Job Branch'),
+										'-3040-job_department_id' => ('Job Department'),
+										'-3050-job_group_id' => ('Job Group'),
+										'-3060-job_item_id' => ('Task'),
 									);
 					$retval = array_merge( $retval, $professional_edition_setup_fields );
 				}
@@ -72,7 +72,7 @@ class PunchSummaryReport extends Report {
 				$retval = TTDate::getTimePeriodOptions();
 				break;
 			case 'date_columns':
-				$retval = TTDate::getReportDateOptions( NULL, TTi18n::getText('Date'), 15, TRUE );
+				$retval = TTDate::getReportDateOptions( NULL, ('Date'), 15, TRUE );
 				break;
 			case 'custom_columns':
 				//Get custom fields for report data.
@@ -86,68 +86,68 @@ class PunchSummaryReport extends Report {
 			case 'static_columns':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1001-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-full_name' => TTi18n::gettext('Full Name'),
-										'-1030-employee_number' => TTi18n::gettext('Employee #'),
-										'-1040-status' => TTi18n::gettext('Status'),
-										'-1050-title' => TTi18n::gettext('Title'),
-										'-1060-province' => TTi18n::gettext('Province/State'),
-										'-1070-country' => TTi18n::gettext('Country'),
-										'-1080-user_group' => TTi18n::gettext('Group'),
-										'-1090-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1100-default_department' => TTi18n::gettext('Default Department'),
-										'-1110-currency' => TTi18n::gettext('Currency'),
+										'-1000-first_name' => ('First Name'),
+										'-1001-middle_name' => ('Middle Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-full_name' => ('Full Name'),
+										'-1030-employee_number' => ('Employee #'),
+										'-1040-status' => ('Status'),
+										'-1050-title' => ('Title'),
+										'-1060-province' => ('Province/State'),
+										'-1070-country' => ('Country'),
+										'-1080-user_group' => ('Group'),
+										'-1090-default_branch' => ('Default Branch'),
+										'-1100-default_department' => ('Default Department'),
+										'-1110-currency' => ('Currency'),
 
-										'-1200-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1210-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
-										'-1220-policy_group' => TTi18n::gettext('Policy Group'),
+										'-1200-permission_control' => ('Permission Group'),
+										'-1210-pay_period_schedule' => ('Pay Period Schedule'),
+										'-1220-policy_group' => ('Policy Group'),
 
 										//Handled in date_columns above.
-										//'-1230-pay_period' => TTi18n::gettext('Pay Period'),
+										//'-1230-pay_period' => ('Pay Period'),
 
-										'-1600-in_time_stamp' => TTi18n::gettext('In Punch'),
-										'-1601-in_type' => TTi18n::gettext('In Type'),
-										'-1610-out_time_stamp' => TTi18n::gettext('Out Punch'),
-										'-1611-out_type' => TTi18n::gettext('Out Type'),
-										'-1620-in_actual_time_stamp' => TTi18n::gettext('In (Actual)'),
-										'-1630-out_actual_time_stamp' => TTi18n::gettext('Out (Actual)'),
-										'-1660-branch' => TTi18n::gettext('Branch'),
-										'-1670-department' => TTi18n::gettext('Department'),
-										'-1671-in_station_type' => TTi18n::gettext('In Station Type'),
-										'-1672-in_station_station_id' => TTi18n::gettext('In Station ID'),
-										'-1673-in_station_source' => TTi18n::gettext('In Station Source'),
-										'-1674-in_station_description' => TTi18n::gettext('In Station Description'),
-										'-1675-out_station_type' => TTi18n::gettext('Out Station Type'),
-										'-1676-out_station_station_id' => TTi18n::gettext('Out Station ID'),
-										'-1677-out_station_source' => TTi18n::gettext('Out Station Source'),
-										'-1678-out_station_description' => TTi18n::gettext('Out Station Description'),
-										'-1720-note' => TTi18n::gettext('Note'),
-										'-1900-in_created_date' => TTi18n::gettext('In Created Date'),
-										'-1905-in_updated_date' => TTi18n::gettext('In Updated Date'),
-										'-1910-out_created_date' => TTi18n::gettext('Out Created Date'),
-										'-1915-out_updated_date' => TTi18n::gettext('Out Updated Date'),
-										'-1920-verified_time_sheet' => TTi18n::gettext('Verified TimeSheet'),
-										'-1925-verified_time_sheet_date' => TTi18n::gettext('Verified TimeSheet Date'),
-										'-1930-verified_time_sheet_tainted' => TTi18n::gettext('TimeSheet Verification Tainted'),
+										'-1600-in_time_stamp' => ('In Punch'),
+										'-1601-in_type' => ('In Type'),
+										'-1610-out_time_stamp' => ('Out Punch'),
+										'-1611-out_type' => ('Out Type'),
+										'-1620-in_actual_time_stamp' => ('In (Actual)'),
+										'-1630-out_actual_time_stamp' => ('Out (Actual)'),
+										'-1660-branch' => ('Branch'),
+										'-1670-department' => ('Department'),
+										'-1671-in_station_type' => ('In Station Type'),
+										'-1672-in_station_station_id' => ('In Station ID'),
+										'-1673-in_station_source' => ('In Station Source'),
+										'-1674-in_station_description' => ('In Station Description'),
+										'-1675-out_station_type' => ('Out Station Type'),
+										'-1676-out_station_station_id' => ('Out Station ID'),
+										'-1677-out_station_source' => ('Out Station Source'),
+										'-1678-out_station_description' => ('Out Station Description'),
+										'-1720-note' => ('Note'),
+										'-1900-in_created_date' => ('In Created Date'),
+										'-1905-in_updated_date' => ('In Updated Date'),
+										'-1910-out_created_date' => ('Out Created Date'),
+										'-1915-out_updated_date' => ('Out Updated Date'),
+										'-1920-verified_time_sheet' => ('Verified TimeSheet'),
+										'-1925-verified_time_sheet_date' => ('Verified TimeSheet Date'),
+										'-1930-verified_time_sheet_tainted' => ('TimeSheet Verification Tainted'),
 
 							   );
 
 				if ( $this->getUserObject()->getCompanyObject()->getProductEdition() == 20 ) {
 					$professional_edition_static_columns = array(
 											//Static Columns - Aggregate functions can't be used on these.
-											'-1810-job' => TTi18n::gettext('Job'),
-											'-1820-job_manual_id' => TTi18n::gettext('Job Code'),
-											'-1830-job_description' => TTi18n::gettext('Job Description'),
-											'-1840-job_status' => TTi18n::gettext('Job Status'),
-											'-1850-job_branch' => TTi18n::gettext('Job Branch'),
-											'-1860-job_department' => TTi18n::gettext('Job Department'),
-											'-1870-job_group' => TTi18n::gettext('Job Group'),
-											'-1910-job_item' => TTi18n::gettext('Task'),
-											'-1920-job_item_manual_id' => TTi18n::gettext('Task Code'),
-											'-1930-job_item_description' => TTi18n::gettext('Task Description'),
-											'-1940-job_item_group' => TTi18n::gettext('Task Group'),
+											'-1810-job' => ('Job'),
+											'-1820-job_manual_id' => ('Job Code'),
+											'-1830-job_description' => ('Job Description'),
+											'-1840-job_status' => ('Job Status'),
+											'-1850-job_branch' => ('Job Branch'),
+											'-1860-job_department' => ('Job Department'),
+											'-1870-job_group' => ('Job Group'),
+											'-1910-job_item' => ('Task'),
+											'-1920-job_item_manual_id' => ('Task Code'),
+											'-1930-job_item_description' => ('Task Description'),
+											'-1940-job_item_group' => ('Task Group'),
 								   );
 					$retval = array_merge( $retval, $professional_edition_static_columns );
 				}
@@ -160,17 +160,17 @@ class PunchSummaryReport extends Report {
 										//Dynamic - Aggregate functions can be used
 
 										//Take into account wage groups. However hourly_rates for the same hour type, so we need to figure out an average hourly rate for each column?
-										'-2010-hourly_rate' => TTi18n::gettext('Hourly Rate'),
+										'-2010-hourly_rate' => ('Hourly Rate'),
 
-										'-2100-total_time' => TTi18n::gettext('Total Time'),
-										'-2110-total_time_wage' => TTi18n::gettext('Total Time Wage'),
-										'-2112-total_time_wage_burden' => TTi18n::gettext('Total Time Wage Burden'),
-										'-2114-total_time_wage_with_burden' => TTi18n::gettext('Total Time Wage w/Burden'),
+										'-2100-total_time' => ('Total Time'),
+										'-2110-total_time_wage' => ('Total Time Wage'),
+										'-2112-total_time_wage_burden' => ('Total Time Wage Burden'),
+										'-2114-total_time_wage_with_burden' => ('Total Time Wage w/Burden'),
 
-										'-2120-actual_total_time' => TTi18n::gettext('Actual Time'),
-										'-2120-actual_total_time_wage' => TTi18n::gettext('Actual Time Wage'),
-										'-2125-actual_total_time_diff' => TTi18n::gettext('Actual Time Difference'),
-										'-2127-actual_total_time_diff_wage' => TTi18n::gettext('Actual Time Difference Wage'),
+										'-2120-actual_total_time' => ('Actual Time'),
+										'-2120-actual_total_time_wage' => ('Actual Time Wage'),
+										'-2125-actual_total_time_diff' => ('Actual Time Difference'),
+										'-2127-actual_total_time_diff_wage' => ('Actual Time Difference Wage'),
 							);
 				break;
 			case 'columns':
@@ -211,33 +211,33 @@ class PunchSummaryReport extends Report {
 				break;
 			case 'templates':
 				$retval = array(
-										'-1010-by_employee+punch_summary+total_time' => TTi18n::gettext('Punch Summary By Employee'),
-										'-1020-by_branch+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Branch'),
-										'-1030-by_department+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Department'),
-										'-1040-by_branch_by_department+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Branch/Department'),
-										'-1050-by_pay_period+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Pay Period'),
-										'-1060-by_date_stamp+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Date'),
-										'-1070-by_station+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Station'),
+										'-1010-by_employee+punch_summary+total_time' => ('Punch Summary By Employee'),
+										'-1020-by_branch+punch_summary+total_time' => ('Punch Summary by Branch'),
+										'-1030-by_department+punch_summary+total_time' => ('Punch Summary by Department'),
+										'-1040-by_branch_by_department+punch_summary+total_time' => ('Punch Summary by Branch/Department'),
+										'-1050-by_pay_period+punch_summary+total_time' => ('Punch Summary by Pay Period'),
+										'-1060-by_date_stamp+punch_summary+total_time' => ('Punch Summary by Date'),
+										'-1070-by_station+punch_summary+total_time' => ('Punch Summary by Station'),
 
-										'-1080-by_employee+punch_summary+total_time+note' => TTi18n::gettext('Punch Summary+Notes by Employee'),
-										'-1090-by_employee+punch_summary+total_time+actual_time' => TTi18n::gettext('Punch Summary+Actual Time by Employee'),
-										'-1100-by_employee+punch_summary+station_summary+total_time' => TTi18n::gettext('Punch/Station Detail By Employee'),
+										'-1080-by_employee+punch_summary+total_time+note' => ('Punch Summary+Notes by Employee'),
+										'-1090-by_employee+punch_summary+total_time+actual_time' => ('Punch Summary+Actual Time by Employee'),
+										'-1100-by_employee+punch_summary+station_summary+total_time' => ('Punch/Station Detail By Employee'),
 
-										'-1110-by_employee+actual_time' => TTi18n::gettext('Actual Time by Employee'),
+										'-1110-by_employee+actual_time' => ('Actual Time by Employee'),
 
-										//'-1010-by_job+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Job'),
-										//'-1010-by_job_item+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Task'),
-										'-1120-by_employee+verified_time_sheet' => TTi18n::gettext('TimeSheet Verification Tainted'),
+										//'-1010-by_job+punch_summary+total_time' => ('Punch Summary by Job'),
+										//'-1010-by_job_item+punch_summary+total_time' => ('Punch Summary by Task'),
+										'-1120-by_employee+verified_time_sheet' => ('TimeSheet Verification Tainted'),
 							   );
 
 				if ( $this->getUserObject()->getCompanyObject()->getProductEdition() == 20 ) {
 					$professional_edition_templates = array(
-										'-2010-by_job+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Job'),
-										'-2020-by_job_item+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Task'),
-										'-2030-by_job_by_job_item+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Job/Task'),
-										'-2040-by_job_branch+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Job Branch'),
-										'-2050-by_job_branch_by_job_department+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Job Branch/Department'),
-										'-2060-by_job_group+punch_summary+total_time' => TTi18n::gettext('Punch Summary by Job Group'),
+										'-2010-by_job+punch_summary+total_time' => ('Punch Summary by Job'),
+										'-2020-by_job_item+punch_summary+total_time' => ('Punch Summary by Task'),
+										'-2030-by_job_by_job_item+punch_summary+total_time' => ('Punch Summary by Job/Task'),
+										'-2040-by_job_branch+punch_summary+total_time' => ('Punch Summary by Job Branch'),
+										'-2050-by_job_branch_by_job_department+punch_summary+total_time' => ('Punch Summary by Job Branch/Department'),
+										'-2060-by_job_group+punch_summary+total_time' => ('Punch Summary by Job Group'),
 									);
 					$retval = array_merge( $retval, $professional_edition_templates );
 				}
@@ -629,7 +629,7 @@ class PunchSummaryReport extends Report {
 
 		$plf->getPunchSummaryReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Total Rows: '. $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $plf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $plf->getRecordCount(), NULL, ('Retrieving Data...') );
 		if ( $plf->getRecordCount() > 0 ) {
 			foreach ( $plf as $key => $p_obj ) {
 				$pay_period_ids[$p_obj->getColumn('pay_period_id')] = TRUE;
@@ -738,7 +738,7 @@ class PunchSummaryReport extends Report {
 		$ulf = TTnew( 'UserListFactory' );
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $ulf as $key => $u_obj ) {
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 
@@ -766,7 +766,7 @@ class PunchSummaryReport extends Report {
 
 	//PreProcess data such as calculating additional columns from raw data etc...
 	function _preProcess() {
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['punch']), NULL, TTi18n::getText('Pre-Processing Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['punch']), NULL, ('Pre-Processing Data...') );
 
 		//Merge time data with user data
 		$key=0;
@@ -785,7 +785,7 @@ class PunchSummaryReport extends Report {
 							$processed_data['verified_time_sheet'] = $this->tmp_data['verified_timesheet'][$user_id][$row['pay_period_id']]['status'];
 							$processed_data['verified_time_sheet_date'] = $this->tmp_data['verified_timesheet'][$user_id][$row['pay_period_id']]['created_date'];
 						} else {
-							$processed_data['verified_time_sheet'] = TTi18n::getText('No');
+							$processed_data['verified_time_sheet'] = ('No');
 							$processed_data['verified_time_sheet_date'] = FALSE;
 						}
 

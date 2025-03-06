@@ -27,31 +27,31 @@ class PayPeriodScheduleFactory extends Factory {
 				 * Set type to MANUAL to disable PP schedule. Rather then add a status_id field.
 				 */
 				$retval = array(
-											5 => TTi18n::gettext('Manual'),
-											10  => TTi18n::gettext('Weekly (52/year)'),
-											20  => TTi18n::gettext('Bi-Weekly (26/year)'),
-											30  => TTi18n::gettext('Semi-Monthly (24/year)'),
-											//40  => TTi18n::gettext('Monthly + Advance'), //Handled with monthly PP schedule and Tax / Deduction to automatically enter advance each month. Advances are paid manually.
-											50  => TTi18n::gettext('Monthly (12/year)') //Must have this here, for ROEs
+											5 => ('Manual'),
+											10  => ('Weekly (52/year)'),
+											20  => ('Bi-Weekly (26/year)'),
+											30  => ('Semi-Monthly (24/year)'),
+											//40  => ('Monthly + Advance'), //Handled with monthly PP schedule and Tax / Deduction to automatically enter advance each month. Advances are paid manually.
+											50  => ('Monthly (12/year)') //Must have this here, for ROEs
 										);
 				break;
 			case 'start_week_day':
 				$retval = array(
-											0 => TTi18n::gettext('Sunday-Saturday'),
-											1 => TTi18n::gettext('Monday-Sunday'),
-											2 => TTi18n::gettext('Tuesday-Monday'),
-											3 => TTi18n::gettext('Wednesday-Tuesday'),
-											4 => TTi18n::gettext('Thursday-Wednesday'),
-											5 => TTi18n::gettext('Friday-Thursday'),
-											6 => TTi18n::gettext('Saturday-Friday'),
+											0 => ('Sunday-Saturday'),
+											1 => ('Monday-Sunday'),
+											2 => ('Tuesday-Monday'),
+											3 => ('Wednesday-Tuesday'),
+											4 => ('Thursday-Wednesday'),
+											5 => ('Friday-Thursday'),
+											6 => ('Saturday-Friday'),
 										);
 				break;
 			case 'shift_assigned_day':
 				$retval = array(
-											10 => TTi18n::gettext('Day They Start On'),
-											20 => TTi18n::gettext('Day They End On'),
-											30 => TTi18n::gettext('Day w/Most Time Worked'),
-											40 => TTi18n::gettext('Each Day (Split at Midnight)'),
+											10 => ('Day They Start On'),
+											20 => ('Day They End On'),
+											30 => ('Day w/Most Time Worked'),
+											40 => ('Each Day (Split at Midnight)'),
 										);
 				break;
 			case 'transaction_date':
@@ -62,36 +62,36 @@ class PayPeriodScheduleFactory extends Factory {
 			case 'transaction_date_business_day':
 				$retval = array(
 											//Adjust Transaction Date To:
-											0 => TTi18n::gettext('No'),
-											1 => TTi18n::gettext('Yes - Previous Business Day'),
-											2 => TTi18n::gettext('Yes - Next Business Day'),
-											3 => TTi18n::gettext('Yes - Closest Business Day'),
+											0 => ('No'),
+											1 => ('Yes - Previous Business Day'),
+											2 => ('Yes - Next Business Day'),
+											3 => ('Yes - Closest Business Day'),
 										);
 				break;
 			case 'timesheet_verify_type':
 				$retval = array(
-											10 => TTi18n::gettext('Disabled'),
-											20 => TTi18n::gettext('Employee Only'),
-											30 => TTi18n::gettext('Superior Only'),
-											40 => TTi18n::gettext('Employee & Superior'),
+											10 => ('Disabled'),
+											20 => ('Employee Only'),
+											30 => ('Superior Only'),
+											40 => ('Employee & Superior'),
 										);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1020-name' => TTi18n::gettext('Name'),
-										'-1030-description' => TTi18n::gettext('Description'),
-										'-1040-total_users' => TTi18n::gettext('Employees'),
-										'-1050-start_week_day' => TTi18n::gettext('Overtime Week'),
-										'-1060-shift_assigned_day' => TTi18n::gettext('Assign Shifts To'),
-										'-1070-time_zone' => TTi18n::gettext('TimeZone'),
-										'-1080-new_day_trigger_time' => TTi18n::gettext('Minimum Time Off Between Shifts'),
-										'-1090-maximum_shift_time' => TTi18n::gettext('Maximum Shift Time'),
+										'-1010-type' => ('Type'),
+										'-1020-name' => ('Name'),
+										'-1030-description' => ('Description'),
+										'-1040-total_users' => ('Employees'),
+										'-1050-start_week_day' => ('Overtime Week'),
+										'-1060-shift_assigned_day' => ('Assign Shifts To'),
+										'-1070-time_zone' => ('TimeZone'),
+										'-1080-new_day_trigger_time' => ('Minimum Time Off Between Shifts'),
+										'-1090-maximum_shift_time' => ('Maximum Shift Time'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -162,7 +162,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -188,7 +188,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -216,7 +216,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'start_week_day',
 											$val,
-											TTi18n::gettext('Incorrect Start Week Day'),
+											('Incorrect Start Week Day'),
 											$this->getOptions('start_week_day')) ) {
 
 			$this->data['start_week_day_id'] = $val;
@@ -239,7 +239,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'shift_assigned_day_id',
 											$val,
-											TTi18n::gettext('Incorrect Shift Assigned Day'),
+											('Incorrect Shift Assigned Day'),
 											$this->getOptions('shift_assigned_day')) ) {
 
 			$this->data['shift_assigned_day_id'] = $val;
@@ -278,11 +278,11 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 				AND	$this->Validator->isTrue(	'name',
 												$this->isUniqueName($name),
-												TTi18n::gettext('Name is already in use')
+												('Name is already in use')
 												)
 						) {
 
@@ -304,7 +304,7 @@ class PayPeriodScheduleFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'description',
 											$description,
-											TTi18n::gettext('Description is invalid'),
+											('Description is invalid'),
 											2,255) ) {
 
 			$this->data['description'] = $description;
@@ -332,7 +332,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'start_day_of_week',
 											$val,
-											TTi18n::gettext('Incorrect start day of week'),
+											('Incorrect start day of week'),
 											TTDate::getDayOfWeekArray() ) ) {
 
 			$this->data['start_day_of_week'] = $val;
@@ -361,7 +361,7 @@ class PayPeriodScheduleFactory extends Factory {
 		if ( $val == 0
 				OR $this->Validator->inArrayKey(	'transaction_date',
 											$val,
-											TTi18n::gettext('Incorrect transaction date'),
+											('Incorrect transaction date'),
 											TTDate::getDayOfMonthArray() ) ) {
 
 			$this->data['transaction_date'] = $val;
@@ -398,7 +398,7 @@ class PayPeriodScheduleFactory extends Factory {
 		if ( 	( $val == -1 OR $val == '' OR $val == 0 )
 				OR $this->Validator->inArrayKey(	'primary_day_of_month',
 											$val,
-											TTi18n::getText('Incorrect primary day of month'),
+											('Incorrect primary day of month'),
 											TTDate::getDayOfMonthArray() ) ) {
 
 			$this->data['primary_day_of_month'] = $val;
@@ -427,7 +427,7 @@ class PayPeriodScheduleFactory extends Factory {
 		if ( 	( $val == -1 OR $val == '' OR $val == 0 )
 				OR $this->Validator->inArrayKey(	'secondary_day_of_month',
 											$val,
-											TTi18n::gettext('Incorrect secondary day of month'),
+											('Incorrect secondary day of month'),
 											TTDate::getDayOfMonthArray() ) ) {
 
 			$this->data['secondary_day_of_month'] = $val;
@@ -456,7 +456,7 @@ class PayPeriodScheduleFactory extends Factory {
 		if ( 	( $val == -1 OR $val == '' OR $val == 0 )
 				OR $this->Validator->inArrayKey(	'primary_transaction_day_of_month',
 											$val,
-											TTi18n::gettext('Incorrect primary transaction day of month'),
+											('Incorrect primary transaction day of month'),
 											TTDate::getDayOfMonthArray() ) ) {
 
 			$this->data['primary_transaction_day_of_month'] = $val;
@@ -485,7 +485,7 @@ class PayPeriodScheduleFactory extends Factory {
 		if ( 	( $val == -1 OR $val == '' OR $val == 0 )
 				OR $this->Validator->inArrayKey(	'secondary_transaction_day_of_month',
 											$val,
-											TTi18n::gettext('Incorrect secondary transaction day of month'),
+											('Incorrect secondary transaction day of month'),
 											TTDate::getDayOfMonthArray() ) ) {
 
 			$this->data['secondary_transaction_day_of_month'] = $val;
@@ -507,7 +507,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'transaction_date_bd',
 											$int,
-											TTi18n::gettext('Incorrect transaction date adjustment'),
+											('Incorrect transaction date adjustment'),
 											$this->getOptions('transaction_date_business_day') ) ) {
 
 			$this->data['transaction_date_bd'] = $int;
@@ -547,7 +547,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'anchor_date',
 												$epoch,
-												TTi18n::gettext('Incorrect start date')) ) {
+												('Incorrect start date')) ) {
 
 			$this->data['anchor_date'] = $epoch;
 
@@ -568,7 +568,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'day_start_time',
 													$int,
-													TTi18n::gettext('Incorrect day start time')) ) {
+													('Incorrect day start time')) ) {
 			$this->data['day_start_time'] = $int;
 
 			return TRUE;
@@ -594,7 +594,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'time_zone',
 											$time_zone,
-											TTi18n::gettext('Incorrect time zone'),
+											('Incorrect time zone'),
 											Misc::trimSortPrefix( $this->getTimeZoneOptions() ) ) ) {
 
 			$this->data['time_zone'] = $time_zone;
@@ -632,7 +632,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'continuous_time',
 													$int,
-													TTi18n::gettext('Incorrect continuous time')) ) {
+													('Incorrect continuous time')) ) {
 			$this->data['day_continuous_time'] = $int;
 
 			return TRUE;
@@ -655,7 +655,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'new_day_trigger_time',
 													$int,
-													TTi18n::gettext('Incorrect Minimum Time-Off Between Shifts')) ) {
+													('Incorrect Minimum Time-Off Between Shifts')) ) {
 			$this->data['new_day_trigger_time'] = $int;
 
 			return TRUE;
@@ -675,7 +675,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'maximum_shift_time',
 													$int,
-													TTi18n::gettext('Incorrect Maximum Shift Time')) ) {
+													('Incorrect Maximum Shift Time')) ) {
 			$this->data['maximum_shift_time'] = $int;
 
 			return TRUE;
@@ -695,7 +695,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'annual_pay_periods',
 													$int,
-													TTi18n::gettext('Incorrect Annual Pay Periods')) ) {
+													('Incorrect Annual Pay Periods')) ) {
 			$this->data['annual_pay_periods'] = $int;
 
 			return TRUE;
@@ -716,7 +716,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'timesheet_verify_type_id',
 											$type,
-											TTi18n::gettext('Incorrect TimeSheet Verification Type'),
+											('Incorrect TimeSheet Verification Type'),
 											$this->getOptions('timesheet_verify_type')) ) {
 
 			$this->data['timesheet_verify_type_id'] = $type;
@@ -738,7 +738,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'timesheet_verify_before_end_date',
 													$int,
-													TTi18n::gettext('Incorrect value for timesheet verification before/after end date')) ) {
+													('Incorrect value for timesheet verification before/after end date')) ) {
 			$this->data['timesheet_verify_before_end_date'] = ($int*86400);
 
 			return TRUE;
@@ -758,7 +758,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'timesheet_verify_before_transaction_date',
 													$int,
-													TTi18n::gettext('Incorrect value for timesheet verification before/after transaction date')) ) {
+													('Incorrect value for timesheet verification before/after transaction date')) ) {
 			$this->data['timesheet_verify_before_transaction_date'] = ($int*86400); //Convert to seconds to support partial days. Do not cast to INT!
 
 			return TRUE;
@@ -779,7 +779,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'timesheet_verify_notice_before_transaction_date',
 													$int,
-													TTi18n::gettext('Incorrect value for timesheet verification notice before/after transaction date')) ) {
+													('Incorrect value for timesheet verification notice before/after transaction date')) ) {
 			$this->data['timesheet_verify_notice_before_transaction_date'] = $int;
 
 			return TRUE;
@@ -855,7 +855,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'user',
 														$ppsuf->Validator->isValid(),
-														TTi18n::gettext('Selected Employee is already assigned to another Pay Period').' ('. $user_obj->getFullName() .')' )) {
+														('Selected Employee is already assigned to another Pay Period').' ('. $user_obj->getFullName() .')' )) {
 						$ppsuf->save();
 					}
 				}
@@ -1782,7 +1782,7 @@ class PayPeriodScheduleFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Pay Period Schedule'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Pay Period Schedule'), NULL, $this->getTable(), $this );
 	}
 
 }

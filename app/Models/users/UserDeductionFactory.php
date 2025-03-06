@@ -23,13 +23,13 @@ class UserDeductionFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -129,7 +129,7 @@ class UserDeductionFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -177,13 +177,13 @@ class UserDeductionFactory extends Factory {
 					OR
 					$this->Validator->isResultSetWithRows(	'company_deduction',
 															$cdlf->getByID($id),
-															TTi18n::gettext('Deduction is invalid')
+															('Deduction is invalid')
 														)
 				)
 					AND
 					$this->Validator->isTrue(				'company_deduction',
 															$this->isUniqueCompanyDeduction($id),
-															TTi18n::gettext('Deduction is already assigned to employee')
+															('Deduction is already assigned to employee')
 															)
 
 
@@ -211,7 +211,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value1',
 												$value,
-												TTi18n::gettext('User Value 1 is too short or too long'),
+												('User Value 1 is too short or too long'),
 												1,
 												20) ) {
 
@@ -237,7 +237,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value2',
 												$value,
-												TTi18n::gettext('User Value 2 is too short or too long'),
+												('User Value 2 is too short or too long'),
 												1,
 												20) ) {
 
@@ -263,7 +263,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value3',
 												$value,
-												TTi18n::gettext('User Value 3 is too short or too long'),
+												('User Value 3 is too short or too long'),
 												1,
 												20) ) {
 
@@ -289,7 +289,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value4',
 												$value,
-												TTi18n::gettext('User Value 4 is too short or too long'),
+												('User Value 4 is too short or too long'),
 												1,
 												20) ) {
 
@@ -315,7 +315,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value5',
 												$value,
-												TTi18n::gettext('User Value 5 is too short or too long'),
+												('User Value 5 is too short or too long'),
 												1,
 												20) ) {
 
@@ -341,7 +341,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value6',
 												$value,
-												TTi18n::gettext('User Value 6 is too short or too long'),
+												('User Value 6 is too short or too long'),
 												1,
 												20) ) {
 
@@ -367,7 +367,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value7',
 												$value,
-												TTi18n::gettext('User Value 7 is too short or too long'),
+												('User Value 7 is too short or too long'),
 												1,
 												20) ) {
 
@@ -393,7 +393,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value8',
 												$value,
-												TTi18n::gettext('User Value 8 is too short or too long'),
+												('User Value 8 is too short or too long'),
 												1,
 												20) ) {
 
@@ -419,7 +419,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value9',
 												$value,
-												TTi18n::gettext('User Value 9 is too short or too long'),
+												('User Value 9 is too short or too long'),
 												1,
 												20) ) {
 
@@ -445,7 +445,7 @@ class UserDeductionFactory extends Factory {
 				OR
 				$this->Validator->isLength(		'user_value10',
 												$value,
-												TTi18n::gettext('User Value 10 is too short or too long'),
+												('User Value 10 is too short or too long'),
 												1,
 												20) ) {
 
@@ -1320,7 +1320,7 @@ class UserDeductionFactory extends Factory {
 	function addLog( $log_action ) {
 		$obj = $this->getUserObject();
 		if ( is_object($obj) ) {
-			return TTLog::addEntry( $this->getCompanyDeduction(), $log_action, TTi18n::getText('Employee Deduction') .': '. $obj->getFullName(), NULL, $this->getTable(), $this );
+			return TTLog::addEntry( $this->getCompanyDeduction(), $log_action, ('Employee Deduction') .': '. $obj->getFullName(), NULL, $this->getTable(), $this );
 		}
 	}
 }

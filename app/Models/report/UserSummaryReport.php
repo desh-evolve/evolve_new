@@ -5,7 +5,7 @@ namespace App\Models\Report;
 class UserSummaryReport extends Report {
 
 	function __construct() {
-		$this->title = TTi18n::getText('Employee Summary Report');
+		$this->title = ('Employee Summary Report');
 		$this->file_name = 'employee_summary_report';
 
 		parent::__construct();
@@ -35,98 +35,98 @@ class UserSummaryReport extends Report {
 			case 'setup_fields':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-template' => TTi18n::gettext('Template'),
-										//'-1010-time_period' => TTi18n::gettext('Time Period'),
+										'-1000-template' => ('Template'),
+										//'-1010-time_period' => ('Time Period'),
 
-										'-2010-user_status_id' => TTi18n::gettext('Employee Status'),
-										'-2020-user_group_id' => TTi18n::gettext('Employee Group'),
-										'-2030-user_title_id' => TTi18n::gettext('Employee Title'),
-										'-2040-include_user_id' => TTi18n::gettext('Employee Include'),
-										'-2050-exclude_user_id' => TTi18n::gettext('Employee Exclude'),
-										'-2060-default_branch_id' => TTi18n::gettext('Default Branch'),
-										'-2070-default_department_id' => TTi18n::gettext('Default Department'),
-										//'-2080-punch_branch_id' => TTi18n::gettext('Punch Branch'),
-										//'-2090-punch_department_id' => TTi18n::gettext('Punch Department'),
+										'-2010-user_status_id' => ('Employee Status'),
+										'-2020-user_group_id' => ('Employee Group'),
+										'-2030-user_title_id' => ('Employee Title'),
+										'-2040-include_user_id' => ('Employee Include'),
+										'-2050-exclude_user_id' => ('Employee Exclude'),
+										'-2060-default_branch_id' => ('Default Branch'),
+										'-2070-default_department_id' => ('Default Department'),
+										//'-2080-punch_branch_id' => ('Punch Branch'),
+										//'-2090-punch_department_id' => ('Punch Department'),
 
-										'-5000-columns' => TTi18n::gettext('Display Columns'),
-										'-5010-group' => TTi18n::gettext('Group By'),
-										'-5020-sub_total' => TTi18n::gettext('SubTotal By'),
-										'-5030-sort' => TTi18n::gettext('Sort By'),
+										'-5000-columns' => ('Display Columns'),
+										'-5010-group' => ('Group By'),
+										'-5020-sub_total' => ('SubTotal By'),
+										'-5030-sort' => ('Sort By'),
 							   );
 				break;
 			case 'date_columns':
 				$retval = array_merge(
-									TTDate::getReportDateOptions( 'hire', TTi18n::getText('Appointment Date'), 16, FALSE ),
-									TTDate::getReportDateOptions( 'termination', TTi18n::getText('Termination Date'), 16, FALSE ),
-									TTDate::getReportDateOptions( 'birth', TTi18n::getText('Birth Date'), 17, FALSE )
+									TTDate::getReportDateOptions( 'hire', ('Appointment Date'), 16, FALSE ),
+									TTDate::getReportDateOptions( 'termination', ('Termination Date'), 16, FALSE ),
+									TTDate::getReportDateOptions( 'birth', ('Birth Date'), 17, FALSE )
 								);
 				break;
 			case 'static_columns':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1001-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-full_name' => TTi18n::gettext('Full Name'),
+										'-1000-first_name' => ('First Name'),
+										'-1001-middle_name' => ('Middle Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-full_name' => ('Full Name'),
 
-										'-1010-user_name' => TTi18n::gettext('User Name'),
-										'-1020-phone_id' => TTi18n::gettext('PIN/Phone ID'),
+										'-1010-user_name' => ('User Name'),
+										'-1020-phone_id' => ('PIN/Phone ID'),
 
-										'-1030-employee_number' => TTi18n::gettext('Employee #'),
+										'-1030-employee_number' => ('Employee #'),
 
-										'-1040-status' => TTi18n::gettext('Status'),
-										'-1050-title' => TTi18n::gettext('Title'),
-										'-1060-province' => TTi18n::gettext('Province/State'),
-										'-1070-country' => TTi18n::gettext('Country'),
-										'-1080-user_group' => TTi18n::gettext('Group'),
-										'-1090-default_branch' => TTi18n::gettext('Branch'), //abbreviate for space
-										'-1100-default_department' => TTi18n::gettext('Department'), //abbreviate for space
-										'-1110-currency' => TTi18n::gettext('Currency'),
+										'-1040-status' => ('Status'),
+										'-1050-title' => ('Title'),
+										'-1060-province' => ('Province/State'),
+										'-1070-country' => ('Country'),
+										'-1080-user_group' => ('Group'),
+										'-1090-default_branch' => ('Branch'), //abbreviate for space
+										'-1100-default_department' => ('Department'), //abbreviate for space
+										'-1110-currency' => ('Currency'),
 
-										'-1200-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1210-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
-										'-1220-policy_group' => TTi18n::gettext('Policy Group'),
+										'-1200-permission_control' => ('Permission Group'),
+										'-1210-pay_period_schedule' => ('Pay Period Schedule'),
+										'-1220-policy_group' => ('Policy Group'),
 
-										'-1310-sex' => TTi18n::gettext('Sex'),
-										'-1320-address1' => TTi18n::gettext('Address 1'),
-										'-1330-address2' => TTi18n::gettext('Address 2'),
+										'-1310-sex' => ('Sex'),
+										'-1320-address1' => ('Address 1'),
+										'-1330-address2' => ('Address 2'),
 
-										'-1340-city' => TTi18n::gettext('City'),
-										'-1350-province' => TTi18n::gettext('Province/State'),
-										'-1360-country' => TTi18n::gettext('Country'),
-										'-1370-postal_code' => TTi18n::gettext('Postal Code'),
-										'-1380-work_phone' => TTi18n::gettext('Work Phone'),
-										'-1391-work_phone_ext' => TTi18n::gettext('Work Phone Ext'),
-										'-1400-home_phone' => TTi18n::gettext('Home Phone'),
-										'-1410-mobile_phone' => TTi18n::gettext('Mobile Phone'),
-										'-1420-fax_phone' => TTi18n::gettext('Fax Phone'),
-										'-1430-home_email' => TTi18n::gettext('Home Email'),
-										'-1440-work_email' => TTi18n::gettext('Work Email'),
-										'-1480-sin' => TTi18n::gettext('SIN/SSN'),
-										'-1490-note' => TTi18n::gettext('Note'),
+										'-1340-city' => ('City'),
+										'-1350-province' => ('Province/State'),
+										'-1360-country' => ('Country'),
+										'-1370-postal_code' => ('Postal Code'),
+										'-1380-work_phone' => ('Work Phone'),
+										'-1391-work_phone_ext' => ('Work Phone Ext'),
+										'-1400-home_phone' => ('Home Phone'),
+										'-1410-mobile_phone' => ('Mobile Phone'),
+										'-1420-fax_phone' => ('Fax Phone'),
+										'-1430-home_email' => ('Home Email'),
+										'-1440-work_email' => ('Work Email'),
+										'-1480-sin' => ('SIN/SSN'),
+										'-1490-note' => ('Note'),
 
-										'-1495-tag' => TTi18n::gettext('Tags'),
-										'-1499-hierarchy_control_display' => TTi18n::gettext('Hierarchy'),
+										'-1495-tag' => ('Tags'),
+										'-1499-hierarchy_control_display' => ('Hierarchy'),
 
 										//Date columns handles these.
-										//'-1500-hire_date' => TTi18n::gettext('Hire Date'),
-										//'-1600-termination_date' => TTi18n::gettext('Termination Date'),
-										//'-1700-birth_date' => TTi18n::gettext('Birth Date'),
+										//'-1500-hire_date' => ('Hire Date'),
+										//'-1600-termination_date' => ('Termination Date'),
+										//'-1700-birth_date' => ('Birth Date'),
 
-										'-1500-institution' => TTi18n::gettext('Bank Institution'),
-										'-1510-transit' => TTi18n::gettext('Bank Transit/Routing'),
-										'-1520-account' => TTi18n::gettext('Bank Account'),
+										'-1500-institution' => ('Bank Institution'),
+										'-1510-transit' => ('Bank Transit/Routing'),
+										'-1520-account' => ('Bank Account'),
 
-										'-1619-currency' => TTi18n::gettext('Currency'),
-										'-1620-type' => TTi18n::gettext('Wage Type'),
-										'-1640-effective_date' => TTi18n::gettext('Wage Effective Date'),
+										'-1619-currency' => ('Currency'),
+										'-1620-type' => ('Wage Type'),
+										'-1640-effective_date' => ('Wage Effective Date'),
 
-										'-1700-language_display' => TTi18n::gettext('Language'),
-										'-1710-date_format_display' => TTi18n::gettext('Date Format'),
-										'-1720-time_format_display' => TTi18n::gettext('Time Format'),
-										'-1730-time_unit_format_display' => TTi18n::gettext('Time Units'),
-										'-1740-time_zone_display' => TTi18n::gettext('Time Zone'),
-										'-1750-items_per_page' => TTi18n::gettext('Rows Per page'),
+										'-1700-language_display' => ('Language'),
+										'-1710-date_format_display' => ('Date Format'),
+										'-1720-time_format_display' => ('Time Format'),
+										'-1730-time_unit_format_display' => ('Time Units'),
+										'-1740-time_zone_display' => ('Time Zone'),
+										'-1750-items_per_page' => ('Rows Per page'),
 							   );
 
 				$retval = array_merge( $retval, $this->getOptions('date_columns') );
@@ -135,10 +135,10 @@ class UserSummaryReport extends Report {
 			case 'dynamic_columns':
 				$retval = array(
 										//Dynamic - Aggregate functions can be used
-										'-1630-wage' => TTi18n::gettext('Wage'),
-										'-1635-hourly_rate' => TTi18n::gettext('Hourly Rate'),
+										'-1630-wage' => ('Wage'),
+										'-1635-hourly_rate' => ('Hourly Rate'),
 
-										'-2000-total_user' => TTi18n::gettext('Total Employees'), //Group counter...
+										'-2000-total_user' => ('Total Employees'), //Group counter...
 							);
 
 				break;
@@ -174,39 +174,39 @@ class UserSummaryReport extends Report {
 				break;
 			case 'templates':
 				$retval = array(
-										'-1010-by_employee+contact' => TTi18n::gettext('Contact Information By Employee'),
+										'-1010-by_employee+contact' => ('Contact Information By Employee'),
 
-										'-1020-by_employee+employment' => TTi18n::gettext('Employment Information By Employee'), //Branch, Department, Title, Group, Hire Date?
+										'-1020-by_employee+employment' => ('Employment Information By Employee'), //Branch, Department, Title, Group, Hire Date?
 
-										'-1030-by_employee+address' => TTi18n::gettext('Addresses By Employee'),
-										'-1040-by_employee+wage' => TTi18n::gettext('Wages By Employee'),
+										'-1030-by_employee+address' => ('Addresses By Employee'),
+										'-1040-by_employee+wage' => ('Wages By Employee'),
 
-										'-1050-by_employee+bank' => TTi18n::gettext('Bank Information By Employee'),
-										'-1060-by_employee+preference' => TTi18n::gettext('Preferences By Employee'),
-										//'-1020-by_employee+deduction' => TTi18n::gettext('Deductions By Employee'),
-										'-1070-by_employee+birth_date' => TTi18n::gettext('Birthdays By Employee'),
+										'-1050-by_employee+bank' => ('Bank Information By Employee'),
+										'-1060-by_employee+preference' => ('Preferences By Employee'),
+										//'-1020-by_employee+deduction' => ('Deductions By Employee'),
+										'-1070-by_employee+birth_date' => ('Birthdays By Employee'),
 
-										'-1080-by_branch_by_employee+contact' => TTi18n::gettext('Contact Information By Branch/Employee'),
-										'-1090-by_branch_by_employee+address' => TTi18n::gettext('Addresses By Branch/Employee'),
-										'-1110-by_branch_by_employee+wage' => TTi18n::gettext('Wages by Branch/Employee'),
-										'-1120-by_branch+total_user' => TTi18n::gettext('Total Employees by Branch'),
+										'-1080-by_branch_by_employee+contact' => ('Contact Information By Branch/Employee'),
+										'-1090-by_branch_by_employee+address' => ('Addresses By Branch/Employee'),
+										'-1110-by_branch_by_employee+wage' => ('Wages by Branch/Employee'),
+										'-1120-by_branch+total_user' => ('Total Employees by Branch'),
 
-										'-1130-by_department_by_employee+contact' => TTi18n::gettext('Contact Information By Department/Employee'),
-										'-1140-by_department_by_employee+address' => TTi18n::gettext('Addresses By Department/Employee'),
-										'-1150-by_department_by_employee+wage' => TTi18n::gettext('Wages by Department/Employee'),
-										'-1160-by_department+total_user' => TTi18n::gettext('Total Employees by Department'),
+										'-1130-by_department_by_employee+contact' => ('Contact Information By Department/Employee'),
+										'-1140-by_department_by_employee+address' => ('Addresses By Department/Employee'),
+										'-1150-by_department_by_employee+wage' => ('Wages by Department/Employee'),
+										'-1160-by_department+total_user' => ('Total Employees by Department'),
 
-										'-1170-by_branch_by_department_by_employee+contact' => TTi18n::gettext('Contact Information By Branch/Department/Employee'),
-										'-1180-by_branch_by_department_by_employee+address' => TTi18n::gettext('Addresses By Branch/Department/Employee'),
-										'-1190-by_branch_by_department+wage' => TTi18n::gettext('Wages by Branch/Department/Employee'),
-										'-1200-by_branch_by_department+total_user' => TTi18n::gettext('Total Employees by Branch/Department'),
+										'-1170-by_branch_by_department_by_employee+contact' => ('Contact Information By Branch/Department/Employee'),
+										'-1180-by_branch_by_department_by_employee+address' => ('Addresses By Branch/Department/Employee'),
+										'-1190-by_branch_by_department+wage' => ('Wages by Branch/Department/Employee'),
+										'-1200-by_branch_by_department+total_user' => ('Total Employees by Branch/Department'),
 
-										'-1210-by_type_by_employee+wage' => TTi18n::gettext('Wages By Type/Employee'),
-										'-1220-by_type+total_user' => TTi18n::gettext('Total Employees by Wage Type'),
+										'-1210-by_type_by_employee+wage' => ('Wages By Type/Employee'),
+										'-1220-by_type+total_user' => ('Total Employees by Wage Type'),
 
 
-										'-1230-by_hired_month+total_user' => TTi18n::gettext('Total Employees Hired By Month'),
-										'-1240-by_termination_month+total_user' => TTi18n::gettext('Total Employees Terminated By Month'),
+										'-1230-by_hired_month+total_user' => ('Total Employees Hired By Month'),
+										'-1240-by_termination_month+total_user' => ('Total Employees Terminated By Month'),
 							   );
 
 				break;
@@ -677,7 +677,7 @@ class UserSummaryReport extends Report {
 		$ulf = TTnew( 'UserListFactory' );
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $ulf as $key => $u_obj ) {
 			//We used to just get return the entire $u_obj->data array, but this wouldn't include tags and other columns that required some additional processing.
 			//Not sure why this was done that way... I think because we had problems with the multiple date fields (Hire Date/Termination Date/Birth Date, etc...)
@@ -698,7 +698,7 @@ class UserSummaryReport extends Report {
 		$uplf = TTnew( 'UserPreferenceListFactory' );
 		$uplf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Preference Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $uplf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $uplf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $uplf as $key => $up_obj ) {
 			$this->tmp_data['user_preference'][$up_obj->getUser()] = (array)$up_obj->getObjectAsArray( $columns );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
@@ -709,7 +709,7 @@ class UserSummaryReport extends Report {
 		$uwlf = TTnew( 'UserWageListFactory' );
 		$uwlf->getAPILastWageSearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Wage Rows: '. $uwlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $uwlf as $key => $uw_obj ) {
 			if ( $wage_permission_children_ids === TRUE OR in_array( $uw_obj->getUser(), $wage_permission_children_ids) ) {
 				$this->tmp_data['user_wage'][$uw_obj->getUser()] = (array)$uw_obj->getObjectAsArray( $columns );
@@ -722,7 +722,7 @@ class UserSummaryReport extends Report {
 		$balf = TTnew( 'BankAccountListFactory' );
 		$balf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Bank Rows: '. $balf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $balf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $balf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $balf as $key => $ba_obj ) {
 			$this->tmp_data['user_bank'][$ba_obj->getUser()] = (array)$ba_obj->getObjectAsArray( $columns );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
@@ -734,7 +734,7 @@ class UserSummaryReport extends Report {
 
 	//PreProcess data such as calculating additional columns from raw data etc...
 	function _preProcess() {
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['user']), NULL, TTi18n::getText('Pre-Processing Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['user']), NULL, ('Pre-Processing Data...') );
 
 		$key=0;
 		if ( isset($this->tmp_data['user']) ) {

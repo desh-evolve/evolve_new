@@ -49,7 +49,7 @@ class UserEducationFactory  extends Factory{
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -74,7 +74,7 @@ class UserEducationFactory  extends Factory{
         function setQualificationName($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('qualification_name', $value, TTi18n::gettext('Qualification name is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('qualification_name', $value, ('Qualification name is too long'), 1, 250)) {
                     $this->data['qualification_name'] = $value;
                     return FALSE;
 		}
@@ -95,7 +95,7 @@ class UserEducationFactory  extends Factory{
         function setInstitute($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('institute', $value, TTi18n::gettext('Institute name is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('institute', $value, ('Institute name is too long'), 1, 250)) {
                     $this->data['institute'] = $value;
                     return FALSE;
 		}
@@ -117,7 +117,7 @@ class UserEducationFactory  extends Factory{
         
         
 	function setYear($year) {
-			if ($value == '' OR $this->Validator->isLength('year', $value, TTi18n::gettext('Year  is too long'), 1, 20)) {
+			if ($value == '' OR $this->Validator->isLength('year', $value, ('Year  is too long'), 1, 20)) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['year'] =  $year ; //Allow blank birthdate.
@@ -143,7 +143,7 @@ class UserEducationFactory  extends Factory{
         function setRemarks($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('remarks', $value, TTi18n::gettext('Remarks is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('remarks', $value, ('Remarks is too long'), 1, 250)) {
                     $this->data['remarks'] = $value;
                     return FALSE;
 		}

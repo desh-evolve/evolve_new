@@ -141,15 +141,15 @@ class PayStubFactory extends Factory {
 
 				$retval = array(
 
-										10 => TTi18n::gettext('NEW'),
+										10 => ('NEW'),
 
-										20 => TTi18n::gettext('LOCKED'),
+										20 => ('LOCKED'),
 
-										25 => TTi18n::gettext('Open'),
+										25 => ('Open'),
 
-										30 => TTi18n::gettext('Pending Transaction'),
+										30 => ('Pending Transaction'),
 
-										40 => TTi18n::gettext('Paid')
+										40 => ('Paid')
 
 									);
 
@@ -159,7 +159,7 @@ class PayStubFactory extends Factory {
 
 				$retval = array();
 
-				$retval += array( '00' => TTi18n::gettext('-- Direct Deposit --') );
+				$retval += array( '00' => ('-- Direct Deposit --') );
 
 				$retval += $this->getOptions('export_eft');
 
@@ -167,7 +167,7 @@ class PayStubFactory extends Factory {
 
 										'01' => '',
 
-										'02' => TTi18n::gettext('-- Laser Cheques --') );
+										'02' => ('-- Laser Cheques --') );
 
 				$retval += $this->getOptions('export_cheque');
 
@@ -179,15 +179,15 @@ class PayStubFactory extends Factory {
 
 										//EFT formats must start with "eft_"
 
-										'-1010-eft_ACH' => TTi18n::gettext('United States - ACH (94-Byte)'),
+										'-1010-eft_ACH' => ('United States - ACH (94-Byte)'),
 
-										'-1020-eft_1464' => TTi18n::gettext('Canada - EFT (CPA 005/1464-Byte)'),
+										'-1020-eft_1464' => ('Canada - EFT (CPA 005/1464-Byte)'),
 
-										'-1030-eft_105' => TTi18n::gettext('Canada - EFT (105-Byte)'),
+										'-1030-eft_105' => ('Canada - EFT (105-Byte)'),
 
-										'-1040-eft_HSBC' => TTi18n::gettext('Canada - HSBC EFT-PC (CSV)'),
+										'-1040-eft_HSBC' => ('Canada - HSBC EFT-PC (CSV)'),
 
-										'-1050-eft_BEANSTREAM' => TTi18n::gettext('Beanstream (CSV)'),
+										'-1050-eft_BEANSTREAM' => ('Beanstream (CSV)'),
 
 									);
 
@@ -199,17 +199,17 @@ class PayStubFactory extends Factory {
 
 										//Cheque formats must start with "cheque_"
 
-										'-2010-cheque_9085' =>   TTi18n::gettext('NEBS #9085'),
+										'-2010-cheque_9085' =>   ('NEBS #9085'),
 
-										'-2020-cheque_9209p' =>  TTi18n::gettext('NEBS #9209P'),
+										'-2020-cheque_9209p' =>  ('NEBS #9209P'),
 
-										'-2030-cheque_dlt103' => TTi18n::gettext('NEBS #DLT103'),
+										'-2030-cheque_dlt103' => ('NEBS #DLT103'),
 
-										'-2040-cheque_dlt104' => TTi18n::gettext('NEBS #DLT104'),
+										'-2040-cheque_dlt104' => ('NEBS #DLT104'),
 
-										'-2050-cheque_cr_standard_form_1' => TTi18n::gettext('Costa Rica - Std Form 1'),
+										'-2050-cheque_cr_standard_form_1' => ('Costa Rica - Std Form 1'),
 
-										'-2060-cheque_cr_standard_form_2' => TTi18n::gettext('Costa Rica - Std Form 2'),
+										'-2060-cheque_cr_standard_form_2' => ('Costa Rica - Std Form 2'),
 
 									);
 
@@ -219,49 +219,49 @@ class PayStubFactory extends Factory {
 
 				$retval = array(
 
-										'-1000-first_name' => TTi18n::gettext('First Name'),
+										'-1000-first_name' => ('First Name'),
 
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
+										'-1002-last_name' => ('Last Name'),
 
-										'-1005-user_status' => TTi18n::gettext('Employee Status'),
+										'-1005-user_status' => ('Employee Status'),
 
-										'-1010-title' => TTi18n::gettext('Title'),
+										'-1010-title' => ('Title'),
 
-										'-1020-user_group' => TTi18n::gettext('Group'),
+										'-1020-user_group' => ('Group'),
 
-										'-1030-default_branch' => TTi18n::gettext('Default Branch'),
+										'-1030-default_branch' => ('Default Branch'),
 
-										'-1040-default_department' => TTi18n::gettext('Default Department'),
+										'-1040-default_department' => ('Default Department'),
 
-										'-1050-city' => TTi18n::gettext('City'),
+										'-1050-city' => ('City'),
 
-										'-1060-province' => TTi18n::gettext('Province/State'),
+										'-1060-province' => ('Province/State'),
 
-										'-1070-country' => TTi18n::gettext('Country'),
+										'-1070-country' => ('Country'),
 
-										'-1080-currency' => TTi18n::gettext('Currency'),
+										'-1080-currency' => ('Currency'),
 
-										//'-1080-pay_period' => TTi18n::gettext('Pay Period'),
-
-
-
-										'-1140-status' => TTi18n::gettext('Status'),
-
-										'-1170-start_date' => TTi18n::gettext('Start Date'),
-
-										'-1180-end_date' => TTi18n::gettext('End Date'),
-
-										'-1190-transaction_date' => TTi18n::gettext('Transaction Date'),
+										//'-1080-pay_period' => ('Pay Period'),
 
 
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
+										'-1140-status' => ('Status'),
 
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
+										'-1170-start_date' => ('Start Date'),
 
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
+										'-1180-end_date' => ('End Date'),
 
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-1190-transaction_date' => ('Transaction Date'),
+
+
+
+										'-2000-created_by' => ('Created By'),
+
+										'-2010-created_date' => ('Created Date'),
+
+										'-2020-updated_by' => ('Updated By'),
+
+										'-2030-updated_date' => ('Updated Date'),
 
 							);
 
@@ -525,7 +525,7 @@ class PayStubFactory extends Factory {
 
 															$ulf->getByID($id),
 
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 
 															) ) {
 
@@ -573,7 +573,7 @@ class PayStubFactory extends Factory {
 
 														$pplf->getByID($id),
 
-														TTi18n::gettext('Invalid Pay Period')
+														('Invalid Pay Period')
 
 														) ) {
 
@@ -629,7 +629,7 @@ class PayStubFactory extends Factory {
 
 														$culf->getByID($id),
 
-														TTi18n::gettext('Invalid Currency')
+														('Invalid Currency')
 
 													) ) {
 
@@ -691,7 +691,7 @@ class PayStubFactory extends Factory {
 
 											$value,
 
-											TTi18n::gettext('Incorrect Currency Rate')) ) {
+											('Incorrect Currency Rate')) ) {
 
 
 
@@ -767,7 +767,7 @@ class PayStubFactory extends Factory {
 
 												$epoch,
 
-												TTi18n::gettext('Incorrect start date'))
+												('Incorrect start date'))
 
 				AND
 
@@ -775,7 +775,7 @@ class PayStubFactory extends Factory {
 
 												$this->isValidStartDate($epoch),
 
-												TTi18n::gettext('Conflicting start date'))
+												('Conflicting start date'))
 
 
 
@@ -853,7 +853,7 @@ class PayStubFactory extends Factory {
 
 												$epoch,
 
-												TTi18n::gettext('Incorrect end date'))
+												('Incorrect end date'))
 
 				AND
 
@@ -861,7 +861,7 @@ class PayStubFactory extends Factory {
 
 												$this->isValidEndDate($epoch),
 
-												TTi18n::gettext('Conflicting end date'))
+												('Conflicting end date'))
 
 
 
@@ -939,7 +939,7 @@ class PayStubFactory extends Factory {
 
 												$epoch,
 
-												TTi18n::gettext('Incorrect transaction date'))
+												('Incorrect transaction date'))
 
 			) {
 
@@ -987,7 +987,7 @@ class PayStubFactory extends Factory {
 
 											$status,
 
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 
 											$this->getOptions('status')) ) {
 
@@ -1039,7 +1039,7 @@ class PayStubFactory extends Factory {
 
 												$epoch,
 
-												TTi18n::gettext('Incorrect Date')) ) {
+												('Incorrect Date')) ) {
 
 
 
@@ -1101,7 +1101,7 @@ class PayStubFactory extends Factory {
 
 													$ulf->getByID($id),
 
-													TTi18n::gettext('Incorrect User')
+													('Incorrect User')
 
 													) ) {
 
@@ -1837,7 +1837,7 @@ class PayStubFactory extends Factory {
 
 												FALSE,
 
-												TTi18n::gettext('Invalid unique User and/or Pay Period') );
+												('Invalid unique User and/or Pay Period') );
 
 			}
 
@@ -1849,7 +1849,7 @@ class PayStubFactory extends Factory {
 
 													$this->getStartDate(),
 
-													TTi18n::gettext('Incorrect start date'));
+													('Incorrect start date'));
 
 			}
 
@@ -1859,7 +1859,7 @@ class PayStubFactory extends Factory {
 
 													$this->getEndDate(),
 
-													TTi18n::gettext('Incorrect end date'));
+													('Incorrect end date'));
 
 			}
 
@@ -1869,7 +1869,7 @@ class PayStubFactory extends Factory {
 
 													$this->getTransactionDate(),
 
-													TTi18n::gettext('Incorrect transaction date'));
+													('Incorrect transaction date'));
 
 			}
 
@@ -1881,7 +1881,7 @@ class PayStubFactory extends Factory {
 
 													FALSE,
 
-													TTi18n::gettext('Transaction date is before pay period end date'));
+													('Transaction date is before pay period end date'));
 
 			}
 
@@ -1913,7 +1913,7 @@ class PayStubFactory extends Factory {
 
 											$this->checkNoEarnings(),
 
-											TTi18n::gettext('No Earnings, employee may not have any hours for this pay period, or their wage may not be set') );
+											('No Earnings, employee may not have any hours for this pay period, or their wage may not be set') );
 
 
 
@@ -1921,7 +1921,7 @@ class PayStubFactory extends Factory {
 
 											$this->checkEarnings(),
 
-											TTi18n::gettext('Earnings don\'t match gross pay') );
+											('Earnings don\'t match gross pay') );
 
 
 
@@ -1933,7 +1933,7 @@ class PayStubFactory extends Factory {
 
 											$this->checkDeductions(),
 
-											TTi18n::gettext('Deductions don\'t match total deductions') );
+											('Deductions don\'t match total deductions') );
 
 
 
@@ -1943,7 +1943,7 @@ class PayStubFactory extends Factory {
 
 											$this->checkNetPay(),
 
-											TTi18n::gettext('Net Pay doesn\'t match earnings or deductions') );
+											('Net Pay doesn\'t match earnings or deductions') );
 
 		}
 
@@ -2823,7 +2823,7 @@ class PayStubFactory extends Factory {
 
 										FALSE,
 
-										TTi18n::gettext('Invalid Pay Stub entry'));
+										('Invalid Pay Stub entry'));
 
 
 
@@ -3137,7 +3137,7 @@ class PayStubFactory extends Factory {
 
 													FALSE,
 
-													TTi18n::gettext('Invalid Pay Stub entry'));
+													('Invalid Pay Stub entry'));
 
 					return FALSE;
 
@@ -4695,41 +4695,41 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x), Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x), Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x), Misc::AdjustXY(110, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110+$stub_2_offset, $adjust_y) );
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 
 
@@ -4737,13 +4737,13 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
@@ -4775,7 +4775,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(172, $adjust_x),Misc::AdjustXY(25, $adjust_y));
 
-								$pdf->Cell(10,10, TTi18n::gettext('Date:').' ', $border, 0, 'C');
+								$pdf->Cell(10,10, ('Date:').' ', $border, 0, 'C');
 
 
 
@@ -4825,41 +4825,41 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 
 
@@ -4867,13 +4867,13 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
@@ -4905,7 +4905,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(172, $adjust_x),Misc::AdjustXY(33, $adjust_y));
 
-								$pdf->Cell(10,10, TTi18n::gettext('Date:').' ', $border, 0, 'C');
+								$pdf->Cell(10,10, ('Date:').' ', $border, 0, 'C');
 
 
 
@@ -4947,41 +4947,41 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 
 
@@ -4989,13 +4989,13 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 								break;
 
@@ -5025,7 +5025,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(172, $adjust_x),Misc::AdjustXY(33, $adjust_y));
 
-								$pdf->Cell(10,10, TTi18n::gettext('Date:').' ', $border, 0, 'C');
+								$pdf->Cell(10,10, ('Date:').' ', $border, 0, 'C');
 
 
 
@@ -5067,41 +5067,41 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 
 
@@ -5109,13 +5109,13 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: '). $pay_stub_obj->getCurrencyObject()->getSymbol() . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 								break;
 
@@ -5137,7 +5137,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY( Misc::AdjustXY(20, $adjust_x), Misc::AdjustXY(41, $adjust_y) );
 
-								$pdf->Cell(100,5, $pay_stub['entries'][40][0]['amount_words'] . TTi18n::gettext(' and ') .  $pay_stub['entries'][40][0]['amount_cents'] .'/100 *****', $border, 0, 'J');
+								$pdf->Cell(100,5, $pay_stub['entries'][40][0]['amount_words'] . (' and ') .  $pay_stub['entries'][40][0]['amount_cents'] .'/100 *****', $border, 0, 'J');
 
 
 
@@ -5179,41 +5179,41 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x), Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x), Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
+								$pdf->Cell(75,5, ('Identification #:').' '. $pay_stub['display_id'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x), Misc::AdjustXY(110, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(110+$stub_2_offset, $adjust_y) );
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay Start Date:').' '. TTDate::getDate('DATE', $pay_stub['start_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(115+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Pay End Date:').' '. TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 								$pdf->setXY(Misc::AdjustXY(160, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(50,5, TTi18n::gettext('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
+								$pdf->Cell(50,5, ('Payment Date:').' '. TTDate::getDate('DATE', $pay_stub['transaction_date'] ), $border, 0, 'L');
 
 
 
@@ -5221,13 +5221,13 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: $') . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: $') . $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
 								$pdf->setXY(Misc::AdjustXY(15, $adjust_x),Misc::AdjustXY(120+$stub_2_offset, $adjust_y));
 
-								$pdf->Cell(40,5, TTi18n::gettext('Net Pay: $'). $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
+								$pdf->Cell(40,5, ('Net Pay: $'). $pay_stub['entries'][40][0]['amount'], $border, 0, 'L');
 
 
 
@@ -5241,11 +5241,11 @@ class PayStubFactory extends Factory {
 
 								$border = 0;
 
-								$pdf->Cell(40,5, TTi18n::gettext('Employee Signature:'), $border, 0, 'L');
+								$pdf->Cell(40,5, ('Employee Signature:'), $border, 0, 'L');
 
 								$pdf->Cell(60,5, '_____________________________' , $border, 0, 'L');
 
-								$pdf->Cell(40,5, TTi18n::gettext('Supervisor Signature:'), $border, 0, 'R');
+								$pdf->Cell(40,5, ('Supervisor Signature:'), $border, 0, 'R');
 
 								$pdf->Cell(60,5, '_____________________________' , $border, 0, 'L');
 
@@ -5271,7 +5271,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->Cell(140,5, '', $border, 0, 'R');
 
-								$pdf->Cell(60,5, TTi18n::gettext('(print name)'), $border, 0, 'C');
+								$pdf->Cell(60,5, ('(print name)'), $border, 0, 'C');
 
 
 
@@ -5299,7 +5299,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY( Misc::AdjustXY(20, $adjust_x), Misc::AdjustXY(41, $adjust_y) );
 
-								$pdf->Cell(100,5, $pay_stub['entries'][40][0]['amount_words'] . TTi18n::gettext(' and ') .  $pay_stub['entries'][40][0]['amount_cents'] .'/100 *****', $border, 0, 'J');
+								$pdf->Cell(100,5, $pay_stub['entries'][40][0]['amount_words'] . (' and ') .  $pay_stub['entries'][40][0]['amount_cents'] .'/100 *****', $border, 0, 'J');
 
 
 
@@ -5331,7 +5331,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(65, $adjust_x), Misc::AdjustXY(100, $adjust_y));
 
-								$pdf->Cell(75,5, TTi18n::gettext('Recipient Copy:'), $border, 0, 'C');
+								$pdf->Cell(75,5, ('Recipient Copy:'), $border, 0, 'C');
 
 
 
@@ -5341,7 +5341,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Date of Issue:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Date of Issue:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
@@ -5353,7 +5353,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Date of Issue:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Date of Issue:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
@@ -5365,7 +5365,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Recipient:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Recipient:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
@@ -5377,7 +5377,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Recipient:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Recipient:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
@@ -5391,7 +5391,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Amount:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Amount:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
@@ -5401,7 +5401,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Amount:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Amount:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
@@ -5413,21 +5413,21 @@ class PayStubFactory extends Factory {
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Regarding:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Regarding:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
-								$pdf->Cell(100,5, TTi18n::gettext('Payment from') .' '. TTDate::getDate('DATE', $pay_stub['start_date'] ).' '. TTi18n::gettext('to').' '.TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'J');
+								$pdf->Cell(100,5, ('Payment from') .' '. TTDate::getDate('DATE', $pay_stub['start_date'] ).' '. ('to').' '.TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'J');
 
 								$pdf->setXY(Misc::AdjustXY(75, $adjust_x), Misc::AdjustXY(140+$stub_2_offset, $adjust_y));
 
 								$pdf->SetFont('','B',10);
 
-								$pdf->Cell(30,5, TTi18n::gettext('Regarding:'), $border, 0, 'J');
+								$pdf->Cell(30,5, ('Regarding:'), $border, 0, 'J');
 
 								$pdf->SetFont('','',10);
 
-								$pdf->Cell(100,5, TTi18n::gettext('Payment from') .' '. TTDate::getDate('DATE', $pay_stub['start_date'] ).' '. TTi18n::gettext('to').' '.TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'J');
+								$pdf->Cell(100,5, ('Payment from') .' '. TTDate::getDate('DATE', $pay_stub['start_date'] ).' '. ('to').' '.TTDate::getDate('DATE', $pay_stub['end_date'] ), $border, 0, 'J');
 
 
 
@@ -5435,7 +5435,7 @@ class PayStubFactory extends Factory {
 
 								$pdf->setXY(Misc::AdjustXY(65, $adjust_x), Misc::AdjustXY(210, $adjust_y));
 
-								$pdf->Cell(75,5, $company_obj->getName().' '.TTi18n::gettext('Copy:'), $border, 0, 'C');
+								$pdf->Cell(75,5, $company_obj->getName().' '.('Copy:'), $border, 0, 'C');
 
 
 
@@ -5469,15 +5469,15 @@ class PayStubFactory extends Factory {
 
 								$pdf->setFillColor(255,255,255);
 
-								$pdf->MultiCell( $column_widths['generated_by'], $line_h, TTi18n::gettext('Generated By'). "\n\n\n " , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['generated_by'], $line_h, ('Generated By'). "\n\n\n " , 1, 'C', 1, 0);
 
-								$pdf->MultiCell( $column_widths['signed_by'], $line_h, TTi18n::gettext('Signed By'). "\n\n\n " , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['signed_by'], $line_h, ('Signed By'). "\n\n\n " , 1, 'C', 1, 0);
 
-								$pdf->MultiCell( $column_widths['received_by'], $line_h, TTi18n::gettext('Received By') . "\n\n\n " , 'T,L,B', 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['received_by'], $line_h, ('Received By') . "\n\n\n " , 'T,L,B', 'C', 1, 0);
 
-								$pdf->MultiCell( $column_widths['date'], $line_h, TTi18n::gettext('Date') . "\n\n\n ", 'T,B', 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['date'], $line_h, ('Date') . "\n\n\n ", 'T,B', 'C', 1, 0);
 
-								$pdf->MultiCell( $column_widths['sin_ssn'], $line_h, TTi18n::gettext('SIN / SSN') . "\n\n\n " , 'T,R,B', 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['sin_ssn'], $line_h, ('SIN / SSN') . "\n\n\n " , 'T,R,B', 'C', 1, 0);
 
 								$pdf->Ln();
 
@@ -5680,17 +5680,17 @@ class PayStubFactory extends Factory {
 
 				$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
 
-				$pdf->Cell(30,3,TTi18n::gettext('Pay Start Date:').' ', $border, 0, 'R');
+				$pdf->Cell(30,3,('Pay Start Date:').' ', $border, 0, 'R');
 
 				$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
 
-				$pdf->Cell(30,3,TTi18n::gettext('Pay End Date:').' ', $border, 0, 'R');
+				$pdf->Cell(30,3,('Pay End Date:').' ', $border, 0, 'R');
 
 				
 
 				$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 
-				$pdf->Cell(30,3,TTi18n::gettext('Payment Date:').' ', $border, 0, 'R');
+				$pdf->Cell(30,3,('Payment Date:').' ', $border, 0, 'R');
 
 
 
@@ -5724,7 +5724,7 @@ class PayStubFactory extends Factory {
 
 				$pdf->setXY( Misc::AdjustXY(165, $adjust_x), Misc::AdjustXY(17, $adjust_y) );
 
-				$pdf->Cell(10, 3, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+				$pdf->Cell(10, 3, ('CONFIDENTIAL'), $border, 0, 'R');
 
 				
 
@@ -5753,7 +5753,7 @@ class PayStubFactory extends Factory {
                                 $adjust_y = $adjust_y-2;//fl added for rosen 
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(29, $adjust_y) );
 
-				$pdf->Cell(175, 3, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+				$pdf->Cell(175, 3, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -5989,15 +5989,15 @@ class PayStubFactory extends Factory {
                                         
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell( $column_widths['name'], 20 ,TTi18n::gettext('Earnings'), $border, 0, 'L');
+					$pdf->Cell( $column_widths['name'], 20 ,('Earnings'), $border, 0, 'L');
 
-					///$pdf->Cell( $column_widths['rate'], 5,TTi18n::gettext('Rate'), $border, 0, 'R');
+					///$pdf->Cell( $column_widths['rate'], 5,('Rate'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['units'], 5,TTi18n::gettext('Hrs/Units'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['units'], 5,('Hrs/Units'), $border, 0, 'R');
 
-					$pdf->Cell( $column_widths['amount'], 20 ,TTi18n::gettext('Amount'), $border, 0, 'R');
+					$pdf->Cell( $column_widths['amount'], 20 ,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -6110,17 +6110,17 @@ class PayStubFactory extends Factory {
                                                             
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
                                                     
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
-						//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					} else {
 
@@ -6130,15 +6130,15 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 4,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 4,('Deductions'), $border, 0, 'L');
 
 					}
 
 
 
-					//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -6328,17 +6328,17 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
-						$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					} else {
 
@@ -6348,15 +6348,15 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					}
 
 
 
-					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -6509,11 +6509,11 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
+					$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
 
-					$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('Balance'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('Balance'), $border, 0, 'R');
 
 
 
@@ -6593,9 +6593,9 @@ class PayStubFactory extends Factory {
 
 
 
-					$pdf->Cell(70,5,TTi18n::gettext('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
+					$pdf->Cell(70,5,('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
 
-					$pdf->Cell(25,5,TTi18n::gettext('Balance (hrs)'), $border, 0, 'R');
+					$pdf->Cell(25,5,('Balance (hrs)'), $border, 0, 'R');
 
 
 
@@ -6667,7 +6667,7 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell(175,5,TTi18n::gettext('Notes'), $border, 0, 'L');
+					$pdf->Cell(175,5,('Notes'), $border, 0, 'L');
 
 
 
@@ -6739,7 +6739,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+3, $adjust_y) );
 
-				//$pdf->Cell(175, 5, TTi18n::gettext('NON NEGOTIABLE'), $border, 0, 'C', 0);
+				//$pdf->Cell(175, 5, ('NON NEGOTIABLE'), $border, 0, 'C', 0);
 
 
 
@@ -6749,7 +6749,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+9, $adjust_y) );
 
-				//$pdf->Cell(60, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'C', 0);
+				//$pdf->Cell(60, 5, ('CONFIDENTIAL'), $border, 0, 'C', 0);
 
 				//$pdf->SetFont('','',10);
 
@@ -6793,11 +6793,11 @@ class PayStubFactory extends Factory {
 
 				if ( isset($pay_stub_entries[65]) AND count($pay_stub_entries[65]) > 0 ) {
 
-					$net_pay_label = TTi18n::gettext('Balance');
+					$net_pay_label = ('Balance');
 
 				} else {
 
-					$net_pay_label = TTi18n::gettext('Net Pay');
+					$net_pay_label = ('Net Pay');
 
 				}
 
@@ -6825,7 +6825,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY($block_adjust_y+30, $adjust_y) );
 
-				//$pdf->Cell(50, 5, TTi18n::gettext('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
+				//$pdf->Cell(50, 5, ('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
 
 				unset($net_pay_amount, $tainted_flag);
 
@@ -6845,7 +6845,7 @@ class PayStubFactory extends Factory {
                                 //ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+ 38, $adjust_y) );
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+65, $adjust_y) );
 
-				$pdf->Cell(175, 1, TTi18n::gettext('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
+				$pdf->Cell(175, 1, ('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
 
 
 
@@ -7098,7 +7098,7 @@ class PayStubFactory extends Factory {
 
                     //Title 
                     
-                    $pdf->Cell(175, 3, TTi18n::gettext('PAY SLIP - ' . strtoupper(date('M, Y', $pp_end_date))), $border, 0, 'L', 0);
+                    $pdf->Cell(175, 3, ('PAY SLIP - ' . strtoupper(date('M, Y', $pp_end_date))), $border, 0, 'L', 0);
                     $pdf->setLineWidth(0.75);
                     $pdf->Line(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(30, $adjust_y), Misc::AdjustXY(96, $adjust_y), Misc::AdjustXY(30, $adjust_y));//0,20 - (35,-3)  -(197,-3) -(35,-3)
 
@@ -7240,39 +7240,39 @@ class PayStubFactory extends Factory {
                         $pdf->SetFont('', '', 10);
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y));//(0,20) - (30,-3)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext("EPF No."), $border, 0, 'L');
-                        $pdf->Cell($column_widths['amount'], 20, ": ".TTi18n::gettext($user_obj->getEmployeeNumber()), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ("EPF No."), $border, 0, 'L');
+                        $pdf->Cell($column_widths['amount'], 20, ": ".($user_obj->getEmployeeNumber()), $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 5));//(0,20) - (30,2)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Name'), $border, 0, 'L');
-                        $pdf->Cell($column_widths['amount'], 20, ": ".TTi18n::gettext($user_obj->getFullName()), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('Name'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['amount'], 20, ": ".($user_obj->getFullName()), $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 10));//(0,20) - (30,7)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Designation'), $border, 0, 'L');
-                        $pdf->Cell($column_widths['amount'], 20, ": ".TTi18n::gettext(Option::getByKey($user_obj->getTitle(), $title_options, NULL )), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('Designation'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['amount'], 20, ": ".(Option::getByKey($user_obj->getTitle(), $title_options, NULL )), $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 15));//(0,20) - (30,12)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Department'), $border, 0, 'L');
-                        $pdf->Cell($column_widths['amount'], 20, ": ".TTi18n::gettext(Option::getByKey($user_obj->getDefaultDepartment(), $department_options, NULL )), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('Department'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['amount'], 20, ": ".(Option::getByKey($user_obj->getDefaultDepartment(), $department_options, NULL )), $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 20));//(0,20) - (30,17)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Location'), $border, 0, 'L');         
-                        $pdf->Cell($column_widths['amount'], 20, ": ".TTi18n::gettext(Option::getByKey($user_obj->getDefaultBranch(), $branch_options, NULL )), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('Location'), $border, 0, 'L');         
+                        $pdf->Cell($column_widths['amount'], 20, ": ".(Option::getByKey($user_obj->getDefaultBranch(), $branch_options, NULL )), $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 25));//(0,20) - (30,22)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Days Worked'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('Days Worked'), $border, 0, 'L');
                         $pdf->Cell($column_widths['amount'], 20, ": ".count($punch_date_array), $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 30));//(0,20) - (30,27)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('NoPay Days'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('NoPay Days'), $border, 0, 'L');
                         $pdf->Cell($column_widths['amount'], 20, ": ".number_format($nopay_days,1), $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 35));//(0,20) - (30,32)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Normal OT Hrs'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('Normal OT Hrs'), $border, 0, 'L');
                         $pdf->Cell($column_widths['amount'], 20, ": ".$normal_OT_formatted, $border, 0, 'L');
 
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 40));//(0,20) - (30,37)
-                        $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Holiday OT Hrs'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name'], 20, ('Holiday OT Hrs'), $border, 0, 'L');
                         $pdf->Cell($column_widths['amount'], 20, ": ".$holiday_OT_formatted, $border, 0, 'L');
 
                         $pdf->setLineWidth(0.25);
@@ -7280,8 +7280,8 @@ class PayStubFactory extends Factory {
 
                         $pdf->SetFont('', 'B', 8);
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y + 48));//(0,20) - (30,37)
-                        $pdf->Cell($column_widths['name']+2, 23, TTi18n::gettext(' '), $border, 0, 'L');
-                        $pdf->Cell($column_widths['amount'], 20, TTi18n::gettext('LKR'), $border, 0, 'L');
+                        $pdf->Cell($column_widths['name']+2, 23, (' '), $border, 0, 'L');
+                        $pdf->Cell($column_widths['amount'], 20, ('LKR'), $border, 0, 'L');
                         
                         $block_adjust_y += 60;
                         
@@ -7374,8 +7374,8 @@ class PayStubFactory extends Factory {
 ////
 ////                        $pdf->SetFont('', 'B', 10);
 ////                        $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y));
-////                        $pdf->Cell($column_widths['amount'], 5, TTi18n::gettext('Accruals'), $border, 0, 'L');
-////                        $pdf->Cell($column_widths['amount'], 5,  ": ".TTi18n::gettext('Amount'), $border, 0, 'L');
+////                        $pdf->Cell($column_widths['amount'], 5, ('Accruals'), $border, 0, 'L');
+////                        $pdf->Cell($column_widths['amount'], 5,  ": ".('Amount'), $border, 0, 'L');
 ////
 ////                        $block_adjust_y += 5;
 ////
@@ -7399,7 +7399,7 @@ class PayStubFactory extends Factory {
 //
 //                                $pdf->Cell($column_widths['amount'], 5,  ": ".TTi18n::formatNumber($pay_stub_entry['amount']), $border, 0, 'L');
 //
-////                                $pdf->Cell($column_widths['name'], 20, TTi18n::gettext('Normal OT Hrs'), $border, 0, 'L');
+////                                $pdf->Cell($column_widths['name'], 20, ('Normal OT Hrs'), $border, 0, 'L');
 ////                                $pdf->Cell($column_widths['amount'], 20, ": "."", $border, 0, 'L');
 //                            }
 //
@@ -7430,7 +7430,7 @@ class PayStubFactory extends Factory {
                       
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y));
 
-                        $pdf->Cell( $column_widths['name'], 4, TTi18n::gettext('Deductions :'), $border, 0, 'L');
+                        $pdf->Cell( $column_widths['name'], 4, ('Deductions :'), $border, 0, 'L');
 
                         $block_adjust_y = $tmp_block_adjust_y = $top_block_adjust_y = $block_adjust_y + 5;
 
@@ -7573,7 +7573,7 @@ class PayStubFactory extends Factory {
 
                             $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y));
 
-                            $pdf->Cell($column_widths['name'], 5, TTi18n::gettext('Employer Contributions :'), $border, 0, 'L');
+                            $pdf->Cell($column_widths['name'], 5, ('Employer Contributions :'), $border, 0, 'L');
 
                             $pdf->setXY(Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y));
 
@@ -7581,7 +7581,7 @@ class PayStubFactory extends Factory {
 
                             $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y));
 
-                            $pdf->Cell($column_widths['name'], 5, TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+                            $pdf->Cell($column_widths['name'], 5, ('Employer Contributions'), $border, 0, 'L');
                         }
                         
                         $block_adjust_y = $tmp_block_adjust_y = $top_block_adjust_y = $block_adjust_y + 5;
@@ -7690,9 +7690,9 @@ class PayStubFactory extends Factory {
 
                         $accrual_time_header_start_y = $pdf->getY();
 
-                        $pdf->Cell(70, 5, TTi18n::gettext('Accrual Time Balances as of ') . TTDate::getDate('DATE', time()), $border, 0, 'L');
+                        $pdf->Cell(70, 5, ('Accrual Time Balances as of ') . TTDate::getDate('DATE', time()), $border, 0, 'L');
 
-                        $pdf->Cell(25, 5, TTi18n::gettext('Balance (hrs)'), $border, 0, 'L');
+                        $pdf->Cell(25, 5, ('Balance (hrs)'), $border, 0, 'L');
 
                         $block_adjust_y += 5;
 
@@ -7750,9 +7750,9 @@ class PayStubFactory extends Factory {
                     }
 
                     if (isset($pay_stub_entries[65]) AND count($pay_stub_entries[65]) > 0) {
-                        $net_pay_label = TTi18n::gettext('Balance');
+                        $net_pay_label = ('Balance');
                     } else {
-                        $net_pay_label = TTi18n::gettext('Net Pay');
+                        $net_pay_label = ('Net Pay');
                     }
 
                     if ($pay_stub_obj->getTainted() == TRUE) {
@@ -7783,7 +7783,7 @@ class PayStubFactory extends Factory {
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 135, $adjust_y));
 
-                    $pdf->Cell(100, 1, TTi18n::gettext('SALARY RECEIPT'), $border, 0, 'L', 0);
+                    $pdf->Cell(100, 1, ('SALARY RECEIPT'), $border, 0, 'L', 0);
 
                     $pdf->SetFont('', 'B', 10);
 
@@ -7798,29 +7798,29 @@ class PayStubFactory extends Factory {
                         $title = 'Ms ';
                     }
 
-                    $pdf->Cell(100, 1, TTi18n::gettext($user_obj->getEmployeeNumber() . '  ' . $title . $user_obj->getNameWithInitials()), $border, 0, 'L', 0);
+                    $pdf->Cell(100, 1, ($user_obj->getEmployeeNumber() . '  ' . $title . $user_obj->getNameWithInitials()), $border, 0, 'L', 0);
 
                     $pdf->SetFont('', '', 10);
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 145, $adjust_y));
 
-                    $pdf->Cell(95, 1, TTi18n::gettext('Received the undermentioned amount being balance pay'), $border, 0, 'L', 0);
+                    $pdf->Cell(95, 1, ('Received the undermentioned amount being balance pay'), $border, 0, 'L', 0);
                     
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 150, $adjust_y));
-                    $pdf->Cell(40, 1, TTi18n::gettext('due to me for the month of '), $border, 0, 'L', 0);
-                    $pdf->Cell(40, 1, TTi18n::gettext(strtoupper(date('F, Y', $pp_end_date))), $border, 0, 'L', 0);
+                    $pdf->Cell(40, 1, ('due to me for the month of '), $border, 0, 'L', 0);
+                    $pdf->Cell(40, 1, (strtoupper(date('F, Y', $pp_end_date))), $border, 0, 'L', 0);
 
                     $pdf->SetFont('', 'B', 10);
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 155, $adjust_y));
-                    $pdf->Cell($column_widths['name']+5, 1, TTi18n::gettext(' '), $border, 0, 'L', 0);
-                    $pdf->Cell($column_widths['amount'], 1, TTi18n::gettext('Rs.'), $border, 0, 'L', 0);
+                    $pdf->Cell($column_widths['name']+5, 1, (' '), $border, 0, 'L', 0);
+                    $pdf->Cell($column_widths['amount'], 1, ('Rs.'), $border, 0, 'L', 0);
 
                     $pdf->SetFont('', '', 10);
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 160, $adjust_y));
 
-                    $pdf->Cell($column_widths['name'], 1, TTi18n::gettext('Salary & Other Income'), $border, 0, 'L', 0);
+                    $pdf->Cell($column_widths['name'], 1, ('Salary & Other Income'), $border, 0, 'L', 0);
                     
                     $other_income = $net_income;
                     if(isset($performance_Incentive) && TTi18n::formatNumber($performance_Incentive) != '0.00'){
@@ -7841,30 +7841,30 @@ class PayStubFactory extends Factory {
 //                    print_r(TTi18n::formatNumber($performance_Incentive)); die;
                     if(isset($performance_Incentive)){
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 165, $adjust_y));
-                        $pdf->Cell($column_widths['name'], 1, TTi18n::gettext('Performance Incentive'), $border, 0, 'L', 0);
+                        $pdf->Cell($column_widths['name'], 1, ('Performance Incentive'), $border, 0, 'L', 0);
                         $pdf->Cell($column_widths['amount'], 1, ": ".TTi18n::formatNumber($final_performance_incentive), $border, 0, 'L', 0);
                     }else{
                         $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 165, $adjust_y));
-                        $pdf->Cell($column_widths['name'], 1, TTi18n::gettext('Performance Incentive'), $border, 0, 'L', 0);
+                        $pdf->Cell($column_widths['name'], 1, ('Performance Incentive'), $border, 0, 'L', 0);
                         $pdf->Cell($column_widths['amount'], 1, ": 0.00", $border, 0, 'L', 0);
                     }
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 170, $adjust_y));
 
-                    $pdf->Cell($column_widths['name'], 1, TTi18n::gettext('Total Income'), $border, 0, 'L', 0);
+                    $pdf->Cell($column_widths['name'], 1, ('Total Income'), $border, 0, 'L', 0);
                     $pdf->Cell($column_widths['amount'], 1, ": ".TTi18n::formatNumber($net_income), $border, 0, 'L', 0);
                     
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 178, $adjust_y));
 
-                    $pdf->Cell(100, 1, TTi18n::gettext('Date'), $border, 0, 'L', 0);
+                    $pdf->Cell(100, 1, ('Date'), $border, 0, 'L', 0);
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 190, $adjust_y));
 
-                    $pdf->Cell(100, 1, TTi18n::gettext('...........................................'), $border, 0, 'L', 0);
+                    $pdf->Cell(100, 1, ('...........................................'), $border, 0, 'L', 0);
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 195, $adjust_y));
 
-                    $pdf->Cell(100, 1, TTi18n::gettext('Signature'), $border, 0, 'L', 0);
+                    $pdf->Cell(100, 1, ('Signature'), $border, 0, 'L', 0);
 
                     //Line - Footer
 
@@ -7877,7 +7877,7 @@ class PayStubFactory extends Factory {
 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y + 203, $adjust_y));
 
-                    $pdf->Cell(50, 1, TTi18n::gettext('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
+                    $pdf->Cell(50, 1, ('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
 
                     $output = $pdf->Output('','S');
 
@@ -8050,25 +8050,25 @@ class PayStubFactory extends Factory {
                                 
                                 $pdf->SetFont('','',9);
                                 $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext('Employee Number').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,('Employee Number').' ', $border, 0, 'L');
                                 
                                 
                                 $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext('Employee Name').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,('Employee Name').' ', $border, 0, 'L');
                                 
                                 
                                 $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext('Designation').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,('Designation').' ', $border, 0, 'L');
                                 
                                 
                                 $pdf->setXY( Misc::AdjustXY(30, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext(':').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,(':').' ', $border, 0, 'L');
                                 
                                 $pdf->setXY( Misc::AdjustXY(30, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext(':').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,(':').' ', $border, 0, 'L');
                                 
                                 $pdf->setXY( Misc::AdjustXY(30, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext(':').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,(':').' ', $border, 0, 'L');
                                 
                                 $pdf->setXY( Misc::AdjustXY(35, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
                                 $pdf->Cell(20, 40,$user_obj->getEmployeeNumber(), $border, 0, 'L');
@@ -8082,17 +8082,17 @@ class PayStubFactory extends Factory {
                                 
                                 
                                 $pdf->setXY( Misc::AdjustXY(110, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext('Month/Year').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,('Month/Year').' ', $border, 0, 'L');
                                 
                                 $pdf->setXY( Misc::AdjustXY(110, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext('Date of payment').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,('Date of payment').' ', $border, 0, 'L');
                                 
                                 
                                 $pdf->setXY( Misc::AdjustXY(132, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext(':').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,(':').' ', $border, 0, 'L');
                                 
                                 $pdf->setXY( Misc::AdjustXY(132, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
-                                $pdf->Cell(20,40,TTi18n::gettext(':').' ', $border, 0, 'L');
+                                $pdf->Cell(20,40,(':').' ', $border, 0, 'L');
                                 
                                 $date_start = new DateTime();
                                 $date_start->setTimestamp($pp_start_date);
@@ -8347,15 +8347,15 @@ class PayStubFactory extends Factory {
                                         
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell( $column_widths['name'], 20 ,TTi18n::gettext('Earnings'), $border, 0, 'L');
+					$pdf->Cell( $column_widths['name'], 20 ,('Earnings'), $border, 0, 'L');
 
-					///$pdf->Cell( $column_widths['rate'], 5,TTi18n::gettext('Rate'), $border, 0, 'R');
+					///$pdf->Cell( $column_widths['rate'], 5,('Rate'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['units'], 5,TTi18n::gettext('Hrs/Units'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['units'], 5,('Hrs/Units'), $border, 0, 'R');
 
-					$pdf->Cell( $column_widths['amount'], 20 ,TTi18n::gettext('Amount'), $border, 0, 'R');
+					$pdf->Cell( $column_widths['amount'], 20 ,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -8468,17 +8468,17 @@ class PayStubFactory extends Factory {
                                                             
 						$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
                                                     
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
-						//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					} else {
 
@@ -8488,15 +8488,15 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 4,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 4,('Deductions'), $border, 0, 'L');
 
 					}
 
 
 
-					//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -8686,17 +8686,17 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
-						$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						$pdf->setXY( Misc::AdjustXY(87, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					} else {
 
@@ -8706,15 +8706,15 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					}
 
 
 
-					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -8867,11 +8867,11 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
+					$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
 
-					$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('Balance'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('Balance'), $border, 0, 'R');
 
 
 
@@ -8951,9 +8951,9 @@ class PayStubFactory extends Factory {
 
 
 
-					$pdf->Cell(70,5,TTi18n::gettext('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
+					$pdf->Cell(70,5,('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
 
-					$pdf->Cell(25,5,TTi18n::gettext('Balance (hrs)'), $border, 0, 'R');
+					$pdf->Cell(25,5,('Balance (hrs)'), $border, 0, 'R');
 
 
 
@@ -9025,7 +9025,7 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell(175,5,TTi18n::gettext('Notes'), $border, 0, 'L');
+					$pdf->Cell(175,5,('Notes'), $border, 0, 'L');
 
 
 
@@ -9097,7 +9097,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+3, $adjust_y) );
 
-				//$pdf->Cell(175, 5, TTi18n::gettext('NON NEGOTIABLE'), $border, 0, 'C', 0);
+				//$pdf->Cell(175, 5, ('NON NEGOTIABLE'), $border, 0, 'C', 0);
 
 
 
@@ -9107,7 +9107,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+9, $adjust_y) );
 
-				//$pdf->Cell(60, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'C', 0);
+				//$pdf->Cell(60, 5, ('CONFIDENTIAL'), $border, 0, 'C', 0);
 
 				//$pdf->SetFont('','',10);
 
@@ -9151,11 +9151,11 @@ class PayStubFactory extends Factory {
 
 				if ( isset($pay_stub_entries[65]) AND count($pay_stub_entries[65]) > 0 ) {
 
-					$net_pay_label = TTi18n::gettext('Balance');
+					$net_pay_label = ('Balance');
 
 				} else {
 
-					$net_pay_label = TTi18n::gettext('Net Pay');
+					$net_pay_label = ('Net Pay');
 
 				}
 
@@ -9183,7 +9183,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY($block_adjust_y+30, $adjust_y) );
 
-				//$pdf->Cell(50, 5, TTi18n::gettext('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
+				//$pdf->Cell(50, 5, ('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
 
 				unset($net_pay_amount, $tainted_flag);
 
@@ -9203,7 +9203,7 @@ class PayStubFactory extends Factory {
                                 //ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+ 38, $adjust_y) );
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+65, $adjust_y) );
 
-				$pdf->Cell(175, 1, TTi18n::gettext('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
+				$pdf->Cell(175, 1, ('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
 
 
 
@@ -9447,17 +9447,17 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(30,5,TTi18n::gettext('Pay Start Date:').' ', $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(30,5,('Pay Start Date:').' ', $border, 0, 'R');
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(30,5,TTi18n::gettext('Pay End Date:').' ', $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(30,5,('Pay End Date:').' ', $border, 0, 'R');
 
 				
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(30,5,TTi18n::gettext('Payment Date:').' ', $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(30,5,('Payment Date:').' ', $border, 0, 'R');
 
 
 
@@ -9488,7 +9488,7 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(165, $adjust_x), Misc::AdjustXY(17, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
 
 				
 
@@ -9519,7 +9519,7 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(29, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(175, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+				//@ARSP-->$pdf->Cell(175, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -9752,16 +9752,16 @@ class PayStubFactory extends Factory {
 
 					//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					//@ARSP-->$pdf->Cell( $column_widths['name'], 20 ,TTi18n::gettext('Earnings'), $border, 0, 'L');
+					//@ARSP-->$pdf->Cell( $column_widths['name'], 20 ,('Earnings'), $border, 0, 'L');
 
 
-					///$pdf->Cell( $column_widths['rate'], 5,TTi18n::gettext('Rate'), $border, 0, 'R');
+					///$pdf->Cell( $column_widths['rate'], 5,('Rate'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['units'], 5,TTi18n::gettext('Hrs/Units'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['units'], 5,('Hrs/Units'), $border, 0, 'R');
 
-					//@ARSP-->$pdf->Cell( $column_widths['amount'], 20 ,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell( $column_widths['amount'], 20 ,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -9882,17 +9882,17 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
-						//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					} else {
 
@@ -9902,15 +9902,15 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					}
 
 
 
-					//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -10116,17 +10116,17 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
-						//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					} else {
 
@@ -10136,15 +10136,15 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					}
 
 
 
-					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -10305,11 +10305,11 @@ class PayStubFactory extends Factory {
 
 					//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					//@ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
+					//@ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
 
-					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('Balance'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('Balance'), $border, 0, 'R');
 
 
 
@@ -10389,9 +10389,9 @@ class PayStubFactory extends Factory {
 
 
 
-					//@ARSP-->$pdf->Cell(70,5,TTi18n::gettext('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
+					//@ARSP-->$pdf->Cell(70,5,('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
 
-					//@ARSP-->$pdf->Cell(25,5,TTi18n::gettext('Balance (hrs)'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell(25,5,('Balance (hrs)'), $border, 0, 'R');
 
 
 
@@ -10463,7 +10463,7 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell(175,5,TTi18n::gettext('Notes'), $border, 0, 'L');
+					$pdf->Cell(175,5,('Notes'), $border, 0, 'L');
 
 
 
@@ -10535,7 +10535,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+3, $adjust_y) );
 
-				//$pdf->Cell(175, 5, TTi18n::gettext('NON NEGOTIABLE'), $border, 0, 'C', 0);
+				//$pdf->Cell(175, 5, ('NON NEGOTIABLE'), $border, 0, 'C', 0);
 
 
 
@@ -10545,7 +10545,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+9, $adjust_y) );
 
-				//$pdf->Cell(60, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'C', 0);
+				//$pdf->Cell(60, 5, ('CONFIDENTIAL'), $border, 0, 'C', 0);
 
 				//$pdf->SetFont('','',10);
 
@@ -10589,11 +10589,11 @@ class PayStubFactory extends Factory {
 
 				if ( isset($pay_stub_entries[65]) AND count($pay_stub_entries[65]) > 0 ) {
 
-					$net_pay_label = TTi18n::gettext('Balance');
+					$net_pay_label = ('Balance');
 
 				} else {
 
-					$net_pay_label = TTi18n::gettext('Net Pay');
+					$net_pay_label = ('Net Pay');
 
 				}
 
@@ -10621,7 +10621,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY($block_adjust_y+30, $adjust_y) );
 
-				//$pdf->Cell(50, 5, TTi18n::gettext('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
+				//$pdf->Cell(50, 5, ('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
 
 				unset($net_pay_amount, $tainted_flag);
 
@@ -10639,7 +10639,7 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+38, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(175, 1, TTi18n::gettext('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
+				//@ARSP-->$pdf->Cell(175, 1, ('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
 
 
 
@@ -11230,7 +11230,7 @@ class PayStubFactory extends Factory {
 
                                     $pdf->setXY( Misc::AdjustXY(195, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 
-                                    $pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+                                    $pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
                                     
                                     
                                     
@@ -11247,7 +11247,7 @@ class PayStubFactory extends Factory {
 
 				$pdf->setXY( Misc::AdjustXY(50, $adjust_x1), Misc::AdjustXY(18, $adjust_y1) );
 
-				$pdf->Cell(75, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+				$pdf->Cell(75, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -11282,7 +11282,7 @@ class PayStubFactory extends Factory {
 
                                     //$pdf->setXY( Misc::AdjustXY(70, 0), Misc::AdjustXY(0, -15) );
                                     $pdf->setXY(Misc::AdjustXY(0, 0), Misc::AdjustXY(0, -15));
-                                    $pdf->Cell(0, 10, TTi18n::gettext('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
+                                    $pdf->Cell(0, 10, ('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
                                     
                                     
                                     
@@ -11357,21 +11357,21 @@ class PayStubFactory extends Factory {
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
                                 $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(34, $adjust_y) );
                                 
-                                //$pdf->Cell(30,5,TTi18n::gettext('Pay Start Date:').' ', $border, 0, 'R');
-				$pdf->Cell(10,5,TTi18n::gettext('Pay Start Date:').' ', $border, 0, 'L');
+                                //$pdf->Cell(30,5,('Pay Start Date:').' ', $border, 0, 'R');
+				$pdf->Cell(10,5,('Pay Start Date:').' ', $border, 0, 'L');
 
                                 //$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(37, $adjust_y) );
                                 
-                                //$pdf->Cell(30,5,TTi18n::gettext('Pay End Date:').' ', $border, 0, 'R');
-				$pdf->Cell(10,5,TTi18n::gettext('Pay End Date:').' ', $border, 0, 'L');
+                                //$pdf->Cell(30,5,('Pay End Date:').' ', $border, 0, 'R');
+				$pdf->Cell(10,5,('Pay End Date:').' ', $border, 0, 'L');
 
 				
                                 //$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(40, $adjust_y) );
 
-                                //$pdf->Cell(30,5,TTi18n::gettext('Payment Date:').' ', $border, 0, 'R');    
-				$pdf->Cell(10,5,TTi18n::gettext('Payment Date:').' ', $border, 0, 'L');
+                                //$pdf->Cell(30,5,('Payment Date:').' ', $border, 0, 'R');    
+				$pdf->Cell(10,5,('Payment Date:').' ', $border, 0, 'L');
 
 
 
@@ -11411,7 +11411,7 @@ class PayStubFactory extends Factory {
 
 				//ARSP-->$pdf->setXY( Misc::AdjustXY(165, $adjust_x), Misc::AdjustXY(17, $adjust_y) );
 
-				//ARSP-->$pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+				//ARSP-->$pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
 
 				
 
@@ -11459,7 +11459,7 @@ class PayStubFactory extends Factory {
 
 				//ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(29, $adjust_y) );
 
-				//ARSP-->$pdf->Cell(175, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+				//ARSP-->$pdf->Cell(175, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -11695,16 +11695,16 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell( $column_widths['name'], 20 ,TTi18n::gettext('Earnings'), $border, 0, 'L');
+					$pdf->Cell( $column_widths['name'], 20 ,('Earnings'), $border, 0, 'L');
 
-					///$pdf->Cell( $column_widths['rate'], 5,TTi18n::gettext('Rate'), $border, 0, 'R');
+					///$pdf->Cell( $column_widths['rate'], 5,('Rate'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['units'], 5,TTi18n::gettext('Hrs/Units'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['units'], 5,('Hrs/Units'), $border, 0, 'R');
                                         
 
-					$pdf->Cell( $column_widths['amount'], 20 ,TTi18n::gettext('Amount'), $border, 0,  'R');
+					$pdf->Cell( $column_widths['amount'], 20 ,('Amount'), $border, 0,  'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -11813,17 +11813,17 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
-						//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					} else {
 
@@ -11834,15 +11834,15 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					}
 
 
 
-					//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -12036,17 +12036,17 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
-						$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					} else {
                                                 
@@ -12057,15 +12057,15 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					}
 
 
 
-					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -12224,12 +12224,12 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-                                        //ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
-					$pdf->Cell( 65-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
+                                        //ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
+					$pdf->Cell( 65-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
 
-					$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('Balance'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('Balance'), $border, 0, 'R');
 
 
 
@@ -12311,9 +12311,9 @@ class PayStubFactory extends Factory {
 
 
 
-					$pdf->Cell(70,5,TTi18n::gettext('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
+					$pdf->Cell(70,5,('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
 
-					$pdf->Cell(25,5,TTi18n::gettext('Balance (hrs)'), $border, 0, 'R');
+					$pdf->Cell(25,5,('Balance (hrs)'), $border, 0, 'R');
 
 
 
@@ -12385,7 +12385,7 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell(175,5,TTi18n::gettext('Notes'), $border, 0, 'L');
+					$pdf->Cell(175,5,('Notes'), $border, 0, 'L');
 
 
 
@@ -12458,7 +12458,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+3, $adjust_y) );
 
-				//$pdf->Cell(175, 5, TTi18n::gettext('NON NEGOTIABLE'), $border, 0, 'C', 0);
+				//$pdf->Cell(175, 5, ('NON NEGOTIABLE'), $border, 0, 'C', 0);
 
 
 
@@ -12468,7 +12468,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+9, $adjust_y) );
 
-				//$pdf->Cell(60, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'C', 0);
+				//$pdf->Cell(60, 5, ('CONFIDENTIAL'), $border, 0, 'C', 0);
 
 				//$pdf->SetFont('','',10);
 
@@ -12512,11 +12512,11 @@ class PayStubFactory extends Factory {
 
 				if ( isset($pay_stub_entries[65]) AND count($pay_stub_entries[65]) > 0 ) {
 
-					$net_pay_label = TTi18n::gettext('Balance');
+					$net_pay_label = ('Balance');
 
 				} else {
 
-					$net_pay_label = TTi18n::gettext('Net Pay');
+					$net_pay_label = ('Net Pay');
 
 				}
 
@@ -12544,7 +12544,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY($block_adjust_y+30, $adjust_y) );
 
-				//$pdf->Cell(50, 5, TTi18n::gettext('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
+				//$pdf->Cell(50, 5, ('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
 
 				unset($net_pay_amount, $tainted_flag);
 
@@ -12563,7 +12563,7 @@ class PayStubFactory extends Factory {
 //				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+38, $adjust_y) );
 //                                
 //                                
-//				$pdf->Cell(175, 1, TTi18n::gettext('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
+//				$pdf->Cell(175, 1, ('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
 
 
 
@@ -12632,7 +12632,7 @@ class PayStubFactory extends Factory {
 
                                     $pdf->setXY( Misc::AdjustXY(195, 3), Misc::AdjustXY(10, $adjust_y) );
 
-                                    $pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+                                    $pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
                                     
 
 
@@ -12641,7 +12641,7 @@ class PayStubFactory extends Factory {
 
                                     $pdf->setXY( Misc::AdjustXY(50, $adjust_x1), Misc::AdjustXY(18, $adjust_y1) );
 
-                                    $pdf->Cell(75, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+                                    $pdf->Cell(75, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -12681,7 +12681,7 @@ class PayStubFactory extends Factory {
 
                                     //$pdf->setXY( Misc::AdjustXY(70, 0), Misc::AdjustXY(0, -15) );
                                     $pdf->setXY(Misc::AdjustXY(0, 0), Misc::AdjustXY(0, -15));
-                                    $pdf->Cell(0, 10, TTi18n::gettext('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
+                                    $pdf->Cell(0, 10, ('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
                                     
                                     
                                     
@@ -12937,7 +12937,7 @@ class PayStubFactory extends Factory {
 //
 //                                    $pdf->setXY( Misc::AdjustXY(195, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 //
-//                                    $pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+//                                    $pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
                                     
                                     
                                     
@@ -12954,7 +12954,7 @@ class PayStubFactory extends Factory {
 //
 //				$pdf->setXY( Misc::AdjustXY(50, $adjust_x1), Misc::AdjustXY(18, $adjust_y1) );
 //
-//				$pdf->Cell(75, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+//				$pdf->Cell(75, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -12990,7 +12990,7 @@ class PayStubFactory extends Factory {
 //                                    $pdf->SetFont('', '', 6);
 //                                    //$pdf->setXY( Misc::AdjustXY(70, 0), Misc::AdjustXY(0, -15) );
 //                                    $pdf->setXY(Misc::AdjustXY(0, 0), Misc::AdjustXY(0, -15));
-//                                    $pdf->Cell(0, 10, TTi18n::gettext('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
+//                                    $pdf->Cell(0, 10, ('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
                                     
                                     
                                     
@@ -13146,7 +13146,7 @@ class PayStubFactory extends Factory {
 
                                 $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(12, $adjust_y) );
 
-                                $pdf->Cell(65, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+                                $pdf->Cell(65, 5, ('CONFIDENTIAL'), $border, 0, 'R');
 
 
 
@@ -13177,7 +13177,7 @@ class PayStubFactory extends Factory {
 
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(16.5, $adjust_y) );
 
-				$pdf->Cell(65, 5, TTi18n::gettext('Pay Slip Summary'), $border, 0, 'C', 0);
+				$pdf->Cell(65, 5, ('Pay Slip Summary'), $border, 0, 'C', 0);
 
 
 
@@ -13228,21 +13228,21 @@ class PayStubFactory extends Factory {
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
                                 $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(32, $adjust_y) );
                                 
-                                //$pdf->Cell(30,5,TTi18n::gettext('Pay Start Date:').' ', $border, 0, 'R');
-				$pdf->Cell(10,5,TTi18n::gettext('Pay Start Date:').' ', $border, 0, 'L');
+                                //$pdf->Cell(30,5,('Pay Start Date:').' ', $border, 0, 'R');
+				$pdf->Cell(10,5,('Pay Start Date:').' ', $border, 0, 'L');
 
                                 //$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(35, $adjust_y) );
                                 
-                                //$pdf->Cell(30,5,TTi18n::gettext('Pay End Date:').' ', $border, 0, 'R');
-				$pdf->Cell(10,5,TTi18n::gettext('Pay End Date:').' ', $border, 0, 'L');
+                                //$pdf->Cell(30,5,('Pay End Date:').' ', $border, 0, 'R');
+				$pdf->Cell(10,5,('Pay End Date:').' ', $border, 0, 'L');
 
 				
                                 //$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(38, $adjust_y) );
 
-                                //$pdf->Cell(30,5,TTi18n::gettext('Payment Date:').' ', $border, 0, 'R');    
-				$pdf->Cell(10,5,TTi18n::gettext('Payment Date:').' ', $border, 0, 'L');
+                                //$pdf->Cell(30,5,('Payment Date:').' ', $border, 0, 'R');    
+				$pdf->Cell(10,5,('Payment Date:').' ', $border, 0, 'L');
 
 
 
@@ -13282,7 +13282,7 @@ class PayStubFactory extends Factory {
 
 				//ARSP-->$pdf->setXY( Misc::AdjustXY(165, $adjust_x), Misc::AdjustXY(17, $adjust_y) );//ARSP NOTE --> CHANGE 165 TO
 
-				//ARSP-->$pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+				//ARSP-->$pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
 
 				
 
@@ -13306,7 +13306,7 @@ class PayStubFactory extends Factory {
 
 				//ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(29, $adjust_y) );
 
-				//ARSP-->$pdf->Cell(175, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+				//ARSP-->$pdf->Cell(175, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -13542,16 +13542,16 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell( $column_widths['name'], 13 ,TTi18n::gettext('Earnings'), $border, 0, 'L');
+					$pdf->Cell( $column_widths['name'], 13 ,('Earnings'), $border, 0, 'L');
                                                                             //20 ARSP NOTE --> I CHANGED THIS CODE FOR THUNDER & NEON
-					///$pdf->Cell( $column_widths['rate'], 5,TTi18n::gettext('Rate'), $border, 0, 'R');
+					///$pdf->Cell( $column_widths['rate'], 5,('Rate'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['units'], 5,TTi18n::gettext('Hrs/Units'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['units'], 5,('Hrs/Units'), $border, 0, 'R');
                                         
 
-					$pdf->Cell( $column_widths['amount'], 13 ,TTi18n::gettext('Amount'), $border, 0,  'R');
+					$pdf->Cell( $column_widths['amount'], 13 ,('Amount'), $border, 0,  'R');
                                                                             //20 ARSP NOTE --> I CHANGED THIS CODE FOR THUNDER & NEON
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -13659,17 +13659,17 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
-						//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					} else {
 
@@ -13680,15 +13680,15 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					}
 
 
 
-					//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -13883,18 +13883,18 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
-						$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
                                                 
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//ARSP -->$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//ARSP -->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//ARSP -->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					} else {
                                                 
@@ -13905,18 +13905,18 @@ class PayStubFactory extends Factory {
 
 						$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
                                                 
                                                 //ARSP --> I ADD THIS CODE HERE. IF $max_deductions < 2  EMPLOYER CONTRIBUTION HEADER WILL BE SHOW
-                                                $pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+                                                $pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
 					}
 
 
 
-					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -14079,12 +14079,12 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-                                        //ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
-					$pdf->Cell( 65-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
+                                        //ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
+					$pdf->Cell( 65-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
 
-					$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('Balance'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('Balance'), $border, 0, 'R');
 
 
 
@@ -14166,9 +14166,9 @@ class PayStubFactory extends Factory {
 
 
 
-					$pdf->Cell(64,5,TTi18n::gettext('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
+					$pdf->Cell(64,5,('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
 
-					$pdf->Cell(1,5,TTi18n::gettext('Balance (hrs)'), $border, 0, 'R');
+					$pdf->Cell(1,5,('Balance (hrs)'), $border, 0, 'R');
 
 
 
@@ -14240,7 +14240,7 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell(175,5,TTi18n::gettext('Notes'), $border, 0, 'L');
+					$pdf->Cell(175,5,('Notes'), $border, 0, 'L');
 
 
 
@@ -14312,7 +14312,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+3, $adjust_y) );
 
-				//$pdf->Cell(175, 5, TTi18n::gettext('NON NEGOTIABLE'), $border, 0, 'C', 0);
+				//$pdf->Cell(175, 5, ('NON NEGOTIABLE'), $border, 0, 'C', 0);
 
 
 
@@ -14322,7 +14322,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+9, $adjust_y) );
 
-				//$pdf->Cell(60, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'C', 0);
+				//$pdf->Cell(60, 5, ('CONFIDENTIAL'), $border, 0, 'C', 0);
 
 				//$pdf->SetFont('','',10);
 
@@ -14366,11 +14366,11 @@ class PayStubFactory extends Factory {
 
 				if ( isset($pay_stub_entries[65]) AND count($pay_stub_entries[65]) > 0 ) {
 
-					$net_pay_label = TTi18n::gettext('Balance');
+					$net_pay_label = ('Balance');
 
 				} else {
 
-					$net_pay_label = TTi18n::gettext('Net Pay');
+					$net_pay_label = ('Net Pay');
 
 				}
 
@@ -14398,7 +14398,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY($block_adjust_y+30, $adjust_y) );
 
-				//$pdf->Cell(50, 5, TTi18n::gettext('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
+				//$pdf->Cell(50, 5, ('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
 
                                 
 
@@ -14410,7 +14410,7 @@ class PayStubFactory extends Factory {
                                 
                                 $pdf->SetFont('', '', 6);
                                 $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(65, $adjust_y + 95));
-                                $pdf->Cell(65,80, TTi18n::gettext('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
+                                $pdf->Cell(65,80, ('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
                                 
                                 
                                 
@@ -14435,7 +14435,7 @@ class PayStubFactory extends Factory {
 //				$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+38, $adjust_y) );
 //                                
 //                                
-//				$pdf->Cell(175, 1, TTi18n::gettext('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
+//				$pdf->Cell(175, 1, ('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
 
 
 
@@ -14504,7 +14504,7 @@ class PayStubFactory extends Factory {
 //
 //                                    $pdf->setXY( Misc::AdjustXY(195, 3), Misc::AdjustXY(10, $adjust_y) );
 //
-//                                    $pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+//                                    $pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
                                     
 
 
@@ -14513,7 +14513,7 @@ class PayStubFactory extends Factory {
 //
 //                                    $pdf->setXY( Misc::AdjustXY(50, $adjust_x1), Misc::AdjustXY(18, $adjust_y1) );
 //
-//                                    $pdf->Cell(75, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+//                                    $pdf->Cell(75, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -14554,7 +14554,7 @@ class PayStubFactory extends Factory {
 //
 //                                    //$pdf->setXY( Misc::AdjustXY(70, 0), Misc::AdjustXY(0, -15) );
 //                                    $pdf->setXY(Misc::AdjustXY(0, 0), Misc::AdjustXY(0, -15));
-//                                    $pdf->Cell(0, 10, TTi18n::gettext('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
+//                                    $pdf->Cell(0, 10, ('Pay Stub Generated by') . ' ' . APPLICATION_NAME, $border, 0, 'C', 0);
                                     
                                     
                                     
@@ -16564,17 +16564,17 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(30,5,TTi18n::gettext('Pay Start Date:').' ', $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(30,5,('Pay Start Date:').' ', $border, 0, 'R');
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(5, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(30,5,TTi18n::gettext('Pay End Date:').' ', $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(30,5,('Pay End Date:').' ', $border, 0, 'R');
 
 				
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY(10, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(30,5,TTi18n::gettext('Payment Date:').' ', $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(30,5,('Payment Date:').' ', $border, 0, 'R');
 
 
 
@@ -16605,7 +16605,7 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(165, $adjust_x), Misc::AdjustXY(17, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(10, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'R');
+				//@ARSP-->$pdf->Cell(10, 5, ('CONFIDENTIAL'), $border, 0, 'R');
 
 				
 
@@ -16636,7 +16636,7 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(29, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(175, 5, TTi18n::gettext('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
+				//@ARSP-->$pdf->Cell(175, 5, ('STATEMENT OF EARNINGS AND DEDUCTIONS'), $border, 0, 'C', 0);
 
 
 
@@ -16875,16 +16875,16 @@ class PayStubFactory extends Factory {
 
 					//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					//@ARSP-->$pdf->Cell( $column_widths['name'], 20 ,TTi18n::gettext('Earnings'), $border, 0, 'L');
+					//@ARSP-->$pdf->Cell( $column_widths['name'], 20 ,('Earnings'), $border, 0, 'L');
 
 
-					///$pdf->Cell( $column_widths['rate'], 5,TTi18n::gettext('Rate'), $border, 0, 'R');
+					///$pdf->Cell( $column_widths['rate'], 5,('Rate'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['units'], 5,TTi18n::gettext('Hrs/Units'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['units'], 5,('Hrs/Units'), $border, 0, 'R');
 
-					//@ARSP-->$pdf->Cell( $column_widths['amount'], 20 ,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell( $column_widths['amount'], 20 ,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -17093,17 +17093,17 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
-						//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					} else {
 
@@ -17113,15 +17113,15 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Deductions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Deductions'), $border, 0, 'L');
 
 					}
 
 
 
-					//$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -17484,17 +17484,17 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
-						//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+						//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-						//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+						//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(90, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					} else {
 
@@ -17504,15 +17504,15 @@ class PayStubFactory extends Factory {
 
 						//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,TTi18n::gettext('Employer Contributions'), $border, 0, 'L');
+						//@ARSP-->$pdf->Cell( $column_widths['name'], 5,('Employer Contributions'), $border, 0, 'L');
 
 					}
 
 
 
-					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('YTD Amount'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('YTD Amount'), $border, 0, 'R');
 
 
 
@@ -17720,11 +17720,11 @@ class PayStubFactory extends Factory {
 
 					//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					//@ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,TTi18n::gettext('Accruals'), $border, 0, 'L');
+					//@ARSP-->$pdf->Cell( 175-($column_widths['amount']+$column_widths['ytd_amount']), 5,('Accruals'), $border, 0, 'L');
 
-					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,TTi18n::gettext('Amount'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell( $column_widths['amount'], 5,('Amount'), $border, 0, 'R');
 
-					//$pdf->Cell( $column_widths['ytd_amount'], 5,TTi18n::gettext('Balance'), $border, 0, 'R');
+					//$pdf->Cell( $column_widths['ytd_amount'], 5,('Balance'), $border, 0, 'R');
 
 
 
@@ -17804,9 +17804,9 @@ class PayStubFactory extends Factory {
 
 
 
-					//@ARSP-->$pdf->Cell(70,5,TTi18n::gettext('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
+					//@ARSP-->$pdf->Cell(70,5,('Accrual Time Balances as of ').TTDate::getDate('DATE', time() ) , $border, 0, 'L');
 
-					//@ARSP-->$pdf->Cell(25,5,TTi18n::gettext('Balance (hrs)'), $border, 0, 'R');
+					//@ARSP-->$pdf->Cell(25,5,('Balance (hrs)'), $border, 0, 'R');
 
 
 
@@ -17878,7 +17878,7 @@ class PayStubFactory extends Factory {
 
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y, $adjust_y) );
 
-					$pdf->Cell(175,5,TTi18n::gettext('Notes'), $border, 0, 'L');
+					$pdf->Cell(175,5,('Notes'), $border, 0, 'L');
 
 
 
@@ -17950,7 +17950,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+3, $adjust_y) );
 
-				//$pdf->Cell(175, 5, TTi18n::gettext('NON NEGOTIABLE'), $border, 0, 'C', 0);
+				//$pdf->Cell(175, 5, ('NON NEGOTIABLE'), $border, 0, 'C', 0);
 
 
 
@@ -17960,7 +17960,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+9, $adjust_y) );
 
-				//$pdf->Cell(60, 5, TTi18n::gettext('CONFIDENTIAL'), $border, 0, 'C', 0);
+				//$pdf->Cell(60, 5, ('CONFIDENTIAL'), $border, 0, 'C', 0);
 
 				//$pdf->SetFont('','',10);
 
@@ -18004,11 +18004,11 @@ class PayStubFactory extends Factory {
 
 				if ( isset($pay_stub_entries[65]) AND count($pay_stub_entries[65]) > 0 ) {
 
-					$net_pay_label = TTi18n::gettext('Balance');
+					$net_pay_label = ('Balance');
 
 				} else {
 
-					$net_pay_label = TTi18n::gettext('Net Pay');
+					$net_pay_label = ('Net Pay');
 
 				}
 
@@ -18036,7 +18036,7 @@ class PayStubFactory extends Factory {
 
 				//$pdf->setXY( Misc::AdjustXY(125, $adjust_x), Misc::AdjustXY($block_adjust_y+30, $adjust_y) );
 
-				//$pdf->Cell(50, 5, TTi18n::gettext('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
+				//$pdf->Cell(50, 5, ('Identification #:').' '. str_pad($pay_stub_obj->getId(),12,0, STR_PAD_LEFT).$tainted_flag, $border, 1, 'L', 0);
                     
                                 
                                 
@@ -18067,7 +18067,7 @@ class PayStubFactory extends Factory {
 
 				//@ARSP-->$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY($block_adjust_y+38, $adjust_y) );
 
-				//@ARSP-->$pdf->Cell(175, 1, TTi18n::gettext('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
+				//@ARSP-->$pdf->Cell(175, 1, ('Pay Stub Generated by').' '. APPLICATION_NAME , $border, 0, 'C', 0);
 
                                 
                                 
@@ -18567,7 +18567,7 @@ class PayStubFactory extends Factory {
 		
 	function addLog( $log_action ) {
 
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Pay Stub'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Pay Stub'), NULL, $this->getTable(), $this );
 
 	}		
 	

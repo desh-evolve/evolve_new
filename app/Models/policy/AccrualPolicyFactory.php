@@ -23,28 +23,28 @@ class AccrualPolicyFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Standard'),
-										20 => TTi18n::gettext('Calendar Based'),
-										30 => TTi18n::gettext('Hour Based'),
+										10 => ('Standard'),
+										20 => ('Calendar Based'),
+										30 => ('Hour Based'),
 									);
 				break;
 			case 'apply_frequency':
 				$retval = array(
-										10 => TTi18n::gettext('each Pay Period'),
-										20 => TTi18n::gettext('Annually'),
-										30 => TTi18n::gettext('Monthly'),
-										40 => TTi18n::gettext('Weekly'),
+										10 => ('each Pay Period'),
+										20 => ('Annually'),
+										30 => ('Monthly'),
+										40 => ('Weekly'),
 									);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1030-name' => TTi18n::gettext('Name'),
+										'-1010-type' => ('Type'),
+										'-1030-name' => ('Name'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -123,7 +123,7 @@ class AccrualPolicyFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -151,7 +151,7 @@ class AccrualPolicyFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -173,7 +173,7 @@ class AccrualPolicyFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -210,7 +210,7 @@ class AccrualPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'minimum_time',
 													$int,
-													TTi18n::gettext('Incorrect Minimum Time')) ) {
+													('Incorrect Minimum Time')) ) {
 			$this->data['minimum_time'] = $int;
 
 			return TRUE;
@@ -235,7 +235,7 @@ class AccrualPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'maximum_time',
 													$int,
-													TTi18n::gettext('Incorrect Maximum Time')) ) {
+													('Incorrect Maximum Time')) ) {
 			$this->data['maximum_time'] = $int;
 
 			return TRUE;
@@ -261,7 +261,7 @@ class AccrualPolicyFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'apply_frequency_id',
 												$value,
-												TTi18n::gettext('Incorrect frequency'),
+												('Incorrect frequency'),
 												$this->getOptions('apply_frequency')) ) {
 
 			$this->data['apply_frequency_id'] = $value;
@@ -286,7 +286,7 @@ class AccrualPolicyFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'apply_frequency_month',
 											$value,
-											TTi18n::gettext('Incorrect frequency month'),
+											('Incorrect frequency month'),
 											TTDate::getMonthOfYearArray() ) ) {
 
 			$this->data['apply_frequency_month'] = $value;
@@ -311,7 +311,7 @@ class AccrualPolicyFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'apply_frequency_day_of_month',
 											$value,
-											TTi18n::gettext('Incorrect frequency day of month'),
+											('Incorrect frequency day of month'),
 											TTDate::getDayOfMonthArray() ) ) {
 
 			$this->data['apply_frequency_day_of_month'] = $value;
@@ -336,7 +336,7 @@ class AccrualPolicyFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'apply_frequency_day_of_week',
 											$value,
-											TTi18n::gettext('Incorrect frequency day of week'),
+											('Incorrect frequency day of week'),
 											TTDate::getDayOfWeekArray() ) ) {
 
 			$this->data['apply_frequency_day_of_week'] = $value;
@@ -379,7 +379,7 @@ class AccrualPolicyFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'milestone_rollover_month',
 											$value,
-											TTi18n::gettext('Incorrect milestone rollover month'),
+											('Incorrect milestone rollover month'),
 											TTDate::getMonthOfYearArray() ) ) {
 
 			$this->data['milestone_rollover_month'] = $value;
@@ -404,7 +404,7 @@ class AccrualPolicyFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'milestone_rollover_day_of_month',
 												$value,
-												TTi18n::gettext('Incorrect milestone rollover day of month'),
+												('Incorrect milestone rollover day of month'),
 												TTDate::getDayOfMonthArray() ) ) {
 
 			$this->data['milestone_rollover_day_of_month'] = $value;
@@ -431,7 +431,7 @@ class AccrualPolicyFactory extends Factory {
 
 		if 	(	$this->Validator->isNumeric(		'minimum_employed_days',
 													$int,
-													TTi18n::gettext('Incorrect Minimum Employed days')) ) {
+													('Incorrect Minimum Employed days')) ) {
 			$this->data['minimum_employed_days'] = $int;
 
 			return TRUE;
@@ -892,7 +892,7 @@ class AccrualPolicyFactory extends Factory {
 			if ( $alf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This accrual policy is in use'));
+											('This accrual policy is in use'));
 
 			}
 		}
@@ -969,7 +969,7 @@ class AccrualPolicyFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Accrual Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Accrual Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

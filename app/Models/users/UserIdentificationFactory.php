@@ -18,13 +18,13 @@ class UserIdentificationFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-											5 	=> TTi18n::gettext('Password History'), //Web interface password history
-											10 	=> TTi18n::gettext('iButton'),
-											20	=> TTi18n::gettext('USB Fingerprint'),
-											//25	=> TTi18n::gettext('LibFingerPrint'),
-											30	=> TTi18n::gettext('Barcode'), //For barcode readers and USB proximity card readers.
-											40	=> TTi18n::gettext('Proximity Card'), //Mainly for proximity cards on timeclocks.
-											100	=> TTi18n::gettext('TimeClock FingerPrint'), //TimeClocks
+											5 	=> ('Password History'), //Web interface password history
+											10 	=> ('iButton'),
+											20	=> ('USB Fingerprint'),
+											//25	=> ('LibFingerPrint'),
+											30	=> ('Barcode'), //For barcode readers and USB proximity card readers.
+											40	=> ('Proximity Card'), //Mainly for proximity cards on timeclocks.
+											100	=> ('TimeClock FingerPrint'), //TimeClocks
 									);
 				break;
 
@@ -55,7 +55,7 @@ class UserIdentificationFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -82,7 +82,7 @@ class UserIdentificationFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -118,7 +118,7 @@ class UserIdentificationFactory extends Factory {
 
 		if (	$this->Validator->isFloat(	'number',
 											$value,
-											TTi18n::gettext('Incorrect Number')) ) {
+											('Incorrect Number')) ) {
 
 			$this->data['number'] = $value;
 
@@ -172,7 +172,7 @@ class UserIdentificationFactory extends Factory {
 		if (
 				$this->Validator->isLength(			'value',
 													$value,
-													TTi18n::gettext('Value is too short or too long'),
+													('Value is too short or too long'),
 													1,
 													32000)
 			) {
@@ -198,7 +198,7 @@ class UserIdentificationFactory extends Factory {
 		if (
 				$this->Validator->isLength(			'extra_value',
 													$value,
-													TTi18n::gettext('Extra Value is too long'),
+													('Extra Value is too long'),
 													1,
 													256000)
 			) {
@@ -215,12 +215,12 @@ class UserIdentificationFactory extends Factory {
 		if ( $this->getValue() == FALSE ) {
 				$this->Validator->isTRUE(			'value',
 													FALSE,
-													TTi18n::gettext('Value is not defined') );
+													('Value is not defined') );
 
 		} else {
 			$this->Validator->isTrue(		'value',
 											$this->isUniqueValue( $this->getUser(), $this->getType(), $this->getValue() ),
-											TTi18n::gettext('Value is already in use, please enter a different one'));
+											('Value is already in use, please enter a different one'));
 		}
 		return TRUE;
 	}
@@ -241,7 +241,7 @@ class UserIdentificationFactory extends Factory {
 
 	function addLog( $log_action ) {
 		//Don't do detail logging for this, as it will store entire figerprints in the log table.
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Employee Identification - Employee'). ': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. TTi18n::getText('Type') . ': '. Option::getByKey($this->getType(), $this->getOptions('type') ) , NULL, $this->getTable() );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Employee Identification - Employee'). ': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. ('Type') . ': '. Option::getByKey($this->getType(), $this->getOptions('type') ) , NULL, $this->getTable() );
 	}
 }
 ?>

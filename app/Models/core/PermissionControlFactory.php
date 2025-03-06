@@ -51,15 +51,15 @@ class PermissionControlFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1000-name' => TTi18n::gettext('Name'),
-										'-1010-description' => TTi18n::gettext('Description'),
-										'-1020-level' => TTi18n::gettext('Level'),
-										'-1030-total_users' => TTi18n::gettext('Employees'),
+										'-1000-name' => ('Name'),
+										'-1010-description' => ('Description'),
+										'-1020-level' => ('Level'),
+										'-1030-total_users' => ('Employees'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -129,7 +129,7 @@ class PermissionControlFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -168,11 +168,11 @@ class PermissionControlFactory extends Factory {
 
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 				AND	$this->Validator->isTrue(	'name',
 												$this->isUniqueName($name),
-												TTi18n::gettext('Name is already in use')
+												('Name is already in use')
 												)
 						) {
 
@@ -193,7 +193,7 @@ class PermissionControlFactory extends Factory {
 		if (	$description == ''
 				OR $this->Validator->isLength(	'description',
 											$description,
-											TTi18n::gettext('Description is invalid'),
+											('Description is invalid'),
 											1,255) ) {
 
 			$this->data['description'] = $description;
@@ -217,7 +217,7 @@ class PermissionControlFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'level',
 											$value,
-											TTi18n::gettext('Incorrect Level'),
+											('Incorrect Level'),
 											$this->getOptions('level')) ) {
 
 			$this->data['level'] = $value;
@@ -301,7 +301,7 @@ class PermissionControlFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'user',
 														$puf->Validator->isValid(),
-														TTi18n::gettext('Selected employee is invalid, or already assigned to another permission group').' ('. $obj->getFullName() .')' )) {
+														('Selected employee is invalid, or already assigned to another permission group').' ('. $obj->getFullName() .')' )) {
 						$puf->save();
 					}
 				}
@@ -484,7 +484,7 @@ class PermissionControlFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Permission Group: '). $this->getName(), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Permission Group: '). $this->getName(), NULL, $this->getTable(), $this );
 	}
 }
 ?>

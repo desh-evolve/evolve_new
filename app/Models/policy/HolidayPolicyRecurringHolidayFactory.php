@@ -41,12 +41,12 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 		if (
 			  $this->Validator->isNumeric(	'holiday_policy',
 											$id,
-											TTi18n::gettext('Holiday Policy is invalid')
+											('Holiday Policy is invalid')
 
 			/*
 			  $this->Validator->isResultSetWithRows(	'holiday_policy',
 													$hplf->getByID($id),
-													TTi18n::gettext('Holiday Policy is invalid')
+													('Holiday Policy is invalid')
 			 */
 															) ) {
 			$this->data['holiday_policy_id'] = $id;
@@ -70,7 +70,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'recurring_holiday',
 															$rhlf->getByID($id),
-															TTi18n::gettext('Selected Recurring Holiday is invalid')
+															('Selected Recurring Holiday is invalid')
 															)
 			) {
 
@@ -133,7 +133,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 	function addLog( $log_action ) {
 		$obj = $this->getRecurringHolidayObject();
 		if ( is_object($obj) ) {
-			return TTLog::addEntry( $this->getHolidayPolicy(), $log_action,  TTi18n::getText('Recurring Holiday').': '. $obj->getName(), NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getHolidayPolicy(), $log_action,  ('Recurring Holiday').': '. $obj->getName(), NULL, $this->getTable() );
 		}
 	}
 }

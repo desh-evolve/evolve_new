@@ -110,7 +110,7 @@ class Login extends Controller
             //Redirect::Page( URLBuilder::getURL( NULL, 'index.php' ) );
             Redirect::Page( URLBuilder::getURL( NULL, 'dashboard' ) );
         } else {
-            $error_message = TTi18n::gettext('User Name or Password is incorrect');
+            $error_message = ('User Name or Password is incorrect');
 
             //Get company status from user_name, so we can display messages for ONHOLD/Cancelled accounts.
             $clf = new CompanyListFactory();
@@ -118,9 +118,9 @@ class Login extends Controller
             if ( $clf->getRecordCount() > 0 ) {
                 $c_obj = $clf->getCurrent();
                 if ( $c_obj->getStatus() == 20 ) {
-                    $error_message = TTi18n::gettext('Sorry, your company\'s account has been placed ON HOLD, please contact customer support immediately');
+                    $error_message = ('Sorry, your company\'s account has been placed ON HOLD, please contact customer support immediately');
                 } elseif ( $c_obj->getStatus() == 30 ) {
-                    $error_message = TTi18n::gettext('Sorry, your company\'s account has been CANCELLED, please contact customer support if you believe this is an error');
+                    $error_message = ('Sorry, your company\'s account has been CANCELLED, please contact customer support if you believe this is an error');
                 }
             }
 

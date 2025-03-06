@@ -1247,20 +1247,20 @@ class Misc {
 	}
 
 	static function generateCopyName( $name, $strict = FALSE ) {
-		$name = str_replace( TTi18n::getText('Copy of'), '', $name );
+		$name = str_replace( ('Copy of'), '', $name );
 
 		if ( $strict === TRUE ) {
-			return TTi18n::getText('Copy of').' '. $name;
+			return ('Copy of').' '. $name;
 		} else {
-			return TTi18n::getText('Copy of').' '. $name .' ['. rand(1,99) .']';
+			return ('Copy of').' '. $name .' ['. rand(1,99) .']';
 		}
 	}
 
 	static function generateShareName( $from, $name, $strict = FALSE ) {
 		if ( $strict === TRUE ) {
-			return $name .' ('. TTi18n::getText('Shared by').': '. $from .')';
+			return $name .' ('. ('Shared by').': '. $from .')';
 		} else {
-			return $name .' ('. TTi18n::getText('Shared by').': '. $from .') ['. rand(1,99) .']';
+			return $name .' ('. ('Shared by').': '. $from .') ['. rand(1,99) .']';
 		}
 	}
 

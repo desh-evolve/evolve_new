@@ -25,26 +25,26 @@ class StationFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-											10 	=> TTi18n::gettext('DISABLED'),
-											20	=> TTi18n::gettext('ENABLED')
+											10 	=> ('DISABLED'),
+											20	=> ('ENABLED')
 									);
 				break;
 			case 'type':
 				$retval = array(
-											10 	=> TTi18n::gettext('PC'),
+											10 	=> ('PC'),
 									);
 
 				if ( getTTProductEdition() >= 15 ) {
-					$retval[20]	= TTi18n::gettext('PHONE');
-					$retval[25]	= TTi18n::gettext('WirelessWeb');
-					$retval[28]	= TTi18n::gettext('iPhone');
-					$retval[30]	= TTi18n::gettext('iBUTTON');
-					$retval[40]	= TTi18n::gettext('Barcode');
-					$retval[50]	= TTi18n::gettext('FingerPrint');
-					$retval[100] = TTi18n::gettext('TimeClock: TT-A8');
-					//$retval[120] = TTi18n::gettext('TimeClock: TT-S300');
-					$retval[150] = TTi18n::gettext('TimeClock: TT-US100');
-					//$retval[200] = TTi18n::gettext('TimeClock: ACTAtek');
+					$retval[20]	= ('PHONE');
+					$retval[25]	= ('WirelessWeb');
+					$retval[28]	= ('iPhone');
+					$retval[30]	= ('iBUTTON');
+					$retval[40]	= ('Barcode');
+					$retval[50]	= ('FingerPrint');
+					$retval[100] = ('TimeClock: TT-A8');
+					//$retval[120] = ('TimeClock: TT-S300');
+					$retval[150] = ('TimeClock: TT-US100');
+					//$retval[200] = ('TimeClock: ACTAtek');
 				}
 				break;
 			case 'station_reserved_word':
@@ -55,129 +55,129 @@ class StationFactory extends Factory {
 				break;
 			case 'branch_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Branches'),
-										20 => TTi18n::gettext('Only Selected Branches'),
-										30 => TTi18n::gettext('All Except Selected Branches'),
+										10 => ('All Branches'),
+										20 => ('Only Selected Branches'),
+										30 => ('All Except Selected Branches'),
 									);
 				break;
 			case 'department_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Departments'),
-										20 => TTi18n::gettext('Only Selected Departments'),
-										30 => TTi18n::gettext('All Except Selected Departments'),
+										10 => ('All Departments'),
+										20 => ('Only Selected Departments'),
+										30 => ('All Except Selected Departments'),
 									);
 				break;
 			case 'group_selection_type':
 				$retval = array(
-										10 => TTi18n::gettext('All Groups'),
-										20 => TTi18n::gettext('Only Selected Groups'),
-										30 => TTi18n::gettext('All Except Selected Groups'),
+										10 => ('All Groups'),
+										20 => ('Only Selected Groups'),
+										30 => ('All Except Selected Groups'),
 									);
 				break;
 			case 'poll_frequency':
 				$retval = array(
-										60 => TTi18n::gettext('1 Minute'),
-										120 => TTi18n::gettext('2 Minutes'),
-										300 => TTi18n::gettext('5 Minutes'),
-										600 => TTi18n::gettext('10 Minutes'),
-										900 => TTi18n::gettext('15 Minutes'),
-										1800 => TTi18n::gettext('30 Minutes'),
-										3600 => TTi18n::gettext('1 Hour'),
-										7200 => TTi18n::gettext('2 Hours'),
-										10800 => TTi18n::gettext('3 Hours'),
-										21600 => TTi18n::gettext('6 Hours'),
-										43200 => TTi18n::gettext('12 Hours'),
-										86400 => TTi18n::gettext('24 Hours'),
-										172800 => TTi18n::gettext('48 Hours'),
-										259200 => TTi18n::gettext('72 Hours'),
-										604800 => TTi18n::gettext('1 Week'),
+										60 => ('1 Minute'),
+										120 => ('2 Minutes'),
+										300 => ('5 Minutes'),
+										600 => ('10 Minutes'),
+										900 => ('15 Minutes'),
+										1800 => ('30 Minutes'),
+										3600 => ('1 Hour'),
+										7200 => ('2 Hours'),
+										10800 => ('3 Hours'),
+										21600 => ('6 Hours'),
+										43200 => ('12 Hours'),
+										86400 => ('24 Hours'),
+										172800 => ('48 Hours'),
+										259200 => ('72 Hours'),
+										604800 => ('1 Week'),
 									);
 				break;
 			case 'partial_push_frequency':
 			case 'push_frequency':
 				$retval = array(
-										60 => TTi18n::gettext('1 Minute'),
-										120 => TTi18n::gettext('2 Minutes'),
-										300 => TTi18n::gettext('5 Minutes'),
-										600 => TTi18n::gettext('10 Minutes'),
-										900 => TTi18n::gettext('15 Minutes'),
-										1800 => TTi18n::gettext('30 Minutes'),
-										3600 => TTi18n::gettext('1 Hour'),
-										7200 => TTi18n::gettext('2 Hours'),
-										10800 => TTi18n::gettext('3 Hours'),
-										21600 => TTi18n::gettext('6 Hours'),
-										43200 => TTi18n::gettext('12 Hours'),
-										86400 => TTi18n::gettext('24 Hours'),
-										172800 => TTi18n::gettext('48 Hours'),
-										259200 => TTi18n::gettext('72 Hours'),
-										604800 => TTi18n::gettext('1 Week'),
+										60 => ('1 Minute'),
+										120 => ('2 Minutes'),
+										300 => ('5 Minutes'),
+										600 => ('10 Minutes'),
+										900 => ('15 Minutes'),
+										1800 => ('30 Minutes'),
+										3600 => ('1 Hour'),
+										7200 => ('2 Hours'),
+										10800 => ('3 Hours'),
+										21600 => ('6 Hours'),
+										43200 => ('12 Hours'),
+										86400 => ('24 Hours'),
+										172800 => ('48 Hours'),
+										259200 => ('72 Hours'),
+										604800 => ('1 Week'),
 									);
 				break;
 			case 'time_clock_command':
 				$retval = array(
-										'test_connection' => TTi18n::gettext('Test Connection'),
-										'set_date' => TTi18n::gettext('Set Date'),
-										'download' => TTi18n::gettext('Download Data'),
-										'upload' => TTi18n::gettext('Upload Data'),
-										'update_config' => TTi18n::gettext('Update Configuration'),
-										'delete_data' => TTi18n::gettext('Delete all Data'),
-										'reset_last_punch_time_stamp' => TTi18n::gettext('Reset Last Punch Time'),
-										'clear_last_punch_time_stamp' => TTi18n::gettext('Clear Last Punch Time'),
-										'restart' => TTi18n::gettext('Restart'),
-										'firmware' => TTi18n::gettext('Update Firmware (CAUTION)'),
+										'test_connection' => ('Test Connection'),
+										'set_date' => ('Set Date'),
+										'download' => ('Download Data'),
+										'upload' => ('Upload Data'),
+										'update_config' => ('Update Configuration'),
+										'delete_data' => ('Delete all Data'),
+										'reset_last_punch_time_stamp' => ('Reset Last Punch Time'),
+										'clear_last_punch_time_stamp' => ('Clear Last Punch Time'),
+										'restart' => ('Restart'),
+										'firmware' => ('Update Firmware (CAUTION)'),
 									);
 				break;
 			case 'mode_flag':
 				$retval = array(
-										1 		=> TTi18n::gettext('-- Default --'),
-										2 		=> TTi18n::gettext('Must Select In/Out Status'),
-										//4 	=> TTi18n::gettext('Enable Work Code (Mode 1)'),
-										//8 	=> TTi18n::gettext('Enable Work Code (Mode 2)'),
-										4 		=> TTi18n::gettext('Disable Out Status'),
-										8 		=> TTi18n::gettext('Enable: Breaks'),
-										16 		=> TTi18n::gettext('Enable: Lunches'),
-										32  	=> TTi18n::gettext('Enable: Branch'),
-										64  	=> TTi18n::gettext('Enable: Department'),
+										1 		=> ('-- Default --'),
+										2 		=> ('Must Select In/Out Status'),
+										//4 	=> ('Enable Work Code (Mode 1)'),
+										//8 	=> ('Enable Work Code (Mode 2)'),
+										4 		=> ('Disable Out Status'),
+										8 		=> ('Enable: Breaks'),
+										16 		=> ('Enable: Lunches'),
+										32  	=> ('Enable: Branch'),
+										64  	=> ('Enable: Department'),
 
-										32768  	=> TTi18n::gettext('Authentication: Fingerprint & Password'),
-										65536  	=> TTi18n::gettext('Authentication: Fingerprint & Proximity Card'),
-										131072 	=> TTi18n::gettext('Authentication: PIN & Fingerprint'),
-										262144	=> TTi18n::gettext('Authentication: Proximity Card & Password'),
+										32768  	=> ('Authentication: Fingerprint & Password'),
+										65536  	=> ('Authentication: Fingerprint & Proximity Card'),
+										131072 	=> ('Authentication: PIN & Fingerprint'),
+										262144	=> ('Authentication: Proximity Card & Password'),
 
-										1048576	=> TTi18n::gettext('Enable: External Proximity Card Reader'),
-										2097152 => TTi18n::gettext('Enable: Pre-Punch Message'),
-										4194304	=> TTi18n::gettext('Enable: Post-Punch Message'),
+										1048576	=> ('Enable: External Proximity Card Reader'),
+										2097152 => ('Enable: Pre-Punch Message'),
+										4194304	=> ('Enable: Post-Punch Message'),
 
-										1073741824 => TTi18n::gettext('Enable: Diagnostic Logs'),
+										1073741824 => ('Enable: Diagnostic Logs'),
 									);
 				if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-					$retval[128]  = TTi18n::gettext('Enable: Job');
-					$retval[256]  = TTi18n::gettext('Enable: Task');
-					$retval[512]  = TTi18n::gettext('Enable: Quantity');
-					$retval[1024] = TTi18n::gettext('Enable: Bad Quantity');
+					$retval[128]  = ('Enable: Job');
+					$retval[256]  = ('Enable: Task');
+					$retval[512]  = ('Enable: Quantity');
+					$retval[1024] = ('Enable: Bad Quantity');
 				}
 
 				ksort($retval);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-status' => TTi18n::gettext('Status'),
-										'-1020-type' => TTi18n::gettext('Type'),
-										'-1030-source' => TTi18n::gettext('Source'),
+										'-1010-status' => ('Status'),
+										'-1020-type' => ('Type'),
+										'-1030-source' => ('Source'),
 
-										'-1140-station_id' => TTi18n::gettext('Station'),
-										'-1150-description' => TTi18n::gettext('Description'),
+										'-1140-station_id' => ('Station'),
+										'-1150-description' => ('Description'),
 
-										'-1160-time_zone' => TTi18n::gettext('Time Zone'),
+										'-1160-time_zone' => ('Time Zone'),
 
-										'-1160-branch_selection_type' => TTi18n::gettext('Branch Selection Type'),
-										'-1160-department_selection_type' => TTi18n::gettext('Department Selection Type'),
-										'-1160-group_selection_type' => TTi18n::gettext('Group Selection Type'),
+										'-1160-branch_selection_type' => ('Branch Selection Type'),
+										'-1160-department_selection_type' => ('Department Selection Type'),
+										'-1160-group_selection_type' => ('Group Selection Type'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -277,7 +277,7 @@ class StationFactory extends Factory {
 
 		$clf = new CompanyListFactory();
 		$rs = $clf->getByID($id)->rs;
-		if ( $this->Validator->isResultSetWithRows(	'company', $rs, TTi18n::gettext('Company is invalid') ) ) {
+		if ( $this->Validator->isResultSetWithRows(	'company', $rs, ('Company is invalid') ) ) {
 
 			$this->data['company_id'] = $id;
 			return TRUE;
@@ -302,7 +302,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'status',
 											$status,
-											TTi18n::gettext('Incorrect Status'),
+											('Incorrect Status'),
 											$this->getOptions('status')) ) {
 
 			$this->data['status_id'] = $status;
@@ -330,7 +330,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -382,12 +382,12 @@ class StationFactory extends Factory {
 				(
 				$this->Validator->isLength(	'station_id',
 											$station_id,
-											TTi18n::gettext('Incorrect Station ID length'),
+											('Incorrect Station ID length'),
 											2, 250 )
 				AND
 				$this->Validator->isTrue(	'station_id',
 											$this->isUniqueStation($station_id),
-											TTi18n::gettext('Station ID already exists'))
+											('Station ID already exists'))
 				)
 			) {
 
@@ -416,7 +416,7 @@ class StationFactory extends Factory {
 				AND
 				$this->Validator->isLength(	'source',
 											$source,
-											TTi18n::gettext('Incorrect Source ID length'),
+											('Incorrect Source ID length'),
 											2, 250 )
 				)
 			) {
@@ -441,7 +441,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->isLength(	'description',
 											$description,
-											TTi18n::gettext('Incorrect Description length'),
+											('Incorrect Description length'),
 											0, 255 ) ) {
 
 			$this->data['description'] = $description;
@@ -469,7 +469,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'branch_id',
 														$blf->getByID($id),
-														TTi18n::gettext('Invalid Branch')
+														('Invalid Branch')
 													) ) {
 
 			$this->data['branch_id'] = $id;
@@ -497,7 +497,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'department_id',
 														$dlf->getByID($id),
-														TTi18n::gettext('Invalid Department')
+														('Invalid Department')
 													) ) {
 
 			$this->data['department_id'] = $id;
@@ -532,7 +532,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job_id',
 														$jlf->getByID($id),
-														TTi18n::gettext('Invalid Job')
+														('Invalid Job')
 													) ) {
 
 			$this->data['job_id'] = $id;
@@ -567,7 +567,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'job_item_id',
 														$jilf->getByID($id),
-														TTi18n::gettext('Invalid Task')
+														('Invalid Task')
 													) ) {
 
 			$this->data['job_item_id'] = $id;
@@ -594,7 +594,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'time_zone',
 											$time_zone,
-											TTi18n::gettext('Incorrect Time Zone'),
+											('Incorrect Time Zone'),
 											Misc::trimSortPrefix( $upf->getOptions('time_zone') ) ) ) {
 
 			$this->data['time_zone'] = $time_zone;
@@ -617,7 +617,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'user_group_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Group Selection Type'),
+											('Incorrect Group Selection Type'),
 											$this->getOptions('group_selection_type')) ) {
 
 			$this->data['user_group_selection_type_id'] = $value;
@@ -685,7 +685,7 @@ class StationFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'group',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Group is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Group is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -710,7 +710,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'branch_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Branch Selection Type'),
+											('Incorrect Branch Selection Type'),
 											$this->getOptions('branch_selection_type')) ) {
 
 			$this->data['branch_selection_type_id'] = $value;
@@ -778,7 +778,7 @@ class StationFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'branch',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Branch is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Branch is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -803,7 +803,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'department_selection_type',
 											$value,
-											TTi18n::gettext('Incorrect Department Selection Type'),
+											('Incorrect Department Selection Type'),
 											$this->getOptions('department_selection_type')) ) {
 
 			$this->data['department_selection_type_id'] = $value;
@@ -871,7 +871,7 @@ class StationFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'department',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Department is invalid').' ('. $obj->getName() .')' )) {
+														('Selected Department is invalid').' ('. $obj->getName() .')' )) {
 						$f->save();
 					}
 				}
@@ -941,7 +941,7 @@ class StationFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'include_user',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Employee is invalid').' ('. $obj->getFullName() .')' )) {
+														('Selected Employee is invalid').' ('. $obj->getFullName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1010,7 +1010,7 @@ class StationFactory extends Factory {
 
 					if ($this->Validator->isTrue(		'exclude_user',
 														$f->Validator->isValid(),
-														TTi18n::gettext('Selected Employee is invalid').' ('. $obj->getFullName() .')' )) {
+														('Selected Employee is invalid').' ('. $obj->getFullName() .')' )) {
 						$f->save();
 					}
 				}
@@ -1044,7 +1044,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(	'port',
 											$value,
-											TTi18n::gettext('Incorrect port')
+											('Incorrect port')
 											) ) {
 
 			$this->data['port'] = $value;
@@ -1067,7 +1067,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->isLength(	'user_name',
 											$value,
-											TTi18n::gettext('Incorrect User Name length'),
+											('Incorrect User Name length'),
 											0, 255 ) ) {
 
 			$this->data['user_name'] = $value;
@@ -1090,7 +1090,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->isLength(	'password',
 											$value,
-											TTi18n::gettext('Incorrect Password length'),
+											('Incorrect Password length'),
 											0, 255 ) ) {
 
 			$this->data['password'] = $value;
@@ -1115,7 +1115,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'poll_frequency',
 											$value,
-											TTi18n::gettext('Incorrect Download Frequency'),
+											('Incorrect Download Frequency'),
 											$this->getOptions('poll_frequency')) ) {
 
 			$this->data['poll_frequency'] = $value;
@@ -1141,7 +1141,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->inArrayKey(	'push_frequency',
 												$value,
-												TTi18n::gettext('Incorrect Upload Frequency'),
+												('Incorrect Upload Frequency'),
 												$this->getOptions('push_frequency')) ) {
 
 			$this->data['push_frequency'] = $value;
@@ -1166,7 +1166,7 @@ class StationFactory extends Factory {
 			OR
 			$this->Validator->inArrayKey(	'partial_push_frequency',
 											$value,
-											TTi18n::gettext('Incorrect Partial Upload Frequency'),
+											('Incorrect Partial Upload Frequency'),
 											$this->getOptions('push_frequency')) ) {
 
 			$this->data['partial_push_frequency'] = $value;
@@ -1198,7 +1198,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->isNumeric(	'mode_flag',
 											$bitmask,
-											TTi18n::gettext('Incorrect Mode') ) ) {
+											('Incorrect Mode') ) ) {
 
 			$this->data['mode_flag'] = $bitmask;
 
@@ -1263,7 +1263,7 @@ class StationFactory extends Factory {
 		} else {
 			$this->Validator->isTRUE(	'work_code_definition',
 										FALSE,
-										TTi18n::gettext('Incorrect work code field lengths, they must all add up to 9') );
+										('Incorrect work code field lengths, they must all add up to 9') );
 		}
 
 		return FALSE;
@@ -1359,7 +1359,7 @@ class StationFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_punch_time_stamp',
 												$epoch,
-												TTi18n::gettext('Incorrect last punch date')) ) {
+												('Incorrect last punch date')) ) {
 
 			$this->data['last_punch_time_stamp'] = $epoch;
 
@@ -1386,7 +1386,7 @@ class StationFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_poll_date',
 												$epoch,
-												TTi18n::gettext('Incorrect last poll date')) ) {
+												('Incorrect last poll date')) ) {
 
 			$this->data['last_poll_date'] = $epoch;
 
@@ -1409,7 +1409,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->isLength(	'last_poll_status_message',
 											$value,
-											TTi18n::gettext('Incorrect Status Message length'),
+											('Incorrect Status Message length'),
 											0, 255 ) ) {
 
 			$this->data['last_poll_status_message'] = $value;
@@ -1436,7 +1436,7 @@ class StationFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_push_date',
 												$epoch,
-												TTi18n::gettext('Incorrect last push date')) ) {
+												('Incorrect last push date')) ) {
 
 			$this->data['last_push_date'] = $epoch;
 
@@ -1459,7 +1459,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->isLength(	'last_push_status_message',
 											$value,
-											TTi18n::gettext('Incorrect Status Message length'),
+											('Incorrect Status Message length'),
 											0, 255 ) ) {
 
 			$this->data['last_push_status_message'] = $value;
@@ -1486,7 +1486,7 @@ class StationFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_partial_push_date',
 												$epoch,
-												TTi18n::gettext('Incorrect last partial push date')) ) {
+												('Incorrect last partial push date')) ) {
 
 			$this->data['last_partial_push_date'] = $epoch;
 
@@ -1509,7 +1509,7 @@ class StationFactory extends Factory {
 
 		if ( $this->Validator->isLength(	'last_partial_push_status_message',
 											$value,
-											TTi18n::gettext('Incorrect Status Message length'),
+											('Incorrect Status Message length'),
 											0, 255 ) ) {
 
 			$this->data['last_partial_push_status_message'] = $value;
@@ -1534,7 +1534,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_1',
 											$value,
-											TTi18n::gettext('User Value 1 is invalid'),
+											('User Value 1 is invalid'),
 											1,255) ) {
 
 			$this->data['user_value_1'] = $value;
@@ -1559,7 +1559,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_2',
 											$value,
-											TTi18n::gettext('User Value 2 is invalid'),
+											('User Value 2 is invalid'),
 											2,255) ) {
 
 			$this->data['user_value_2'] = $value;
@@ -1584,7 +1584,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_3',
 											$value,
-											TTi18n::gettext('User Value 3 is invalid'),
+											('User Value 3 is invalid'),
 											3,255) ) {
 
 			$this->data['user_value_3'] = $value;
@@ -1609,7 +1609,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_4',
 											$value,
-											TTi18n::gettext('User Value 4 is invalid'),
+											('User Value 4 is invalid'),
 											4,255) ) {
 
 			$this->data['user_value_4'] = $value;
@@ -1634,7 +1634,7 @@ class StationFactory extends Factory {
 				OR
 				$this->Validator->isLength(	'user_value_5',
 											$value,
-											TTi18n::gettext('User Value 5 is invalid'),
+											('User Value 5 is invalid'),
 											5,255) ) {
 
 			$this->data['user_value_5'] = $value;
@@ -1688,7 +1688,7 @@ class StationFactory extends Factory {
 			$query = 'UPDATE '. $this->getTable() .' set allowed_date = ? where id = ?';
 			$this->db->Execute($query, $ph);
 
-			TTLog::addEntry( $id, 200,  TTi18n::getText('Access from station Allowed'), $user_id, $this->getTable() ); //Allow
+			TTLog::addEntry( $id, 200,  ('Access from station Allowed'), $user_id, $this->getTable() ); //Allow
 
 			return TRUE;
 		}
@@ -1712,7 +1712,7 @@ class StationFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'allowed_date',
 												$epoch,
-												TTi18n::gettext('Incorrect allowed date')) ) {
+												('Incorrect allowed date')) ) {
 
 			$this->data['allowed_date'] = $epoch;
 
@@ -1930,7 +1930,7 @@ class StationFactory extends Factory {
 		if ( $this->getDescription() == '' ) {
 			$this->Validator->isTrue(		'description',
 											FALSE,
-											TTi18n::gettext('Description must be specified'));
+											('Description must be specified'));
 		}
 
 		return TRUE;
@@ -2065,7 +2065,7 @@ class StationFactory extends Factory {
 
 	function addLog( $log_action ) {
 		if ( !( $log_action == 10 AND $this->getType() == 10 ) ) {
-			return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Station'), NULL, $this->getTable(), $this );
+			return TTLog::addEntry( $this->getId(), $log_action,  ('Station'), NULL, $this->getTable(), $this );
 		}
 	}
 }

@@ -318,7 +318,7 @@ class Factory {
 
 		if 	(	$this->Validator->isDate(		'created_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Date')) ) {
+												('Incorrect Date')) ) {
 
 			$this->data['created_date'] = $epoch;
 
@@ -354,7 +354,7 @@ class Factory {
 		$ulf = new UserListFactory();
 		if ( $this->Validator->isResultSetWithRows(	'created_by',
 													$ulf->getByID($id),
-													TTi18n::gettext('Incorrect User')
+													('Incorrect User')
 													) ) {
 
 			$this->data['created_by'] = $id;
@@ -386,7 +386,7 @@ class Factory {
 
 		if 	(	$this->Validator->isDate(		'updated_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Date')) ) {
+												('Incorrect Date')) ) {
 
 			$this->data['updated_date'] = $epoch;
 
@@ -424,7 +424,7 @@ class Factory {
 		$ulf = new UserListFactory();
 		if ( $this->Validator->isResultSetWithRows(	'updated_by',
 													$ulf->getByID($id),
-													TTi18n::gettext('Incorrect User')
+													('Incorrect User')
 													) ) {
 			$this->data['updated_by'] = $id;
 
@@ -457,7 +457,7 @@ class Factory {
 
 		if 	(	$this->Validator->isDate(		'deleted_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Date')) ) {
+												('Incorrect Date')) ) {
 
 			$this->data['deleted_date'] = $epoch;
 
@@ -491,7 +491,7 @@ class Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'updated_by',
 													$ulf->getByID($id),
-													TTi18n::gettext('Incorrect User')
+													('Incorrect User')
 													) ) {
 
 			$this->data['deleted_by'] = $id;
@@ -1104,7 +1104,7 @@ class Factory {
 				}				
 				
 			}
-			
+
 			if (isset($sql_chunks)) {
 				$sql = implode(',', $sql_chunks);
 				return ' order by ' . $sql;

@@ -22,10 +22,10 @@ class AbsenceLeaveFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Paid'),
-										12 => TTi18n::gettext('Paid (Above Salary)'),
-										20 => TTi18n::gettext('Unpaid'),
-										30 => TTi18n::gettext('Dock'),
+										10 => ('Paid'),
+										12 => ('Paid (Above Salary)'),
+										20 => ('Unpaid'),
+										30 => ('Dock'),
 									);
 				break;
 			case 'paid_type': //Types that are considered paid.
@@ -33,18 +33,18 @@ class AbsenceLeaveFactory extends Factory {
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-type' => TTi18n::gettext('Type'),
-										'-1020-name' => TTi18n::gettext('Name'),
+										'-1010-type' => ('Type'),
+										'-1020-name' => ('Name'),
 
-										'-1030-rate' => TTi18n::gettext('Rate'),
+										'-1030-rate' => ('Rate'),
 
-										'-1080-accrual_policy' => TTi18n::gettext('Accrual Policy'),
-										'-1090-accrual_rate' => TTi18n::gettext('Accrual Rate'),
+										'-1080-accrual_policy' => ('Accrual Policy'),
+										'-1090-accrual_rate' => ('Accrual Rate'),
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -124,7 +124,7 @@ class AbsenceLeaveFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -158,7 +158,7 @@ class AbsenceLeaveFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$value,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
@@ -216,7 +216,7 @@ class AbsenceLeaveFactory extends Factory {
 		$name = trim($name);
 		if (	$this->Validator->isLength(	'name',
 											$name,
-											TTi18n::gettext('Name is invalid'),
+											('Name is invalid'),
 											2,50)
 						) {
 
@@ -255,7 +255,7 @@ class AbsenceLeaveFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'rate',
 												$int,
-												TTi18n::gettext('Incorrect Rate')) ) {
+												('Incorrect Rate')) ) {
 			$this->data['rate'] = $int;
 
 			return TRUE;
@@ -280,7 +280,7 @@ class AbsenceLeaveFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'wage_group',
 													$wglf->getByID($id),
-													TTi18n::gettext('Wage Group is invalid')
+													('Wage Group is invalid')
 													) ) {
 
 			$this->data['wage_group_id'] = $id;
@@ -307,7 +307,7 @@ class AbsenceLeaveFactory extends Factory {
 
 		if 	(	$this->Validator->isFloat(		'accrual_rate',
 												$int,
-												TTi18n::gettext('Incorrect Accrual Rate')) ) {
+												('Incorrect Accrual Rate')) ) {
 			$this->data['accrual_rate'] = $int;
 
 			return TRUE;
@@ -336,7 +336,7 @@ class AbsenceLeaveFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'accrual_policy',
 													$aplf->getByID($id),
-													TTi18n::gettext('Accrual Policy is invalid')
+													('Accrual Policy is invalid')
 													) ) {
 
 			$this->data['accrual_policy_id'] = $id;
@@ -369,7 +369,7 @@ class AbsenceLeaveFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account_id',
 														$psealf->getById($id),
-														TTi18n::gettext('Invalid Pay Stub Account')
+														('Invalid Pay Stub Account')
 														) ) {
 			$this->data['pay_stub_entry_account_id'] = $id;
 
@@ -387,7 +387,7 @@ class AbsenceLeaveFactory extends Factory {
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',
 											FALSE,
-											TTi18n::gettext('This absence policy is in use'));
+											('This absence policy is in use'));
 
 			}
 		}
@@ -467,7 +467,7 @@ class AbsenceLeaveFactory extends Factory {
 	}
 
 	function addLog( $log_action ) {
-		return TTLog::addEntry( $this->getId(), $log_action,  TTi18n::getText('Absence Policy'), NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action,  ('Absence Policy'), NULL, $this->getTable(), $this );
 	}
 }
 ?>

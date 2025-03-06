@@ -50,7 +50,7 @@ class UserWorkExperionceFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -77,7 +77,7 @@ class UserWorkExperionceFactory extends Factory {
         function setCompanyName($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('company_name', $value, TTi18n::gettext('Company name is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('company_name', $value, ('Company name is too long'), 1, 250)) {
                     $this->data['company_name'] = $value;
                     return FALSE;
 		}
@@ -101,7 +101,7 @@ class UserWorkExperionceFactory extends Factory {
 		if 	(	( $epoch !== FALSE AND $epoch == '' )
 				OR $this->Validator->isDate(	'from_date',
 												$epoch,
-												TTi18n::gettext('From date is invalid.')) ) {
+												('From date is invalid.')) ) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['from_date'] = ( $epoch != 0 AND $epoch != '' ) ? TTDate::getMiddleDayEpoch( $epoch ) : '' ; //Allow blank birthdate.
@@ -130,7 +130,7 @@ class UserWorkExperionceFactory extends Factory {
 		if 	(	( $epoch !== FALSE AND $epoch == '' )
 				OR $this->Validator->isDate(	'to_date',
 												$epoch,
-												TTi18n::gettext('To date is invalid.')) ) {
+												('To date is invalid.')) ) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['to_date'] = ( $epoch != 0 AND $epoch != '' ) ? TTDate::getMiddleDayEpoch( $epoch ) : '' ; //Allow blank birthdate.
@@ -156,7 +156,7 @@ class UserWorkExperionceFactory extends Factory {
         function setDepartment($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('department', $value, TTi18n::gettext('Department is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('department', $value, ('Department is too long'), 1, 250)) {
                     $this->data['department'] = $value;
                     return FALSE;
 		}
@@ -181,7 +181,7 @@ class UserWorkExperionceFactory extends Factory {
         function setDesignation($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('designation', $value, TTi18n::gettext('Designation is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('designation', $value, ('Designation is too long'), 1, 250)) {
                     $this->data['designation'] = $value;
                     return FALSE;
 		}
@@ -204,7 +204,7 @@ class UserWorkExperionceFactory extends Factory {
         function setRemarks($value) {
 		$value = trim($value);
 
-		if ($value == '' OR $this->Validator->isLength('remaks', $value, TTi18n::gettext('Remarks is too long'), 1, 250)) {
+		if ($value == '' OR $this->Validator->isLength('remaks', $value, ('Remarks is too long'), 1, 250)) {
                     $this->data['remaks'] = $value;
                     return FALSE;
 		}

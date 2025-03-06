@@ -5,7 +5,7 @@ namespace App\Models\Report;
 class PayStubSummaryReport extends Report {
 
 	function __construct() {
-		$this->title = TTi18n::getText('Pay Stub Summary Report');
+		$this->title = ('Pay Stub Summary Report');
 		$this->file_name = 'paystub_summary_report';
 
 		parent::__construct();
@@ -35,50 +35,50 @@ class PayStubSummaryReport extends Report {
 			case 'setup_fields':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-template' => TTi18n::gettext('Template'),
-										'-1010-time_period' => TTi18n::gettext('Time Period'),
+										'-1000-template' => ('Template'),
+										'-1010-time_period' => ('Time Period'),
 
-										'-2010-user_status_id' => TTi18n::gettext('Employee Status'),
-										'-2020-user_group_id' => TTi18n::gettext('Employee Group'),
-										'-2030-user_title_id' => TTi18n::gettext('Employee Title'),
-										'-2040-include_user_id' => TTi18n::gettext('Employee Include'),
-										'-2050-exclude_user_id' => TTi18n::gettext('Employee Exclude'),
-										'-2060-default_branch_id' => TTi18n::gettext('Default Branch'),
-										'-2070-default_department_id' => TTi18n::gettext('Default Department'),
+										'-2010-user_status_id' => ('Employee Status'),
+										'-2020-user_group_id' => ('Employee Group'),
+										'-2030-user_title_id' => ('Employee Title'),
+										'-2040-include_user_id' => ('Employee Include'),
+										'-2050-exclude_user_id' => ('Employee Exclude'),
+										'-2060-default_branch_id' => ('Default Branch'),
+										'-2070-default_department_id' => ('Default Department'),
 
-										'-5000-columns' => TTi18n::gettext('Display Columns'),
-										'-5010-group' => TTi18n::gettext('Group By'),
-										'-5020-sub_total' => TTi18n::gettext('SubTotal By'),
-										'-5030-sort' => TTi18n::gettext('Sort By'),
+										'-5000-columns' => ('Display Columns'),
+										'-5010-group' => ('Group By'),
+										'-5020-sub_total' => ('SubTotal By'),
+										'-5030-sort' => ('Sort By'),
 							   );
 				break;
 			case 'time_period':
 				$retval = TTDate::getTimePeriodOptions();
 				break;
 			case 'date_columns':
-				$retval = TTDate::getReportDateOptions( 'transaction', TTi18n::getText('Transaction Date'), 13, TRUE );
+				$retval = TTDate::getReportDateOptions( 'transaction', ('Transaction Date'), 13, TRUE );
 				break;
 			case 'static_columns':
 				$retval = array(
 										//Static Columns - Aggregate functions can't be used on these.
-										'-1000-first_name' => TTi18n::gettext('First Name'),
-										'-1001-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1002-last_name' => TTi18n::gettext('Last Name'),
-										'-1005-full_name' => TTi18n::gettext('Full Name'),
-										'-1030-employee_number' => TTi18n::gettext('Employee #'),
-										'-1040-status' => TTi18n::gettext('Status'),
-										'-1050-title' => TTi18n::gettext('Title'),
-										'-1060-province' => TTi18n::gettext('Province/State'),
-										'-1070-country' => TTi18n::gettext('Country'),
-										'-1080-user_group' => TTi18n::gettext('Group'),
-										'-1090-default_branch' => TTi18n::gettext('Default Branch'),
-										'-1100-default_department' => TTi18n::gettext('Default Department'),
-										'-1110-currency' => TTi18n::gettext('Currency'),
-										'-1200-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1210-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
-										'-1220-policy_group' => TTi18n::gettext('Policy Group'),
+										'-1000-first_name' => ('First Name'),
+										'-1001-middle_name' => ('Middle Name'),
+										'-1002-last_name' => ('Last Name'),
+										'-1005-full_name' => ('Full Name'),
+										'-1030-employee_number' => ('Employee #'),
+										'-1040-status' => ('Status'),
+										'-1050-title' => ('Title'),
+										'-1060-province' => ('Province/State'),
+										'-1070-country' => ('Country'),
+										'-1080-user_group' => ('Group'),
+										'-1090-default_branch' => ('Default Branch'),
+										'-1100-default_department' => ('Default Department'),
+										'-1110-currency' => ('Currency'),
+										'-1200-permission_control' => ('Permission Group'),
+										'-1210-pay_period_schedule' => ('Pay Period Schedule'),
+										'-1220-policy_group' => ('Policy Group'),
 										//Handled in date_columns above.
-										//'-1250-pay_period' => TTi18n::gettext('Pay Period'),
+										//'-1250-pay_period' => ('Pay Period'),
 							   );
 
 				$retval = array_merge( $retval, $this->getOptions('date_columns') );
@@ -89,7 +89,7 @@ class PayStubSummaryReport extends Report {
 										//Dynamic - Aggregate functions can be used
 
 										//Take into account wage groups. However hourly_rates for the same hour type, so we need to figure out an average hourly rate for each column?
-										'-2010-hourly_rate' => TTi18n::gettext('Hourly Rate'),
+										'-2010-hourly_rate' => ('Hourly Rate'),
 
 							);
 
@@ -165,25 +165,25 @@ class PayStubSummaryReport extends Report {
 			case 'templates':
 				$retval = array(
 
-										'-1010-by_employee+totals' => TTi18n::gettext('Totals by Employee'),
-										'-1020-by_employee+earnings' => TTi18n::gettext('Earnings by Employee'),
-										'-1030-by_employee+employee_deductions' => TTi18n::gettext('Deductions by Employee'),
-										'-1040-by_employee+employer_deductions' => TTi18n::gettext('Employer Contributions by Employee'),
-										'-1050-by_employee+accruals' => TTi18n::gettext('Accruals by Employee'),
-										'-1060-by_employee+totals+earnings+employee_deductions+employer_deductions+accruals' => TTi18n::gettext('All Accounts by Employee'),
+										'-1010-by_employee+totals' => ('Totals by Employee'),
+										'-1020-by_employee+earnings' => ('Earnings by Employee'),
+										'-1030-by_employee+employee_deductions' => ('Deductions by Employee'),
+										'-1040-by_employee+employer_deductions' => ('Employer Contributions by Employee'),
+										'-1050-by_employee+accruals' => ('Accruals by Employee'),
+										'-1060-by_employee+totals+earnings+employee_deductions+employer_deductions+accruals' => ('All Accounts by Employee'),
 
-										'-1110-by_title+totals' => TTi18n::gettext('Totals by Title'),
-										'-1120-by_group+totals' => TTi18n::gettext('Totals by Group'),
-										'-1130-by_branch+totals' => TTi18n::gettext('Totals by Branch'),
-										'-1140-by_department+totals' => TTi18n::gettext('Totals by Department'),
-										'-1150-by_branch_by_department+totals' => TTi18n::gettext('Totals by Branch/Department'),
-										'-1160-by_pay_period+totals' => TTi18n::gettext('Totals by Pay Period'),
+										'-1110-by_title+totals' => ('Totals by Title'),
+										'-1120-by_group+totals' => ('Totals by Group'),
+										'-1130-by_branch+totals' => ('Totals by Branch'),
+										'-1140-by_department+totals' => ('Totals by Department'),
+										'-1150-by_branch_by_department+totals' => ('Totals by Branch/Department'),
+										'-1160-by_pay_period+totals' => ('Totals by Pay Period'),
 
-										'-1210-by_pay_period_by_employee+totals' => TTi18n::gettext('Totals by Pay Period/Employee'),
-										'-1220-by_employee_by_pay_period+totals' => TTi18n::gettext('Totals by Employee/Pay Period'),
-										'-1230-by_branch_by_pay_period+totals' => TTi18n::gettext('Totals by Branch/Pay Period'),
-										'-1240-by_department_by_pay_period+totals' => TTi18n::gettext('Totals by Department/Pay Period'),
-										'-1250-by_branch_by_department_by_pay_period+totals' => TTi18n::gettext('Totals by Branch/Department/Pay Period'),
+										'-1210-by_pay_period_by_employee+totals' => ('Totals by Pay Period/Employee'),
+										'-1220-by_employee_by_pay_period+totals' => ('Totals by Employee/Pay Period'),
+										'-1230-by_branch_by_pay_period+totals' => ('Totals by Branch/Pay Period'),
+										'-1240-by_department_by_pay_period+totals' => ('Totals by Department/Pay Period'),
+										'-1250-by_branch_by_department_by_pay_period+totals' => ('Totals by Branch/Department/Pay Period'),
 							   );
 
 				break;
@@ -533,7 +533,7 @@ class PayStubSummaryReport extends Report {
 
 		$pself = TTnew( 'PayStubEntryListFactory' );
 		$pself->getAPIReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $pself->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $pself->getRecordCount(), NULL, ('Retrieving Data...') );
 		if ( $pself->getRecordCount() > 0 ) {
 			foreach( $pself as $key => $pse_obj ) {
 				$hourly_rate = 0;
@@ -574,7 +574,7 @@ class PayStubSummaryReport extends Report {
 		$ulf = TTnew( 'UserListFactory' );
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, TTi18n::getText('Retrieving Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
 		foreach ( $ulf as $key => $u_obj ) {
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
@@ -586,7 +586,7 @@ class PayStubSummaryReport extends Report {
 
 	//PreProcess data such as calculating additional columns from raw data etc...
 	function _preProcess() {
-		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['pay_stub_entry']), NULL, TTi18n::getText('Pre-Processing Data...') );
+		$this->getProgressBarObject()->start( $this->getAMFMessageID(), count($this->tmp_data['pay_stub_entry']), NULL, ('Pre-Processing Data...') );
 
 		//Merge time data with user data
 		$key=0;

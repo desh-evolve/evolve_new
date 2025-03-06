@@ -25,8 +25,8 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => TTi18n::gettext('Include'),
-										20 => TTi18n::gettext('Exclude'),
+										10 => ('Include'),
+										20 => ('Exclude'),
 									);
 				break;
 
@@ -67,7 +67,7 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'company_deduction',
 														$cdlf->getByID($id),
-														TTi18n::gettext('Tax / Deduction is invalid')
+														('Tax / Deduction is invalid')
 													) ) {
 
 			$this->data['company_deduction_id'] = $id;
@@ -95,7 +95,7 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 
 		if ( $this->Validator->inArrayKey(	'type',
 											$type,
-											TTi18n::gettext('Incorrect Type'),
+											('Incorrect Type'),
 											$this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $type;
@@ -123,7 +123,7 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 		if (
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account',
 														$psealf->getByID($id),
-														TTi18n::gettext('Pay Stub Account is invalid')
+														('Pay Stub Account is invalid')
 													) ) {
 
 			$this->data['pay_stub_entry_account_id'] = $id;
@@ -186,7 +186,7 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 		$obj = $this->getPayStubEntryAccountObject();
 		if ( is_object($obj) ) {
 			$type = Option::getByKey($this->getType(), Misc::TrimSortPrefix( $this->getOptions('type') ) );
-			return TTLog::addEntry( $this->getCompanyDeduction(), $log_action,  $type .' '. TTi18n::getText('Pay Stub Account').': '. $obj->getName(), NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getCompanyDeduction(), $log_action,  $type .' '. ('Pay Stub Account').': '. $obj->getName(), NULL, $this->getTable() );
 		}
 	}
 }

@@ -569,7 +569,7 @@ class Authentication {
 				$this->UpdateLastLoginDate();
 			}
 
-			TTLog::addEntry( $this->getObject()->getID(), 100,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '. TTi18n::getText('Type').': '. $type .' '.  TTi18n::getText('SessionID') .': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication'); //Login
+			TTLog::addEntry( $this->getObject()->getID(), 100,  ('SourceIP').': '. $this->getIPAddress() .' '. ('Type').': '. $type .' '.  ('SessionID') .': '.$this->getSessionID() .' '.  ('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication'); //Login
 
 			Log::info("User {$user_name} logged in successfully with IP: {$ipAddress}");
 
@@ -591,7 +591,7 @@ class Authentication {
 		$this->destroyCookie();
 		$this->Delete();
 
-		TTLog::addEntry( $this->getObject()->getID(), 110,  TTi18n::getText('SourceIP').': '. $this->getIPAddress() .' '.  TTi18n::getText('SessionID').': '.$this->getSessionID() .' '.  TTi18n::getText('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication');
+		TTLog::addEntry( $this->getObject()->getID(), 110,  ('SourceIP').': '. $this->getIPAddress() .' '.  ('SessionID').': '.$this->getSessionID() .' '.  ('UserID').': '. $this->getObject()->getId(), $this->getObject()->getID() , 'authentication');
 
 		BreadCrumb::Delete();
 

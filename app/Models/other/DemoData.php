@@ -566,11 +566,11 @@ class DemoData {
 		$psealf = TTnew( 'PayStubEntryAccountLinkFactory' );
 		$psealf->setCompany( $company_id );
 
-		$psealf->setTotalGross( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, TTi18n::gettext('Total Gross')) );
-		$psealf->setTotalEmployeeDeduction( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, TTi18n::gettext('Total Deductions')) );
-		$psealf->setTotalEmployerDeduction( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, TTi18n::gettext('Employer Total Contributions')) );
-		$psealf->setTotalNetPay( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, TTi18n::gettext('Net Pay')) );
-		$psealf->setRegularTime( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 10, TTi18n::gettext('Regular Time')) );
+		$psealf->setTotalGross( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, ('Total Gross')) );
+		$psealf->setTotalEmployeeDeduction( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, ('Total Deductions')) );
+		$psealf->setTotalEmployerDeduction( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, ('Employer Total Contributions')) );
+		$psealf->setTotalNetPay( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, ('Net Pay')) );
+		$psealf->setRegularTime( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 10, ('Regular Time')) );
 
 		if ( $psealf->isValid() ) {
 			$insert_id = $psealf->Save();

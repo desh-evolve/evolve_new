@@ -71,24 +71,24 @@ class UserJobFactory extends Factory {
 			case 'columns':
 				$retval = array(
 
-										'-1010-first_name' => TTi18n::gettext('First Name'),
-										'-1020-last_name' => TTi18n::gettext('Last Name'),
+										'-1010-first_name' => ('First Name'),
+										'-1020-last_name' => ('Last Name'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
-										//'-1099-group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+										'-1090-title' => ('Title'),
+										//'-1099-group' => ('Group'),
+										'-1100-default_branch' => ('Branch'),
+										'-1110-default_department' => ('Department'),
 
-										//'-5010-transit' => TTi18n::gettext('Transit/Routing'),
-										//'-5020-account' => TTi18n::gettext('Account'),
-										//'-5030-institution' => TTi18n::gettext('Institution'),
+										//'-5010-transit' => ('Transit/Routing'),
+										//'-5020-account' => ('Account'),
+										//'-5030-institution' => ('Institution'),
                                     
-                                                                                '-1290-note' => TTi18n::gettext('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                                                                                '-1290-note' => ('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
-										'-2000-created_by' => TTi18n::gettext('Created By'),
-										'-2010-created_date' => TTi18n::gettext('Created Date'),
-										'-2020-updated_by' => TTi18n::gettext('Updated By'),
-										'-2030-updated_date' => TTi18n::gettext('Updated Date'),
+										'-2000-created_by' => ('Created By'),
+										'-2010-created_date' => ('Created Date'),
+										'-2020-updated_by' => ('Updated By'),
+										'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
@@ -163,7 +163,7 @@ class UserJobFactory extends Factory {
 				OR
 						$this->Validator->isLength(		'note',
 														$value,
-														TTi18n::gettext('Note is too long'),
+														('Note is too long'),
 														1,
 														2048)
 			) {
@@ -201,7 +201,7 @@ class UserJobFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_branch',
 														$blf->getByID($id),
-														TTi18n::gettext('Invalid Default Branch')
+														('Invalid Default Branch')
 													) ) {
 
 			$this->data['default_branch_id'] = $id;
@@ -237,7 +237,7 @@ class UserJobFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'title',
 														$utlf->getByID($id),
-														TTi18n::gettext('Title is invalid')
+														('Title is invalid')
 													) ) {
 
 			$this->data['title_id'] = $id;
@@ -273,7 +273,7 @@ class UserJobFactory extends Factory {
 				OR
 				$this->Validator->isResultSetWithRows(	'default_department',
 														$dlf->getByID($id),
-														TTi18n::gettext('Invalid Default Department')
+														('Invalid Default Department')
 													) ) {
 
 			$this->data['default_department_id'] = $id;
@@ -316,7 +316,7 @@ class UserJobFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'first_worked_date',
 												$epoch,
-												TTi18n::gettext('Incorrect First Worked Date'))
+												('Incorrect First Worked Date'))
 			) {
 
 			//$this->data['first_worked_date'] = $epoch;
@@ -330,7 +330,7 @@ class UserJobFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'first_worked_date',
 												FALSE,
-												TTi18n::gettext('Incorrect first worked date'));
+												('Incorrect first worked date'));
 			}                    
                     
 		}
@@ -365,7 +365,7 @@ class UserJobFactory extends Factory {
 
 		if 	(	$this->Validator->isDate(		'last_worked_date',
 												$epoch,
-												TTi18n::gettext('Incorrect Last Worked Date'))
+												('Incorrect Last Worked Date'))
 			) {
 
 			//$this->data['first_worked_date'] = $epoch;
@@ -379,7 +379,7 @@ class UserJobFactory extends Factory {
 			} else {
 				$this->Validator->isTRUE(		'last_worked_date',
 												FALSE,
-												TTi18n::gettext('Incorrect last worked date'));
+												('Incorrect last worked date'));
 			}                    
                     
 		}
@@ -399,7 +399,7 @@ class UserJobFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
-													TTi18n::gettext('Company is invalid')
+													('Company is invalid')
 													) ) {
 
 			$this->data['company_id'] = $id;
@@ -425,7 +425,7 @@ class UserJobFactory extends Factory {
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
-															TTi18n::gettext('Invalid User')
+															('Invalid User')
 															) ) {
 			$this->data['user_id'] = $id;
 
@@ -472,7 +472,7 @@ class UserJobFactory extends Factory {
 //		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
 //			$this->Validator->isTRUE(		'account',
 //											FALSE,
-//											TTi18n::gettext('Bank account already exists') );
+//											('Bank account already exists') );
 //
 //			return FALSE;
 //		}
@@ -481,28 +481,28 @@ class UserJobFactory extends Factory {
 		if ( $this->getDefaultBranch() == 0 ) {
 			$this->Validator->isTrue(		'default_branch',
 											FALSE,
-											TTi18n::gettext('Default Branch must be specified') );
+											('Default Branch must be specified') );
 		} 
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getDefaultDepartment() == 0 ) {
 			$this->Validator->isTrue(		'default_department',
 											FALSE,
-											TTi18n::gettext('Default Department must be specified') );
+											('Default Department must be specified') );
 		}   
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getTitle() == 0 ) {
 			$this->Validator->isTrue(		'title',
 											FALSE,
-											TTi18n::gettext('Employee Title must be specified') );
+											('Employee Title must be specified') );
 		}        
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getLastWorkedDate() != '' AND $this->getFirstWorkedDate() != '' AND $this->getLastWorkedDate() < $this->getFirstWorkedDate() ) {
 			$this->Validator->isTrue(		'last_worked_date',
 											FALSE,
-											TTi18n::gettext('Conflicting last worked date'));
+											('Conflicting last worked date'));
 		}                
 
 		return TRUE;
@@ -586,11 +586,11 @@ class UserJobFactory extends Factory {
          */          
 	function addLog( $log_action ) {
 		if ( $this->getUser() == '' ) {
-			$log_description = TTi18n::getText('Company');
+			$log_description = ('Company');
 		} else {
-			$log_description = TTi18n::getText('Employee');
+			$log_description = ('Employee');
 		}
-		return TTLog::addEntry( $this->getId(), $log_action, TTi18n::getText('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
+		return TTLog::addEntry( $this->getId(), $log_action, ('Bank Account') .' - '. $log_description, NULL, $this->getTable(), $this );
 	}
 
 }

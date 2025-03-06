@@ -24,11 +24,11 @@ class StationDepartmentFactory extends Factory {
 				OR
 				$this->Validator->isNumeric(	'station',
 													$id,
-													TTi18n::gettext('Selected Station is invalid')
+													('Selected Station is invalid')
 /*
 				$this->Validator->isResultSetWithRows(	'station',
 													$slf->getByID($id),
-													TTi18n::gettext('Selected Station is invalid')
+													('Selected Station is invalid')
 */
 															)
 			) {
@@ -69,7 +69,7 @@ class StationDepartmentFactory extends Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'department',
 													$dlf->getByID($id),
-													TTi18n::gettext('Selected Department is invalid')
+													('Selected Department is invalid')
 													) ) {
 			$this->data['department_id'] = $id;
 
@@ -129,7 +129,7 @@ class StationDepartmentFactory extends Factory {
 	function addLog( $log_action ) {
 		$d_obj = $this->getDepartmentObject();
 		if ( is_object($d_obj) ) {
-			return TTLog::addEntry( $this->getStation(), $log_action, TTi18n::getText('Department').': '. $d_obj->getName() , NULL, $this->getTable() );
+			return TTLog::addEntry( $this->getStation(), $log_action, ('Department').': '. $d_obj->getName() , NULL, $this->getTable() );
 		}
 
 		return FALSE;

@@ -61,14 +61,11 @@ AND ( !isset($config_vars['other']['installer_enabled']) OR ( isset($config_vars
 	}	
 }
 
-//print_r('hi');exit;
-
 $permission = new Permission();
 $authentication = new Authentication();
 
 if ( isset($authenticate) AND $authenticate === FALSE ) {
 	Debug::text('Bypassing Authentication', __FILE__, __LINE__, __METHOD__, 10);
-	TTi18n::chooseBestLocale();
 } else {
 	//Increase timeout on WAP devices, so they don't have to login as often.
 	if ( isset($enable_wap) AND $enable_wap == TRUE ) {
@@ -77,10 +74,6 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 		$authentication->setIdle( (int)$config_vars['other']['web_session_timeout'] );
 	}
 
-	//echo 'Interface->$authentication->Check(): ';
-	//print_r($authentication->Check());exit;
-	//echo '$authentication->Check(): ';
-	//echo $authentication->Check();exit;
 	if ( $authentication->Check() === TRUE ) {
 		$profiler->startTimer( 'Interface.inc - Post-Authentication' );
 
@@ -202,8 +195,6 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 			//dd('error: check here => interface.php');
 			//Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'Login.php') );
 		}
-
-		//exit;
 	}
 }
 unset($clf);
@@ -217,8 +208,6 @@ foreach ($system_settings as $item) {
     $system_settings[$item->name] = $item->value;
 }
 */
-
-//print_r($system_settings['system_version']);exit;
         
 // Share data with all views
 View::share('css_file', 'global.css');
