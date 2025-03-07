@@ -1411,49 +1411,49 @@ class Factory {
 
 	function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		DB::beginTransaction();
-
+		
 		try {
 			// Validate the model before saving (if not deleted)
 			if (!$this->getDeleted() && !$this->isValid()) {
 				throw new \Exception('Invalid Data, not saving.');
 			}
-
 			// Get the table name dynamically
 			$table = $this->getTable();
+			
 
 			// Get the data dynamically
 			$data = $this->data;
-
 			// Determine if we're inserting a new record or updating an existing one
 			if ($this->isNew($force_lookup)) {
-
+				
 				//Insert
 				$time = TTDate::getTime();
-
+				
 				if ( $this->getCreatedDate() == '' ) {
 					$this->setCreatedDate($time);
 				}
 				if ( $this->getCreatedBy() == '' ) {
 					$this->setCreatedBy();
 				}
-
+				
 				//Set updated date at the same time, so we can easily select last
 				//updated, or last created records.
 				$this->setUpdatedDate($time);
 				$this->setUpdatedBy();
-
+				
 				unset($time);
-
+				
 				// Perform the insert and get the insert ID
 				$insert_id = DB::table($table)->insertGetId($data);
 				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
-
+				
 				// Set the insert ID in the model
 				$this->setId($insert_id);
-
+				
 				// Return the ID of the newly created record
 				$retval = $insert_id;
 				$log_action = 10; // 'Add'
+				echo 'check error: ';
 			} else {
 				Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
 
@@ -1467,11 +1467,13 @@ class Factory {
 				$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
 			}
 
+			/*
 			if ( method_exists($this,'addLog') ) {
 				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
 				//tables like PayPeriodSchedule, so addLog() can't get the user information.
 				$this->addLog( $log_action );
 			}
+			*/
 
 			// Clear the data if requested
 			if ($reset_data) {
@@ -1480,12 +1482,11 @@ class Factory {
 
 			// Commit the transaction
 			DB::commit();
-
+			
 			return $retval;
 		} catch (\Exception $e) {
 			// Roll back the transaction on error
 			DB::rollBack();
-			print_r($e->getMessage());exit;
 			Log::error('Save failed: ' . $e->getMessage());
 			throw new \Exception('Save failed.');
 		}

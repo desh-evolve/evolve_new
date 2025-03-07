@@ -6,6 +6,7 @@ use App\Models\Company\CompanyListFactory;
 use App\Models\PayStub\PayStubListFactory;
 use App\Models\Users\UserListFactory;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class CurrencyFactory extends Factory {
 	protected $table = 'currency';
@@ -353,16 +354,12 @@ class CurrencyFactory extends Factory {
 	}
 	function setCompany($id) {
 		$id = trim($id);
-
+		
 		$clf = new CompanyListFactory(); 
 
-		if ( $id == 0
-				OR $this->Validator->isResultSetWithRows(	'company',
-															$clf->getByID($id),
-															('Company is invalid')
-															) ) {
+		if ( $id == 0 || $this->Validator->isResultSetWithRows(	'company', $clf->getByID($id), ('Company is invalid') ) ) {
 			$this->data['company_id'] = $id;
-
+			
 			return TRUE;
 		}
 
@@ -407,7 +404,8 @@ class CurrencyFactory extends Factory {
 					where company_id = :company_id
 						AND name = :name
 						AND deleted = 0';
-		$name_id = $this->db->GetOne($query, $ph);
+		$result = DB::select($query, $ph);
+		$name_id = !empty($result) ? $result[0]->id : null;
 		Debug::Arr($name_id,'Unique Name: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $name_id === FALSE ) {
@@ -600,7 +598,8 @@ class CurrencyFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND is_default = 1 AND deleted=0';
-		$id = $this->db->GetOne($query, $ph);
+		$result = DB::select($query, $ph);
+		$id = !empty($result) ? $result[0]->id : null;
 		Debug::Arr($id,'Unique Currency Default: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {
@@ -644,7 +643,8 @@ class CurrencyFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND is_base = 1 AND deleted=0';
-		$id = $this->db->GetOne($query, $ph);
+		$result = DB::select($query, $ph);
+		$id = !empty($result) ? $result[0]->id : null;
 		Debug::Arr($id,'Unique Currency Base: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {
