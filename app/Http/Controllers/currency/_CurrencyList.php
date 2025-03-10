@@ -36,6 +36,7 @@ class CurrencyList extends Controller
         //$permission;
         //$current_company;
         //$current_user_prefs;
+        //$current_user_prefs;
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
