@@ -390,19 +390,19 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND a.created_by in ('. implode(',', $filter_data['permission_children_ids']) .') ';
+			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
 		}
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
+			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
 		}
 		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND a.id not in ('. implode(',', $filter_data['exclude_id']) .') ';
+			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. implode(',', $filter_data['status_id']) .') ';
+			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['type_id']) AND isset($filter_data['type_id'][0]) AND !in_array(-1, (array)$filter_data['type_id']) ) {
-			$query  .=	' AND a.type_id in ('. implode(',', $filter_data['type_id']) .') ';
+			$query  .=	' AND a.type_id in ('. $this->getListSQL($filter_data['type_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
 			$ph[] = strtolower(trim($filter_data['name']));

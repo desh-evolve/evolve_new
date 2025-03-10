@@ -215,7 +215,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 					';
 
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
+			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
 		}
 		if ( isset($filter_data['exception_policy_control_id']) AND isset($filter_data['exception_policy_control_id'][0]) AND !in_array(-1, (array)$filter_data['exception_policy_control_id']) ) {
 			$query  .=	' AND a.exception_policy_control_id in ('. $this->getListSQL($filter_data['exception_policy_control_id'], $ph) .') ';
@@ -236,7 +236,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 			$query  .=	' AND e.map_id in ('. $this->getListSQL($filter_data['premium_policy_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['accrual_policy_id']) AND isset($filter_data['accrual_policy_id'][0]) AND !in_array(-1, (array)$filter_data['accrual_policy_id']) ) {
-			$query  .=	' AND f.map_id in ('. implode(',', $filter_data['accrual_policy_id']) .') ';
+			$query  .=	' AND f.map_id in ('. $this->getListSQL($filter_data['accrual_policy_id'], $ph) .') ';
 		}
 
 		$query .= 	'
@@ -370,10 +370,10 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 					where	a.company_id = ?
 					';
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND a.created_by in ('. implode(',', $filter_data['permission_children_ids']) .') ';
+			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
 		}
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
+			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
 		}
 		if ( isset($filter_data['exception_policy_control']) AND isset($filter_data['exception_policy_control'][0]) AND !in_array(-1, (array)$filter_data['exception_policy_control']) ) {
 			$query  .=	' AND a.exception_policy_control_id in ('. $this->getListSQL($filter_data['exception_policy_control'], $ph) .') ';

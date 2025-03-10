@@ -790,26 +790,26 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND b.id in ('. implode(',', $filter_data['permission_children_ids']) .') ';
+			$query  .=	' AND b.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
 		}
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND b.id in ('. implode(',', $filter_data['user_id']) .') ';
+			$query  .=	' AND b.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. implode(',', $filter_data['status_id']) .') ';
+			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
 			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
 				$uglf = new UserGroupListFactory();
 				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 			}
-			$query  .=	' AND b.group_id in ('. implode(',', $filter_data['group_id']) .') ';
+			$query  .=	' AND b.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND b.default_branch_id in ('. implode(',', $filter_data['default_branch_id']) .') ';
+			$query  .=	' AND b.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND b.default_department_id in ('. implode(',', $filter_data['default_department_id']) .') ';
+			$query  .=	' AND b.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
 			$query  .=	' AND b.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
@@ -942,20 +942,20 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND b.id in ('. implode(',', $filter_data['permission_children_ids']) .') ';
+			$query  .=	' AND b.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
 		}
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND b.id in ('. implode(',', $filter_data['user_id']) .') ';
+			$query  .=	' AND b.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
 		}
 
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
+			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
 		}
 		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND a.id not in ('. implode(',', $filter_data['exclude_id']) .') ';
+			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND a.user_id in ('. implode(',', $filter_data['user_id']) .') ';
+			$query  .=	' AND a.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
 		}
 
 		if ( isset($filter_data['pay_period_id']) AND isset($filter_data['pay_period_id'][0]) AND !in_array(-1, (array)$filter_data['pay_period_id']) ) {
@@ -967,13 +967,13 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 				$uglf = new UserGroupListFactory();
 				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 			}
-			$query  .=	' AND b.group_id in ('. implode(',', $filter_data['group_id']) .') ';
+			$query  .=	' AND b.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND b.default_branch_id in ('. implode(',', $filter_data['default_branch_id']) .') ';
+			$query  .=	' AND b.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND b.default_department_id in ('. implode(',', $filter_data['default_department_id']) .') ';
+			$query  .=	' AND b.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
 			$query  .=	' AND b.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';

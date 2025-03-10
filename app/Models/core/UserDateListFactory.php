@@ -394,7 +394,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					from	'. $this->getTable() .'
 					where
 						user_id in ('. $this->getListSQL($user_id, $ph) .')
-						AND pay_period_id in ('. implode(',', $pay_period_id) .')
+						AND pay_period_id in ('. $this->getListSQL($pay_period_id, $ph) .')
 						AND deleted = 0
 					';
 
@@ -438,7 +438,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					where
 						a.user_id = b.id
 						AND b.company_id = ?
-						AND a.pay_period_id in ('. implode(',', $pay_period_id) .')
+						AND a.pay_period_id in ('. $this->getListSQL($pay_period_id, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
 

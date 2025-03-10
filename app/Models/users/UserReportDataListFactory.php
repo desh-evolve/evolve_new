@@ -367,10 +367,10 @@ class UserReportDataListFactory extends UserReportDataFactory implements Iterato
 					';
 
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
+			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
 		}
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND a.user_id in ('. implode(',', $filter_data['user_id']) .') ';
+			$query  .=	' AND a.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['script']) AND isset($filter_data['script'][0]) AND !in_array(-1, (array)$filter_data['script']) ) {
 			$query  .=	' AND a.script in ('. $this->getListSQL($filter_data['script'], $ph) .') ';
