@@ -281,7 +281,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 
 		if ( $rs->RecordCount() > 0 ) {
 
@@ -392,7 +392,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 				';
 
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $rs->RecordCount() > 0 ) {
@@ -502,7 +502,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 				';
 
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $rs->RecordCount() > 0 ) {
@@ -585,7 +585,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 					';
 
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $rs->RecordCount() > 0 ) {
@@ -668,7 +668,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 					';
 
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $rs->RecordCount() > 0 ) {

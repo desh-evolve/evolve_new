@@ -47,7 +47,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -78,7 +78,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -115,7 +115,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 	}
 
 	function getByCompanyIdArray($company_id, $include_blank = TRUE) {
@@ -188,7 +188,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$query .= $this->getSortSQL( $order, $strict );
 		$query .= ' LIMIT 1';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -284,9 +284,9 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

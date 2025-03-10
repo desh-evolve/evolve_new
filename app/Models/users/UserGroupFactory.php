@@ -225,7 +225,7 @@ class UserGroupFactory extends Factory {
 			$sugf = TTnew( 'StationUserGroupFactory' );
 
 			$query = 'delete from '. $sugf->getTable() .' where group_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
                         
 			//Job employee criteria

@@ -51,7 +51,7 @@ class UserCensusInformationListFactory  extends UserCensusInformationFactory  im
 						where	id = ?
 							AND deleted = 0';
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 		
 
@@ -97,9 +97,9 @@ class UserCensusInformationListFactory  extends UserCensusInformationFactory  im
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

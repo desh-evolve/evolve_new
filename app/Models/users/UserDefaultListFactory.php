@@ -50,7 +50,7 @@ class UserDefaultListFactory extends UserDefaultFactory implements IteratorAggre
 							AND deleted = 0';
 			//$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -87,7 +87,7 @@ class UserDefaultListFactory extends UserDefaultFactory implements IteratorAggre
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -109,9 +109,9 @@ class UserDefaultListFactory extends UserDefaultFactory implements IteratorAggre
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

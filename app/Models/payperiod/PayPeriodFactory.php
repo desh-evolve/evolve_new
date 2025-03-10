@@ -892,7 +892,7 @@ class PayPeriodFactory extends Factory {
 			$udf = TTnew( 'UserDateFactory' );
 
 			$query = 'update '. $udf->getTable() .' set pay_period_id = 0 where pay_period_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 		} else {
 			if ( $this->getStatus() == 20 ) { //Closed
 				//Mark pay stubs as PAID once the pay period is closed?

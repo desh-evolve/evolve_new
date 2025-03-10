@@ -452,7 +452,8 @@ class Authentication {
 						)';
 		try {
 			DB::insert($query, $ph);
-		} catch (Throwable $e) {
+		} catch (Exception $e) {
+			print_r($e->getMessage());exit; //check here
 			throw new DBError($e);
 		}
 
@@ -549,7 +550,7 @@ class Authentication {
 			default:
 				return false;
 		}
-
+		
 		if ($password_result === true) {
 			Log::info('Login Successful!');
 
@@ -577,6 +578,8 @@ class Authentication {
 			RateLimiter::clear($key);
 
 			return true;
+		}else{
+			dd('Incorrect User Name or Password!');
 		}
 
 		Log::warning("Login Failed! Attempts: " . RateLimiter::attempts($key));

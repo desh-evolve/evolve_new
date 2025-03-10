@@ -194,7 +194,7 @@ class FastTree {
 
 		// get all children of this node
 		$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = ? AND parent_id = ?';
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 
 		if ( !is_object($rs) ) {
 			Debug::Text(' Select failed', __FILE__, __LINE__, __METHOD__,10);
@@ -228,7 +228,7 @@ class FastTree {
 		// we've got the left value, and now that we've processed
 		// the children of this node we also know the right value
 		$query  = 'UPDATE '. $this->table .' SET left_id = ?, right_id = ? WHERE tree_id = ? AND object_id = ?';
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 
 		//Use this to help debug concurrency issues.
 		//usleep(100000);
@@ -359,7 +359,7 @@ class FastTree {
 				GROUP BY 	a.object_id, a.parent_id, a.left_id
 				ORDER BY	a.left_id';
 
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 
 		while ( $row = $rs->FetchRow() ) {
 			if ( $data_format == 1 ) {
@@ -448,10 +448,10 @@ class FastTree {
 						);
 
 			$query  = 'UPDATE '. $this->table .' SET right_id = right_id + 1000 WHERE tree_id = ? AND right_id >= ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			$query  = 'UPDATE '. $this->table .' SET left_id = left_id + 1000 WHERE tree_id = ? AND left_id > ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			return TRUE;
 		}
@@ -494,7 +494,7 @@ class FastTree {
 						);
 
 			$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = ? AND parent_id = -1';
-			$rs = $this->db->Execute($query, $ph);
+			$rs = DB::select($query, $ph);
 
 			if ( !is_object($rs) ) {
 				Debug::Text(' Select failed', __FILE__, __LINE__, __METHOD__,10);
@@ -546,7 +546,7 @@ class FastTree {
 
 			Debug::Text(' Inserting Node... Left ID: '. $left_id .' Right ID: '. $right_id, __FILE__, __LINE__, __METHOD__,10);
 			$query = 'INSERT INTO '. $this->table .' (tree_id, parent_id, object_id, left_id, right_id) VALUES (?,?,?,?,?)';
-			$rs = $this->db->Execute($query, $ph);
+			$rs = DB::select($query, $ph);
 
 			if ( !is_object($rs) ) {
 				Debug::Text(' Error inserting node', __FILE__, __LINE__, __METHOD__,10);
@@ -631,7 +631,7 @@ class FastTree {
 						);
 
 			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = ? AND object_id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 		} elseif ( strtolower($recurse) == 'recurse' ) {
 			Debug::Arr($children_ids, ' Recursing Delete - Current Object: '. $object_id .' Child IDs: ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -643,7 +643,7 @@ class FastTree {
 			$children_ids[] = $object_id;
 
 			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = ? AND object_id in ('. $this->getListSQL( $children_ids, $ph ).')';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 		} else {
 			Debug::Text(' Re-parenting children: ', __FILE__, __LINE__, __METHOD__,10);
@@ -656,7 +656,7 @@ class FastTree {
 						);
 
 			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = ? AND object_id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			$ph = array(
 						'parent_id' => $parent_id,
@@ -668,7 +668,7 @@ class FastTree {
 						SET parent_id = ?
 						WHERE tree_id = ?
 							AND parent_id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 		}
 
@@ -710,7 +710,7 @@ class FastTree {
 					SET parent_id = ?
 					WHERE tree_id = ?
 						AND object_id = ?';
-		$this->db->Execute($query, $ph);
+		DB::select($query, $ph);
 
 		//FIXME: rebuild tree starting from object_id and parent_id only perhaps?
 		//Might cut down on some work.
@@ -757,14 +757,14 @@ class FastTree {
 						SET parent_id = ?
 						WHERE tree_id = ?
 							AND parent_id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			//Update object ID
 			$query = '	UPDATE '. $this->table .'
 						SET object_id = ?
 						WHERE tree_id = ?
 							AND object_id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			$this->db->CommitTrans();
 

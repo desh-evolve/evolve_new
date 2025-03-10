@@ -513,28 +513,28 @@ class DepartmentFactory extends Factory {
 			$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
 
 			$query = 'update '. $pcf->getTable() .' set department_id = 0 where department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $udtf->getTable() .' set department_id = 0 where department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $sf_b->getTable() .' set department_id = 0 where department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $uf->getTable() .' set default_department_id = 0 where company_id = '. (int)$this->getCompany() .' AND default_department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $udf->getTable() .' set default_department_id = 0 where company_id = '. (int)$this->getCompany() .' AND default_department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $sf->getTable() .' set department_id = 0 where company_id = '. (int)$this->getCompany() .' AND department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'delete from '. $sdf->getTable() .' where department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $rstf->getTable() .' set department_id = 0 where department_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			//Job employee criteria
 			$cgmlf = TTnew( 'CompanyGenericMapListFactory' );

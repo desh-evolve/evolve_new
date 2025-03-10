@@ -1174,7 +1174,7 @@ class Factory {
 				$cache_id = 'empty_rs_'. $this->table .'_'. $id;
 				$rs = $this->getCache($cache_id);
 				if ( $rs === FALSE ) {
-					$rs = $this->db->Execute($query);
+					$rs = DB::select($query);
 					$this->saveCache($rs,$cache_id);
 				}
 				*/
@@ -1196,7 +1196,7 @@ class Factory {
 				}
 				$this->db->IgnoreErrors( $save_error_handlers ); //Prevent a cache write error from causing a transaction rollback.
 			} else {
-				//$rs = $this->db->Execute($query);
+				//$rs = DB::select($query);
 				$rs = DB::select($query);
 			}
 		} catch (Throwable $e) {
@@ -1380,7 +1380,7 @@ class Factory {
 
 			if ( is_string($query) AND $query != '' ) {
 				try {
-					$this->db->Execute($query);
+					DB::select($query);
 				} catch (Throwable $e) {
 					//Comment this out to see some errors on MySQL.
 					//throw new DBError($e);
@@ -1504,7 +1504,7 @@ class Factory {
 			$query = 'DELETE FROM '. $this->getTable() .' WHERE id = ?';
 
 			try {
-				$this->db->Execute($query, $ph);
+				DB::select($query, $ph);
 
 				if ( method_exists($this,'addLog') ) {
 					//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
@@ -1549,7 +1549,7 @@ class Factory {
 			Debug::text('Bulk Delete Query: '. $query, __FILE__, __LINE__, __METHOD__, 9);
 
 			try {
-				$this->db->Execute($query, $ph);
+				DB::select($query, $ph);
 			} catch (Throwable $e) {
 				throw new DBError($e);
 			}

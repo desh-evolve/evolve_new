@@ -272,7 +272,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

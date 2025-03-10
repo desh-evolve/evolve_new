@@ -313,7 +313,7 @@ class PolicyGroupFactory extends Factory {
 			$udf = TTnew( 'UserDefaultFactory' );
 
 			$query = 'update '. $udf->getTable() .' set policy_group_id = 0 where company_id = '. (int)$this->getCompany() .' AND policy_group_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 		}
 
 		return TRUE;

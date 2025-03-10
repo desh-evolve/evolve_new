@@ -177,7 +177,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		//					where   job_skills != null
 		//						AND deleted = 0';
 		//                
-		//		$this->rs = $this->db->Execute($query);
+		//		$this->rs = DB::select($query);
 		//                echo "ARSP --------------------------------------<br/>";
 		//                print_r($this);
 		//                echo "<pre>";
@@ -257,7 +257,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				//$this->rs = DB::select($query, $ph);
@@ -723,7 +723,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -835,7 +835,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -901,7 +901,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -940,7 +940,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -1081,7 +1081,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 
 				}
 
@@ -1428,7 +1428,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -1621,7 +1621,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -1803,7 +1803,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -1985,7 +1985,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 				} else {
 					$this->rs = DB::select($query, $ph);
-					//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+					//$this->rs = DB::select($query, $ph);
 				}
 
 				return $this;
@@ -2548,7 +2548,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

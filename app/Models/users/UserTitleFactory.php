@@ -159,10 +159,10 @@ class UserTitleFactory extends Factory {
 			$udf = TTnew( 'UserDefaultFactory' );
 
 			$query = 'update '. $uf->getTable() .' set title_id = 0 where company_id = '. (int)$this->getCompany() .' AND title_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $udf->getTable() .' set title_id = 0 where company_id = '. (int)$this->getCompany() .' AND title_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 		}
 	}
 

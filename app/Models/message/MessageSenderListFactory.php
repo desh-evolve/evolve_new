@@ -43,7 +43,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -72,7 +72,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 							AND a.id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -104,7 +104,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 							AND b.id in ('. $this->getListSQL($id, $ph) .')
 							AND ( b.deleted = 0 )
 					';
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -133,7 +133,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 							AND a.message_control_id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -173,7 +173,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 							AND a.user_id != ?
 							AND ( b.deleted = 0 AND c.deleted = 0 )
 					';
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -208,7 +208,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 							AND a.id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

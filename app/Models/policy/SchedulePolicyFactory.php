@@ -313,10 +313,10 @@ class SchedulePolicyFactory extends Factory {
 			$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
 
 			$query = 'update '. $sf->getTable() .' set schedule_policy_id = 0 where schedule_policy_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $rstf->getTable() .' set schedule_policy_id = 0 where schedule_policy_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 		}
 
 		$this->removeCache( $this->getId() );

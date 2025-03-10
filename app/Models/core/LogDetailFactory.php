@@ -1550,7 +1550,7 @@ class LogDetailFactory extends Factory {
 					//Save data in a single SQL query.
 					$query = 'INSERT INTO '. $this->getTable() .'(SYSTEM_LOG_ID,FIELD,NEW_VALUE,OLD_VALUE) VALUES'. implode(',', $data );
 					//Debug::Text('Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
-					$this->db->Execute($query, $ph);
+					DB::select($query, $ph);
 
 					Debug::Text('Logged detail records in: '. (microtime(TRUE)-$start_time), __FILE__, __LINE__, __METHOD__, 10);
 

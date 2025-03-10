@@ -41,7 +41,7 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -80,7 +80,7 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -117,7 +117,7 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -150,7 +150,7 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -182,7 +182,7 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}

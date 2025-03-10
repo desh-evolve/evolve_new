@@ -16,6 +16,7 @@ use App\Models\Users\UserFactory;
 use App\Models\Users\UserGroupFactory;
 use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserTitleFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -170,8 +171,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$ph = array(
 					':company_id' => $company_id,
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date )
+					':start_date' => Carbon::parse($start_date)->toDateString(),
+					':end_date' => Carbon::parse($end_date)->toDateString()
 					);
 
 		$query = '
@@ -265,7 +266,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		$ph = array(
 					':pay_period_id' => $pay_period_id,
-					':date_stamp' => $this->db->BindDate( TTDate::getBeginDayEpoch( $before_epoch  ) ),
+					':date_stamp' => Carbon::parse(TTDate::getBeginDayEpoch( $before_epoch  ))->toDateString(),
 					);
 
 		//Ignore pre-mature exceptions when counting exceptions.
@@ -287,7 +288,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		
 		return $this;
 	}
 
@@ -341,7 +342,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -402,7 +403,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -464,7 +465,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -525,8 +526,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse($start_date)->toDateString(),
+					':end_date' => Carbon::parse($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -600,8 +601,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse($start_date)->toDateString(),
+					':end_date' => Carbon::parse($end_date)->toDateString(),
 					);
 
 		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
@@ -838,7 +839,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -1056,11 +1057,11 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
@@ -1077,7 +1078,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

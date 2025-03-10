@@ -276,9 +276,9 @@ class StationFactory extends Factory {
 		$id = trim($id);
 
 		$clf = new CompanyListFactory();
-		$rs = $clf->getByID($id)->rs;
+		$rs = $clf->getByID($id);
+		
 		if ( $this->Validator->isResultSetWithRows(	'company', $rs, ('Company is invalid') ) ) {
-
 			$this->data['company_id'] = $id;
 			return TRUE;
 		}
@@ -1285,7 +1285,7 @@ class StationFactory extends Factory {
 						'id' => $id,
 						);
 			$query = 'UPDATE '. $this->getTable() .' set last_poll_date = ?,last_punch_time_stamp = ? where id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			return TRUE;
 		}
@@ -1308,7 +1308,7 @@ class StationFactory extends Factory {
 						);
 
 			$query = 'UPDATE '. $this->getTable() .' set last_push_date = ? where id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			return TRUE;
 		}
@@ -1331,7 +1331,7 @@ class StationFactory extends Factory {
 						);
 
 			$query = 'UPDATE '. $this->getTable() .' set last_partial_push_date = ? where id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			return TRUE;
 		}
@@ -1686,7 +1686,7 @@ class StationFactory extends Factory {
 						'id' => $id,
 						);
 			$query = 'UPDATE '. $this->getTable() .' set allowed_date = ? where id = ?';
-			$this->db->Execute($query, $ph);
+			DB::select($query, $ph);
 
 			TTLog::addEntry( $id, 200,  ('Access from station Allowed'), $user_id, $this->getTable() ); //Allow
 

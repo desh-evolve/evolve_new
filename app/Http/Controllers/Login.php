@@ -95,7 +95,7 @@ class Login extends Controller
             if ( $create_new_station == TRUE ) {
                 //Insert new station
                 $sf = new StationFactory();
-
+                
                 $sf->setCompany( $current_company->getId() );
                 $sf->setStatus('ENABLED');
                 $sf->setType('PC');

@@ -35,18 +35,18 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted=0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -62,7 +62,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$ppsulf = new PayPeriodScheduleUserListFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -70,12 +70,12 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 					from	'. $this->getTable() .' as a,
 							'. $ppsulf->getTable() .' as b
 					where 	a.id = b.pay_period_schedule_id
-						AND b.user_id = ?
+						AND b.user_id = :user_id
 						AND a.deleted=0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -86,21 +86,21 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted=0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -124,7 +124,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 */
 		$ppsuf = new PayPeriodScheduleUserFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		$query = '
 					select 	a.*,
@@ -132,7 +132,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 					from	'. $this->getTable() .' as a,
 							'. $ppsuf->getTable() .' as b
 					where 	a.id = b.pay_period_schedule_id
-						AND a.company_id = ? ';
+						AND a.company_id = :company_id ';
 
 		if ( isset($user_ids) AND ( $user_ids != '' OR ( is_array($user_ids) AND isset($user_ids[0]) ) ) ) {
 			$query  .=	' AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .') ';
@@ -142,7 +142,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 	}
 
 	function getByIdAndCompanyId($id, $company_id, $order = NULL) {
@@ -155,19 +155,19 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	id = ?
+					where	company_id = :company_id
+						AND	id = :id
 						AND deleted=0';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -182,22 +182,22 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	pay_period_schedule_id = ?
+					where	company_id = :company_id
+						AND	pay_period_schedule_id = :id
 						AND deleted=0';
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -290,7 +290,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$ppsuf = new PayPeriodScheduleUserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -305,7 +305,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -321,12 +321,12 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 			$query  .=	' AND a.type_id in ('. $this->getListSQL($filter_data['type_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = strtolower(trim($filter_data['name']));
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['description']) AND trim($filter_data['description']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['description']));
-			$query  .=	' AND lower(a.description) LIKE ?';
+			$ph[':description'] = strtolower(trim($filter_data['description']));
+			$query  .=	' AND lower(a.description) LIKE :description';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
@@ -343,9 +343,9 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

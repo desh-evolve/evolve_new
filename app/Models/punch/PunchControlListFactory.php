@@ -56,7 +56,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -92,7 +92,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -118,7 +118,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -141,7 +141,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -511,9 +511,9 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

@@ -21,7 +21,7 @@ class CformSubmissionFactory extends Factory {
  
 	 	$query = ' select 	* from 	'. $this->table .' where company_id = '.$epfNo.' and pay_period = '.$payperiod.' and type = '."'$type'";
 		 
-		$this->rs = $this->db->Execute($query);
+		$this->rs = DB::select($query);
 		return $this;
 	}
         

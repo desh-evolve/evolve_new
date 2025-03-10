@@ -42,7 +42,7 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -68,7 +68,7 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 			//Run query without limit
 			$this->rs = $this->db->SelectLimit($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -108,7 +108,7 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 			//Run query without limit
 			$this->rs = $this->db->SelectLimit($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

@@ -51,7 +51,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		}
@@ -84,7 +84,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -113,7 +113,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -141,7 +141,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		
@@ -174,7 +174,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		
@@ -208,7 +208,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
 		
@@ -242,7 +242,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			//$this->saveCache($this->rs,$id);
 		
@@ -281,7 +281,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			//$this->saveCache($this->rs,$id);
 		
@@ -332,7 +332,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$this->rs = $this->db->Execute($query, isset($ph) ? $ph : []);
+			$this->rs = DB::select($query, isset($ph) ? $ph : []);
 
 			$this->saveCache($this->rs,$id);
 		

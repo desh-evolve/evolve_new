@@ -4980,7 +4980,7 @@ class UserFactory extends Factory {
 				//Run a separate custom query to clear the geocordinates. Do we really want to do this for so many objects though...
 				Debug::text('Address has changed, clear geocordinates!', __FILE__, __LINE__, __METHOD__, 10);
 				$query = 'UPDATE '. $this->getTable() .' SET longitude = NULL, latitude = NULL where id = ?';
-				$this->db->Execute( $query, array( 'id' => $this->getID() ) );
+				DB::select( $query, array( 'id' => $this->getID() ) );
 			}
 		}
 
@@ -5099,10 +5099,10 @@ class UserFactory extends Factory {
 			$seuf = new StationExcludeUserFactory();
 
 			$query = 'delete from '. $siuf->getTable() .' where user_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'delete from '. $seuf->getTable() .' where user_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			//Job employee criteria
 			$cgmlf = new CompanyGenericMapListFactory();

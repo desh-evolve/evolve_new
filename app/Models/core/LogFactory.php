@@ -410,7 +410,7 @@ class LogFactory extends Factory {
 		}
 
 		$ulf = new UserListFactory();
-
+		
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),

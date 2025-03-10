@@ -76,7 +76,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -105,7 +105,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 	}
 
 	function getByIdAndCompanyId( $id, $company_id ) {
@@ -145,7 +145,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					ORDER BY a.time_stamp asc, a.status_id desc, a.punch_control_id asc
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -195,7 +195,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					ORDER BY a.time_stamp asc, a.status_id desc, a.punch_control_id asc
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -229,7 +229,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -257,7 +257,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -291,7 +291,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -325,7 +325,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -357,7 +357,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -391,7 +391,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -431,7 +431,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -525,7 +525,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -568,7 +568,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		//$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -625,7 +625,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -680,7 +680,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -730,7 +730,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -782,7 +782,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -812,7 +812,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -841,7 +841,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -894,7 +894,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					ORDER BY a.time_stamp asc, a.status_id desc, a.punch_control_id asc
 					';
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -932,7 +932,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -970,7 +970,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -999,7 +999,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -1086,7 +1086,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$query .= $this->getSortSQL( $order, FALSE );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -1194,7 +1194,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$query .= $this->getSortSQL( $order, FALSE );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -1320,7 +1320,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$query .= $this->getSortSQL( $order, FALSE );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -1563,9 +1563,9 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		//Debug::Arr($ph,'PlaceHolders:', __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -1779,7 +1779,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					';
 
 		$query .= $this->getSortSQL( $order, FALSE );
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -2108,9 +2108,9 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		//Debug::Arr($ph,'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -2428,9 +2428,9 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		//Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -2653,9 +2653,9 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

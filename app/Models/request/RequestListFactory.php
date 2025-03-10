@@ -44,18 +44,18 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -73,8 +73,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -85,13 +85,13 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND a.id = ?
-						AND c.company_id = ?
+						AND a.id = :id
+						AND c.company_id = :company_id
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -109,18 +109,18 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -145,8 +145,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -157,16 +157,16 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
-						AND b.user_id = ?
+						AND c.company_id = :company_id
+						AND b.user_id = :user_id
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -200,10 +200,10 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':user_id' => $user_id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -214,18 +214,18 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
-						AND b.user_id = ?
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND c.company_id = :company_id
+						AND b.user_id = :user_id
+						AND b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -263,11 +263,11 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
-					'status_id' => $status_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':user_id' => $user_id,
+					':status_id' => $status_id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -278,19 +278,19 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
-						AND b.user_id = ?
-						AND a.status_id = ?
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND c.company_id = :company_id
+						AND b.user_id = :user_id
+						AND a.status_id = :status_id
+						AND b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 ) ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -327,9 +327,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'status' => $status,
-					'level' => $level,
-					'max_level' => $max_level,
+					':status' => $status,
+					':level' => $level,
+					':max_level' => $max_level,
 					);
 
 		$query = '
@@ -338,9 +338,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 							'. $udf->getTable() .' as b
 
 					where	a.user_date_id = b.id
-						AND	a.status_id = ?
+						AND	a.status_id = :status
 						AND a.authorized = 0
-						AND ( a.authorization_level = ? OR a.authorization_level > ? )
+						AND ( a.authorization_level = :level OR a.authorization_level > :max_level )
 						AND b.user_id in ('. $this->getListSQL($ids, $ph).')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 				';
@@ -348,9 +348,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order, $additional_sort_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -386,7 +386,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$huf = new HierarchyUserFactory();
 
 		$ph = array(
-					'status' => $status,
+					':status' => $status,
 					);
 
 		$query = '
@@ -398,7 +398,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 					where	a.user_date_id = b.id
 						AND b.user_id = z.user_id
 						AND b.user_id = c.id
-						AND	a.status_id = ?
+						AND	a.status_id = :status
 						AND a.authorized = 0
 						AND ( '. HierarchyLevelFactory::convertHierarchyLevelMapToSQL( $hierarchy_level_map ) .' )
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )
@@ -407,9 +407,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order, $additional_sort_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -445,8 +445,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$huf = new HierarchyUserFactory();
 
 		$ph = array(
-					'status' => $status,
-					'type_id' => $type_id
+					':status' => $status,
+					':type_id' => $type_id
 					);
 
 		$query = '
@@ -458,8 +458,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 					where	a.user_date_id = b.id
 						AND b.user_id = z.user_id
 						AND b.user_id = c.id
-						AND	a.status_id = ?
-						AND	a.type_id = ?
+						AND	a.status_id = :status
+						AND	a.type_id = :type_id
 						AND a.authorized = 0
 						AND ( '. HierarchyLevelFactory::convertHierarchyLevelMapToSQL( $hierarchy_level_map ) .' )
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )
@@ -468,9 +468,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order, $additional_sort_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -528,9 +528,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -548,7 +548,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'status_id' => $status,
+					':status_id' => $status,
 					);
 
 		$query = '
@@ -556,7 +556,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $udf->getTable() .' as b
 					where	a.user_date_id = b.id
-						AND	a.status_id = ?
+						AND	a.status_id = :status_id
 						AND b.pay_period_id in ('. $this->getListSQL($pay_period_id, $ph).')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					GROUP By b.pay_period_id
@@ -564,7 +564,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -581,8 +581,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'status_id' => $status,
+					':company_id' => $company_id,
+					':status_id' => $status,
 					);
 
 		$query = '
@@ -592,8 +592,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
-						AND	a.status_id = ?
+						AND c.company_id = :company_id
+						AND	a.status_id = :status_id
 						AND b.pay_period_id in ('. $this->getListSQL($pay_period_id, $ph).')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					GROUP By b.pay_period_id
@@ -601,8 +601,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
+		$this->rs = $this->db->Getrow($query, $ph);
 		return $this;
 	}
 
@@ -618,9 +619,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id,
-					'status_id' => $status,
-					'before_date' => $this->db->BindDate( $before_date ),
+					':pay_period_id' => $pay_period_id,
+					':status_id' => $status,
+					':before_date' => $this->db->BindDate( $before_date ),
 					);
 
 		$query = '
@@ -628,9 +629,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $udf->getTable() .' as b
 					where	a.user_date_id = b.id
-						AND b.pay_period_id = ?
-						AND	a.status_id = ?
-						AND b.date_stamp <= ?
+						AND b.pay_period_id = :pay_period_id
+						AND	a.status_id = :status_id
+						AND b.date_stamp <= :before_date
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 				';
 		$query .= $this->getWhereSQL( $where );
@@ -696,9 +697,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -864,9 +865,9 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 
 		Debug::Arr($ph,'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

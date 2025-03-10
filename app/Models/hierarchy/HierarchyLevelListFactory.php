@@ -47,7 +47,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -79,7 +79,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -108,7 +108,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -139,7 +139,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -172,7 +172,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
+		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
@@ -251,7 +251,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 				ORDER BY x.level asc
 				';
 
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $rs->RecordCount() > 0 ) {
@@ -310,7 +310,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 				ORDER BY x.level asc
 				';
 
-		$rs = $this->db->Execute($query, $ph);
+		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $rs->RecordCount() > 0 ) {
@@ -427,9 +427,9 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;
@@ -478,7 +478,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order, $strict_order );
 
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$cache_id);
 		}
@@ -517,9 +517,9 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 
 		if ($limit == NULL) {
 			//Run query without limit
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
-			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
+			$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

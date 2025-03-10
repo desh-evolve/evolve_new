@@ -1130,28 +1130,28 @@ class BranchFactory extends Factory {
 			$rstf = new RecurringScheduleTemplateFactory();
 
 			$query = 'update '. $pcf->getTable() .' set branch_id = 0 where branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $udtf->getTable() .' set branch_id = 0 where branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $sf_b->getTable() .' set branch_id = 0 where branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $uf->getTable() .' set default_branch_id = 0 where company_id = '. (int)$this->getCompany() .' AND default_branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $udf->getTable() .' set default_branch_id = 0 where company_id = '. (int)$this->getCompany() .' AND default_branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $sf->getTable() .' set branch_id = 0 where company_id = '. (int)$this->getCompany() .' AND branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'delete from '. $sbf->getTable() .' where branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			$query = 'update '. $rstf->getTable() .' set branch_id = 0 where branch_id = '. (int)$this->getId();
-			$this->db->Execute($query);
+			DB::select($query);
 
 			//Job employee criteria
 			$cgmlf = new CompanyGenericMapListFactory();
