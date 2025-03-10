@@ -405,10 +405,10 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+			$query  .=	' AND a.created_by in ('. implode(',', $filter_data['permission_children_ids']) .') ';
 		}
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
 		}
 		if ( isset($filter_data['hierarchy_control_id']) AND isset($filter_data['hierarchy_control_id'][0]) AND !in_array(-1, (array)$filter_data['hierarchy_control_id']) ) {
 			$query  .=	' AND a.hierarchy_control_id in ('. $this->getListSQL($filter_data['hierarchy_control_id'], $ph) .') ';

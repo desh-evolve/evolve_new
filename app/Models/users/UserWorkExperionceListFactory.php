@@ -96,7 +96,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 					
 					where 	a.user_id = b.id
 						AND b.company_id = ?
-						AND a.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
+						AND a.user_id in ('. implode(',', $user_id) .')
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );

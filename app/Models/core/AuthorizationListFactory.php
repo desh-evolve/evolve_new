@@ -228,14 +228,14 @@ class AuthorizationListFactory extends AuthorizationFactory implements IteratorA
 			$user_id_column = 'pptsvf.user_id';
 		}
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND '. $user_id_column .' in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+			$query  .=	' AND '. $user_id_column .' in ('. implode(',', $filter_data['permission_children_ids']) .') ';
 		}
 
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
 		}
 		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+			$query  .=	' AND a.id not in ('. implode(',', $filter_data['exclude_id']) .') ';
 		}
 		if ( isset($filter_data['object_type_id']) AND isset($filter_data['object_type_id'][0]) AND !in_array(-1, (array)$filter_data['object_type_id']) ) {
 			$query  .=	' AND a.object_type_id in ('. $this->getListSQL($filter_data['object_type_id'], $ph) .') ';

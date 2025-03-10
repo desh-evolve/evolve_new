@@ -636,7 +636,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 					where	a.pay_stub_id = b.id
 						AND b.user_id = ?
 						AND a.id != ?
-						AND b.pay_period_id in ('. $this->getListSQL($pay_period_id, $ph) .')
+						AND b.pay_period_id in ('. implode(',', $pay_period_id) .')
 						AND	a.pay_stub_entry_name_id in ('. $this->getListSQL($entry_name_id, $ph) .')
 						AND a.deleted = 0
 						AND b.deleted=0
@@ -1455,32 +1455,32 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 
 							where cc.company_id = ? ';
 							if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-								$query  .=	' AND cc.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+								$query  .=	' AND cc.id in ('. implode(',', $filter_data['permission_children_ids']) .') ';
 							}
 							if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-								$query  .=	' AND cc.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+								$query  .=	' AND cc.id in ('. implode(',', $filter_data['id']) .') ';
 							}
 							if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-								$query  .=	' AND cc.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+								$query  .=	' AND cc.id in ('. implode(',', $filter_data['user_id']) .') ';
 							}
 							if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-								$query  .=	' AND cc.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+								$query  .=	' AND cc.id not in ('. implode(',', $filter_data['exclude_id']) .') ';
 							}
 							if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-								$query  .=	' AND cc.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+								$query  .=	' AND cc.status_id in ('. implode(',', $filter_data['status_id']) .') ';
 							}
 							if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
 								if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
 									$uglf = new UserGroupListFactory();
 									$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 								}
-								$query  .=	' AND cc.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+								$query  .=	' AND cc.group_id in ('. implode(',', $filter_data['group_id']) .') ';
 							}
 							if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-								$query  .=	' AND cc.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+								$query  .=	' AND cc.default_branch_id in ('. implode(',', $filter_data['default_branch_id']) .') ';
 							}
 							if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-								$query  .=	' AND cc.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+								$query  .=	' AND cc.default_department_id in ('. implode(',', $filter_data['default_department_id']) .') ';
 							}
 							if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
 								$query  .=	' AND cc.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
@@ -1603,32 +1603,32 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 
 							where cc.company_id = ? ';
 							if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-								$query  .=	' AND cc.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+								$query  .=	' AND cc.id in ('. implode(',', $filter_data['permission_children_ids']) .') ';
 							}
 							if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-								$query  .=	' AND cc.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+								$query  .=	' AND cc.id in ('. implode(',', $filter_data['id']) .') ';
 							}
 							if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-								$query  .=	' AND cc.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+								$query  .=	' AND cc.id in ('. implode(',', $filter_data['user_id']) .') ';
 							}
 							if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-								$query  .=	' AND cc.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+								$query  .=	' AND cc.id not in ('. implode(',', $filter_data['exclude_id']) .') ';
 							}
 							if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-								$query  .=	' AND cc.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+								$query  .=	' AND cc.status_id in ('. implode(',', $filter_data['status_id']) .') ';
 							}
 							if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
 								if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
 									$uglf = new UserGroupListFactory();
 									$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 								}
-								$query  .=	' AND cc.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+								$query  .=	' AND cc.group_id in ('. implode(',', $filter_data['group_id']) .') ';
 							}
 							if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-								$query  .=	' AND cc.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+								$query  .=	' AND cc.default_branch_id in ('. implode(',', $filter_data['default_branch_id']) .') ';
 							}
 							if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-								$query  .=	' AND cc.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+								$query  .=	' AND cc.default_department_id in ('. implode(',', $filter_data['default_department_id']) .') ';
 							}
 							if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
 								$query  .=	' AND cc.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';

@@ -600,16 +600,16 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 								AND c.object_type_id in (5,50,90)';
 
 			if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-				$query  .=	' AND b.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+				$query  .=	' AND b.id in ('. implode(',', $filter_data['id']) .') ';
 			}
 			if ( isset($filter_data['object_type_id']) AND isset($filter_data['object_type_id'][0]) AND !in_array(-1, (array)$filter_data['object_type_id']) ) {
 				$query  .=	' AND c.object_type_id in ('. $this->getListSQL($filter_data['object_type_id'], $ph) .') ';
 			}
 			if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-				$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+				$query  .=	' AND a.status_id in ('. implode(',', $filter_data['status_id']) .') ';
 			}
 			if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-				$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+				$query  .=	' AND b.user_id in ('. implode(',', $filter_data['user_id']) .') ';
 			}
 			if ( isset($filter_data['subject']) AND trim($filter_data['subject']) != '' ) {
 				$ph[] = strtolower(trim($filter_data['subject']));
@@ -657,16 +657,16 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 								AND c.object_type_id in (5,50,90)';
 
 			if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-				$query  .=	' AND b.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+				$query  .=	' AND b.id in ('. implode(',', $filter_data['id']) .') ';
 			}
 			if ( isset($filter_data['object_type_id']) AND isset($filter_data['object_type_id'][0]) AND !in_array(-1, (array)$filter_data['object_type_id']) ) {
 				$query  .=	' AND c.object_type_id in ('. $this->getListSQL($filter_data['object_type_id'], $ph) .') ';
 			}
 			if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-				$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+				$query  .=	' AND a.status_id in ('. implode(',', $filter_data['status_id']) .') ';
 			}
 			if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-				$query  .=	' AND a.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+				$query  .=	' AND a.user_id in ('. implode(',', $filter_data['user_id']) .') ';
 			}
 			if ( isset($filter_data['subject']) AND trim($filter_data['subject']) != '' ) {
 				$ph[] = strtolower(trim($filter_data['subject']));
