@@ -80,7 +80,7 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 		/*
 		 * Get default interface data here. Things like User info, Company info etc...
 		 */
-		global $current_company;
+		$current_company;
 		$current_user = $authentication->getObject();
 		
 		Debug::text('User Authenticated: '. $current_user->getUserName() .' Created Date: '. $authentication->getCreatedDate(), __FILE__, __LINE__, __METHOD__, 10);
