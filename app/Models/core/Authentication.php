@@ -179,10 +179,13 @@ class Authentication {
 	}
 
 	private function genSessionID() {
-		return $_COOKIE['SessionID'];
-		//return md5(uniqid(dechex(mt_rand()), true));
-		//return bin2hex(random_bytes(16));
-	}	
+		if (isset($_COOKIE['laravel_session'])) {
+			setcookie('SessionID', $_COOKIE['laravel_session'], time() + 3600, "/"); // Expires in 1 hour
+			return $_COOKIE['laravel_session'];
+		}
+		return null; // Return null if 'laravel_session' is not set
+	}
+	
 
 	public function checkCompanyStatus( $user_name ) {
 		$ulf = new UserListFactory();
