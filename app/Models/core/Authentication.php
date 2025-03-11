@@ -27,7 +27,8 @@ class Authentication {
 	function __construct() {
 		global $db;
 
-		$this->db = $db;
+		// $this->db = $db;
+        DB::select($db);
 
 		$this->rl = new RateLimit();
 		$this->rl->setID( 'authentication_'.$_SERVER['REMOTE_ADDR'] );
@@ -149,9 +150,9 @@ class Authentication {
 			$ulf = new UserListFactory();
 			$ulf->getByID($user_id);
 
-			
+
 			$ulf->data = (array)$ulf->rs[0];
-			
+
 			foreach ($ulf->data as $user) {
 				$this->obj = $ulf;
 
@@ -185,7 +186,7 @@ class Authentication {
 		}
 		return null; // Return null if 'laravel_session' is not set
 	}
-	
+
 
 	public function checkCompanyStatus( $user_name ) {
 		$ulf = new UserListFactory();
@@ -215,7 +216,7 @@ class Authentication {
 		$ulf = new UserListFactory();
 
 		$ulf->getByUserNameAndStatus(strtolower(trim($user_name)), 10 ); //Active
-		
+
 		foreach ($ulf as $user) {
 			echo '<br>hi<br>';
 			if ( $user->checkPassword($password) ) {
@@ -235,7 +236,7 @@ class Authentication {
 		$ulf = new UserListFactory();
 
 		$users = $ulf->getByUserNameAndStatus(strtolower(trim($user_name)), 10 ); //Active
-		
+
 		if($users->rs){
 			if ( $ulf->checkPassword($password) ) {
 				$this->setObject( $ulf->getID() );
@@ -386,7 +387,7 @@ class Authentication {
 			TTDate::getTime(),
 			(int) $this->getObject()->getID(),
 		];
-		
+
 		try {
 			DB::update($query, $ph);
 		} catch (Throwable $e) {
@@ -436,7 +437,7 @@ class Authentication {
 	}
 
 	private function Write() {
-		
+
 		$ph = array(
 			':session_id' => $this->getSessionID(),
 			':user_id' => $this->getObject()->getID(),
@@ -464,7 +465,7 @@ class Authentication {
 	}
 
 	private function Read() {
-		
+
 		$ph = array(
 			':session_id' => $this->getSessionID(),
 			':ip_address' => $this->getIPAddress(),
@@ -476,9 +477,9 @@ class Authentication {
 			AND ip_address = :ip_address
 			AND updated_date >= :updated_date
 		';
-		
+
 		//Debug::text('Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
-		
+
 		//$result = $this->db->GetRow($query, $ph);
 		$result = DB::select($query, $ph);
 		//print_r($ph);exit;
@@ -512,7 +513,7 @@ class Authentication {
 
 		$ipAddress = request()->ip();
 		$key = "login_attempts_{$ipAddress}";
-		
+
 		/*
 		// check here => remove this after developing login
 		// Prevent brute force attacks
@@ -553,7 +554,7 @@ class Authentication {
 			default:
 				return false;
 		}
-		
+
 		if ($password_result === true) {
 			Log::info('Login Successful!');
 
@@ -634,7 +635,7 @@ class Authentication {
 		Debug::text('Session ID: '. $session_id .' URL: '. $_SERVER['REQUEST_URI'], __FILE__, __LINE__, __METHOD__, 10);
 		//Checks session cookie, returns user_id;
 		if ( isset( $session_id ) ) {
-			
+
 			/*
 			Bind session ID to IP address to aid in preventing session ID theft,
 			if this starts to cause problems
@@ -648,7 +649,7 @@ class Authentication {
 			//echo 'read:';
 			//print_r($this->Read());exit;
 			if ( $this->Read() == TRUE ) {
-					
+
 				//touch UpdatedDate
 				$this->Update();
 
