@@ -176,12 +176,15 @@ class CompanyGenericTagFactory extends Factory {
 						AND deleted = 0';
 		$name_id = DB::select($query, $ph);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 		if ($name_id === FALSE ) {
             $name_id = 0;
         }else{
             $name_id = current(get_object_vars($name_id[0]));
         }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 		Debug::Arr($name_id,'Unique Name: '. $name , __FILE__, __LINE__, __METHOD__,10);

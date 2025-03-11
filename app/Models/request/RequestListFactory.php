@@ -642,12 +642,15 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 
 		$total = DB::select($query, $ph);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 		if ($total === FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 

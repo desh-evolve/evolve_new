@@ -596,6 +596,7 @@ class CompanyDeductionFactory extends Factory {
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND  name = :name AND deleted=0';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {
@@ -603,6 +604,9 @@ class CompanyDeductionFactory extends Factory {
         }else{
             $id = current(get_object_vars($id[0]));
         }
+=======
+		$id = DB::Select($query, $ph);
+>>>>>>> Stashed changes
 =======
 		$id = DB::Select($query, $ph);
 >>>>>>> Stashed changes

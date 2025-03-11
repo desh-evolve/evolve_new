@@ -138,12 +138,15 @@ class BranchBankAccountFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
 		$id = DB::select($query, $ph);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 		if ($id === FALSE ) {
             $id = 0;
         }else{
             $id = current(get_object_vars($id[0]));
         }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 		Debug::Arr($id,'Unique ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
