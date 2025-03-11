@@ -157,16 +157,15 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					'user_date_id' => $user_date_id,
-					'over						AND status_id in ('. $this->getListSQL($status, $ph) .')
-						AND deleted = 0
-					';
+					'override' => $this->toBool( $override ),
+					);
 
-		$this->rs = DB::select($query, $ph);
-
-?	return $this;
-	}
-
-	fu?c						AND status_id in ('.$this->getListSQL($status, $ph)) .')
+		$query = '
+					select 	*
+					from	'. $this->getTable() .'
+					where	user_date_id = ?
+						AND override = ?
+						AND status_id in ('. implode(',', $status) .')
 						AND deleted = 0
 					';
 

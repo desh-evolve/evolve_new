@@ -39,6 +39,7 @@ use App\Models\Policy\PolicyGroupListFactory;
 use App\Models\Policy\PolicyGroupUserFactory;
 use App\Models\Policy\PolicyGroupUserListFactory;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class UserFactory extends Factory {
 
