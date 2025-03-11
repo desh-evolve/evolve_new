@@ -178,19 +178,16 @@ class BranchFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where manual_id = :manual_id AND company_id = :company_id AND deleted=0';
-		$id = DB::select($query, $ph);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+		// $id = $this->db->GetOne($query, $ph);
+        $id = DB::select($query, $ph);
 
-		if ($id === FALSE ) {
+        if ($id === FALSE ) {
             $id = 0;
         }else{
             $id = current(get_object_vars($id[0]));
         }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
+
 		Debug::Arr($id,'Unique Code: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {
@@ -313,19 +310,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where branch_short_id = :branch_short_id AND company_id = :company_id AND deleted=0';
+            // $id = $this->db->GetOne($query, $ph);
             $id = DB::select($query, $ph);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-		if ($id === FALSE ) {
-            $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
-        }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -388,19 +381,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where epf_no = :epf_no AND company_id = :company_id AND deleted=0';
+            // $id = $this->db->GetOne($query, $ph);
             $id = DB::select($query, $ph);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-		if ($id === FALSE ) {
-            $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
-        }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -467,19 +456,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where etf_no = :etf_no AND company_id = :company_id AND deleted=0';
+            // $id = $this->db->GetOne($query, $ph);
             $id = DB::select($query, $ph);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-		if ($id === FALSE ) {
-            $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
-        }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -545,19 +530,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where tin_no = :tin_no AND company_id = :company_id AND deleted=0';
+            // $id = $this->db->GetOne($query, $ph);
             $id = DB::select($query, $ph);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-		if ($id === FALSE ) {
-            $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
-        }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -623,19 +604,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where business_reg_no = :business_reg_no AND company_id = :company_id AND deleted=0';
+            // $id = $this->db->GetOne($query, $ph);
             $id = DB::select($query, $ph);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-		if ($id === FALSE ) {
-            $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
-        }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -675,19 +652,15 @@ class BranchFactory extends Factory {
 					where company_id = :company_id
 						AND name = :name
 						AND deleted = 0';
-		$name_id = DB::select($query, $ph);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+		// $name_id = $this->db->GetOne($query, $ph);
+        $name_id = DB::select($query, $ph);
 
-		if ($name_id === FALSE ) {
+        if ($name_id === FALSE ) {
             $name_id = 0;
         }else{
             $name_id = current(get_object_vars($name_id[0]));
         }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 		Debug::Arr($name_id,'Unique Name: '. $name , __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $name_id === FALSE ) {

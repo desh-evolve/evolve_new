@@ -48,7 +48,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 
 			$this->rs = DB::select($query, $ph);
 
-			$this->saveCache($this->rs,$id);
+			$this->saveCache($this->rs, $id);
 		}
 
 		return $this;

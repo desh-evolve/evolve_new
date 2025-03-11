@@ -288,13 +288,21 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
                     ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
-		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
-			//$month_sql = '(month( date_stamp ))';
-			$month_sql = '( date_format( date_stamp, \'%Y-%m-01\') )';
-		} else {
-			//$month_sql = '( date_part(\'month\', date_stamp) )';
-			$month_sql = '( to_char(date_stamp, \'YYYY-MM\') || \'-01\' )'; //Concat -01 to end due to EnterpriseDB issue with to_char
-		}
+		// if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
+		// 	//$month_sql = '(month( date_stamp ))';
+		// 	$month_sql = '( date_format( date_stamp, \'%Y-%m-01\') )';
+		// } else {
+		// 	//$month_sql = '( date_part(\'month\', date_stamp) )';
+		// 	$month_sql = '( to_char(date_stamp, \'YYYY-MM\') || \'-01\' )'; //Concat -01 to end due to EnterpriseDB issue with to_char
+		// }
+
+        // Handle MySQL vs Postgres date formatting
+        if (DB::connection()->getDriverName() === 'mysql') {
+            $month_sql = "DATE_FORMAT(date_stamp, '%Y-%m-01')";
+        } else {
+            $month_sql = "(TO_CHAR(date_stamp, 'YYYY-MM') || '-01')";
+        }
+
 
 		$query = '
 					select
@@ -340,17 +348,26 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					// ':start_date' => $this->db->BindDate( $start_date ),
+					// ':end_date' => $this->db->BindDate( $end_date ),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
-		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
-			//$month_sql = '(month( date_stamp ))';
-			$month_sql = '( date_format( date_stamp, \'%Y-%m-01\') )';
-		} else {
-			//$month_sql = '( date_part(\'month\', date_stamp) )';
-			$month_sql = '( to_char(date_stamp, \'YYYY-MM-01\') )';
-		}
+		// if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
+		// 	//$month_sql = '(month( date_stamp ))';
+		// 	$month_sql = '( date_format( date_stamp, \'%Y-%m-01\') )';
+		// } else {
+		// 	//$month_sql = '( date_part(\'month\', date_stamp) )';
+		// 	$month_sql = '( to_char(date_stamp, \'YYYY-MM-01\') )';
+		// }
+
+        // Handle MySQL vs Postgres date formatting
+        if (DB::connection()->getDriverName() === 'mysql') {
+            $month_sql = "DATE_FORMAT(date_stamp, '%Y-%m-01')";
+        } else {
+            $month_sql = "(TO_CHAR(date_stamp, 'YYYY-MM') || '-01')";
+        }
 
 		$query = '
 					select
@@ -402,17 +419,26 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		$ph = array(
 					':status_id' => $status_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					// ':start_date' => $this->db->BindDate( $start_date ),
+					// ':end_date' => $this->db->BindDate( $end_date ),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
-		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
-			//$month_sql = '(month( date_stamp ))';
-			$month_sql = '( date_format( a.date_stamp, \'%Y-%m-01\') )';
-		} else {
-			//$month_sql = '( date_part(\'month\', date_stamp) )';
-			$month_sql = '( to_char(a.date_stamp, \'YYYY-MM-01\') )';
-		}
+		// if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
+		// 	//$month_sql = '(month( date_stamp ))';
+		// 	$month_sql = '( date_format( a.date_stamp, \'%Y-%m-01\') )';
+		// } else {
+		// 	//$month_sql = '( date_part(\'month\', date_stamp) )';
+		// 	$month_sql = '( to_char(a.date_stamp, \'YYYY-MM-01\') )';
+		// }
+
+        // Handle MySQL vs Postgres date formatting
+        if (DB::connection()->getDriverName() === 'mysql') {
+            $month_sql = "DATE_FORMAT(date_stamp, '%Y-%m-01')";
+        } else {
+            $month_sql = "(TO_CHAR(date_stamp, 'YYYY-MM') || '-01')";
+        }
 
 		$query = '
 					select

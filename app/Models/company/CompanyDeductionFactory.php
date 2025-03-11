@@ -595,21 +595,15 @@ class CompanyDeductionFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND  name = :name AND deleted=0';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-		$id = DB::select($query, $ph);
+		// $id = $this->db->GetOne($query, $ph);
+        $id = DB::selectOne($query, $ph);
 
-		if ($id === FALSE ) {
+        if (!$id) {
             $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
+        } else {
+            $id = current(get_object_vars($id));
         }
-=======
-		$id = DB::Select($query, $ph);
->>>>>>> Stashed changes
-=======
-		$id = DB::Select($query, $ph);
->>>>>>> Stashed changes
+
 		Debug::Arr($id,'Unique Pay Stub Account: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {

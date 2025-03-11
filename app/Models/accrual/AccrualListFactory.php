@@ -323,7 +323,8 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			':company_id' => $company_id,
 			':accrual_policy_id' => $accrual_policy_id,
 			// ':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
-            ':time_stamp' => Carbon::parse($time_stamp)->toDateTimeString(),
+            ':time_stamp' => Carbon::createFromTimestamp($time_stamp)->toDateTimeString(),
+
 			':amount' => $amount,
 		);
 
@@ -386,7 +387,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			':accrual_policy_id' => $accrual_policy_id,
 			':type_id' => $type_id,
 			// ':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
-            ':time_stamp' => Carbon::parse($time_stamp)->toDateTimeString(),
+            ':time_stamp' => Carbon::createFromTimestamp($time_stamp)->toDateTimeString(),
 		);
 
 		$query = '
@@ -536,7 +537,8 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 								OR a.user_date_total_id IS NULL AND b.id is NULL )
 						AND a.deleted = 0';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
 
 		if ($total === FALSE ) {
 			$total = 0;
