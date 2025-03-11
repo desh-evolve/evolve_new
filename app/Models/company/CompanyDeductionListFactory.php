@@ -297,7 +297,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		if ( $id == '') {
 			return FALSE;
 		}
-		
+
 		$psenlf = new PayStubEntryNameListFactory();
 		$psenlf->getById($id);
 
@@ -439,8 +439,8 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 			$query  .=	' AND a.calculation_id in ('. $this->getListSQL($filter_data['calculation_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = '%' . strtolower(trim($filter_data['name'])) . '%';
+			$query  .=	' AND lower(a.name) LIKE :name ';
 		}
 		if ( isset($filter_data['country']) AND isset($filter_data['country'][0]) AND !in_array(-1, (array)$filter_data['country']) ) {
 			$query  .=	' AND a.country in ('. $this->getListSQL($filter_data['country'], $ph) .') ';

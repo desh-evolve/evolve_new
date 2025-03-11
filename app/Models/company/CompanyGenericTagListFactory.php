@@ -48,7 +48,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 
 			$this->rs = DB::select($query, $ph);
 
-			$this->saveCache($this->rs,$id);
+			$this->saveCache($this->rs, $id);
 		}
 
 		return $this;
@@ -309,7 +309,7 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
 		Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 
-		$uf = new UserFactory(); 
+		$uf = new UserFactory();
 
 		$ph = array(
 					':company_id' => $company_id,

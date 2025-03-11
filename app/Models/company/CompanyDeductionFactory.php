@@ -18,6 +18,7 @@ use App\Models\Core\Environment;
 use App\Models\Core\TTLog;
 
 use App\Models\Core\TTDate;
+use Illuminate\Support\Facades\DB;
 
 class CompanyDeductionFactory extends Factory {
 	protected $table = 'company_deduction';
@@ -594,13 +595,15 @@ class CompanyDeductionFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND  name = :name AND deleted=0';
-		$id = DB::select($query, $ph);
+		// $id = $this->db->GetOne($query, $ph);
+        $id = DB::selectOne($query, $ph);
 
-		if ($id === FALSE ) {
+        if (!$id) {
             $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
+        } else {
+            $id = current(get_object_vars($id));
         }
+
 		Debug::Arr($id,'Unique Pay Stub Account: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {
@@ -908,24 +911,24 @@ class CompanyDeductionFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
+
+
+
         function setBasisOfEmployment($int) {
-            
+
             $int= (int)$int;
-		
+
             if 	($int>0){
-            
+
 			$this->data['basis_of_employment']=$int;
                         return TRUE;
             }
-		
+
 
 		return FALSE;
 	}
-        
-        
+
+
         function getBasisOfEmployment() {
 		if ( isset($this->data['basis_of_employment']) ) {
 			return (float)$this->data['basis_of_employment'];

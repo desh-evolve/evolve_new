@@ -13,6 +13,7 @@ use App\Models\Users\UserFactory;
 use App\Models\Users\UserGroupFactory;
 use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserTitleFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -171,10 +172,10 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 		return $this;
 	}
-        
-        
-          
-        
+
+
+
+
         function getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($company_id, $user_id, $accrual_policy_id,$type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $company_id == '') {
 			return FALSE;
@@ -216,22 +217,22 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 						a.user_id = :user_id
 						AND b.company_id = :company_id
 						AND a.accrual_policy_id = :accrual_policy_id
-                                                AND a.type_id in (70,30,75) 
+                                                AND a.type_id in (70,30,75)
 						AND ( a.user_date_total_id IS NULL OR ( a.user_date_total_id IS NOT NULL AND c.deleted = 0 AND d.deleted = 0) )
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order );
-                
-               
+
+
 
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
 
-        
-        
-        
+
+
+
         function getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatus($company_id, $user_id, $accrual_policy_id,$type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $company_id == '') {
 			return FALSE;
@@ -278,8 +279,8 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order );
-                
-               
+
+
 
 		$this->rs = DB::select($query, $ph);
 
@@ -321,7 +322,9 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			':user_id' => $user_id,
 			':company_id' => $company_id,
 			':accrual_policy_id' => $accrual_policy_id,
-			':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
+			// ':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
+            ':time_stamp' => Carbon::createFromTimestamp($time_stamp)->toDateTimeString(),
+
 			':amount' => $amount,
 		);
 
@@ -383,7 +386,8 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			':company_id' => $company_id,
 			':accrual_policy_id' => $accrual_policy_id,
 			':type_id' => $type_id,
-			':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
+			// ':time_stamp' => $this->db->BindTimeStamp( $time_stamp ),
+            ':time_stamp' => Carbon::createFromTimestamp($time_stamp)->toDateTimeString(),
 		);
 
 		$query = '
@@ -535,11 +539,6 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
-            $total = 0;
-        }else{
-            $total = current(get_object_vars($total[0]));
-        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -720,22 +719,22 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 		return $this;
 	}
-        
+
 	function getByAccrualByUserIdAndTypeIdAndDate($user_id,$type_id,$date_stamp, $where = NULL, $order = NULL) {
 		if ( $user_id == '') {
 			return FALSE;
 		}
-                
-                
+
+
                 if ( $type_id == '') {
 			return FALSE;
 		}
-                
-                
+
+
                 if ( $date_stamp == '') {
 			return FALSE;
 		}
-                
+
 
 		$ph = array(
 			':time_stamp' => $date_stamp,
@@ -744,7 +743,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		);
 
 		$uf = new UserFactory();
-                
+
 
 		$query = "SELECT * FROM ". $this->getTable() ." as a
                          WHERE DATE_FORMAT(a.time_stamp,'%Y-%m-%d') = :time_stamp
@@ -758,20 +757,20 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 		return $this;
 	}
-        
-       
+
+
     function getByAccrualPolicyIdAndStartDateAndEndDate($company_id, $user_id,$accrual_policy_id,$type_id, $start_date, $end_date){
-            
+
         if ( $company_id == '') {
 			return FALSE;
 		}
-                
-                
+
+
         if ( $user_id == '') {
 			return FALSE;
 		}
-                
-                
+
+
         if ( $accrual_policy_id == '') {
 			return FALSE;
 		}
@@ -779,24 +778,24 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
         if ( $start_date == '') {
 			return FALSE;
 		}
-                
-                
+
+
         if ( $end_date == '') {
 			return FALSE;
 		}
-                
-                
+
+
 		$ph = array(
 			':company_id' => $company_id,
 			':user_id' => $user_id,
 			':accrual_policy_id' => $accrual_policy_id,
 			':type_id' => $type_id,
 		);
-                
+
 		$uf = new UserFactory();
-		
-		
-		$query = 'select 	sum(a.amount) as amount 
+
+
+		$query = 'select 	sum(a.amount) as amount
 			from	'. $this->getTable() .' as a '
 				.'inner join '. $uf->getTable() .' as b on  b.id = a.user_id'
 				.' where b.company_id = :company_id '
@@ -805,16 +804,16 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 				.' and a.type_id = :type_id'
 				." and a.time_stamp  between '".$start_date."' and '".$end_date."'"
 				.' and a.deleted = 0';
-                
-                
+
+
         //$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
-            
+
     }
-        
+
 }
 ?>
