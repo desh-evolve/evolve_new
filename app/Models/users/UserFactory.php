@@ -2383,7 +2383,13 @@ class UserFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where employee_number = ? AND company_id = ? AND deleted = 0';
-		$user_id = $this->db->GetOne($query, $ph);
+		$user_id = DB::select($query, $ph);
+
+		if ($user_id === FALSE ) {
+            $user_id = 0;
+        }else{
+            $user_id = current(get_object_vars($user_id[0]));
+        }
 		Debug::Arr($user_id,'Unique Employee Number: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_id === FALSE ) {
@@ -2566,7 +2572,13 @@ class UserFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where employee_number_only = ? AND company_id = ?  AND deleted = 0';
-		$user_id = $this->db->GetOne($query, $ph);
+		$user_id = DB::select($query, $ph);
+
+		if ($user_id === FALSE ) {
+            $user_id = 0;
+        }else{
+            $user_id = current(get_object_vars($user_id[0]));
+        }
 		Debug::Arr($user_id,'Unique Employee Number Only: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_id === FALSE ) {
@@ -2604,7 +2616,13 @@ class UserFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where employee_number_only = ? AND company_id = ?  AND default_branch_id = ? AND deleted = 0';
-		$user_id = $this->db->GetOne($query, $ph);
+		$user_id = DB::select($query, $ph);
+
+		if ($user_id === FALSE ) {
+            $user_id = 0;
+        }else{
+            $user_id = current(get_object_vars($user_id[0]));
+        }
 		Debug::Arr($user_id,'Unique Employee Number Only: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_id === FALSE ) {
@@ -2691,7 +2709,13 @@ class UserFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where punch_machine_user_id = ? AND company_id = ? AND deleted = 0';
-		$user_id = $this->db->GetOne($query, $ph);
+		$user_id = DB::select($query, $ph);
+
+		if ($user_id === FALSE ) {
+            $user_id = 0;
+        }else{
+            $user_id = current(get_object_vars($user_id[0]));
+        }
 		Debug::Arr($user_id,'Unique punch_machine_user_id : '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_id === FALSE ) {
@@ -2720,7 +2744,13 @@ class UserFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where rf_id = ? AND company_id = ? AND deleted = 0';
-		$user_id = $this->db->GetOne($query, $ph);
+		$user_id = DB::select($query, $ph);
+
+		if ($user_id === FALSE ) {
+            $user_id = 0;
+        }else{
+            $user_id = current(get_object_vars($user_id[0]));
+        }
 		Debug::Arr($user_id,'Unique RFID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_id === FALSE ) {

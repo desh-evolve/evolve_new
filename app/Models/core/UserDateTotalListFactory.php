@@ -157,15 +157,16 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					'user_date_id' => $user_date_id,
-					'override' => $this->toBool( $override ),
-					);
+					'over						AND status_id in ('. $this->getListSQL($status, $ph) .')
+						AND deleted = 0
+					';
 
-		$query = '
-					select 	*
-					from	'. $this->getTable() .'
-					where	user_date_id = ?
-						AND override = ?
-						AND status_id in ('. $this->getListSQL($status, $ph) .')
+		$this->rs = DB::select($query, $ph);
+
+?	return $this;
+	}
+
+	fu?c						AND status_id in ('.$this->getListSQL($status, $ph)) .')
 						AND deleted = 0
 					';
 
@@ -203,7 +204,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					where	a.user_date_id = ?
 						AND
 							(
-								( a.override = ? AND a.status_id in ('. $this->getListSQL($status, $ph) .') )
+								( a.override = ? AND a.status_id in ('.$this->getListSQL($status, $ph)) .') )
 								OR
 								( b.id IS NOT NULL AND ( a.user_date_id != b.user_date_id OR b.deleted = 1 ) )
 							)
@@ -257,7 +258,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					select 	*
 					from	'. $this->getTable() .'
 					where	user_date_id = ?
-						AND type_id in ('. $this->getListSQL($type, $ph) .')
+						AND type_id in ('.$this->getListSQL($type, $ph)) .')
 						AND deleted = 0
 					';
 
@@ -297,7 +298,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					LEFT JOIN '. $pcf->getTable() .' as b ON a.punch_control_id = b.id
 					LEFT JOIN '. $pf->getTable() .' as c ON a.punch_control_id = c.punch_control_id AND ( c.status_id = 10 OR c.status_id IS NULL )
 					where	a.user_date_id = ?
-						AND a.status_id in ('. $this->getListSQL($status, $ph) .')
+						AND a.status_id in ('.$this->getListSQL($status, $ph)) .')
 						AND ( a.deleted = 0
 								AND ( b.deleted=0 OR b.deleted IS NULL )
 								AND ( c.deleted=0 OR c.deleted IS NULL ) )
@@ -348,8 +349,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					LEFT JOIN '. $pcf->getTable() .' as b ON a.punch_control_id = b.id
 					LEFT JOIN '. $pf->getTable() .' as c ON a.punch_control_id = c.punch_control_id AND ( c.status_id = 10 OR c.status_id IS NULL )
 					where	a.user_date_id = ?
-						AND a.status_id in ('. $this->getListSQL($status, $ph) .')
-						AND a.type_id in ('. $this->getListSQL($type, $ph) .')
+						AND a.status_id in ('.$this->getListSQL($status, $ph)) .')
+						AND a.type_id in ('.$this->getListSQL($type, $ph)) .')
 						AND ( a.deleted = 0
 								AND ( b.deleted=0 OR b.deleted IS NULL )
 								AND ( c.deleted=0 OR c.deleted IS NULL ) )
@@ -731,11 +732,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( c.type_id IS NULL OR c.type_id in ( 10, 12 ) )
 						AND ( a.deleted = 0 AND (b.deleted=0 OR b.deleted is NULL) )
 				';
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -759,11 +762,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND deleted = 0
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -787,11 +792,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND deleted = 0
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -820,11 +827,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND a.deleted = 0
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -848,7 +857,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND a.deleted = 0
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -883,7 +898,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND a.deleted = 0
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -934,7 +955,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND a.absence_policy_id = 0
 						AND a.deleted = 0
 				';
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -1086,8 +1113,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND	b.user_id = ?
 						AND b.date_stamp >= ?
 						AND b.date_stamp <= ?
-						AND a.status_id in ('. $this->getListSQL($status, $ph) .')
-						AND a.type_id in ('. $this->getListSQL($type, $ph) .')
+						AND a.status_id in ('.$this->getListSQL($status, $ph)) .')
+						AND a.type_id in ('.$this->getListSQL($type, $ph)) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					ORDER BY b.date_stamp asc, a.status_id asc, a.type_id asc, d.type_id desc, a.total_time asc
 					';
@@ -1147,7 +1174,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND a.type_id not in (10,40,100,110)
 						AND b.date_stamp >= ?
 						AND b.date_stamp <= ?
-						AND a.status_id in ('. $this->getListSQL($status, $ph) .')
+						AND a.status_id in ('.$this->getListSQL($status, $ph)) .')
 						AND ( e.type_id is NULL OR e.type_id in ( 10, 12 ) )
 						AND ( a.deleted = 0 AND b.deleted = 0 AND (f.deleted=0 OR f.deleted is NULL) )
 					ORDER BY b.date_stamp asc, a.status_id asc, a.type_id asc, d.type_id desc
@@ -1193,7 +1220,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -1237,7 +1270,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -1288,7 +1327,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -1333,7 +1378,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -1392,7 +1443,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -1424,17 +1481,20 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 							'. $udf->getTable() .' as b
 					where 	a.user_date_id = b.id
 						AND b.user_id = ?
-						AND a.user_date_id in ('. $this->getListSQL($user_date_ids, $ph) .')
+						AND a.user_date_id in ('.$th s->gdtListSQLe $user_date_id, $phs) .')
 						AND a.status_id = 20
 						AND a.total_time > 0
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
+
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -1468,11 +1528,14 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
+
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -1506,11 +1569,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total .' Pay Period: '. $pay_period_id, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -1544,11 +1609,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total .' Pay Period: '. $pay_period_id, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -1624,11 +1691,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -1665,11 +1734,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -1706,11 +1777,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						AND ( a.deleted = 0 AND b.deleted=0 )
 				';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
 
 		if ($total === FALSE ) {
-			$total = 0;
-		}
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
@@ -2242,7 +2315,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 					if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-						$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+						$query  .=	' AND b.user_id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 					}
 
 					if ( isset($filter_data['pay_period_ids']) AND isset($filter_data['pay_period_ids'][0]) AND !in_array(-1, (array)$filter_data['pay_period_ids']) ) {
@@ -2290,7 +2363,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				WHERE z.company_id = ? ';
 
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND z.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+			$query  .=	' AND z.id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 		}
 
 		$query .= ' AND z.deleted = 0 ';
@@ -2513,7 +2586,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 								LEFT JOIN '. $pf->getTable() .' as tmp2_c ON tmp2_b.id = tmp2_c.punch_control_id
 								WHERE 1=1 ';
 								if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-									$query  .=	' AND tmp2_a.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+									$query  .=	' AND tmp2_a.user_id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 								}
 
 								if ( isset($filter_data['pay_period_ids']) AND isset($filter_data['pay_period_ids'][0]) AND !in_array(-1, (array)$filter_data['pay_period_ids']) ) {
@@ -2539,7 +2612,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					where 	1=1 ';
 
 					if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-						$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+						$query  .=	' AND b.user_id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 					}
 
 		if ( isset($filter_data['pay_period_ids']) AND isset($filter_data['pay_period_ids'][0]) AND !in_array(-1, (array)$filter_data['pay_period_ids']) ) {
@@ -2571,7 +2644,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				WHERE z.company_id = ? ';
 
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND z.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+			$query  .=	' AND z.id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 		}
 
 		$query .= ' AND z.deleted = 0 ';
@@ -2702,7 +2775,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 								LEFT JOIN '. $pf->getTable() .' as tmp2_c ON tmp2_b.id = tmp2_c.punch_control_id
 								WHERE 1=1 ';
 								if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-									$query  .=	' AND tmp2_a.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+									$query  .=	' AND tmp2_a.user_id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 								}
 
 								if ( isset($filter_data['pay_period_ids']) AND isset($filter_data['pay_period_ids'][0]) AND !in_array(-1, (array)$filter_data['pay_period_ids']) ) {
@@ -2728,7 +2801,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					where 	1=1 ';
 
 					if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-						$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+						$query  .=	' AND b.user_id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 					}
 
 		if ( isset($filter_data['pay_period_ids']) AND isset($filter_data['pay_period_ids'][0]) AND !in_array(-1, (array)$filter_data['pay_period_ids']) ) {
@@ -2760,7 +2833,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				WHERE z.company_id = ? ';
 
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND z.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+			$query  .=	' AND z.id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 		}
 
 		$query .= ' AND z.deleted = 0 ';
@@ -3361,7 +3434,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					where 	uf.company_id = ? ';
 /*
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND uf.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+			$query  .=	' AND uf.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph)) .') ';
 		}
 		if ( isset($filter_data['include_user_id']) AND isset($filter_data['include_user_id'][0]) AND !in_array(-1, (array)$filter_data['include_user_id']) ) {
 			$query  .=	' AND uf.id in ('. $this->getListSQL($filter_data['include_user_id'], $ph) .') ';
@@ -3371,7 +3444,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['user_status_id']) AND isset($filter_data['user_status_id'][0]) AND !in_array(-1, (array)$filter_data['user_status_id']) ) {
-			$query  .=	' AND uf.status_id in ('. $this->getListSQL($filter_data['user_status_id'], $ph) .') ';
+			$query  .=	' AND uf.status_id in ('.$this->getListSQL($filter_data['user_status_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_group_id']) AND isset($filter_data['user_group_id'][0]) AND !in_array(-1, (array)$filter_data['user_group_id']) ) {
 			if ( isset($filter_data['include_user_subgroups']) AND (bool)$filter_data['include_user_subgroups'] == TRUE ) {
@@ -3381,10 +3454,10 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$query  .=	' AND uf.group_id in ('. $this->getListSQL($filter_data['user_group_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND uf.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+			$query  .=	' AND uf.default_branch_id in ('.$this->getListSQL($filter_data['default_branch_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND uf.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+			$query  .=	' AND uf.default_department_id in ('.$this->getListSQL($filter_data['default_department_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_title_id']) AND isset($filter_data['user_title_id'][0]) AND !in_array(-1, (array)$filter_data['user_title_id']) ) {
 			$query  .=	' AND uf.title_id in ('. $this->getListSQL($filter_data['user_title_id'], $ph) .') ';
@@ -3396,7 +3469,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$query  .=	' AND a.department_id in ('. $this->getListSQL($filter_data['punch_department_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['pay_period_id']) AND isset($filter_data['pay_period_id'][0]) AND !in_array(-1, (array)$filter_data['pay_period_id']) ) {
-			$query .= 	' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_id'], $ph) .') ';
+			$query .= 	' AND b.pay_period_id in ('.$this->getListSQL($filter_data['pay_period_id'], $ph)) .') ';
 		}
 */
 		$query .= ( isset($filter_data['permission_children_ids']) ) ? $this->getWhereClauseSQL( 'uf.id', $filter_data['permission_children_ids'], 'numeric_list', $ph ) : NULL;
@@ -3556,7 +3629,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					where 	uf.company_id = ? ';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND uf.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+			$query  .=	' AND uf.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph)) .') ';
 		}
 		if ( isset($filter_data['include_user_id']) AND isset($filter_data['include_user_id'][0]) AND !in_array(-1, (array)$filter_data['include_user_id']) ) {
 			$query  .=	' AND uf.id in ('. $this->getListSQL($filter_data['include_user_id'], $ph) .') ';
@@ -3566,7 +3639,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['user_status_id']) AND isset($filter_data['user_status_id'][0]) AND !in_array(-1, (array)$filter_data['user_status_id']) ) {
-			$query  .=	' AND uf.status_id in ('. $this->getListSQL($filter_data['user_status_id'], $ph) .') ';
+			$query  .=	' AND uf.status_id in ('.$this->getListSQL($filter_data['user_status_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_group_id']) AND isset($filter_data['user_group_id'][0]) AND !in_array(-1, (array)$filter_data['user_group_id']) ) {
 			if ( isset($filter_data['include_user_subgroups']) AND (bool)$filter_data['include_user_subgroups'] == TRUE ) {
@@ -3576,10 +3649,10 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$query  .=	' AND uf.group_id in ('. $this->getListSQL($filter_data['user_group_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND uf.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+			$query  .=	' AND uf.default_branch_id in ('.$this->getListSQL($filter_data['default_branch_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND uf.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+			$query  .=	' AND uf.default_department_id in ('.$this->getListSQL($filter_data['default_department_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_title_id']) AND isset($filter_data['user_title_id'][0]) AND !in_array(-1, (array)$filter_data['user_title_id']) ) {
 			$query  .=	' AND uf.title_id in ('. $this->getListSQL($filter_data['user_title_id'], $ph) .') ';
@@ -3591,7 +3664,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$query  .=	' AND a.department_id in ('. $this->getListSQL($filter_data['punch_department_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['pay_period_id']) AND isset($filter_data['pay_period_id'][0]) AND !in_array(-1, (array)$filter_data['pay_period_id']) ) {
-			$query .= 	' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_id'], $ph) .') ';
+			$query .= 	' AND b.pay_period_id in ('.$this->getListSQL($filter_data['pay_period_id'], $ph)) .') ';
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
@@ -3714,7 +3787,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					where 	uf.company_id = ? ';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND uf.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+			$query  .=	' AND uf.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph)) .') ';
 		}
 		if ( isset($filter_data['include_user_id']) AND isset($filter_data['include_user_id'][0]) AND !in_array(-1, (array)$filter_data['include_user_id']) ) {
 			$query  .=	' AND uf.id in ('. $this->getListSQL($filter_data['include_user_id'], $ph) .') ';
@@ -3724,7 +3797,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['user_status_id']) AND isset($filter_data['user_status_id'][0]) AND !in_array(-1, (array)$filter_data['user_status_id']) ) {
-			$query  .=	' AND uf.status_id in ('. $this->getListSQL($filter_data['user_status_id'], $ph) .') ';
+			$query  .=	' AND uf.status_id in ('.$this->getListSQL($filter_data['user_status_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_group_id']) AND isset($filter_data['user_group_id'][0]) AND !in_array(-1, (array)$filter_data['user_group_id']) ) {
 			if ( isset($filter_data['include_user_subgroups']) AND (bool)$filter_data['include_user_subgroups'] == TRUE ) {
@@ -3734,10 +3807,10 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$query  .=	' AND uf.group_id in ('. $this->getListSQL($filter_data['user_group_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND uf.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+			$query  .=	' AND uf.default_branch_id in ('.$this->getListSQL($filter_data['default_branch_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND uf.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+			$query  .=	' AND uf.default_department_id in ('.$this->getListSQL($filter_data['default_department_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_title_id']) AND isset($filter_data['user_title_id'][0]) AND !in_array(-1, (array)$filter_data['user_title_id']) ) {
 			$query  .=	' AND uf.title_id in ('. $this->getListSQL($filter_data['user_title_id'], $ph) .') ';
@@ -3749,7 +3822,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$query  .=	' AND a.department_id in ('. $this->getListSQL($filter_data['punch_department_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['pay_period_id']) AND isset($filter_data['pay_period_id'][0]) AND !in_array(-1, (array)$filter_data['pay_period_id']) ) {
-			$query .= 	' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_id'], $ph) .') ';
+			$query .= 	' AND b.pay_period_id in ('.$this->getListSQL($filter_data['pay_period_id'], $ph)) .') ';
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
@@ -3959,51 +4032,51 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= '	WHERE d.company_id = ?';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND d.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+			$query  .=	' AND d.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph)) .') ';
 		}
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+			$query  .=	' AND a.id in ('.$this->getListSQL($filter_data['id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND d.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+			$query  .=	' AND d.id not in ('.$this->getListSQL($filter_data['exclude_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND c.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+			$query  .=	' AND c.user_id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 		}
 
 		if ( isset($filter_data['user_status_id']) AND isset($filter_data['user_status_id'][0]) AND !in_array(-1, (array)$filter_data['user_status_id']) ) {
-			$query  .=	' AND d.status_id in ('. $this->getListSQL($filter_data['user_status_id'], $ph) .') ';
+			$query  .=	' AND d.status_id in ('.$this->getListSQL($filter_data['user_status_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
 			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
 				$uglf = new UserGroupListFactory();
 				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 			}
-			$query  .=	' AND d.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+			$query  .=	' AND d.group_id in ('.$this->getListSQL($filter_data['group_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND d.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+			$query  .=	' AND d.default_branch_id in ('.$this->getListSQL($filter_data['default_branch_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND d.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+			$query  .=	' AND d.default_department_id in ('.$this->getListSQL($filter_data['default_department_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
-			$query  .=	' AND d.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
+			$query  .=	' AND d.title_id in ('.$this->getListSQL($filter_data['title_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['branch_id']) AND isset($filter_data['branch_id'][0]) AND !in_array(-1, (array)$filter_data['branch_id']) ) {
-			$query  .=	' AND a.branch_id in ('. $this->getListSQL($filter_data['branch_id'], $ph) .') ';
+			$query  .=	' AND a.branch_id in ('.$this->getListSQL($filter_data['branch_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['department_id']) AND isset($filter_data['department_id'][0]) AND !in_array(-1, (array)$filter_data['department_id']) ) {
-			$query  .=	' AND a.department_id in ('. $this->getListSQL($filter_data['department_id'], $ph) .') ';
+			$query  .=	' AND a.department_id in ('.$this->getListSQL($filter_data['department_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+			$query  .=	' AND a.status_id in ('.$this->getListSQL($filter_data['status_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['type_id']) AND isset($filter_data['type_id'][0]) AND !in_array(-1, (array)$filter_data['type_id']) ) {
-			$query  .=	' AND a.type_id in ('. $this->getListSQL($filter_data['type_id'], $ph) .') ';
+			$query  .=	' AND a.type_id in ('.$this->getListSQL($filter_data['type_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['pay_period_id']) AND isset($filter_data['pay_period_id'][0]) AND !in_array(-1, (array)$filter_data['pay_period_id']) ) {
-			$query .= 	' AND c.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_id'], $ph) .') ';
+			$query .= 	' AND c.pay_period_id in ('.$this->getListSQL($filter_data['pay_period_id'], $ph)) .') ';
 		}
 
 
@@ -4243,51 +4316,110 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= '	WHERE d.company_id = ?';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
-			$query  .=	' AND d.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
+			$query  .=	' AND d.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph)) .') ';
 		}
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
-			$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['id'], $ph) .') ';
+			$query  .=	' AND a.id in ('.$this->getListSQL($filter_data['id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
-			$query  .=	' AND d.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
+			$query  .=	' AND d.id not in ('.$this->getListSQL($filter_data['exclude_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND c.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+			$query  .=	' AND c.user_id in ('.$this->getListSQL($filter_data['user_id'], $ph)) .') ';
 		}
 
 		if ( isset($filter_data['user_status_id']) AND isset($filter_data['user_status_id'][0]) AND !in_array(-1, (array)$filter_data['user_status_id']) ) {
-			$query  .=	' AND d.status_id in ('. $this->getListSQL($filter_data['user_status_id'], $ph) .') ';
+			$query  .=	' AND d.status_id in ('.$this->getListSQL($filter_data['user_status_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
 			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
 				$uglf = new UserGroupListFactory();
 				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 			}
-			$query  .=	' AND d.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
+			$query  .=	' AND d.group_id in ('.$this->getListSQL($filter_data['group_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
-			$query  .=	' AND d.default_branch_id in ('. $this->getListSQL($filter_data['default_branch_id'], $ph) .') ';
+			$query  .=	' AND d.default_branch_id in ('.$this->getListSQL($filter_data['default_branch_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
-			$query  .=	' AND d.default_department_id in ('. $this->getListSQL($filter_data['default_department_id'], $ph) .') ';
+			$query  .=	' AND d.default_department_id in ('.$this->getListSQL($filter_data['default_department_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['title_id']) AND isset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
-			$query  .=	' AND d.title_id in ('. $this->getListSQL($filter_data['title_id'], $ph) .') ';
+			$query  .=	' AND d.title_id in ('.$this->getListSQL($filter_data['title_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['branch_id']) AND isset($filter_data['branch_id'][0]) AND !in_array(-1, (array)$filter_data['branch_id']) ) {
-			$query  .=	' AND a.branch_id in ('. $this->getListSQL($filter_data['branch_id'], $ph) .') ';
+			$query  .=	' AND a.branch_id in ('.$this->getListSQL($filter_data['branch_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['department_id']) AND isset($filter_data['department_id'][0]) AND !in_array(-1, (array)$filter_data['department_id']) ) {
-			$query  .=	' AND a.department_id in ('. $this->getListSQL($filter_data['department_id'], $ph) .') ';
+			$query  .=	' AND a.department_id in ('.$this->getListSQL($filter_data['department_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
-			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
+			$query  .=	' AND a.status_id in ('.$this->getListSQL($filter_data['status_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['type_id']) AND isset($filter_data['type_id'][0]) AND !in_array(-1, (array)$filter_data['type_id']) ) {
-			$query  .=	' AND a.type_id in ('. $this->getListSQL($filter_data['type_id'], $ph) .') ';
+			$query  .=	' AND a.type_id in ('.$this->getListSQL($filter_data['type_id'], $ph)) .') ';
 		}
 		if ( isset($filter_data['pay_period_id']) AND isset($filter_data['pay_period_id'][0]) AND !in_array(-1, (array)$filter_data['pay_period_id']) ) {
-			$query .= 	' AND c.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_id'], $ph) .') ';
+			$query .= 	' AND c.pay_period_id in ('.$this->getListSQL($filter_data['pay_period_id'], $ph)) .') ';
+here z.user_id = c.user_id
+																			and z.effective_date <= c.date_stamp
+																			and z.wage_group_id = 0
+																			and z.deleted = 0
+																			order by z.effective_date desc LiMiT 1)
+					';
+		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
+			$query .= '	LEFT JOIN '. $jf->getTable() .' as x ON a.job_id = x.id';
+			$query .= '	LEFT JOIN '. $jif->getTable() .' as y ON a.job_item_id = y.id';
+		}
+
+		$query .= '	WHERE d.company_id = ?';
+
+		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
+			$query  .=	' AND d.id in ('. implode(',', $filter_data['permission_children_ids']) .') ';
+		}
+		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
+			$query  .=	' AND a.id in ('. implode(',', $filter_data['id']) .') ';
+		}
+		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
+			$query  .=	' AND d.id not in ('. implode(',', $filter_data['exclude_id']) .') ';
+		}
+		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
+			$query  .=	' AND c.user_id in ('. implode(',', $filter_data['user_id']) .') ';
+		}
+
+		if ( isset($filter_data['user_status_id']) AND isset($filter_data['user_stat$this->db->BindDate_array(-1, (array)$filter_data['user_status_id']) ) {
+			$q?ery  .=	' AND d.status_id in ('. implode(',', $filter_data['user_status_id']) .') ';
+		}
+		if ( isset($filt$this->db->BindDate) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)?filter_data['group_id']) ) {
+			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['$this->db->BindDate == TRUE ) {
+				$uglf = new UserGroupListFactory();
+				$filter?data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
+			}
+			$query  .=	' AND d.group_id in ('. implode(',', $filter_data['group_id']) .') ';
+		}
+		if ( isset($filter_data['default_branch_id']) AND isset($filter_data['default_branch_id'][0]) AND !in_array(-1, (array)$filter_data['default_branch_id']) ) {
+			$query  .=	' AND d.default_branch_id in ('. implode(',', $filter_data['default_branch_id']) .') ';
+		}
+		if ( isset($filter_data['default_department_id']) AND isset($filter_data['default_department_id'][0]) AND !in_array(-1, (array)$filter_data['default_department_id']) ) {
+			$query  .=	' AND d.default_department_id in ('. implode(',', $filter_data['default_department_id']) .') ';
+		}
+		if ( isset($filter_data$this->db->BindDatesset($filter_data['title_id'][0]) AND !in_array(-1, (array)$filter_data['title_id']) ) {
+			$query  .=	' AND d.title_id in ('. implode(',', $filter_data['title_id']) .') ';
+		}
+		if ( isset($filter_data['branch_id']) AND isset($filter_data['branch_id'][0]) AND !in_array(-1, (array)$fil? r_data['branch_id']) ) {
+			$query  .=	' AND a.branch_id i? ('. implode(',',$filter_data['branch_id']) .') ';
+		}
+		if ( isset($filter_data['department_id']) AND isset($filter_data['department_id'][0]) AND !in_array(-1, (array)$filter_data['department_id']) ) {
+			$query  .=	' AND a.department_id in ('. implode(',',$filter_data['department_id']) .') ';
+		}
+		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
+			$query  .=	' AND a.status_id in ('. implode(',', $filter_data['status_id']) .') ';
+		}
+		if ( isset($filter_data['type_id']) AND isset($filter_data['type_id'][0]) AND !in_array(-1, (array)$filter_data['type_id']) ) {
+			$query  .=	' AND a.type_id in ('. implode(',', $filter_data['type_id']) .') ';
+		}
+		if ( isset($filter_data['pay_period_id']) AND isset($filter_data['pay_period_id'][0]) AND !in_array(-1, (array)$filter_data['pay_period_id']) ) {
+			$query .= 	' AND c.pay_period_id in ('. implode(',', $filter_data['pay_period_id']) .') ';
 		}
 
 

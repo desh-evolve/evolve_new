@@ -2,6 +2,7 @@
 
 namespace App\Models\PayPeriod;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,6 +10,10 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Holiday\HolidayListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Users\UserDefaultListFactory;
+use App\Models\Users\UserPreferenceFactory;
 
 class PayPeriodScheduleFactory extends Factory {
 	protected $table = 'pay_period_schedule';
@@ -158,7 +163,7 @@ class PayPeriodScheduleFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -578,7 +583,7 @@ class PayPeriodScheduleFactory extends Factory {
 	}
 
 	function getTimeZoneOptions() {
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 
 		return $upf->getOptions('time_zone');
 	}
@@ -802,7 +807,7 @@ class PayPeriodScheduleFactory extends Factory {
 	}
 
 	function getUser() {
-		$ppsulf = TTnew( 'PayPeriodScheduleUserListFactory' );
+		$ppsulf = new PayPeriodScheduleUserListFactory();
 		$ppsulf->getByPayPeriodScheduleId( $this->getId() );
 		foreach ($ppsulf as $pay_period_schedule) {
 			$user_list[] = $pay_period_schedule->getUser();
@@ -822,7 +827,7 @@ class PayPeriodScheduleFactory extends Factory {
 		if ( is_array($ids) ) {
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$ppsulf = TTnew( 'PayPeriodScheduleUserListFactory' );
+				$ppsulf = new PayPeriodScheduleUserListFactory();
 				$ppsulf->getByPayPeriodScheduleId( $this->getId() );
 
 				$user_ids = array();
@@ -843,11 +848,11 @@ class PayPeriodScheduleFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
 			foreach ($ids as $id) {
 				if ( $id != '' AND isset($user_ids) AND !in_array($id, $user_ids) ) {
-					$ppsuf = TTnew( 'PayPeriodScheduleUserFactory' );
+					$ppsuf = new PayPeriodScheduleUserFactory();
 					$ppsuf->setPayPeriodSchedule( $this->getId() );
 					$ppsuf->setUser( $id );
 
@@ -875,7 +880,7 @@ class PayPeriodScheduleFactory extends Factory {
 		$user_ids = $this->getUser();
 
 		if ( count($user_ids) > 0 ) {
-			$hlf = TTnew( 'HolidayListFactory' );
+			$hlf = new HolidayListFactory(); 
 			$hlf->getByPolicyGroupUserIdAndStartDateAndEndDate( $user_ids, $epoch-(86400*14), $epoch+(86400*2) );
 			if ( $hlf->getRecordCount() > 0 ) {
 				foreach( $hlf as $h_obj ) {
@@ -902,7 +907,7 @@ class PayPeriodScheduleFactory extends Factory {
 			return FALSE;
 		}
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
 		//Debug::text('PP Schedule ID: '. $this->getId(), __FILE__, __LINE__, __METHOD__, 10);
 		//Debug::text('PP Schedule Name: '. $this->getName(), __FILE__, __LINE__, __METHOD__, 10);
@@ -1155,7 +1160,7 @@ class PayPeriodScheduleFactory extends Factory {
 		if ( $this->getNextStartDate() <= ( TTDate::getTime() + $offset ) ) {
 			Debug::text('Insert new pay period. Start Date: '. $this->getNextStartDate() .' End Date: '. $this->getNextEndDate() , __FILE__, __LINE__, __METHOD__,10);
 
-			$ppf = TTnew( 'PayPeriodFactory' );
+			$ppf = new PayPeriodFactory();
 			$ppf->setCompany( $this->getCompany() );
 			$ppf->setPayPeriodSchedule( $this->getId() );
 			$ppf->setStatus(10);
@@ -1259,7 +1264,7 @@ class PayPeriodScheduleFactory extends Factory {
 /*
 		//FIXME: If a company starts with TimeTrex half way through the year, this will be incorrect.
 		//Because it only counts pay periods that exist, not pay periods that WOULD have existed.
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByPayPeriodScheduleIdAndStartTransactionDateAndEndTransactionDate( $this->getId(), TTDate::getBeginYearEpoch( $epoch ), $epoch );
 		$retval = $pplf->getRecordCount();
 
@@ -1316,7 +1321,7 @@ class PayPeriodScheduleFactory extends Factory {
 				$retval = FALSE;
 
 				if ( $this->getId() > 0 ) {
-					$pplf = TTnew( 'PayPeriodListFactory' );
+					$pplf = new PayPeriodListFactory();
 					$retarr = $pplf->getFirstStartDateAndLastEndDateByPayPeriodScheduleId( $this->getId() );
 					if ( is_array($retarr) AND isset($retarr['first_start_date']) AND isset($retarr['last_end_date']) ) {
 						$retarr['first_start_date'] = TTDate::strtotime( $retarr['first_start_date'] );
@@ -1378,7 +1383,7 @@ class PayPeriodScheduleFactory extends Factory {
 		//Debug::text('User Date ID: '. $user_date_id .' User ID: '. $user_id .' TimeStamp: '. TTDate::getDate('DATE+TIME', $epoch), __FILE__, __LINE__, __METHOD__, 10);
 		$new_shift_trigger_time = $this->getNewDayTriggerTime();
 
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory(); 
 		if ( $user_date_id != '' ) {
 			$plf->getByUserDateId( $user_date_id );
 		} else {
@@ -1639,7 +1644,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->getDeleted() == TRUE ) {
 			//Delete pay periods assigned to this schedule.
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getByPayPeriodScheduleId( $this->getId() );
 			if ( $pplf->getRecordCount() > 0 ) {
 				Debug::text('Delete Pay Periods: '. $pplf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
@@ -1666,7 +1671,7 @@ class PayPeriodScheduleFactory extends Factory {
 		$this->removeCache( $this->getId() );
 
 		if ( $this->getEnableInitialPayPeriods() == TRUE AND $this->getCreateInitialPayPeriods() == TRUE ) {
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 			$pay_period_schedule_obj = $ppslf->getById( $this->getId() )->getCurrent();
 
 			$pay_period_schedule_obj->createNextPayPeriod( $pay_period_schedule_obj->getAnchorDate() );
@@ -1683,7 +1688,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->getDeleted() == TRUE ) {
 			//Remove from User Defaults.
-			$udlf = TTnew( 'UserDefaultListFactory' );
+			$udlf = new UserDefaultListFactory(); 
 			$udlf->getByCompanyId( $this->getCompany() );
 			if ( $udlf->getRecordCount() > 0 ) {
 				foreach( $udlf as $udf_obj ) {

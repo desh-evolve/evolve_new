@@ -145,7 +145,13 @@ class UserIdentificationFactory extends Factory {
 						AND a.type_id = ?
 						AND a.value = ?
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
-		$id = $this->db->GetOne($query, $ph);
+		$id = DB::select($query, $ph);
+
+		if ($id === FALSE ) {
+            $id = 0;
+        }else{
+            $id = current(get_object_vars($id[0]));
+        }
 		//Debug::Arr($id,'Unique Value: '. $value, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {

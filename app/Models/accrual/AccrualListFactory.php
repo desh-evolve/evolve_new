@@ -533,7 +533,13 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 								OR a.user_date_total_id IS NULL AND b.id is NULL )
 						AND a.deleted = 0';
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;

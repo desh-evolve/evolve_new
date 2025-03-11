@@ -230,7 +230,13 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 						AND a.status_id = 10
 						AND a.deleted = 0
 				';
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;

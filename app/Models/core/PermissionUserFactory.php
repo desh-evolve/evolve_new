@@ -54,7 +54,13 @@ class PermissionUserFactory extends Factory {
 					);
 
 		$query = 'select a.id from '. $this->getTable() .' as a, '. $pclf->getTable() .' as b where a.permission_control_id = b.id AND a.user_id = ? AND b.deleted=0';
-		$user_id = $this->db->GetOne($query, $ph);
+		$user_id = DB::select($query, $ph);
+
+		if ($user_id === FALSE ) {
+            $user_id = 0;
+        }else{
+            $user_id = current(get_object_vars($user_id[0]));
+        }
 		Debug::Arr($user_id,'Unique User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_id === FALSE ) {

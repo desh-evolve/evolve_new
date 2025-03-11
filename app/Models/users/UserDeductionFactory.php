@@ -146,7 +146,13 @@ class UserDeductionFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where user_id = ? AND company_deduction_id = ? AND deleted=0';
-		$id = $this->db->GetOne($query, $ph);
+		$id = DB::select($query, $ph);
+
+		if ($id === FALSE ) {
+            $id = 0;
+        }else{
+            $id = current(get_object_vars($id[0]));
+        }
 		Debug::Arr($id,'Unique Company Deduction: '. $deduction_id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {

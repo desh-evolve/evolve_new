@@ -639,7 +639,13 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 
 		//$this->rs = DB::select($query);
 
-		$total = $this->db->GetOne($query, $ph);
+		$total = DB::select($query, $ph);
+
+		if ($total === FALSE ) {
+            $total = 0;
+        }else{
+            $total = current(get_object_vars($total[0]));
+        }
 
 		if ($total === FALSE ) {
 			$total = 0;

@@ -20,8 +20,12 @@ use App\Models\Core\Pager;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\URLBuilder;
+use App\Models\Core\UserDateTotalListFactory;
 use App\Models\PayPeriod\PayPeriodListFactory;
 use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
 use App\Models\Request\RequestListFactory;
 use Illuminate\Support\Facades\View;
 
@@ -45,7 +49,6 @@ class ClosePayPeriod extends Controller
 	public function index(){
 		$current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
-
 		/*
 		if ( !$permission->Check('pay_period_schedule','enabled')
 				OR !( $permission->Check('pay_period_schedule','view') OR $permission->Check('pay_period_schedule','view_own') ) ) {
@@ -103,8 +106,6 @@ class ClosePayPeriod extends Controller
 					$high_severity_exceptions = 0;
 					$critical_severity_exceptions = 0;
 					
-					
-					
 					if ( $elf->getRecordCount() > 0 ) {
 						Debug::Text(' Found Exceptions: '. $elf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 						foreach($elf->rs as $e_obj ) {
@@ -125,8 +126,6 @@ class ClosePayPeriod extends Controller
 						Debug::Text(' No Exceptions!', __FILE__, __LINE__, __METHOD__,10);
 					}
 
-					
-
 					//Get all pending requests
 					$pending_requests = 0;
 					$rlf = new RequestListFactory();
@@ -136,7 +135,7 @@ class ClosePayPeriod extends Controller
 					}
 
 					//Get PS Amendments.
-					$psalf = TTnew( 'PayStubAmendmentListFactory' );
+					$psalf = new PayStubAmendmentListFactory();
 					$psalf->getByUserIdAndAuthorizedAndStartDateAndEndDate( $pay_period_schedule->getUser(), TRUE, $pplf->getStartDate(), $pplf->getEndDate() );
 					$total_ps_amendments = 0;
 					if ( is_object($psalf) ) {
@@ -144,7 +143,7 @@ class ClosePayPeriod extends Controller
 					}
 
 					//Get verified timesheets
-					$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+					$pptsvlf = new PayPeriodTimeSheetVerifyListFactory(); 
 					$pptsvlf->getByPayPeriodIdAndCompanyId( $pplf->getId(), $current_company->getId() );
 					$verified_time_sheets = 0;
 					$pending_time_sheets = 0;
@@ -159,11 +158,11 @@ class ClosePayPeriod extends Controller
 					}
 
 					//Get total employees with time for this pay period.
-					$udtlf = TTnew( 'UserDateTotalListFactory' );
+					$udtlf = new UserDateTotalListFactory(); 
 					$total_worked_users = $udtlf->getWorkedUsersByPayPeriodId( $pplf->getId() );
 
 					//Count how many pay stubs for each pay period.
-					$pslf = TTnew( 'PayStubListFactory' );
+					$pslf = new PayStubListFactory();
 					$total_pay_stubs = $pslf->getByPayPeriodId( $pplf->getId() )->getRecordCount();
 
 					if ( $pplf->getStatus() != 20 ) {
@@ -193,29 +192,29 @@ class ClosePayPeriod extends Controller
 						'deleted' => $pplf->getDeleted()
 					);
 				}
-				unset(	$total_shifts,
-						$total_ps_amendments,
-						$total_pay_stubs,
-						$verified_time_sheets,
-						$total_worked_users);
+				unset(	
+					$total_shifts,
+					$total_ps_amendments,
+					$total_pay_stubs,
+					$verified_time_sheets,
+					$total_worked_users
+				);
+
+				print_r('hi');exit;
 			}
 
 		} else {
 			Debug::Text('No pay periods pending transaction ', __FILE__, __LINE__, __METHOD__,10);
 		}
 
-
-		$smarty->assign_by_ref('open_pay_periods', $open_pay_periods);
-		$smarty->assign_by_ref('pay_periods', $pay_periods);
+		$viewData['open_pay_periods'] = $open_pay_periods;
+		$viewData['pay_periods'] = $pay_periods;
 		$total_pay_periods = count($pay_periods);
-		$smarty->assign_by_ref('total_pay_periods', $total_pay_periods);
+		$viewData['total_pay_periods'] = $total_pay_periods;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-
-		//$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		$smarty->display('payperiod/ClosePayPeriod.tpl');
+		return view('payperiod.ClosePayPeriod', $viewData);
 	}
 
 	// function for lock/unlock/close

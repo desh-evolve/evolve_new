@@ -73,7 +73,7 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 	} elseif ( isset($config_vars['other']['web_session_timeout']) AND $config_vars['other']['web_session_timeout'] != '' ) {
 		$authentication->setIdle( (int)$config_vars['other']['web_session_timeout'] );
 	}
-
+	
 	if ( $authentication->Check() === TRUE ) {
 		$profiler->startTimer( 'Interface.inc - Post-Authentication' );
 

@@ -7,8 +7,8 @@ use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTDate;
-use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class PayPeriodFactory extends Factory {
 	protected $table = 'pay_period';
@@ -22,64 +22,63 @@ class PayPeriodFactory extends Factory {
 		switch( $name ) {
 			case 'status':
 				$retval = array(
-										10 => ('OPEN'),
-										12 => ('Locked - Pending Approval'), //Go to this state as soon as date2 is passed
-										//15 => ('Locked - Pending Transaction'), //Go to this as soon as approved, or 48hrs before transaction date.
-										20 => ('CLOSED'), //Once paid
-										30 => ('Post Adjustment')
-									);
+					10 => ('OPEN'),
+					12 => ('Locked - Pending Approval'), //Go to this state as soon as date2 is passed
+					//15 => ('Locked - Pending Transaction'), //Go to this as soon as approved, or 48hrs before transaction date.
+					20 => ('CLOSED'), //Once paid
+					30 => ('Post Adjustment')
+				);
 				break;
 			case 'columns':
 				$retval = array(
-										'-1010-type' => ('Type'),
-										'-1020-status' => ('Status'),
-										'-1030-pay_period_schedule' => ('Pay Period Schedule'),
+					'-1010-type' => ('Type'),
+					'-1020-status' => ('Status'),
+					'-1030-pay_period_schedule' => ('Pay Period Schedule'),
 
-										'-1040-start_date' => ('Start Date'),
-										'-1050-end_date' => ('End Date'),
-										'-1060-transaction_date' => ('Transaction Date'),
+					'-1040-start_date' => ('Start Date'),
+					'-1050-end_date' => ('End Date'),
+					'-1060-transaction_date' => ('Transaction Date'),
 
-										'-1500-total_punches' => ('Punches'),
-										'-1505-pending_requests' => ('Pending Requests'),
-										'-1510-exceptions_critical' => ('Critical'),
-										'-1510-exceptions_high' => ('High'),
-										'-1512-exceptions_medium' => ('Medium'),
-										'-1514-exceptions_low' => ('Low'),
-										'-1520-verified_timesheets' => ('Verified'),
-										'-1522-pending_timesheets' => ('Pending'),
-										'-1524-total_timesheets' => ('Total'),
-										'-1530-ps_amendments' => ('PS Amendments'),
-										'-1540-pay_stubs' => ('Pay Stubs'),
+					'-1500-total_punches' => ('Punches'),
+					'-1505-pending_requests' => ('Pending Requests'),
+					'-1510-exceptions_critical' => ('Critical'),
+					'-1510-exceptions_high' => ('High'),
+					'-1512-exceptions_medium' => ('Medium'),
+					'-1514-exceptions_low' => ('Low'),
+					'-1520-verified_timesheets' => ('Verified'),
+					'-1522-pending_timesheets' => ('Pending'),
+					'-1524-total_timesheets' => ('Total'),
+					'-1530-ps_amendments' => ('PS Amendments'),
+					'-1540-pay_stubs' => ('Pay Stubs'),
 
-										'-2000-created_by' => ('Created By'),
-										'-2010-created_date' => ('Created Date'),
-										'-2020-updated_by' => ('Updated By'),
-										'-2030-updated_date' => ('Updated Date'),
-							);
+					'-2000-created_by' => ('Created By'),
+					'-2010-created_date' => ('Created Date'),
+					'-2020-updated_by' => ('Updated By'),
+					'-2030-updated_date' => ('Updated Date'),
+				);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( $this->getOptions('default_display_columns'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
 				break;
 			case 'default_display_columns': //Columns that are displayed by default.
 				$retval = array(
-								'pay_period_schedule',
-								'type',
-								'status',
-								'start_date',
-								'end_date',
-								'transaction_date'
-								);
+					'pay_period_schedule',
+					'type',
+					'status',
+					'start_date',
+					'end_date',
+					'transaction_date'
+				);
 				break;
 			case 'unique_columns': //Columns that are unique, and disabled for mass editing.
 				$retval = array(
-								'start_date',
-								'end_date',
-								'transaction_date',
-								);
+					'start_date',
+					'end_date',
+					'transaction_date',
+				);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
-				$retval = array(
-								);
+				$retval = array();
 				break;
 
 		}
@@ -89,38 +88,38 @@ class PayPeriodFactory extends Factory {
 
 	function _getVariableToFunctionMap( $data ) {
 			$variable_function_map = array(
-											'id' => 'ID',
-											'company_id' => 'Company',
-											'status_id' => 'Status',
-											'status' => FALSE,
-											'type_id' => FALSE,
-											'type' => FALSE,
-											'pay_period_schedule_id' => 'PayPeriodSchedule',
-											'pay_period_schedule' => FALSE,
-											'start_date' => 'StartDate',
-											'end_date' => 'EndDate',
-											'transaction_date' => 'TransactionDate',
-											//'advance_transaction_date' => 'AdvanceTransactionDate',
-											//'advance_transaction_date' => 'Primary',
-											//'is_primary' => 'PayStubStatus',
-											//'tainted' => 'Tainted',
-											//'tainted_date' => 'TaintedDate',
-											//'tainted_by' => 'TaintedBy',
+				'id' => 'ID',
+				'company_id' => 'Company',
+				'status_id' => 'Status',
+				'status' => FALSE,
+				'type_id' => FALSE,
+				'type' => FALSE,
+				'pay_period_schedule_id' => 'PayPeriodSchedule',
+				'pay_period_schedule' => FALSE,
+				'start_date' => 'StartDate',
+				'end_date' => 'EndDate',
+				'transaction_date' => 'TransactionDate',
+				//'advance_transaction_date' => 'AdvanceTransactionDate',
+				//'advance_transaction_date' => 'Primary',
+				//'is_primary' => 'PayStubStatus',
+				//'tainted' => 'Tainted',
+				//'tainted_date' => 'TaintedDate',
+				//'tainted_by' => 'TaintedBy',
 
-											'total_punches' => 'TotalPunches',
-											'pending_requests' => 'PendingRequests',
-											'exceptions_critical' => 'Exceptions',
-											'exceptions_high' => 'Exceptions',
-											'exceptions_medium' => 'Exceptions',
-											'exceptions_low' => 'Exceptions',
-											'verified_timesheets' => 'TimeSheets',
-											'pending_timesheets' => 'TimeSheets',
-											'total_timesheets' => 'TimeSheets',
-											'ps_amendments' => 'PayStubAmendments',
-											'pay_stubs' => 'PayStubs',
+				'total_punches' => 'TotalPunches',
+				'pending_requests' => 'PendingRequests',
+				'exceptions_critical' => 'Exceptions',
+				'exceptions_high' => 'Exceptions',
+				'exceptions_medium' => 'Exceptions',
+				'exceptions_low' => 'Exceptions',
+				'verified_timesheets' => 'TimeSheets',
+				'pending_timesheets' => 'TimeSheets',
+				'total_timesheets' => 'TimeSheets',
+				'ps_amendments' => 'PayStubAmendments',
+				'pay_stubs' => 'PayStubs',
 
-											'deleted' => 'Deleted',
-											);
+				'deleted' => 'Deleted',
+			);
 			return $variable_function_map;
 	}
 
@@ -148,13 +147,8 @@ class PayPeriodFactory extends Factory {
 
 		$clf = TTnew( 'CompanyListFactory' );
 
-		if ( $this->Validator->isResultSetWithRows(	'company',
-													$clf->getByID($id),
-													('Company is invalid')
-													) ) {
-
+		if ( $this->Validator->isResultSetWithRows(	'company', $clf->getByID($id), ('Company is invalid') ) ) {
 			$this->data['company_id'] = $id;
-
 			return TRUE;
 		}
 
@@ -250,7 +244,13 @@ class PayPeriodFactory extends Factory {
 						AND deleted=0
 						AND id != ?
 					';
-		$id = $this->db->GetOne($query, $ph);
+		$id = DB::select($query, $ph);
+
+		if ($id === FALSE ) {
+            $id = 0;
+        }else{
+            $id = current(get_object_vars($id[0]));
+        }
 		Debug::Arr($id,'Pay Period ID of conflicting pay period: '. $epoch, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {

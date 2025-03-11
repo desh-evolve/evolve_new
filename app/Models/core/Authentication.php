@@ -624,7 +624,7 @@ class Authentication {
 				$session_id = FALSE;
 			}
 		}
-
+		//print_r($session_id);exit;
 		/*
 		if ( $session_id == '' AND isset($_COOKIE[$this->getName()]) ) {
 			$session_id = $_COOKIE[$this->getName()];
