@@ -26,4 +26,6 @@ Route::post('/currency/save/{id?}', [EditCurrency::class, 'save'])->name('curren
 
 
 Route::get('/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll_processing');
+Route::post('/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll_action');
+
 

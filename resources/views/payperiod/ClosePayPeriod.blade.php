@@ -157,8 +157,8 @@
                                 <br>
                             </td>
                             <td colspan="2" align="center">
-                                <input type="submit" name="action:lock" value="{{ __('Lock') }}">
-                                <input type="submit" name="action:unlock" value="{{ __('UnLock') }}">
+                                <input type="button" name="action:lock" value="{{ __('Lock') }}">
+                                <input type="button" name="action:unlock" value="{{ __('UnLock') }}">
                             </td>
                         </tr>
                     @endif
@@ -253,7 +253,7 @@
                     <tr class="bg-primary text-white">
                         <td colspan="6"><br></td>
                         <td colspan="2" align="center">
-                            <input type="submit" name="action:generate_pay_stubs" value="{{ __('Generate Final Pay') }}">
+                            <input type="button" name="action:generate_pay_stubs" value="{{ __('Generate Final Pay') }}">
                         </td>
                     </tr>
                 </form>
@@ -368,7 +368,7 @@
                         <tr class="bg-primary text-white">
                             <td colspan="6"><br></td>
                             <td colspan="2" align="center">
-                                <input type="submit" name="action:close" value="{{ __('Close') }}">
+                                <input type="button" name="action:close" value="{{ __('Close') }}">
                             </td>
                         </tr>
                     @endif
@@ -379,4 +379,59 @@
             
         </div>
     </div>
+
+    <script>
+    //check here
+    // if not working here just use php
+    $(document).ready(function () {
+        // Listen for the action button click
+        $(document).on('click', 'input[name^="action:"]', function () {
+            // Get the action type from the button's name
+            let actionType = $(this).attr('name').split(':')[1] || ''; // Extract action (lock or unlock)
+
+            // Show confirmation dialog before proceeding
+            let confirmationMessage = '';
+
+            // Determine confirmation message based on action
+            if (actionType === 'lock') {
+                confirmationMessage = 'Are you sure you want to lock the pay periods?';
+            } else if (actionType === 'unlock') {
+                confirmationMessage = 'Are you sure you want to unlock the pay periods?';
+            } else {
+                confirmationMessage = 'Are you sure you want to take this action?';
+            }
+
+            // Ask for user confirmation
+            if (confirm(confirmationMessage)) {
+                // If confirmed, proceed with fetch request
+                fetch('/payroll_action', {
+                    method: 'POST', // POST method
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF token
+                    },
+                    body: JSON.stringify({
+                        action: actionType, // action type (lock/unlock)
+                        pay_period_ids: [1, 2, 3] // Example pay period IDs, replace with actual
+                    })
+                })
+                .then(response => response.json()) // Parse JSON response
+                .then(data => {
+                    // Handle the success response from the PHP function
+                    alert('Action successfully completed');
+                    console.log(data); // You can check the response from the server here
+                })
+                .catch(error => {
+                    // Handle any errors during the fetch request
+                    alert('An error occurred: ' + error);
+                    console.error(error);
+                });
+            } else {
+                // If user cancels the action
+                console.log('Action was canceled by the user');
+            }
+        });
+    });
+
+    </script>
 </x-app-layout>

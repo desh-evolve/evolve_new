@@ -217,39 +217,60 @@ class ClosePayPeriod extends Controller
 	}
 
 	// function for lock/unlock/close
-	public function action(){
+	public function action(Request $request) {
+		$action = $request->input('action'); // Get the action from request
+		$pay_period_ids = $request->input('pay_period_ids', []); // Default to an empty array if not set
+	
 		$current_company = $this->company;
-        $current_user_prefs = $this->userPrefs;
-
-		//Lock selected pay periods
-		Debug::Text('Lock Selected Pay Periods... Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
-
-		$pplf = TTnew( 'PayPeriodListFactory' );
-
+		$current_user_prefs = $this->userPrefs;
+	
+		// Debugging
+		Debug::Text('Lock Selected Pay Periods... Action: ' . $action, __FILE__, __LINE__, __METHOD__, 10);
+	
+		$pplf = new PayPeriodListFactory();
+	
 		$pplf->StartTransaction();
-		if ( isset($pay_period_ids) AND count($pay_period_ids) > 0 ) {
-			foreach($pay_period_ids as $pay_period_id) {
-				$pay_period_obj = $pplf->getById( $pay_period_id )->getCurrent();
-
-				if ( $pay_period_obj->getStatus() != 20 ) {
-					if ( $action == 'close' ) {
-						$pay_period_obj->setStatus(20);
-					} elseif ( $action == 'lock' ) {
-						$pay_period_obj->setStatus(12);
-					} else {
-						$pay_period_obj->setStatus(10);
+	
+		if (!empty($pay_period_ids)) {
+			foreach ($pay_period_ids as $pay_period_id) {
+				$pay_period_obj = $pplf->getById($pay_period_id)->getCurrent();
+	
+				if ($pay_period_obj && $pay_period_obj->getStatus() != 20) {
+					switch ($action) {
+						case 'close':
+							$pay_period_obj->setStatus(20);
+							break;
+						case 'lock':
+							$pay_period_obj->setStatus(12);
+							break;
+						default:
+							$pay_period_obj->setStatus(10);
+							break;
 					}
-
 					$pay_period_obj->Save();
 				}
 			}
 		}
+	
 		$pplf->CommitTransaction();
-
-		Redirect::Page( URLBuilder::getURL(NULL, 'ClosePayPeriod.php') );
+	
+		return redirect()->to(URLBuilder::getURL(NULL, 'payroll_processing'));
 	}
+	
 
 	public function generate_pay_stubs(){
+		/* Get FORM variables */
+		extract	(FormVariables::GetVariables(
+			array	(
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'pay_period_ids',
+				'pay_stub_pay_period_ids'
+			)
+		) );
+
 		$current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
 
