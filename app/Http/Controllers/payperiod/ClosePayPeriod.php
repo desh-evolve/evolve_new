@@ -200,7 +200,6 @@ class ClosePayPeriod extends Controller
 					$total_worked_users
 				);
 
-				print_r('hi');exit;
 			}
 
 		} else {
