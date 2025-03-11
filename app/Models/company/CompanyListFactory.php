@@ -14,7 +14,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 {
 
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		
+
 		if ( $order == NULL ) {
 			$order = array( 'status_id' => 'asc', 'name' => 'asc');
 			$strict = FALSE;
@@ -28,7 +28,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 					WHERE deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
-		
+
 		if ($limit === null) {
 			// Run query without limit
 			$this->rs = DB::select($query);
@@ -39,10 +39,10 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 				'offset' => ($page - 1) * $limit,
 			]);
 		}
-		
+
 		return $this;
 	}
-	
+
 	function getById($id, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
@@ -55,27 +55,27 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 				FROM ' . $this->getTable() . '
 				WHERE id = :id
 				AND deleted = 0';
-				
+
 			// Add any additional where conditions
 			$query .= $this->getWhereSQL($where);
-			
+
 			// Add sorting
 			$query .= $this->getSortSQL($order);
-			
+
 			// Prepare parameters
 			$params = [
 				':id' => $id
 			];
-			
+
 			// Execute query with parameterized values
 			$this->rs = DB::select($query, $params);
-			
+
 			// Save to cache if query was successful
 			if ($this->rs !== FALSE) {
 				$this->saveCache($this->rs, $id);
 			}
 		}
-		
+
 		return $this;
 	}
 
@@ -208,14 +208,14 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 			}
 			$strict = TRUE;
 		}
-		
+
 		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 
 		$uf = new UserFactory();
 
 		$ph = array(
-					//'company_id' => $company_id,
+					//':company_id' => $company_id,
 					);
 
 		$query = '

@@ -15,6 +15,7 @@ use App\Models\Users\UserFactory;
 use App\Models\Users\UserGroupFactory;
 use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserTitleFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -603,7 +604,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 
 		$this->rs = DB::select($query, $ph);
 
-		$this->rs = $this->db->Getrow($query, $ph);
+		$this->rs = DB::select($query, $ph);
 		return $this;
 	}
 
@@ -640,12 +641,15 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		//$this->rs = DB::select($query);
 
 		$total = DB::select($query, $ph);
+<<<<<<< Updated upstream
 
 		if ($total === FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
+=======
+>>>>>>> Stashed changes
 
 		if ($total === FALSE ) {
 			$total = 0;
@@ -671,7 +675,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -682,7 +686,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ? ';
+						AND c.company_id = :company_id ';
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
 		}
@@ -690,12 +694,12 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 			$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date']);
+			$query  .=	' AND b.date_stamp >= :start_date ';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date']);
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 		$query .= '		AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 ) ';
 
@@ -755,7 +759,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$huf = new HierarchyUserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		//Need to make this return DISTINCT records only, because if the same child is assigned to multiple hierarchies,
@@ -790,7 +794,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 						LEFT JOIN '. $ugf->getTable() .' as e ON ( b.group_id = e.id AND e.deleted = 0 )
 						LEFT JOIN '. $utf->getTable() .' as f ON ( b.title_id = f.id AND f.deleted = 0 )
 
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -848,12 +852,12 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND udf.date_stamp >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date']);
+			$query  .=	' AND udf.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND udf.date_stamp <= ?';
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date']);
+			$query  .=	' AND udf.date_stamp <= :end_date';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {

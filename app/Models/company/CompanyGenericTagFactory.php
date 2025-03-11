@@ -6,6 +6,7 @@ use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class CompanyGenericTagFactory extends Factory {
 	protected $table = 'company_generic_tag';
@@ -174,12 +175,15 @@ class CompanyGenericTagFactory extends Factory {
 						AND lower(name) = :name
 						AND deleted = 0';
 		$name_id = DB::select($query, $ph);
+<<<<<<< Updated upstream
 
 		if ($name_id === FALSE ) {
             $name_id = 0;
         }else{
             $name_id = current(get_object_vars($name_id[0]));
         }
+=======
+>>>>>>> Stashed changes
 		Debug::Arr($name_id,'Unique Name: '. $name , __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $name_id === FALSE ) {

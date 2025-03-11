@@ -10,6 +10,7 @@ use App\Models\core\Validator;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\Log;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class BranchBankAccountFactory extends Factory {
 	protected $table = 'branch_bank_account';
@@ -136,12 +137,15 @@ class BranchBankAccountFactory extends Factory {
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
 		$id = DB::select($query, $ph);
+<<<<<<< Updated upstream
 
 		if ($id === FALSE ) {
             $id = 0;
         }else{
             $id = current(get_object_vars($id[0]));
         }
+=======
+>>>>>>> Stashed changes
 		Debug::Arr($id,'Unique ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {
@@ -192,11 +196,11 @@ class BranchBankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /*
-         * ARSP EDIT--> THIS CODE USE TO ADD  THE BANK CODE NOT TRANSIT 
-         * 
+         * ARSP EDIT--> THIS CODE USE TO ADD  THE BANK CODE NOT TRANSIT
+         *
          */
 	function setTransit($value) {
 		$value = trim($value);
@@ -220,13 +224,13 @@ class BranchBankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
+
+
+
         /*
          * ARSP EDIT--> I ADD NEW CODE FOR GET BANK NAME
-         * 
-         */        
+         *
+         */
 	function getBankName() {
 		if ( isset($this->data['bank_name']) ) {
 			return $this->data['bank_name'];
@@ -234,11 +238,11 @@ class BranchBankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /*
          * RSP EDIT--> I ADD NEW CODE FOR SET BANK NAME
-         * 
+         *
          */
 	function setBankName($value) {
 		$value = trim($value);
@@ -258,13 +262,13 @@ class BranchBankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
+
+
+
         /*
          * ARSP EDIT--> I ADD NEW CODE FOR GET BANK BRANCH NAME
-         * 
-         */        
+         *
+         */
 	function getBankBranch() {
 		if ( isset($this->data['bank_branch']) ) {
 			return $this->data['bank_branch'];
@@ -272,11 +276,11 @@ class BranchBankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /*
          * ARSP EDIT--> I ADD NEW CODE FOR SET BANK BRANCH NAME
-         * 
+         *
          */
 	function setBankBranch($value) {
 		$value = trim($value);
@@ -295,14 +299,14 @@ class BranchBankAccountFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
-        
-        
+	}
+
+
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */        
+         *
+         */
 	function setDefaultBranch($id) {
 		$id = (int)trim($id);
 
@@ -321,19 +325,19 @@ class BranchBankAccountFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */               
+         *
+         */
 	function getDefaultBranch() {
 		if ( isset($this->data['default_branch_id']) ) {
 			return $this->data['default_branch_id'];
 		}
 
 		return FALSE;
-	}        
+	}
 
 	function getSecureAccount( $value = NULL ) {
 		if ( $value == '' ) {

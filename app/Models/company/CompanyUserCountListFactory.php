@@ -3,6 +3,7 @@
 namespace App\Models\Company;
 
 use App\Models\Users\UserFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -173,8 +174,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		$ph = array(
 					':company_id' => $id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -224,9 +225,9 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					//'company_id' => $id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					//':company_id' => $id,
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -283,8 +284,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		$ph = array(
 					':company_id' => $id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
 		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
