@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\currency;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Currency;
@@ -31,7 +32,7 @@ class CurrencyList extends Controller
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
-    
+
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
@@ -39,6 +40,7 @@ class CurrencyList extends Controller
 
     public function index()
     {
+        // var_dump('a');
         $current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
 
@@ -46,11 +48,15 @@ class CurrencyList extends Controller
         //    !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
         //    return $this->permission->Redirect(false);
         //}
-        
+
         //$smarty->assign('title', ('Currency List'));
 
         extract(FormVariables::GetVariables([
-            'action', 'page', 'sort_column', 'sort_order', 'ids'
+            'action',
+            'page',
+            'sort_column',
+            'sort_order',
+            'ids'
         ]));
 
         URLBuilder::setURL($_SERVER['SCRIPT_NAME'], [
@@ -60,9 +66,9 @@ class CurrencyList extends Controller
         ]);
 
         $sort_array = $sort_column != '' ? [$sort_column => $sort_order] : null;
-        
+
         Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
-        
+
         $action = Misc::findSubmitButton();
 
         switch ($action) {
@@ -100,10 +106,10 @@ class CurrencyList extends Controller
                 $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
                 $pager = new Pager($clf);
                 $iso_code_options = $clf->getISOCodesArray();
-                
+
                 $currencies = [];
                 $base_currency = false;
-                
+
                 foreach ($clf->rs as $c_obj) {
                     if ($c_obj->is_base) {
                         $base_currency = true;
@@ -121,7 +127,7 @@ class CurrencyList extends Controller
                         'deleted' => $c_obj->deleted
                     ];
                 }
-                
+
                 $data = [
                     'title' => 'Currency List',
                     'currencies' => $currencies,
@@ -130,11 +136,60 @@ class CurrencyList extends Controller
                     'sort_order' => $sort_array['sort_order'] ?? '',
                     'paging_data' => $pager->getPageVariables()
                 ];
-                
-                return view('currency.list', $data);
+
+                return view('currency.CurrencyList', $data);
                 break;
         }
-
     }
 
+    // public function delete($id)
+    // {
+    //     $current_company = $this->company;
+    //     // dd($id);
+    //     // print_r($request);
+    //     // exit;
+
+    //     // $ids = $request->input('ids', []); // Array of IDs to delete
+
+    //     if (empty($id)) {
+    //         return redirect()->back()->withErrors(['error' => 'No currencies selected.']);
+    //     }
+
+    //     $clf = new CurrencyListFactory();
+
+    //     // foreach ($ids as $id) {
+    //         $clf->getByIdAndCompanyId($id, $current_company->getId());
+    //         foreach ($clf as $c_obj) {
+    //             $c_obj->setDeleted(true); // Set deleted flag to true
+    //             if ($c_obj->isValid()) {
+    //                 $c_obj->Save();
+    //             }
+    //         }
+    //     // }
+
+    //     // Redirect with success message
+    //     return redirect()->to(URLBuilder::getURL(null, '/currency'))->with('success', 'Currencies deleted successfully.');
+    // }
+
+    public function delete($id)
+    {
+        $current_company = $this->company;
+
+        if (empty($id)) {
+            return response()->json(['error' => 'No currencies selected.'], 400);
+        }
+
+        $clf = new CurrencyListFactory();
+        $currency = $clf->getByIdAndCompanyId($id, $current_company->getId());
+        
+        foreach ($currency->rs as $c_obj) {
+            $currency->setDeleted(true); // Set deleted flag to true
+            if ($currency->isValid()) {
+                $currency->Save();
+            }
+        }
+        dd($currency->rs);
+
+        return response()->json(['success' => 'Currency deleted successfully.']);
+    }
 }

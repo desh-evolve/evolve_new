@@ -93,7 +93,7 @@ class EditCurrency extends Controller
             'data' => $data,
         ];
 
-        return view('currency.form', $viewData);
+        return view('currency.EditCurrency', $viewData);
     }
 
     public function save(Request $request, $id = null)

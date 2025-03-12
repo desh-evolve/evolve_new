@@ -22,6 +22,9 @@ Route::get('/currency', [CurrencyList::class, 'index'])->name('currency.index');
 
 Route::get('/currency/add/{id?}', [EditCurrency::class, 'index'])->name('currency.add');
 Route::post('/currency/save/{id?}', [EditCurrency::class, 'save'])->name('currency.save');
+// Route::delete('/currency/delete/{id?}', [CurrencyList::class, 'delete'])->name('currency.delete');
+Route::delete('/currency/delete/{id}', [CurrencyList::class, 'delete'])->name('currency.delete');
+
 
 
 
