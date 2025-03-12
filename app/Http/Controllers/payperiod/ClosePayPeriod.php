@@ -265,7 +265,7 @@ class ClosePayPeriod extends Controller
 
 		Debug::Text('Generate Pay Stubs ', __FILE__, __LINE__, __METHOD__,10);
 
-		return redirect()->route('progress_bar\generate_paystubs', [
+		return redirect()->route('progress_bar.generate_paystubs', [
 			'action' => 'generate_paystubs',
 			'pay_period_ids' => $pay_stub_pay_period_ids,
 			'next_page' => 'payroll_processing'
