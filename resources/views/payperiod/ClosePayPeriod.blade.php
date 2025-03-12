@@ -86,8 +86,10 @@
                         </td>
                     </tr>
                 @endforeach
+            </table>
 
-                <form method="get" action="{{ request()->server('SCRIPT_NAME') }}">
+            <form method="get" action="payroll_action">
+                <table class="table table-striped">
                     <tr>
                         <td class="tblPagingLeft" colspan="10" align="right">
                             <br>
@@ -122,7 +124,7 @@
                                     <td>{{ __('Transaction') }}</td>
                                     <td>{{ __('Functions') }}</td>
                                     <td>
-                                        <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)" checked/>
+                                        <input type="checkbox" class="checkbox" name="select_all" onclick="checkAll(this)" checked/>
                                     </td>
                                 </tr>
                             @endif
@@ -157,19 +159,20 @@
                                 <br>
                             </td>
                             <td colspan="2" align="center">
-                                <input type="button" name="action:lock" value="{{ __('Lock') }}">
-                                <input type="button" name="action:unlock" value="{{ __('UnLock') }}">
+                                <input type="submit" name="action" value="{{ __('Lock') }}">
+                                <input type="submit" name="action" value="{{ __('UnLock') }}">
                             </td>
                         </tr>
                     @endif
-                </form>
+                </table>
+            </form>
 
+            <table class="table table-striped">
                 <tr>
                     <td colspan="10">
                         <br>
                     </td>
                 </tr>
-
 
                 @foreach ($pay_periods as $index => $pay_period)
                     @if ($index === 0)
@@ -201,15 +204,15 @@
                     </tr>
                 @endforeach
             
-
                 <tr>
                     <td colspan="10">
                         <br>
                     </td>
                 </tr>
+            </table>
 
-
-                <form method="get" action="{{ request()->server('SCRIPT_NAME') }}">
+            <form method="get" action="payroll_generate_pay_stubs">
+                <table class="table table-striped">
                     @foreach ($pay_periods as $index => $pay_period)
                         @if ($index === 0)
                             <tr class="bg-primary text-white">
@@ -224,7 +227,7 @@
                                 <td colspan="4">{{ __('Pay Stubs') }}</td>
                                 <td>{{ __('Functions') }}</td>
                                 <td>
-                                    <input type="checkbox" class="checkbox" name="select_all" onclick="CheckAll(this)" checked />
+                                    <input type="checkbox" class="checkbox" name="select_all" onclick="checkAll(this)" checked />
                                 </td>
                             </tr>
                         @endif
@@ -253,19 +256,22 @@
                     <tr class="bg-primary text-white">
                         <td colspan="6"><br></td>
                         <td colspan="2" align="center">
-                            <input type="button" name="action:generate_pay_stubs" value="{{ __('Generate Final Pay') }}">
+                            <input type="submit" name="action" value="{{ __('Generate Final Pay') }}">
                         </td>
                     </tr>
-                </form>
+                </table>
+            </form>
                 
-
+            <table class="table table-striped">
                 <tr>
                     <td colspan="10">
                         <br>
                     </td>
                 </tr>
+            </table>
 
-                <form method="get" action="{{ request()->server('SCRIPT_NAME') }}">
+            <form method="get" action="#">
+                <table class="table table-striped">
                     @foreach ($pay_periods as $index => $pay_period)
                         @if ($index === 0)
                             <tr class="bg-primary text-white">
@@ -283,7 +289,7 @@
                                 <td>{{ __('Transaction') }}</td>
                                 <td>{{ __('Functions') }}</td>
                                 <td>
-                                    <input type="checkbox" class="checkbox" name="select_all" onclick="CheckAll(this)" checked />
+                                    <input type="checkbox" class="checkbox" name="select_all" onclick="checkAll(this)" checked />
                                 </td>
                             </tr>
                         @endif
@@ -311,15 +317,19 @@
                             </td>
                         </tr>
                     @endforeach
-                </form>
+                </table>
+            </form>
                 
+            <table class="table table-striped">
                 <tr>
                     <td colspan="10">
                         <br>
                     </td>
                 </tr>
+            </table>
 
-                <form method="get" action="{{ request()->server('SCRIPT_NAME') }}">
+            <form method="get" action="payroll_action">
+                <table class="table table-striped">
                     @if (count($pay_periods) > 0)
                         @foreach ($pay_periods as $index => $pay_period)
                             @if ($index === 0)
@@ -338,7 +348,7 @@
                                     <td>{{ __('Transaction') }}</td>
                                     <td>{{ __('Functions') }}</td>
                                     <td>
-                                        <input type="checkbox" class="checkbox" name="select_all" onclick="CheckAll(this)" checked />
+                                        <input type="checkbox" class="checkbox" name="select_all" onclick="checkAll(this)" checked />
                                     </td>
                                 </tr>
                             @endif
@@ -368,70 +378,14 @@
                         <tr class="bg-primary text-white">
                             <td colspan="6"><br></td>
                             <td colspan="2" align="center">
-                                <input type="button" name="action:close" value="{{ __('Close') }}">
+                                <input type="submit" name="action" value="{{ __('Close') }}">
                             </td>
                         </tr>
                     @endif
-                </form>
-                
-
-            </table>
+                </table>
+            </form>
             
         </div>
     </div>
 
-    <script>
-    //check here
-    // if not working here just use php
-    $(document).ready(function () {
-        // Listen for the action button click
-        $(document).on('click', 'input[name^="action:"]', function () {
-            // Get the action type from the button's name
-            let actionType = $(this).attr('name').split(':')[1] || ''; // Extract action (lock or unlock)
-
-            // Show confirmation dialog before proceeding
-            let confirmationMessage = '';
-
-            // Determine confirmation message based on action
-            if (actionType === 'lock') {
-                confirmationMessage = 'Are you sure you want to lock the pay periods?';
-            } else if (actionType === 'unlock') {
-                confirmationMessage = 'Are you sure you want to unlock the pay periods?';
-            } else {
-                confirmationMessage = 'Are you sure you want to take this action?';
-            }
-
-            // Ask for user confirmation
-            if (confirm(confirmationMessage)) {
-                // If confirmed, proceed with fetch request
-                fetch('/payroll_action', {
-                    method: 'POST', // POST method
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF token
-                    },
-                    body: JSON.stringify({
-                        action: actionType, // action type (lock/unlock)
-                        pay_period_ids: [1, 2, 3] // Example pay period IDs, replace with actual
-                    })
-                })
-                .then(response => response.json()) // Parse JSON response
-                .then(data => {
-                    // Handle the success response from the PHP function
-                    alert('Action successfully completed');
-                    console.log(data); // You can check the response from the server here
-                })
-                .catch(error => {
-                    // Handle any errors during the fetch request
-                    alert('An error occurred: ' + error);
-                    console.error(error);
-                });
-            } else {
-                // If user cancels the action
-                console.log('Action was canceled by the user');
-            }
-        });
-    });
-
-    </script>
 </x-app-layout>

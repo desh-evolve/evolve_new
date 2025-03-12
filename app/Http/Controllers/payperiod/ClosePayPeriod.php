@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\payperiod;
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use Illuminate\Support\Facades\Redirect;
@@ -218,9 +219,9 @@ class ClosePayPeriod extends Controller
 
 	// function for lock/unlock/close
 	public function action(Request $request) {
-		$action = $request->input('action'); // Get the action from request
+		$action = strtolower($request->input('action'));// Get the action from request
 		$pay_period_ids = $request->input('pay_period_ids', []); // Default to an empty array if not set
-	
+		
 		$current_company = $this->company;
 		$current_user_prefs = $this->userPrefs;
 	
@@ -253,30 +254,22 @@ class ClosePayPeriod extends Controller
 		}
 	
 		$pplf->CommitTransaction();
-	
+		
 		return redirect()->to(URLBuilder::getURL(NULL, 'payroll_processing'));
 	}
 	
 
-	public function generate_pay_stubs(){
-		/* Get FORM variables */
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'pay_period_ids',
-				'pay_stub_pay_period_ids'
-			)
-		) );
-
-		$current_company = $this->company;
-        $current_user_prefs = $this->userPrefs;
+	public function generate_pay_stubs(Request $request){
+		$action = strtolower(str_replace(' ', '_', trim($request->input('action'))));// Get the action from request
+		$pay_stub_pay_period_ids = $request->input('pay_stub_pay_period_ids', []); // Default to an empty array if not set
 
 		Debug::Text('Generate Pay Stubs ', __FILE__, __LINE__, __METHOD__,10);
-		//var_dump($pay_stub_pay_period_ids); die;
-		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paystubs', 'pay_period_ids' => $pay_stub_pay_period_ids, 'next_page' => '../payperiod/ClosePayPeriod.php' ), '../progress_bar/ProgressBarControl.php') );
+
+		return redirect()->route('payroll.progress_bar', [
+			'action' => 'generate_paystubs',
+			'pay_period_ids' => $pay_stub_pay_period_ids,
+			'next_page' => '../payperiod/ClosePayPeriod.php'
+		]);		
 	}
 }
 
