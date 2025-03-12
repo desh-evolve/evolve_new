@@ -38,10 +38,6 @@
                                     <th scope="col">Base</th>
                                     <th scope="col">Default</th>
                                     <th scope="col">Action</th>
-                                    <th scope="col">
-                                        <input type="checkbox" class="checkbox" name="select_all"
-                                            onClick="CheckAll(this)" />
-                                    </th>
                                 </tr>
                             </thead>
 
@@ -80,12 +76,15 @@
                                             {{ isset($currency['is_default']) && $currency['is_default'] ? __('Yes') : __('No') }}
                                         </td>
                                         <td>
-                                            <a
-                                                href="{{ route('currency.add', ['id' => $currency['id'] ?? '']) }}">{{ __('Edit') }}</a>
-
-                                            {{-- @if ($permission->check('currency', 'delete')) --}}
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrency({{ $currency['id'] }})">{{ __('Delete') }}</button>
-                                            {{-- @endif --}}
+                                            <!-- Edit Button -->
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('currency.add', ['id' => $currency['id'] ?? '']) }}'">
+                                                {{ __('Edit') }}
+                                            </button>
+                                        
+                                            <!-- Delete Button -->
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrency({{ $currency['id'] }})">
+                                                {{ __('Delete') }}
+                                            </button>
                                         </td>
                                         {{-- <td>
                                             <input type="checkbox" class="form-check-input" name="ids[]"
@@ -141,9 +140,7 @@
                     const data = await response.json();
                     if (response.ok) {
                         alert(data.success); // Display success message
-                        // Optionally, remove the deleted currency element from the DOM
-                        document.getElementById(`currency-${currencyId}`)
-                    .remove(); // Adjust based on your HTML structure
+                        window.location.reload(); // Reload the page to reflect changes
                     } else {
                         console.error(`Error deleting item ID ${currencyId}:`, data.error);
                     }
