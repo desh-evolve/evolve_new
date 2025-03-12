@@ -190,7 +190,7 @@ class Factory {
 	//Determines if the data is new data, or updated data.
 	public function isNew($force_lookup = false) {
 		// Check if the model has an ID (i.e., it's an existing record)
-		if ($this->getId() === false) {
+		if (empty($this->getId())) {
 			// New Data (no ID set)
 			return true;
 		} elseif ($force_lookup === true) {
@@ -202,7 +202,6 @@ class Factory {
 				return true;
 			}
 		}
-	
 		// Not new data (the record exists in the DB)
 		return false;
 	}
@@ -1433,9 +1432,8 @@ class Factory {
 	}
 	*/
 
-	function Save($reset_data = TRUE, $force_lookup = FALSE) {
+	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		DB::beginTransaction();
-		
 		try {
 			// Validate the model before saving (if not deleted)
 			if (!$this->getDeleted() && !$this->isValid()) {
@@ -1447,9 +1445,9 @@ class Factory {
 
 			// Get the data dynamically
 			$data = $this->data;
+
 			// Determine if we're inserting a new record or updating an existing one
 			if ($this->isNew($force_lookup)) {
-				
 				//Insert
 				$time = TTDate::getTime();
 				
@@ -1509,6 +1507,7 @@ class Factory {
 			
 			return $retval;
 		} catch (\Exception $e) {
+			dd($e->getMessage());
 			// Roll back the transaction on error
 			DB::rollBack();
 			Log::error('Save failed: ' . $e->getMessage());

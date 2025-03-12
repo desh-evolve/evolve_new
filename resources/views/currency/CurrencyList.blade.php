@@ -84,10 +84,7 @@
                                                 href="{{ route('currency.add', ['id' => $currency['id'] ?? '']) }}">{{ __('Edit') }}</a>
 
                                             {{-- @if ($permission->check('currency', 'delete')) --}}
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="deleteCurrency({{ $currency['id'] }})">
-                                                Delete
-                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrency({{ $currency['id'] }})">{{ __('Delete') }}</button>
                                             {{-- @endif --}}
                                         </td>
                                         {{-- <td>
@@ -103,39 +100,22 @@
                                 value="{{ $data['id'] ?? '' }}">
 
                             @if ($permission->Check('currency', 'add'))
-                                <button type="submit" name="action:Update_Rates"
+                                <button type="button" name="action:Update_Rates"
                                     class="btn btn-secondary">Update Rates</button>
-                                <button type="submit" name="action:add"
+                                <button type="button" name="action:add"
                                     class="btn btn-success">Add</button>
                             @endif
 
                             @if ($permission->Check('currency', 'delete'))
-                                <button type="submit" name="action:delete" class="btn btn-danger"
+                                <button type="button" name="action:delete" class="btn btn-danger"
                                     onclick="return confirmSubmit()">Delete</button>
                             @endif
 
                             @if ($permission->Check('currency', 'undelete'))
-                                <button type="submit" name="action:undelete"
+                                <button type="button" name="action:undelete"
                                     class="btn btn-warning">UnDelete</button>
                             @endif
                         </div> --}}
-                        <div class="form-group d-flex justify-content-end">
-                            <input type="hidden" name="id" id="currency_id" value="{{ $data['id'] ?? '' }}">
-
-                            {{-- @if ($permission->Check('currency', 'delete')) --}}
-                            <button type="submit" name="action:delete" class="btn btn-danger me-2"
-                                onclick="return confirmSubmit()">Delete</button>
-                            {{-- @endif --}}
-
-                        </div>
-
-                        <div class="form-group d-flex justify-content-end">
-                            <input type="hidden" name="id" id="currency_id" value="{{ $data['id'] ?? '' }}">
-                            <button type="button" class="btn btn-danger btn-sm"
-                                onclick="deleteCurrency({{ $currency['id'] }})">
-                                <i class="ri-delete-bin-fill"></i>
-                            </button>
-                        </div>
 
                     </div>
                 </div><!-- end card -->
@@ -145,30 +125,6 @@
         <!-- end col -->
     </div>
     <script>
-        // async function deleteCurrency(currencyId) {
-        //     if (confirm('Are you sure you want to delete this item?')) {
-        //         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        //         try {
-        //             const response = await fetch(`/currency/delete/${currencyId}`, {
-        //                 method: 'DELETE',
-        //                 headers: {
-        //                     'X-CSRF-TOKEN': token,
-        //                     'Content-Type': 'application/json'
-        //                 }
-        //             });
-
-        //             if (response.ok) {
-        //                 window.location.reload(); // Reload the page to reflect changes
-        //             } else {
-        //                 console.error(`Error deleting item ID ${currencyId}:`, response.statusText);
-        //             }
-        //         } catch (error) {
-        //             console.error(`Error deleting item ID ${currencyId}:`, error);
-        //         }
-        //     }
-        // }
-
         async function deleteCurrency(currencyId) {
             if (confirm('Are you sure you want to delete this item?')) {
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -181,7 +137,7 @@
                             'Content-Type': 'application/json'
                         }
                     });
-
+                
                     const data = await response.json();
                     if (response.ok) {
                         alert(data.success); // Display success message

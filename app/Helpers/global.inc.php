@@ -482,4 +482,5 @@ if ( isset($enable_wap) AND $enable_wap == TRUE ) {
 
 require_once('Cache.inc.php');
 require_once('Database.inc.php');
+
 ?>

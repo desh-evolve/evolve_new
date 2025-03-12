@@ -69,107 +69,55 @@ class CurrencyList extends Controller
 
         Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
 
-        $action = Misc::findSubmitButton();
+        BreadCrumb::setCrumb('Currency List');
 
-        switch ($action) {
-            case 'update_rates':
-                CurrencyFactory::updateCurrencyRates($current_company->getId());
-                Redirect::Page(URLBuilder::getURL(NULL, '/currency'));
-                break;
+        $clf = new CurrencyListFactory();
+        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
+        $pager = new Pager($clf);
+        $iso_code_options = $clf->getISOCodesArray();
 
-            case 'add':
-                Redirect::Page(URLBuilder::getURL(NULL, '/currency/add'));
-                break;
+        $currencies = [];
+        $base_currency = false;
 
-            case 'delete':
-            case 'undelete':
-                $delete = strtolower($action) == 'delete';
-                $clf = new CurrencyListFactory();
-
-                if (!empty($ids) && is_array($ids)) {
-                    foreach ($ids as $id) {
-                        $clf->getByIdAndCompanyId($id, $current_company->getId());
-                        foreach ($clf as $c_obj) {
-                            $c_obj->setDeleted($delete);
-                            if ($c_obj->isValid()) {
-                                $c_obj->Save();
-                            }
-                        }
-                    }
-                }
-                Redirect::Page(URLBuilder::getURL(NULL, '/currency'));
-                break;
-
-            default:
-                BreadCrumb::setCrumb('Currency List');
-                $clf = new CurrencyListFactory();
-                $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
-                $pager = new Pager($clf);
-                $iso_code_options = $clf->getISOCodesArray();
-
-                $currencies = [];
-                $base_currency = false;
-
-                foreach ($clf->rs as $c_obj) {
-                    if ($c_obj->is_base) {
-                        $base_currency = true;
-                    }
-                    $currencies[] = [
-                        'id' => $c_obj->id,
-                        'status_id' => $c_obj->status_id,
-                        'name' => $c_obj->name,
-                        'iso_code' => $c_obj->iso_code,
-                        'currency_name' => Option::getByKey($c_obj->iso_code, $iso_code_options),
-                        'conversion_rate' => $c_obj->conversion_rate,
-                        'auto_update' => $c_obj->auto_update,
-                        'is_base' => $c_obj->is_base,
-                        'is_default' => $c_obj->is_default,
-                        'deleted' => $c_obj->deleted
-                    ];
-                }
-
-                $data = [
-                    'title' => 'Currency List',
-                    'currencies' => $currencies,
-                    'base_currency' => $base_currency,
-                    'sort_column' => $sort_array['sort_column'] ?? '',
-                    'sort_order' => $sort_array['sort_order'] ?? '',
-                    'paging_data' => $pager->getPageVariables()
-                ];
-
-                return view('currency.CurrencyList', $data);
-                break;
+        foreach ($clf->rs as $c_obj) {
+            if ($c_obj->is_base) {
+                $base_currency = true;
+            }
+            $currencies[] = [
+                'id' => $c_obj->id,
+                'status_id' => $c_obj->status_id,
+                'name' => $c_obj->name,
+                'iso_code' => $c_obj->iso_code,
+                'currency_name' => Option::getByKey($c_obj->iso_code, $iso_code_options),
+                'conversion_rate' => $c_obj->conversion_rate,
+                'auto_update' => $c_obj->auto_update,
+                'is_base' => $c_obj->is_base,
+                'is_default' => $c_obj->is_default,
+                'deleted' => $c_obj->deleted
+            ];
         }
+
+        $data = [
+            'title' => 'Currency List',
+            'currencies' => $currencies,
+            'base_currency' => $base_currency,
+            'sort_column' => $sort_array['sort_column'] ?? '',
+            'sort_order' => $sort_array['sort_order'] ?? '',
+            'paging_data' => $pager->getPageVariables()
+        ];
+
+        return view('currency.CurrencyList', $data);
     }
 
-    // public function delete($id)
-    // {
-    //     $current_company = $this->company;
-    //     // dd($id);
-    //     // print_r($request);
-    //     // exit;
+    public function update_rates(){
+        $current_company = $this->company;
+        CurrencyFactory::updateCurrencyRates($current_company->getId());
+        Redirect::Page(URLBuilder::getURL(NULL, '/currency'));
+    }
 
-    //     // $ids = $request->input('ids', []); // Array of IDs to delete
-
-    //     if (empty($id)) {
-    //         return redirect()->back()->withErrors(['error' => 'No currencies selected.']);
-    //     }
-
-    //     $clf = new CurrencyListFactory();
-
-    //     // foreach ($ids as $id) {
-    //         $clf->getByIdAndCompanyId($id, $current_company->getId());
-    //         foreach ($clf as $c_obj) {
-    //             $c_obj->setDeleted(true); // Set deleted flag to true
-    //             if ($c_obj->isValid()) {
-    //                 $c_obj->Save();
-    //             }
-    //         }
-    //     // }
-
-    //     // Redirect with success message
-    //     return redirect()->to(URLBuilder::getURL(null, '/currency'))->with('success', 'Currencies deleted successfully.');
-    // }
+    public function add(){
+        Redirect::Page(URLBuilder::getURL(NULL, '/currency/add'));
+    }
 
     public function delete($id)
     {
@@ -178,18 +126,25 @@ class CurrencyList extends Controller
         if (empty($id)) {
             return response()->json(['error' => 'No currencies selected.'], 400);
         }
-
+        
         $clf = new CurrencyListFactory();
         $currency = $clf->getByIdAndCompanyId($id, $current_company->getId());
         
         foreach ($currency->rs as $c_obj) {
+            $currency->data = (array)$c_obj; // added bcz currency data is null and it gives an error
+            
             $currency->setDeleted(true); // Set deleted flag to true
+
             if ($currency->isValid()) {
-                $currency->Save();
+                $res = $currency->Save();
+                
+                if($res){
+                    return response()->json(['success' => 'Currency deleted successfully.']);
+                }else{
+                    return response()->json(['error' => 'Currency deleted failed.']);
+                }
             }
         }
-        dd($currency->rs);
-
-        return response()->json(['success' => 'Currency deleted successfully.']);
+        
     }
 }

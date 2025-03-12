@@ -519,13 +519,13 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id
+					':id' => $id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	currency_id = ?
+					where	currency_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, FALSE );
