@@ -140,6 +140,7 @@ class ProgressBar extends Controller
 	}
 
 	public function generate_paystubs(){
+		print_r('Generate Pay Stubs');exit;
 		//Debug::setVerbosity(11);
 
 		Debug::Text('Generate Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
