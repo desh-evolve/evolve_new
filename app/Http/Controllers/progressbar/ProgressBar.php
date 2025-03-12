@@ -26,6 +26,8 @@ class ProgressBar extends Controller
     protected $company;
     protected $userPrefs;
 
+	public $progress = 0;
+
     public function __construct() {
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
@@ -60,70 +62,26 @@ class ProgressBar extends Controller
 
     }
 
-	//START Progress Bar Header...
 	public function InitProgressBar( $increment = 1 ) {
-		print_r($increment);exit;
-
-		global $progress_bar;
-	
-		$progress_bar = new HTML_Progress();
-		$progress_bar->setAnimSpeed(100);
-	
-		//$progress_bar->setIncrement( (int)$increment );
-		//$progress_bar->setIndeterminate(true);
-		$progress_bar->setBorderPainted(true);
-	
-	
-		$ui =& $progress_bar->getUI();
-		$ui->setCellAttributes('active-color=#3874B4 inactive-color=#CCCCCC width=10');
-		$ui->setBorderAttributes('width=1 color=navy');
-		$ui->setStringAttributes('width=60 font-size=14 background-color=#FFFFFF align=center');
-	
-		?>
-		<html>
-		<head>
-		<style type="text/css">
-		<!--
-		<?php echo $progress_bar->getStyle(); ?>
-	
-		body {
-				background-color: #FFFFFF;
-				/*color: #FFFFFF;*/
-				font-family: Verdana, freesans;
-		}
-	
-		a:visited, a:active, a:link {
-				color: yellow;
-		}
-		
-		</style>
-		<script type="text/javascript">
-		<!--
-		<?php echo $progress_bar->getScript(); ?>
-		//-->
-		</script>
-		</head>
-		<body>
-	
-		<div align="center">
-		<?php
-		echo $progress_bar->toHtml();
+		if ($this->progress < 100) {
+            $this->progress += $increment;
+        }
 	}
-	//END Progress Bar Header...
 
-
+	//check here
 	public function index(){
+
 		$this->InitProgressBar( 10 );
 
 		for($i=0; $i < 11; $i++) {
-			$progress_bar->display();
-			$progress_bar->incValue();
 
 			if ( $i % 2 == 0 ) {
 				sleep(1);
 			}
 
 		}
+
+		return view('components.general.progress-bar', ['progress' => $this->progress]);
 	}
 
 	// function for recalculate_company & recalculate_employee
