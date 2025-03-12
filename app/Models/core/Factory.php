@@ -623,6 +623,30 @@ class Factory {
 		return FALSE;
 	}
 
+	protected function getListSQL($array, &$ph = null)
+	{
+		// Ensure it's an array
+		if (!is_array($array)) {
+			$array = explode(',', (string) $array); // Convert comma-separated string to array
+		}
+
+		// Trim values and filter out empty ones
+		$array = array_filter(array_map('trim', $array));
+
+		// If `$ph` is an array (used for binding), merge the values
+		if (is_array($ph)) {
+			foreach ($array as $key => $value) {
+				$param = ':param' . $key;
+				$ph[$param] = $value;
+				$array[$key] = $param;
+			}
+		}
+
+		return implode(',', $array);
+	}
+
+
+/* //commented by desh(2025-03-10)
 	protected function getListSQL($array, &$ph = NULL) {
 		if ( $ph === NULL ) {
 			if ( is_array( $array ) AND count($array) > 0) {
@@ -681,7 +705,7 @@ class Factory {
 			return $retval;
 		}
 	}
-
+*/
 	//This function takes plain input from the user and creates a SQL statement for filtering
 	//based on a date range.
 	// Supported Syntax:

@@ -16,6 +16,7 @@ use App\Models\Schedule\ScheduleFactory;
 use App\Models\Users\UserDefaultFactory;
 use App\Models\Users\UserFactory;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class BranchFactory extends Factory {
 	protected $table = 'branch';
@@ -177,7 +178,16 @@ class BranchFactory extends Factory {
 					);
 
 		$query = 'select id from '. $this->getTable() .' where manual_id = :manual_id AND company_id = :company_id AND deleted=0';
-		$id = $this->db->GetOne($query, $ph);
+		// $id = $this->db->GetOne($query, $ph);
+        $id = DB::select($query, $ph);
+
+        if ($id === FALSE ) {
+            $id = 0;
+        }else{
+            $id = current(get_object_vars($id[0]));
+        }
+
+
 		Debug::Arr($id,'Unique Code: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id === FALSE ) {
@@ -205,7 +215,7 @@ class BranchFactory extends Factory {
 		} elseif ($company_id == '' && method_exists(static::class, 'getCompany')) {
 			$company_id = static::getCompany();
 		}
-		
+
 
 		$blf = new BranchListFactory();
 		$blf->getHighestManualIDByCompanyId( $company_id );
@@ -251,7 +261,7 @@ class BranchFactory extends Factory {
 		return FALSE;
 	}
 
-	
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * THIS ID IS UNIQUE SHORT NAME OF THE BRANCH NAME
@@ -270,15 +280,15 @@ class BranchFactory extends Factory {
          */
         function setBranchShortID($value) {
             $value = trim($value);
-            
-	if ($value != NULL 
-                AND 
+
+	if ($value != NULL
+                AND
                 $this->Validator->isLength('branch_short_id', $value, ('Branch Short ID is too short or too long'), 1, 100)
                 AND
                 $this->Validator->isTrue('branch_short_id', $this->isUniqueBranchShortID($value), ('Branch Short ID is already in use, please enter a different one'))
         ) {
 
-            $this->data['branch_short_id'] = $value;            
+            $this->data['branch_short_id'] = $value;
 
             return TRUE;
         }
@@ -300,7 +310,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where branch_short_id = :branch_short_id AND company_id = :company_id AND deleted=0';
-            $id = $this->db->GetOne($query, $ph);
+            // $id = $this->db->GetOne($query, $ph);
+            $id = DB::select($query, $ph);
+
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -313,8 +331,8 @@ class BranchFactory extends Factory {
 
             return FALSE;
         }
-        
-        
+
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * THIS ID IS UNIQUE EPF NUMBER
@@ -333,15 +351,15 @@ class BranchFactory extends Factory {
          */
         function setEpfNo($value) {
             $value = trim($value);
-            
-	if ($value != NULL 
-                AND 
+
+	if ($value != NULL
+                AND
                 $this->Validator->isLength('epf_no', $value, ('EPF No is too short or too long'), 1, 100)
                 AND
                 $this->Validator->isTrue('epf_no', $this->isUniqueEpfNo($value), ('EPF No is already in use, please enter a different one'))
         ) {
 
-            $this->data['epf_no'] = $value;            
+            $this->data['epf_no'] = $value;
 
             return TRUE;
         }
@@ -363,7 +381,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where epf_no = :epf_no AND company_id = :company_id AND deleted=0';
-            $id = $this->db->GetOne($query, $ph);
+            // $id = $this->db->GetOne($query, $ph);
+            $id = DB::select($query, $ph);
+
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -375,12 +401,12 @@ class BranchFactory extends Factory {
             }
 
             return FALSE;
-        }        
-        
-        
-        
-        
-        
+        }
+
+
+
+
+
 
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
@@ -400,15 +426,15 @@ class BranchFactory extends Factory {
          */
         function setEtfNo($value) {
             $value = trim($value);
-            
-	if ($value != NULL 
-                AND 
+
+	if ($value != NULL
+                AND
                 $this->Validator->isLength('etf_no', $value, ('ETF No is too short or too long'), 1, 100)
                 AND
                 $this->Validator->isTrue('etf_no', $this->isUniqueEtfNo($value), ('ETF No is already in use, please enter a different one'))
         ) {
 
-            $this->data['etf_no'] = $value;            
+            $this->data['etf_no'] = $value;
 
             return TRUE;
         }
@@ -430,7 +456,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where etf_no = :etf_no AND company_id = :company_id AND deleted=0';
-            $id = $this->db->GetOne($query, $ph);
+            // $id = $this->db->GetOne($query, $ph);
+            $id = DB::select($query, $ph);
+
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -442,12 +476,12 @@ class BranchFactory extends Factory {
             }
 
             return FALSE;
-        }       
-        
-        
-        
-        
-        
+        }
+
+
+
+
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * THIS ID IS UNIQUE TIN NUMBER
@@ -466,15 +500,15 @@ class BranchFactory extends Factory {
          */
         function setTinNo($value) {
             $value = trim($value);
-            
-	if ($value != NULL 
-                AND 
+
+	if ($value != NULL
+                AND
                 $this->Validator->isLength('tin_no', $value, ('TIN No is too short or too long'), 1, 100)
                 AND
                 $this->Validator->isTrue('tin_no', $this->isUniqueTinNo($value), ('TIN No is already in use, please enter a different one'))
         ) {
 
-            $this->data['tin_no'] = $value;            
+            $this->data['tin_no'] = $value;
 
             return TRUE;
         }
@@ -496,7 +530,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where tin_no = :tin_no AND company_id = :company_id AND deleted=0';
-            $id = $this->db->GetOne($query, $ph);
+            // $id = $this->db->GetOne($query, $ph);
+            $id = DB::select($query, $ph);
+
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -508,12 +550,12 @@ class BranchFactory extends Factory {
             }
 
             return FALSE;
-        }            
-        
-        
-        
-        
-        
+        }
+
+
+
+
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * THIS ID IS UNIQUE Business Registration NUMBER
@@ -532,15 +574,15 @@ class BranchFactory extends Factory {
          */
         function setBusinessRegNo($value) {
             $value = trim($value);
-            
-	if ($value != NULL 
-                AND 
+
+	if ($value != NULL
+                AND
                 $this->Validator->isLength('business_reg_no', $value, ('Business Registration No is too short or too long'), 1, 100)
                 AND
                 $this->Validator->isTrue('business_reg_no', $this->isUniqueBusinessRegNo($value), ('Business Registration No is already in use, please enter a different one'))
         ) {
 
-            $this->data['business_reg_no'] = $value;            
+            $this->data['business_reg_no'] = $value;
 
             return TRUE;
         }
@@ -562,7 +604,15 @@ class BranchFactory extends Factory {
             );
 
             $query = 'select id from ' . $this->getTable() . ' where business_reg_no = :business_reg_no AND company_id = :company_id AND deleted=0';
-            $id = $this->db->GetOne($query, $ph);
+            // $id = $this->db->GetOne($query, $ph);
+            $id = DB::select($query, $ph);
+
+            if ($id === FALSE ) {
+                $id = 0;
+            }else{
+                $id = current(get_object_vars($id[0]));
+            }
+
             Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
             if ($id === FALSE) {
@@ -574,14 +624,14 @@ class BranchFactory extends Factory {
             }
 
             return FALSE;
-        }  	
-	
-	
-	
-	
-	
-	
-	
+        }
+
+
+
+
+
+
+
 	function isUniqueName($name) {
 		Debug::Arr($this->getCompany(),'Company: ', __FILE__, __LINE__, __METHOD__,10);
 		if ( $this->getCompany() == FALSE ) {
@@ -602,7 +652,15 @@ class BranchFactory extends Factory {
 					where company_id = :company_id
 						AND name = :name
 						AND deleted = 0';
-		$name_id = $this->db->GetOne($query, $ph);
+		// $name_id = $this->db->GetOne($query, $ph);
+        $name_id = DB::select($query, $ph);
+
+        if ($name_id === FALSE ) {
+            $name_id = 0;
+        }else{
+            $name_id = current(get_object_vars($name_id[0]));
+        }
+
 		Debug::Arr($name_id,'Unique Name: '. $name , __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $name_id === FALSE ) {

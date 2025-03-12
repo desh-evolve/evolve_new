@@ -42,13 +42,13 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -68,16 +68,16 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		}
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id,
-					'user_id' => $user_id
+					':pay_period_id' => $pay_period_id,
+					':user_id' => $user_id
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					where
-						a.pay_period_id = ?
-						AND a.user_id = ?
+						a.pay_period_id = :pay_period_id
+						AND a.user_id = :user_id
 						AND ( a.deleted = 0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -104,9 +104,9 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		$uf = new UserFactory();
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id,
-					'user_id' => $user_id,
-					'company_id' => $company_id
+					':pay_period_id' => $pay_period_id,
+					':user_id' => $user_id,
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -114,9 +114,9 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 					from	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where 	a.user_id = b.id
-						AND a.pay_period_id = ?
-						AND a.user_id = ?
-						AND b.company_id = ?
+						AND a.pay_period_id = :pay_period_id
+						AND a.user_id = :user_id
+						AND b.company_id = :company_id
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -140,7 +140,7 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 
 		$ph = array(
 					//'pay_period_id' => $pay_period_id,
-					'company_id' => $company_id
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -148,7 +148,7 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 					from	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where 	a.user_id = b.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.pay_period_id in ('. $this->getListSQL($pay_period_id, $ph).')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 						';
@@ -172,8 +172,8 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -181,8 +181,8 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 					from	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where 	a.user_id = b.id
-						AND a.id = ?
-						AND b.company_id = ?
+						AND a.id = :id
+						AND b.company_id = :company_id
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -206,13 +206,13 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		}
 
 		$ph = array(
-					'company_id' => $id
+					':company_id' => $id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -254,9 +254,9 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		$uf = new UserFactory();
 
 		$ph = array(
-					'status' => $status,
-					'level' => $level,
-					'max_level' => $max_level,
+					':status' => $status,
+					':level' => $level,
+					':max_level' => $max_level,
 					);
 
 		$query = '
@@ -265,9 +265,9 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 							'. $ppf->getTable() .' as b
 
 					where	a.pay_period_id = b.id
-						AND	a.status_id = ?
+						AND	a.status_id = :status
 						AND a.authorized = 0
-						AND ( a.authorization_level = ? OR a.authorization_level > ? )
+						AND ( a.authorization_level = :level OR a.authorization_level > :max_level )
 						AND a.user_id in ('. $this->getListSQL($ids, $ph).')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 				';
@@ -306,7 +306,7 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		$huf = new HierarchyUserFactory();
 
 		$ph = array(
-					'status' => $status,
+					':status' => $status,
 					);
 
 		$query = '
@@ -316,7 +316,7 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 							'. $huf->getTable() .' as z
 					where	a.pay_period_id = b.id
 						AND a.user_id = z.user_id
-						AND	a.status_id = ?
+						AND	a.status_id = :status
 						AND a.authorized = 0
 						AND ( '. HierarchyLevelFactory::convertHierarchyLevelMapToSQL( $hierarchy_level_map ) .' )
 						AND ( a.deleted = 0 AND b.deleted = 0 )
@@ -376,7 +376,7 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 		$ppf = new PayPeriodFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		//Need to make this return DISTINCT records only, because if the same child is assigned to multiple hierarchies,
@@ -412,7 +412,7 @@ class PayPeriodTimeSheetVerifyListFactory extends PayPeriodTimeSheetVerifyFactor
 						LEFT JOIN '. $ugf->getTable() .' as e ON ( b.group_id = e.id AND e.deleted = 0 )
 						LEFT JOIN '. $utf->getTable() .' as f ON ( b.title_id = f.id AND f.deleted = 0 )
 
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

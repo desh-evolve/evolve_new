@@ -91,7 +91,7 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 
-require_once( 'Numbers/Words.php');
+//require_once( 'Numbers/Words.php');
 
 class PayStubFactory extends Factory {
 

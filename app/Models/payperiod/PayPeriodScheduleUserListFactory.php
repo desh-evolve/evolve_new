@@ -30,13 +30,13 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -65,8 +65,8 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$ppsf = new PayPeriodScheduleFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -74,8 +74,8 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 					from	'. $this->getTable() .' as a,
 							'. $ppsf->getTable() .' as b
 					where	b.id = a.pay_period_schedule_id
-						AND b.company_id = ?
-						AND a.pay_period_schedule_id = ?
+						AND b.company_id = :company_id
+						AND a.pay_period_schedule_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -101,8 +101,8 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$ppsf = new PayPeriodScheduleFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -110,8 +110,8 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 					from	'. $this->getTable() .' as a,
 							'. $ppsf->getTable() .' as b
 					where	b.id = a.pay_period_schedule_id
-						AND b.company_id = ?
-						AND a.pay_period_schedule_id = ?
+						AND b.company_id = :company_id
+						AND a.pay_period_schedule_id = :id
 						AND a.user_id in ( '. $this->getListSQL($user_id, $ph) .' )
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -137,7 +137,7 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$ppsf = new PayPeriodScheduleFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -145,7 +145,7 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 					from	'. $this->getTable() .' as a,
 							'. $ppsf->getTable() .' as b
 					where	b.id = a.pay_period_schedule_id
-						AND pay_period_schedule_id = ?
+						AND pay_period_schedule_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -167,8 +167,8 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 		$ppsf = new PayPeriodScheduleFactory();
 
 		$ph = array(
-					'id' => $id,
-					'user_id' => $user_id
+					':id' => $id,
+					':user_id' => $user_id
 					);
 
 		$query = '
@@ -176,8 +176,8 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 					from	'. $this->getTable() .' as a,
 							'. $ppsf->getTable() .' as b
 					where	b.id = a.pay_period_schedule_id
-						AND pay_period_schedule_id = ?
-						AND user_id = ?
+						AND pay_period_schedule_id = :id
+						AND user_id = :user_id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

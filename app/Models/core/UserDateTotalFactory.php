@@ -1259,18 +1259,18 @@ class UserDateTotalFactory extends Factory {
 
                 Debug::text('&nbsp;&nbsp;Checking Against Policy: ' . $otp_obj->getName() . ' Trigger Time: ' . $otp_obj->getTriggerTime(), __FILE__, __LINE__, __METHOD__, 10);
                 $trigger_time = NULL;
-//                echo '<br>------------------';
-//                echo '<br>type:::'.$otp_obj->getType();
-//                echo '<br>datestamp::'.date('Y-m-d',$this->getUserDateObject()->getDateStamp());
+                    //                echo '<br>------------------';
+                    //                echo '<br>type:::'.$otp_obj->getType();
+                    //                echo '<br>datestamp::'.date('Y-m-d',$this->getUserDateObject()->getDateStamp());
                 
                 switch ($otp_obj->getType()) {
 
                     case 10: //Daily
-//                        echo '<br>type is 10 case:: Daily';
+                        //echo '<br>type is 10 case:: Daily';
                         $trigger_time = $otp_obj->getTriggerTime();
                         $max_time = $otp_obj->getMaxTime();
                         $npvc_daily = true;
-//                        echo '<br>trigger_time::' . $trigger_time;
+                        //echo '<br>trigger_time::' . $trigger_time;
                         Debug::text(' Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         break;
                     case 20: //Weekly
@@ -1309,14 +1309,14 @@ class UserDateTotalFactory extends Factory {
                         unset($first_week_total, $week_modifier, $current_week_modifier);
                         break;
                     case 40: //Sunday
-//                        echo '<br><br>type is 40 case sunday';
+                    //                        echo '<br><br>type is 40 case sunday';
                         if (date('w', $this->getUserDateObject()->getDateStamp()) == 0) {
                             $trigger_time = $otp_obj->getTriggerTime();
                             $max_time = $otp_obj->getMaxTime();
                             Debug::text(' DayOfWeek OT for Sat ... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT DayOfWeek OT for Sat...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
 
                         break;
@@ -1326,7 +1326,7 @@ class UserDateTotalFactory extends Factory {
                             Debug::text(' DayOfWeek OT for Sat ... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT DayOfWeek OT for Sat...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
                         break;
                     case 60: //Tuesday
@@ -1335,7 +1335,7 @@ class UserDateTotalFactory extends Factory {
                             Debug::text(' DayOfWeek OT for Sat ... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT DayOfWeek OT for Sat...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
                         break;
                     case 70: //Wed
@@ -1344,7 +1344,7 @@ class UserDateTotalFactory extends Factory {
                             Debug::text(' DayOfWeek OT for Sat ... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT DayOfWeek OT for Sat...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
                         break;
                     case 80: //Thu
@@ -1353,7 +1353,7 @@ class UserDateTotalFactory extends Factory {
                             Debug::text(' DayOfWeek OT for Sat ... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT DayOfWeek OT for Sat...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
                         break;
                     case 90: //Fri
@@ -1362,25 +1362,25 @@ class UserDateTotalFactory extends Factory {
                             Debug::text(' DayOfWeek OT for Sat ... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT DayOfWeek OT for Sat...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
                         break;
                     case 100: //Sat
-//                        echo '<br> type 100 Saturday';
+                                //                        echo '<br> type 100 Saturday';
                         if (date('w', $this->getUserDateObject()->getDateStamp()) == 6) {
                              $hlf = new HolidayListFactory();
                              $hlf->getByPolicyGroupUserIdAndDate($this->getUserDateObject()->getUser(), $this->getUserDateObject()->getDateStamp());
                              if ($hlf->getRecordCount() > 0) {
-//                                 echo '<br> have a holi count';
+                                            //                                 echo '<br> have a holi count';
                                  continue 2;
                              } else {
-//                                 echo '<br> not have a holi count';
+                                //                                 echo '<br> not have a holi count';
                                  $trigger_time = $otp_obj->getTriggerTime();
                              }
                             Debug::text(' DayOfWeek OT for Sat ... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT DayOfWeek OT for Sat...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
                         break;
                     case 150: //2-day Consecutive
@@ -1423,12 +1423,12 @@ class UserDateTotalFactory extends Factory {
                             Debug::text(' After Days Consecutive... Daily Trigger Time: ' . $trigger_time, __FILE__, __LINE__, __METHOD__, 10);
                         } else {
                             Debug::text(' NOT After Days Consecutive Worked...', __FILE__, __LINE__, __METHOD__, 10);
-                            continue;
+                            continue 2;
                         }
                         unset($weekly_days_worked, $minimum_days_worked);
                         break;
                     case 180: // Poya Holiday
-//                        echo '<br>type is 180 case Poya holiday';
+                            //                        echo '<br>type is 180 case Poya holiday';
 
                         $hlf = new HolidayListFactory();
 
@@ -1462,7 +1462,7 @@ class UserDateTotalFactory extends Factory {
 
                         break;
                     case 190: // S Holiday
-//                        echo '<br>type is 190 case S holiday';
+                        //                        echo '<br>type is 190 case S holiday';
 
                         $hlf = new HolidayListFactory();
 

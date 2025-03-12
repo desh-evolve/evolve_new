@@ -90,7 +90,13 @@ class HierarchyUserFactory extends Factory {
 					AND c.deleted = 0
 				';
 		//Debug::Arr($ph,'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
-		$user_id = $this->db->GetOne($query, $ph);
+		$user_id = DB::select($query, $ph);
+
+		if ($user_id === FALSE ) {
+            $user_id = 0;
+        }else{
+            $user_id = current(get_object_vars($user_id[0]));
+        }
 
 		if ( $user_id === FALSE ) {
 			return TRUE;

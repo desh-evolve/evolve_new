@@ -157,4 +157,13 @@ function commonAlert(icon, msg) {
     });
 }
 
+//desh(2025-03-12)
+function checkAll(elem) {
+    let isChecked = $(elem).prop('checked'); 
+    $(elem).closest('form').find('input[type="checkbox"]').prop('checked', isChecked);
+}
+
+
+
+
 </script>

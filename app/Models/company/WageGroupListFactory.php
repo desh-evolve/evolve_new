@@ -166,11 +166,11 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 			}
 			$strict = TRUE;
 		}
-		
+
 		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 
-		$uf = new UserFactory(); 
+		$uf = new UserFactory();
 
 		$ph = array(
 					':company_id' => $company_id,
@@ -199,8 +199,8 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = '%' . strtolower(trim($filter_data['name'])) . '%';
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';
