@@ -3,6 +3,8 @@
 use App\Http\Controllers\payperiod\ClosePayPeriod;
 use App\Http\Controllers\currency\CurrencyList;
 use App\Http\Controllers\currency\EditCurrency;
+use App\Http\Controllers\branch\BranchList;
+use App\Http\Controllers\branch\EditBranch;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\progressbar\ProgressBar;
@@ -19,11 +21,19 @@ Route::post('/authenticate', [Login::class, 'login'])->name('authenticate');
 
 Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 
+// ==================== currency =====================================================================================
 Route::get('/currency', [CurrencyList::class, 'index'])->name('currency.index');
 
 Route::get('/currency/add/{id?}', [EditCurrency::class, 'index'])->name('currency.add');
 Route::post('/currency/save/{id?}', [EditCurrency::class, 'save'])->name('currency.save');
 Route::delete('/currency/delete/{id}', [CurrencyList::class, 'delete'])->name('currency.delete');
+
+// ==================== branch =====================================================================================
+Route::get('/branch', [BranchList::class, 'index'])->name('branch.index');
+
+Route::get('/branch/add/{id?}', [EditBranch::class, 'index'])->name('branch.add');
+Route::post('/branch/save/{id?}', [EditBranch::class, 'save'])->name('branch.save');
+Route::delete('/branch/delete/{id}', [BranchList::class, 'delete'])->name('branch.delete');
 
 
 
