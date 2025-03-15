@@ -6,6 +6,7 @@ namespace App\Models\Core;
 use App\Models\PayPeriod\PayPeriodFactory;
 use App\Models\Punch\PunchControlFactory;
 use App\Models\Users\UserFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -35,7 +36,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$this->rs = $this->getCache($id);
@@ -44,7 +45,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -83,13 +84,13 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -113,8 +114,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$uf = new UserFactory();
@@ -124,8 +125,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
-						AND	a.id = ?
+						AND	b.company_id = :company_id
+						AND	a.id = :id
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -158,9 +159,9 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$ppf = new PayPeriodFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
+					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
 					);
 
 		$query = '
@@ -168,9 +169,9 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 						LEFT JOIN '. $ppf->getTable() .' as c ON a.pay_period_id = c.id
-					where	b.company_id = ?
-						AND a.date_stamp >= ?
-						AND a.date_stamp <= ?
+					where	b.company_id = :company_id
+						AND a.date_stamp >= :start_date
+						AND a.date_stamp <= :end_date
 						AND c.status_id in ('. $this->getListSQL($status, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )';
 
@@ -188,13 +189,13 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -209,13 +210,13 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id,
+					':pay_period_id' => $pay_period_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	pay_period_id = ?
+					where	pay_period_id = :pay_period_id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -232,7 +233,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'date' => $this->db->BindDate( $date ),
+					':date' => Carbon::parse($date)->format('Y-m-d'),
 					);
 
 		$query = '
@@ -240,7 +241,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					where
-						a.date_stamp = ?
+						a.date_stamp = :date
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
 
@@ -261,16 +262,16 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'date' => $this->db->BindDate( $date ),
+					':user_id' => $user_id,
+					':date' => Carbon::parse($date)->format('Y-m-d'),
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-						user_id = ?
-						AND date_stamp = ?
+						user_id = :user_id
+						AND date_stamp = :date
 						AND deleted = 0
 					ORDER BY id ASC
 					';
@@ -305,16 +306,16 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
+					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-						date_stamp >= ?
-						AND date_stamp <= ?
+						date_stamp >= :start_date
+						AND date_stamp <= :end_date
 						AND user_id in ('. $this->getListSQL($user_ids, $ph) .')
 						AND deleted = 0
 					';
@@ -349,16 +350,16 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
+					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-						date_stamp >= ?
-						AND date_stamp <= ?
+						date_stamp >= :start_date
+						AND date_stamp <= :end_date
 						AND user_id in ('. $this->getListSQL($user_ids, $ph) .')
 						AND ( pay_period_id = 0 OR pay_period_id IS NULL )
 						AND deleted = 0
@@ -427,7 +428,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					//'pay_period_id' => $pay_period_id,
 					);
 
@@ -437,7 +438,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as b
 					where
 						a.user_id = b.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.pay_period_id in ('. $this->getListSQL($pay_period_id, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
@@ -490,9 +491,9 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$pcf = new PunchControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
+					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
 					);
 
 		$query = '
@@ -508,9 +509,9 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 						from	'. $this->getTable() .' as a,
 								'. $uf->getTable() .' as b
 						where 	a.user_id = b.id
-							AND b.company_id = ?
-							AND a.date_stamp >= ?
-							AND a.date_stamp <= ?
+							AND b.company_id = :company_id
+							AND a.date_stamp >= :start_date
+							AND a.date_stamp <= :end_date
 							AND a.user_id in ('. $this->getListSQL($user_ids, $ph) .')
 							AND exists(
 										select id
@@ -523,39 +524,6 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 						) tmp
 					GROUP BY user_id
 					';
-
-/*
-		$query = '
-					select 	user_id,
-							avg(total) as avg,
-							min(total) as min,
-							max(total) as max
-					from (
-
-						select 	a.user_id,
-								(date_part(\''.$time_period.'\', a.date_stamp) || \'-\' || date_part(\'year\', a.date_stamp) ) as date,
-								count(*) as total
-						from	'. $this->getTable() .' as a,
-								'. $uf->getTable() .' as b
-						where 	a.user_id = b.id
-							AND b.company_id = ?
-							AND a.date_stamp >= ?
-							AND a.date_stamp <= ?
-							AND a.user_id in ('. $this->getListSQL($user_ids, $ph) .')
-							AND exists(
-										select id
-										from '. $pcf->getTable() .' as z
-										where z.user_date_id = a.id
-										AND z.deleted=0
-										)
-							AND ( a.deleted = 0 AND b.deleted=0 )
-							GROUP BY user_id,(date_part(\''. $time_period.'\', a.date_stamp) || \'-\' ||  date_part(\'year\', a.date_stamp) )
-						) tmp
-					GROUP BY user_id
-					';
-*/
-		//$query .= $this->getWhereSQL( $where );
-		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
 
@@ -578,18 +546,18 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'date' => $this->db->BindDate( $date ),
-					'deleted' => (int)$deleted
+					':user_id' => $user_id,
+					':date' => Carbon::parse($date)->format('Y-m-d'),
+					':deleted' => (int)$deleted
 					);
 
 		$query = '
 					delete
 					from	'. $this->getTable() .'
 					where
-						user_id = ?
-						AND date_stamp = ?
-						AND deleted = ?
+						user_id = :user_id
+						AND date_stamp = :date
+						AND deleted = :deleted
 					';
 
 		$this->rs = DB::select($query, $ph);
@@ -631,25 +599,24 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
                 
                 
                 $ph = array(
-					'user_id' => $user_id,
-                                        'absence_policy_id'=>$absence_policy_id,
-					
-					);
+					':user_id' => $user_id,
+                    ':absence_policy_id'=>$absence_policy_id,
+				);
                 
                 
                 $udtf= new UserDateTotalFactory();
                 
                 $query = "
 					SELECT sum(udt.total_time ) as total_nopay_time
-FROM  ". $this->getTable() ." as a
-inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
-where a.user_id = ? 
-and udt.status_id = 30
-and udt.type_id = 10
-and udt.absence_policy_id = ? 
-and a.date_stamp between '".$nopay_start_date."' AND '".$nopay_end_date."'
-and a.deleted = 0 
-and udt.deleted = 0";
+					FROM  ". $this->getTable() ." as a
+					inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
+					where a.user_id = :user_id
+					and udt.status_id = 30
+					and udt.type_id = 10
+					and udt.absence_policy_id = :absence_policy_id
+					and a.date_stamp between '".$nopay_start_date."' AND '".$nopay_end_date."'
+					and a.deleted = 0 
+					and udt.deleted = 0";
 
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
@@ -681,26 +648,26 @@ function getTotalNopayTimeByPayperiods($user_id,$absence_policy_id,$pay_periods_
                 
                 
                 $ph = array(
-					'user_id' => $user_id,
-                                        'absence_policy_id'=>$absence_policy_id,
-                                        'pay_period_id'=>$pay_periods_id,
+					':user_id' => $user_id,
+					':absence_policy_id'=>$absence_policy_id,
+					':pay_period_id'=>$pay_periods_id,
 					
-					);
+				);
                 
                 
                 $udtf= new UserDateTotalFactory();
                 
                 $query = "
 					SELECT sum(udt.total_time ) as total_nopay_time
-FROM  ". $this->getTable() ." as a
-inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
-where a.user_id = ? 
-and udt.status_id = 30
-and udt.type_id = 10
-and udt.absence_policy_id = ? 
-and a.pay_period_id = ?  
-and a.deleted = 0 
-and udt.deleted = 0";
+					FROM  ". $this->getTable() ." as a
+					inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
+					where a.user_id = :user_id
+					and udt.status_id = 30
+					and udt.type_id = 10
+					and udt.absence_policy_id = :absence_policy_id
+					and a.pay_period_id = :pay_period_id
+					and a.deleted = 0 
+					and udt.deleted = 0";
 
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );

@@ -5,7 +5,10 @@
 use App\Models\Core\Debug;
 use App\Models\Core\Misc;
 use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -790,17 +793,17 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		//Debug::Arr($order,'bOrder Data:', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 
-		$uf = new UserFactory();
+		$uf = new UserFactory(); 
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
@@ -820,7 +823,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
 			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
-				$uglf = new UserGroupListFactory();
+				$uglf = new UserGroupListFactory(); 
 				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 			}
 			$query  .=	' AND b.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';
@@ -845,16 +848,16 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['transaction_start_date']) AND trim($filter_data['transaction_start_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_start_date'])) );
-			$query  .=	' AND a.transaction_date >= ?';
+			$ph[':transaction_start_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_start_date'])) );
+			$query  .=	' AND a.transaction_date >= :transaction_start_date';
 		}
 		if ( isset($filter_data['transaction_end_date']) AND trim($filter_data['transaction_end_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_end_date'])) );
-			$query  .=	' AND a.transaction_date <= ?';
+			$ph[':transaction_end_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_end_date'])) );
+			$query  .=	' AND a.transaction_date <= :transaction_end_date';
 		}
 		if ( isset($filter_data['transaction_date']) AND trim($filter_data['transaction_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_date'])) );
-			$query  .=	' AND a.transaction_date = ?';
+			$ph[':transaction_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_date'])) );
+			$query  .=	' AND a.transaction_date = :transaction_date';
 		}
 
 		$query .= 	'
@@ -862,7 +865,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
-
+		
 		if ($limit == NULL) {
 			$this->rs = DB::select($query, $ph);
 		} else {
@@ -1032,8 +1035,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		return $this;
 	}
         
-        function getByPayperiodsIdAndUserId($pay_periods_id,$user_id,$limit = NULL, $page = NULL)
-        {
+    function getByPayperiodsIdAndUserId($pay_periods_id,$user_id,$limit = NULL, $page = NULL){
             
             if ( $pay_periods_id == '') {
 			return FALSE;
@@ -1047,27 +1049,26 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
             
             $uf = new UserFactory();
             
-            
             $ph = array(
-					'pay_period_id' => $pay_periods_id,
-                                        'user_id' => $user_id,
-					);
+				':pay_period_id' => $pay_periods_id,
+                ':user_id' => $user_id,
+			);
             
             
             $query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
-					where	a.pay_period_id = ? AND a.user_id= ? 
+					where	a.pay_period_id = :pay_period_id AND a.user_id= :user_id 
                                          AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
             
             
-             if ($limit == NULL) {
-			$this->rs = DB::select($query, $ph);
-		} else {
-			$this->rs = DB::select($query, $ph);
-		}
+			if ($limit == NULL) {
+				$this->rs = DB::select($query, $ph);
+			} else {
+				$this->rs = DB::select($query, $ph);
+			}
 
             return $this;
                 

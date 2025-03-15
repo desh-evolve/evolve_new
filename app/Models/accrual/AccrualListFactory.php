@@ -725,16 +725,13 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			return FALSE;
 		}
 
-
-                if ( $type_id == '') {
+		if ( $type_id == '') {
 			return FALSE;
 		}
 
-
-                if ( $date_stamp == '') {
+        if ( $date_stamp == '') {
 			return FALSE;
 		}
-
 
 		$ph = array(
 			':time_stamp' => $date_stamp,

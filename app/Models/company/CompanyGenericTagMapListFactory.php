@@ -106,8 +106,6 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 			return FALSE;
 		}
 
-
-
 		$additional_order_fields = array( 'cgtf.name' );
 
 		if ( $order == NULL ) {
@@ -120,7 +118,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$cgtf = new CompanyGenericTagFactory();
 
 		$ph = array( ':company_id' => $company_id);
-
+		
 		//This should be a list of just distinct
 		$query = '
 					select
@@ -136,7 +134,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		$this->rs = DB::select($query, $ph);
-
+		
 		return $this;
 	}
 /*
