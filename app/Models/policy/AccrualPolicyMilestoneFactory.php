@@ -96,7 +96,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 		if ( is_object($this->accrual_policy_obj) ) {
 			return $this->accrual_policy_obj;
 		} else {
-			$aplf = TTnew( 'AccrualPolicyListFactory' );
+			$aplf = new AccrualPolicyListFactory();
 			$aplf->getById( $this->getAccrualPolicyID() );
 			if ( $aplf->getRecordCount() > 0 ) {
 				$this->accrual_policy_obj = $aplf->getCurrent();
@@ -117,7 +117,7 @@ class AccrualPolicyMilestoneFactory extends Factory {
 	function setAccrualPolicy($id) {
 		$id = trim($id);
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'accrual_policy',
 													$aplf->getByID($id),

@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 
 		foreach ($ids as $id) {
 			$pplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -81,7 +81,7 @@ switch ($action) {
 
 	default:
 		BreadCrumb::setCrumb($title);
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 		$pplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($pplf);

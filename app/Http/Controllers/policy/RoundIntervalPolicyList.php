@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+		$riplf = new RoundIntervalPolicyListFactory();
 
 		foreach ($ids as $id) {
 			$riplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -77,7 +77,7 @@ switch ($action) {
 		break;
 
 	default:
-		$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+		$riplf = new RoundIntervalPolicyListFactory();
 		$riplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($riplf);

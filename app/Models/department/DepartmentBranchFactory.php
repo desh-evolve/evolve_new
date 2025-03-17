@@ -13,7 +13,7 @@ class DepartmentBranchFactory extends Factory {
 	function setDepartment($id) {
 		$id = trim($id);
 		
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'company',
@@ -34,7 +34,7 @@ class DepartmentBranchFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 		
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'company',

@@ -48,7 +48,7 @@ if ( $sort_column != '' ) {
 }
 
 
-//$ppslf = TTnew( 'PayPeriodScheduleFactory' );
+//$ppslf = new PayPeriodScheduleFactory();
 
 Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
 
@@ -66,7 +66,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$hclf = TTnew( 'HierarchyControlListFactory' );
+		$hclf = new HierarchyControlListFactory();
 
 		foreach ($ids as $id) {
 			//$dsclf->GetByIdAndUserId($id, $current_user->getId() );
@@ -82,12 +82,12 @@ switch ($action) {
 		break;
 
 	default:
-		$hclf = TTnew( 'HierarchyControlListFactory' );
+		$hclf = new HierarchyControlListFactory();
 		$hclf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		$pager = new Pager($hclf);
 
-		$hotf = TTnew( 'HierarchyObjectTypeFactory' );
+		$hotf = new HierarchyObjectTypeFactory();
 		$object_type_options = $hotf->getOptions('object_type');
 
 		foreach ($hclf as $hierarchy_control) {

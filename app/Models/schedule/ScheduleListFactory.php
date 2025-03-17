@@ -117,7 +117,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					);
                 
                 //FL CHANGED THE QUERY FOR NPVC 20160812
-                $spf = TTnew('SchedulePolicyFactory');
+                $spf = new SchedulePolicyFactory();
                   
 		$query = '
 					select 	a.*, b.name as shedule_policy_name

@@ -43,7 +43,7 @@ if ( isset($data) ) {
 	$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 }
 
-$pptsvf = TTnew( 'PayPeriodTimeSheetVerifyFactory' );
+$pptsvf = new PayPeriodTimeSheetVerifyFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -62,7 +62,7 @@ switch ($action) {
 		if ( !empty($timesheet_id) ) {
 			Debug::text(' Authorizing TimeSheet ID: '. $timesheet_id, __FILE__, __LINE__, __METHOD__,10);
 
-			$af = TTnew( 'AuthorizationFactory' );
+			$af = new AuthorizationFactory();
 			$af->setObjectType('timesheet');
 			$af->setObject( $timesheet_id );
 
@@ -92,7 +92,7 @@ switch ($action) {
 		if ( (int)$id > 0 ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-			$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 			$pptsvlf->getByIDAndCompanyID( $id, $current_company->getId() );
 
 			$status_options = $pptsvlf->getOptions('type');
@@ -123,7 +123,7 @@ switch ($action) {
 					AND count($timesheet_queue_ids) <= 1 ) {
 
 				Debug::Text('Get TimeSheet Queue: ', __FILE__, __LINE__, __METHOD__,10);
-				$hllf = TTnew( 'HierarchyLevelListFactory' );
+				$hllf = new HierarchyLevelListFactory();
 				$timesheet_levels = $hllf->getLevelsAndHierarchyControlIDsByUserIdAndObjectTypeID( $current_user->getId(), 90 );
 				//Debug::Arr( $timesheet_levels, 'timesheet Levels', __FILE__, __LINE__, __METHOD__,10);
 
@@ -139,7 +139,7 @@ switch ($action) {
 
 				if ( is_array($timesheet_selected_level) ) {
 					Debug::Text( 'Hierarchy information found...', __FILE__, __LINE__, __METHOD__,10);
-					$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+					$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 					$pptsvlf->getByHierarchyLevelMapAndStatusAndNotAuthorized($timesheet_selected_level, 30 );
 
 					//Get all IDs that need authorizing.

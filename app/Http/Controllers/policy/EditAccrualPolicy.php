@@ -63,8 +63,8 @@ if ( isset($data['milestone_rows']) ) {
 	}
 }
 
-$apf = TTnew( 'AccrualPolicyFactory' );
-$apmf = TTnew( 'AccrualPolicyMilestoneFactory' );
+$apf = new AccrualPolicyFactory();
+$apmf = new AccrualPolicyMilestoneFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -76,7 +76,7 @@ switch ($action) {
 				if ($apm_id > 0) {
 					Debug::Text('cDeleting Milestone Row ID: '. $apm_id, __FILE__, __LINE__, __METHOD__,10);
 
-					$apmlf = TTnew( 'AccrualPolicyMilestoneListFactory' );
+					$apmlf = new AccrualPolicyMilestoneListFactory();
 					$apmlf->getById( $apm_id );
 					if ( $apmlf->getRecordCount() == 1 ) {
 						foreach($apmlf as $apm_obj ) {
@@ -187,8 +187,8 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$aplf = TTnew( 'AccrualPolicyListFactory' );
-			$apmlf = TTnew( 'AccrualPolicyMilestoneListFactory' );
+			$aplf = new AccrualPolicyListFactory();
+			$apmlf = new AccrualPolicyMilestoneListFactory();
 
 			$aplf->getByIdAndCompanyID( $id, $current_company->getID() );
 			if ( $aplf->getRecordCount() > 0 ) {

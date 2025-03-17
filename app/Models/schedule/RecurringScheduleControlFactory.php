@@ -95,7 +95,7 @@ class RecurringScheduleControlFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -120,7 +120,7 @@ class RecurringScheduleControlFactory extends Factory {
 	function setRecurringScheduleTemplateControl($id) {
 		$id = trim($id);
 
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'recurring_schedule_template_control_id',
 													$rstclf->getByID($id),
@@ -232,7 +232,7 @@ class RecurringScheduleControlFactory extends Factory {
 	}
 
 	function getUser() {
-		$rsulf = TTnew( 'RecurringScheduleUserListFactory' );
+		$rsulf = new RecurringScheduleUserListFactory();
 		$rsulf->getByRecurringScheduleControlId( $this->getId() );
 		foreach ($rsulf as $obj) {
 			$list[] = $obj->getUser();
@@ -252,7 +252,7 @@ class RecurringScheduleControlFactory extends Factory {
 		if ( is_array($ids) ) {
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$rsulf = TTnew( 'RecurringScheduleUserListFactory' );
+				$rsulf = new RecurringScheduleUserListFactory();
 				$rsulf->getByRecurringScheduleControlId( $this->getId() );
 
 				$tmp_ids = array();
@@ -274,7 +274,7 @@ class RecurringScheduleControlFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
@@ -282,7 +282,7 @@ class RecurringScheduleControlFactory extends Factory {
 					if ( $ulf->getRecordCount() > 0 ) {
 						$obj = $ulf->getCurrent();
 
-						$rsuf = TTnew( 'RecurringScheduleUserFactory' );
+						$rsuf = new RecurringScheduleUserFactory();
 						$rsuf->setRecurringScheduleControl( $this->getId() );
 						$rsuf->setUser( $id );
 
@@ -373,7 +373,7 @@ class RecurringScheduleControlFactory extends Factory {
 		Debug::text('Start Date: '. TTDate::getDate('DATE+TIME', $start_date) .'('.$start_date.') End Date: '. TTDate::getDate('DATE+TIME', $end_date) .'('.$end_date.')', __FILE__, __LINE__, __METHOD__, 10);
 
 		//Get week data
-		$rstlf = TTnew( 'RecurringScheduleTemplateListFactory' );
+		$rstlf = new RecurringScheduleTemplateListFactory();
 		$rstlf->getByRecurringScheduleTemplateControlId( $this->getRecurringScheduleTemplateControl() )->getCurrent();
 		$max_week = 1;
 		$weeks = array();

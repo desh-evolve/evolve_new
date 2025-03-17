@@ -111,12 +111,12 @@ if ( isset($user_data) ) {
 	$user_data['birth_date'] = TTDate::getTimeStampFromSmarty('birth_', $user_data);
 }
 
-$ulf = TTnew( 'UserListFactory' );
-$uf = TTnew( 'UserFactory' );
+$ulf = new UserListFactory();
+$uf = new UserFactory();
 //ARSP  EDIT --> ADDD NEW CODE FOR SALARY (WAGE)
-$uwf = TTnew('UserWageFactory');
+$uwf = new UserWageFactory();
 
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId( $current_company->getId(), $current_user->getId() );
 //Include current user in list.
 if ( $permission->Check('user','edit_own') ) {
@@ -136,7 +136,7 @@ switch ($action) {
 
 			Debug::Text('Login as different user: '. $id, __FILE__, __LINE__, __METHOD__,10);
 			//Get record for other user so we can check to make sure its not a primary company.
-			$ulf = TTNew('UserListFactory');
+			$ulf = new UserListFactory();
 			$ulf->getById( $id );
 			if ( $ulf->getRecordCount() > 0 ) {
 				if ( isset($config_vars['other']['primary_company_id']) AND $config_vars['other']['primary_company_id'] != $ulf->getCurrent()->getCompany() ) {
@@ -199,7 +199,7 @@ switch ($action) {
 		}
 
         //Get New Hire Defaults.
-        $udlf = TTnew( 'UserDefaultListFactory' );
+        $udlf = new UserDefaultListFactory();
         $udlf->getByCompanyId( $uf->getCompany() );
         if ( $udlf->getRecordCount() > 0 ) {
             Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
@@ -879,25 +879,25 @@ switch ($action) {
                                         
                                         
 
-					$pclfb = TTnew( 'PermissionControlListFactory' );
+					$pclfb = new PermissionControlListFactory();
 					$pclfb->getByCompanyIdAndUserId( $user->getCompany(), $id );
 					if ( $pclfb->getRecordCount() > 0 ) {
 						$user_data['permission_control_id'] = $pclfb->getCurrent()->getId();
 					}
 
-					$ppslfb = TTnew( 'PayPeriodScheduleListFactory' );
+					$ppslfb = new PayPeriodScheduleListFactory();
 					$ppslfb->getByUserId( $id );
 					if ( $ppslfb->getRecordCount() > 0 ) {
 						$user_data['pay_period_schedule_id'] = $ppslfb->getCurrent()->getId();
 					}
 
-					$pglf = TTnew( 'PolicyGroupListFactory' );
+					$pglf = new PolicyGroupListFactory();
 					$pglf->getByUserIds( $id );
 					if ( $pglf->getRecordCount() > 0 ) {
 						$user_data['policy_group_id'] = $pglf->getCurrent()->getId();
 					}
 
-					$hclf = TTnew( 'HierarchyControlListFactory' );
+					$hclf = new HierarchyControlListFactory();
 					$hclf->getObjectTypeAppendedListByCompanyIDAndUserID( $user->getCompany(), $user->getID() );
 					$user_data['hierarchy_control'] = $hclf->getArrayByListFactory( $hclf, FALSE, TRUE, FALSE );
 					unset($hclf);
@@ -910,7 +910,7 @@ switch ($action) {
 			
 			
 //START-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)----------------------------------------- 
-                        $uwlf = TTnew( 'UserWageListFactory' );
+                        $uwlf = new UserWageListFactory();
 						$uwlf->getByUserId($user_data['id']);                       
                         
                                 foreach ($uwlf as $wage) {        
@@ -990,7 +990,7 @@ switch ($action) {
 			Debug::Text('Adding new User.', __FILE__, __LINE__, __METHOD__,10);
 
 			//Get New Hire Defaults.
-			$udlf = TTnew( 'UserDefaultListFactory' );
+			$udlf = new UserDefaultListFactory();
 			$udlf->getByCompanyId( $company_id );
 			if ( $udlf->getRecordCount() > 0 ) {
 				Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
@@ -1091,25 +1091,25 @@ switch ($action) {
 		//var_dump($user_data);              
 
 		//Select box options;
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $company_id );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $company_id );
 
-		$culf = TTnew( 'CurrencyListFactory' );
+		$culf = new CurrencyListFactory();
                 $culf->getByCompanyId( $company_id );
 		$currency_options = $culf->getArrayByListFactory( $culf, FALSE, TRUE );
 
-		$hotf = TTnew( 'HierarchyObjectTypeFactory' );
+		$hotf = new HierarchyObjectTypeFactory();
 		$hierarchy_object_type_options = $hotf->getOptions('object_type');
 
-		$hclf = TTnew( 'HierarchyControlListFactory' );
+		$hclf = new HierarchyControlListFactory();
 		$hclf->getObjectTypeAppendedListByCompanyID( $company_id );
 		$hierarchy_control_options = $hclf->getArrayByListFactory( $hclf, TRUE, TRUE );
                 
                 
-                $clf = TTnew( 'CompanyListFactory' );
+                $clf = new CompanyListFactory();
                 $clf->getById($company_id);
                 
                 $user_data['epf_registration_no'] =$current_company->getEpfNo();
@@ -1130,11 +1130,11 @@ switch ($action) {
                 
                 
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 		$user_data['country_options'] = $clf->getOptions('country');
 		$user_data['province_options'] = $clf->getOptions('province', $user_data['country'] );
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$user_titles = $utlf->getByCompanyIdArray( $company_id );
 		$user_data['title_options'] = $user_titles;
 
@@ -1151,24 +1151,24 @@ switch ($action) {
                 $user_data['bond_period_option'] = $uf->getOptions('bond_period'); 
                 
 		//Get Permission Groups
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 		$pclf->getByCompanyIdAndLevel( $company_id, $permission->getLevel() );
 		$user_data['permission_control_options'] = $pclf->getArrayByListFactory( $pclf, FALSE );
 
 		//Get pay period schedules
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 		$pay_period_schedules = $ppslf->getByCompanyIDArray( $company_id );
 		$user_data['pay_period_schedule_options'] = $pay_period_schedules;
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 		$policy_groups = $pglf->getByCompanyIDArray( $company_id );
 		$user_data['policy_group_options'] = $policy_groups;
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$user_data['group_options'] = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $company_id ), 'TEXT', TRUE) );
 
 		//Get other field names
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 		$user_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $company_id, 10 );
 
 		$user_data['hierarchy_object_type_options'] = $hierarchy_object_type_options;

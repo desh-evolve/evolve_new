@@ -44,8 +44,8 @@ if ( !$permission->Check('branch','enabled')
 }
 
 
-//$baf = TTnew( 'BankAccountFactory' );
-$baf = TTnew( 'BranchBankAccountFactory' );
+//$baf = new BankAccountFactory();
+$baf = new BranchBankAccountFactory();
 
 
 $action = Misc::findSubmitButton();
@@ -88,8 +88,8 @@ switch ($action) {
 			Debug::Text('Invalid bank data...', __FILE__, __LINE__, __METHOD__,10);
 		}
 	default:
-		$balf = TTnew( 'BranchBankAccountListFactory' );
-		//$ulf = TTnew( 'UserListFactory' );
+		$balf = new BranchBankAccountListFactory();
+		//$ulf = new UserListFactory();
 
                 $balf->getById($id);                
                 
@@ -125,7 +125,7 @@ switch ($action) {
                 //Add New
                 if($bank_data['default_branch_id'] != '' OR $bank_data['default_branch_id'] != NULL)
                 {
-                    $blf = TTnew( 'BranchListFactory' );
+                    $blf = new BranchListFactory();
                     $company_branch_name = $blf->getById( $bank_data['default_branch_id'] )->getCurrent()->getName();                
                     $smarty->assign_by_ref('company_branch_name', $company_branch_name);                    
                 }
@@ -133,7 +133,7 @@ switch ($action) {
                 //Edid Old
                 if(isset($branch_id_new))
                 {
-                    $blf = TTnew( 'BranchListFactory' );
+                    $blf = new BranchListFactory();
                     $company_branch_name = $blf->getById( $branch_id_new )->getCurrent()->getName();                
                     $smarty->assign_by_ref('company_branch_name', $company_branch_name);                    
                 }               

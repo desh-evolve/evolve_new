@@ -45,20 +45,23 @@ class ClosePayPeriod extends Controller
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
-    }
 
-	public function index(){
-		$current_company = $this->company;
-        $current_user_prefs = $this->userPrefs;
 		/*
 		if ( !$permission->Check('pay_period_schedule','enabled')
 				OR !( $permission->Check('pay_period_schedule','view') OR $permission->Check('pay_period_schedule','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 		*/
+    }
+
+	public function index(){
+		$current_company = $this->company;
+        $current_user_prefs = $this->userPrefs;
+		
 		$viewData = [];
 
 		$viewData['title'] = 'End of Pay Period';
+		
 		/* Get FORM variables */
 		extract	(FormVariables::GetVariables(
 			array	(

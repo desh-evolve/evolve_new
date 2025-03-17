@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		foreach ($ids as $id) {
 			$pglf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -77,7 +77,7 @@ switch ($action) {
 		break;
 
 	default:
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 		$pglf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($pglf);

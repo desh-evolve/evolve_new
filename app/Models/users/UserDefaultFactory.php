@@ -57,7 +57,7 @@ class UserDefaultFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -69,7 +69,7 @@ class UserDefaultFactory extends Factory {
 			return $this->title_obj;
 		} else {
 
-			$utlf = TTnew( 'UserTitleListFactory' );
+			$utlf = new UserTitleListFactory();
 			$utlf->getById( $this->getTitle() );
 
 			if ( $utlf->getRecordCount() == 1 ) {
@@ -93,7 +93,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -118,7 +118,7 @@ class UserDefaultFactory extends Factory {
 	function setPermissionControl($id) {
 		$id = trim($id);
 
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 
 		if (  $this->Validator->isResultSetWithRows(		'permission_control_id',
 															$pclf->getByID($id),
@@ -142,7 +142,7 @@ class UserDefaultFactory extends Factory {
 	function setPayPeriodSchedule($id) {
 		$id = trim($id);
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule_id',
@@ -167,7 +167,7 @@ class UserDefaultFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = trim($id);
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'policy_group_id',
@@ -220,7 +220,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Title ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 
 		if (
 				$id == 0
@@ -249,7 +249,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Branch ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 
 		if (
 				$id == 0
@@ -278,7 +278,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Department ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 
 		if (
 				$id == 0
@@ -307,7 +307,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Currency ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$culf = TTnew( 'CurrencyListFactory' );
+		$culf = new CurrencyListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'currency',
@@ -368,7 +368,7 @@ class UserDefaultFactory extends Factory {
 	function setCountry($country) {
 		$country = trim($country);
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		if ( $this->Validator->inArrayKey(		'country',
 												$country,
@@ -395,7 +395,7 @@ class UserDefaultFactory extends Factory {
 
 		Debug::Text('Country: '. $this->getCountry() .' Province: '. $province, __FILE__, __LINE__, __METHOD__,10);
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		$options_arr = $cf->getOptions('province');
 		if ( isset($options_arr[$this->getCountry()]) ) {
@@ -564,7 +564,7 @@ class UserDefaultFactory extends Factory {
 	}
 	function setDateFormat($date_format) {
 		$date_format = trim($date_format);
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 
 		if ( $this->Validator->inArrayKey(	'date_format',
 											$date_format,
@@ -589,7 +589,7 @@ class UserDefaultFactory extends Factory {
 	function setTimeFormat($time_format) {
 		$time_format = trim($time_format);
 
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 
 		$key = Option::getByValue($time_format, $upf->getOptions('time_format') );
 		if ($key !== FALSE) {
@@ -619,7 +619,7 @@ class UserDefaultFactory extends Factory {
 	function setTimeZone($time_zone) {
 		$time_zone = Misc::trimSortPrefix( trim($time_zone) );
 
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 
 		if ( $this->Validator->inArrayKey(	'time_zone',
 											$time_zone,
@@ -645,7 +645,7 @@ class UserDefaultFactory extends Factory {
 	function setTimeUnitFormat($time_unit_format) {
 		$time_unit_format = trim($time_unit_format);
 
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 
 		$key = Option::getByValue($time_unit_format, $upf->getOptions('time_unit_format') );
 		if ($key !== FALSE) {
@@ -700,7 +700,7 @@ class UserDefaultFactory extends Factory {
 	function setStartWeekDay($value) {
 		$value = trim($value);
 
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 
 		$key = Option::getByValue($value, $upf->getOptions('start_week_day') );
 		if ($key !== FALSE) {
@@ -751,7 +751,7 @@ class UserDefaultFactory extends Factory {
 
 	*/
 	function getCompanyDeduction() {
-		$udcdlf = TTnew( 'UserDefaultCompanyDeductionListFactory' );
+		$udcdlf = new UserDefaultCompanyDeductionListFactory();
 		$udcdlf->getByUserDefaultId( $this->getId() );
 		foreach ($udcdlf as $obj) {
 			$list[] = $obj->getCompanyDeduction();
@@ -768,7 +768,7 @@ class UserDefaultFactory extends Factory {
 		if ( is_array($ids) ) {
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$udcdlf = TTnew( 'UserDefaultCompanyDeductionListFactory' );
+				$udcdlf = new UserDefaultCompanyDeductionListFactory();
 				$udcdlf->getByUserDefaultId( $this->getId() );
 
 				$tmp_ids = array();
@@ -792,12 +792,12 @@ class UserDefaultFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			//$lf = TTnew( 'UserListFactory' );
-			$cdlf = TTnew( 'CompanyDeductionListFactory' );
+			//$lf = new UserListFactory();
+			$cdlf = new CompanyDeductionListFactory();
 
 			foreach ($ids as $id) {
 				if ( $id != FALSE AND isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$udcdf = TTnew( 'UserDefaultCompanyDeductionFactory' );
+					$udcdf = new UserDefaultCompanyDeductionFactory();
 					$udcdf->setUserDefault( $this->getId() );
 					$udcdf->setCompanyDeduction( $id );
 
@@ -861,7 +861,7 @@ class UserDefaultFactory extends Factory {
 
 
 	function getObjectAsArray( $include_columns = NULL ) {
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory();
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

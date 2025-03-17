@@ -39,7 +39,7 @@ if ( isset($data) ) {
 }
 
 
-$uef = TTnew( 'UserEducationFactory' );
+$uef = new UserEducationFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -74,7 +74,7 @@ switch ($action) {
                     
                    BreadCrumb::setCrumb($title);
                    
-                   $uelf = TTnew( 'UserEducationListFactory' );
+                   $uelf = new UserEducationListFactory();
 		   $uelf->getById($id);
                    
                    foreach ($uelf as $uef_obj) {
@@ -97,7 +97,7 @@ switch ($action) {
                     $data['user_id']= $filter_user_id;
                 }
                 
-                $ulf = TTnew( 'UserListFactory' );
+                $ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), TRUE );
                 
                 

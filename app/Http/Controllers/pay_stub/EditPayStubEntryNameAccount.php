@@ -31,13 +31,13 @@ extract	(FormVariables::GetVariables(
 												'name_account_data'
 												) ) );
 
-$psenalf = TTnew( 'PayStubEntryNameAccountListFactory' );
+$psenalf = new PayStubEntryNameAccountListFactory();
 
 switch ($action) {
 	case 'submit':
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-		$psenaf = TTnew( 'PayStubEntryNameAccountFactory' );
+		$psenaf = new PayStubEntryNameAccountFactory();
 
 		$psenaf->StartTransaction();
 		foreach($name_account_data as $pay_stub_entry_name_id => $value_arr){
@@ -76,7 +76,7 @@ switch ($action) {
 		if ( !isset($action) ) {
 			BreadCrumb::setCrumb($title);
 
-			$psenalf = TTnew( 'PayStubEntryNameAccountListFactory' );
+			$psenalf = new PayStubEntryNameAccountListFactory();
 			$psenalf->getByCompanyId( $current_company->getId() );
 
 			foreach ($psenalf as $name_account_obj) {
@@ -97,7 +97,7 @@ switch ($action) {
 			}
 
 			//Get all accounts
-			$psenlf = TTnew( 'PayStubEntryNameListFactory' );
+			$psenlf = new PayStubEntryNameListFactory();
 			$psenlf->getAll();
 
 			$type_options  = $psenlf->getOptions('type');

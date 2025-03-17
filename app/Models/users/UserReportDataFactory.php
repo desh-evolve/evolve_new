@@ -78,7 +78,7 @@ class UserReportDataFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -109,7 +109,7 @@ class UserReportDataFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(			'company',
 															$clf->getByID($id),
@@ -133,7 +133,7 @@ class UserReportDataFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
@@ -312,7 +312,7 @@ class UserReportDataFactory extends Factory {
 	function preSave() {
 		if ( $this->getDefault() == TRUE ) {
 			//Remove default flag from all other entries.
-			$urdlf = TTnew( 'UserReportDataListFactory' );
+			$urdlf = new UserReportDataListFactory();
 			if ( $this->getUser() == FALSE ) {
 				$urdlf->getByCompanyIdAndScriptAndDefault( $this->getUser(), $this->getScript(), TRUE );
 			} else {

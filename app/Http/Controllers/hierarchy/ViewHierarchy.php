@@ -36,7 +36,7 @@ switch ($action) {
 	default:
 		if ( isset($id) ) {
 
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 
 			$tmp_id = $id;
 			$i=0;
@@ -50,7 +50,7 @@ switch ($action) {
 					$parent_users = array();
 					foreach($parents as $user_id) {
 						//Get user information
-						$ulf = TTnew( 'UserListFactory' );
+						$ulf = new UserListFactory();
 						$ulf->getById( $user_id );
 						$user = $ulf->getCurrent();
 						unset($ulf);

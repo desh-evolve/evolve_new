@@ -56,7 +56,7 @@ if ( isset( $filter_data['start_date'] ) AND $filter_data['start_date'] != '' ) 
 $filter_data = array_merge( $serialize_filter_data, $filter_data);
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 if ( $permission->Check('schedule','view') == FALSE ) {
 	if ( $permission->Check('schedule','view_child') == FALSE ) {
@@ -81,7 +81,7 @@ switch ($action) {
 
 		Debug::text(' Start Date: '. TTDate::getDate('DATE+TIME', $start_date) .' End Date: '. TTDate::getDate('DATE+TIME', $end_date) , __FILE__, __LINE__, __METHOD__,10);
 
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 		$raw_schedule_shifts = $sf->getScheduleArray(  $filter_data );
 		if ( is_array($raw_schedule_shifts) ) {
 			foreach( $raw_schedule_shifts as $day_epoch => $day_schedule_shifts ) {
@@ -156,7 +156,7 @@ switch ($action) {
 		}
 		$smarty->assign_by_ref('calendar_array', $calendar_array);
 
-		$hlf = TTnew( 'HolidayListFactory' );
+		$hlf = new HolidayListFactory();
 		$holiday_array = $hlf->getArrayByPolicyGroupUserId( $user_ids, $start_date, $end_date );
 		//var_dump($holiday_array);
 

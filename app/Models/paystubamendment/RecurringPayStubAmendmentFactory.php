@@ -160,7 +160,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -308,7 +308,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	}
 
 	function getUser() {
-		$rpsaulf = TTnew( 'RecurringPayStubAmendmentUserListFactory' );
+		$rpsaulf = new RecurringPayStubAmendmentUserListFactory();
 		$rpsaulf->getByRecurringPayStubAmendment( $this->getId() );
 		foreach ($rpsaulf as $ps_amendment_user) {
 			$user_list[] = $ps_amendment_user->getUser();
@@ -334,7 +334,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$rpsaulf = TTnew( 'RecurringPayStubAmendmentUserListFactory' );
+				$rpsaulf = new RecurringPayStubAmendmentUserListFactory();
 				$rpsaulf->getByRecurringPayStubAmendment( $this->getId() );
 
 				$tmp_ids = array();
@@ -356,12 +356,12 @@ class RecurringPayStubAmendmentFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
 					if ( $id == -1 ) {
 						Debug::text('--ALL-- Employees selected...', __FILE__, __LINE__, __METHOD__, 10);
-						$rpsauf = TTnew( 'RecurringPayStubAmendmentUserFactory' );
+						$rpsauf = new RecurringPayStubAmendmentUserFactory();
 						$rpsauf->setRecurringPayStubAmendment( $this->getId() );
 						$rpsauf->setUser( $id );
 
@@ -372,7 +372,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 						}
 
 					} else {
-						$rpsauf = TTnew( 'RecurringPayStubAmendmentUserFactory' );
+						$rpsauf = new RecurringPayStubAmendmentUserFactory();
 						$rpsauf->setRecurringPayStubAmendment( $this->getId() );
 						$rpsauf->setUser( $id );
 
@@ -407,7 +407,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	function setPayStubEntryNameId($id) {
 		$id = trim($id);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getById( $id );
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_stub_entry_name_id',
@@ -426,7 +426,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	function setPayStubEntryName($name) {
 		$name = trim($name);
 
-		$psenlf = TTnew( 'PayStubEntryNameListFactory' );
+		$psenlf = new PayStubEntryNameListFactory();
 		$result = $psenlf->getByName($name);
 
 		if (  $this->Validator->isResultSetWithRows(	'ps_entry_name',
@@ -679,7 +679,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	function setPercentAmountEntryNameId($id) {
 		$id = trim($id);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getById( $id );
 		//Not sure why we tried to use $result here, as if the ID passed is NULL, it causes a fatal error.
 		//$result = $psealf->getById( $id )->getCurrent();
@@ -746,7 +746,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 			$epoch = TTDate::getTime();
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		Debug::text('Recurring PS Amendment ID: '. $this->getId() .' Frequency: '. $this->getFrequency(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -772,7 +772,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 			switch( $this->getFrequency() ) {
 				case 10:
 					//Get all open pay periods
-					$pplf = TTnew( 'PayPeriodListFactory' );
+					$pplf = new PayPeriodListFactory();
 					//FIXME: Get all non-closed pay periods AFTER the start date.
 					$pplf->getByUserIdListAndNotStatusAndStartDateAndEndDate($user_ids, 20, $this->getStartDate(), $this->getEndDate() ); //All non-closed pay periods
 					Debug::text('Found Open Pay Periods: '. $pplf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -785,7 +785,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 								AND $this->checkTimeFrame($epoch) ) {
 							Debug::text('After end of pay period. Start Date: '. TTDate::getDate('DATE+TIME', $pay_period_obj->getStartDate() ) .' End Date: '. TTDate::getDate('DATE+TIME', $pay_period_obj->getEndDate() ) , __FILE__, __LINE__, __METHOD__,10);
 
-							$psalf = TTnew( 'PayStubAmendmentListFactory' );
+							$psalf = new PayStubAmendmentListFactory();
 
 							//Loop through each user of this Pay Period Schedule adding PS amendments if they don't already exist.
 							$pay_period_schedule_users = $pay_period_obj->getPayPeriodScheduleObject()->getUser();
@@ -804,7 +804,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 										//No amendment, good to insert one
 										Debug::text('Inserting Recurring PS Amendment for User: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-										$psaf = TTnew( 'PayStubAmendmentFactory' );
+										$psaf = new PayStubAmendmentFactory();
 										$psaf->setUser( $user_id );
 										$psaf->setStatus( 50 );
 
@@ -886,12 +886,12 @@ class RecurringPayStubAmendmentFactory extends Factory {
 								continue;
 							}
 
-							$psalf = TTnew( 'PayStubAmendmentListFactory' );
+							$psalf = new PayStubAmendmentListFactory();
 							if ( $psalf->getByUserIdAndRecurringPayStubAmendmentIdAndStartDateAndEndDate( $user_id, $this->getId(), $start_date, $end_date )->getRecordCount() == 0 ) {
 								//No amendment, good to insert one
 								Debug::text('Inserting Recurring PS Amendment for User: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-								$psaf = TTnew( 'PayStubAmendmentFactory' );
+								$psaf = new PayStubAmendmentFactory();
 								$psaf->setUser( $user_id );
 								$psaf->setStatus( 50 );
 
@@ -1038,7 +1038,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL ) {
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory();
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

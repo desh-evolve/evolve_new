@@ -637,7 +637,7 @@ class UserSummaryReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('user','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -674,7 +674,7 @@ class UserSummaryReport extends Report {
 		$columns['hire_date'] = $columns['termination_date'] = $columns['birth_date'] = TRUE;
 
 		//Get user data for joining.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -695,7 +695,7 @@ class UserSummaryReport extends Report {
 		//Debug::Arr($this->tmp_data['user'], 'TMP User Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get user preference data for joining.
-		$uplf = TTnew( 'UserPreferenceListFactory' );
+		$uplf = new UserPreferenceListFactory();
 		$uplf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Preference Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $uplf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -706,7 +706,7 @@ class UserSummaryReport extends Report {
 
 		//Get user wage data for joining.
 		$filter_data['wage_group_id'] = 0; //Use default wage groups only.
-		$uwlf = TTnew( 'UserWageListFactory' );
+		$uwlf = new UserWageListFactory();
 		$uwlf->getAPILastWageSearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Wage Rows: '. $uwlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -719,7 +719,7 @@ class UserSummaryReport extends Report {
 
 
 		//Get user bank data for joining.
-		$balf = TTnew( 'BankAccountListFactory' );
+		$balf = new BankAccountListFactory();
 		$balf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Bank Rows: '. $balf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $balf->getRecordCount(), NULL, ('Retrieving Data...') );

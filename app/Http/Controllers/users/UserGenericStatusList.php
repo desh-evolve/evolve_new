@@ -1,73 +1,82 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 
-use App\Models\Core\BreadCrumb;
+namespace App\Http\Controllers\users;
+use App\Http\Controllers\Controller;
+
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
-use App\Models\Core\Pager;
-use App\Models\Core\TTi18n;
 use App\Models\Core\URLBuilder;
+use App\Models\Users\UserGenericStatusListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * $Revision: 4104 $
- * $Id: UserGenericStatusList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+class UserGenericStatusList extends Controller
+{
+	protected $permission;
+    protected $company;
+    protected $userPrefs;
+    protected $currentUser;
+    protected $profiler;
 
-//Debug::setVerbosity( 11 );
-/*
-if ( !$permission->Check('user','enabled')
-		OR !( $permission->Check('user','view') OR $permission->Check('user','view_own') ) ) {
+	public function __construct() {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+    
+        $this->userPrefs = View::shared('current_user_prefs');
+        $this->company = View::shared('current_company');
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->profiler = View::shared('profiler');
 
-	$permission->Redirect( FALSE ); //Redirect
-}
-*/
+		/* //check here
+		if ( !$permission->Check('user','enabled')
+				OR !( $permission->Check('user','view') OR $permission->Check('user','view_own') ) ) {
 
-$smarty->assign('title', TTi18n::gettext($title = 'Status Report')); // See index.php
-BreadCrumb::setCrumb($title);
+			$permission->Redirect( FALSE ); //Redirect
+		}
+		*/
+	}
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'batch_id',
-												'batch_title',
-												'batch_next_page',
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												) ) );
+	public function index(){
+		$viewData = [];
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page,
-													'batch_id' => $batch_id,
-													'batch_title' => $batch_title,
-													'batch_next_page' => $batch_next_page
-												) );
+		$viewData['title'] = 'Status Report';
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+		// Get FORM variables
+		extract	(FormVariables::GetVariables(
+			array	(
+				'batch_id',
+				'batch_title',
+				'batch_next_page',
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+			) 
+		) );
 
-switch ($action) {
-	default:
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array(
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page,
+				'batch_id' => $batch_id,
+				'batch_title' => $batch_title,
+				'batch_next_page' => $batch_next_page
+			) 
+		);
+
+		$sort_array = NULL;
+
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
+		}
+
 		Debug::Text('Next Page: '. urldecode( $batch_next_page ) , __FILE__, __LINE__, __METHOD__,10);
 		if ( $batch_id != '' ) {
-			$ugslf = TTnew( 'UserGenericStatusListFactory' );
+			$ugslf = new UserGenericStatusListFactory();
 			$ugslf->getByUserIdAndBatchId( $current_user->getId(), $batch_id,  $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 			//var_dump($ugslf);
 			Debug::Text('Record Count: '. $ugslf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -77,36 +86,37 @@ switch ($action) {
 			if ( $ugslf->getRecordCount() > 0 ) {
 				$status_count_arr = $ugslf->getStatusCountArrayByUserIdAndBatchId( $current_user->getId(), $batch_id );
 
-				foreach ($ugslf as $ugs_obj) {
+				foreach ($ugslf->rs as $ugs_obj) {
+					$ugslf->data = (array)$ugs_obj;
 					$rows[] = array(
-										'id' => $ugs_obj->getId(),
-										'user_id' => $ugs_obj->getUser(),
-										'batch_id' => $ugs_obj->getBatchId(),
-										'status_id' => $ugs_obj->getStatus(),
-										'status' => Option::getByKey( $ugs_obj->getStatus(), $ugs_obj->getOptions('status') ),
-										'label' => $ugs_obj->getLabel(),
-										'description' => $ugs_obj->getDescription(),
-										'link' => $ugs_obj->getLink(),
-										'deleted' => $ugs_obj->getDeleted()
-									);
+						'id' => $ugslf->getId(),
+						'user_id' => $ugslf->getUser(),
+						'batch_id' => $ugslf->getBatchId(),
+						'status_id' => $ugslf->getStatus(),
+						'status' => Option::getByKey( $ugslf->getStatus(), $ugslf->getOptions('status') ),
+						'label' => $ugslf->getLabel(),
+						'description' => $ugslf->getDescription(),
+						'link' => $ugslf->getLink(),
+						'deleted' => $ugslf->getDeleted()
+					);
 				}
 
 				//var_dump($rows);
 				//var_dump($status_count_arr);
 			}
 		}
-		$smarty->assign_by_ref('rows', $rows);
-		$smarty->assign_by_ref('status_count', $status_count_arr);
 
-		$smarty->assign_by_ref('batch_title', $batch_title);
-		$smarty->assign_by_ref('batch_next_page', $batch_next_page);
+		$viewData['rows'] = $rows;	
+		$viewData['status_count'] = $status_count_arr;	
+		$viewData['batch_title'] = $batch_title;
+		$viewData['batch_next_page'] = $batch_next_page;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		
+		return view('users.UserGenericStatusList', $viewData);
+	}
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-
-		//$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		break;
 }
-$smarty->display('users/UserGenericStatusList.tpl');
+
+
 ?>

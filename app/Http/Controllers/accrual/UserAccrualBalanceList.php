@@ -55,8 +55,8 @@ switch ($action) {
 		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserAccrual.php') );
 		break;
 	default:
-		$ablf = TTnew( 'AccrualBalanceListFactory' );
-		$ulf = TTnew( 'UserListFactory' );
+		$ablf = new AccrualBalanceListFactory();
+		$ulf = new UserListFactory();
 
 		if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child') ) {
 			if ( isset($filter_user_id) ) {
@@ -80,7 +80,7 @@ switch ($action) {
 
 			$pager = new Pager($ablf);
 
-			$aplf = TTnew( 'AccrualPolicyListFactory' );
+			$aplf = new AccrualPolicyListFactory();
 			$accrual_policy_options = $aplf->getByCompanyIDArray( $current_company->getId() );
 
 			foreach ($ablf as $ab_obj) {
@@ -101,7 +101,7 @@ switch ($action) {
 
 			$smarty->assign_by_ref('accruals', $accruals);
 
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 			if ( $permission->Check('accrual','view') == FALSE ) {

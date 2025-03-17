@@ -167,7 +167,7 @@ class PunchFactory extends Factory {
 			return $this->punch_control_obj;
 		} else {
 			if ( $this->getPunchControlID() !== FALSE ) {
-				$pclf = TTnew( 'PunchControlListFactory' );
+				$pclf = new PunchControlListFactory();
 				$this->punch_control_obj = $pclf->getById( $this->getPunchControlID() )->getCurrent();
 
 				return $this->punch_control_obj;
@@ -181,7 +181,7 @@ class PunchFactory extends Factory {
 		if ( is_object($this->schedule_policy_obj) ) {
 			return $this->schedule_policy_obj;
 		} else {
-			$splf = TTnew( 'SchedulePolicyListFactory' );
+			$splf = new SchedulePolicyListFactory();
 			$splf->getById( $this->getScheduleObject()->getSchedulePolicyID() );
 			if ( $splf->getRecordCount() > 0 ) {
 				$this->schedule_policy_obj = $splf->getCurrent();
@@ -197,7 +197,7 @@ class PunchFactory extends Factory {
 			return $this->schedule_obj;
 		} else {
 			if ( $this->getScheduleID() !== FALSE ) {
-				$slf = TTnew( 'ScheduleListFactory' );
+				$slf = new ScheduleListFactory();
 				$slf->getById( $this->getScheduleID() );
 				if ( $slf->getRecordCount() > 0 ) {
 					$this->schedule_obj = $slf->getCurrent();
@@ -237,7 +237,7 @@ class PunchFactory extends Factory {
 		if ( $this->getPunchControlID() != FALSE ) {
 			$retval = $this->getPunchControlID();
 		} else {
-			$pclf = TTnew( 'PunchControlListFactory' );
+			$pclf = new PunchControlListFactory();
 			Debug::Text('Checking for incomplete punch control... User: '. $this->getUser() .' TimeStamp: '. $this->getTimeStamp() .' Status: '. $this->getStatus(), __FILE__, __LINE__, __METHOD__,10);
 
 			//Need to make sure the punch is rounded before we can get the proper punch_control_id. However
@@ -262,7 +262,7 @@ class PunchFactory extends Factory {
 	function setPunchControlID($id) {
 		$id = trim($id);
 
-		$pclf = TTnew( 'PunchControlListFactory' );
+		$pclf = new PunchControlListFactory();
 
 		//Can't check to make sure the PunchControl row exists, as it may be inserted later. So just
 		//make sure its an non-zero INT.
@@ -419,7 +419,7 @@ class PunchFactory extends Factory {
 	function setStation($id) {
 		$id = trim($id);
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 /*
 		if (	$id == 0
 				OR
@@ -443,7 +443,7 @@ class PunchFactory extends Factory {
 
 		//Punch control is no longer used for rounding.
 		//Check for rounding policies.
-		$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+		$riplf = new RoundIntervalPolicyListFactory();
 		$type_id = $riplf->getPunchTypeFromPunchStatusAndType( $this->getStatus(), $this->getType() );
 
 		Debug::text(' Round Interval Punch Type: '. $type_id .' User: '. $this->getUser(), __FILE__, __LINE__, __METHOD__,10);
@@ -463,7 +463,7 @@ class PunchFactory extends Factory {
 					//If strict is set, round to scheduled lunch time?
 					//Find Lunch Punch In.
 
-					$plf = TTnew( 'PunchListFactory' );
+					$plf = new PunchListFactory();
 					//$plf->getPreviousPunchByUserDateIdAndStatusAndTypeAndEpoch( $this->getPunchControlObject()->getUserDateID(), 20, 20, $epoch );
 					$plf->getPreviousPunchByUserIdAndStatusAndTypeAndEpoch( $this->getUser(), 20, 20, $epoch );
 					if ( $plf->getRecordCount() == 1 ) {
@@ -523,7 +523,7 @@ class PunchFactory extends Factory {
 					//If strict is set, round to scheduled break time?
 					//Find break Punch In.
 
-					$plf = TTnew( 'PunchListFactory' );
+					$plf = new PunchListFactory();
 					//$plf->getPreviousPunchByUserDateIdAndStatusAndTypeAndEpoch( $this->getPunchControlObject()->getUserDateID(), 20, 30, $epoch );
 					$plf->getPreviousPunchByUserIdAndStatusAndTypeAndEpoch( $this->getUser(), 20, 30, $epoch );
 					if ( $plf->getRecordCount() == 1 ) {
@@ -582,13 +582,13 @@ class PunchFactory extends Factory {
 
 					//If strict is set, round to scheduled time?
 
-					$plf = TTnew( 'PunchListFactory' );
+					$plf = new PunchListFactory();
 					$plf->getPreviousPunchByUserIdAndEpochAndNotPunchIDAndMaximumShiftTime( $this->getUser(), $epoch, $this->getId() );
 					if ( $plf->getRecordCount() == 1 ) {
 						Debug::text('Found Previous Punch In: '. TTDate::getDate('DATE+TIME', $plf->getCurrent()->getTimeStamp() ), __FILE__, __LINE__, __METHOD__,10);
 
 						//Get day total time prior to this punch control.
-						$pclf = TTnew( 'PunchControlListFactory' );
+						$pclf = new PunchControlListFactory();
 						$pclf->getByUserDateId( $plf->getCurrent()->getPunchControlObject()->getUserDateID() );
 						if ( $pclf->getRecordCount() > 0 ) {
 							$day_total_time = $epoch - $plf->getCurrent()->getTimeStamp();
@@ -603,7 +603,7 @@ class PunchFactory extends Factory {
 
 							//Take into account paid meal/breaks when doing day total rounding...
 							$meal_and_break_adjustment = 0;
-							$udtlf = TTnew( 'UserDateTotalListFactory' );
+							$udtlf = new UserDateTotalListFactory();
 							$udtlf->getByUserDateIdAndStatusAndType( $plf->getCurrent()->getPunchControlObject()->getUserDateID(), 10, array(100,110) );
 							if ( $udtlf->getRecordCount() > 0 ) {
 								foreach( $udtlf as $udt_obj ) {
@@ -913,7 +913,7 @@ class PunchFactory extends Factory {
 		//We need to make sure we get schedules within about a 24hr
 		//window of this punch, because if punch is at 11:55AM and the schedule starts at 12:30AM it won't
 		//be found by a user_date_id.
-		$slf = TTnew( 'ScheduleListFactory' );
+		$slf = new ScheduleListFactory();
 		$slf->getByUserIdAndStartDateAndEndDate( $user_id, ($epoch-43200), ($epoch+43200) );
 		if ( $slf->getRecordCount() > 0 ) {
 			//Check for schedule policy
@@ -1116,7 +1116,7 @@ class PunchFactory extends Factory {
 		} else {
 			//Make sure prev punch is a Lunch Out Punch
 			//Check NON-scheduled meal policies
-			$mplf = TTnew( 'MealPolicyListFactory' );
+			$mplf = new MealPolicyListFactory();
 			$mplf->getByPolicyGroupUserId( $this->getUser() );
 			if ( $mplf->getRecordCount() > 0 ) {
 				$mp_obj = $mplf->getCurrent();
@@ -1186,7 +1186,7 @@ class PunchFactory extends Factory {
 		} else {
 			//Make sure prev punch is a Break Out Punch
 			//Check NON-scheduled break policies
-			$bplf = TTnew( 'BreakPolicyListFactory' );
+			$bplf = new BreakPolicyListFactory();
 			$bplf->getByPolicyGroupUserId( $this->getUser() );
 			if ( $bplf->getRecordCount() > 0 ) {
 				$bp_objs[] = $bplf->getCurrent();
@@ -1260,7 +1260,7 @@ class PunchFactory extends Factory {
 				Debug::text(' Transfer is Enabled, automatic punch out of last punch pair: ', __FILE__, __LINE__, __METHOD__,10);
 
 				//Check to make sure there is an open punch pair.
-				$plf = TTnew( 'PunchListFactory' );
+				$plf = new PunchListFactory();
 				$plf->getPreviousPunchByUserIdAndEpoch( $this->getUser(), $this->getTimeStamp() );
 				if ( $plf->getRecordCount() > 0 ) {
 					$p_obj = $plf->getCurrent();
@@ -1272,7 +1272,7 @@ class PunchFactory extends Factory {
 						$this->setStatus(10); //In
 						$this->setType(10); //Normal (can't transfer in/out of lunches?)
 
-						$pf = TTnew( 'PunchFactory' );
+						$pf = new PunchFactory();
 						$pf->setUser( $this->getUser() );
 						$pf->setEnableAutoTransfer( FALSE );
 						$pf->setPunchControlID( $p_obj->getPunchControlID() );
@@ -1321,7 +1321,7 @@ class PunchFactory extends Factory {
 							AND is_object( $this->getPunchControlObject()->getPayPeriodScheduleObject() )
 							AND $this->getPunchControlObject()->getPayPeriodScheduleObject()->getShiftAssignedDay() == 40 ) ) {
 
-				$plf = TTnew( 'PunchListFactory' );
+				$plf = new PunchListFactory();
 				$plf->getPreviousPunchByUserIdAndEpoch( $this->getUser(), $this->getTimeStamp() );
 				if ( $plf->getRecordCount() > 0 ) {
 					$p_obj = $plf->getCurrent();
@@ -1350,7 +1350,7 @@ class PunchFactory extends Factory {
 						//The issue with this is that if rounding is enabled this will ignore it, and the shift for this day may total: 3.98hrs.
 						//when they want it to total 4.00hrs. Why don't we split shifts at exactly midnight with no gap at all?
 						//Split shifts right at midnight causes additional issues when editing those punches, TimeTrex will want to combine them on the same day again.
-						$pf = TTnew( 'PunchFactory' );
+						$pf = new PunchFactory();
 						$pf->setUser( $this->getUser() );
 						$pf->setEnableSplitAtMidnight( FALSE );
 						$pf->setTransfer( FALSE );
@@ -1386,7 +1386,7 @@ class PunchFactory extends Factory {
 						//
 						//Punch in again right at midnight.
 						//
-						$pf = TTnew( 'PunchFactory' );
+						$pf = new PunchFactory();
 						$pf->setUser( $this->getUser() );
 						$pf->setEnableSplitAtMidnight( FALSE );
 						$pf->setTransfer( FALSE );
@@ -1404,7 +1404,7 @@ class PunchFactory extends Factory {
 						$pf->setPunchControlID( $new_punch_control_id );
 						if ( $pf->isValid() ) {
 							if ( $pf->Save( FALSE ) == TRUE ) {
-								$pcf = TTnew( 'PunchControlFactory' );
+								$pcf = new PunchControlFactory();
 								$pcf->setId( $pf->getPunchControlID() );
 								$pcf->setPunchObject( $pf );
 
@@ -1446,7 +1446,7 @@ class PunchFactory extends Factory {
 	function postSave() {
 
 		if ( $this->getDeleted() == TRUE ) {
-			$plf = TTnew( 'PunchListFactory' );
+			$plf = new PunchListFactory();
 			$plf->getByPunchControlId( $this->getPunchControlID() );
 			if ( $plf->getRecordCount() == 0 ) {
 				//Check to see if any other punches are assigned to this punch_control_id
@@ -1623,8 +1623,8 @@ class PunchFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE ) {
-		$uf = TTnew( 'UserFactory' );
-		$sf = TTnew('StationFactory');
+		$uf = new UserFactory();
+		$sf = new StationFactory();
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

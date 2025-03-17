@@ -51,7 +51,7 @@ if ( isset( $filter_data['start_date'] ) AND $filter_data['start_date'] != '' ) 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 $permission_children_ids = array();
 if ( $permission->Check('schedule','view') == FALSE ) {
-	$hlf = TTnew( 'HierarchyListFactory' );
+	$hlf = new HierarchyListFactory();
 	$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
 	if ( $permission->Check('schedule','view_child') == FALSE ) {
@@ -64,8 +64,8 @@ if ( $permission->Check('schedule','view') == FALSE ) {
 	$filter_data['permission_children_ids'] = $permission_children_ids;
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 //Debug::setVerbosity(11);
 $action = Misc::findSubmitButton('do');
@@ -85,7 +85,7 @@ switch ($action) {
 		Debug::Text('Start Date: '. TTDate::getDate('DATE+TIME', $filter_data['start_date']), __FILE__, __LINE__, __METHOD__,10);
 		$filter_data['end_date'] = $filter_data['start_date'] + (($filter_data['show_days']*7)*86400-3601);
 
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 		$output = $sf->getSchedule( $filter_data, $current_user_prefs->getStartWeekDay(), $filter_data['group_schedule'] );
 
 		//print_r($output);
@@ -140,7 +140,7 @@ switch ($action) {
 			}
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
 
 		if ( !isset($filter_data['show_days']) OR ( isset($filter_data['show_days']) AND $filter_data['show_days'] == '' ) ) {
@@ -173,7 +173,7 @@ switch ($action) {
 		if ( !isset($filter_data['group_ids']) ) {
 			$filter_data['group_ids'] = NULL;
 		}
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = Misc::prependArray( $all_array_option, $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) ) );
 		$filter_data['src_group_options'] = Misc::arrayDiffByKey( (array)$filter_data['group_ids'], $group_options );
 		$filter_data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$filter_data['group_ids'], $group_options );
@@ -185,7 +185,7 @@ switch ($action) {
 		if ( !isset($filter_data['default_branch_ids']) ) {
 			$filter_data['default_branch_ids'] = NULL;
 		}
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $all_array_option, $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		$filter_data['src_schedule_branch_options'] = Misc::arrayDiffByKey( (array)$filter_data['schedule_branch_ids'], $branch_options );
@@ -200,7 +200,7 @@ switch ($action) {
 		if ( !isset($filter_data['default_department_ids']) ) {
 			$filter_data['default_department_ids'] = NULL;
 		}
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $all_array_option, $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		$filter_data['src_schedule_department_options'] = Misc::arrayDiffByKey( (array)$filter_data['schedule_department_ids'], $department_options );
@@ -212,7 +212,7 @@ switch ($action) {
 		if ( !isset($filter_data['user_title_ids']) ) {
 			$filter_data['user_title_ids'] = NULL;
 		}
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$user_title_options = Misc::prependArray( $all_array_option, $utlf->getArrayByListFactory( $utlf, FALSE, TRUE ) );
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );

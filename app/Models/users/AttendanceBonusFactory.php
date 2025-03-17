@@ -23,7 +23,7 @@ class AttendanceBonusFactory   extends Factory{
 		if ( is_object($this->bonus_december_obj) ) {
 			return $this->bonus_december_obj;
 		} else {
-			$bdlf = TTnew( 'BonusDecemberListFactory' );
+			$bdlf = new BonusDecemberListFactory();
 			$bdlf->getById( $this->getBonusDecember() );
 			if ( $bdlf->getRecordCount() == 1 ) {
 				$this->bonus_december_obj = $bdlf->getCurrent();
@@ -48,7 +48,7 @@ class AttendanceBonusFactory   extends Factory{
 	function setBonusDecember($id) {
 		$id = trim($id);
 
-		$bdlf = TTnew( 'BonusDecemberListFactory' );
+		$bdlf = new BonusDecemberListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows( 'bonus',
@@ -69,7 +69,7 @@ class AttendanceBonusFactory   extends Factory{
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$clf->getById( $this->getCompany() );
 			if ( $clf->getRecordCount() == 1 ) {
 				$this->company_obj = $clf->getCurrent();
@@ -88,7 +88,7 @@ class AttendanceBonusFactory   extends Factory{
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),

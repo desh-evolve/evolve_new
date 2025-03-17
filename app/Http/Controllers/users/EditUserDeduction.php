@@ -32,9 +32,9 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$udf = TTnew( 'UserDeductionFactory' );
-$cdf = TTnew( 'CompanyDeductionFactory' );
-$ulf = TTnew( 'UserListFactory' );
+$udf = new UserDeductionFactory();
+$cdf = new CompanyDeductionFactory();
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -111,7 +111,7 @@ switch ($action) {
 				Debug::Text('Adding Deductions', __FILE__, __LINE__, __METHOD__,10);
 				if ( isset($data['deduction_ids']) AND count($data['deduction_ids']) > 0 ) {
 					foreach( $data['deduction_ids'] as $deduction_id ) {
-						$udf = TTnew( 'UserDeductionFactory' );
+						$udf = new UserDeductionFactory();
 						$udf->setUser( $data['user_id'] );
 						$udf->setCompanyDeduction( $deduction_id );
 						if ( $udf->isValid() ) {
@@ -172,13 +172,13 @@ switch ($action) {
 		}
 		$udf->FailTransaction();
 	default:
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		if ( isset($company_deduction_id) AND $company_deduction_id != '' ) {
 			Debug::Text('Mass User Deduction Edit!', __FILE__, __LINE__, __METHOD__,10);
 
 			//Get all employees assigned to this company deduction.
-			$cdlf = TTnew( 'CompanyDeductionListFactory' );
+			$cdlf = new CompanyDeductionListFactory();
 			$cdlf->getByCompanyIdAndId( $current_company->getId(), $company_deduction_id );
 			Debug::Text('Company Deduction Records: '. $cdlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 			if ( $cdlf->getRecordCount() > 0 ) {
@@ -245,7 +245,7 @@ switch ($action) {
 						Debug::Text('Assigned Users: '. count($user_ids), __FILE__, __LINE__, __METHOD__,10);
 						if ( is_array($user_ids) AND count($user_ids) > 0 ) {
 							//Get User deduction data for each user.
-							$udlf = TTnew( 'UserDeductionListFactory' );
+							$udlf = new UserDeductionListFactory();
 							$udlf->getByUserIdAndCompanyDeductionId( $user_ids, $cd_obj->getId() );
 							if ( $udlf->getRecordCount() > 0 ) {
 								//Get deduction data for each user.
@@ -317,10 +317,10 @@ switch ($action) {
 				BreadCrumb::setCrumb($title);
 
 				//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-				$hlf = TTnew( 'HierarchyListFactory' );
+				$hlf = new HierarchyListFactory();
 				$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
-				$udlf = TTnew( 'UserDeductionListFactory' );
+				$udlf = new UserDeductionListFactory();
 				$udlf->getByCompanyIdAndId( $current_company->getID(), $id );
 
 				foreach ($udlf as $ud_obj) {
@@ -443,10 +443,10 @@ switch ($action) {
 				$data['user_id'] = $user_id;
 
 				//Get all Company Deductions for drop down box.
-				$cdlf = TTnew( 'CompanyDeductionListFactory' );
+				$cdlf = new CompanyDeductionListFactory();
 				$data['deduction_options'] = $cdlf->getByCompanyIdAndStatusIdArray( $current_company->getId(), 10, FALSE);
 
-				$udlf = TTnew( 'UserDeductionListFactory' );
+				$udlf = new UserDeductionListFactory();
 				$udlf->getByCompanyIdAndUserId( $current_company->getId(), $user_id );
 				if ($udlf->getRecordCount() > 0 ) {
 					//Remove deductions from select box that are already assigned to user.
@@ -460,7 +460,7 @@ switch ($action) {
 			}
 
 			//Get user full name
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getByIdAndCompanyId( $data['user_id'], $current_company->getId() );
 			if ( $ulf->getRecordCount() > 0 ) {
 				$data['user_full_name'] = $ulf->getCurrent()->getFullName();

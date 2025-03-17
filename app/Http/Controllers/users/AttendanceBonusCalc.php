@@ -58,7 +58,7 @@ switch ($action) {
 	
 	default:
             
-            $ablf = TTnew('AttendanceBonusListFactory');
+            $ablf = new AttendanceBonusListFactory();
             $ablf->getByCompanyId($current_company->getId());
             $bonuses = array();
             

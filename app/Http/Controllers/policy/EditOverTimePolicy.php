@@ -39,7 +39,7 @@ if ( isset($data['max_time'] ) ) {
 	$data['max_time'] = TTDate::parseTimeUnit($data['max_time']);
 }
 
-$otpf = TTnew( 'OverTimePolicyFactory' );
+$otpf = new OverTimePolicyFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -72,7 +72,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$otplf = TTnew( 'OverTimePolicyListFactory' );
+			$otplf = new OverTimePolicyListFactory();
 			$otplf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($otplf as $otp_obj) {
@@ -102,13 +102,13 @@ switch ($action) {
 			$data = array( 'trigger_time' => 0,'max_time' => 0, 'rate' => '1.00', 'accrual_rate' => '1.00' );
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 		$accrual_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_entry_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50) );
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 		$data['wage_group_options'] = $wglf->getArrayByListFactory( $wglf->getByCompanyId( $current_company->getId() ), TRUE );
 
 		//Select box options;

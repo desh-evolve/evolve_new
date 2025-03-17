@@ -56,7 +56,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 		foreach ($ids as $id) {
 			$wglf->getByIdAndCompanyId($id, $current_company->getId() );
 			foreach ($wglf as $wg_obj) {
@@ -77,7 +77,7 @@ switch ($action) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
 		}
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 		$wglf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(),$page, NULL, $sort_array );
 
 		$pager = new Pager($wglf);

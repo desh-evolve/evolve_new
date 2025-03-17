@@ -17,7 +17,7 @@ class PolicyGroupPremiumPolicyFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = trim($id);
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
@@ -39,7 +39,7 @@ class PolicyGroupPremiumPolicyFactory extends Factory {
 	function setPremiumPolicy($id) {
 		$id = trim($id);
 
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 
 		if (	$id == 0
 				OR

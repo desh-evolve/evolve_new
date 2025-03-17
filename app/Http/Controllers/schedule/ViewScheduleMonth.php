@@ -54,7 +54,7 @@ if ( !isset($filter_data['show_days']) OR ( isset($filter_data['show_days']) AND
 $filter_data['show_days'] = $filter_data['show_days'] * 7;
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 if ( $permission->Check('schedule','view') == FALSE ) {
 	if ( $permission->Check('schedule','view_child') == FALSE ) {
@@ -84,7 +84,7 @@ switch (strtolower($do)) {
 		Debug::text(' Start Date: '. TTDate::getDate('DATE+TIME', $start_date) .' End Date: '. TTDate::getDate('DATE+TIME', $end_date) , __FILE__, __LINE__, __METHOD__,10);
 
 		//var_dump( $filter_data);
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 		$raw_schedule_shifts = $sf->getScheduleArray( $filter_data );
 		//Debug::Arr($raw_schedule_shifts, 'Raw Schedule Shifts1: ', __FILE__, __LINE__, __METHOD__, 10);
 		if ( is_array($raw_schedule_shifts) ) {
@@ -147,7 +147,7 @@ switch (strtolower($do)) {
 		}
 		$smarty->assign_by_ref('calendar_column_headers', $calendar_column_headers);
 
-		$hlf = TTnew( 'HolidayListFactory' );
+		$hlf = new HolidayListFactory();
 		$holiday_array = $hlf->getArrayByPolicyGroupUserId( $user_ids, $start_date, $end_date );
 		//var_dump($holiday_array);
 		$smarty->assign_by_ref('holidays', $holiday_array);

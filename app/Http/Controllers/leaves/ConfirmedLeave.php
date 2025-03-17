@@ -24,7 +24,7 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 
-//$lrlf = TTnew( 'LeaveRequestListFactory' );
+//$lrlf = new LeaveRequestListFactory();
 
 if(!isset($filter_data)){
    $filter_data = array();
@@ -118,7 +118,7 @@ foreach($lrlf as $lrf_obj) {
 //                                 echo '<pre>'; print_r($rows[0]); echo '<pre>';  die;
 //                                 Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
 //                                
-//                             //   $tsdr= TTnew( 'TimesheetDetailReport' );//new code         
+//                             //   $tsdr= new TimesheetDetailReport();//new code         
 //                                
 //                                $output =$lrlf->getAllConfirmedLeave($current_user->getId(),$filter_data);//new code                               
 //                                                                                              
@@ -185,7 +185,7 @@ $rows = 1;
 //					if ( isset($user_data['data']) AND is_array($user_data['data']) ) {
 //						if ( isset($filter_data['date_type']) AND $filter_data['date_type'] == 'pay_period_ids' )  {
 //							//Fill in any missing days, only if they select by pay period.
-//							$pplf = TTnew( 'PayPeriodListFactory' );
+//							$pplf = new PayPeriodListFactory();
 //							$pplf->getById( $user_data['pay_period_id'] );
 //							if ( $pplf->getRecordCount() == 1 ) {
 //								$pp_obj = $pplf->getCurrent();
@@ -273,7 +273,7 @@ $rows = 1;
 ////
 ////							if ( $data['date_stamp'] !== '' ) {
 ////
-////								$hlf = TTnew('HolidayListFactory');
+////								$hlf = new HolidayListFactory();
 ////								$hlf->getByPolicyGroupUserIdAndDate($user_data['user_id'], date('Y-m-d', $data['date_stamp']));
 ////								$hday_obj_arr = $hlf->getCurrent()->data;
 ////                                                                
@@ -439,7 +439,7 @@ $rows = 1;
 
 		} 
 
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 
 $ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 

@@ -174,7 +174,7 @@ class PayStubFactory extends Factory {
 		if ( is_object($this->pay_period_obj) ) {
 			return $this->pay_period_obj;
 		} else {
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 
 			$pplf->getById( $this->getPayPeriod() );
 			if ( $pplf->getRecordCount() > 0 ) {
@@ -190,7 +190,7 @@ class PayStubFactory extends Factory {
 		if ( is_object($this->currency_obj) ) {
 			return $this->currency_obj;
 		} else {
-			$clf = TTnew( 'CurrencyListFactory' );
+			$clf = new CurrencyListFactory();
 
 			$clf->getById( $this->getCurrency() );
 			if ( $clf->getRecordCount() > 0 ) {
@@ -206,7 +206,7 @@ class PayStubFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() > 0 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -227,7 +227,7 @@ class PayStubFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
@@ -251,7 +251,7 @@ class PayStubFactory extends Factory {
 	function setPayPeriod($id) {
 		$id = trim($id);
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_period',
 														$pplf->getByID($id),
@@ -276,7 +276,7 @@ class PayStubFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Currency ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$culf = TTnew( 'CurrencyListFactory' );
+		$culf = new CurrencyListFactory();
 
 		$old_currency_id = $this->getCurrency();
 
@@ -515,7 +515,7 @@ class PayStubFactory extends Factory {
 			}
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'created_by',
 													$ulf->getByID($id),
@@ -657,7 +657,7 @@ class PayStubFactory extends Factory {
 
 		Debug::Text('Calculating the differences between Pay Stub: '. $pay_stub_id1 .' And: '. $pay_stub_id2, __FILE__, __LINE__, __METHOD__,10);
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		$pslf->StartTransaction();
 
@@ -685,11 +685,11 @@ class PayStubFactory extends Factory {
 		if ( $ps_amendment_date == NULL OR $ps_amendment_date == '' ) {
 			Debug::Text('PS Amendment Date not set, trying to figure it out!', __FILE__, __LINE__, __METHOD__,10);
 			//Take a guess at the end of the newest open pay period.
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 			$ppslf->getByUserId( $pay_stub2_obj->getUser() );
 			if ( $ppslf->getRecordCount() > 0 ) {
 				Debug::Text('Found Pay Period Schedule, ID: '. $ppslf->getCurrent()->getId(), __FILE__, __LINE__, __METHOD__,10);
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 				$pplf->getByPayPeriodScheduleIdAndTransactionDate( $ppslf->getCurrent()->getId(), time(), NULL, array('a.transaction_date' => 'DESC' ) );
 				if ( $pplf->getRecordCount() > 0 ) {
 					Debug::Text('Using Pay Period End Date.', __FILE__, __LINE__, __METHOD__,10);
@@ -706,7 +706,7 @@ class PayStubFactory extends Factory {
 		//Only do Earnings for now.
 		//Get all earnings, EE/ER deduction PS entries.
 		$pay_stub1_entry_ids = NULL;
-		$pay_stub1_entries = TTnew( 'PayStubEntryListFactory' );
+		$pay_stub1_entries = new PayStubEntryListFactory();
 		$pay_stub1_entries->getByPayStubIdAndType( $pay_stub1_obj->getId(), array(10,20,30) );
 		if ( $pay_stub1_entries->getRecordCount() > 0 ) {
 			Debug::Text('Pay Stub1 Entries DO exist: ', __FILE__, __LINE__, __METHOD__,10);
@@ -723,7 +723,7 @@ class PayStubFactory extends Factory {
 		//var_dump($pay_stub1_entry_ids);
 
 		$pay_stub2_entry_ids = NULL;
-		$pay_stub2_entries = TTnew( 'PayStubEntryListFactory' );
+		$pay_stub2_entries = new PayStubEntryListFactory();
 		$pay_stub2_entries->getByPayStubIdAndType( $pay_stub2_obj->getId(), array(10,20,30) );
 		if ( $pay_stub2_entries->getRecordCount() > 0 ) {
 			Debug::Text('Pay Stub2 Entries DO exist: ', __FILE__, __LINE__, __METHOD__,10);
@@ -741,7 +741,7 @@ class PayStubFactory extends Factory {
 		Debug::Arr( $pay_stub_entry_ids, 'Pay Stub Entry Differences: ', __FILE__, __LINE__, __METHOD__,10);
 		//var_dump($pay_stub_entry_ids);
 
-		$pself = TTnew( 'PayStubEntryListFactory' );
+		$pself = new PayStubEntryListFactory();
 		if ( count($pay_stub_entry_ids) > 0 ) {
 			foreach( $pay_stub_entry_ids as $pay_stub_entry_id) {
 				Debug::Text('Entry ID: '. $pay_stub_entry_id, __FILE__, __LINE__, __METHOD__,10);
@@ -756,7 +756,7 @@ class PayStubFactory extends Factory {
 					Debug::Text('FOUND DIFFERENCE of: Amount: '. $amount_diff .' Units: '. $units_diff, __FILE__, __LINE__, __METHOD__,10);
 
 					//Generate PS Amendment.
-					$psaf = TTnew( 'PayStubAmendmentFactory' );
+					$psaf = new PayStubAmendmentFactory();
 					$psaf->setUser( $pay_stub1_obj->getUser() );
 					$psaf->setStatus( 'ACTIVE' );
 					$psaf->setType( 10 );
@@ -799,7 +799,7 @@ class PayStubFactory extends Factory {
 		//Make sure the entire pay stub object is loaded before calling this.
 		if ( $pay_stub_id != '' ) {
 			Debug::text('Attempting to recalculate pay stub YTD for pay stub id:'. $pay_stub_id, __FILE__, __LINE__, __METHOD__,10);
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$pslf->getById( $pay_stub_id );
 
 			if ( $pslf->getRecordCount() == 1 ) {
@@ -830,7 +830,7 @@ class PayStubFactory extends Factory {
 	function reCalculateYTD() {
 		Debug::Text('ReCalculating YTD on all newer pay stubs...', __FILE__, __LINE__, __METHOD__,10);
 		//Get all pay stubs NEWER then this one.
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		//Because this recalculates YTD amounts and accruals which span years, we need to recalculate ALL newer pay stubs.
 		//$pslf->getByUserIdAndStartDateAndEndDate( $this->getUser() , $this->getTransactionDate(), TTDate::getEndYearEpoch( $this->getTransactionDate() ) );
@@ -871,8 +871,8 @@ class PayStubFactory extends Factory {
 		//Make sure we're not submitted two pay stubs for the same pay period per user.
 		//Unless the pay period type of Monthly + Advance
 		/*
-		$pplf = TTnew( 'PayPeriodListFactory' );
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$pplf = new PayPeriodListFactory();
+		$ppslf = new PayPeriodScheduleListFactory();
 		$pay_period_type = $ppslf->getById( $pplf->getById( $this->getPayPeriod() )->getCurrent()->getPayPeriodSchedule() )->getCurrent()->getType();
 		Debug::Text('Pay Period Type: '. $pay_period_type, __FILE__, __LINE__, __METHOD__,10);
 		*/
@@ -992,7 +992,7 @@ class PayStubFactory extends Factory {
 			unset($entry_arr);
 		} elseif ( $this->getStatus() != 10 ) {
 			//Instead of loading the current pay stub entries, just run a query instead.
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			$pself->getByPayStubId( $this->getId() );
 
 			foreach($pself as $pay_stub_entry_obj) {
@@ -1009,7 +1009,7 @@ class PayStubFactory extends Factory {
 
 			foreach ( $ps_amendment_ids as $ps_amendment_id ) {
 				//Set PS amendment status to match Pay stub.
-				$psalf = TTnew( 'PayStubAmendmentListFactory' );
+				$psalf = new PayStubAmendmentListFactory();
 				$psalf->getById( $ps_amendment_id );
 				if ( $psalf->getRecordCount() == 1 ) {
 					Debug::Text('Changing Status of PS Amendment: '. $ps_amendment_id , __FILE__, __LINE__, __METHOD__,10);
@@ -1041,7 +1041,7 @@ class PayStubFactory extends Factory {
 		if ( is_object($this->pay_stub_entry_account_link_obj) ) {
 			return $this->pay_stub_entry_account_link_obj;
 		} else {
-			$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+			$pseallf = new PayStubEntryAccountLinkListFactory();
 			$pseallf->getByCompanyID( $this->getUserObject()->getCompany() );
 			if ( $pseallf->getRecordCount() > 0 ) {
 				$this->pay_stub_entry_account_link_obj = $pseallf->getCurrent();
@@ -1057,7 +1057,7 @@ class PayStubFactory extends Factory {
 			//Debug::text('Returning Cached data...' , __FILE__, __LINE__, __METHOD__,10);
 			return $this->pay_stub_entry_accounts_obj;
 		} else {
-			$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getByCompanyId( $this->getUserObject()->getCompany() );
 			if ( $psealf->getRecordCount() > 0 ) {
 				foreach(  $psealf as $psea_obj ) {
@@ -1185,7 +1185,7 @@ class PayStubFactory extends Factory {
 		Debug::Text('aLoading current pay stub entries, Pay Stub ID: '. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
 		if ( $this->getId() != '' ) {
 			//Get pay stub entries
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			$pself->getByPayStubId( $this->getID() );
 			Debug::Text('bLoading current pay stub entries, Pay Stub ID: '. $this->getId() .' Record Count: '. $pself->getRecordCount() , __FILE__, __LINE__, __METHOD__,10);
 
@@ -1244,7 +1244,7 @@ class PayStubFactory extends Factory {
 		}
 
 		//Grab last pay stub so we can use it for YTD calculations on this pay stub.
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 		$pslf->getLastPayStubByUserIdAndStartDate( $this->getUser(), $this->getStartDate() );
 		if ( $pslf->getRecordCount() > 0 ) {
 			$ps_obj = $pslf->getCurrent();
@@ -1268,7 +1268,7 @@ class PayStubFactory extends Factory {
 			}
 
 			//Get pay stub entries
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			$pself->getByPayStubId( $ps_obj->getID() );
 			if ( $pself->getRecordCount() > 0 ) {
 				foreach( $pself as $pse_obj ) {
@@ -1500,7 +1500,7 @@ class PayStubFactory extends Factory {
 		foreach( $this->tmp_data['current_pay_stub'] as $pse_arr ) {
 			if ( isset($pse_arr['pay_stub_entry_account_id']) AND isset($pse_arr['amount']) ) {
 				Debug::Text('Current Pay Stub ID: '. $this->getId() .' Adding Pay Stub Entry for: '. $pse_arr['pay_stub_entry_account_id'] .' Amount: '. $pse_arr['amount'] .' YTD Amount: '. $pse_arr['ytd_amount'] .' YTD Units: '. $pse_arr['ytd_units'], __FILE__, __LINE__, __METHOD__,10);
-				$psef = TTnew( 'PayStubEntryFactory' );
+				$psef = new PayStubEntryFactory();
 				$psef->setPayStub( $this->getId() );
 				$psef->setPayStubEntryNameId( $pse_arr['pay_stub_entry_account_id'] );
 				$psef->setRate( $pse_arr['rate'] );
@@ -1532,7 +1532,7 @@ class PayStubFactory extends Factory {
 
 	function deleteEntries( $all_entries = FALSE ) {
 		//Delete any entries from the pay stub, so they can be re-created.
-		$pself = TTnew( 'PayStubEntryListFactory' );
+		$pself = new PayStubEntryListFactory();
 
 		if ( $all_entries == TRUE ) {
 			$pself->getByPayStubIdAndType( $this->getId(), 40 );
@@ -1778,7 +1778,7 @@ class PayStubFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE  ) {
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory();
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {
@@ -1873,7 +1873,7 @@ class PayStubFactory extends Factory {
 		global $current_company;
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$pslf->getById( $this->getId() );
 		}
 
@@ -1895,18 +1895,18 @@ class PayStubFactory extends Factory {
 				case 'eft_ach':
 				case 'eft_beanstream':
 					//Get file creation number
-					$ugdlf = TTnew( 'UserGenericDataListFactory' );
+					$ugdlf = new UserGenericDataListFactory();
 					$ugdlf->getByCompanyIdAndScriptAndDefault( $current_company->getId(), 'PayStubFactory', TRUE );
 					if ( $ugdlf->getRecordCount() > 0 ) {
 						$ugd_obj = $ugdlf->getCurrent();
 						$setup_data = $ugd_obj->getData();
 					} else {
-						$ugd_obj = TTnew( 'UserGenericDataFactory' );
+						$ugd_obj = new UserGenericDataFactory();
 					}
 
 					Debug::Text('bExporting...', __FILE__, __LINE__, __METHOD__,10);
 					//get User Bank account info
-					$balf = TTnew( 'BankAccountListFactory' );
+					$balf = new BankAccountListFactory();
 					$balf->getCompanyAccountByCompanyId( $current_company->getID() );
 					if ( $balf->getRecordCount() > 0 ) {
 						$company_bank_obj = $balf->getCurrent();
@@ -1942,12 +1942,12 @@ class PayStubFactory extends Factory {
 					$eft->setDataCenter( $current_company->getDataCenterID() );
 					$eft->setOriginatorShortName( $current_company->getShortName() );
 
-					$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+					$psealf = new PayStubEntryAccountListFactory();
 					foreach ($pslf as $key => $pay_stub_obj) {
 						Debug::Text('Looping over Pay Stub... ID: '. $pay_stub_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 
 						//Get pay stub entries.
-						$pself = TTnew( 'PayStubEntryListFactory' );
+						$pself = new PayStubEntryListFactory();
 						$pself->getByPayStubId( $pay_stub_obj->getId() );
 
 						$prev_type = NULL;
@@ -2024,15 +2024,15 @@ class PayStubFactory extends Factory {
 							unset($pay_stub_entries);
 
 							//Get User information
-							$ulf = TTnew( 'UserListFactory' );
+							$ulf = new UserListFactory();
 							$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
 							//Get company information
-							$clf = TTnew( 'CompanyListFactory' );
+							$clf = new CompanyListFactory();
 							$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
 							//get User Bank account info
-							$balf = TTnew( 'BankAccountListFactory' );
+							$balf = new BankAccountListFactory();
 							$user_bank_obj = $balf->getUserAccountByCompanyIdAndUserId( $user_obj->getCompany(), $user_obj->getId() );
 							if ( $user_bank_obj->getRecordCount() > 0 ) {
 								$user_bank_obj = $user_bank_obj->getCurrent();
@@ -2090,12 +2090,12 @@ class PayStubFactory extends Factory {
 					$pdf->SetAutoPageBreak(FALSE);
 					$pdf->SetFont('freeserif','',10);
 
-					$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+					$psealf = new PayStubEntryAccountListFactory();
 
 					$i=0;
 					foreach ($pslf as $pay_stub_obj) {
 						//Get pay stub entries.
-						$pself = TTnew( 'PayStubEntryListFactory' );
+						$pself = new PayStubEntryListFactory();
 						$pself->getByPayStubId( $pay_stub_obj->getId() );
 
 						$pay_stub_entries = NULL;
@@ -2167,11 +2167,11 @@ class PayStubFactory extends Factory {
 						}
 
 						//Get User information
-						$ulf = TTnew( 'UserListFactory' );
+						$ulf = new UserListFactory();
 						$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
 						//Get company information
-						$clf = TTnew( 'CompanyListFactory' );
+						$clf = new CompanyListFactory();
 						$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
 						if ( $user_obj->getCountry() == 'CA' ) {
@@ -2204,7 +2204,7 @@ class PayStubFactory extends Factory {
 						Debug::text($i .'. Pay Stub Transaction Date: '. $pay_stub_obj->getTransactionDate(), __FILE__, __LINE__, __METHOD__,10);
 
 						//Get Pay Period information
-						$pplf = TTnew( 'PayPeriodListFactory' );
+						$pplf = new PayPeriodListFactory();
 						$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
 						$pp_start_date = $pay_period_obj->getStartDate();
@@ -2212,7 +2212,7 @@ class PayStubFactory extends Factory {
 						$pp_transaction_date = $pay_period_obj->getTransactionDate();
 
 						//Get pay period numbers
-						$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+						$ppslf = new PayPeriodScheduleListFactory();
 						$pay_period_schedule_obj = $ppslf->getById( $pay_period_obj->getPayPeriodSchedule() )->getCurrent();
 
 						$pay_period_data = array(
@@ -2679,7 +2679,7 @@ class PayStubFactory extends Factory {
 
 	function getPayStub( $pslf = NULL, $hide_employer_rows = TRUE ) {
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$pslf->getById( $this->getId() );
 		}
 
@@ -2700,12 +2700,12 @@ class PayStubFactory extends Factory {
 
 			$i=0;
 			foreach ($pslf as $pay_stub_obj) {
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 				Debug::text($i .'. Pay Stub Transaction Date: '. $pay_stub_obj->getTransactionDate(), __FILE__, __LINE__, __METHOD__,10);
 
 				//Get Pay Period information
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
 				//Use Pay Stub dates, not Pay Period dates.
@@ -2714,11 +2714,11 @@ class PayStubFactory extends Factory {
 				$pp_transaction_date = $pay_stub_obj->getTransactionDate();
 
 				//Get User information
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
 				//Get company information
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
 				//Change locale to users own locale.
@@ -2781,7 +2781,7 @@ class PayStubFactory extends Factory {
 				$pdf->setLineWidth( 0.25 );
 
 				//Get pay stub entries.
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 				Debug::text('Pay Stub Entries: '. $pself->getRecordCount()  , __FILE__, __LINE__, __METHOD__,10);
 
@@ -3174,7 +3174,7 @@ class PayStubFactory extends Factory {
 				//
 				//Accrual Policy Balances
 				//
-				$ablf = TTnew( 'AccrualBalanceListFactory' );
+				$ablf = new AccrualBalanceListFactory();
 				$ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE );
 				if ( $ablf->getRecordCount() > 0 ) {
 					//Accrual Header

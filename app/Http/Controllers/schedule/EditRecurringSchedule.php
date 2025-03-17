@@ -45,7 +45,7 @@ if ( isset($data)) {
 $filter_data = NULL;
 $permission_children_ids = array();
 if ( $permission->Check('recurring_schedule','view') == FALSE ) {
-	$hlf = TTnew( 'HierarchyListFactory' );
+	$hlf = new HierarchyListFactory();
 	$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 	Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -59,7 +59,7 @@ if ( $permission->Check('recurring_schedule','view') == FALSE ) {
 	$filter_data['permission_children_ids'] = $permission_children_ids;
 }
 
-$rscf = TTnew( 'RecurringScheduleControlFactory' );
+$rscf = new RecurringScheduleControlFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -124,7 +124,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$rsclf = TTnew( 'RecurringScheduleControlListFactory' );
+			$rsclf = new RecurringScheduleControlListFactory();
 			$rsclf->getByIdAndCompanyId( $id, $current_company->getID() );
 
 			foreach ($rsclf as $rsc_obj) {
@@ -157,12 +157,12 @@ switch ($action) {
 		}
 
 		//Select box options;
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE );
 		//$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 		$template_options = $rstclf->getByCompanyIdArray( $current_company->getId() );
 
 		//Select box options;

@@ -295,7 +295,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -313,7 +313,7 @@ class AbsenceLeaveUserFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -421,7 +421,7 @@ class AbsenceLeaveUserFactory extends Factory {
 	function setUserId($id) {
 		$id = trim($id);
                 
-		$uf = TTnew( 'UserListFactory' );
+		$uf = new UserListFactory();
 		if (	$this->Validator->isResultSetWithRows(	'user_id',
 											$uf->getById($id),
 											('User is invalid'),
@@ -446,7 +446,7 @@ class AbsenceLeaveUserFactory extends Factory {
 	function setAbsenceLeaveId($id) {
 		$id = trim($id);
                 
-		$alf = TTnew( 'AbsenceLeaveListFactory' );
+		$alf = new AbsenceLeaveListFactory();
 		if (	$this->Validator->isResultSetWithRows(	'absence_leave_id',
 											$alf->getById($id),
 											('Absence Leave is invalid'),
@@ -471,7 +471,7 @@ class AbsenceLeaveUserFactory extends Factory {
 	function setAbsencePolicyId($id) {
 		$id = trim($id);
                 
-		$alf = TTnew( 'AbsencePolicyListFactory' );
+		$alf = new AbsencePolicyListFactory();
 		if (	$this->Validator->isResultSetWithRows(	'absence_policy_id',
 											$alf->getById($id),
 											('Absence Policy  is invalid'),
@@ -736,7 +736,7 @@ class AbsenceLeaveUserFactory extends Factory {
 	}
         
         function getUser() {
-                        $udlf = TTnew( 'AbsenceLeaveUserEntryListFactory' );
+                        $udlf = new AbsenceLeaveUserEntryListFactory();
                         $udlf->getByAbsenceUserId( $this->getId() );
                         foreach ($udlf as $obj) {
                                 $list[$obj->getUserId()] = array('user_id' => $obj->getUserId(),'id'=>$obj->getId());
@@ -750,7 +750,7 @@ class AbsenceLeaveUserFactory extends Factory {
                 }
         
         function SetUser() {
-                        $udlf = TTnew( 'AbsenceLeaveUserEntryListFactory' );
+                        $udlf = new AbsenceLeaveUserEntryListFactory();
                         $udlf->getByAbsenceUserId( $this->getId() );
                         foreach ($udlf as $obj) {
                                 $list[] = $obj->getUserId();
@@ -834,7 +834,7 @@ class AbsenceLeaveUserFactory extends Factory {
 	function setWageGroup($id) {
 		$id = trim($id);
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 
 		if ( $id == 0
 				OR
@@ -890,7 +890,7 @@ class AbsenceLeaveUserFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -923,7 +923,7 @@ class AbsenceLeaveUserFactory extends Factory {
 			$id = NULL;
 		}
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (	$id == NULL
 				OR
@@ -942,7 +942,7 @@ class AbsenceLeaveUserFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ) {
 			//Check to make sure there are no hours using this OT policy.
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getByAbsencePolicyId( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

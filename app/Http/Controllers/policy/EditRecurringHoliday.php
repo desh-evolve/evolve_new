@@ -31,7 +31,7 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$rhf = TTnew( 'RecurringHolidayFactory' );
+$rhf = new RecurringHolidayFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -79,7 +79,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$rhlf = TTnew( 'RecurringHolidayListFactory' );
+			$rhlf = new RecurringHolidayListFactory();
 			$rhlf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($rhlf as $rh_obj) {

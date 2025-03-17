@@ -31,9 +31,9 @@ extract	(FormVariables::GetVariables(
 												
 												) ) );
 
-$udf = TTnew( 'UserDeductionFactory' );
-$cdf = TTnew( 'CompanyDeductionFactory' );
-$ulf = TTnew( 'UserListFactory' );
+$udf = new UserDeductionFactory();
+$cdf = new CompanyDeductionFactory();
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -48,7 +48,7 @@ switch ($action) {
              $date_formated = $date->format('Y-m-d');
             
             
-             $udtlf = TTnew( 'UserDateTotalListFactory' );
+             $udtlf = new UserDateTotalListFactory();
              $udtlf->getUserOPorOTValuesByDateAndType($date_formated,30);
              //$udtlf->getById(40);
              
@@ -87,7 +87,7 @@ switch ($action) {
             $date_formated = $date->format('Y-m-d');
             
             
-             $udtlf = TTnew( 'UserDateTotalListFactory' );
+             $udtlf = new UserDateTotalListFactory();
              $udtlf->getUserOPorOTValuesByDateAndType($date_formated,40);
              //$udtlf->getById(40);
              
@@ -124,7 +124,7 @@ switch ($action) {
 		//Debug::setVerbosity(11);  user_date_total
             
                // print_r($data);
-                $udtlf = TTnew( 'UserDateTotalListFactory' );
+                $udtlf = new UserDateTotalListFactory();
                 $udtlf->StartTransaction();
                 
                 foreach($data['user_date_total']  as $key => $value){

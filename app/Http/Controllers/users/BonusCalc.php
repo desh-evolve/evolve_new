@@ -58,7 +58,7 @@ switch ($action) {
 	
 	default:
             
-            $bdlf = TTnew( 'BonusDecemberListFactory' );
+            $bdlf = new BonusDecemberListFactory();
             $bdlf->getByCompanyId($current_company->getId());
             $bonuses = array();
             

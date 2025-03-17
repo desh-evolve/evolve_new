@@ -82,7 +82,7 @@ class UserDeductionFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -93,7 +93,7 @@ class UserDeductionFactory extends Factory {
 		if ( is_object($this->company_deduction_obj) ) {
 			return $this->company_deduction_obj;
 		} else {
-			$cdlf = TTnew( 'CompanyDeductionListFactory' );
+			$cdlf = new CompanyDeductionListFactory();
 			$this->company_deduction_obj = $cdlf->getById( $this->getCompanyDeduction() )->getCurrent();
 
 			return $this->company_deduction_obj;
@@ -104,7 +104,7 @@ class UserDeductionFactory extends Factory {
 		if ( is_object($this->pay_stub_entry_account_link_obj) ) {
 			return $this->pay_stub_entry_account_link_obj;
 		} else {
-			$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+			$pseallf = new PayStubEntryAccountLinkListFactory();
 			$pseallf->getByCompanyID( $this->getUserObject()->getCompany() );
 			if ( $pseallf->getRecordCount() > 0 ) {
 				$this->pay_stub_entry_account_link_obj = $pseallf->getCurrent();
@@ -125,7 +125,7 @@ class UserDeductionFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
@@ -176,7 +176,7 @@ class UserDeductionFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$cdlf = TTnew( 'CompanyDeductionListFactory' );
+		$cdlf = new CompanyDeductionListFactory();
 
 		if (	(
 					$id != 0
@@ -1012,7 +1012,7 @@ class UserDeductionFactory extends Factory {
 
 					$pd_obj->setEnableCPPAndEIDeduction(TRUE);
 
-					//$pself = TTnew( 'PayStubEntryListFactory' );
+					//$pself = new PayStubEntryListFactory();
 					if ( $this->getPayStubEntryAccountLinkObject()->getEmployeeCPP() != '' ) {
 						Debug::Text('Found Employee CPP account link!: ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -1112,7 +1112,7 @@ class UserDeductionFactory extends Factory {
 
 					$pd_obj->setEnableCPPAndEIDeduction(TRUE);
 
-					//$pself = TTnew( 'PayStubEntryListFactory' );
+					//$pself = new PayStubEntryListFactory();
 					if ( $this->getPayStubEntryAccountLinkObject()->getEmployeeCPP() != '' ) {
 						Debug::Text('Found Employee CPP account link!: ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -1157,7 +1157,7 @@ class UserDeductionFactory extends Factory {
 					Debug::Text('US Pay Period Deductions...', __FILE__, __LINE__, __METHOD__,10);
 
 					//Need to set Federal settings here.
-					$udlf = TTnew( 'UserDeductionListFactory' );
+					$udlf = new UserDeductionListFactory();
 					$udlf->getByUserIdAndCountryID( $user_id, $this->getCompanyDeductionObject()->getCountry() );
 					if ( $udlf->getRecordCount() > 0 ) {
 						Debug::Text('Found Federal User Deduction...', __FILE__, __LINE__, __METHOD__,10);

@@ -99,13 +99,13 @@ class ProgressBar extends Controller
 
 		//Make sure pay period is not CLOSED.
 		//We can re-calc on locked though.
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getById( $pay_period_ids );
 		if ( $pplf->getRecordCount() > 0 ) {
 			$pp_obj = $pplf->getCurrent();
 
 			if ( $pp_obj->getStatus() != 20 ) {
-				$udlf = TTnew( 'UserDateListFactory' );
+				$udlf = new UserDateListFactory();
 				if ( $action == 'recalculate_company' ) {
 					TTLog::addEntry( $current_company->getId(), TTi18n::gettext('Notice'), TTi18n::gettext(' Recalculating Company TimeSheet'), $current_user->getId(), 'user_date_total' );
 					$udlf->getByCompanyIdAndPayPeriodID( $current_company->getId(), $pay_period_ids );
@@ -263,7 +263,7 @@ class ProgressBar extends Controller
 				$ugsf->setBatchID( $ugsf->getNextBatchId() );
 				$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
 				$ugsf->saveQueue();
-				$next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Generating Pay Stubs', 'batch_next_page' => $next_page), '../users/UserGenericStatusList.php');
+				$next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Generating Pay Stubs', 'batch_next_page' => $next_page), '/users/user_generic_status_list');
 
 				unset($ugsf);
 			}
@@ -288,7 +288,7 @@ class ProgressBar extends Controller
 			foreach($pay_period_ids as $pay_period_id) {
 				Debug::text('Pay Period ID: '. $pay_period_id, __FILE__, __LINE__, __METHOD__,10);
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 				$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
 
 				$epoch = TTDate::getTime();
@@ -297,7 +297,7 @@ class ProgressBar extends Controller
 					Debug::text('Pay Period Schedule ID: '. $pay_period_obj->getPayPeriodSchedule(), __FILE__, __LINE__, __METHOD__,10);
 
 					//Grab all users for pay period
-					$ppsulf = TTnew( 'PayPeriodScheduleUserListFactory' );
+					$ppsulf = new PayPeriodScheduleUserListFactory();
 					$ppsulf->getByPayPeriodScheduleId( $pay_period_obj->getPayPeriodSchedule() );
 
 					$total_pay_stubs = $ppsulf->getRecordCount();
@@ -314,7 +314,7 @@ class ProgressBar extends Controller
 
 					//Delete existing pay stub. Make sure we only
 					//delete pay stubs that are the same as what we're creating.
-					$pslf = TTnew( 'PayStubListFactory' );
+					$pslf = new PayStubListFactory();
 					$pslf->getByPayPeriodId( $pay_period_obj->getId() );
 					foreach ( $pslf as $pay_stub_obj ) {
 
@@ -356,7 +356,7 @@ class ProgressBar extends Controller
 					}
 					unset($ppsulf);
 
-					$ugsf = TTnew( 'UserGenericStatusFactory' );
+					$ugsf = new UserGenericStatusFactory();
 					$ugsf->setUser( $current_user->getId() );
 					$ugsf->setBatchID( $ugsf->getNextBatchId() );
 					$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
@@ -377,7 +377,7 @@ class ProgressBar extends Controller
 		$init_progress_bar = TRUE;
 
 		//Just need the pay_stub_id of the modified pay stub.
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		$pslf->StartTransaction();
 		if ( is_array($pay_stub_ids) ) {
@@ -447,9 +447,9 @@ class ProgressBar extends Controller
 			$total_punches = count($filter_user_id) * TTDate::getDays($data['end_punch_full_time_stamp'] - $data['start_punch_full_time_stamp']);
 			Debug::Text('Total Punches: '. $total_punches .' Users: '.  count($filter_user_id) .' Days: '.  TTDate::getDays($data['end_punch_full_time_stamp'] - $data['start_punch_full_time_stamp']), __FILE__, __LINE__, __METHOD__,10);
 
-			$pcf = TTnew( 'PunchControlFactory' );
-			$pf = TTnew( 'PunchFactory' );
-			$ulf = TTnew( 'UserListFactory' );
+			$pcf = new PunchControlFactory();
+			$pf = new PunchFactory();
+			$ulf = new UserListFactory();
 
 			$pf->StartTransaction();
 
@@ -471,8 +471,8 @@ class ProgressBar extends Controller
 							$user_generic_status_label = 'N/A @ '. TTDate::getDate('DATE+TIME', $time_stamp);
 						}
 
-						$pcf = TTnew( 'PunchControlFactory' );
-						$pf = TTnew( 'PunchFactory' );
+						$pcf = new PunchControlFactory();
+						$pf = new PunchFactory();
 
 						Debug::Text('Punch Full Time Stamp: '. TTDate::getDate('DATE+TIME', $time_stamp), __FILE__, __LINE__, __METHOD__,10);
 
@@ -499,7 +499,7 @@ class ProgressBar extends Controller
 
 						if ( $pf->isValid() == TRUE ) {
 							if ( $pf->Save( FALSE ) == TRUE ) {
-								$pcf = TTnew( 'PunchControlFactory' );
+								$pcf = new PunchControlFactory();
 								$pcf->setId( $pf->getPunchControlID() );
 								$pcf->setPunchObject( $pf );
 
@@ -596,7 +596,7 @@ class ProgressBar extends Controller
 			//$pf->FailTransaction();
 			$pf->CommitTransaction();
 
-			$ugsf = TTnew( 'UserGenericStatusFactory' );
+			$ugsf = new UserGenericStatusFactory();
 			$ugsf->setUser( $current_user->getId() );
 			$ugsf->setBatchID( $ugsf->getNextBatchId() );
 			$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
@@ -625,8 +625,8 @@ class ProgressBar extends Controller
 			$total_shifts = count($filter_user_id) * TTDate::getDays($data['end_full_time_stamp'] - $data['start_full_time_stamp']);
 			Debug::Text('Total Shifts: '. $total_shifts .' Users: '.  count($filter_user_id) .' Days: '.  TTDate::getDays($data['end_full_time_stamp'] - $data['start_full_time_stamp']), __FILE__, __LINE__, __METHOD__,10);
 
-			$sf = TTnew( 'ScheduleFactory' );
-			$ulf = TTnew( 'UserListFactory' );
+			$sf = new ScheduleFactory();
+			$ulf = new UserListFactory();
 
 			$sf->StartTransaction();
 
@@ -659,7 +659,7 @@ class ProgressBar extends Controller
 						$conflicting_shifts = FALSE;
 						if ( isset($data['overwrite']) AND $data['overwrite'] == 1 ) {
 							Debug::Text('Overwriting Existing Shifts Enabled...', __FILE__, __LINE__, __METHOD__,10);
-							$slf = TTnew( 'ScheduleListFactory' );
+							$slf = new ScheduleListFactory();
 							//$slf->getConflictingByUserDateIdAndStartDateAndEndDate($user_date_id, $start_time, $end_time);
 							$slf->getConflictingByUserIdAndStartDateAndEndDate( $user_id, $start_time, $end_time );
 							if ( $slf->getRecordCount() > 0 ) {
@@ -692,7 +692,7 @@ class ProgressBar extends Controller
 						}
 
 						//Re-initialize schedule factory here so we clear any errors preventing the next schedule from being inserted.
-						$sf = TTnew( 'ScheduleFactory' );
+						$sf = new ScheduleFactory();
 						//$sf->setUserDateId( $user_date_id  );
 						$sf->setUserDate($user_id, $time_stamp);
 						$sf->setStatus( $data['status_id'] );
@@ -755,7 +755,7 @@ class ProgressBar extends Controller
 			//$sf->FailTransaction();
 			$sf->CommitTransaction();
 
-			$ugsf = TTnew( 'UserGenericStatusFactory' );
+			$ugsf = new UserGenericStatusFactory();
 			$ugsf->setUser( $current_user->getId() );
 			$ugsf->setBatchID( $ugsf->getNextBatchId() );
 			$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
@@ -785,8 +785,8 @@ class ProgressBar extends Controller
 			$total_shifts = count($filter_user_id) * count($data['shifts']); 
 						Debug::Text('Total Shifts: '. $total_shifts .' Users: '.  count($filter_user_id) .' Days: '.  TTDate::getDays($data['end_full_time_stamp'] - $data['start_full_time_stamp']), __FILE__, __LINE__, __METHOD__,10);
 
-			$sf = TTnew( 'ScheduleFactory' );
-			$ulf = TTnew( 'UserListFactory' );
+			$sf = new ScheduleFactory();
+			$ulf = new UserListFactory();
 						
 			$sf->StartTransaction();
 
@@ -883,7 +883,7 @@ class ProgressBar extends Controller
 						$conflicting_shifts = FALSE;
 						if ( isset($data_shifts['overwrite']) AND $data_shifts['overwrite'] == 1 ) {
 							Debug::Text('Overwriting Existing Shifts Enabled...', __FILE__, __LINE__, __METHOD__,10);
-							$slf = TTnew( 'ScheduleListFactory' );
+							$slf = new ScheduleListFactory();
 							//$slf->getConflictingByUserDateIdAndStartDateAndEndDate($user_date_id, $start_time, $end_time);
 							$slf->getConflictingByUserIdAndStartDateAndEndDate( $user_id, $start_time, $end_time );
 							if ( $slf->getRecordCount() > 0 ) {
@@ -917,7 +917,7 @@ class ProgressBar extends Controller
 						}
 
 						//Re-initialize schedule factory here so we clear any errors preventing the next schedule from being inserted.
-						$sf = TTnew( 'ScheduleFactory' );
+						$sf = new ScheduleFactory();
 			//
 						//$sf->setUserDateId( $user_date_id  );
 
@@ -1002,7 +1002,7 @@ class ProgressBar extends Controller
 			//$sf->FailTransaction(); 
 			$sf->CommitTransaction();
 
-			$ugsf = TTnew( 'UserGenericStatusFactory' );
+			$ugsf = new UserGenericStatusFactory();
 			$ugsf->setUser( $current_user->getId() );
 			$ugsf->setBatchID( $ugsf->getNextBatchId() );
 			$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
@@ -1036,8 +1036,8 @@ class ProgressBar extends Controller
 				$progress_bar->setValue(0);
 				$progress_bar->display();
 
-				$apf = TTnew( 'AccrualPolicyFactory' );
-				$aplf = TTnew( 'AccrualPolicyListFactory' );
+				$apf = new AccrualPolicyFactory();
+				$aplf = new AccrualPolicyListFactory();
 
 				$aplf->getByIdAndCompanyId( (int)$data['accrual_policy_id'], $current_company->getId() );
 				if ( $aplf->getRecordCount() > 0 ) {

@@ -24,7 +24,7 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 
-//$lrlf = TTnew( 'LeaveRequestListFactory' );
+//$lrlf = new LeaveRequestListFactory();
 $data = array();
 //$msg = "";
 $lrlf = new LeaveRequestListFactory();

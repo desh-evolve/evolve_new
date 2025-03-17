@@ -40,7 +40,7 @@ if ( $sort_column != '' ) {
 	$sort_array = array($sort_column => $sort_order);
 }
 
-$mcf = TTnew( 'MessageFactory' );
+$mcf = new MessageFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -60,14 +60,14 @@ switch ($action) {
 
 			Debug::text('Filter Folder ID: '. $filter_folder_id, __FILE__, __LINE__, __METHOD__,9);
 			if ( $filter_folder_id == 10 ) { //Inbox
-				$mrlf = TTnew( 'MessageRecipientListFactory' );
+				$mrlf = new MessageRecipientListFactory();
 				$mrlf->getByCompanyIdAndUserIdAndMessageSenderId( $current_company->getId(), $current_user->getId(), $ids );
 				foreach ($mrlf as $m_obj) {
 					$m_obj->setDeleted($delete);
 					$m_obj->Save();
 				}
 			} else { //Sent
-				$mslf = TTnew( 'MessageSenderListFactory' );
+				$mslf = new MessageSenderListFactory();
 				$mslf->getByCompanyIdAndUserIdAndId( $current_company->getId(), $current_user->getId(), $ids );
 				foreach ($mslf as $m_obj) {
 					$m_obj->setDeleted($delete);
@@ -83,7 +83,7 @@ switch ($action) {
 
 		break;
 	default:
-		$mclf = TTnew( 'MessageControlListFactory' );
+		$mclf = new MessageControlListFactory();
 
 		$folder_options = $mclf->getOptions('folder');
 

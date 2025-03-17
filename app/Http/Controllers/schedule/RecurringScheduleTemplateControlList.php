@@ -53,9 +53,9 @@ switch ($action) {
 
 		break;
 	case 'copy':
-		$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
-		$rstlf = TTnew( 'RecurringScheduleTemplateListFactory' );
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstf = new RecurringScheduleTemplateFactory();
+		$rstlf = new RecurringScheduleTemplateListFactory();
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 
 		foreach ($ids as $id) {
 			$rstclf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -150,7 +150,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 
 		foreach ($ids as $id) {
 			$rstclf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -167,7 +167,7 @@ switch ($action) {
 		break;
 
 	default:
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 
 		$filter_data = NULL;
 		if ( $permission->Check('recurring_schedule_template','view') == FALSE ) {

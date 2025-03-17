@@ -61,7 +61,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$rplf = TTnew( 'RoundPolicyListFactory' );
+		$rplf = new RoundPolicyListFactory();
 
 		foreach ($ids as $id) {
 			$rplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -76,7 +76,7 @@ switch ($action) {
 		break;
 
 	default:
-		$rplf = TTnew( 'RoundPolicyListFactory' );
+		$rplf = new RoundPolicyListFactory();
 
 		$rplf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(),$page, NULL, $sort_array );
 

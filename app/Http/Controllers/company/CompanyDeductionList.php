@@ -67,7 +67,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$cdlf = TTnew( 'CompanyDeductionListFactory' );
+		$cdlf = new CompanyDeductionListFactory();
 
 		foreach ($ids as $id) {
 			$cdlf->getByCompanyIdAndId($current_company->getId(), $id );
@@ -83,7 +83,7 @@ switch ($action) {
 
 		break;
 	case 'copy':
-		$cdlf = TTnew( 'CompanyDeductionListFactory' );
+		$cdlf = new CompanyDeductionListFactory();
 
 		foreach ($ids as $id) {
 			$cdlf->getByCompanyIdAndId($current_company->getId(), $id );
@@ -118,7 +118,7 @@ switch ($action) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
 		}
 
-		$cdlf = TTnew( 'CompanyDeductionListFactory' );
+		$cdlf = new CompanyDeductionListFactory();
 		$cdlf->getByCompanyId( $current_company->getId(), NULL, $sort_array );
 
 		$pager = new Pager($cdlf);

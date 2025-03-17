@@ -22,7 +22,7 @@ class HolidayPolicyFactory extends Factory {
 		$retval = NULL;
 		switch( $name ) {
 			case 'default_schedule_status':
-				$sf = TTnew( 'ScheduleFactory' );
+				$sf = new ScheduleFactory();
 				$retval = $sf->getOptions('status');
 				break;
 			case 'type':
@@ -117,7 +117,7 @@ class HolidayPolicyFactory extends Factory {
 		if ( is_object($this->round_interval_policy_obj) ) {
 			return $this->round_interval_policy_obj;
 		} else {
-			$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+			$riplf = new RoundIntervalPolicyListFactory();
 			$riplf->getById( $this->getRoundIntervalPolicyID() );
 			if ( $riplf->getRecordCount() > 0 ) {
 				$this->round_interval_policy_obj = $riplf->getCurrent();
@@ -131,7 +131,7 @@ class HolidayPolicyFactory extends Factory {
 		if ( is_object($this->absence_policy_obj) ) {
 			return $this->absence_policy_obj;
 		} else {
-			$aplf = TTnew( 'AbsencePolicyListFactory' );
+			$aplf = new AbsencePolicyListFactory();
 			$aplf->getById( $this->getAbsencePolicyID() );
 			if ( $aplf->getRecordCount() > 0 ) {
 				$this->absence_policy_obj = $aplf->getCurrent();
@@ -145,7 +145,7 @@ class HolidayPolicyFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -163,7 +163,7 @@ class HolidayPolicyFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -239,7 +239,7 @@ class HolidayPolicyFactory extends Factory {
 	function setDefaultScheduleStatus($value) {
 		$value = trim($value);
 
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 
 		$key = Option::getByValue($value, $sf->getOptions('status') );
 		if ($key !== FALSE) {
@@ -560,7 +560,7 @@ class HolidayPolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+		$riplf = new RoundIntervalPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -654,7 +654,7 @@ class HolidayPolicyFactory extends Factory {
 			$id = 0;
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 
 		if ( $id == 0
 				OR
@@ -672,7 +672,7 @@ class HolidayPolicyFactory extends Factory {
 	}
 
 	function getRecurringHoliday() {
-		$hprhlf = TTnew( 'HolidayPolicyRecurringHolidayListFactory' );
+		$hprhlf = new HolidayPolicyRecurringHolidayListFactory();
 		$hprhlf->getByHolidayPolicyId( $this->getId() );
 		Debug::text('Found Recurring Holidays Attached to this Policy: '. $hprhlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		foreach ($hprhlf as $obj) {
@@ -691,7 +691,7 @@ class HolidayPolicyFactory extends Factory {
 			$tmp_ids = array();
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$hprhlf = TTnew( 'HolidayPolicyRecurringHolidayListFactory' );
+				$hprhlf = new HolidayPolicyRecurringHolidayListFactory();
 				$hprhlf->getByHolidayPolicyId( $this->getId() );
 
 				foreach ($hprhlf as $obj) {
@@ -712,11 +712,11 @@ class HolidayPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$rhlf = TTnew( 'RecurringHolidayListFactory' );
+			$rhlf = new RecurringHolidayListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) AND $id > 0 ) {
-					$hprhf = TTnew( 'HolidayPolicyRecurringHolidayFactory' );
+					$hprhf = new HolidayPolicyRecurringHolidayFactory();
 					$hprhf->setHolidayPolicy( $this->getId() );
 					$hprhf->setRecurringHoliday( $id );
 

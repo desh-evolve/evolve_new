@@ -64,11 +64,11 @@ if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
 	}
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -94,7 +94,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$rsclf = TTnew( 'RecurringScheduleControlListFactory' );
+		$rsclf = new RecurringScheduleControlListFactory();
 
 		foreach ($ids as $id => $user_ids) {
 			$rsclf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -156,8 +156,8 @@ switch ($action) {
 															'page' => $page
 														) );
 
-		$rsclf = TTnew( 'RecurringScheduleControlListFactory' );
-		$ulf = TTnew( 'UserListFactory' );
+		$rsclf = new RecurringScheduleControlListFactory();
+		$ulf = new UserListFactory();
 
 		if ( $permission->Check('recurring_schedule','view') == FALSE ) {
 			if ( $permission->Check('recurring_schedule','view_child') ) {
@@ -172,28 +172,28 @@ switch ($action) {
 
 		$pager = new Pager($rsclf);
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 		$template_options = $rstclf->getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
 
 		foreach ($rsclf as $rsc_obj) {
 			$user_id = $rsc_obj->getColumn('user_id');
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getByID( $user_id );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$u_obj = $ulf->getCurrent();

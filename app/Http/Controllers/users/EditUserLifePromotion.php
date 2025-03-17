@@ -40,7 +40,7 @@ if ( isset($data) ) {
 }
 
 
-$ulpf = TTnew( 'UserLifePromotionFactory' );
+$ulpf = new UserLifePromotionFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -77,7 +77,7 @@ switch ($action) {
                     
                    BreadCrumb::setCrumb($title);
                    
-                   $ulplf = TTnew( 'UserLifePromotionListFactory' );
+                   $ulplf = new UserLifePromotionListFactory();
 		   $ulplf->getById($id);
                    
                    foreach ($ulplf as $ulpf_obj) {
@@ -98,7 +98,7 @@ switch ($action) {
                     
                 }
                 
-                $ulf = TTnew( 'UserListFactory' );
+                $ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), TRUE );
                 
                 

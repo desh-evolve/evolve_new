@@ -35,7 +35,7 @@ extract	(FormVariables::GetVariables(
 												'user_id'
 												) ) );
 
-$roef = TTnew( 'ROEFactory' );
+$roef = new ROEFactory();
 
 if ( isset($roe_data) ) {
 	if ( $roe_data['first_date'] != '' ) {
@@ -52,8 +52,8 @@ if ( isset($roe_data) ) {
 	}
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -114,7 +114,7 @@ switch ($action) {
 
 			$roef->Save();
 
-			$ugsf = TTnew( 'UserGenericStatusFactory' );
+			$ugsf = new UserGenericStatusFactory();
 			$ugsf->setUser( $current_user->getId() );
 			$ugsf->setBatchID( $ugsf->getNextBatchId() );
 			$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
@@ -143,7 +143,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$roelf = TTnew( 'ROEListFactory' );
+			$roelf = new ROEListFactory();
 
 			$roelf->getById( $id );
 
@@ -177,13 +177,13 @@ switch ($action) {
 			//Guess for end dates...
 
 			//get User data for hire date
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$user_obj = $ulf->getById($user_id)->getCurrent();
 
-			$plf = TTnew( 'PunchListFactory' );
+			$plf = new PunchListFactory();
 
 			//Is there a previous ROE? If so, find first shift back since ROE was issued.
-			$rlf = TTnew( 'ROEListFactory' );
+			$rlf = new ROEListFactory();
 			$rlf->getLastROEByUserId( $user_id );
 			if ( $rlf->getRecordCount() > 0 ) {
 				$roe_obj = $rlf->getCurrent();
@@ -213,7 +213,7 @@ switch ($action) {
 			Debug::Text('Last Punch Date: '. TTDate::getDate('DATE+TIME', $last_date) , __FILE__, __LINE__, __METHOD__,10);
 
 			//Get pay period of last shift workd
-			$plf = TTnew( 'PayPeriodListFactory' );
+			$plf = new PayPeriodListFactory();
 			$pay_period_obj = $plf->getByUserIdAndEndDate( $user_id, $last_date )->getCurrent();
 
 			$pay_period_type_id = FALSE;
@@ -232,7 +232,7 @@ switch ($action) {
 		//Select box options;
 		$roe_data['code_options'] = $roef->getOptions('code');
 
-		$ppsf = TTnew( 'PayPeriodScheduleFactory' );
+		$ppsf = new PayPeriodScheduleFactory();
 		$roe_data['pay_period_type_options'] = $ppsf->getOptions('type');
 		unset($roe_data['pay_period_type_options'][5]);
 
@@ -240,7 +240,7 @@ switch ($action) {
 		$smarty->assign_by_ref('user_options', $user_options);
 
 		//PSEA accounts
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$earning_pay_stub_entry_account_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,30,40), TRUE );
 		$smarty->assign_by_ref('earning_pay_stub_entry_account_options', $earning_pay_stub_entry_account_options);
 

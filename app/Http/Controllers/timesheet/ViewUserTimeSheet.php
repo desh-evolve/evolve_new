@@ -98,7 +98,7 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 //Load default filter settings, if other filter settings aren't set.
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
+$ugdlf = new UserGenericDataListFactory();
 
 $ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'], TRUE );
 if ( $ugdlf->getRecordCount() > 0 ) {
@@ -128,20 +128,20 @@ if ( !isset($filter_data['department_ids']) ) {
 	// $filter_data['department_ids'] = -1;
 }
 
-$uglf = TTnew( 'UserGroupListFactory' );
+$uglf = new UserGroupListFactory();
 $group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
-$blf = TTnew( 'BranchListFactory' );
+$blf = new BranchListFactory();
 $blf->getByCompanyId( $current_company->getId() );
 $branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-$dlf = TTnew( 'DepartmentListFactory' );
+$dlf = new DepartmentListFactory();
 $dlf->getByCompanyId( $current_company->getId() );
 $department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 //Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 if ( $permission->Check('punch','view') == FALSE ) {
@@ -201,7 +201,7 @@ if ( isset($prev_week) ) {
 
 //Get current PP info
 if ( isset($prev_pp) OR isset($next_pp) ) {
-	$pplf = TTnew( 'PayPeriodListFactory' );
+	$pplf = new PayPeriodListFactory();
 	$pplf->getByUserIdAndEndDate( $user_id, $filter_data['date'] );
 	if ( $pplf->getRecordCount() > 0 ) {
 		//Debug::setVerbosity(11);
@@ -231,7 +231,7 @@ if ( $filter_data['date'] == '' OR $filter_data['date'] <= 0 ) {
 }
 
 //Save current filter settings, so when we come back to the timesheet they are loaded.
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdf = new UserGenericDataFactory();
 if ( isset($generic_data) AND $generic_data['id'] != '' AND $generic_data['id'] != 0 ) {
 	Debug::text('Passed ID: ', __FILE__, __LINE__, __METHOD__,10);
 	$ugdf->setID( $generic_data['id'] );
@@ -254,7 +254,7 @@ if ( $ugdf->isValid() ) {
 }
 
 //Get pay period info from filter date.
-$udlf = TTnew( 'UserDateListFactory' );
+$udlf = new UserDateListFactory();
 $udlf->getByUserIdAndDate( getByUserIdAndDate $filter_data['date'] );
 if ( $udlf->getRecordCount() > 0 ) {
 	$pay_period_id = $udlf->getCurrent()->getPayPeriod();
@@ -266,7 +266,7 @@ if ( $udlf->getRecordCount() > 0 ) {
 	//This will guess they belong to the new pay period schedule.
 	//Only real fix I see for this is to make sure we have a user_date row for EVERY day, for EVERY
 	//user, regardless if they work or not.
-	$pplf = TTnew( 'PayPeriodListFactory' );
+	$pplf = new PayPeriodListFactory();
 	$pplf->getByUserIdAndEndDate( $user_id, $filter_data['date'] );
 	if ( $pplf->getRecordCount() > 0 ) {
 		$pay_period_obj = $pplf->getCurrent();
@@ -275,7 +275,7 @@ if ( $udlf->getRecordCount() > 0 ) {
 		$pay_period_id = FALSE;
 	}
 }
-$pplf = TTnew( 'PayPeriodListFactory' );
+$pplf = new PayPeriodListFactory();
 $pplf->getById( $pay_period_id );
 if ( $pplf->getRecordCount() > 0 ) {
 	$pay_period_obj = $pplf->getCurrent();
@@ -300,12 +300,12 @@ switch ($action) {
 		//Debug::setVerbosity(11);
 		Debug::text('Verifying Pay Period TimeSheet ', __FILE__, __LINE__, __METHOD__,10);
 
-		$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+		$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 		$pptsvlf->StartTransaction();
 		$pptsvlf->getByPayPeriodIdAndUserId( $pay_period_obj->getId(), $user_id );
 		if ( $pptsvlf->getRecordCount() == 0 ) {
 			Debug::text('Timesheet NOT verified by employee yet.', __FILE__, __LINE__, __METHOD__,10);
-			$pptsvf = TTnew( 'PayPeriodTimeSheetVerifyFactory' );
+			$pptsvf = new PayPeriodTimeSheetVerifyFactory();
 		} else {
 			Debug::text('Timesheet re-verified by employee, or superior...', __FILE__, __LINE__, __METHOD__,10);
 			$pptsvf = $pptsvlf->getCurrent();
@@ -329,10 +329,10 @@ switch ($action) {
 
 		//Find out if a pay stub is already generated for the pay period we are currently in.
 		//If it is, delete it so we can start from fresh
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 		$pslf->getByUserIdAndPayPeriodId( $filter_data['user_id'], $pay_period_id );
 
 		foreach ($pslf as $pay_stub) {
@@ -420,7 +420,7 @@ switch ($action) {
 		//var_dump($calendar_array);
 
 		//Get all punches, put in array by date epoch.
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$plf->getByCompanyIDAndUserIdAndStartDateAndEndDate( $current_company->getId(), $user_id, $start_date, $end_date);
 		if ( $plf->getRecordCount() > 0 ) {
 			foreach($plf as $punch_obj) {
@@ -640,9 +640,9 @@ switch ($action) {
 		
 
 		//Get date total rows.
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 		$meal_policy_options = $mplf->getByCompanyIdArray( $current_company->getId() );
 		unset($mplf);
 
@@ -699,7 +699,7 @@ switch ($action) {
 		}
 
 
-		$bplf = TTnew( 'BreakPolicyListFactory' );
+		$bplf = new BreakPolicyListFactory();
 		$break_policy_options = $bplf->getByCompanyIdArray( $current_company->getId() );
 		unset($bplf);
 
@@ -833,14 +833,14 @@ switch ($action) {
 		$job_options = array();
 		$job_item_options = array();
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$job_options = $jlf->getByCompanyIdArray( $current_company->getId(), FALSE );
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$job_item_options = $jilf->getByCompanyIdArray( $current_company->getId(), FALSE );
 		}
 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		//Get only worked/paid absence totals.
 		$udtlf->getPaidTimeByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $user_id, array(10,30) , $start_date, $end_date);
 		if ( $udtlf->getRecordCount() > 0 ) {
@@ -998,11 +998,11 @@ switch ($action) {
 
 
 		*/
-		$pplf_b = TTnew( 'PremiumPolicyListFactory' );
+		$pplf_b = new PremiumPolicyListFactory();
 		$premium_policy_options = $pplf_b->getByCompanyIdArray( $current_company->getId() );
 		unset($pplf_b);
 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		//Get only worked totals.
 		$udtlf->getByCompanyIDAndUserIdAndStatusAndTypeAndStartDateAndEndDate( $current_company->getId(), $user_id, 10, 40, $start_date, $end_date);
 		if ( $udtlf->getRecordCount() > 0 ) {
@@ -1063,13 +1063,13 @@ switch ($action) {
 
 
 		*/
-		//$aplf = TTnew( 'AccrualPolicyListFactory' );
+		//$aplf = new AccrualPolicyListFactory();
 		//$absence_policy_options = $aplf->getByCompanyIdArray( $current_company->getId() );
-                $aplf = TTnew( 'AbsencePolicyListFactory' );
+                $aplf = new AbsencePolicyListFactory();
 		$absence_policy_options = $aplf->getByCompanyIdArray( $current_company->getId() );
 
                 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		//Get only worked totals.
 		$udtlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $user_id, 30, $start_date, $end_date);
         if ( $udtlf->getRecordCount() > 0 ) {
@@ -1139,7 +1139,7 @@ switch ($action) {
 
 
 		*/
-		$elf = TTnew( 'ExceptionListFactory' );
+		$elf = new ExceptionListFactory();
 		$elf->getByCompanyIDAndUserIdAndStartDateAndEndDate( $current_company->getID(), $user_id, $start_date, $end_date);
 		$punch_exceptions = array();
 		if ( $elf->getRecordCount() > 0 ) {
@@ -1189,7 +1189,7 @@ switch ($action) {
 
 		//Get exception names for legend.
 		if ( isset($unique_exceptions) ) {
-			$epf = TTnew( 'ExceptionPolicyFactory' );
+			$epf = new ExceptionPolicyFactory();
 			$exception_options = $epf->getOptions('type');
 			foreach( $unique_exceptions as $unique_exception ) {
 				$unique_exceptions[$unique_exception['exception_policy_type_id']]['name'] = $exception_options[$unique_exception['exception_policy_type_id']];
@@ -1205,7 +1205,7 @@ switch ($action) {
 
 
 		*/
-		$rlf = TTnew( 'RequestListFactory' );
+		$rlf = new RequestListFactory();
 		$rlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getID(), $user_id, 30, $start_date, $end_date);
 		if ( $rlf->getRecordCount() > 0 ) {
 			Debug::text('Found Requests!!: ', __FILE__, __LINE__, __METHOD__,10);
@@ -1240,7 +1240,7 @@ switch ($action) {
 
 		*/
 
-		$hlf = TTnew( 'HolidayListFactory' );
+		$hlf = new HolidayListFactory();
 		$holiday_array = $hlf->getArrayByPolicyGroupUserId( $user_id, $start_date, $end_date );
 		//var_dump($holiday_array);
 
@@ -1281,7 +1281,7 @@ switch ($action) {
 		*/
 		if ( isset($pay_period_obj) AND is_object($pay_period_obj) ) {
 			$is_timesheet_superior = FALSE;
-			$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 			$pptsvlf->getByPayPeriodIdAndUserId( $pay_period_obj->getId(), $user_id );
 
 			if ( $pptsvlf->getRecordCount() > 0 ) {
@@ -1324,7 +1324,7 @@ switch ($action) {
 		//Sum all Paid Absences
 		//Sum all Dock Absences
 		//Sum all Regular/OverTime hours
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		$worked_total_time = (int)$udtlf->getWorkedTimeSumByUserIDAndPayPeriodId( $user_id, $pay_period_id );
 		Debug::text('Worked Total Time: '. $worked_total_time, __FILE__, __LINE__, __METHOD__,10);
 
@@ -1337,7 +1337,7 @@ switch ($action) {
 		$udtlf->getRegularAndOverTimeSumByUserIDAndPayPeriodId( $user_id, $pay_period_id );
 		if ( $udtlf->getRecordCount() > 0 ) {
 			//Get overtime policy names
-			$otplf = TTnew( 'OverTimePolicyListFactory' );
+			$otplf = new OverTimePolicyListFactory();
 			$over_time_policy_options = $otplf->getByCompanyIdArray( $current_company->getId(), FALSE );
 
 			foreach($udtlf as $udt_obj ) {
@@ -1416,7 +1416,7 @@ switch ($action) {
 		} else {
 			Debug::text('Pay Period Object NOT Found!', __FILE__, __LINE__, __METHOD__,10);
 			//Check to see if employee is even assigned to pay period schedule.
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 			$ppslf->getByCompanyIdAndUserId( $current_company->getId(), $user_id );
 			if ( $ppslf->getRecordCount() > 0 ) {
 				Debug::text('Pay Period Schedule Found!', __FILE__, __LINE__, __METHOD__,10);

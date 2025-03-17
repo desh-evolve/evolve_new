@@ -18,7 +18,7 @@ class PolicyGroupOverTimePolicyFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = trim($id);
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
@@ -40,7 +40,7 @@ class PolicyGroupOverTimePolicyFactory extends Factory {
 	function setOverTimePolicy($id) {
 		$id = trim($id);
 
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 
 		if (	$id == 0
 				OR

@@ -60,7 +60,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 
 		foreach ($ids as $id) {
 			$uglf->getById($id );
@@ -75,7 +75,7 @@ switch ($action) {
 		break;
 
 	default:
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 
 		$nodes = FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'HTML' );
 

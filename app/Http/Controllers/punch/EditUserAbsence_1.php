@@ -41,7 +41,7 @@ if ( isset($udt_data) ) {
 	}
 }
 
-$udtf = TTnew( 'UserDateTotalFactory' );
+$udtf = new UserDateTotalFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -50,7 +50,7 @@ switch ($action) {
 		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::setVerbosity(11);
 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		$udtlf->getById( $udt_data['id'] );
 		if ( $udtlf->getRecordCount() > 0 ) {
 			foreach($udtlf as $udt_obj) {
@@ -99,7 +99,7 @@ switch ($action) {
 					$udtf->setId($udt_data['id']);
 				} else {
 					Debug::Text('Editing absence, absence policy changed, deleting old record ID: '. $udt_data['id'] , __FILE__, __LINE__, __METHOD__,10);
-					$udtlf = TTnew( 'UserDateTotalListFactory' );
+					$udtlf = new UserDateTotalListFactory();
 					$udtlf->getById( $udt_data['id'] );
 					if ( $udtlf->getRecordCount() == 1 ) {
 						$udt_obj = $udtlf->getCurrent();
@@ -177,7 +177,7 @@ switch ($action) {
 		if ( $id != '' ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getById( $id );
 
 			foreach ($udtlf as $udt_obj) {
@@ -210,7 +210,7 @@ switch ($action) {
 			Debug::Text(' ID was NOT passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 			//Get user full name
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$user_obj = $ulf->getById( $user_id )->getCurrent();
 			$user_date_id = UserDateFactory::getUserDateID($user_id, $date_stamp);
 
@@ -226,22 +226,22 @@ switch ($action) {
 							);
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$absence_policy_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByCompanyIdAndUserIdAndStatus( $current_company->getId(), $user_id, array(10,20,30,40) );
 			$udt_data['job_options'] = $jlf->getArrayByListFactory( $jlf, TRUE, TRUE );
 			$udt_data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
 			$udt_data['job_item_options'] = $jilf->getArrayByListFactory( $jilf, TRUE, TRUE );
 			$udt_data['job_item_manual_id_options'] = $jilf->getManualIdArrayByListFactory( $jilf, TRUE );

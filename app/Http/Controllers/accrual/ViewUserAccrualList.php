@@ -72,7 +72,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$alf = TTnew( 'AccrualListFactory' );
+		$alf = new AccrualListFactory();
 
 		$alf->StartTransaction();
 		foreach ($ids as $id) {
@@ -99,7 +99,7 @@ switch ($action) {
 		break;
 
 	default:
-		$alf = TTnew( 'AccrualListFactory' );
+		$alf = new AccrualListFactory();
 		$alf->getByCompanyIdAndUserIdAndAccrualPolicyID( $current_company->getId(), $user_id, $accrual_policy_id, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
 
 		$pager = new Pager($alf);
@@ -129,10 +129,10 @@ switch ($action) {
 		}
 		$smarty->assign_by_ref('accruals', $accruals);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_obj = $ulf->getById( $user_id )->getCurrent();
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 		$accrual_policy_obj = $aplf->getById( $accrual_policy_id )->getCurrent();
 
 		$smarty->assign_by_ref('user_id', $user_id);

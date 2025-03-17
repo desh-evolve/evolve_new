@@ -101,7 +101,7 @@ class AccrualPolicyFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -119,7 +119,7 @@ class AccrualPolicyFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -579,7 +579,7 @@ class AccrualPolicyFactory extends Factory {
 			return FALSE;
 		}
 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		$retval = $udtlf->getWorkedTimeSumByUserIDAndStartDateAndEndDate( $user_id, 1, $end_date );
 
 		Debug::Text('Worked Seconds: '. (int)$retval .' Before: '. TTDate::getDate('DATE+TIME', $end_date), __FILE__, __LINE__, __METHOD__,10);
@@ -598,7 +598,7 @@ class AccrualPolicyFactory extends Factory {
 
 		$milestone_obj = FALSE;
 
-		$apmlf = TTnew( 'AccrualPolicyMilestoneListFactory' );
+		$apmlf = new AccrualPolicyMilestoneListFactory();
 		$apmlf->getByAccrualPolicyId($this->getId(), NULL, array('length_of_service_days' => 'desc' ) );
 		Debug::Text('&nbsp;&nbsp;Total Accrual Policy MileStones: '. (int)$apmlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		if ( $apmlf->getRecordCount() > 0 ) {
@@ -657,7 +657,7 @@ class AccrualPolicyFactory extends Factory {
 		}
 
 		//Check min/max times of accrual policy.
-		$ablf = TTnew( 'AccrualBalanceListFactory' );
+		$ablf = new AccrualBalanceListFactory();
 		$ablf->getByUserIdAndAccrualPolicyId( $user_id, $accrual_policy_id );
 		if ( $ablf->getRecordCount() > 0 ) {
 			$accrual_balance = $ablf->getCurrent()->getBalance();
@@ -694,7 +694,7 @@ class AccrualPolicyFactory extends Factory {
 
 		Debug::Text('Accrual Policy ID: '. $this->getId() .' Current EPOCH: '. TTDate::getDate('DATE+TIME', $epoch), __FILE__, __LINE__, __METHOD__,10);
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		$pglf->StartTransaction();
 
@@ -710,7 +710,7 @@ class AccrualPolicyFactory extends Factory {
 						Debug::Text('Policy Group User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
 						//Get User Object
-						$ulf = TTnew( 'UserListFactory' );
+						$ulf = new UserListFactory();
 						$ulf->getByIDAndCompanyID( $user_id, $this->getCompany() );
 						if ( $ulf->getRecordCount() == 1 ) {
 							$u_obj = $ulf->getCurrent();
@@ -739,7 +739,7 @@ class AccrualPolicyFactory extends Factory {
 										//Because of pay period frequencies, and users being assigned to different
 										//pay period schedules we need to get the last pay period of each user individually.
 										//This will return the pay period that just ended in the offset time.
-										$pplf = TTnew( 'PayPeriodListFactory' );
+										$pplf = new PayPeriodListFactory();
 										$pplf->getByUserIdAndEndDate( $user_id, ($epoch-$offset) );
 										if ( $pplf->getRecordCount() > 0 ) {
 											foreach( $pplf as $pp_obj ) {
@@ -785,7 +785,7 @@ class AccrualPolicyFactory extends Factory {
 
 										//Check to make sure there isn't an identical entry already made.
 										//Ignore rollover adjustment is another adjustment of any amount has been made on the same day.
-										$alf = TTnew( 'AccrualListFactory' );
+										$alf = new AccrualListFactory();
 										$alf->getByCompanyIdAndUserIdAndAccrualPolicyIDAndTypeIDAndTimeStamp( $u_obj->getCompany(), $user_id, $this->getId(), 60, TTDate::getMiddleDayEpoch( $epoch ) );
 										if ( $alf->getRecordCount() == 0 ) {
 
@@ -797,7 +797,7 @@ class AccrualPolicyFactory extends Factory {
 											}
 
 											//Round to nearest 1min
-											$af = TTnew( 'AccrualFactory' );
+											$af = new AccrualFactory();
 											$af->setUser( $user_id );
 											$af->setType( 60 ); //Rollover Adjustment
 											$af->setAccrualPolicyID( $this->getId() );
@@ -837,12 +837,12 @@ class AccrualPolicyFactory extends Factory {
 												Debug::Text('&nbsp;&nbsp; Min/Max Adjusted Accrual Amount: '. $accrual_amount .' Limits: Min: '. $milestone_obj->getMinimumTime() .' Max: '. $milestone_obj->getMaximumTime(), __FILE__, __LINE__, __METHOD__,10);
 
 												//Check to make sure there isn't an identical entry already made.
-												$alf = TTnew( 'AccrualListFactory' );
+												$alf = new AccrualListFactory();
 												$alf->getByCompanyIdAndUserIdAndAccrualPolicyIDAndTimeStampAndAmount( $u_obj->getCompany(), $user_id, $this->getId(), TTDate::getMiddleDayEpoch( $epoch ),  $accrual_amount );
 												if ( $alf->getRecordCount() == 0 ) {
 
 													//Round to nearest 1min
-													$af = TTnew( 'AccrualFactory' );
+													$af = new AccrualFactory();
 													$af->setUser( $user_id );
 													$af->setType( 75 ); //Accrual Policy
 													$af->setAccrualPolicyID( $this->getId() );
@@ -887,7 +887,7 @@ class AccrualPolicyFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ){
 			//Check to make sure there are no hours using this OT policy.
-			$alf = TTnew( 'AccrualListFactory' );
+			$alf = new AccrualListFactory();
 			$alf->getByAccrualPolicyId( $this->getId() );
 			if ( $alf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

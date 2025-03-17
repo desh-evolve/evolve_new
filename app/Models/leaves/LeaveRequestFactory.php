@@ -85,7 +85,7 @@ class LeaveRequestFactory  extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -103,7 +103,7 @@ class LeaveRequestFactory  extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -122,7 +122,7 @@ class LeaveRequestFactory  extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$aplf = TTnew( 'UserListFactory' );
+			$aplf = new UserListFactory();
 			$this->user_obj = $aplf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -141,7 +141,7 @@ class LeaveRequestFactory  extends Factory {
 		$id = trim($id);
 
 		Debug::Text('User ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 													$ulf->getByID($id),
@@ -161,7 +161,7 @@ class LeaveRequestFactory  extends Factory {
 		if ( is_object($this->designation_obj) ) {
 			return $this->designation_obj;
 		} else {
-			$aplf = TTnew( 'UserTitleListFactory' );
+			$aplf = new UserTitleListFactory();
 			$this->designation_obj = $aplf->getById( $this->getDesignation() )->getCurrent();
 
 			return $this->designation_obj;
@@ -181,7 +181,7 @@ class LeaveRequestFactory  extends Factory {
 		$id = trim($id);
 
 		Debug::Text('User ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$ulf = TTnew( 'UserTitleListFactory' );
+		$ulf = new UserTitleListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'designation',
 													$ulf->getByID($id),
@@ -202,7 +202,7 @@ class LeaveRequestFactory  extends Factory {
 		if ( is_object($this->leave_policy_obj) ) {
 			return $this->leave_policy_obj;
 		} else {
-			$aplf = TTnew( 'AccrualPolicyListFactory' );
+			$aplf = new AccrualPolicyListFactory();
 			$this->leave_policy_obj = $aplf->getById( $this->getAccuralPolicy() )->getCurrent();
 
 			return $this->leave_policy_obj;
@@ -225,7 +225,7 @@ class LeaveRequestFactory  extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Accrual ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'accrualpolicy',
 													$aplf->getByID($id),

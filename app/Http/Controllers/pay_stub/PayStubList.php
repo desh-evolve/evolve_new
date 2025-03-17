@@ -76,12 +76,12 @@ if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
 	}
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
-$pplf = TTnew( 'PayPeriodListFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
+$pplf = new PayPeriodListFactory();
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -111,7 +111,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) > 0 ) {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			if ( $permission->Check('pay_stub','view_child') ) {
 				$filter_data['permission_children_ids'] = $permission_children_ids;
 			}
@@ -130,7 +130,7 @@ switch ($action) {
 					} else {
 						//Include file creation number in the exported file name, so the user knows what it is without opening the file,
 						//and can generate multiple files if they need to match a specific number.
-						$ugdlf = TTnew( 'UserGenericDataListFactory' );
+						$ugdlf = new UserGenericDataListFactory();
 						$ugdlf->getByCompanyIdAndScriptAndDefault( $current_company->getId(), 'PayStubFactory', TRUE );
 						if ( $ugdlf->getRecordCount() > 0 ) {
 							$ugd_obj = $ugdlf->getCurrent();
@@ -169,7 +169,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) > 0 ) {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			if ( $permission->Check('pay_stub','view') == FALSE ) {
 				if ( $permission->Check('pay_stub','view_child') ) {
@@ -213,7 +213,7 @@ switch ($action) {
 			exit;
 		}
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		if ( is_array( $ids ) AND count($ids) > 0 ) {
 			foreach ($ids as $id) {
@@ -245,7 +245,7 @@ switch ($action) {
 			exit;
 		}
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
 			if ( is_array( $ids ) AND count($ids) > 0 ) {
@@ -276,7 +276,7 @@ switch ($action) {
 			exit;
 		}
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
 			if ( is_array( $ids ) AND count($ids) > 0 ) {
@@ -332,8 +332,8 @@ switch ($action) {
 															'saved_search_id' => $saved_search_id,
 															'page' => $page
 														) );
-		$pslf = TTnew( 'PayStubListFactory' );
-		$ulf = TTnew( 'UserListFactory' );
+		$pslf = new PayStubListFactory();
+		$ulf = new UserListFactory();
 
 		if ( $permission->Check('pay_stub','view') == FALSE ) {
 			if ( $permission->Check('pay_stub','view_child') ) {
@@ -344,7 +344,7 @@ switch ($action) {
 			}
 		}
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getPayPeriodsWithPayStubsByCompanyId( $current_company->getId(), NULL, array('a.start_date' => 'desc') );
 		$pay_period_options = $pplf->getArrayByListFactory( $pplf, FALSE, FALSE );
 		$pay_period_ids = array_keys((array)$pay_period_options);
@@ -362,19 +362,19 @@ switch ($action) {
 
 		$pager = new Pager($pslf);
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
 		foreach ($pslf as $pay_stub) {

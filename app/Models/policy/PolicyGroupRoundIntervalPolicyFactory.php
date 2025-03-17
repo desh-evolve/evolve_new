@@ -17,7 +17,7 @@ class PolicyGroupRoundIntervalPolicyFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = trim($id);
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'policy_group',
 															$pglf->getByID($id),
@@ -39,7 +39,7 @@ class PolicyGroupRoundIntervalPolicyFactory extends Factory {
 	function setRoundInterValPolicy($id) {
 		$id = trim($id);
 
-		$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+		$riplf = new RoundIntervalPolicyListFactory();
 
 		if ( $id == 0
 				OR

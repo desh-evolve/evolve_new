@@ -44,8 +44,8 @@ switch ($action) {
 	case 'Submit':
 	default:
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
-		$slf = TTnew( 'ShiftListFactory' );
+		$pplf = new PayPeriodListFactory();
+		$slf = new ShiftListFactory();
 
 		if (!isset($pay_period_id) ) {
 			Debug::text(' Pay Period ID NOT SET: '. $pay_period_id , __FILE__, __LINE__, __METHOD__,10);
@@ -53,12 +53,12 @@ switch ($action) {
 		}
 		Debug::text(' Pay Period ID: '. $pay_period_id , __FILE__, __LINE__, __METHOD__,10);
 
-		$psenlf = TTnew( 'PayStubEntryNameListFactory' );
-		$ulf = TTnew( 'UserListFactory' );
-		$blf = TTnew( 'BranchListFactory' );
+		$psenlf = new PayStubEntryNameListFactory();
+		$ulf = new UserListFactory();
+		$blf = new BranchListFactory();
 
 		//Get all pay stubs for this pay period
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 		$pslf->getByPayPeriodId( $pay_period_id, NULL, array('advance' => '= \'f\'') );
 
 		$pager = new Pager($pslf);
@@ -67,7 +67,7 @@ switch ($action) {
 		foreach($pslf as $pay_stub_obj) {
 			Debug::text(' Pay Stub ID: '. $pay_stub_obj->getId() , __FILE__, __LINE__, __METHOD__,10);
 
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			//Order is very important here. We want the "last" entries to go last, as they should
 			//have the most up to date YTD values.
 			$pself->getByPayStubId( $pay_stub_obj->getId() );
@@ -228,7 +228,7 @@ switch ($action) {
 			$pay_period_ids[] = $pay_period_obj->getId();
 		}
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pay_period_options = $pplf->getByIdListArray($pay_period_ids, NULL, array('start_date' => 'desc'));
 
 		$smarty->assign_by_ref('pay_period_options', $pay_period_options);

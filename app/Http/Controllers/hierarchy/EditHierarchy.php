@@ -38,7 +38,7 @@ extract	(FormVariables::GetVariables(
 $ft = new FastTree($fast_tree_options);
 $ft->setTree( $hierarchy_id );
 
-$hf = TTnew( 'HierarchyFactory' );
+$hf = new HierarchyFactory();
 
 $redirect=0;
 
@@ -91,7 +91,7 @@ switch ($action) {
 			$user_data['user_id'] = $id;
 		}
 
-		$hlf = TTnew( 'HierarchyListFactory' );
+		$hlf = new HierarchyListFactory();
 
 		//$nodes = $hlf->FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'TEXT', TRUE);
 		//$nodes = FastTree::FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'TEXT', TRUE);
@@ -102,7 +102,7 @@ switch ($action) {
 		}
 
 		//Get include employee list.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getByCompanyId( $current_company->getId() );
 		$raw_user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
 		//$raw_user_list_options = UserListFactory::getByCompanyIdArray( $current_company->getId() );

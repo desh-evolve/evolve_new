@@ -15,7 +15,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 		if ( is_object($this->recurring_holiday_obj) ) {
 			return $this->recurring_holiday_obj;
 		} else {
-			$lf = TTnew( 'RecurringHolidayListFactory' );
+			$lf = new RecurringHolidayListFactory();
 			$lf->getById( $this->getRecurringHoliday() );
 			if ( $lf->getRecordCount() == 1 ) {
 				$this->recurring_holiday_obj = $lf->getCurrent();
@@ -36,7 +36,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 	function setHolidayPolicy($id) {
 		$id = trim($id);
 
-		$hplf = TTnew( 'HolidayPolicyListFactory' );
+		$hplf = new HolidayPolicyListFactory();
 
 		if (
 			  $this->Validator->isNumeric(	'holiday_policy',
@@ -65,7 +65,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 	function setRecurringHoliday($id) {
 		$id = trim($id);
 
-		$rhlf = TTnew( 'RecurringHolidayListFactory' );
+		$rhlf = new RecurringHolidayListFactory();
 
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'recurring_holiday',

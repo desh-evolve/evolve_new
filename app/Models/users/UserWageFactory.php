@@ -118,7 +118,7 @@ class UserWageFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -134,7 +134,7 @@ class UserWageFactory extends Factory {
 			return $this->wage_group_obj;
 		} else {
 
-			$wglf = TTnew( 'WageGroupListFactory' );
+			$wglf = new WageGroupListFactory();
 			$wglf->getById( $this->getWageGroup() );
 
 			if ( $wglf->getRecordCount() == 1 ) {
@@ -157,7 +157,7 @@ class UserWageFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -183,7 +183,7 @@ class UserWageFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Wage Group ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 
 		if (
 				$id == 0
@@ -426,7 +426,7 @@ class UserWageFactory extends Factory {
 
 		$must_validate = FALSE;
 
-		$uwlf = TTnew( 'UserWageListFactory' );
+		$uwlf = new UserWageListFactory();
 		$uwlf->getByUserIdAndGroupIDAndBeforeDate( $this->getUser(), 0, $epoch );
 		//Debug::text(' Total Rows: '. $uwlf->getRecordCount() .' User: '. $this->getUser() .' Epoch: '. $epoch , __FILE__, __LINE__, __METHOD__,10);
 
@@ -525,7 +525,7 @@ class UserWageFactory extends Factory {
 			return FALSE;
 		}
 
-		$clf = TTnew( 'CurrencyListFactory' );
+		$clf = new CurrencyListFactory();
 		$clf->getByCompanyIdAndBase( $this->getUserObject()->getCompany(), TRUE );
 		if ( $clf->getRecordCount() > 0 ) {
 			$base_currency_obj = $clf->getCurrent();
@@ -596,7 +596,7 @@ class UserWageFactory extends Factory {
 			return FALSE;
 		}
                 $budgetary_allowance = 0;
-                $udlf = TTnew( 'UserDeductionListFactory' );
+                $udlf = new UserDeductionListFactory();
                 $udlf->getByUserIdAndCompanyDeductionId($this->getUser(), 3);
                 if($udlf->getRecordCount()>0){
                     foreach ($udlf as $udlf_obj){
@@ -872,10 +872,10 @@ class UserWageFactory extends Factory {
 
 		$retval = FALSE;
 
-		$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyID( $company_id );
 		if ( $pseallf->getRecordCount() > 0 ) {
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			$total_gross = $pself->getAmountSumByUserIdAndEntryNameIdAndStartDateAndEndDate($user_id, $pseallf->getCurrent()->getTotalGross(), $start_epoch, $end_epoch );
 			$total_employer_deductions = $pself->getAmountSumByUserIdAndEntryNameIdAndStartDateAndEndDate($user_id, $pseallf->getCurrent()->getTotalEmployerDeduction(), $start_epoch, $end_epoch );
 

@@ -39,7 +39,7 @@ extract	(FormVariables::GetVariables(
 												'message_data',
 												'ack_message_id',
 												) ) );
-$mcf = TTnew( 'MessageControlFactory' );
+$mcf = new MessageControlFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -66,7 +66,7 @@ switch ($action) {
 
 			$mcf->StartTransaction();
 
-			$mcf = TTnew( 'MessageControlFactory' );
+			$mcf = new MessageControlFactory();
 			$mcf->setFromUserId( $current_user->getId() );
 
 			//Get sender of the original message, as we only reply directly to them.
@@ -96,14 +96,14 @@ switch ($action) {
 
 			//If a supervisors sends a message to multiple recipients, we always treat it as individual messages,
 			//So we only display a message thread for a single from/to pair.
-			$mclf = TTnew( 'MessageControlListFactory' );
+			$mclf = new MessageControlListFactory();
 			$mclf->getByCompanyIDAndUserIdAndIdAndFolder( $current_user->getCompany(), $current_user->getID(), $id, $filter_folder_id, NULL, NULL, NULL, array( 'a.created_date' => 'asc' ) );
 			if ( $mclf->getRecordCount() > 0 ) {
 				$mark_read_message_ids = array();
 				$i=0;
 				foreach ($mclf as $message) {
 					//Get user info
-					$ulf = TTnew( 'UserListFactory' );
+					$ulf = new UserListFactory();
 
 					$from_user_id = $message->getColumn('from_user_id');
 					$from_user_full_name = Misc::getFullName( $message->getColumn('from_first_name'), $message->getColumn('from_middle_name'), $message->getColumn('from_last_name') );

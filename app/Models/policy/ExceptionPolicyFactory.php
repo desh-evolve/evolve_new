@@ -141,7 +141,7 @@ class ExceptionPolicyFactory extends Factory {
 	function setExceptionPolicyControl($id) {
 		$id = trim($id);
 
-		$epclf = TTnew( 'ExceptionPolicyControlListFactory' );
+		$epclf = new ExceptionPolicyControlListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'exception_policy_control',
 													$epclf->getByID($id),
@@ -809,7 +809,7 @@ class ExceptionPolicyFactory extends Factory {
 		Debug::text(' User Date ID: '. $user_date_id .' PreMature: '. (int)$enable_premature_exceptions , __FILE__, __LINE__, __METHOD__,10);
 
 		//Get user date info
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory();
 		$udlf->getById( $user_date_id );
 		if ( $udlf->getRecordCount() > 0 ) {
 			$user_date_obj = $udlf->getCurrent();
@@ -835,7 +835,7 @@ class ExceptionPolicyFactory extends Factory {
 		//Get list of existing exceptions, so we can determine if we need to delete any. We can't delete them all blindly and re-create them
 		//as this will send duplicate email notifications for every single punch.
 		$existing_exceptions = array();
-		$elf = TTnew( 'ExceptionListFactory' );
+		$elf = new ExceptionListFactory();
 		$elf->getByUserDateID( $user_date_id );
 		if ( $elf->getRecordCount() > 0 ) {
 			foreach( $elf as $e_obj ) {
@@ -852,13 +852,13 @@ class ExceptionPolicyFactory extends Factory {
 		unset($elf, $e_obj);
 
 		//Get all Punches on this date for this user.
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$plf->getByUserDateId( $user_date_id );
 		if ( $plf->getRecordCount() > 0 ) {
 			Debug::text(' Found Punches: '.  $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		}
 
-		$slf = TTnew( 'ScheduleListFactory' );
+		$slf = new ScheduleListFactory();
 		$slf->getByUserDateIdAndStatusId( $user_date_id, 10 );
 		if ( $slf->getRecordCount() > 0 ) {
 			Debug::text(' Found Schedule: '.  $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -869,7 +869,7 @@ class ExceptionPolicyFactory extends Factory {
 		$current_exceptions = array(); //Array holding current exception data.
 
 		//Get all active exceptions.
-		$eplf = TTnew( 'ExceptionPolicyListFactory' );
+		$eplf = new ExceptionPolicyListFactory();
 		$eplf->getByPolicyGroupUserIdAndActive( $user_date_obj->getUser(), TRUE );
 		if ( $eplf->getRecordCount() > 0 ) {
 			Debug::text(' Found Active Exceptions: '.  $eplf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -1381,7 +1381,7 @@ class ExceptionPolicyFactory extends Factory {
 								$daily_total_time = 0;
 								if ( $schedule_total_time > 0 ) {
 									//Get daily total time.
-									$udtlf = TTnew( 'UserDateTotalListFactory' );
+									$udtlf = new UserDateTotalListFactory();
 
 									//Take into account auto-deduct/add meal policies
 									//$udtlf->getByUserDateIdAndStatus( $user_date_id, 20 );
@@ -1430,7 +1430,7 @@ class ExceptionPolicyFactory extends Factory {
 								$daily_total_time = 0;
 								if ( $schedule_total_time > 0 ) {
 									//Get daily total time.
-									$udtlf = TTnew( 'UserDateTotalListFactory' );
+									$udtlf = new UserDateTotalListFactory();
 
 									//Take into account auto-deduct/add meal policies
 									//$udtlf->getByUserDateIdAndStatus( $user_date_id, 20 );
@@ -1473,7 +1473,7 @@ class ExceptionPolicyFactory extends Factory {
 							$daily_total_time = 0;
 
 							//Get daily total time.
-							$udtlf = TTnew( 'UserDateTotalListFactory' );
+							$udtlf = new UserDateTotalListFactory();
 
 							//Take into account auto-deduct/add meal policies
 							$udtlf->getByUserDateIdAndStatusAndType( $user_date_id, 10, 10 );
@@ -1520,7 +1520,7 @@ class ExceptionPolicyFactory extends Factory {
 							//In either case though we should take into account the entires week worth of scheduled time even if we are only partially through
 							//the week, that way we won't be triggering s9 exceptions on a Wed and a Fri or something, it will only occur on the last days of the week.
 							if ( strtolower( $ep_obj->getType() ) == 's9' ) {
-								$tmp_slf = TTnew( 'ScheduleListFactory' );
+								$tmp_slf = new ScheduleListFactory();
 								$tmp_slf->getByUserIdAndStartDateAndEndDate( $user_date_obj->getUser(), TTDate::getBeginWeekEpoch($user_date_obj->getDateStamp(), $start_week_day_id), TTDate::getEndWeekEpoch($user_date_obj->getDateStamp(), $start_week_day_id) );
 								if ( $tmp_slf->getRecordCount() > 0 ) {
 									foreach( $tmp_slf as $s_obj ) {
@@ -1534,7 +1534,7 @@ class ExceptionPolicyFactory extends Factory {
 							$weekly_total_time = 0;
 
 							//Get daily total time.
-							$udtlf = TTnew( 'UserDateTotalListFactory' );
+							$udtlf = new UserDateTotalListFactory();
 							$weekly_total_time = $udtlf->getWorkedTimeSumByUserIDAndStartDateAndEndDate( $user_date_obj->getUser(), TTDate::getBeginWeekEpoch($user_date_obj->getDateStamp(), $start_week_day_id), $user_date_obj->getDateStamp() );
 
 							Debug::text(' Weekly Total Time: '. $weekly_total_time .' Weekly Scheduled Total Time: '. $weekly_scheduled_total_time .' Watch Window: '. $ep_obj->getWatchWindow() .' Grace: '. $ep_obj->getGrace() .' User Date ID: '. $user_date_id, __FILE__, __LINE__, __METHOD__,10);
@@ -1597,7 +1597,7 @@ class ExceptionPolicyFactory extends Factory {
 												AND is_object( $p_obj->getScheduleObject()->getSchedulePolicyObject() ) == TRUE ) {
 											$mp_obj = $p_obj->getScheduleObject()->getSchedulePolicyObject()->getMealPolicyObject();
 										} else {
-											$mplf = TTnew( 'MealPolicyListFactory' );
+											$mplf = new MealPolicyListFactory();
 											$mplf->getByPolicyGroupUserId( $user_date_obj->getUserObject()->getId() );
 											if ( $mplf->getRecordCount() > 0 ) {
 												Debug::text('Found Meal Policy to apply.', __FILE__, __LINE__, __METHOD__, 10);
@@ -1679,7 +1679,7 @@ class ExceptionPolicyFactory extends Factory {
 								Debug::text('No Schedule Found...', __FILE__, __LINE__, __METHOD__,10);
 
 								//Check if they have a meal policy, with no schedule.
-								$mplf = TTnew( 'MealPolicyListFactory' );
+								$mplf = new MealPolicyListFactory();
 								$mplf->getByPolicyGroupUserId( $user_date_obj->getUser() );
 								if ( $mplf->getRecordCount() > 0 ) {
 									foreach( $mplf as $mp_obj ) {
@@ -1702,7 +1702,7 @@ class ExceptionPolicyFactory extends Factory {
 								$punch_control_id = FALSE;
 
 								$daily_total_time = 0;
-								$udtlf = TTnew( 'UserDateTotalListFactory' );
+								$udtlf = new UserDateTotalListFactory();
 								$udtlf->getByUserDateIdAndStatus( $user_date_id, 20 );
 								if ( $udtlf->getRecordCount() > 0 ) {
 									foreach( $udtlf as $udt_obj ) {
@@ -1758,7 +1758,7 @@ class ExceptionPolicyFactory extends Factory {
 							//Also ignore this exception if the lunch is auto-deduct.
 							$daily_total_time = 0;
 
-							$udtlf = TTnew( 'UserDateTotalListFactory' );
+							$udtlf = new UserDateTotalListFactory();
 							$udtlf->getByUserDateIdAndStatus( $user_date_id, 20 );
 							if ( $udtlf->getRecordCount() > 0 ) {
 								foreach( $udtlf as $udt_obj ) {
@@ -1807,7 +1807,7 @@ class ExceptionPolicyFactory extends Factory {
 										Debug::text('No Schedule Found...', __FILE__, __LINE__, __METHOD__,10);
 
 										//Check if they have a meal policy, with no schedule.
-										$mplf = TTnew( 'MealPolicyListFactory' );
+										$mplf = new MealPolicyListFactory();
 										$mplf->getByPolicyGroupUserId( $user_date_obj->getUser() );
 										if ( $mplf->getRecordCount() > 0 ) {
 											Debug::text('Found UnScheduled Meal Policy...', __FILE__, __LINE__, __METHOD__,10);
@@ -1885,7 +1885,7 @@ class ExceptionPolicyFactory extends Factory {
 										}
 
 										//Check to see if they have a schedule policy
-										$bplf = TTnew( 'BreakPolicyListFactory' );
+										$bplf = new BreakPolicyListFactory();
 										if ( $p_obj->setScheduleID( $scheduled_id_cache[$p_obj->getID()] ) == TRUE
 												AND is_object( $p_obj->getScheduleObject() ) == TRUE
 												AND is_object( $p_obj->getScheduleObject()->getSchedulePolicyObject() ) == TRUE ) {
@@ -1983,7 +1983,7 @@ class ExceptionPolicyFactory extends Factory {
 
 							//Get daily total time.
 							$daily_total_time = 0;
-							$udtlf = TTnew( 'UserDateTotalListFactory' );
+							$udtlf = new UserDateTotalListFactory();
 							$udtlf->getByUserDateIdAndStatusAndType( $user_date_id, 10, 10 );
 							if ( $udtlf->getRecordCount() > 0 ) {
 								foreach( $udtlf as $udt_obj ) {
@@ -2011,7 +2011,7 @@ class ExceptionPolicyFactory extends Factory {
 										}
 
 										//Check to see if they have a schedule policy
-										$bplf = TTnew( 'BreakPolicyListFactory' );
+										$bplf = new BreakPolicyListFactory();
 										if ( $p_obj->setScheduleID( $scheduled_id_cache[$p_obj->getID()] ) == TRUE
 												AND is_object( $p_obj->getScheduleObject() ) == TRUE
 												AND is_object( $p_obj->getScheduleObject()->getSchedulePolicyObject() ) == TRUE ) {
@@ -2090,7 +2090,7 @@ class ExceptionPolicyFactory extends Factory {
 								Debug::text('No Schedule Found...', __FILE__, __LINE__, __METHOD__,10);
 
 								//Check if they have a break policy, with no schedule.
-								$bplf = TTnew( 'BreakPolicyListFactory' );
+								$bplf = new BreakPolicyListFactory();
 								$bplf->getByPolicyGroupUserId( $user_date_obj->getUser() );
 								if ( $bplf->getRecordCount() > 0 ) {
 									Debug::text('Found UnScheduled Break Policy...', __FILE__, __LINE__, __METHOD__,10);
@@ -2113,7 +2113,7 @@ class ExceptionPolicyFactory extends Factory {
 								$punch_control_id = FALSE;
 
 								$daily_total_time = 0;
-								$udtlf = TTnew( 'UserDateTotalListFactory' );
+								$udtlf = new UserDateTotalListFactory();
 								$udtlf->getByUserDateIdAndStatus( $user_date_id, 20 );
 								if ( $udtlf->getRecordCount() > 0 ) {
 									foreach( $udtlf as $udt_obj ) {
@@ -2169,7 +2169,7 @@ class ExceptionPolicyFactory extends Factory {
 							//Try to assign this exception to a specific punch control id, so we can do searches based on punch branch.
 							$daily_total_time = 0;
 
-							$udtlf = TTnew( 'UserDateTotalListFactory' );
+							$udtlf = new UserDateTotalListFactory();
 							$udtlf->getByUserDateIdAndStatus( $user_date_id, 20 );
 							if ( $udtlf->getRecordCount() > 0 ) {
 								foreach( $udtlf as $udt_obj ) {
@@ -2218,7 +2218,7 @@ class ExceptionPolicyFactory extends Factory {
 										Debug::text('No Schedule Found...', __FILE__, __LINE__, __METHOD__,10);
 
 										//Check if they have a break policy, with no schedule.
-										$bplf = TTnew( 'BreakPolicyListFactory' );
+										$bplf = new BreakPolicyListFactory();
 										$bplf->getByPolicyGroupUserId( $user_date_obj->getUser() );
 										if ( $bplf->getRecordCount() > 0 ) {
 											Debug::text('Found UnScheduled Break Policy...', __FILE__, __LINE__, __METHOD__,10);
@@ -2277,11 +2277,11 @@ class ExceptionPolicyFactory extends Factory {
 									) {
 
 									//Get pay period total time, include worked and paid absence time.
-									$udtlf = TTnew( 'UserDateTotalListFactory' );
+									$udtlf = new UserDateTotalListFactory();
 									$total_time = $udtlf->getTimeSumByUserIDAndPayPeriodId( $user_date_obj->getUser(), $user_date_obj->getPayPeriodObject()->getID() );
 									if ( $total_time > 0 ) {
 										//Check to see if pay period has been verified or not yet.
-										$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+										$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 										$pptsvlf->getByPayPeriodIdAndUserId( $user_date_obj->getPayPeriodObject()->getId(), $user_date_obj->getUser() );
 
 										$pay_period_verified = FALSE;
@@ -2320,7 +2320,7 @@ class ExceptionPolicyFactory extends Factory {
 								if ( $p_obj->getStatus() == 10 ) { //In punches
 									if ( is_object( $p_obj->getPunchControlObject() ) AND $p_obj->getPunchControlObject()->getJob() > 0 ) {
 										//Found job punch, check job settings.
-										$jlf = TTnew( 'JobListFactory' );
+										$jlf = new JobListFactory();
 										$jlf->getById( $p_obj->getPunchControlObject()->getJob() );
 										if ( $jlf->getRecordCount() > 0 ) {
 											$j_obj = $jlf->getCurrent();
@@ -2353,7 +2353,7 @@ class ExceptionPolicyFactory extends Factory {
 								if ( $p_obj->getStatus() == 10 ) { //In punches
 									if ( is_object( $p_obj->getPunchControlObject() ) AND $p_obj->getPunchControlObject()->getJob() > 0 AND $p_obj->getPunchControlObject()->getJobItem() > 0 ) {
 										//Found job punch, check job settings.
-										$jlf = TTnew( 'JobListFactory' );
+										$jlf = new JobListFactory();
 										$jlf->getById( $p_obj->getPunchControlObject()->getJob() );
 										if ( $jlf->getRecordCount() > 0 ) {
 											$j_obj = $jlf->getCurrent();
@@ -2387,7 +2387,7 @@ class ExceptionPolicyFactory extends Factory {
 								if ( $p_obj->getStatus() == 10 ) { //In punches
 									if ( is_object( $p_obj->getPunchControlObject() ) AND $p_obj->getPunchControlObject()->getJob() > 0 ) {
 										//Found job punch, check job settings.
-										$jlf = TTnew( 'JobListFactory' );
+										$jlf = new JobListFactory();
 										$jlf->getById( $p_obj->getPunchControlObject()->getJob() );
 										if ( $jlf->getRecordCount() > 0 ) {
 											$j_obj = $jlf->getCurrent();
@@ -2434,7 +2434,7 @@ class ExceptionPolicyFactory extends Factory {
 											OR $p_obj->getPunchControlObject()->getJobItem() == FALSE ) {
 
 										//Make sure at least one task exists before triggering exception.
-										$jilf = TTNew('JobItemListFactory');
+										$jilf = new JobItemListFactory();
 										$jilf->getByCompanyID( $user_date_obj->getUserObject()->getCompany(), 1 ); //Limit to just 1 record.
 										if ( $jilf->getRecordCount() > 0 ) {
 											$add_exception = TRUE;
@@ -2467,7 +2467,7 @@ class ExceptionPolicyFactory extends Factory {
 			if ( isset($exceptions['create_exceptions']) AND is_array($exceptions['create_exceptions']) AND count($exceptions['create_exceptions']) > 0 ) {
 				Debug::text('Creating new exceptions... Total: '. count($exceptions['create_exceptions']), __FILE__, __LINE__, __METHOD__,10);
 				foreach( $exceptions['create_exceptions'] as $tmp_exception ) {
-					$ef = TTnew( 'ExceptionFactory' );
+					$ef = new ExceptionFactory();
 					$ef->setUserDateID( $tmp_exception['user_date_id'] );
 					$ef->setExceptionPolicyID( $tmp_exception['exception_policy_id'] );
 					$ef->setType( $tmp_exception['type_id'] );
@@ -2480,7 +2480,7 @@ class ExceptionPolicyFactory extends Factory {
 					$ef->setEnableDemerits( TRUE );
 					if ( $ef->isValid() ) {
 						if ( $enable_premature_exceptions == TRUE OR ( isset($tmp_exception['enable_email_notification']) AND $tmp_exception['enable_email_notification'] == TRUE ) ) {
-							$eplf = TTnew( 'ExceptionPolicyListFactory' );
+							$eplf = new ExceptionPolicyListFactory();
 							$eplf->getById( $tmp_exception['exception_policy_id'] );
 							if ( $eplf->getRecordCount() == 1 ) {
 								$ep_obj = $eplf->getCurrent();
@@ -2494,7 +2494,7 @@ class ExceptionPolicyFactory extends Factory {
 
 			if ( isset($exceptions['delete_exceptions']) AND is_array($exceptions['delete_exceptions']) AND count($exceptions['delete_exceptions']) > 0 ) {
 				Debug::Text('Deleting no longer valid exceptions... Total: '. count($exceptions['delete_exceptions']), __FILE__, __LINE__, __METHOD__,10);
-				$ef = TTnew( 'ExceptionFactory' );
+				$ef = new ExceptionFactory();
 				$ef->bulkDelete( $exceptions['delete_exceptions'] );
 			}
 		}

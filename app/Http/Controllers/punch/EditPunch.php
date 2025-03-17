@@ -58,9 +58,9 @@ if ( isset($pc_data) ) {
 	}
 }
 
-$pcf = TTnew( 'PunchControlFactory' );
-$pf = TTnew( 'PunchFactory' );
-$ulf = TTnew( 'UserListFactory' );
+$pcf = new PunchControlFactory();
+$pf = new PunchFactory();
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 
@@ -70,7 +70,7 @@ switch ($action) {
 		//Debug::setVerbosity(11);
 		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
 
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$plf->getById( $pc_data['punch_id'] );
 		if ( $plf->getRecordCount() > 0 ) {
 			foreach($plf as $p_obj) {
@@ -106,7 +106,7 @@ switch ($action) {
 		Debug::Text('Repeating Punch For: '. $pc_data['repeat'] .' Days', __FILE__, __LINE__, __METHOD__,10);
 
 		for( $i=0; $i <= (int)$pc_data['repeat']; $i++ ) {
-			$pf = TTnew( 'PunchFactory' );
+			$pf = new PunchFactory();
 
 			Debug::Text('Punch Repeat: '. $i, __FILE__, __LINE__, __METHOD__,10);
 			if ( $i == 0 ) {
@@ -155,7 +155,7 @@ switch ($action) {
 			if ( $pf->isValid() == TRUE ) {
 
 				if ( $pf->Save( FALSE ) == TRUE ) {
-					$pcf = TTnew( 'PunchControlFactory' );
+					$pcf = new PunchControlFactory();
 					$pcf->setId( $pf->getPunchControlID() );
 					$pcf->setPunchObject( $pf );
 
@@ -250,14 +250,14 @@ switch ($action) {
 		if ( $id != '' AND $action != 'submit' ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-			$pclf = TTnew( 'PunchControlListFactory' );
+			$pclf = new PunchControlListFactory();
 			$pclf->getByPunchId( $id );
 
 			foreach ($pclf as $pc_obj) {
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				//Get punches
-				$plf = TTnew( 'PunchListFactory' );
+				$plf = new PunchListFactory();
 				//$plf->getByPunchControlId( $pc_obj->getId() );
 				$plf->getById( $id );
 				if ( $plf->getRecordCount() > 0 ) {
@@ -268,7 +268,7 @@ switch ($action) {
 
 				//Get Station data.
 				$station_data = FALSE;
-				$slf = TTnew( 'StationListFactory' );
+				$slf = new StationListFactory();
 				if ( $p_obj->getStation() != FALSE ) {
 					$slf->getById( $p_obj->getStation() );
 					if ( $slf->getRecordCount() > 0 ) {
@@ -341,7 +341,7 @@ switch ($action) {
 				Debug::Text(' Punch Control ID was passed: '. $punch_control_id, __FILE__, __LINE__, __METHOD__,10);
 
 				//Get previous punch, and default timestamp to that.
-				$plf = TTnew( 'PunchListFactory' );
+				$plf = new PunchListFactory();
 				$plf->getPreviousPunchByPunchControlID( $punch_control_id );
 				if ( $plf->getRecordCount() > 0 ) {
 					$prev_punch_obj = $plf->getCurrent();
@@ -352,7 +352,7 @@ switch ($action) {
 					$date_stamp = NULL;
 				}
 
-				$pclf = TTnew( 'PunchControlListFactory' );
+				$pclf = new PunchControlListFactory();
 				$pclf->getById( $punch_control_id );
 				if ( $pclf->getRecordCount() > 0 ) {
 					$pc_obj = $pclf->getCurrent();
@@ -402,7 +402,7 @@ switch ($action) {
 					$epoch = TTDate::getTime();
 				}
 				//Get previous punch, and default timestamp to that.
-				$plf = TTnew( 'PunchListFactory' );
+				$plf = new PunchListFactory();
 				$plf->getPreviousPunchByUserIDAndEpoch( $user_id, $epoch );
 				if ( $plf->getRecordCount() > 0 ) {
 					Debug::Text(' Found Previous punch: ', __FILE__, __LINE__, __METHOD__,10);
@@ -412,7 +412,7 @@ switch ($action) {
 					$time_stamp = $date_stamp;
 				}
 				*/
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 				if ( $ulf->getRecordCount() > 0 ) {
 					$user_obj = $ulf->getCurrent();
@@ -435,19 +435,19 @@ switch ($action) {
 		}
 
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByCompanyIdAndUserIdAndStatus( $current_company->getId(), $pc_data['user_id'], array(10,20,30,40) );
 			$pc_data['job_options'] = $jlf->getArrayByListFactory( $jlf, TRUE, TRUE );
 			$pc_data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
 			$pc_data['job_item_options'] = $jilf->getArrayByListFactory( $jilf, TRUE, TRUE );
 			$pc_data['job_item_manual_id_options'] = $jilf->getManualIdArrayByListFactory( $jilf, TRUE );
@@ -460,7 +460,7 @@ switch ($action) {
 		$pc_data['department_options'] = $department_options;
 
 		//Get other field names
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 		$pc_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getId(), 15 );
 
 		//Debug::Text('pc_data[date_stamp]: '. TTDate::getDate('DATE+TIME', $pc_data['date_stamp']), __FILE__, __LINE__, __METHOD__,10);

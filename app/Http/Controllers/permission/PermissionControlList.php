@@ -56,7 +56,7 @@ switch ($action) {
 
 		break;
 	case 'copy':
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 
 		$pclf->StartTransaction();
 
@@ -89,7 +89,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 
 		foreach ($ids as $id) {
 			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -106,7 +106,7 @@ switch ($action) {
 		break;
 
 	default:
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 		$pclf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		$pager = new Pager($pclf);

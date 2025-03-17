@@ -147,7 +147,7 @@ class TimesheetDetailReport extends Report {
                         case 'overtime_columns':
                                 //Get all Overtime policies.
                                 $retval = array();
-                                $otplf = TTnew( 'OverTimePolicyListFactory' );
+                                $otplf = new OverTimePolicyListFactory();
                                 $otplf->getByCompanyId( $this->getUserObject()->getCompany() );
                                 if ( $otplf->getRecordCount() > 0 ) {
                                         foreach( $otplf as $otp_obj ) {
@@ -160,7 +160,7 @@ class TimesheetDetailReport extends Report {
                         case 'premium_columns':
                                 $retval = array();
                                 //Get all Premium policies.
-                                $pplf = TTnew( 'PremiumPolicyListFactory' );
+                                $pplf = new PremiumPolicyListFactory();
                                 $pplf->getByCompanyId( $this->getUserObject()->getCompany() );
                                 if ( $pplf->getRecordCount() > 0 ) {
                                         foreach( $pplf as $pp_obj ) {
@@ -173,7 +173,7 @@ class TimesheetDetailReport extends Report {
                         case 'absence_columns':
                                 $retval = array();
                                 //Get all Absence Policies.
-                                $aplf = TTnew( 'AbsencePolicyListFactory' );
+                                $aplf = new AbsencePolicyListFactory();
                                 $aplf->getByCompanyId( $this->getUserObject()->getCompany() );
                                 if ( $aplf->getRecordCount() > 0 ) {
                                         foreach( $aplf as $ap_obj ) {
@@ -646,7 +646,7 @@ class TimesheetDetailReport extends Report {
                 //Take into account wage groups!
 
                 //Get all Overtime policies.
-                $otplf = TTnew( 'OverTimePolicyListFactory' );
+                $otplf = new OverTimePolicyListFactory();
                 $otplf->getByCompanyId( $this->getUserObject()->getCompany() );
                 if ( $otplf->getRecordCount() > 0 ) {
                         foreach( $otplf as $otp_obj ) {
@@ -656,7 +656,7 @@ class TimesheetDetailReport extends Report {
                 }
 
                 //Get all Premium policies.
-                $pplf = TTnew( 'PremiumPolicyListFactory' );
+                $pplf = new PremiumPolicyListFactory();
                 $pplf->getByCompanyId( $this->getUserObject()->getCompany() );
                 if ( $pplf->getRecordCount() > 0 ) {
                         foreach( $pplf as $pp_obj ) {
@@ -665,7 +665,7 @@ class TimesheetDetailReport extends Report {
                 }
 
                 //Get all Absence Policies.
-                $aplf = TTnew( 'AbsencePolicyListFactory' );
+                $aplf = new AbsencePolicyListFactory();
                 $aplf->getByCompanyId( $this->getUserObject()->getCompany() );
                 if ( $aplf->getRecordCount() > 0 ) {
                         foreach( $aplf as $ap_obj ) {
@@ -689,7 +689,7 @@ class TimesheetDetailReport extends Report {
                 $policy_hourly_rates = $this->getPolicyHourlyRates();
 
                 if ( $this->getPermissionObject()->Check('punch','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-                        $hlf = TTnew( 'HierarchyListFactory' );
+                        $hlf = new HierarchyListFactory();
                         $permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
                         Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
                 } else {
@@ -724,7 +724,7 @@ class TimesheetDetailReport extends Report {
 
                 $pay_period_ids = array();
 
-                $udtlf = TTnew( 'UserDateTotalListFactory' );
+                $udtlf = new UserDateTotalListFactory();
                 $udtlf->getTimesheetDetailReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
                 Debug::Text(' Total Rows: '. $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
                 $this->getProgressBarObject()->start( $this->getAMFMessageID(), $udtlf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -857,7 +857,7 @@ class TimesheetDetailReport extends Report {
                 //Debug::Arr($this->tmp_data['user_date_total'], 'User Date Total Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
                 //Get user data for joining.
-                $ulf = TTnew( 'UserListFactory' );
+                $ulf = new UserListFactory();
                 $ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
                 Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
                 $this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -874,7 +874,7 @@ class TimesheetDetailReport extends Report {
                 //Get verified timesheets for all pay periods considered in report.
                 $pay_period_ids = array_keys( $pay_period_ids );
                 if ( isset($pay_period_ids) AND count($pay_period_ids) > 0 ) {
-                        $pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+                        $pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
                         $pptsvlf->getByPayPeriodIdAndCompanyId( $pay_period_ids, $this->getUserObject()->getCompany() );
                         if ( $pptsvlf->getRecordCount() > 0 ) {
                                 foreach( $pptsvlf as $pptsv_obj ) {
@@ -1394,7 +1394,7 @@ class TimesheetDetailReport extends Report {
 
                         $filter_data = $this->getFilterConfig();
 
-                        $plf = TTnew( 'PunchListFactory' );
+                        $plf = new PunchListFactory();
                         $plf->getSearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data);
                         if ( $plf->getRecordCount() > 0 ) {
                                 foreach( $plf as $p_obj ) {
@@ -1533,7 +1533,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -1541,7 +1541,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -1549,7 +1549,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -1559,7 +1559,7 @@ class TimesheetDetailReport extends Report {
                                 
                 }  
                 
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -1612,7 +1612,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -1838,7 +1838,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -1846,7 +1846,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -1854,7 +1854,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -1864,7 +1864,7 @@ class TimesheetDetailReport extends Report {
                                 
                 }  
                 //echo '<pre>'; print_r($data); echo '<pre>';  die;
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -1912,7 +1912,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -1977,25 +1977,25 @@ class TimesheetDetailReport extends Report {
 
                 foreach ($rows as $row){
 
-                    $udlf = TTnew('UserDateListFactory');
+                    $udlf = new UserDateListFactory();
                     $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d', $pay_period_start));
                     $udlf_obj = $udlf->getCurrent();
                     $user_date_id = $udlf_obj->getId();
 
-                    $slf = TTnew('ScheduleListFactory');
+                    $slf = new ScheduleListFactory();
                     $slf->getByUserDateId($user_date_id);
                     $slf_obj_arr = $slf->getCurrent()->data;
 
                     if(!empty($slf_obj_arr))
                     {
-                        $pclf = TTnew('PunchControlListFactory');
+                        $pclf = new PunchControlListFactory();
                         $pclf->getByUserDateId($user_date_id); //par - user_date_id
                         $pc_obj_arr = $pclf->getCurrent()->data;
 
                         if(empty($pc_obj_arr))
                         {
 
-                             $aluelf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                             $aluelf = new AbsenceLeaveUserEntryRecordListFactory();
                              $aluelf->getAbsencePolicyByUserDateId($udlf_obj->getId());
                              $absLeave_obj_arr = $aluelf->getCurrent()->data;
 
@@ -2078,7 +2078,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -2086,7 +2086,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -2094,7 +2094,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -2104,7 +2104,7 @@ class TimesheetDetailReport extends Report {
                                 
                 }  
 //                echo '<pre>'; print_r($data); echo '<pre>';  die;
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -2152,7 +2152,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -2234,13 +2234,13 @@ class TimesheetDetailReport extends Report {
                     $EmpDateStatus = $this->getReportStatusByUserIdAndDate($row['user_id'],date('Y-m-d', $pay_period_start));
 //                    echo'<pre>'; print_r($EmpDateStatus); die;  
                     
-                    $udlf = TTnew('UserDateListFactory');
+                    $udlf = new UserDateListFactory();
             
                     $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d', $pay_period_start));
                     $udlf_obj = $udlf->getCurrent();
                     $user_date_id = $udlf_obj->getId();
 
-                    $elf = TTnew('ExceptionListFactory');
+                    $elf = new ExceptionListFactory();
                     $elf->getByUserDateId($user_date_id);
                     foreach ($elf as $elf_obj){
                         if($elf_obj->getExceptionPolicyId() == '5'){
@@ -2261,7 +2261,7 @@ class TimesheetDetailReport extends Report {
                         }
                     }
                     
-                    $udtlf = TTnew('UserDateTotalListFactory');
+                    $udtlf = new UserDateTotalListFactory();
                     
                     
                     //create Array by date day
@@ -2425,7 +2425,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -2433,7 +2433,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -2441,7 +2441,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -2450,7 +2450,7 @@ class TimesheetDetailReport extends Report {
                     }
                                 
                 }  
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -2506,7 +2506,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -2584,8 +2584,8 @@ class TimesheetDetailReport extends Report {
                 foreach ($new_rows as $data_vl){
 
                     //Get all accrual policies.
-                    $ulf = TTnew( 'UserListFactory' );
-                    $aplf = TTnew( 'AbsencePolicyListFactory' );
+                    $ulf = new UserListFactory();
+                    $aplf = new AbsencePolicyListFactory();
                     $aplf->getByCompanyId($current_company->getId());
                     if ( $aplf->getRecordCount() > 0 ) {
                         foreach ($aplf as $ap_obj ) {
@@ -2596,7 +2596,7 @@ class TimesheetDetailReport extends Report {
                     }
 
 
-                        $ablf = TTnew( 'AccrualBalanceListFactory' );
+                        $ablf = new AccrualBalanceListFactory();
                         $ablf->getByUserIdAndCompanyId( $data_vl['user_id'], $current_company->getId() );
 
                         $total_balance_leave_all = array('full_day'=>0, 'half_day'=>0, 'short_leave'=>0);
@@ -2615,7 +2615,7 @@ class TimesheetDetailReport extends Report {
                            if($colAbs_arr[0] == 'absence_policy' && in_array($colAbs_arr[1], $absence_policy_id_array) ){
                                 $absence_policy_id = $colAbs_arr[1];
 
-                                $udlf = TTnew('UserDateListFactory');
+                                $udlf = new UserDateListFactory();
                                 $total_used_leaves = 0;
                                 for($i1=1; $i1<=$nof_days_for_month; $i1++){
                                     
@@ -2623,12 +2623,12 @@ class TimesheetDetailReport extends Report {
                                     $udlf_obj = $udlf->getCurrent();
 
                                     //get used Leave for particular date year
-                                     $aluerlf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                     $aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
                                      //$aluerlf->getByAbsencePolicyIdAndUserId2($absence_policy_id,$row['user_id']);
                                      $aluerlf->getgetAbsenceLeaveIdByAbsencePolicyIdAndUserIdUserDateId($absence_policy_id, $data_vl['user_id'], $udlf_obj->getId());
 
                                      if(count($aluerlf) > 0){ 
-                                        $allf1 = TTnew('AbsenceLeaveListFactory');
+                                        $allf1 = new AbsenceLeaveListFactory();
                                          foreach($aluerlf as $aluerlf_obj){
 
                                             $leave_taken[$column_abs][$aluerlf_obj->getAbsenceLeaveId()] += 1;
@@ -2639,7 +2639,7 @@ class TimesheetDetailReport extends Report {
                                     //$total_balance_leave = $total_assigned_leaves - $total_used_leaves;
                                 }
 
-                                $allf = TTnew('AbsenceLeaveListFactory');
+                                $allf = new AbsenceLeaveListFactory();
 
                                 $allf->getAll(); 
 
@@ -2741,7 +2741,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -2749,7 +2749,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -2757,7 +2757,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -2766,7 +2766,7 @@ class TimesheetDetailReport extends Report {
                     }
                                 
                 }  
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -2821,7 +2821,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -2896,8 +2896,8 @@ class TimesheetDetailReport extends Report {
                 foreach ($new_rows as $data_vl){
 
                     //Get all accrual policies.
-                    $ulf = TTnew( 'UserListFactory' );
-                    $aplf = TTnew( 'AbsencePolicyListFactory' );
+                    $ulf = new UserListFactory();
+                    $aplf = new AbsencePolicyListFactory();
                     $aplf->getByCompanyId($current_company->getId());
                     if ( $aplf->getRecordCount() > 0 ) {
                         foreach ($aplf as $ap_obj ) {
@@ -2908,7 +2908,7 @@ class TimesheetDetailReport extends Report {
                     }
 
 
-                        $ablf = TTnew( 'AccrualBalanceListFactory' );
+                        $ablf = new AccrualBalanceListFactory();
                         $ablf->getByUserIdAndCompanyId( $data_vl['user_id'], $current_company->getId() );
 
                         $total_balance_leave_all = array('full_day'=>0, 'half_day'=>0, 'short_leave'=>0);
@@ -2924,7 +2924,7 @@ class TimesheetDetailReport extends Report {
                                 $absence_policy_id = $colAbs_arr[1];
 
                                 //get total leaves for particular date year 
-                                $alulf = TTnew('AbsenceLeaveUserListFactory');
+                                $alulf = new AbsenceLeaveUserListFactory();
                                 
                                 $alulf->getEmployeeTotalLeaves($absence_policy_id, $data_vl['user_id'], $start_date_year);
                                 $total_assigned_leaves = 0; 
@@ -2938,7 +2938,7 @@ class TimesheetDetailReport extends Report {
                                }
 
 
-                                $udlf = TTnew('UserDateListFactory');
+                                $udlf = new UserDateListFactory();
                                 $total_used_leaves = 0;
                                 for($i1=1; $i1<=$nof_days_for_month; $i1++){
                                     
@@ -2946,12 +2946,12 @@ class TimesheetDetailReport extends Report {
                                     $udlf_obj = $udlf->getCurrent();
 
                                     //get used Leave for particular date year
-                                     $aluerlf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                     $aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
                                      //$aluerlf->getByAbsencePolicyIdAndUserId2($absence_policy_id,$row['user_id']);
                                      $aluerlf->getgetAbsenceLeaveIdByAbsencePolicyIdAndUserIdUserDateId($absence_policy_id, $data_vl['user_id'], $udlf_obj->getId());
 
                                      if(count($aluerlf) > 0){ 
-                                        $allf1 = TTnew('AbsenceLeaveListFactory');
+                                        $allf1 = new AbsenceLeaveListFactory();
                                          foreach($aluerlf as $aluerlf_obj){
                                             $leave_taken[$column_abs][$aluerlf_obj->getAbsenceLeaveId()] += 1;
                                         }
@@ -2961,7 +2961,7 @@ class TimesheetDetailReport extends Report {
                                 }
 
 
-                                $allf = TTnew('AbsenceLeaveListFactory');
+                                $allf = new AbsenceLeaveListFactory();
                                 $allf->getAll(); 
                                 foreach ($allf as $allf_obj){
                                     $absence_leave[$allf_obj->getId()] = $allf_obj;  
@@ -3090,7 +3090,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -3098,7 +3098,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -3106,7 +3106,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -3115,7 +3115,7 @@ class TimesheetDetailReport extends Report {
                     }
                                 
                 }  
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -3177,7 +3177,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -3293,8 +3293,8 @@ class TimesheetDetailReport extends Report {
                                 $lateSec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_start_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['min_punch_time_stamp']);
                                 $earlySec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_end_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['max_punch_time_stamp']);
                                 
-                                $udlf = TTnew('UserDateListFactory');
-                                $pclf = TTnew('PunchControlListFactory');
+                                $udlf = new UserDateListFactory();
+                                $pclf = new PunchControlListFactory();
 
     //                            
                                 $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
@@ -3309,7 +3309,7 @@ class TimesheetDetailReport extends Report {
                                 if(!empty($pc_obj_arr)){
                                     $status1 = 'P';  
                                     //check late come and early departure
-                                    $elf = TTnew('ExceptionListFactory');
+                                    $elf = new ExceptionListFactory();
                                     $elf->getByUserDateIdAndExceptionPolicyId($udlf_obj->getId(), 4); //par - user_date_id, 4 - late exception
                                     $ex_obj_arr = $elf->getCurrent()->data;
                                      if(!empty($ex_obj_arr)){
@@ -3318,7 +3318,7 @@ class TimesheetDetailReport extends Report {
                                 }else{
                                      $status1 = 'WO'; 
                                      
-                                     $aluelf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                     $aluelf = new AbsenceLeaveUserEntryRecordListFactory();
                                      $aluelf->getAbsencePolicyByUserDateId($udlf_obj->getId());
                                      $absLeave_obj_arr = $aluelf->getCurrent()->data;
                                      if(!empty($absLeave_obj_arr)){
@@ -3344,7 +3344,7 @@ class TimesheetDetailReport extends Report {
                                 }
                                 
 
-                                 $hlf = TTnew('HolidayListFactory');
+                                 $hlf = new HolidayListFactory();
                                  $hlf->getByPolicyGroupUserIdAndDate($row['user_id'], date('Y-m-d', strtotime($i1.'-'.$date_month)));
                                  $hday_obj_arr = $hlf->getCurrent()->data;
                                  
@@ -3358,7 +3358,7 @@ class TimesheetDetailReport extends Report {
 
                             }
                            
-                            $udtlf = TTnew( 'UserDateTotalListFactory' );
+                            $udtlf = new UserDateTotalListFactory();
                             $udtlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $row['user_id'], 10, date('Y-m-d',$pay_period_start), date('Y-m-d',$pay_period_end));
                              if ( $udtlf->getRecordCount() > 0 ) {
                                 foreach($udtlf as $udt_obj) {
@@ -3553,7 +3553,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -3561,7 +3561,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -3569,7 +3569,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -3578,7 +3578,7 @@ class TimesheetDetailReport extends Report {
                     }
                                 
                 }  
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -3640,7 +3640,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -3782,8 +3782,8 @@ class TimesheetDetailReport extends Report {
                             $lateSec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_start_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['min_punch_time_stamp']);
                             $earlySec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_end_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['max_punch_time_stamp']);
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $pclf = TTnew('PunchControlListFactory');
+                            $udlf = new UserDateListFactory();
+                            $pclf = new PunchControlListFactory();
 
 //                            
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
@@ -3798,7 +3798,7 @@ class TimesheetDetailReport extends Report {
                             if(!empty($pc_obj_arr)){
                                 $status1 = 'P';  
                                 //check late come and early departure
-                                $elf = TTnew('ExceptionListFactory');
+                                $elf = new ExceptionListFactory();
                                 $elf->getByUserDateIdAndExceptionPolicyId($udlf_obj->getId(), 4); //par - user_date_id, 4 - late exception
                                 $ex_obj_arr = $elf->getCurrent()->data;
                                  if(!empty($ex_obj_arr)){
@@ -3807,7 +3807,7 @@ class TimesheetDetailReport extends Report {
                             }else{
                                  $status1 = 'WO'; 
                                  
-                                 $aluelf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                 $aluelf = new AbsenceLeaveUserEntryRecordListFactory();
                                  $aluelf->getAbsencePolicyByUserDateId($udlf_obj->getId());
                                  $absLeave_obj_arr = $aluelf->getCurrent()->data;
                                  if(!empty($absLeave_obj_arr)){
@@ -3833,7 +3833,7 @@ class TimesheetDetailReport extends Report {
                             }
                             
 
-                             $hlf = TTnew('HolidayListFactory');
+                             $hlf = new HolidayListFactory();
                              $hlf->getByPolicyGroupUserIdAndDate($row['user_id'], date('Y-m-d', strtotime($i1.'-'.$date_month)));
                              $hday_obj_arr = $hlf->getCurrent()->data;
                              
@@ -3847,7 +3847,7 @@ class TimesheetDetailReport extends Report {
 
                         }
                        
-                        $udtlf = TTnew( 'UserDateTotalListFactory' );
+                        $udtlf = new UserDateTotalListFactory();
                         $udtlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $row['user_id'], 10, date('Y-m-d',$pay_period_start), date('Y-m-d',$pay_period_end));
                          if ( $udtlf->getRecordCount() > 0 ) {
                             foreach($udtlf as $udt_obj) {
@@ -3922,8 +3922,8 @@ class TimesheetDetailReport extends Report {
                         $html = $html.'<td></td>'; 
                         $status_id = '-';
                         for($i1=$list_start_date; $i1<=$list_end_date; $i1++){
-                            $udlf = TTnew('UserDateListFactory');
-                            $slf = TTnew('ScheduleListFactory');
+                            $udlf = new UserDateListFactory();
+                            $slf = new ScheduleListFactory();
                             
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -3949,7 +3949,7 @@ class TimesheetDetailReport extends Report {
                         $html = $html.'<td align="left">Shift In</td>'; 
                         $html = $html.'<td></td>'; 
 
-                        $plf = TTnew('PunchListFactory');
+                        $plf = new PunchListFactory();
 
                         $udlf->getByUserIdAndStartDateAndEndDate($row['user_id'], $pay_period_start, $pay_period_end);
                         $udlf_obj = $udlf->getCurrent();
@@ -4027,8 +4027,8 @@ class TimesheetDetailReport extends Report {
 
                             //echo $row_data_day_key[sprintf("%02d", $i1)]['min_punch_time_stamp']; die;
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $slf = TTnew('ScheduleListFactory');
+                            $udlf = new UserDateListFactory();
+                            $slf = new ScheduleListFactory();
                             
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -4068,8 +4068,8 @@ class TimesheetDetailReport extends Report {
                         $html = $html.'<td></td>'; 
                         for($i1=$list_start_date; $i1<=$list_end_date; $i1++){
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $slf = TTnew('ScheduleListFactory');
+                            $udlf = new UserDateListFactory();
+                            $slf = new ScheduleListFactory();
                             
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -4101,9 +4101,9 @@ class TimesheetDetailReport extends Report {
                             $lateSec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_start_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['min_punch_time_stamp']);
                             $earlySec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_end_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['max_punch_time_stamp']);
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $pclf = TTnew('PunchControlListFactory');
-                            $elf = TTnew('ExceptionListFactory'); //--Add code eranda
+                            $udlf = new UserDateListFactory();
+                            $pclf = new PunchControlListFactory();
+                            $elf = new ExceptionListFactory(); //--Add code eranda
 //                            
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -4121,7 +4121,7 @@ class TimesheetDetailReport extends Report {
 
 
                                 //check late come and early departure
-                                /*$elf = TTnew('ExceptionListFactory');
+                                /*$elf = new ExceptionListFactory();
                                 $elf->getByUserDateIdAndExceptionPolicyId($udlf_obj->getId(), 4); //par - user_date_id, 4 - late exception
                                 $ex_obj_arr = $elf->getCurrent()->data;
                                  if(!empty($ex_obj_arr)){
@@ -4182,7 +4182,7 @@ class TimesheetDetailReport extends Report {
 
                                  
                                  
-                                 $aluelf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                 $aluelf = new AbsenceLeaveUserEntryRecordListFactory();
                                  $aluelf->getAbsencePolicyByUserDateId($udlf_obj->getId());
                                  $absLeave_obj_arr = $aluelf->getCurrent()->data;
                                  if(!empty($absLeave_obj_arr)){
@@ -4194,7 +4194,7 @@ class TimesheetDetailReport extends Report {
                             }
                             
 
-                             $hlf = TTnew('HolidayListFactory');
+                             $hlf = new HolidayListFactory();
                              $hlf->getByPolicyGroupUserIdAndDate($row['user_id'], date('Y-m-d', strtotime($i1.'-'.$date_month)));
                              $hday_obj_arr = $hlf->getCurrent()->data;
                              
@@ -4271,7 +4271,7 @@ class TimesheetDetailReport extends Report {
                                     );
                                                                                 
                 foreach($filter_header_data as $fh_key=>$filter_header){
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     if($fh_key == 'department_ids'){
                         foreach ($filter_header as $dep_id) { 
                             $department_list[] = $dlf->getNameById($dep_id); 
@@ -4279,7 +4279,7 @@ class TimesheetDetailReport extends Report {
                         $dep_strng = implode(', ', $department_list);
                     }
                                 
-                    $blf = TTnew( 'BranchListFactory' ); 
+                    $blf = new BranchListFactory(); 
                     if($fh_key == 'branch_ids'){
                         foreach ($filter_header as $br_id) { 
                             $branch_list[] = $blf->getNameById($br_id); 
@@ -4287,7 +4287,7 @@ class TimesheetDetailReport extends Report {
                         $br_strng = implode(', ', $branch_list);
                     }
                                                                                 
-                    $uglf = TTnew( 'UserGroupListFactory' ); 
+                    $uglf = new UserGroupListFactory(); 
                     if($fh_key == 'group_ids'){
                         foreach ($filter_header as $gr_id) {   
                             $group_list[] = $uglf->getNameById($gr_id); 
@@ -4296,7 +4296,7 @@ class TimesheetDetailReport extends Report {
                     }
                                 
                 }  
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -4353,7 +4353,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -4492,8 +4492,8 @@ class TimesheetDetailReport extends Report {
                             $lateSec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_start_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['min_punch_time_stamp']);
                             $earlySec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_end_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['max_punch_time_stamp']);
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $pclf = TTnew('PunchControlListFactory');
+                            $udlf = new UserDateListFactory();
+                            $pclf = new PunchControlListFactory();
 
 //                            
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
@@ -4508,7 +4508,7 @@ class TimesheetDetailReport extends Report {
                             if(!empty($pc_obj_arr)){
                                 $status1 = 'P';  
                                 //check late come and early departure
-                                $elf = TTnew('ExceptionListFactory');
+                                $elf = new ExceptionListFactory();
                                 $elf->getByUserDateIdAndExceptionPolicyId($udlf_obj->getId(), 4); //par - user_date_id, 4 - late exception
                                 $ex_obj_arr = $elf->getCurrent()->data;
                                  if(!empty($ex_obj_arr)){
@@ -4517,7 +4517,7 @@ class TimesheetDetailReport extends Report {
                             }else{
                                  $status1 = 'WO'; 
                                  
-                                 $aluelf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                 $aluelf = new AbsenceLeaveUserEntryRecordListFactory();
                                  $aluelf->getAbsencePolicyByUserDateId($udlf_obj->getId());
                                  $absLeave_obj_arr = $aluelf->getCurrent()->data;
                                  if(!empty($absLeave_obj_arr)){
@@ -4543,7 +4543,7 @@ class TimesheetDetailReport extends Report {
                             }
                             
 
-                             $hlf = TTnew('HolidayListFactory');
+                             $hlf = new HolidayListFactory();
                              $hlf->getByPolicyGroupUserIdAndDate($row['user_id'], date('Y-m-d', strtotime($i1.'-'.$date_month)));
                              $hday_obj_arr = $hlf->getCurrent()->data;
                              
@@ -4557,7 +4557,7 @@ class TimesheetDetailReport extends Report {
 
                         }
                        
-                        $udtlf = TTnew( 'UserDateTotalListFactory' );
+                        $udtlf = new UserDateTotalListFactory();
                         $udtlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $row['user_id'], 10, date('Y-m-d',$pay_period_start), date('Y-m-d',$pay_period_end));
                          if ( $udtlf->getRecordCount() > 0 ) {
                             foreach($udtlf as $udt_obj) {
@@ -4635,8 +4635,8 @@ class TimesheetDetailReport extends Report {
                         $html = $html.'<td></td>'; 
                         $status_id = '-';
                         for($i1=1; $i1<=$nof_days_for_month; $i1++){
-                            $udlf = TTnew('UserDateListFactory');
-                            $slf = TTnew('ScheduleListFactory');
+                            $udlf = new UserDateListFactory();
+                            $slf = new ScheduleListFactory();
                             
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -4684,8 +4684,8 @@ class TimesheetDetailReport extends Report {
                         
                         for($i1=1; $i1<=$nof_days_for_month; $i1++){
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $slf = TTnew('ScheduleListFactory');
+                            $udlf = new UserDateListFactory();
+                            $slf = new ScheduleListFactory();
                             
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -4709,8 +4709,8 @@ class TimesheetDetailReport extends Report {
                         $html = $html.'<td></td>'; 
                         for($i1=1; $i1<=$nof_days_for_month; $i1++){
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $slf = TTnew('ScheduleListFactory');
+                            $udlf = new UserDateListFactory();
+                            $slf = new ScheduleListFactory();
                             
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -4742,9 +4742,9 @@ class TimesheetDetailReport extends Report {
                             $lateSec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_start_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['min_punch_time_stamp']);
                             $earlySec = strtotime($row_data_day_key[sprintf("%02d", $i1)]['shedule_end_time']) - strtotime($row_data_day_key[sprintf("%02d", $i1)]['max_punch_time_stamp']);
                             
-                            $udlf = TTnew('UserDateListFactory');
-                            $pclf = TTnew('PunchControlListFactory');
-                            $elf = TTnew('ExceptionListFactory'); //--Add code eranda
+                            $udlf = new UserDateListFactory();
+                            $pclf = new PunchControlListFactory();
+                            $elf = new ExceptionListFactory(); //--Add code eranda
 
                             $udlf->getByUserIdAndDate($row['user_id'],date('Y-m-d',  strtotime($i1.'-'.$date_month)));
                             $udlf_obj = $udlf->getCurrent();
@@ -4772,7 +4772,7 @@ class TimesheetDetailReport extends Report {
 
 
                                 //check late come and early departure
-                         /*       $elf = TTnew('ExceptionListFactory');
+                         /*       $elf = new ExceptionListFactory();
                                 $elf->getByUserDateIdAndExceptionPolicyId($udlf_obj->getId(), 4); //par - user_date_id, 4 - late exception
                                 $ex_obj_arr = $elf->getCurrent()->data;
                                  if(!empty($ex_obj_arr)){
@@ -4803,7 +4803,7 @@ class TimesheetDetailReport extends Report {
                                  $status1 = 'WO'; 
                                 
                                  //Check user leaves
-                                 $aluelf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                 $aluelf = new AbsenceLeaveUserEntryRecordListFactory();
                                  $aluelf->getAbsencePolicyByUserDateId($udlf_obj->getId());
                                  $absLeave_obj_arr = $aluelf->getCurrent()->data;
                                  if(!empty($absLeave_obj_arr)){
@@ -4813,7 +4813,7 @@ class TimesheetDetailReport extends Report {
                                  else
                                  {
                                     //Check Holidays
-                                     $hlf = TTnew('HolidayListFactory');
+                                     $hlf = new HolidayListFactory();
                                      $hlf->getByPolicyGroupUserIdAndDate($row['user_id'], date('Y-m-d', strtotime($i1.'-'.$date_month)));
                                      $hday_obj_arr = $hlf->getCurrent()->data;
                                      
@@ -4823,7 +4823,7 @@ class TimesheetDetailReport extends Report {
                                      else
                                      {
                                         //Schedule shifts
-                                        $slf = TTnew('ScheduleListFactory');
+                                        $slf = new ScheduleListFactory();
                                         $slf->getByUserDateId($udlf_obj->getId()); //par - user_date_id
                                         $sp_obj_arr = $slf->getCurrent()->data;
 
@@ -4904,7 +4904,7 @@ class TimesheetDetailReport extends Report {
             );
                                                                                 
             foreach($filter_header_data as $fh_key=>$filter_header){
-                $dlf = TTnew( 'DepartmentListFactory' );
+                $dlf = new DepartmentListFactory();
                 if($fh_key == 'department_ids'){
                     foreach ($filter_header as $dep_id) { 
                         $department_list[] = $dlf->getNameById($dep_id); 
@@ -4912,7 +4912,7 @@ class TimesheetDetailReport extends Report {
                     $dep_strng = implode(', ', $department_list);
                 }
                             
-                $blf = TTnew( 'BranchListFactory' ); 
+                $blf = new BranchListFactory(); 
                 if($fh_key == 'branch_ids'){
                     foreach ($filter_header as $br_id) { 
                         $branch_list[] = $blf->getNameById($br_id); 
@@ -4920,7 +4920,7 @@ class TimesheetDetailReport extends Report {
                     $br_strng = implode(', ', $branch_list);
                 }
                                                                             
-                $uglf = TTnew( 'UserGroupListFactory' ); 
+                $uglf = new UserGroupListFactory(); 
                 if($fh_key == 'group_ids'){
                     foreach ($filter_header as $gr_id) {   
                         $group_list[] = $uglf->getNameById($gr_id); 
@@ -4930,7 +4930,7 @@ class TimesheetDetailReport extends Report {
                             
             }
 
-            $pplf = TTnew( 'PayPeriodListFactory' );
+            $pplf = new PayPeriodListFactory();
             if(isset($filter_data['pay_period_ids'][0])){                                                              
                 $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                 $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -4985,7 +4985,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -5174,7 +5174,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -5227,7 +5227,7 @@ class TimesheetDetailReport extends Report {
             $data['tot_data'] = $data['data'][count($data['data'])-1];
             array_pop($data['data']);//delete tot of data array 
 //            echo '<pre>';     print_r( $data ); echo '<pre>'; die;
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -5406,7 +5406,7 @@ class TimesheetDetailReport extends Report {
                 $html=  $html.'<td colspan="7">&nbsp;</td>';
                 $html=  $html.'</tr>';
             
-                 $otplf = TTnew( 'OverTimePolicyListFactory' );
+                 $otplf = new OverTimePolicyListFactory();
                 $allOtAccount = $otplf->getAll();
                 if(count($allOtAccount) > 0)
                 {
@@ -5592,7 +5592,7 @@ class TimesheetDetailReport extends Report {
                     
                                                 );
                                                                                                 
-                $pdf = TTnew( 'TimeReportHeaderFooter' );                                                               
+                $pdf = new TimeReportHeaderFooter();                                                               
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -5741,7 +5741,7 @@ class TimesheetDetailReport extends Report {
         function getReportStatusByUserIdAndDate($user_id, $date){
             $status1 = $status2 = '';
             $all_status = array('status1_all'=>'','status2_all'=>'','status1'=>'', 'status2'=>'');
-            $udlf = TTnew('UserDateListFactory');
+            $udlf = new UserDateListFactory();
             
             $udlf->getByUserIdAndDate($user_id,$date);
             $udlf_obj = $udlf->getCurrent();
@@ -5749,10 +5749,10 @@ class TimesheetDetailReport extends Report {
 
             //echo '<br>user_date_id....'.$user_date_id.'..date..'.$date;
             
-          /*  $elf = TTnew('ExceptionListFactory');
+          /*  $elf = new ExceptionListFactory();
             $elf->getByUserDateId($user_date_id);
 			*/
-			$elf = TTnew('ExceptionListFactory');
+			$elf = new ExceptionListFactory();
             $elf->getByUserDateId($user_date_id);
             $elf_obj = $elf->getCurrent();
     /*        foreach ($elf as $elf_obj){
@@ -5775,11 +5775,11 @@ class TimesheetDetailReport extends Report {
             }
 			*/
                    
-                $plf = TTnew('PunchListFactory');
+                $plf = new PunchListFactory();
                 $plf->getByUserDateId($user_date_id);
                 $plf_obj = $plf->getCurrent();
                     
-                $slf = TTnew('ScheduleListFactory');
+                $slf = new ScheduleListFactory();
                 $slf->getByUserDateId($user_date_id);
                 $slf_obj = $slf->getCurrent();
                     
@@ -5823,7 +5823,7 @@ class TimesheetDetailReport extends Report {
                             }
                         }
                 
-                $hlf = TTnew('HolidayListFactory');
+                $hlf = new HolidayListFactory();
                 $hlf->getByPolicyGroupUserIdAndDate($user_id, $date);
                 $hlf_obj = $hlf->getCurrent();
                 if(!empty($hlf_obj->data)){
@@ -5835,7 +5835,7 @@ class TimesheetDetailReport extends Report {
                     }
                 }
                 
-                $aluerlf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                $aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
                 $aluerlf->getAbsencePolicyByUserDateId($user_date_id);
                 $aluerlf_obj = $aluerlf->getCurrent();
                 if(!empty($aluerlf_obj->data)){

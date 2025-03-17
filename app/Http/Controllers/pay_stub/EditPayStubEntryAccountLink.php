@@ -32,7 +32,7 @@ extract	(FormVariables::GetVariables(
 												'data_saved'
 												) ) );
 
-$psealf = TTnew( 'PayStubEntryAccountLinkFactory' );
+$psealf = new PayStubEntryAccountLinkFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -69,7 +69,7 @@ switch ($action) {
 	default:
 		BreadCrumb::setCrumb($title);
 
-		$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyId( $current_company->getId() );
 
 		if ( $pseallf->getRecordCount() > 0 ) {
@@ -120,7 +120,7 @@ switch ($action) {
 							);
 		}
 
-		$psealf_tmp = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf_tmp = new PayStubEntryAccountListFactory();
 
 		$data['earning_account_options'] = $psealf_tmp->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10) );
 		$data['employee_deduction_account_options'] = $psealf_tmp->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(20) );

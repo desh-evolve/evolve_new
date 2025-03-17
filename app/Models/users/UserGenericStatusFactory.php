@@ -46,7 +46,7 @@ class UserGenericStatusFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
@@ -226,7 +226,7 @@ class UserGenericStatusFactory extends Factory {
 			Debug::Arr($this->queue, 'Generic Status Queue', __FILE__, __LINE__, __METHOD__,10);
 			foreach( $this->queue as $key => $queue_data ) {
 
-				$ugsf = TTnew( 'UserGenericStatusFactory' );
+				$ugsf = new UserGenericStatusFactory();
 				$ugsf->setUser( $this->getUser() );
 				if ( $this->getBatchId() !== FALSE ) {
 					$ugsf->setBatchID( $this->getBatchID() );

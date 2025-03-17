@@ -53,7 +53,7 @@ $columns = array(
 $columns = Misc::prependArray( $static_columns, $columns);
 
 //Get all accrual policies.
-$aplf = TTnew( 'AbsencePolicyListFactory' );
+$aplf = new AbsencePolicyListFactory();
 $aplf->getByCompanyId($current_company->getId());
 if ( $aplf->getRecordCount() > 0 ) {
 	foreach ($aplf as $ap_obj ) {
@@ -68,7 +68,7 @@ echo '<br>-------'; print_r($filter_data);
 
 $permission_children_ids = array();
 if ( $permission->Check('accrual','view') == FALSE ) {
-	$hlf = TTnew( 'HierarchyListFactory' );
+	$hlf = new HierarchyListFactory();
 	$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 	Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -82,8 +82,8 @@ if ( $permission->Check('accrual','view') == FALSE ) {
 	$filter_data['permission_children_ids'] = $permission_children_ids;
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $action = Misc::findSubmitButton();
 
@@ -95,19 +95,19 @@ switch ($action) {
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data, 'Filter Data', __FILE__, __LINE__, __METHOD__,10);
             
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data ); 
 		if ( $ulf->getRecordCount() > 0 ) {  
-                    $utlf = TTnew( 'UserTitleListFactory' );
+                    $utlf = new UserTitleListFactory();
                     $title_options = $utlf->getByCompanyIdArray( $current_company->getId() );
 
-                    $uglf = TTnew( 'UserGroupListFactory' );
+                    $uglf = new UserGroupListFactory();
                     $group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'no_tree_text', TRUE) );
 
-                    $blf = TTnew( 'BranchListFactory' );
+                    $blf = new BranchListFactory();
                     $branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     $department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
                     $x=0; 
@@ -118,7 +118,7 @@ switch ($action) {
                         $filter_data['user_id'][] = $u_obj->getId();
                         $user_id = $u_obj->getId(); 
 
-                        $ablf = TTnew( 'AccrualBalanceListFactory' );
+                        $ablf = new AccrualBalanceListFactory();
                         $ablf->getByUserIdAndCompanyId( $filter_data['user_id'], $current_company->getId() );
 
                         $total_balance_leave_all = array('full_day'=>0, 'half_day'=>0, 'short_leave'=>0);
@@ -138,7 +138,7 @@ switch ($action) {
                                 //echo 'cccc'.$absence_policy_id; 
 
                                 //get total leaves for particular date year 
-                                $alulf = TTnew('AbsenceLeaveUserListFactory');
+                                $alulf = new AbsenceLeaveUserListFactory();
                                 
                                 $alulf->getEmployeeTotalLeaves($absence_policy_id, $user_id, $filter_data['leave_year_ids'][0]);
                                 $total_assigned_leaves = 0; 
@@ -151,12 +151,12 @@ switch ($action) {
                                     } 
                                 }
                                 //get used Leave for particular date year
-                                 $aluerlf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                                 $aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
                                  $aluerlf->getByAbsencePolicyIdAndUserId2($absence_policy_id,$user_id);
                                  $total_used_leaves = 0;
 
                                  if(count($aluerlf) > 0){ 
-                                    $allf1 = TTnew('AbsenceLeaveListFactory');
+                                    $allf1 = new AbsenceLeaveListFactory();
                                      foreach($aluerlf as $aluerlf_obj){
 
                                         //$amount = $aluerlf_obj->getAmount();
@@ -171,7 +171,7 @@ switch ($action) {
                                 $rows[$x]['total_used_leaves'] = $total_used_leaves;
 
 
-                                $allf = TTnew('AbsenceLeaveListFactory');
+                                $allf = new AbsenceLeaveListFactory();
 
                                 $allf->getAll(); 
 
@@ -205,7 +205,7 @@ switch ($action) {
                             $user_obj = $ulf->getById( $user_id )->getCurrent();
                             
 
-                            $allf = TTnew('AbsenceLeaveListFactory');
+                            $allf = new AbsenceLeaveListFactory();
 
                             $allf->getAll(); 
 
@@ -327,7 +327,7 @@ switch ($action) {
 
                     //echo '<pre>'; print_r($rows); echo '----'; print_r($filter_columns); die;
 
-                   $tssr = TTnew( 'TimesheetDetailReport' );//new code   
+                   $tssr = new TimesheetDetailReport();//new code   
                                                 
                    $output = $tssr->EmployeeLeaveBalance($rows, $filter_columns, $filter_data, $current_user, $current_company);//new code   
 
@@ -395,7 +395,7 @@ switch ($action) {
 		}
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'leave_year_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
 
 		//Get include employee list.
@@ -416,34 +416,34 @@ switch ($action) {
 		$filter_data['selected_user_status_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_status_ids'], $user_status_options );
 
 		//Get Employee Groups
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = Misc::prependArray( $all_array_option, $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) ) );
 		$filter_data['src_group_options'] = Misc::arrayDiffByKey( (array)$filter_data['group_ids'], $group_options );
 		$filter_data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$filter_data['group_ids'], $group_options );
 
 		//Get branches
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $all_array_option, $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		$filter_data['src_branch_options'] = Misc::arrayDiffByKey( (array)$filter_data['branch_ids'], $branch_options );
 		$filter_data['selected_branch_options'] = Misc::arrayIntersectByKey( (array)$filter_data['branch_ids'], $branch_options );
 
 		//Get departments
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $all_array_option, $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		$filter_data['src_department_options'] = Misc::arrayDiffByKey( (array)$filter_data['department_ids'], $department_options );
 		$filter_data['selected_department_options'] = Misc::arrayIntersectByKey( (array)$filter_data['department_ids'], $department_options );
 
 		//Get employee titles
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$user_title_options = Misc::prependArray( $all_array_option, $utlf->getArrayByListFactory( $utlf, FALSE, TRUE ) );
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 		$filter_data['selected_user_title_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 		
         //Get Leave Years absence_leave_user
-		$alulf = TTnew( 'AbsenceLeaveUserListFactory' );
+		$alulf = new AbsenceLeaveUserListFactory();
 		$alulf->getAllLeaveYear();
 		$leave_year_options = Misc::prependArray( $all_array_option, $alulf->getArrayByListFactory( $alulf, FALSE, TRUE ) );
 		$filter_data['src_leave_year_options'] = Misc::arrayDiffByKey( (array)$filter_data['leave_year_ids'], $leave_year_options );

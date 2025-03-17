@@ -31,7 +31,7 @@ extract	(FormVariables::GetVariables(
 												'group_data'
 												) ) );
 
-$wgf = TTnew( 'WageGroupFactory' );
+$wgf = new WageGroupFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -53,7 +53,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$wglf = TTnew( 'WageGroupListFactory' );
+			$wglf = new WageGroupListFactory();
 
 			$wglf->GetByIdAndCompanyId($id, $current_company->getId() );
 

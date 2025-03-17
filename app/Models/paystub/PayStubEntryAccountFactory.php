@@ -119,7 +119,7 @@ class PayStubEntryAccountFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -340,7 +340,7 @@ class PayStubEntryAccountFactory extends Factory {
 		//Usually accounts like Vacation Accrual Release etc...
 		if ( $this->
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getByCompanyIdAndStatusIdAndTypeId( $user_obj->getCompany(), 10, 50);
 
 	}
@@ -357,12 +357,12 @@ class PayStubEntryAccountFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getByID($id);
 		if ( $psealf->getRecordCount() > 0 ) {
 			if ( $psealf->getCurrent()->getType() != 50 ) {
 				//Reset Result set so an error occurs.
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 			}
 		}
 
@@ -387,7 +387,7 @@ class PayStubEntryAccountFactory extends Factory {
 			return FALSE;
 		}
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 		$clf->getById( $company_id );
 		if ( $clf->getRecordCount() > 0 ) {
 			$company_obj = $clf->getCurrent();
@@ -397,7 +397,7 @@ class PayStubEntryAccountFactory extends Factory {
 			return FALSE;
 		}
 
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->StartTransaction();
 
 		/*
@@ -411,12 +411,12 @@ class PayStubEntryAccountFactory extends Factory {
 		*/
 
 		//See if accounts are already linked
-		$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyId( $company_id );
 		if ( $pseallf->getRecordCount() > 0 ) {
 			$psealf = $pseallf->getCurrent();
 		} else {
-			$psealf = TTnew( 'PayStubEntryAccountLinkFactory' );
+			$psealf = new PayStubEntryAccountLinkFactory();
 			$psealf->setCompany( $company_id );
 		}
 
@@ -424,7 +424,7 @@ class PayStubEntryAccountFactory extends Factory {
 		switch (strtolower($country)) {
 			case 'ca':
 				Debug::text('Saving.... Federal Taxes', __FILE__, __LINE__, __METHOD__, 10);
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -435,7 +435,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -446,7 +446,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -457,7 +457,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -470,7 +470,7 @@ class PayStubEntryAccountFactory extends Factory {
 					unset($psea_id);
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -484,7 +484,7 @@ class PayStubEntryAccountFactory extends Factory {
 				}
 
 				//Employer Contributions
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -495,7 +495,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -506,7 +506,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -518,7 +518,7 @@ class PayStubEntryAccountFactory extends Factory {
 				}
 
 				Debug::text('Saving.... Vacation Accrual', __FILE__, __LINE__, __METHOD__, 10);
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(50);
@@ -529,7 +529,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$vacation_accrual_id = $pseaf->Save();
 
 					Debug::text('Saving.... Earnings - Vacation Accrual Release', __FILE__, __LINE__, __METHOD__, 10);
-					$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+					$pseaf = new PayStubEntryAccountFactory();
 					$pseaf->setCompany( $company_id );
 					$pseaf->setStatus(10);
 					$pseaf->setType(10);
@@ -546,7 +546,7 @@ class PayStubEntryAccountFactory extends Factory {
 
 				break;
 			case 'us':
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -557,7 +557,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -568,7 +568,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -579,7 +579,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -590,7 +590,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -601,7 +601,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -612,7 +612,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -623,7 +623,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -634,7 +634,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -645,7 +645,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -656,7 +656,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -667,7 +667,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -678,7 +678,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(20);
@@ -689,7 +689,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -700,7 +700,7 @@ class PayStubEntryAccountFactory extends Factory {
 					$pseaf->Save();
 				}
 
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -717,7 +717,7 @@ class PayStubEntryAccountFactory extends Factory {
 		Debug::text('Province: '. $province , __FILE__, __LINE__, __METHOD__, 10);
 		switch (strtolower($province)) {
 			case 'ny':
-				$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+				$pseaf = new PayStubEntryAccountFactory();
 				$pseaf->setCompany( $company_id );
 				$pseaf->setStatus(10);
 				$pseaf->setType(30);
@@ -732,7 +732,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Earnings - Regular Time', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(10);
@@ -746,7 +746,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Earnings - Over Time 1', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(10);
@@ -758,7 +758,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Earnings - Over Time 2', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(10);
@@ -770,7 +770,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Earnings - Premium Time 1', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(10);
@@ -782,7 +782,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Earnings - Premium Time 2', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(10);
@@ -794,7 +794,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Earnings - Bonus', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(10);
@@ -806,7 +806,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Earnings - Other', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(10);
@@ -818,7 +818,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Union Dues', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(20);
@@ -830,7 +830,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Employee Benefits Plan', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(20);
@@ -842,7 +842,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Employer Benefits Plan', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(30);
@@ -854,7 +854,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Total Earnings', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(40);
@@ -868,7 +868,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Total Deductions', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(40);
@@ -882,7 +882,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Net Pay', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(40);
@@ -896,7 +896,7 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		Debug::text('Saving.... Employer Total Cont', __FILE__, __LINE__, __METHOD__, 10);
-		$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+		$pseaf = new PayStubEntryAccountFactory();
 		$pseaf->setCompany( $company_id );
 		$pseaf->setStatus(10);
 		$pseaf->setType(40);
@@ -937,12 +937,12 @@ class PayStubEntryAccountFactory extends Factory {
 		}
 
 		//Make sure PS order is correct, in that types can't be separated by total or accrual accounts.
-		$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyId( $this->getCompany() );
 		if ( $pseallf->getRecordCount() > 0 ) {
 			$pseal_obj = $pseallf->getCurrent();
 
-			$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getByCompanyIdAndTypeId( $this->getCompany(), 40 );
 			if ( $psealf->getRecordCount() > 0 ) {
 				foreach( $psealf as $psea_obj ) {
@@ -1001,7 +1001,7 @@ class PayStubEntryAccountFactory extends Factory {
 			Debug::text('Attempting to delete PSE Account', __FILE__, __LINE__, __METHOD__, 10);
 
 			//Check to see if account is in use.
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			$pself->getByEntryNameId( $this->getId() );
 			if ( $pself->getRecordCount() > 0 ) {
 				Debug::text('PSE Account is in use by Pay Stubs... Disabling instead.', __FILE__, __LINE__, __METHOD__, 10);
@@ -1011,7 +1011,7 @@ class PayStubEntryAccountFactory extends Factory {
 				Debug::text('aPSE Account is NOT in use... Deleting...', __FILE__, __LINE__, __METHOD__, 10);
 			}
 
-			$psalf = TTnew( 'PayStubAmendmentListFactory' );
+			$psalf = new PayStubAmendmentListFactory();
 			$psalf->getByPayStubEntryNameID( $this->getId() );
 			if ( $psalf->getRecordCount() > 0 ) {
 				Debug::text('PSE Account is in use by PS Amendments... Disabling instead.', __FILE__, __LINE__, __METHOD__, 10);

@@ -55,7 +55,7 @@ if ( isset($data) ) {
 
 
 $filter_data = array();
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 if ( $permission->Check('schedule','edit') == FALSE ) {
 	if ( $permission->Check('schedule','edit_child') == FALSE ) {
@@ -68,14 +68,14 @@ if ( $permission->Check('schedule','edit') == FALSE ) {
 	$filter_data['permission_children_ids'] = $permission_children_ids;
 }
 
-$sf = TTnew( 'ScheduleFactory' );
+$sf = new ScheduleFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
 	case 'delete':
 		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
 
-		$slf = TTnew( 'ScheduleListFactory' );
+		$slf = new ScheduleListFactory();
 		$slf->getById( $data['id'] );
 		if ( $slf->getRecordCount() > 0 ) {
 			foreach($slf as $s_obj) {
@@ -116,7 +116,7 @@ switch ($action) {
 			Debug::Text('Date Stamp: '. TTDate::getDate('DATE', $date_stamp), __FILE__, __LINE__, __METHOD__,10);
 
 
-			$sf = TTnew( 'ScheduleFactory' );
+			$sf = new ScheduleFactory();
 
 			if ( $i == 0 ) {
 				$sf->setID( $data['id'] );
@@ -180,7 +180,7 @@ switch ($action) {
 		if ( $id != '' ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-			$slf = TTnew( 'ScheduleListFactory' );
+			$slf = new ScheduleListFactory();
 			$slf->getById( $id );
 			foreach ($slf as $s_obj) {
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
@@ -219,7 +219,7 @@ switch ($action) {
 
 			//Get user full name
 			if ( $user_id != '' ) {
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$user_obj = $ulf->getById( $user_id )->getCurrent();
 				$user_full_name = $user_obj->getFullName();
 				$user_default_branch = $user_obj->getDefaultBranch();
@@ -227,7 +227,7 @@ switch ($action) {
 
 				$user_date_id = UserDateFactory::getUserDateID($user_id, $date_stamp);
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 				$pplf->getByUserIdAndEndDate( $user_id, $date_stamp );
 				if ( $pplf->getRecordCount() > 0 ) {
 					$pay_period_is_locked = $pplf->getCurrent()->getIsLocked();
@@ -275,7 +275,7 @@ switch ($action) {
 		} else {
 			//Get user full name.
 			if ( $data['user_id'] != '' ) {
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$user_obj = $ulf->getById( $data['user_id'] )->getCurrent();
 				$user_full_name = $user_obj->getFullName();
 
@@ -284,31 +284,31 @@ switch ($action) {
 			}
 		}
 
-		$splf = TTnew( 'SchedulePolicyListFactory' );
+		$splf = new SchedulePolicyListFactory();
 		$schedule_policy_options = $splf->getByCompanyIdArray( $current_company->getId() );
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$absence_policy_options = $aplf->getByCompanyIdArray( $current_company->getId() );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByCompanyIdAndUserIdAndStatus( $current_company->getId(),  $current_user->getId(), array(10) );
 			$data['job_options'] = $jlf->getArrayByListFactory( $jlf, TRUE, TRUE );
 			$data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
 			$data['job_item_options'] = $jilf->getArrayByListFactory( $jilf, TRUE );
 			$data['job_item_manual_id_options'] = $jilf->getManualIdArrayByListFactory( $jilf, TRUE );
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$data['user_options'] = UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE );
 

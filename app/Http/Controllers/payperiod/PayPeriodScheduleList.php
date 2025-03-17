@@ -43,7 +43,7 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 
 
 
-//$ppslf = TTnew( 'PayPeriodScheduleFactory' );
+//$ppslf = new PayPeriodScheduleFactory();
 
 Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
 
@@ -61,7 +61,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		foreach ($ids as $id) {
 			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
@@ -76,7 +76,7 @@ switch ($action) {
 		break;
 
 	default:
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		$ppslf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, array($sort_column => $sort_order) );
 

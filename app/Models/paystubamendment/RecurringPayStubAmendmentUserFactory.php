@@ -13,7 +13,7 @@ class RecurringPayStubAmendmentUserFactory extends Factory {
 	function setRecurringPayStubAmendment($id) {
 		$id = trim($id);
 
-		$rpsalf = TTnew( 'RecurringPayStubAmendmentListFactory' );
+		$rpsalf = new RecurringPayStubAmendmentListFactory();
 
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'recurring_ps_amendment',
@@ -34,7 +34,7 @@ class RecurringPayStubAmendmentUserFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == -1
 				OR $this->Validator->isResultSetWithRows(	'user',

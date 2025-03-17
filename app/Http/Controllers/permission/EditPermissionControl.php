@@ -35,7 +35,7 @@ extract	(FormVariables::GetVariables(
 												'src_user_id',
 												) ) );
 
-$pcf = TTnew( 'PermissionControlFactory' );
+$pcf = new PermissionControlFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -44,7 +44,7 @@ switch ($action) {
 		//Debug::setVerbosity( 11 );
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-		$pf = TTnew( 'PermissionFactory' );
+		$pf = new PermissionFactory();
 		$pcf->StartTransaction();
 
 		$pcf->setId( $data['id'] );
@@ -61,7 +61,7 @@ switch ($action) {
 			//Check to see if current user is assigned to another permission group.
 			$current_user_failed = FALSE;
 
-			$pclf = TTnew( 'PermissionControlListFactory' );
+			$pclf = new PermissionControlListFactory();
 			$pclf->getByCompanyIdAndUserId( $current_company->getId(), $current_user->getId() );
 			if ( $pclf->getRecordCount() == 0 ) {
 				$current_user_failed = TRUE;
@@ -117,7 +117,7 @@ switch ($action) {
 
 						if ( $pcf_id != '' AND isset($data['preset']) ) {
 							Debug::Text('Applying Preset!', __FILE__, __LINE__, __METHOD__,10);
-							$pf = TTnew( 'PermissionFactory' );
+							$pf = new PermissionFactory();
 							$pf->applyPreset($pcf_id, $data['preset'], $data['preset_flags']);
 						}
 					}
@@ -132,13 +132,13 @@ switch ($action) {
 
 		$pcf->FailTransaction();
 	default:
-		$pf = TTnew( 'PermissionFactory' );
-		$plf = TTnew( 'PermissionListFactory' );
+		$pf = new PermissionFactory();
+		$plf = new PermissionListFactory();
 
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$pclf = TTnew( 'PermissionControlListFactory' );
+			$pclf = new PermissionControlListFactory();
 
 			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
 

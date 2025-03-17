@@ -61,7 +61,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		foreach ($ids as $id) {
 			$aplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -83,7 +83,7 @@ switch ($action) {
 		break;
 
 	default:
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 		$aplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($aplf);

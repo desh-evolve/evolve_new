@@ -106,7 +106,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 
 					);
 
-        $aluef = TTnew( 'AbsenceLeaveUserEntryFactory' );
+        $aluef = new AbsenceLeaveUserEntryFactory();
                 
 		$query = '
                             SELECT ale.user_id, al.* 

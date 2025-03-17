@@ -41,7 +41,7 @@ if ( isset($data) ) {
 }
 
 
-$ucif = TTnew( 'UserCensusInformationFactory' );
+$ucif = new UserCensusInformationFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -78,7 +78,7 @@ switch ($action) {
                     
                    BreadCrumb::setCrumb($title);
                    
-                   $ucilf = TTnew( 'UserCensusInformationListFactory' );
+                   $ucilf = new UserCensusInformationListFactory();
 		   $ucilf->getById($id);
                    
                    foreach ($ucilf as $ucif_obj) {
@@ -102,7 +102,7 @@ switch ($action) {
                     $data['user_id']= $filter_user_id;
                 }
                 
-                $ulf = TTnew( 'UserListFactory' );
+                $ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), TRUE );
                 
                 

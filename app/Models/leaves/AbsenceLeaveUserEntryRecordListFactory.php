@@ -84,7 +84,7 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
                 'user_date_id' => $id
                 );
 
-        $apf = TTnew('AbsencePolicyFactory');
+        $apf = new AbsencePolicyFactory();
 		$query = ' select 	a.*, b.name absence_name
 					from	'. $this->getTable() .' a
                     LEFT JOIN '.$apf->getTable().' b 
@@ -226,8 +226,8 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
                 'user_date_id' => $user_date_id,
                 );
 
-                $udf = TTnew('UserDateFactory');
-                $udtf = TTnew('UserDateTotalFactory');
+                $udf = new UserDateFactory();
+                $udtf = new UserDateTotalFactory();
                 
 		$query = 'SELECT alur . * 
                             FROM  '. $udtf->getTable() .' udt
@@ -299,8 +299,8 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
                             'user_id' => $user_id
                             );
 
-                $udf = TTnew('UserDateFactory');
-                $udtf = TTnew('UserDateTotalFactory');
+                $udf = new UserDateFactory();
+                $udtf = new UserDateTotalFactory();
                 
 		$query = 'SELECT alur . * 
                             FROM  '. $udtf->getTable() .' udt

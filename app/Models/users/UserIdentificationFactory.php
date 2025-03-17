@@ -37,7 +37,7 @@ class UserIdentificationFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -50,7 +50,7 @@ class UserIdentificationFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -135,7 +135,7 @@ class UserIdentificationFactory extends Factory {
 					'value' => (string)$value,
 					);
 
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory();
 
 		$query = 'select a.id
 					from '. $this->getTable() .' as a,

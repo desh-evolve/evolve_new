@@ -40,12 +40,12 @@ if ( isset($wage_data) ) {
 }
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
-$uwf = TTnew( 'UserWageFactory' );
+$uwf = new UserWageFactory();
 
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -90,7 +90,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$uwlf = TTnew( 'UserWageListFactory' );
+			$uwlf = new UserWageListFactory();
 			$uwlf->getByIdAndCompanyId($id, $current_company->getId() );
                         
                         
@@ -99,7 +99,7 @@ switch ($action) {
 				$user_obj = $ulf->getByIdAndCompanyId( $wage->getUser(), $current_company->getId() )->getCurrent();
                                 
                                 $budgetary_allowance = 0;
-                                $udlf = TTnew( 'UserDeductionListFactory' );
+                                $udlf = new UserDeductionListFactory();
                                 $udlf->getByUserIdAndCompanyDeductionId($wage->getUser(), 3);
                                 if($udlf->getRecordCount()>0){
                                     foreach ($udlf as $udlf_obj){
@@ -149,7 +149,7 @@ switch ($action) {
 			if ( $action != 'submit' ) {
                             
                                 $budgetary_allowance = 0;
-                                $udlf = TTnew( 'UserDeductionListFactory' );
+                                $udlf = new UserDeductionListFactory();
                                 $udlf->getByUserIdAndCompanyDeductionId($user_id, 3);
                                 if($udlf->getRecordCount()>0){
                                     foreach ($udlf as $udlf_obj){
@@ -163,14 +163,14 @@ switch ($action) {
 		//Select box options;
 		$wage_data['type_options'] = $uwf->getOptions('type');
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 		$wage_data['wage_group_options'] = $wglf->getArrayByListFactory( $wglf->getByCompanyId( $current_company->getId() ), TRUE );
 
-		$crlf = TTnew( 'CurrencyListFactory' );
+		$crlf = new CurrencyListFactory();
 		$crlf->getByCompanyId( $current_company->getId() );
 		$currency_options = $crlf->getArrayByListFactory( $crlf, FALSE, TRUE );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 		$user_data = $ulf->getCurrent();
 		if ( is_object( $user_data->getCurrencyObject() ) ) {
@@ -183,14 +183,14 @@ switch ($action) {
 		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = TTi18n::gettext('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
 		$pay_period_boundary_dates = Misc::prependArray( array(-1 => TTi18n::gettext('(Choose Date)')), $pay_period_boundary_dates);
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 		$ppslf->getByUserId( $user_id );
 		if ( $ppslf->getRecordCount() > 0 ) {
 			$pay_period_schedule_id = $ppslf->getCurrent()->getId();
 			$pay_period_schedule_name = $ppslf->getCurrent()->getName();
 			Debug::Text('Pay Period Schedule ID: '. $pay_period_schedule_id, __FILE__, __LINE__, __METHOD__,10);
 
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getByPayPeriodScheduleId( $pay_period_schedule_id, 10, NULL, NULL, array('transaction_date' => 'desc') );
 			$pay_period_dates = NULL;
 			foreach($pplf as $pay_period_obj) {

@@ -35,8 +35,8 @@ extract	(FormVariables::GetVariables(
 												'hierarchy_level_data'
 												) ) );
 
-$hcf = TTnew( 'HierarchyControlFactory' );
-$hlf = TTnew( 'HierarchyLevelFactory' );
+$hcf = new HierarchyControlFactory();
+$hlf = new HierarchyLevelFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -125,7 +125,7 @@ switch ($action) {
 				if ( $hl_id > 0 ) {
 					Debug::Text('Deleting level Row ID: '. $hl_id, __FILE__, __LINE__, __METHOD__,10);
 
-					$hllf = TTnew( 'HierarchyLevelListFactory' );
+					$hllf = new HierarchyLevelListFactory();
 					$hllf->getById( $hl_id );
 					if ( $hllf->getRecordCount() == 1 ) {
 						foreach($hllf as $hl_obj ) {
@@ -145,7 +145,7 @@ switch ($action) {
 		if ( isset($hierarchy_control_id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$hclf = TTnew( 'HierarchyControlListFactory' );
+			$hclf = new HierarchyControlListFactory();
 			$hclf->getByIdAndCompanyId($hierarchy_control_id, $current_company->getId() );
 
 			foreach ($hclf as $hierarchy_control) {
@@ -164,7 +164,7 @@ switch ($action) {
 								);
 			}
 
-			$hllf = TTnew( 'HierarchyLevelListFactory' );
+			$hllf = new HierarchyLevelListFactory();
 			$hllf->getByHierarchyControlId( $hierarchy_control_id );
 			if ( $hllf->getRecordCount() > 0 ) {
 				foreach( $hllf as $hl_obj ) {
@@ -235,11 +235,11 @@ switch ($action) {
 
 		$prepend_array_option = array( 0 => TTi18n::gettext('-- Please Choose --') );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), FALSE, TRUE );
 
 		//Select box options;
-		$hotlf = TTnew( 'HierarchyObjectTypeListFactory' );
+		$hotlf = new HierarchyObjectTypeListFactory();
 		$hierarchy_control_data['user_options'] = $user_options;
 		$hierarchy_control_data['level_user_options'] = Misc::prependArray( $prepend_array_option, $user_options);
 		$hierarchy_control_data['object_type_options'] = $hotlf->getOptions('object_type');

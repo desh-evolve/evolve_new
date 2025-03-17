@@ -67,7 +67,7 @@ $non_static_columns = array(		'-1100-income' => TTi18n::gettext('Income (14)'),
 									'-1220-other_box_5' => TTi18n::gettext('Other Box 6'),
 									);
 
-$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+$pseallf = new PayStubEntryAccountLinkListFactory();
 $pseallf->getByCompanyId( $current_company->getId() );
 if ( $pseallf->getRecordCount() > 0 ) {
 	$pseal_obj = $pseallf->getCurrent();
@@ -96,11 +96,11 @@ $column_ps_entry_name_map = array(
 
 $columns = Misc::prependArray( $static_columns, $non_static_columns);
 
-$pplf = TTnew( 'PayPeriodListFactory' );
+$pplf = new PayPeriodListFactory();
 $year_options = $pplf->getYearsArrayByCompanyId( $current_company->getId() );
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), array() );
 
@@ -130,7 +130,7 @@ switch ($action) {
 			$ugdf->Save();
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		if ( $ulf->getRecordCount() > 0 ) {
 			foreach( $ulf as $u_obj ) {
@@ -144,7 +144,7 @@ switch ($action) {
 					Debug::Text(' Year: '. TTDate::getDate('DATE+TIME', $year_epoch) , __FILE__, __LINE__, __METHOD__,10);
 				}
 
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 				$pself->getReportByCompanyIdAndUserIdAndTransactionStartDateAndTransactionEndDate($current_company->getId(), $filter_data['user_ids'], TTDate::getBeginYearEpoch($year_epoch), TTDate::getEndYearEpoch($year_epoch) );
 
 				$report_columns = $static_columns;
@@ -158,18 +158,18 @@ switch ($action) {
 				//var_dump($raw_rows);
 
 				if ( isset($raw_rows) ) {
-					$ulf = TTnew( 'UserListFactory' );
+					$ulf = new UserListFactory();
 
-					$utlf = TTnew( 'UserTitleListFactory' );
+					$utlf = new UserTitleListFactory();
 					$title_options = $utlf->getByCompanyIdArray( $current_company->getId() );
 
-					$uglf = TTnew( 'UserGroupListFactory' );
+					$uglf = new UserGroupListFactory();
 					$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'no_tree_text', TRUE) );
 
-					$blf = TTnew( 'BranchListFactory' );
+					$blf = new BranchListFactory();
 					$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-					$dlf = TTnew( 'DepartmentListFactory' );
+					$dlf = new DepartmentListFactory();
 					$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 					$x=0;
@@ -252,7 +252,7 @@ switch ($action) {
 			$total_row = $last_row+1;
 
 			//Get company information
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$company_obj = $clf->getById( $current_company->getId() )->getCurrent();
 
 			//Debug::setVerbosity(11);
@@ -291,7 +291,7 @@ switch ($action) {
 					continue;
 				}
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$user_obj = $ulf->getById( $row['user_id'] )->getCurrent();
 
 				$ee_data = array(
@@ -333,7 +333,7 @@ switch ($action) {
 							);
 
 				//Get User Tax / Deductions by Pay Stub Account.
-				$udlf = TTnew( 'UserDeductionListFactory' );
+				$udlf = new UserDeductionListFactory();
 				if ( isset($setup_data['employee_cpp_psea_id']) ) {
 					$udlf->getByUserIdAndPayStubEntryAccountID( $user_obj->getId(), $setup_data['employee_cpp_psea_id'] );
 					if ( $setup_data['employee_cpp_psea_id'] != 0
@@ -516,13 +516,13 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
 		//Deduction PSEA accounts
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$filter_data['pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), TRUE );
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$filter_data['deduction_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(20,30), TRUE );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
 
 		//Get include employee list.
@@ -543,27 +543,27 @@ switch ($action) {
 		$filter_data['selected_user_status_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_status_ids'], $user_status_options );
 
 		//Get Employee Groups
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = Misc::prependArray( $all_array_option, $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) ) );
 		$filter_data['src_group_options'] = Misc::arrayDiffByKey( (array)$filter_data['group_ids'], $group_options );
 		$filter_data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$filter_data['group_ids'], $group_options );
 
 		//Get branches
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $all_array_option, $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		$filter_data['src_branch_options'] = Misc::arrayDiffByKey( (array)$filter_data['branch_ids'], $branch_options );
 		$filter_data['selected_branch_options'] = Misc::arrayIntersectByKey( (array)$filter_data['branch_ids'], $branch_options );
 
 		//Get departments
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $all_array_option, $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		$filter_data['src_department_options'] = Misc::arrayDiffByKey( (array)$filter_data['department_ids'], $department_options );
 		$filter_data['selected_department_options'] = Misc::arrayIntersectByKey( (array)$filter_data['department_ids'], $department_options );
 
 		//Get employee titles
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$user_title_options = Misc::prependArray( $all_array_option, $utlf->getArrayByListFactory( $utlf, FALSE, TRUE ) );
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );

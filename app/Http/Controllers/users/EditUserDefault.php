@@ -40,10 +40,10 @@ if ( isset($user_data) ) {
 		}
 }
 
-$uf = TTnew( 'UserFactory' );
-$upf = TTnew( 'UserPreferenceFactory' );
-$udlf = TTnew( 'UserDefaultListFactory' );
-$udf = TTnew( 'UserDefaultFactory' );
+$uf = new UserFactory();
+$upf = new UserPreferenceFactory();
+$udlf = new UserDefaultListFactory();
+$udf = new UserDefaultFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -190,13 +190,13 @@ switch ($action) {
 			}
 		}
 		//Select box options;
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
-		$culf = TTnew( 'CurrencyListFactory' );
+		$culf = new CurrencyListFactory();
         $culf->getByCompanyId( $current_company->getId() );
 		$currency_options = $culf->getArrayByListFactory( $culf, FALSE, TRUE );
 
@@ -206,25 +206,25 @@ switch ($action) {
       	$user_data['currency_options'] = $currency_options;
 
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 		$user_data['country_options'] = $cf->getOptions('country');
 		$user_data['province_options'] = $cf->getOptions('province', $user_data['country'] );
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$user_titles = $utlf->getByCompanyIdArray( $current_company->getId() );
 		$user_data['title_options'] = $user_titles;
 
 		//Get Permission Groups
-		$pclf = TTnew( 'PermissionControlListFactory' );
+		$pclf = new PermissionControlListFactory();
 		$pclf->getByCompanyId( $current_company->getId() );
 		$user_data['permission_control_options'] = $pclf->getArrayByListFactory( $pclf, FALSE );
 
 		//Get pay period schedules
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 		$pay_period_schedules = $ppslf->getByCompanyIDArray( $current_company->getId() );
 		$user_data['pay_period_schedule_options'] = $pay_period_schedules;
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 		$policy_groups = $pglf->getByCompanyIDArray( $current_company->getId() );
 		$user_data['policy_group_options'] = $policy_groups;
 
@@ -242,7 +242,7 @@ switch ($action) {
 		$user_data['time_zone_options'] = $timezone_options;
 
         //Get all Company Deductions for drop down box.
-        $cdlf = TTnew( 'CompanyDeductionListFactory' );
+        $cdlf = new CompanyDeductionListFactory();
         $user_data['company_deduction_options'] = $cdlf->getByCompanyIdAndStatusIdArray( $current_company->getId(), 10, FALSE);
 
 		$smarty->assign_by_ref('user_data', $user_data);

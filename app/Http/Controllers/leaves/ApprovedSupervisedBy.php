@@ -25,7 +25,7 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 
-//$lrlf = TTnew( 'LeaveRequestListFactory' );
+//$lrlf = new LeaveRequestListFactory();
 $msg = "";
 $lrlf = new LeaveRequestListFactory();
 
@@ -64,7 +64,7 @@ $user_date_id=0;
                    // echo $lrf->getUser();
                    // print_r($lrf);
                     
-                    $ablf = TTnew( 'AccrualBalanceListFactory' );
+                    $ablf = new AccrualBalanceListFactory();
                     $ablf->getByUserIdAndAccrualPolicyId($lrf->getUser(),$lrf->getAccuralPolicy());
                     
                   //  echo $ablf->getRecordCount();
@@ -126,7 +126,7 @@ $user_date_id=0;
                          // $abf->save();
                           foreach($date_array as $date){
 
-                                    $af = TTnew( 'AccrualFactory' );
+                                    $af = new AccrualFactory();
 
                                     $af->setAccrualPolicyID($lrf->getAccuralPolicy());
                                     $af->setUser($lrf->getUser());

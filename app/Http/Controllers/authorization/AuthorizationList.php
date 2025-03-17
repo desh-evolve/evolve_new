@@ -53,10 +53,10 @@ switch ($action) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
-		$hlf = TTnew( 'HierarchyListFactory' );
-		$hllf = TTnew( 'HierarchyLevelListFactory' );
-		$hotlf = TTnew( 'HierarchyObjectTypeListFactory' );
+		$ulf = new UserListFactory();
+		$hlf = new HierarchyListFactory();
+		$hllf = new HierarchyLevelListFactory();
+		$hotlf = new HierarchyObjectTypeListFactory();
 
 		if ( $permission->Check('request','authorize') ) {
 
@@ -75,7 +75,7 @@ switch ($action) {
 			//Debug::Arr( $selected_level_arr['request_punch'], 'Request Punch Selected Level Arr: ', __FILE__, __LINE__, __METHOD__,10);
 
 			if ( is_array($selected_level_arr['request_punch']) ) {
-				$rlf = TTnew( 'RequestListFactory' );
+				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_punch'], 10, 30, NULL, NULL, NULL, $sort_array ); //Missed Punch
 				foreach( $rlf as $r_obj) {
 					//Grab authorizations for this object.
@@ -112,7 +112,7 @@ switch ($action) {
 			//Debug::Arr( $selected_level_arr['request_punch_adjust'], 'Request Punch Selected Level Arr: ', __FILE__, __LINE__, __METHOD__,10);
 
 			if ( is_array($selected_level_arr['request_punch_adjust']) ) {
-				$rlf = TTnew( 'RequestListFactory' );
+				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_punch_adjust'], 20, 30, NULL, NULL, NULL, $sort_array ); //Punch Adjust
 				foreach( $rlf as $r_obj) {
 					//Grab authorizations for this object.
@@ -149,7 +149,7 @@ switch ($action) {
 			//Debug::Arr( $selected_level_arr['request_absence'], 'Request Punch Selected Level Arr: ', __FILE__, __LINE__, __METHOD__,10);
 
 			if ( is_array($selected_level_arr['request_absence']) ) {
-				$rlf = TTnew( 'RequestListFactory' );
+				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_absence'], 30, 30, NULL, NULL, NULL, $sort_array ); //Absence
 				foreach( $rlf as $r_obj) {
 					//Grab authorizations for this object.
@@ -186,7 +186,7 @@ switch ($action) {
 			//Debug::Arr( $selected_level_arr['request_schedule'], 'Request Punch Selected Level Arr: ', __FILE__, __LINE__, __METHOD__,10);
 
 			if ( is_array($selected_level_arr['request_schedule']) ) {
-				$rlf = TTnew( 'RequestListFactory' );
+				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_schedule'], 40, 30, NULL, NULL, NULL, $sort_array ); //Schedule
 				foreach( $rlf as $r_obj) {
 					//Grab authorizations for this object.
@@ -222,7 +222,7 @@ switch ($action) {
 			//Debug::Arr( $selected_level_arr['request_other'], 'Request Punch Selected Level Arr: ', __FILE__, __LINE__, __METHOD__,10);
 
 			if ( is_array($selected_level_arr['request_other']) ) {
-				$rlf = TTnew( 'RequestListFactory' );
+				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_other'], 100, 30, NULL, NULL, NULL, $sort_array ); //Other
 				foreach( $rlf as $r_obj) {
 					//Grab authorizations for this object.
@@ -267,7 +267,7 @@ switch ($action) {
 			//Debug::Arr( $timesheet_selected_level, 'TimeSheet Selected Level Arr: ', __FILE__, __LINE__, __METHOD__,10);
 
 			if ( is_array($selected_level_arr['timesheet']) ) {
-				$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+				$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 				$pptsvlf->getByHierarchyLevelMapAndStatusAndNotAuthorized($selected_level_arr['timesheet'], 30, NULL, NULL, NULL, $sort_array );
 				foreach( $pptsvlf as $pptsv_obj) {
 					//Grab authorizations for this object.

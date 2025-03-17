@@ -31,7 +31,7 @@ extract	(FormVariables::GetVariables(
 												'title_data'
 												) ) );
 
-$utf = TTnew( 'UserTitleFactory' );
+$utf = new UserTitleFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -55,7 +55,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$utlf = TTnew( 'UserTitleListFactory' );
+			$utlf = new UserTitleListFactory();
 
 			$utlf->GetByIdAndCompanyId($id, $current_company->getId() );
 

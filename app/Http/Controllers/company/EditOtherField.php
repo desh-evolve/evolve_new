@@ -30,7 +30,7 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$off = TTnew( 'OtherFieldFactory' );
+$off = new OtherFieldFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -57,7 +57,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$oflf = TTnew( 'OtherFieldListFactory' );
+			$oflf = new OtherFieldListFactory();
 
 			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
 			$oflf->getById($id);
@@ -82,7 +82,7 @@ switch ($action) {
 			}
 		}
 		//Select box options;
-		//$jif = TTnew( 'JobItemFactory' );
+		//$jif = new JobItemFactory();
 		$data['type_options'] = $off->getOptions('type');
 
 		$smarty->assign_by_ref('data', $data);

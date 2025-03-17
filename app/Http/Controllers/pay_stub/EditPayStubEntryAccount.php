@@ -31,7 +31,7 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$pseaf = TTnew( 'PayStubEntryAccountFactory' );
+$pseaf = new PayStubEntryAccountFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -62,7 +62,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getById($id);
 
 			foreach ($psealf as $psea_obj) {
@@ -92,7 +92,7 @@ switch ($action) {
 		$data['status_options'] = $pseaf->getOptions('status');
 		$data['type_options'] = $pseaf->getOptions('type');
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$data['accrual_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(50), TRUE );
 
 		$smarty->assign_by_ref('data', $data);

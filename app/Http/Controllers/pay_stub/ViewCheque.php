@@ -47,7 +47,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) > 0 ) {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			if ( $permission->Check('pay_stub','view') ) {
 				$pslf->getByCompanyIdAndId( $current_company->getId(), $ids);
 			} else {

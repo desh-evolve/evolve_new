@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$bplf = TTnew( 'BreakPolicyListFactory' );
+		$bplf = new BreakPolicyListFactory();
 
 		foreach ($ids as $id) {
 			$bplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -79,7 +79,7 @@ switch ($action) {
 		break;
 
 	default:
-		$bplf = TTnew( 'BreakPolicyListFactory' );
+		$bplf = new BreakPolicyListFactory();
 		$bplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($bplf);

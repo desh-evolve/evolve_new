@@ -45,8 +45,8 @@ if ( isset($data) AND isset($data['time_stamp']) ) {
 	}
 }
 
-$pcf = TTnew( 'PunchControlFactory' );
-$pf = TTnew( 'PunchFactory' );
+$pcf = new PunchControlFactory();
+$pf = new PunchFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -85,7 +85,7 @@ switch ($action) {
 		if ( $pf->isValid() == TRUE ) {
 
 			if ( $pf->Save( FALSE ) == TRUE ) {
-				$pcf = TTnew( 'PunchControlFactory' );
+				$pcf = new PunchControlFactory();
 				$pcf->setId( $pf->getPunchControlID() );
 				$pcf->setPunchObject( $pf );
 
@@ -161,10 +161,10 @@ switch ($action) {
 	default:
 		$epoch = TTDate::getTime();
 
-		$slf = TTnew( 'ScheduleListFactory' );
+		$slf = new ScheduleListFactory();
 
 		//Get last punch for this day, for this user.
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 
 		if ( $action != 'submit' ) {
 			$plf->getPreviousPunchByUserIDAndEpoch( $current_user->getId(), $epoch );
@@ -324,23 +324,23 @@ switch ($action) {
 			$data['date_stamp'] = $epoch;
 		}
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, TRUE, FALSE );
 		//$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, TRUE, FALSE);
 		//$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByCompanyIdAndUserIdAndStatus( $current_company->getId(), $current_user->getId(), array(10) );
 			$data['job_options'] = $jlf->getArrayByListFactory( $jlf, TRUE, TRUE );
 			$data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyIdAndStatus( $current_company->getId(), 10 );
 			$data['job_item_options'] = $jilf->getArrayByListFactory( $jilf, TRUE, FALSE );
 			$data['job_item_manual_id_options'] = $jilf->getManualIdArrayByListFactory( $jilf, FALSE );
@@ -353,7 +353,7 @@ switch ($action) {
 		$data['department_options'] = $department_options;
 
 		//Get other field names
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 		$data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getId(), 15 );
 
 		//Make sure current station is allowed.

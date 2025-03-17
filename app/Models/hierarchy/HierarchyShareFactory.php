@@ -13,7 +13,7 @@ class HierarchyShareFactory extends Factory {
 	function setHierarchyControl($id) {
 		$id = trim($id);
 		
-		$hclf = TTnew( 'HierarchyControlListFactory' );
+		$hclf = new HierarchyControlListFactory();
 		
 		if ( $this->Validator->isResultSetWithRows(	'hierarchy_control',
 															$hclf->getByID($id),
@@ -33,7 +33,7 @@ class HierarchyShareFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 		
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),

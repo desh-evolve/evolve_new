@@ -29,7 +29,7 @@ extract	(FormVariables::GetVariables(
 												'department_data'
 												) ) );
 
-$df = TTnew( 'DepartmentFactory' );
+$df = new DepartmentFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -74,7 +74,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$dlf = TTnew( 'DepartmentListFactory' );
+			$dlf = new DepartmentListFactory();
 
 			$dlf->GetByIdAndCompanyId($id, $current_company->getId() );
 
@@ -111,12 +111,12 @@ switch ($action) {
 
 		//Select box options;
 		$department_data['status_options'] = $df->getOptions('status');
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$department_data['branch_list_options'] = $blf->getArrayByListFactory( $blf, FALSE);
 
 		//Get other field names
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 		$department_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getID(), 5 );
 
 		$smarty->assign_by_ref('department_data', $department_data);

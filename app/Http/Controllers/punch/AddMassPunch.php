@@ -65,7 +65,7 @@ if ( isset($pc_data) ) {
 }
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 $filter_data = array();
 //Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
@@ -78,9 +78,9 @@ if ( $permission->Check('punch','edit') == FALSE ) {
 	}
 }
 
-$pcf = TTnew( 'PunchControlFactory' );
-$pf = TTnew( 'PunchFactory' );
-$ulf = TTnew( 'UserListFactory' );
+$pcf = new PunchControlFactory();
+$pf = new PunchFactory();
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -125,7 +125,7 @@ switch ($action) {
 		}
 		//var_dump($pc_data);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$src_user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, FALSE );
 
@@ -134,22 +134,22 @@ switch ($action) {
 		
 		$prepend_array_option = array( 0 => '--', -1 => TTi18n::gettext('-- Default --') );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $prepend_array_option,  $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $prepend_array_option,  $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByStatusIdAndCompanyId( array(10,20,30,40), $current_company->getId() );
 			//$jlf->getByCompanyIdAndUserIdAndStatus( $current_company->getId(),  $pc_data['user_id'], array(10,20,30,40) );
 			$pc_data['job_options'] = $jlf->getArrayByListFactory( $jlf, TRUE, TRUE );
 			$pc_data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
 			$pc_data['job_item_options'] = $jilf->getArrayByListFactory( $jilf, TRUE );
 			$pc_data['job_item_manual_id_options'] = $jilf->getManualIdArrayByListFactory( $jilf, TRUE );
@@ -165,7 +165,7 @@ switch ($action) {
 		$pc_data['department_options'] = $department_options;
 
 		//Get other field names
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 		$pc_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getId(), 15 );
 
 		//var_dump($pc_data);

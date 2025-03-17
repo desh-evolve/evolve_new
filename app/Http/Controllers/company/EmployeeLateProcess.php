@@ -31,14 +31,14 @@ extract	(FormVariables::GetVariables(
                                                                                                 'pay_period_ids'
 												) ) );
 
-$cf = TTnew( 'CompanyFactory' );
+$cf = new CompanyFactory();
 
-$ulf = TTnew( 'UserListFactory' );
-$uf = TTnew( 'UserFactory' );
+$ulf = new UserListFactory();
+$uf = new UserFactory();
 //ARSP  EDIT --> ADDD NEW CODE FOR SALARY (WAGE)
-$uwf = TTnew('UserWageFactory');
+$uwf = new UserWageFactory();
 
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 
 $pplf = new PayPeriodListFactory();
 
@@ -309,7 +309,7 @@ switch ($action) {
                                     
 
 
-                                                                       $ablf = TTnew( 'AccrualBalanceListFactory' );
+                                                                       $ablf = new AccrualBalanceListFactory();
                                                                        $ablf->getByUserIdAndAccrualPolicyId($user_obj->getId(),4);
 
                                                                          if( $ablf->getRecordCount() > 0){
@@ -350,7 +350,7 @@ switch ($action) {
                                                                                   }
 
 
-                                                                               $af = TTnew( 'AccrualFactory' );
+                                                                               $af = new AccrualFactory();
 
                                                                                $af->setAccrualPolicyID(4);
                                                                                $af->setUser($user_obj->getId());
@@ -414,7 +414,7 @@ switch ($action) {
                                                                            $user_date_id = $udlf->getCurrent()->getId();
                                                                        }
                                                  
-                                                                      $ablf = TTnew( 'AccrualBalanceListFactory' );
+                                                                      $ablf = new AccrualBalanceListFactory();
                                                                        $ablf->getByUserIdAndAccrualPolicyId($user_obj->getId(),4);
 
                                                                          if( $ablf->getRecordCount() > 0){
@@ -447,7 +447,7 @@ switch ($action) {
                                                                                   }
 
 
-                                                                               $af = TTnew( 'AccrualFactory' );
+                                                                               $af = new AccrualFactory();
 
                                                                                $af->setAccrualPolicyID(4);
                                                                                $af->setUser($user_obj->getId());
