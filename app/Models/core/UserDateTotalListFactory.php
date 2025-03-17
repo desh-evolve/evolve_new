@@ -2593,12 +2593,12 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 								}
 
 								if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-									$ph[] = $this->db->BindDate($filter_data['start_date']);
-									$query  .=	' AND tmp2_a.date_stamp >= ?';
+									$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+									$query  .=	' AND tmp2_a.date_stamp >= :start_date';
 								}
 								if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-									$ph[] = $this->db->BindDate($filter_data['end_date']);
-									$query  .=	' AND tmp2_a.date_stamp <= ?';
+									$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+									$query  .=	' AND tmp2_a.date_stamp <= :end_date';
 								}
 
 								$query .= '
@@ -2626,21 +2626,21 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
-		$ph[] = $company_id;
+		$ph[':company_id'] = $company_id;
 		$query .= '
 						AND a.status_id in (10,20,30)
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					group by b.user_id, b.pay_period_id, a.branch_id, a.department_id, b.date_stamp, user_wage_id, user_wage_effective_date, over_time_policy_wage_id, over_time_policy_wage_effective_date, absence_policy_wage_id, absence_policy_wage_effective_date, premium_policy_wage_id, premium_policy_wage_effective_date, a.status_id, a.type_id, a.over_time_policy_id, a.absence_policy_id, a.premium_policy_id, tmp2.min_punch_time_stamp, tmp2.max_punch_time_stamp
 					) as tmp ON z.id = tmp.user_id
-				WHERE z.company_id = ? ';
+				WHERE z.company_id = :company_id ';
 
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
 			$query  .=	' AND z.id in ('.$this->getListSQL($filter_data['user_id'], $ph) .') ';

@@ -1,0 +1,508 @@
+<?php
+/*********************************************************************************
+ * Evolve is a Payroll and Time Management program developed by
+ * Evolve Technology PVT LTD.
+ *
+ ********************************************************************************/
+/*
+ * $Revision: 5459 $
+ * $Id: EditCompanyDeduction.php 5459 2011-11-04 21:40:55Z ipso $
+ * $Date: 2011-11-04 14:40:55 -0700 (Fri, 04 Nov 2011) $
+ */
+require_once('../../includes/global.inc.php');
+require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+require_once(Environment::getBasePath() .'classes/swiftmailer/lib/swift_required.php');
+
+/*
+if ( !$permission->Check('accrual','view')
+		OR (  $permission->Check('accrual','view_own') ) ) {
+	$permission->Redirect( FALSE ); //Redirect
+}
+*/
+
+$smarty->assign('title', TTi18n::gettext($title = 'Apply Employee Leaves')); // See index.php
+
+/*
+ * Get FORM variables
+ */
+extract	(FormVariables::GetVariables(
+										array	(
+												'action',
+												'id',
+												'data',
+                                                                                                'filter_data'
+												) ) );
+
+
+if ( isset($data)) {
+	if ( $data['start_date'] != '' ) {
+		//$data['leave_start_date'] = TTDate::parseDateTime( $data['leave_start_date'] );
+	}
+	if ( $data['end_date'] != '' ) {
+		//$data['leave_end_date'] = TTDate::parseDateTime( $data['leave_end_date'] );
+	}
+}
+
+//echo '<pre>'.print_r($data);exit;
+
+/*
+if ( isset($data['appt-time']) && $data['appt-time'] != '') {
+		//$data['parsed_start_time'] = TTDate::strtotime( $data['appt-time'], $data['start_date_stamp'] ) ;
+    echo $data['appt-time']; exit;
+}
+*/
+
+$lrlf = TTnew( 'LeaveRequestListFactory' );
+
+$action = Misc::findSubmitButton();
+$action = strtolower($action);
+
+
+switch ($action) {
+	case 'submit':
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+		//Debug::setVerbosity(11);
+            
+          //  $lrf = TTnew( 'LeaveRequestFactory' );
+            
+            //echo $data['leave_start_date'];
+            //exit();
+            
+            $ablf = TTnew( 'AccrualBalanceListFactory' );
+            $ablf->getByUserIdAndAccrualPolicyId($current_user->getId(),$data['leave_type']);
+            
+            if( $ablf->getRecordCount() > 0){
+                
+                
+                
+                 $abf = $ablf->getCurrent();
+                  
+                  $balance = $abf->getBalance();
+                  
+                   $amount = $data['no_days'];
+                          
+                          $amount_taken =0;
+                          
+                          if($data['method_type'] == 1){
+                              $amount_taken = (($amount*8) * (28800/8));
+                          } elseif($data['method_type'] == 2){
+                              
+                              if($amount<1){
+                                   $amount_taken = (($amount*8) * (28800/8));
+                              }
+                              else{
+                                  $amount_taken = (($amount*8) * (28800/8));
+                              }
+                          } elseif($data['method_type'] == 3){
+                               $amount_taken = 4320;
+                               
+                             //  $start_date_stamp = TTDate::parseDateTime( $data['leave_start_date'].' '.$data['appt-time'] );
+                               
+                             //  $end_date_stamp = TTDate::parseDateTime( $data['leave_start_date'].' '.$data['end-time'] );
+                               
+                              $start_date_stamp= TTDate::parseTimeUnit($data['appt-time'] );
+                              $end_date_stamp= TTDate::parseTimeUnit($data['end-time'] );
+                              
+                              $time_diff = $end_date_stamp - $start_date_stamp;
+                              
+                              if($time_diff <=3600){
+                                  $time_diff = 3600;
+                              }
+                              
+                              
+                              if($time_diff >7200){
+                                  $time_diff = 7200;
+                              }
+                             
+                              $amount_taken =$time_diff*0.8;
+                           }
+                          
+                          $amount_taken = -1 * abs($amount_taken);
+                           
+                          $current_amount = abs($amount_taken);
+                          
+                          
+                
+                    if($current_amount <= $balance ){
+                        
+                        $date_sh_array = explode(',', $data['leave_start_date']);
+                        //check here
+                        $udtlf_s = new UserDateListFactory();
+                        $udtlf_s->getByUserIdAndDate($current_user->getId(), $date_sh_array[0]);
+                        
+                        $udf_obj = $udtlf_s->getCurrent();
+                        $pp_id = $udf_obj->getPayPeriod();
+                        
+                        $pplf = new PayPeriodListFactory();
+                        $pplf->getById($pp_id);
+                        $pp_obj = $pplf->getCurrent();
+                        // echo "foo".$pp_obj->getStartDate(TRUE);
+                        
+                        $lrlf_s = new LeaveRequestListFactory();
+                        $row = $lrlf_s->getPayperiodsShortLeaveCount($current_user->getId(), $data['leave_type'], $pp_obj->getStartDate(TRUE), $pp_obj->getEndDate(TRUE));
+                        $pp_short_leave_count=$row['count'];
+                        
+                     
+                         
+                        if($pp_short_leave_count>=2 && $data['leave_type'] == 8){
+                            
+                             $msg = "You can apply only two short leaves"; 
+                        }else{
+                             
+                          
+                                    $lrf = new LeaveRequestFactory;
+
+
+                                    $lrf->setCompany($current_company->getId());
+                                    $lrf->setUser($current_user->getId());
+                                    $lrf->setDesignation($data['title_id']);
+                                    $lrf->setAccuralPolicy($data['leave_type']);
+                                    $lrf->setLeaveMethod($data['method_type']);
+                                    $lrf->setAmount($data['no_days']);
+                                    
+                                    if ( isset($data['appt-time']) && $data['appt-time'] != '') {
+                                        $lrf->setLeaveTime($data['appt-time']);
+                                    }
+                                    
+                                    if ( isset($data['end-time']) && $data['end-time'] != '') {
+                                        $lrf->setLeaveEndTime($data['end-time']);
+                                    }
+
+                                    $date_array = array();
+                                    if(isset($data['leave_start_date'])){
+                                        
+                                        $lrf->setLeaveDates(trim($data['leave_start_date']));
+                                        
+                                        $date_array = explode(',', $data['leave_start_date']);
+                                    
+                                    
+                                            $date_count = count($date_array);
+
+                                            if($date_count ==1){
+
+                                                $from_date =  DateTime::createFromFormat('Y-m-d', $date_array[$date_count-1]);
+                                               $lrf->setLeaveFrom($from_date->format('Y-m-d'));
+
+                                               $To_date =  DateTime::createFromFormat('Y-m-d', $date_array[$date_count-1]);
+                                               $lrf->setLeaveTo($To_date->format('Y-m-d'));
+
+                                            }elseif ($date_count >1) {
+
+                                               $from_date =  new DateTime($date_array[0]);
+                                               
+                                               $lrf->setLeaveFrom($from_date->format('Y-m-d'));
+
+                                               $To_date =  new DateTime($date_array[$date_count-1]);
+                                            
+                                               $lrf->setLeaveTo($To_date->format('Y-m-d'));
+                                               
+
+                                            }
+                                    }
+                                   //  $from_date =  DateTime::createFromFormat('j-M-y', $data['leave_start_date']);
+                                   
+
+                                  // $To_date =  DateTime::createFromFormat('j-M-y', $data['leave_end_date']);
+                                  
+
+                                     $lrf->setReason($data['reason']);
+                                     $lrf->setAddressTelephone($data['address_tel']);
+                                     $lrf->setCoveredBy($data['cover_duty']);
+                                     $lrf->setSupervisorId($data['supervisor']);
+                                     $lrf->setCoveredApproved(1);
+                                     $lrf->setSupervisorApproved(0);
+                                    $lrf->setHrApproved(0);
+                                     $lrf->setDeleted(0);
+                                     $lrf->setStatus(10);
+
+                                     if($data['leave_type'] == 3){
+
+                                         $lrf->setCoveredApproved(1);
+
+                                     }
+
+
+
+                                      if($data['leave_type'] == 14){
+
+                                         $lrf->setCoveredApproved(1);
+
+                                     }
+
+                                     $lrlf_b = new LeaveRequestListFactory();
+                                     
+                                     $lrlf_b->checkUserHasLeaveTypeForDay($current_user->getId(), $from_date->format('Y-m-d'), $data['leave_type']);
+                                   // echo $data['leave_start_date'];
+                                     
+                                     if($lrlf_b->getRecordCount()>0 && $data['leave_type'] == 8){
+                                          $msg = "You have This leave for the day";  
+                                     }
+                                     else{
+                                        $lrf->Save();
+
+                                        global $config_vars;
+
+
+                                        $supervisors = new UserListFactory();
+                                        $supervisors->getById(trim($data['supervisor']));
+                                        $supervisor_obj = $supervisors->getCurrent();
+
+
+                                        $employeeLF = new UserListFactory();
+                                        $employeeLF->getById(trim($current_user->getId()));
+                                        $employee_obj = $employeeLF->getCurrent();
+
+
+                                        if ( $supervisor_obj->getWorkEmail() != FALSE ) {
+                                                    $supervisor_primary_email = $supervisor_obj->getWorkEmail();
+                                                    if ( $supervisor_obj->getHomeEmail() != FALSE ) {
+                                                            $supervisor_secondary_email = $supervisor_obj->getHomeEmail();
+                                                    } else {
+                                                            $supervisor_secondary_email = NULL;
+                                                    }
+                                        } else {
+                                                    $supervisor_primary_email = $supervisor_obj->getHomeEmail();
+                                                    $supervisor_secondary_email = NULL;
+                                        }
+
+
+
+
+
+                                        if ( $employee_obj->getWorkEmail() != FALSE ) {
+                                                    $employee_primary_email = $employee_obj->getWorkEmail();
+                                                    if ( $employee_obj->getHomeEmail() != FALSE ) {
+                                                            $employee_secondary_email = $employee_obj->getHomeEmail();
+                                                    } else {
+                                                            $employee_secondary_email = NULL;
+                                                    }
+                                        } else {
+                                                    $employee_primary_email = $employee_obj->getHomeEmail();
+                                                    $employee_secondary_email = NULL;
+                                        }
+
+
+                                $aplf = new AccrualPolicyListFactory();
+                                $aplf->getById($data['leave_type']);
+
+                            //****************************************************************
+
+
+                            // Create the mail transport configuration
+                            $transport = Swift_MailTransport::newInstance();
+                            $transporter = Swift_SmtpTransport::newInstance($config_vars['mail']['smtp_host'], $config_vars['mail']['smtp_port'], 'ssl')
+                            ->setUsername($config_vars['mail']['smtp_username'])
+                            ->setPassword($config_vars['mail']['smtp_password']);
+
+
+
+                            // Create the message
+                            $message = Swift_Message::newInstance();
+                            $message->setTo(array(
+                                $supervisor_primary_email=> $supervisor_obj->getFullName()
+                                ));
+                            $message->setSubject("New leave request by ". $employee_obj->getFullName());
+                            $htmlContent .= '<p>Dear '.$supervisor_obj->getFullName().'</p>';
+                            $htmlContent .= '<div style="background: rgb(55,110,55); padding-bottom: 0.1px; padding-top: 0.1px;" align="center"><h2 style="color: #fff">Below leave application is pending for your approval.</h2></div>';
+                            $htmlContent .= '<br><br><table><tr><td>Emp No </td>'. "<td>".$employee_obj->getEmployeeNumber()."</td></tr>";
+                            $htmlContent .= '<tr><td>Name </td>'. "<td>".$employee_obj->getFirstName().' '.$employee_obj->getLastName(). "</td></tr>";
+                            $htmlContent .= '<tr><td>Leave Type </td>'. "<td>".  $aplf->getCurrent()->getName()."</td></tr>";
+                            $htmlContent .= '<tr><td>No. of days </td>'. "<td>".$data['no_days']."</td></tr>";
+                            $htmlContent .= '<tr><td>From </td>'. "<td>".$from_date->format('Y-m-d')."</td></tr>";
+                            $htmlContent .= '<tr><td>To </td>'. "<td>".$To_date->format('Y-m-d')."</td></tr></table>";
+                            $htmlContent .= '<tr><td>Dates </td>'. "<td>".$data['leave_start_date']."</td></tr></table>";
+                            $htmlContent .= '<p><b><i><span style="font-family: Helvetica,sans-serif; color:#440062">HR Department</span></i></b></p>';
+                            $message->setBody($htmlContent,'text/html');
+                            $message->setFrom("careers@aquafresh.lk", "HRM");
+
+                            // Send the email
+                            $mailer = Swift_Mailer::newInstance($transporter);
+                            $mailer->send($message);
+
+
+                                        $msg = "You have successfully apply leave";  
+                                        
+                                        
+                           }
+                        //****************************************************************
+                        }
+                    }else{
+                        $msg = "You don't have sufficent leave";
+                    }
+            }
+
+
+            else{
+                       $msg = "You don't have this leave type";
+            }
+
+           break;
+	default:
+		
+		
+		break;
+}
+//Select box options; getName() no_days
+
+$lrlf->getByUserIdAndCompanyId($current_user->getId(),$current_company->getId());
+
+$leave_request = array();
+
+if($lrlf->getRecordCount() > 0){
+    
+   foreach ($lrlf as $lrf) {
+     
+       $leave = array();
+  
+    
+    $leave['name'] = $lrf->getUserObject()->getFullName();
+    $leave['from'] = $lrf->getLeaveFrom();
+    $leave['to'] = $lrf->getLeaveTo();
+    $leave['amount'] = $lrf->getAmount();
+    $leave['leave_type'] = $lrf->getAccuralPolicyObject()->getName();
+    
+     $leave['status'] = "Pending Aproovals";
+    
+    if($lrf->getCoveredApproved() && $lrf->getStatus()==10 ){
+         $leave['status'] = "Pending for Authorization ";
+    }
+    
+    if (!$lrf->getCoveredApproved() && $lrf->getStatus()==20) {
+        $leave['status'] = "Cover Rejected";
+    
+    }
+    
+    if($lrf->getCoveredApproved() && $lrf->getSupervisorApproved() && $lrf->getStatus()==10 ){
+         $leave['status'] = "Supervisor Approved";
+    }
+    
+    if($lrf->getCoveredApproved() && !$lrf->getSupervisorApproved() && $lrf->getStatus()==30 ){
+            $leave['status'] = "Supervisor Rejected";
+    }
+    
+    if($lrf->getCoveredApproved() && $lrf->getSupervisorApproved() && $lrf->getHrApproved() && $lrf->getStatus()==10){
+         $leave['status'] = "HR Approved";
+    }
+    
+    if($lrf->getCoveredApproved() && $lrf->getSupervisorApproved() && !$lrf->getHrApproved() && $lrf->getStatus()==40){
+        $leave['status'] = "HR Rejected";
+    }
+    
+    
+    $leave_request[]= $leave;
+   }
+    
+}
+
+
+
+$alf = TTnew( 'AccrualListFactory' );
+
+$aplf = TTnew( 'AccrualPolicyListFactory' );
+$aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
+
+$header_leave = array();
+$total_asign_leave = array();
+$total_taken_leave = array();
+$total_balance_leave = array();
+
+foreach($aplf as $apf){
+    
+    if($apf->getId() == 4 || $apf->getId() == 11){
+        continue;
+    }
+ 
+    $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($current_company->getId(),$current_user->getId(),$apf->getId(),30);
+    
+    
+    $header_leave[]['name']=$apf->getName();
+            
+    if($alf->getRecordCount() > 0)
+    {
+       $af= $alf->getCurrent();
+        $total_asign_leave[]['asign'] =  number_format($af->getAmount()/28800,2);
+    }
+    else{
+        $total_asign_leave[]['asign'] = 0;
+    }
+    
+  
+   $ttotal =  $alf->getSumByUserIdAndAccrualPolicyId($current_user->getId(),$apf->getId());
+   
+   
+     
+    if($alf->getRecordCount() > 0)
+    {
+       $af= $alf->getCurrent();
+       $total_taken_leave[]['taken'] = number_format(($af->getAmount()/28800)-($ttotal/28800),2);
+       $total_balance_leave[]['balance'] =  number_format(($ttotal/28800),2);
+    }
+    else{
+        $total_taken_leave[]['taken'] = 0;
+         $total_balance_leave[]['balance'] = 0;
+    }
+    
+}
+
+
+
+
+
+$leave_options = array();
+foreach($aplf as $apf){
+    $leave_options[$apf->getId()]=$apf->getName();
+    
+    
+    
+    $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatus($current_company->getId(),$current_user->getId(),$apf->getId(),30);
+    
+}
+$leave_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $leave_options );
+$data['leave_options'] = $leave_options;
+        
+$method_options = $lrlf->getOptions('leave_method');
+ 
+$method_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $method_options );
+$data['method_options'] = $method_options;
+        
+//check here
+$ulf = TTnew( 'UserListFactory' );
+//$filter_data['default_branch_id'] = $current_user->getDefaultBranch();
+$filter_data['exclude_id'] = 1;
+
+$ulf->getAPISearchByCompanyIdAndArrayCriteria( $current_company->getId(),$filter_data);
+//$ulf->getAll();
+
+$user_options = array();
+
+foreach($ulf as $uf){
+    
+  $user_options[$uf->getId()] = $uf->getPunchMachineUserID().'-'.$uf->getFullName() ; 
+}
+
+$user_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $user_options );
+$data['users_cover_options'] = $user_options;
+//$data['users_cover_options'] = $ulf;
+$data['name'] =$current_user->getFullName();
+$data['title'] = $current_user->getTitleObject()->getName();
+$data['title_id'] = $current_user->getTitleObject()->getId();
+$data['leave_start_date'] = '';
+//$data['reason']="";
+
+//$data['no_days'] = '';
+$smarty->assign_by_ref('total_asign_leave', $total_asign_leave);
+$smarty->assign_by_ref('total_taken_leave', $total_taken_leave);
+$smarty->assign_by_ref('total_balance_leave', $total_balance_leave);
+$smarty->assign_by_ref('header_leave', $header_leave);
+
+$data['msg'] =isset($msg) ;
+
+$smarty->assign_by_ref('leave_request', $leave_request);
+$smarty->assign_by_ref('data', $data);
+$smarty->assign_by_ref('user', $current_user);
+
+//$current_user->getId() 
+
+$smarty->display('leaves/ApplyUserLeave.tpl');
+
+?>

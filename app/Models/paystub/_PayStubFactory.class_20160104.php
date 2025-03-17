@@ -403,10 +403,7 @@ class PayStubFactory extends Factory {
 
 		} else {
 
-			$pplf = TTnew( 'PayPeriodListFactory' );
-
-
-
+			$pplf = new PayPeriodListFactory();
 			$pplf->getById( $this->getPayPeriod() );
 
 			if ( $pplf->getRecordCount() > 0 ) {
@@ -418,8 +415,6 @@ class PayStubFactory extends Factory {
 			}
 
 		}
-
-
 
 		return FALSE;
 

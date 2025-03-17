@@ -143,16 +143,15 @@ class Authentication {
 
 		return FALSE;
 	}
+
 	function setObject($user_id) {
 		if ( !empty($user_id) ) {
 
 			$ulf = new UserListFactory();
 			$ulf->getByID($user_id);
-
 			
-			$ulf->data = (array)$ulf->rs[0];
-			
-			foreach ($ulf->data as $user) {
+			foreach ($ulf->rs as $user) {
+				$ulf->data = (array)$user;
 				$this->obj = $ulf;
 
 				return TRUE;
@@ -436,7 +435,6 @@ class Authentication {
 	}
 
 	private function Write() {
-		
 		$ph = array(
 			':session_id' => $this->getSessionID(),
 			':user_id' => $this->getObject()->getID(),

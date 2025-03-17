@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\progressbar;
 use App\Http\Controllers\Controller;
-
+use App\Models\Core\CalculatePayStub;
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use Illuminate\Support\Facades\Redirect;
@@ -14,10 +14,14 @@ use App\Models\Core\FormVariables;
 use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 use App\Models\Core\URLBuilder;
 use App\Models\Core\UserDateListFactory;
 use App\Models\PayPeriod\PayPeriodFactory;
 use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleUserListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\Users\UserGenericStatusFactory;
 use Illuminate\Support\Facades\View;
 
 class ProgressBar extends Controller
@@ -25,6 +29,8 @@ class ProgressBar extends Controller
 	protected $permission;
     protected $company;
     protected $userPrefs;
+    protected $currentUser;
+    protected $profiler;
 
 	public $progress = 0;
 
@@ -40,6 +46,8 @@ class ProgressBar extends Controller
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->profiler = View::shared('profiler');
 
 		
 		// Get FORM variables
@@ -139,21 +147,28 @@ class ProgressBar extends Controller
 		}
 	}
 
-	public function generate_paystubs(){
-		print_r('Generate Pay Stubs');exit;
+	public function generate_paystubs(Request $request){
+		$action = strtolower($request->input('action'));// Get the action from request
+		$pay_period_ids = $request->input('pay_period_ids', []); // Default to an empty array if not set
+		$next_page = $request->input('next_page', []); // Default to an empty array if not set
+		$permission = $this->permission;
+		$current_user = $this->currentUser;
+		$current_company = $this->company;
+		$profiler = $this->profiler;
 		//Debug::setVerbosity(11);
 
 		Debug::Text('Generate Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
-
+		/*
 		if ( !$permission->Check('pay_period_schedule','enabled')
 				OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
 
 			$permission->Redirect( FALSE ); //Redirect
 		}
-
+		*/
 		if ( !is_array($pay_period_ids) ) {
 			$pay_period_ids = array($pay_period_ids);
 		}
+		print_r('Generate Pay Stubs: ');
 
 		TTLog::addEntry( $current_company->getId(), TTi18n::gettext('Notice'), TTi18n::gettext('Recalculating Company Pay Stubs for Pay Periods:').' '. implode(',', $pay_period_ids) , $current_user->getId(), 'pay_stub' );
 
@@ -161,77 +176,89 @@ class ProgressBar extends Controller
 		foreach($pay_period_ids as $pay_period_id) {
 			Debug::text('Pay Period ID: '. $pay_period_id, __FILE__, __LINE__, __METHOD__,10);
 
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
-
+			
 			$epoch = TTDate::getTime();
 
-			foreach ($pplf as $pay_period_obj) {
-				Debug::text('Pay Period Schedule ID: '. $pay_period_obj->getPayPeriodSchedule(), __FILE__, __LINE__, __METHOD__,10);
+			foreach ($pplf->rs as $pay_period_obj) {
+				$pplf->data = (array)$pay_period_obj;
+				
+				Debug::text('Pay Period Schedule ID: '. $pplf->getPayPeriodSchedule(), __FILE__, __LINE__, __METHOD__,10);
 
 				//Grab all users for pay period
-				$ppsulf = TTnew( 'PayPeriodScheduleUserListFactory' );
-				$ppsulf->getByPayPeriodScheduleId( $pay_period_obj->getPayPeriodSchedule() );
-
+				$ppsulf = new PayPeriodScheduleUserListFactory();
+				$ppsulf->getByPayPeriodScheduleId( $pplf->getPayPeriodSchedule() );
+				
 				$total_pay_stubs = $ppsulf->getRecordCount();
 				//echo "Total Pay Stubs: $total_pay_stubs - ". ceil(100 / $total_pay_stubs) ."<Br>\n";
 
 				if ( $init_progress_bar == TRUE ) {
 					//InitProgressBar( ceil(100 / $total_pay_stubs) );
-					InitProgressBar();
+					$this->InitProgressBar();
 					$init_progress_bar = FALSE;
 				}
-
-				$progress_bar->setValue(0);
-				$progress_bar->display();
+				//$progress_bar->setValue(0);
+				//$progress_bar->display();
 
 				//Delete existing pay stub. Make sure we only
 				//delete pay stubs that are the same as what we're creating.
-				$pslf = TTnew( 'PayStubListFactory' );
-				$pslf->getByPayPeriodId( $pay_period_obj->getId() );
-				foreach ( $pslf as $pay_stub_obj ) {
+				$pslf = new PayStubListFactory(); 
+				$pslf->getByPayPeriodId( $pplf->getId() );
 
-					Debug::text('Existing Pay Stub: '. $pay_stub_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
+				foreach ( $pslf->rs as $pay_stub_obj ) {
+					$pslf->data = (array)$pay_stub_obj;
+
+					Debug::text('Existing Pay Stub: '. $pslf->getId(), __FILE__, __LINE__, __METHOD__,10);
 
 					//Check PS End Date to match with PP End Date
 					//So if an ROE was generated, it won't get deleted when they generate all other Pay Stubs
 					//later on.
-					if ( $pay_stub_obj->getStatus() <= 25
-							AND $pay_stub_obj->getTainted() === FALSE
-							AND $pay_stub_obj->getEndDate() == $pay_period_obj->getEndDate() ) {
-						Debug::text('Pay stub matched advance flag, deleting: '. $pay_stub_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
-						$pay_stub_obj->setDeleted(TRUE);
-						$pay_stub_obj->Save();
+					if ( $pslf->getStatus() <= 25
+							AND $pslf->getTainted() === FALSE
+							AND $pslf->getEndDate() == $pplf->getEndDate() ) {
+						Debug::text('Pay stub matched advance flag, deleting: '. $pslf->getId(), __FILE__, __LINE__, __METHOD__,10);
+						$pslf->setDeleted(TRUE);
+						$pslf->Save();
 					} else {
 						Debug::text('Pay stub does not need regenerating, or it is LOCKED!', __FILE__, __LINE__, __METHOD__,10);
 					}
 				}
-
+				
 				$i=1;
-				foreach ($ppsulf as $pay_period_schdule_user_obj) {
-					Debug::text('Pay Period User ID: '. $pay_period_schdule_user_obj->getUser(), __FILE__, __LINE__, __METHOD__,10);
+				foreach ($ppsulf->rs as $pay_period_schdule_user_obj) {
+					$ppsulf->data = (array)$pay_period_schdule_user_obj;
+
+					Debug::text('Pay Period User ID: '. $ppsulf->getUser(), __FILE__, __LINE__, __METHOD__,10);
 					Debug::text('Total Pay Stubs: '. $total_pay_stubs .' - '. ceil( 1 / (100 / $total_pay_stubs) ) , __FILE__, __LINE__, __METHOD__,10);
 
 					$profiler->startTimer( 'Calculating Pay Stub' );
 					//Calc paystubs.
 					$cps = new CalculatePayStub();
-					$cps->setUser( $pay_period_schdule_user_obj->getUser() );
-					$cps->setPayPeriod( $pay_period_obj->getId() );
-                                     
+
+					$cps->setUser( $ppsulf->getUser() );
+					$cps->setPayPeriod( $pplf->getId() );
+
+					//=================================================================
+					// calculation functions
+					//=================================================================
                     $cps->removeTerminatePayStub();
                     $cps->calculateAllowance();
 					$cps->calculate();
+					//=================================================================
 					unset($cps);
 					$profiler->stopTimer( 'Calculating Pay Stub' );
 
-					$progress_bar->setValue( Misc::calculatePercent( $i, $total_pay_stubs ) );
-					$progress_bar->display();
+					
+					//$progress_bar->setValue( Misc::calculatePercent( $i, $total_pay_stubs ) );
+					//$progress_bar->display();
 
 					$i++;
 				}
+				
 				unset($ppsulf);
 
-				$ugsf = TTnew( 'UserGenericStatusFactory' );
+				$ugsf = new UserGenericStatusFactory();
 				$ugsf->setUser( $current_user->getId() );
 				$ugsf->setBatchID( $ugsf->getNextBatchId() );
 				$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );

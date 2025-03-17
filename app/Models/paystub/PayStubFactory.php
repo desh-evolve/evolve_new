@@ -91,6 +91,8 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 
+use App\Models\PayPeriod\PayPeriodListFactory;
+
 //require_once( 'Numbers/Words.php');
 
 class PayStubFactory extends Factory {
@@ -401,8 +403,6 @@ class PayStubFactory extends Factory {
 
 	}
 
-
-
 	function getPayPeriodObject() {
 
 		if ( is_object($this->pay_period_obj) ) {
@@ -411,7 +411,7 @@ class PayStubFactory extends Factory {
 
 		} else {
 
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory(); 
 
 
 
@@ -432,8 +432,6 @@ class PayStubFactory extends Factory {
 		return FALSE;
 
 	}
-
-
 
 	function getCurrencyObject() {
 
@@ -758,43 +756,19 @@ class PayStubFactory extends Factory {
 	}
 
 	function setStartDate($epoch) {
-
 		$epoch = trim($epoch);
 
-
-
-		if 	(	$this->Validator->isDate(		'start_date',
-
-												$epoch,
-
-												('Incorrect start date'))
-
-				AND
-
-				$this->Validator->isTrue(		'start_date',
-
-												$this->isValidStartDate($epoch),
-
-												('Conflicting start date'))
-
-
-
-			) {
-
-
-
+		if 	(
+			$this->Validator->isDate('start_date', $epoch,('Incorrect start date'))
+ 			AND
+			$this->Validator->isTrue('start_date', $this->isValidStartDate($epoch), ('Conflicting start date'))
+		) {
 			//$this->data['start_date'] = $epoch;
 
 			$this->data['start_date'] = TTDate::getDBTimeStamp($epoch, FALSE);
-
-
-
 			return TRUE;
 
 		}
-
-
-
 		return FALSE;
 
 	}
@@ -847,40 +821,18 @@ class PayStubFactory extends Factory {
 
 		$epoch = trim($epoch);
 
-
-
-		if 	(	$this->Validator->isDate(		'end_date',
-
-												$epoch,
-
-												('Incorrect end date'))
-
-				AND
-
-				$this->Validator->isTrue(		'end_date',
-
-												$this->isValidEndDate($epoch),
-
-												('Conflicting end date'))
-
-
-
-			) {
-
-
-
+		if 	(
+			$this->Validator->isDate('end_date', $epoch, ('Incorrect end date'))
+			AND
+			$this->Validator->isTrue('end_date', $this->isValidEndDate($epoch), ('Conflicting end date'))
+		) {
 			//$this->data['end_date'] = $epoch;
 
 			$this->data['end_date'] = TTDate::getDBTimeStamp($epoch, FALSE);
 
-
-
 			return TRUE;
 
 		}
-
-
-
 		return FALSE;
 
 	}
@@ -2178,32 +2130,21 @@ class PayStubFactory extends Factory {
 		} else {
 
 			$psealf = new PayStubEntryAccountListFactory();
-
 			$psealf->getByCompanyId( $this->getUserObject()->getCompany() );
 
 			if ( $psealf->getRecordCount() > 0 ) {
 
-				foreach(  $psealf as $psea_obj ) {
-
-					$this->pay_stub_entry_accounts_obj[$psea_obj->getId()] = array(
-
-						'type_id' => $psea_obj->getType(),
-
-						'accrual_pay_stub_entry_account_id' => $psea_obj->getAccrual()
-
-						);
-
+				foreach(  $psealf->rs as $psea_obj ) {
+					$psealf->data = (array)$psea_obj;
+					$this->pay_stub_entry_accounts_obj[$psealf->getId()] = array(
+						'type_id' => $psealf->getType(),
+						'accrual_pay_stub_entry_account_id' => $psealf->getAccrual()
+					);
 				}
-
-
-
-				//Debug::Arr($this->pay_stub_entry_accounts_obj, ' Pay Stub Entry Accounts ('.count($this->pay_stub_entry_accounts_obj).'): ' , __FILE__, __LINE__, __METHOD__,10);
 
 				return $this->pay_stub_entry_accounts_obj;
 
 			}
-
-
 
 			Debug::text('Returning FALSE...' , __FILE__, __LINE__, __METHOD__,10);
 
@@ -2218,26 +2159,14 @@ class PayStubFactory extends Factory {
 	function getPayStubEntryAccountArray( $id ) {
 
 		if ( $id == '' ) {
-
 			return FALSE;
-
 		}
-
-
-
-		//Debug::text('ID: '. $id , __FILE__, __LINE__, __METHOD__,10);
 
 		$psea = $this->getPayStubEntryAccountsArray();
 
-
-
 		if ( isset($psea[$id]) ) {
-
 			return $psea[$id];
-
 		}
-
-
 
 		Debug::text('Returning FALSE...' , __FILE__, __LINE__, __METHOD__,10);
 
@@ -2542,17 +2471,12 @@ class PayStubFactory extends Factory {
 	function loadPreviousPayStub() {
 
 		if ( $this->getUser() == FALSE OR $this->getStartDate() == FALSE ) {
-
 			return FALSE;
-
 		}
-
-
 
 		//Grab last pay stub so we can use it for YTD calculations on this pay stub.
 
 		$pslf = new PayStubListFactory();
-
 		$pslf->getLastPayStubByUserIdAndStartDate( $this->getUser(), $this->getStartDate() );
 
 		if ( $pslf->getRecordCount() > 0 ) {
@@ -2561,29 +2485,15 @@ class PayStubFactory extends Factory {
 
 			Debug::text('Loading Data from Pay Stub ID: '. $ps_obj->getId() , __FILE__, __LINE__, __METHOD__,10);
 
-
-
 			$retarr = array(
-
-							'id' => $ps_obj->getId(),
-
-							'start_date' => $ps_obj->getStartDate(),
-
-							'end_date' => $ps_obj->getEndDate(),
-
-							'transaction_date' => $ps_obj->getTransactionDate(),
-
-							'entries' => NULL,
-
-							);
-
-
-
-			//
+				'id' => $ps_obj->getId(),
+				'start_date' => $ps_obj->getStartDate(),
+				'end_date' => $ps_obj->getEndDate(),
+				'transaction_date' => $ps_obj->getTransactionDate(),
+				'entries' => NULL,
+			);
 
 			//If previous pay stub is in a different year, only carry forward the accrual accounts.
-
-			//
 
 			$new_year = FALSE;
 
@@ -2595,33 +2505,24 @@ class PayStubFactory extends Factory {
 
 			}
 
-
-
 			//Get pay stub entries
 
 			$pself = new PayStubEntryListFactory();
-
 			$pself->getByPayStubId( $ps_obj->getID() );
 
 			if ( $pself->getRecordCount() > 0 ) {
 
-				foreach( $pself as $pse_obj ) {
-
+				foreach( $pself->rs as $pse_obj ) {
+					$pself->data = (array)$pse_obj;
 					//Get PSE account type, group by that.
 
-					$psea_arr = $this->getPayStubEntryAccountArray( $pse_obj->getPayStubEntryNameId() );
+					$psea_arr = $this->getPayStubEntryAccountArray( $pself->getPayStubEntryNameId() );
 
 					if ( is_array( $psea_arr) ) {
-
 						$type_id = $psea_arr['type_id'];
-
 					} else {
-
 						$type_id = NULL;
-
 					}
-
-
 
 					//If we're just starting a new year, only carry over
 
@@ -2630,47 +2531,26 @@ class PayStubFactory extends Factory {
 					if ( $new_year == FALSE OR $type_id == 50 ) {
 
 						$pse_arr[] = array(
-
-							'id' => $pse_obj->getId(),
-
+							'id' => $pself->getId(),
 							'pay_stub_entry_type_id' => $type_id,
-
-							'pay_stub_entry_account_id' => $pse_obj->getPayStubEntryNameId(),
-
-							'pay_stub_amendment_id' => $pse_obj->getPayStubAmendment(),
-
-							'rate' => $pse_obj->getRate(),
-
-							'units' => $pse_obj->getUnits(),
-
-							'amount' => $pse_obj->getAmount(),
-
-							'ytd_units' => $pse_obj->getYTDUnits(),
-
-							'ytd_amount' => $pse_obj->getYTDAmount(),
-
-							);
+							'pay_stub_entry_account_id' => $pself->getPayStubEntryNameId(),
+							'pay_stub_amendment_id' => $pself->getPayStubAmendment(),
+							'rate' => $pself->getRate(),
+							'units' => $pself->getUnits(),
+							'amount' => $pself->getAmount(),
+							'ytd_units' => $pself->getYTDUnits(),
+							'ytd_amount' => $pself->getYTDAmount(),
+						);
 
 					}
 
 					unset($type_id, $psea_obj);
-
 				}
 
-
-
 				if ( isset( $pse_arr ) ) {
-
 					$retarr['entries'] = $pse_arr;
-
-
-
 					$this->tmp_data['previous_pay_stub'] = $retarr;
-
-
-
 					return TRUE;
-
 				}
 
 			}

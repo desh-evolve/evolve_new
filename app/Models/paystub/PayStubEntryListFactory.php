@@ -84,17 +84,17 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$psealf = new PayStubEntryAccountListFactory();
 
 		$ph = array(
-					'id' => $id,
-					);
+			':id' => $id,
+		);
 
 		$query = '
-					select 	a.*
-					from	'. $this->getTable() .' as a,
-							'. $psealf->getTable() .' as b
-					where	a.pay_stub_entry_name_id = b.id
-						AND a.pay_stub_id = ?
-						AND a.deleted = 0
-					';
+			select 	a.*
+			from	'. $this->getTable() .' as a,
+					'. $psealf->getTable() .' as b
+			where	a.pay_stub_entry_name_id = b.id
+				AND a.pay_stub_id = :id
+				AND a.deleted = 0
+		';
 
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
