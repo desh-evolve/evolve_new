@@ -4,6 +4,7 @@ namespace App\Models\Core;
 
 use App\Models\Company\CompanyListFactory;
 use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 
 class PermissionControlFactory extends Factory {
 	protected $table = 'permission_control';
@@ -142,12 +143,19 @@ class PermissionControlFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => (int)$this->getCompany(),
-					'name' => $name,
+					':company_id' => (int)$this->getCompany(),
+					':name' => $name,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND name = ? AND deleted=0';
-		$permission_control_id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND name = :name AND deleted=0';
+		// $permission_control_id = $this->db->GetOne($query, $ph);
+        $permission_control_id = DB::select($query, $ph);
+        if ($permission_control_id === FALSE ) {
+            $permission_control_id = 0;
+        }else{
+            $permission_control_id = current(get_object_vars($permission_control_id[0]));
+        }
+
 		Debug::Arr($permission_control_id,'Unique Permission Control ID: '. $permission_control_id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $permission_control_id === FALSE ) {

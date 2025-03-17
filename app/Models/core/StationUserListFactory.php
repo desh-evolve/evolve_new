@@ -30,13 +30,13 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -52,13 +52,13 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	station_id = ?
+					where	station_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -78,15 +78,15 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'station_id' => $station_id,
-					'id' => $id,
+					':station_id' => $station_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	station_id = ?
-						AND	id = ?';
+					where	station_id = :station_id
+						AND	id = :id';
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
@@ -100,13 +100,13 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?';
+					where	user_id = :id';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
@@ -125,15 +125,15 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'id' => $id,
+					':user_id' => $user_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	user_id = ?
-						AND	id = ?';
+					where	user_id = :user_id
+						AND	id = :id';
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
@@ -151,15 +151,15 @@ class StationUserListFactory extends StationUserFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'station_id' => $station_id,
-					'user_id' => $user_id,
+					':station_id' => $station_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	station_id = ?
-						AND	user_id = ?';
+					where	station_id = :station_id
+						AND	user_id = :user_id';
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);

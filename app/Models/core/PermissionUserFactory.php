@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 
 class PermissionUserFactory extends Factory {
 	protected $table = 'permission_user';
@@ -36,7 +37,7 @@ class PermissionUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = new UserListFactory(); 
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -50,10 +51,10 @@ class PermissionUserFactory extends Factory {
 		$pclf = new PermissionControlListFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
-		$query = 'select a.id from '. $this->getTable() .' as a, '. $pclf->getTable() .' as b where a.permission_control_id = b.id AND a.user_id = ? AND b.deleted=0';
+		$query = 'select a.id from '. $this->getTable() .' as a, '. $pclf->getTable() .' as b where a.permission_control_id = b.id AND a.user_id = :id AND b.deleted=0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {

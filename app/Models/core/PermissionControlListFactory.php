@@ -32,13 +32,13 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -58,15 +58,15 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
-					'level' => $level,
+					':id' => $id,
+					':level' => $level,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND level <= ?
+					where	id = :id
+						AND level <= :level
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -86,15 +86,15 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
-						AND id = ?
+					where	company_id = :company_id
+						AND id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -119,14 +119,14 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$additional_sort_fields = array( 'name', 'description', 'id' );
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-						company_id = ?
+						company_id = :id
 						AND deleted = 0
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -163,16 +163,16 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$additional_sort_fields = array( 'name', 'level', 'description', 'id' );
 
 		$ph = array(
-					'id' => $id,
-					'level' => $level,
+					':id' => $id,
+					':level' => $level,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-						company_id = ?
-						AND level <= ?
+						company_id = :id
+						AND level <= :level
 						AND deleted = 0
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -202,7 +202,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$puf = new PermissionUserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -210,7 +210,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 					from	'. $this->getTable() .' as a,
 							'. $puf->getTable() .' as b
 					where	a.id = b.permission_control_id
-						AND a.company_id = ?
+						AND a.company_id = :company_id
 						AND b.user_id in ('. $this->getListSQL($user_id, $ph) .')
 						AND a.deleted = 0
 					';
@@ -290,7 +290,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$puf = new PermissionUserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -305,7 +305,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -319,13 +319,13 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		}
 
 		if ( isset($filter_data['level']) AND $filter_data['level'] != '' AND $filter_data['level'] > 0 ) {
-			$ph[] = (int)$filter_data['level'];
-			$query  .=	' AND a.level <= ?';
+			$ph[':level'] = (int)$filter_data['level'];
+			$query  .=	' AND a.level <= :level';
 		}
 
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = '%' . strtolower(trim($filter_data['name'])) . '%';
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';

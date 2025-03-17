@@ -49,13 +49,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -75,8 +75,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$udf = new UserDateFactory();
@@ -89,8 +89,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND a.id = ?
-						AND c.company_id = ?
+						AND a.id = :id
+						AND c.company_id = :company_id
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -111,7 +111,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$udf = new UserDateFactory();
@@ -124,7 +124,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
+						AND c.company_id = :id
 						AND ( a.deleted = 0 AND b.deleted=0 AND c.deleted=0 )
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -156,7 +156,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		*/
 
 		$ph = array(
-					'user_date_id' => $user_date_id,
+					':user_date_id' => $user_date_id,
 					'over						AND status_id in ('. $this->getListSQL($status, $ph) .')
 						AND deleted = 0
 					';
@@ -175,6 +175,9 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		return $this;
 	}
 
+
+
+
 	function getByUserDateIdAndStatusAndOverrideAndMisMatchPunchControlUserDateId($user_date_id, $status, $override = FALSE) {
 		if ( $user_date_id == '' ) {
 			return FALSE;
@@ -187,8 +190,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$pcf = new PunchControlFactory();
 
 		$ph = array(
-					'user_date_id' => $user_date_id,
-					'override' => $this->toBool( $override ),
+					':user_date_id' => $user_date_id,
+					':override' => $this->toBool( $override ),
 					);
 
 		//Don't check for JUST b.deleted = 0 because of the LEFT JOIN, it might be NULL too.
@@ -201,10 +204,10 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					LEFT JOIN '. $pcf->getTable() .' as b ON a.punch_control_id = b.id
-					where	a.user_date_id = ?
+					where	a.user_date_id = :user_date_id
 						AND
 							(
-								( a.override = ? AND a.status_id in ('.$this->getListSQL($status, $ph)) .') )
+								( a.override = :override AND a.status_id in ('.$this->getListSQL($status, $ph)) .') )
 								OR
 								( b.id IS NOT NULL AND ( a.user_date_id != b.user_date_id OR b.deleted = 1 ) )
 							)
@@ -2247,7 +2250,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		return $this;
 	}
 
-	
+
 
 	function getReportByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		//$order = array( 'b.pay_period_id' => 'asc', 'b.user_id' => 'asc' );
@@ -4470,19 +4473,19 @@ here z.user_id = c.user_id
 
 		return $this;
 	}
-        
-        
+
+
         function getUserOPorOTValuesByDateAndType($date_stamp,$type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL){
-            
+
             if($date_stamp == ''){ return FALSE; }
             if($type_id == ''){ return FALSE; }
-            
-            
-           
-            
-            $uf = new UserFactory();            
+
+
+
+
+            $uf = new UserFactory();
 	    $udf = new UserDateFactory();
-            
+
             $ph = array($this->db->BindDate($date_stamp));
             $ph[] = $type_id;
 
@@ -4490,9 +4493,9 @@ here z.user_id = c.user_id
 					select 	a.*
 					from	'. $this->getTable() .' as a
                                         Inner join '. $udf->getTable() .' as b ON a.user_date_id = b.id
-                                       
-					where	b.date_stamp = ? 
-                                         AND a.type_id = ? 
+
+					where	b.date_stamp = ?
+                                         AND a.type_id = ?
                                          AND a.total_time >= 7200
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -4501,11 +4504,11 @@ here z.user_id = c.user_id
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
-           
 
-		
-            
-            
+
+
+
+
         }
 }
 ?>
