@@ -255,7 +255,7 @@ class ProgressBar extends Controller
 
 					$i++;
 				}
-				echo 'hi';exit;
+				dd('generate_paystubs'); //check here
 				unset($ppsulf);
 
 				$ugsf = TTnew( 'UserGenericStatusFactory' );

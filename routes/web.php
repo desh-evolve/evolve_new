@@ -38,9 +38,9 @@ Route::delete('/branch/delete/{id}', [BranchList::class, 'delete'])->name('branc
 
 
 
-Route::get('/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll_processing');
-Route::get('/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll_action');
-Route::get('/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('generate_pay_stubs');
+Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
+Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll.payroll_action');
+Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
 
 
 // ===============================================================================================================================

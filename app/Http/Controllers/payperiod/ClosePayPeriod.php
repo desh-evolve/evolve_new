@@ -255,7 +255,7 @@ class ClosePayPeriod extends Controller
 	
 		$pplf->CommitTransaction();
 		
-		return redirect()->to(URLBuilder::getURL(NULL, 'payroll_processing'));
+		return redirect()->to(URLBuilder::getURL(NULL, 'payroll.payroll_processing'));
 	}
 	
 
@@ -268,7 +268,7 @@ class ClosePayPeriod extends Controller
 		return redirect()->route('progress_bar.generate_paystubs', [
 			'action' => 'generate_paystubs',
 			'pay_period_ids' => $pay_stub_pay_period_ids,
-			'next_page' => 'payroll_processing'
+			'next_page' => 'payroll.payroll_processing'
 		]);		
 	}
 }

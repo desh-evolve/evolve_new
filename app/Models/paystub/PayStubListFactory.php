@@ -305,20 +305,20 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$pplf = new PayPeriodListFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindTimeStamp( $start_date ),
-					);
+			':start_date' => $this->db->BindTimeStamp( $start_date ),
+		);
 
 		$query = '
-					select 	a.*
-					from	'. $this->getTable() .' as a,
-							'. $ulf->getTable() .' as b,
-							'. $pplf->getTable() .' as c
-					where	a.user_id = b.id
-						AND a.pay_period_id = c.id
-						AND a.start_date < ?
-						AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
-						AND ( a.deleted = 0 AND c.deleted = 0)
-					';
+			select 	a.*
+			from	'. $this->getTable() .' as a,
+					'. $ulf->getTable() .' as b,
+					'. $pplf->getTable() .' as c
+			where	a.user_id = b.id
+				AND a.pay_period_id = c.id
+				AND a.start_date < :start_date
+				AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
+				AND ( a.deleted = 0 AND c.deleted = 0)
+		';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order );
 
@@ -635,15 +635,15 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id,
-					'user_id' => $user_id,
-					);
+			':pay_period_id' => $pay_period_id,
+			':user_id' => $user_id,
+		);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	pay_period_id = ?
-						AND user_id = ?
+					where	pay_period_id = :pay_period_id
+						AND user_id = :user_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

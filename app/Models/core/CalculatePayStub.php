@@ -423,7 +423,6 @@ class CalculatePayStub extends PayStubFactory {
 			UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 10, $pay_stub->Validator->getTextErrors(), NULL );
 
 			$this->FailTransaction();
-			$this->CommitTransaction();
 			return FALSE;
 		}
 
@@ -497,16 +496,12 @@ class CalculatePayStub extends PayStubFactory {
 		$psalf = new PayStubAmendmentListFactory();
 		$psalf->getByUserIdAndAuthorizedAndStartDateAndEndDate( $this->getUser(), TRUE, $this->getPayPeriodObject()->getStartDate(), $this->getPayPeriodObject()->getEndDate() );
 
-		//                echo '<br>';
-		//                print_r($psalf->getRecordCount());
 		$udlf = new UserDeductionListFactory();
 		$udlf->getByCompanyIdAndUserId( $this->getUserObject()->getCompany(), $this->getUserObject()->getId() );
 
-		//                echo '<br>';
-		//                print_r($udlf->getRecordCount());
                 
 		$deduction_order_arr = $this->getOrderedDeductionAndPSAmendment( $udlf, $psalf );
-               // print_r($deduction_order_arr); exit;
+		
 		if ( is_array($deduction_order_arr) AND count($deduction_order_arr) > 0 ) {
                     
                       $deduction_slary_advance = 0;
@@ -1100,9 +1095,7 @@ class CalculatePayStub extends PayStubFactory {
 				unset($user_id, $status_id, $status, $pay_period_id, $date_stamp);
 			}
 		}
-		//echo '<pre>'; print_r($schedule_rows); echo'<pre>';
 					
-		
 		foreach ($udtlf->rs as $udt_obj ) {
 			$udtlf->data = (array)$udt_obj;
 			
