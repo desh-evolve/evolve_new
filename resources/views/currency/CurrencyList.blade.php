@@ -21,102 +21,100 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="card-body">
-                        @if (!$base_currency)
-                            <div class="alert alert-warning" role="alert">
-                                {{ __('WARNING: There is no base currency set. Please create a base currency immediately.') }}
-                            </div>
-                        @endif
-                        <table class="table table-bordered">
-                            <thead class="bg-primary text-white">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Currency Name</th>
-                                    <th scope="col">Currency</th>
-                                    <th scope="col">Rate</th>
-                                    <th scope="col">Auto Update</th>
-                                    <th scope="col">Base</th>
-                                    <th scope="col">Default</th>
-                                    <th scope="col">Action</th>
+                    @if (!$base_currency)
+                        <div class="alert alert-warning" role="alert">
+                            {{ __('WARNING: There is no base currency set. Please create a base currency immediately.') }}
+                        </div>
+                    @endif
+                    <table class="table table-bordered">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Currency Name</th>
+                                <th scope="col">Currency</th>
+                                <th scope="col">Rate</th>
+                                <th scope="col">Auto Update</th>
+                                <th scope="col">Base</th>
+                                <th scope="col">Default</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="table_body">
+                            @foreach ($currencies as $index => $currency)
+                                @php
+                                    // Determine the row class based on conditions
+                                    $row_class =
+                                        (isset($currency['deleted']) && $currency['deleted']) ||
+                                        (isset($currency['status_id']) && $currency['status_id'] == 20)
+                                            ? 'table-danger'
+                                            : ($loop->iteration % 2 == 0
+                                                ? 'table-light'
+                                                : 'table-white');
+                                @endphp
+                                <tr class="{{ $row_class }}">
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td>
+                                        {{ $currency['name'] ?? '' }}
+                                    </td>
+                                    <td>
+                                        {{ $currency['currency_name'] ?? '' }}
+                                    </td>
+                                    <td>
+                                        {{ $currency['conversion_rate'] ?? '' }}
+                                    </td>
+                                    <td>
+                                        {{ isset($currency['auto_update']) && $currency['auto_update'] ? __('Yes') : __('No') }}
+                                    </td>
+                                    <td>
+                                        {{ isset($currency['is_base']) && $currency['is_base'] ? __('Yes') : __('No') }}
+                                    </td>
+                                    <td>
+                                        {{ isset($currency['is_default']) && $currency['is_default'] ? __('Yes') : __('No') }}
+                                    </td>
+                                    <td>
+                                        <!-- Edit Button -->
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('currency.add', ['id' => $currency['id'] ?? '']) }}'">
+                                            {{ __('Edit') }}
+                                        </button>
+                                    
+                                        <!-- Delete Button -->
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrency({{ $currency['id'] }})">
+                                            {{ __('Delete') }}
+                                        </button>
+                                    </td>
+                                    {{-- <td>
+                                        <input type="checkbox" class="form-check-input" name="ids[]"
+                                            value="{{ $currency['id'] ?? '' }}">
+                                    </td> --}}
                                 </tr>
-                            </thead>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    {{-- <div class="form-group text-right">
+                        <input type="hidden" name="id" id="currency_id"
+                            value="{{ $data['id'] ?? '' }}">
 
-                            <tbody id="table_body">
-                                @foreach ($currencies as $index => $currency)
-                                    @php
-                                        // Determine the row class based on conditions
-                                        $row_class =
-                                            (isset($currency['deleted']) && $currency['deleted']) ||
-                                            (isset($currency['status_id']) && $currency['status_id'] == 20)
-                                                ? 'table-danger'
-                                                : ($loop->iteration % 2 == 0
-                                                    ? 'table-light'
-                                                    : 'table-white');
-                                    @endphp
-                                    <tr class="{{ $row_class }}">
-                                        <td>
-                                            {{ $loop->iteration }}
-                                        </td>
-                                        <td>
-                                            {{ $currency['name'] ?? '' }}
-                                        </td>
-                                        <td>
-                                            {{ $currency['currency_name'] ?? '' }}
-                                        </td>
-                                        <td>
-                                            {{ $currency['conversion_rate'] ?? '' }}
-                                        </td>
-                                        <td>
-                                            {{ isset($currency['auto_update']) && $currency['auto_update'] ? __('Yes') : __('No') }}
-                                        </td>
-                                        <td>
-                                            {{ isset($currency['is_base']) && $currency['is_base'] ? __('Yes') : __('No') }}
-                                        </td>
-                                        <td>
-                                            {{ isset($currency['is_default']) && $currency['is_default'] ? __('Yes') : __('No') }}
-                                        </td>
-                                        <td>
-                                            <!-- Edit Button -->
-                                            <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('currency.add', ['id' => $currency['id'] ?? '']) }}'">
-                                                {{ __('Edit') }}
-                                            </button>
-                                        
-                                            <!-- Delete Button -->
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrency({{ $currency['id'] }})">
-                                                {{ __('Delete') }}
-                                            </button>
-                                        </td>
-                                        {{-- <td>
-                                            <input type="checkbox" class="form-check-input" name="ids[]"
-                                                value="{{ $currency['id'] ?? '' }}">
-                                        </td> --}}
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        {{-- <div class="form-group text-right">
-                            <input type="hidden" name="id" id="currency_id"
-                                value="{{ $data['id'] ?? '' }}">
+                        @if ($permission->Check('currency', 'add'))
+                            <button type="button" name="action:Update_Rates"
+                                class="btn btn-secondary">Update Rates</button>
+                            <button type="button" name="action:add"
+                                class="btn btn-success">Add</button>
+                        @endif
 
-                            @if ($permission->Check('currency', 'add'))
-                                <button type="button" name="action:Update_Rates"
-                                    class="btn btn-secondary">Update Rates</button>
-                                <button type="button" name="action:add"
-                                    class="btn btn-success">Add</button>
-                            @endif
+                        @if ($permission->Check('currency', 'delete'))
+                            <button type="button" name="action:delete" class="btn btn-danger"
+                                onclick="return confirmSubmit()">Delete</button>
+                        @endif
 
-                            @if ($permission->Check('currency', 'delete'))
-                                <button type="button" name="action:delete" class="btn btn-danger"
-                                    onclick="return confirmSubmit()">Delete</button>
-                            @endif
+                        @if ($permission->Check('currency', 'undelete'))
+                            <button type="button" name="action:undelete"
+                                class="btn btn-warning">UnDelete</button>
+                        @endif
+                    </div> --}}
 
-                            @if ($permission->Check('currency', 'undelete'))
-                                <button type="button" name="action:undelete"
-                                    class="btn btn-warning">UnDelete</button>
-                            @endif
-                        </div> --}}
-
-                    </div>
                 </div><!-- end card -->
             </div>
             <!-- end col -->

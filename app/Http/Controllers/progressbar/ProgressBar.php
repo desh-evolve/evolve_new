@@ -168,7 +168,6 @@ class ProgressBar extends Controller
 		if ( !is_array($pay_period_ids) ) {
 			$pay_period_ids = array($pay_period_ids);
 		}
-		print_r('Generate Pay Stubs: ');
 
 		TTLog::addEntry( $current_company->getId(), TTi18n::gettext('Notice'), TTi18n::gettext('Recalculating Company Pay Stubs for Pay Periods:').' '. implode(',', $pay_period_ids) , $current_user->getId(), 'pay_stub' );
 
@@ -180,7 +179,6 @@ class ProgressBar extends Controller
 			$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
 			
 			$epoch = TTDate::getTime();
-
 			foreach ($pplf->rs as $pay_period_obj) {
 				$pplf->data = (array)$pay_period_obj;
 				
@@ -189,7 +187,7 @@ class ProgressBar extends Controller
 				//Grab all users for pay period
 				$ppsulf = new PayPeriodScheduleUserListFactory();
 				$ppsulf->getByPayPeriodScheduleId( $pplf->getPayPeriodSchedule() );
-				
+
 				$total_pay_stubs = $ppsulf->getRecordCount();
 				//echo "Total Pay Stubs: $total_pay_stubs - ". ceil(100 / $total_pay_stubs) ."<Br>\n";
 
@@ -224,7 +222,7 @@ class ProgressBar extends Controller
 						Debug::text('Pay stub does not need regenerating, or it is LOCKED!', __FILE__, __LINE__, __METHOD__,10);
 					}
 				}
-				
+
 				$i=1;
 				foreach ($ppsulf->rs as $pay_period_schdule_user_obj) {
 					$ppsulf->data = (array)$pay_period_schdule_user_obj;
@@ -243,8 +241,12 @@ class ProgressBar extends Controller
 					// calculation functions
 					//=================================================================
                     $cps->removeTerminatePayStub();
+					echo '1'; 
                     $cps->calculateAllowance();
+					echo '2'; 
 					$cps->calculate();
+					echo '3'; 
+					exit;
 					//=================================================================
 					unset($cps);
 					$profiler->stopTimer( 'Calculating Pay Stub' );
@@ -255,15 +257,24 @@ class ProgressBar extends Controller
 
 					$i++;
 				}
-				
+				exit;
 				unset($ppsulf);
 
 				$ugsf = new UserGenericStatusFactory();
 				$ugsf->setUser( $current_user->getId() );
 				$ugsf->setBatchID( $ugsf->getNextBatchId() );
+
 				$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
 				$ugsf->saveQueue();
-				$next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Generating Pay Stubs', 'batch_next_page' => $next_page), '/users/user_generic_status_list');
+
+				$urlArray = array(
+					'batch_id' => $ugsf->getBatchID(), 
+					'batch_title' => 'Generating Pay Stubs', 
+					'batch_next_page' => $next_page
+				);
+				$next_page = URLBuilder::getURL( $urlArray, '/users/user_generic_status_list');
+
+				return Redirect::to($next_page);
 
 				unset($ugsf);
 			}

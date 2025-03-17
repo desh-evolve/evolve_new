@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
-            $table->tinyInteger('deleted')->default(0);
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->smallInteger('authorization_level')->default(99);
             $table->smallInteger('user_verified')->default(0);
             $table->integer('user_verified_date')->nullable();

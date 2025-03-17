@@ -40,7 +40,11 @@ class UserGenericStatusList extends Controller
 	}
 
 	public function index(){
+
+		$current_user = $this->currentUser;
+		$current_user_prefs = $this->userPrefs;
 		$viewData = [];
+		$rows = [];
 
 		$viewData['title'] = 'Status Report';
 
@@ -75,10 +79,11 @@ class UserGenericStatusList extends Controller
 		}
 
 		Debug::Text('Next Page: '. urldecode( $batch_next_page ) , __FILE__, __LINE__, __METHOD__,10);
+		
 		if ( $batch_id != '' ) {
 			$ugslf = new UserGenericStatusListFactory();
 			$ugslf->getByUserIdAndBatchId( $current_user->getId(), $batch_id,  $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-			//var_dump($ugslf);
+
 			Debug::Text('Record Count: '. $ugslf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 			//$pager = new Pager($ugslf);
@@ -105,6 +110,8 @@ class UserGenericStatusList extends Controller
 				//var_dump($status_count_arr);
 			}
 		}
+
+		print_r($rows);exit;
 
 		$viewData['rows'] = $rows;	
 		$viewData['status_count'] = $status_count_arr;	

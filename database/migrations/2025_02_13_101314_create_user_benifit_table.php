@@ -16,13 +16,13 @@ return new class extends Migration
             $table->integer('user_id'); // User ID (required)
             $table->string('item_name', 250); // Item name (required)
             $table->string('item_remark', 250); // Item remark (required)
-            $table->integer('created_date'); // Created date (required)
-            $table->integer('created_by'); // Created by (required)
-            $table->integer('updated_date'); // Updated date (required)
-            $table->integer('updated_by'); // Updated by (required)
-            $table->integer('deleted_date'); // Deleted date (required)
-            $table->integer('deleted_by'); // Deleted by (required)
-            $table->tinyInteger('deleted')->default(0); // Deleted status (0 by default)
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

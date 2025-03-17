@@ -16,13 +16,13 @@ return new class extends Migration
             $table->integer('user_id'); // User ID (required)
             $table->integer('pay_period_id'); // Pay period ID (required)
             $table->date('date_stamp'); // Date stamp (required)
-            $table->integer('created_date')->nullable(); // Created date (nullable)
-            $table->integer('created_by')->nullable(); // Created by (nullable)
-            $table->integer('updated_date')->nullable(); // Updated date (nullable)
-            $table->integer('updated_by')->nullable(); // Updated by (nullable)
-            $table->integer('deleted_date')->nullable(); // Deleted date (nullable)
-            $table->integer('deleted_by')->nullable(); // Deleted by (nullable)
-            $table->tinyInteger('deleted')->default(0); // Deleted status (default 0)
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

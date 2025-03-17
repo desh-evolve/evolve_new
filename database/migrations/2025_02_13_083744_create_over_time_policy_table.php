@@ -28,7 +28,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
-            $table->boolean('deleted')->default(0);
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('wage_group_id')->default(0);
         });
     }

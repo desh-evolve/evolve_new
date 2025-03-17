@@ -6,6 +6,7 @@ use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
+use Illuminate\Support\Facades\DB;
 
 class UserGenericStatusFactory extends Factory {
 	protected $table = 'user_generic_status';
@@ -61,7 +62,7 @@ class UserGenericStatusFactory extends Factory {
 	}
 
 	function getNextBatchID() {
-		$this->batch_id = $this->db->GenID( $this->batch_sequence_name );
+		$this->batch_id = DB::table($this->table)->max('batch_id') + 1;
 
 		return $this->batch_id;
 	}

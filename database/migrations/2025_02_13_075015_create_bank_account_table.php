@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
-            $table->tinyInteger('deleted')->default(0);
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->string('branch_code', 15);
             $table->string('transit_two', 15);
             $table->string('bank_two_name', 250);

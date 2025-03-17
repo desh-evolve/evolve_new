@@ -271,7 +271,7 @@ class ClosePayPeriod extends Controller
 		return redirect()->route('progress_bar.generate_paystubs', [
 			'action' => 'generate_paystubs',
 			'pay_period_ids' => $pay_stub_pay_period_ids,
-			'next_page' => 'payroll.payroll_processing'
+			'next_page' => '/payroll/payroll_processing'
 		]);		
 	}
 }

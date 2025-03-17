@@ -30,7 +30,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
-            $table->tinyInteger('deleted')->default(0);
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('manual_id')->nullable();
             $table->string('name_metaphone', 250)->nullable();
             $table->decimal('longitude', 15, 10)->nullable();

@@ -16,13 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('bonus_december_id');
             $table->string('year', 100);
-            $table->integer('created_date');
-            $table->integer('created_by');
-            $table->integer('updated_date');
-            $table->integer('updated_by');
-            $table->integer('deleted_date');
-            $table->integer('deleted_by');
-            $table->tinyInteger('deleted')->default(0);
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

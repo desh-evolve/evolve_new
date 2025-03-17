@@ -1,88 +1,32 @@
 <?php
 
-/*********************************************************************************
-
- * TimeTrex is a Payroll and Time Management program developed by
-
- * TimeTrex Payroll Services Copyright (C) 2003 - 2012 TimeTrex Payroll Services.
-
- *
-
- * This program is free software; you can redistribute it and/or modify it under
-
- * the terms of the GNU Affero General Public License version 3 as published by
-
- * the Free Software Foundation with the addition of the following permission
-
- * added to Section 15 as permitted in Section 7(a): FOR ANY PART OF THE COVERED
-
- * WORK IN WHICH THE COPYRIGHT IS OWNED BY TIMETREX, TIMETREX DISCLAIMS THE
-
- * WARRANTY OF NON INFRINGEMENT OF THIRD PARTY RIGHTS.
-
- *
-
- * This program is distributed in the hope that it will be useful, but WITHOUT
-
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-
- * FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
-
- * details.
-
- *
-
- * You should have received a copy of the GNU Affero General Public License along
-
- * with this program; if not, see http://www.gnu.org/licenses or write to the Free
-
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-
- * 02110-1301 USA.
-
- *
-
- * You can contact TimeTrex headquarters at Unit 22 - 2475 Dobbin Rd. Suite
-
- * #292 Westbank, BC V4T 2E9, Canada or at email address info@timetrex.com.
-
- *
-
- * The interactive user interfaces in modified source and object code versions
-
- * of this program must display Appropriate Legal Notices, as required under
-
- * Section 5 of the GNU Affero General Public License version 3.
-
- *
-
- * In accordance with Section 7(b) of the GNU Affero General Public License
-
- * version 3, these Appropriate Legal Notices must retain the display of the
-
- * "Powered by TimeTrex" logo. If the display of the logo is not reasonably
-
- * feasible for technical reasons, the Appropriate Legal Notices must display
-
- * the words "Powered by TimeTrex".
-
- ********************************************************************************/
-
-/*
-
- * $Revision: 5457 $
-
- * $Id: PayStubFactory.class.php 5457 2011-11-04 20:49:58Z ipso $
-
- * $Date: 2011-11-04 13:49:58 -0700 (Fri, 04 Nov 2011) $
-
- */
-
-
-
 
 namespace App\Models\PayStub;
 use App\Models\Core\Factory;
+
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Core\CurrencyListFactory;
+use App\Models\Core\TTPDF;
+use App\Models\Core\UserDateListFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Company\CompanyListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Other\EFT;
+use App\Models\Other\EFT_record;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Users\BankAccountListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
 
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
@@ -91,7 +35,7 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 
-use App\Models\PayPeriod\PayPeriodListFactory;
+use Illuminate\Support\Facades\DB;
 
 //require_once( 'Numbers/Words.php');
 
@@ -1027,7 +971,7 @@ class PayStubFactory extends Factory {
 
 		if ( empty($id) ) {
 
-			global $current_user;
+			$current_user = $this->currentUser;
 
 
 
@@ -1138,18 +1082,15 @@ class PayStubFactory extends Factory {
 		if ( $this->is_unique_pay_stub === NULL ) {
 
 			$ph = array(
-
-						'pay_period_id' => (int)$this->getPayPeriod(),
-
-						'user_id' => (int)$this->getUser(),
-
-						);
+				':pay_period_id' => (int)$this->getPayPeriod(),
+				':user_id' => (int)$this->getUser(),
+			);
 
 
 
-			$query = 'select id from '. $this->getTable() .' where pay_period_id = ? AND user_id = ? AND deleted = 0';
+			$query = 'select id from '. $this->getTable() .' where pay_period_id = :pay_period_id AND user_id = :user_id AND deleted = 0';
 
-			$pay_stub_id = $this->db->GetOne($query, $ph);
+			$pay_stub_id = DB::select($query, $ph);
 
 
 
@@ -2478,7 +2419,7 @@ class PayStubFactory extends Factory {
 
 		$pslf = new PayStubListFactory();
 		$pslf->getLastPayStubByUserIdAndStartDate( $this->getUser(), $this->getStartDate() );
-
+		
 		if ( $pslf->getRecordCount() > 0 ) {
 
 			$ps_obj = $pslf->getCurrent();
@@ -2714,29 +2655,30 @@ class PayStubFactory extends Factory {
 
 
 	function processEntries() {
+		// check here
 
-		Debug::Text('Processing PayStub ('. count($this->tmp_data['current_pay_stub']) .') Entries...', __FILE__, __LINE__, __METHOD__,10);
+		//Debug::Text('Processing PayStub ('. count($this->tmp_data['current_pay_stub']) .') Entries...', __FILE__, __LINE__, __METHOD__,10);
 
 		///Debug::Arr($this->tmp_data['current_pay_stub'], 'Current Entries...', __FILE__, __LINE__, __METHOD__,10);
 
 
-
+		echo 'processEntries 0: ';
 		$this->deleteEntries( FALSE ); //Delete only total entries
-
+		echo 'processEntries 1: ';
 		$this->addUnUsedYTDEntries();
-                
-               // $this->addGrossSum();
+		echo 'processEntries 2: ';
+        
+		// $this->addGrossSum();
 
 		$this->addEarningSum();
-
+		echo 'processEntries 3: ';
 		$this->addDeductionSum();
-
+		echo 'processEntries 4: ';
 		$this->addEmployerDeductionSum();
-
+		echo 'processEntries 5: ';
 		$this->addNetPay();
 
-
-
+		exit;
 		return TRUE;
 
 	}

@@ -26,8 +26,8 @@ return new class extends Migration
             $table->unsignedSmallInteger('maximum_length_of_service_unit_id');
             $table->unsignedSmallInteger('deleted');
             $table->unsignedSmallInteger('status');
-            $table->integer('created_date');
-            $table->integer('created_by');
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
             $table->integer('updated_date')->nullable();
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();

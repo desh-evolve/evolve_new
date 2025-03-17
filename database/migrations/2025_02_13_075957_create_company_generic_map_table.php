@@ -19,12 +19,12 @@ return new class extends Migration
             $table->string('name_metaphone', 250)->nullable();
             $table->string('description', 250)->nullable();
             $table->integer('created_date')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->integer('created_by')->nullable();
             $table->integer('updated_date')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
-            $table->integer('deleted')->default(0);
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

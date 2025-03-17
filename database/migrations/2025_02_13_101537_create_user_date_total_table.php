@@ -30,13 +30,13 @@ return new class extends Migration
             $table->timestamp('end_time_stamp')->nullable(); // End timestamp (nullable)
             $table->integer('total_time')->default(0); // Total time (default 0)
             $table->tinyInteger('override')->default(0); // Override (default 0)
-            $table->integer('created_date')->nullable(); // Created date (nullable)
-            $table->integer('created_by')->nullable(); // Created by (nullable)
-            $table->integer('updated_date')->nullable(); // Updated date (nullable)
-            $table->integer('updated_by')->nullable(); // Updated by (nullable)
-            $table->integer('deleted_date')->nullable(); // Deleted date (nullable)
-            $table->integer('deleted_by')->nullable(); // Deleted by (nullable)
-            $table->tinyInteger('deleted')->default(0); // Deleted status (default 0)
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('actual_total_time')->default(0); // Actual total time (default 0)
             $table->integer('meal_policy_id')->nullable(); // Meal policy ID (nullable)
             $table->integer('break_policy_id')->default(0); // Break policy ID (default 0)

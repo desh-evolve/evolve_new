@@ -19,12 +19,12 @@ return new class extends Migration
             $table->integer('minimum_time')->nullable();
             $table->integer('maximum_time')->nullable();
             $table->integer('created_date')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->integer('created_by')->nullable();
             $table->integer('updated_date')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
-            $table->boolean('deleted')->default(false);
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->smallInteger('apply_frequency_id')->nullable();
             $table->smallInteger('apply_frequency_month')->nullable();
             $table->smallInteger('apply_frequency_day_of_month')->nullable();
