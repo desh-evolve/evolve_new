@@ -15,7 +15,7 @@ class PremiumPolicyDepartmentFactory extends Factory {
 		if ( is_object($this->department_obj) ) {
 			return $this->department_obj;
 		} else {
-			$lf = TTnew( 'DepartmentListFactory' );
+			$lf = new DepartmentListFactory();
 			$lf->getById( $this->getDepartment() );
 			if ( $lf->getRecordCount() == 1 ) {
 				$this->department_obj = $lf->getCurrent();
@@ -34,7 +34,7 @@ class PremiumPolicyDepartmentFactory extends Factory {
 	function setPremiumPolicy($id) {
 		$id = trim($id);
 
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 
 		if (	$id == 0
 				OR
@@ -67,7 +67,7 @@ class PremiumPolicyDepartmentFactory extends Factory {
 	function setDepartment($id) {
 		$id = trim($id);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'department',
 													$dlf->getByID($id),

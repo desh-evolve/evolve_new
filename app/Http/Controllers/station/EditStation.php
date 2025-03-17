@@ -31,7 +31,7 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$sf = TTnew( 'StationFactory' );
+$sf = new StationFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -156,7 +156,7 @@ switch ($action) {
 				//$tc->setUsername( $data['user_name'] );
 				$tc->setPassword( $data['password'] );
 
-				$slf = TTnew( 'StationListFactory' );
+				$slf = new StationListFactory();
 				$slf->getByIdAndCompanyId( $data['id'], $current_company->getId() );
 				if ( $slf->getRecordCount() == 1 ) {
 					$s_obj = $slf->getCurrent();
@@ -266,7 +266,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$slf = TTnew( 'StationListFactory' );
+			$slf = new StationListFactory();
 
 			$slf->GetByIdAndCompanyId($id, $current_company->getId() );
 
@@ -344,35 +344,35 @@ switch ($action) {
 		$data['mode_flag_options'] = $sf->getOptions('mode_flag');
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByCompanyId( $current_company->getId() );
 			$data['job_options'] = Misc::prependArray( array(0 => '-- None --'), $jlf->getArrayByListFactory( $jlf, FALSE, TRUE ) );
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyIdAndStatus( $current_company->getId(), 10 );
 			$data['job_item_options'] = Misc::prependArray( array(0 => '-- None --'), $jilf->getArrayByListFactory( $jilf, TRUE, FALSE ) );
 		}
 
 		//Get branches
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 		$data['src_branch_options'] = Misc::arrayDiffByKey( (array)$data['branch_ids'], $branch_options );
 		$data['selected_branch_options'] = Misc::arrayIntersectByKey( (array)$data['branch_ids'], $branch_options );
 
 		//Get departments
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 		$data['src_department_options'] = Misc::arrayDiffByKey( (array)$data['department_ids'], $department_options );
 		$data['selected_department_options'] = Misc::arrayIntersectByKey( (array)$data['department_ids'], $department_options );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 		$data['src_group_options'] = Misc::arrayDiffByKey( (array)$data['group_ids'], $group_options );
 		$data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$data['group_ids'], $group_options );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), NULL );
 		$user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
 
@@ -389,7 +389,7 @@ switch ($action) {
 		$data['branch_options'] = Misc::prependArray( array(0 => '-- None --'), $branch_options );
 		$data['department_options'] = Misc::prependArray( array(0 => '-- None --'), $department_options );
 
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 		$timezone_options = Misc::prependArray( array(0 => '-- None --'), $upf->getOptions('time_zone') );
 		$data['time_zone_options'] = $timezone_options;
 

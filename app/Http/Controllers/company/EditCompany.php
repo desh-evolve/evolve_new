@@ -30,7 +30,7 @@ extract	(FormVariables::GetVariables(
 												'company_data'
 												) ) );
 
-$cf = TTnew( 'CompanyFactory' );
+$cf = new CompanyFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -130,7 +130,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 
 			if ( $permission->Check('company','edit') ) {
 				$clf->GetByID($id);
@@ -206,7 +206,7 @@ switch ($action) {
 		$company_data['product_edition_options'] = $cf->getOptions('product_edition');
 
 		//Get other field names
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 		$company_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getID(), 2 );
 
 		$company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type');

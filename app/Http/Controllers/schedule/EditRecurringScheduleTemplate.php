@@ -47,8 +47,8 @@ if ( isset($week_rows)) {
 	}
 }
 
-$rstcf = TTnew( 'RecurringScheduleTemplateControlFactory' );
-$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+$rstcf = new RecurringScheduleTemplateControlFactory();
+$rstf = new RecurringScheduleTemplateFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -187,7 +187,7 @@ switch ($action) {
 				if ( $rst_id > 0 ) {
 					Debug::Text('Deleting Week Row ID: '. $rst_id, __FILE__, __LINE__, __METHOD__,10);
 
-					$rstlf = TTnew( 'RecurringScheduleTemplateListFactory' );
+					$rstlf = new RecurringScheduleTemplateListFactory();
 					$rstlf->getById( $rst_id );
 
 					if ( $rstlf->getRecordCount() == 1 ) {
@@ -212,8 +212,8 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$rstlf = TTnew( 'RecurringScheduleTemplateListFactory' );
-			$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+			$rstlf = new RecurringScheduleTemplateListFactory();
+			$rstclf = new RecurringScheduleTemplateControlListFactory();
 			$rstclf->getByIdAndCompanyId( $id, $current_company->getID() );
 
 			foreach ($rstclf as $rstc_obj) {
@@ -320,7 +320,7 @@ switch ($action) {
 					if ( $week_row['week'] != '' AND $week_row['week'] > 0 ) {
 						Debug::Text('Row ID: '. $week_row_id .' Week: '. $week_row['week'] .' Schedule Policy ID: '. $week_row['schedule_policy_id'], __FILE__, __LINE__, __METHOD__,10);
 
-						$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+						$rstf = new RecurringScheduleTemplateFactory();
 						$rstf->setStartTime( $week_row['start_time'] );
 						$rstf->setEndTime( $week_row['end_time'] );
 
@@ -373,24 +373,24 @@ switch ($action) {
 		$prepend_array_option = array( 0 => '--', -1 => TTi18n::gettext('-- Default --') );
 
 		//Select box options;
-		$splf = TTnew( 'SchedulePolicyListFactory' );
+		$splf = new SchedulePolicyListFactory();
 		$data['schedule_options'] = $splf->getByCompanyIdArray( $current_company->getId() );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$data['branch_options'] = Misc::prependArray( $prepend_array_option,  $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		//$data['branch_options']  = Misc::prependArray( array( -1 => '-- Default --' ), $blf->getByCompanyIdArray( $current_company->getId(), FALSE, FALSE ) );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$data['department_options'] = Misc::prependArray( $prepend_array_option,  $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		//$data['department_options'] = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$data['job_options'] = $jlf->getByCompanyIdAndStatusArray( $current_company->getId(), array(10,20,30,40), TRUE );
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$data['job_item_options'] = $jilf->getByCompanyIdArray( $current_company->getId(), TRUE );
 		}
 

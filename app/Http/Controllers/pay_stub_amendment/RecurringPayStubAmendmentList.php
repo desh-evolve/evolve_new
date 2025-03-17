@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$rpsalf = TTnew( 'RecurringPayStubAmendmentListFactory' );
+		$rpsalf = new RecurringPayStubAmendmentListFactory();
 
 		foreach ($ids as $id) {
 			$rpsalf->getById( $id );
@@ -79,13 +79,13 @@ switch ($action) {
 	default:
 		URLBuilder::setURL(NULL, array('sort_column' => $sort_column, 'sort_order' => $sort_order) );
 
-		$rpsalf = TTnew( 'RecurringPayStubAmendmentListFactory' );
+		$rpsalf = new RecurringPayStubAmendmentListFactory();
 
 		$rpsalf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		$pager = new Pager($rpsalf);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		foreach ($rpsalf as $recurring_pay_stub_amendment) {
 

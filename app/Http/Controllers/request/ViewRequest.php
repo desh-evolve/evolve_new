@@ -44,7 +44,7 @@ if ( isset($data) ) {
 	$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 }
 
-$rf = TTnew( 'RequestFactory' );
+$rf = new RequestFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -64,7 +64,7 @@ switch ($action) {
 		if ( !empty($request_id) ) {
 			Debug::text(' Authorizing Request ID: '. $request_id, __FILE__, __LINE__, __METHOD__,10);
 
-			$af = TTnew( 'AuthorizationFactory' );
+			$af = new AuthorizationFactory();
 			$af->setObjectType( $hierarchy_type_id );
 			$af->setObject( $request_id );
 
@@ -93,7 +93,7 @@ switch ($action) {
 		if ( (int)$id > 0 ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-			$rlf = TTnew( 'RequestListFactory' );
+			$rlf = new RequestListFactory();
 			$rlf->getByIDAndCompanyID( $id, $current_company->getId() );
 			if ( $rlf->getRecordCount() == 1 ) {
 				foreach ($rlf as $r_obj) {
@@ -128,9 +128,9 @@ switch ($action) {
 
 					Debug::Text('Get Request Queue: ', __FILE__, __LINE__, __METHOD__,10);
 
-					$ulf = TTnew( 'UserListFactory' );
-					$hlf = TTnew( 'HierarchyListFactory' );
-					$hllf = TTnew( 'HierarchyLevelListFactory' );
+					$ulf = new UserListFactory();
+					$hlf = new HierarchyListFactory();
+					$hllf = new HierarchyLevelListFactory();
 
 					$request_levels = $hllf->getLevelsAndHierarchyControlIDsByUserIdAndObjectTypeID( $current_user->getId(), $hierarchy_type_id );
 					//Debug::Arr( $request_levels, 'Request Levels', __FILE__, __LINE__, __METHOD__,10);
@@ -147,7 +147,7 @@ switch ($action) {
 
 					if ( is_array($request_selected_level) ) {
 						Debug::Text( 'Hierarchy information found...', __FILE__, __LINE__, __METHOD__,10);
-						$rlf = TTnew( 'RequestListFactory' );
+						$rlf = new RequestListFactory();
 						//$rlf->getByHierarchyLevelMapAndStatusAndNotAuthorized( $request_selected_level, 30 );
 						$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($request_selected_level, $type_id, 30 );
 

@@ -32,13 +32,13 @@ return new class extends Migration
             $table->string('time_unit_format', 250)->nullable(); // Time unit format (nullable)
             $table->string('time_zone', 250)->nullable(); // Time zone (nullable)
             $table->integer('items_per_page')->nullable(); // Items per page (nullable)
-            $table->integer('created_date')->nullable(); // Created date (nullable)
-            $table->integer('created_by')->nullable(); // Created by (nullable)
-            $table->integer('updated_date')->nullable(); // Updated date (nullable)
-            $table->integer('updated_by')->nullable(); // Updated by (nullable)
-            $table->integer('deleted_date')->nullable(); // Deleted date (nullable)
-            $table->integer('deleted_by')->nullable(); // Deleted by (nullable)
-            $table->tinyInteger('deleted')->default(0); // Deleted flag (default 0)
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('start_week_day')->nullable(); // Start week day (nullable)
             $table->string('language', 5)->nullable(); // Language (nullable)
             $table->integer('currency_id')->nullable(); // Currency ID (nullable)

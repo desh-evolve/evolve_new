@@ -64,21 +64,21 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 
 
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
 	case 'export':
             
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByJobSkills($filter_data['job_skills']);
 
                 
 		$job_skills_list = array();
 		if ( $ulf->getRecordCount() > 0 ) {
                     
-                    $blf = TTnew('BranchListFactory');
+                    $blf = new BranchListFactory();
                     
                     
 			foreach ($ulf as $job_skills) {

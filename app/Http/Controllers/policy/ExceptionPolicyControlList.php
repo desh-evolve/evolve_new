@@ -63,7 +63,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$epclf = TTnew( 'ExceptionPolicyControlListFactory' );
+		$epclf = new ExceptionPolicyControlListFactory();
 
 		foreach ($ids as $id) {
 			$epclf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -80,7 +80,7 @@ switch ($action) {
 		break;
 
 	default:
-		$epclf = TTnew( 'ExceptionPolicyControlListFactory' );
+		$epclf = new ExceptionPolicyControlListFactory();
 		$epclf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($epclf);

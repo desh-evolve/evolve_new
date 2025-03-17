@@ -49,7 +49,7 @@ if ( isset($pay_period_schedule_data) ) {
 }
 
 //var_dump($pay_period_schedule_data);
-$ppsf = TTnew( 'PayPeriodScheduleFactory' );
+$ppsf = new PayPeriodScheduleFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -139,7 +139,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 
 			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
 

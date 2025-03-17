@@ -39,7 +39,7 @@ if ( isset($data) ) {
 	$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 }
 
-$rf = TTnew( 'RequestFactory' );
+$rf = new RequestFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -79,7 +79,7 @@ switch ($action) {
 		if ( (int)$id > 0 ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-			$rlf = TTnew( 'RequestListFactory' );
+			$rlf = new RequestListFactory();
 			$rlf->getByIDAndCompanyID( $id, $current_company->getId() );
 
 			foreach ($rlf as $r_obj) {

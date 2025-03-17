@@ -134,7 +134,7 @@ class TimesheetSummaryReport extends Report {
 			case 'overtime_columns':
 				//Get all Overtime policies.
 				$retval = array();
-				$otplf = TTnew( 'OverTimePolicyListFactory' );
+				$otplf = new OverTimePolicyListFactory();
 				$otplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $otplf->getRecordCount() > 0 ) {
 					foreach( $otplf as $otp_obj ) {
@@ -147,7 +147,7 @@ class TimesheetSummaryReport extends Report {
 			case 'premium_columns':
 				$retval = array();
 				//Get all Premium policies.
-				$pplf = TTnew( 'PremiumPolicyListFactory' );
+				$pplf = new PremiumPolicyListFactory();
 				$pplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $pplf->getRecordCount() > 0 ) {
 					foreach( $pplf as $pp_obj ) {
@@ -160,7 +160,7 @@ class TimesheetSummaryReport extends Report {
 			case 'absence_columns':
 				$retval = array();
 				//Get all Absence Policies.
-				$aplf = TTnew( 'AbsencePolicyListFactory' );
+				$aplf = new AbsencePolicyListFactory();
 				$aplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $aplf->getRecordCount() > 0 ) {
 					foreach( $aplf as $ap_obj ) {
@@ -619,7 +619,7 @@ class TimesheetSummaryReport extends Report {
 		$policy_rates = array();
 
 		//Get all Overtime policies.
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 		$otplf->getByCompanyId( $this->getUserObject()->getCompany() );
 		if ( $otplf->getRecordCount() > 0 ) {
 			foreach( $otplf as $otp_obj ) {
@@ -629,7 +629,7 @@ class TimesheetSummaryReport extends Report {
 		}
 
 		//Get all Premium policies.
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 		$pplf->getByCompanyId( $this->getUserObject()->getCompany() );
 		if ( $pplf->getRecordCount() > 0 ) {
 			foreach( $pplf as $pp_obj ) {
@@ -638,7 +638,7 @@ class TimesheetSummaryReport extends Report {
 		}
 
 		//Get all Absence Policies.
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$aplf->getByCompanyId( $this->getUserObject()->getCompany() );
 		if ( $aplf->getRecordCount() > 0 ) {
 			foreach( $aplf as $ap_obj ) {
@@ -658,7 +658,7 @@ class TimesheetSummaryReport extends Report {
 		$policy_hourly_rates = $this->getPolicyHourlyRates();
 
 		if ( $this->getPermissionObject()->Check('punch','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			//Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -693,7 +693,7 @@ class TimesheetSummaryReport extends Report {
 
 		$pay_period_ids = array();
 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		$udtlf->getTimesheetSummaryReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Total Rows: '. $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $udtlf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -815,7 +815,7 @@ class TimesheetSummaryReport extends Report {
 		//Debug::Arr($this->tmp_data['user_date_total'], 'User Date Total Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get user data for joining.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -825,7 +825,7 @@ class TimesheetSummaryReport extends Report {
 		}
 		//Debug::Arr($this->tmp_data['user'], 'User Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Branch Total Rows: '. $blf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $blf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -836,7 +836,7 @@ class TimesheetSummaryReport extends Report {
 		}
 		//Debug::Arr($this->tmp_data['default_branch'], 'Default Branch Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Department Total Rows: '. $blf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $dlf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -850,7 +850,7 @@ class TimesheetSummaryReport extends Report {
 		//Get verified timesheets for all pay periods considered in report.
 		$pay_period_ids = array_keys( $pay_period_ids );
 		if ( isset($pay_period_ids) AND count($pay_period_ids) > 0 ) {
-			$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 			$pptsvlf->getByPayPeriodIdAndCompanyId( $pay_period_ids, $this->getUserObject()->getCompany() );
 			if ( $pptsvlf->getRecordCount() > 0 ) {
 				foreach( $pptsvlf as $pptsv_obj ) {
@@ -947,7 +947,7 @@ class TimesheetSummaryReport extends Report {
                                         );
 																					
 					foreach($filter_header_data as $fh_key=>$filter_header){
-						$dlf = TTnew( 'DepartmentListFactory' );
+						$dlf = new DepartmentListFactory();
 						if($fh_key == 'department_ids'){
 							foreach ($filter_header as $dep_id) { 
 								$department_list[] = $dlf->getNameById($dep_id); 
@@ -955,7 +955,7 @@ class TimesheetSummaryReport extends Report {
 							$dep_strng = implode(', ', $department_list);
 						}
 								
-						$blf = TTnew( 'BranchListFactory' ); 
+						$blf = new BranchListFactory(); 
 						if($fh_key == 'branch_ids'){
 							foreach ($filter_header as $br_id) { 
 								$branch_list[] = $blf->getNameById($br_id); 
@@ -982,7 +982,7 @@ class TimesheetSummaryReport extends Report {
                         }
 
 																					
-						$uglf = TTnew( 'UserGroupListFactory' ); 
+						$uglf = new UserGroupListFactory(); 
 						if($fh_key == 'group_ids'){
 							foreach ($filter_header as $gr_id) {   
 								$group_list[] = $uglf->getNameById($gr_id); 
@@ -993,7 +993,7 @@ class TimesheetSummaryReport extends Report {
 					} 
 					if($dep_strng==''){$dep_strng='All';} 
                                          
-                $pplf = TTnew( 'PayPeriodListFactory' );
+                $pplf = new PayPeriodListFactory();
                 if(isset($filter_data['pay_period_ids'][0])){                                                              
                     $pay_period_start = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getStartDate();
                     $pay_period_end = $pplf->getById($filter_data['pay_period_ids'][0])->getCurrent()->getEndDate();
@@ -1030,7 +1030,7 @@ class TimesheetSummaryReport extends Report {
                     
                                                 );
 												
-				$pdf = TTnew( 'TimeReportHeaderFooter' );								
+				$pdf = new TimeReportHeaderFooter();								
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -1254,7 +1254,7 @@ class TimesheetSummaryReport extends Report {
                                                   'postal_code'  => $current_company->getPostalCode(), 
                                                 );
 												
-				$pdf = TTnew( 'TimeReportHeaderFooter' );								
+				$pdf = new TimeReportHeaderFooter();								
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);

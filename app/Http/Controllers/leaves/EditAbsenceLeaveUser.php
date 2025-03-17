@@ -39,7 +39,7 @@ if ( isset($data)) {
 	}
 }
 
-$aluf = TTnew( 'AbsenceLeaveUserFactory' );
+$aluf = new AbsenceLeaveUserFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -50,11 +50,11 @@ switch ($action) {
         
                 $leaveTypeId = '1'; //Hard Coded to absence type id to 1 [absence_leave Table]
                     
-                    $allf = TTnew( 'AbsenceLeaveListFactory' );
+                    $allf = new AbsenceLeaveListFactory();
                     $leaveType = $allf->getById($leaveTypeId)->getCurrent();
                     $leaveAmount = $data['amount']*$leaveType->getTimeSec();
                     
-                    $aluf = TTnew( 'AbsenceLeaveUserFactory' );
+                    $aluf = new AbsenceLeaveUserFactory();
                     $aluf->setId($data['id']);
     //                            $aluf->setUserId($user );
 //                    $aluf->setCompany( $current_company->getId() );
@@ -82,7 +82,7 @@ switch ($action) {
                         $aluf->Save(FALSE);  
                         $aluf->CommitTransaction(); 
                         
-                        $aluelf = TTnew('AbsenceLeaveUserEntryListFactory');
+                        $aluelf = new AbsenceLeaveUserEntryListFactory();
                         $aluelf->getByAbsenceUserId($aluf->getId());
                         
                         //update to  deleted all users
@@ -103,7 +103,7 @@ switch ($action) {
                    if(count($data['user_ids']) > 0){
                      
                         foreach ($data['user_ids'] as $user){
-                            $uf = TTnew('UserListFactory');
+                            $uf = new UserListFactory();
                             $uf->getById($user);
                             $user_obj = $uf->getCurrent();
     //                        echo '<pre>';   print_r($user_obj);  echo '<pre>';   die;
@@ -125,7 +125,7 @@ switch ($action) {
                             if($user_obj->getBasisOfEmployment() == $data['basis_employment'] && $minLengthStatus && $maxLengthStatus){
                             //users
                                 $aUser = $aluf->getUser();
-                                $aluef = TTnew( 'AbsenceLeaveUserEntryFactory' );
+                                $aluef = new AbsenceLeaveUserEntryFactory();
                                 
 //                                echo $aUser;die;
                                 $aluef->setId( $aUser[$user]['id'] );
@@ -177,13 +177,13 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$cdlf = TTnew( 'AbsenceLeaveUserListFactory' );
+			$cdlf = new AbsenceLeaveUserListFactory();
 			$cdlf->getById( $id );
                          $leaveTypeId = '1'; //hardcoded
 			foreach ($cdlf as $cd_obj) {
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
                             
-                            $allf = TTnew( 'AbsenceLeaveListFactory' );
+                            $allf = new AbsenceLeaveListFactory();
                             $leaveType = $allf->getById($leaveTypeId)->getCurrent();
                             $leaveAmount = $cd_obj->getAmount()/$leaveType->getTimeSec();
                             
@@ -254,7 +254,7 @@ switch ($action) {
 		break;
 }
 //Select box options;
-                $aplf = TTnew( 'AbsencePolicyListFactory' );
+                $aplf = new AbsencePolicyListFactory();
 		$absence_policy_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
         
 		$data['status_options'] = $aluf->getOptions('status');

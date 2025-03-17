@@ -2,13 +2,19 @@
 
  namespace App\Models\PayStub;
 
+use App\Models\Company\BranchFactory;
+use App\Models\Core\CurrencyFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Misc;
+use App\Models\Department\DepartmentFactory;
 use App\Models\PayPeriod\PayPeriodListFactory;
 use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
 use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
-use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use App\Models\Users\UserTitleFactory;
+use Carbon\Carbon;
+
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -305,7 +311,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$pplf = new PayPeriodListFactory();
 
 		$ph = array(
-			':start_date' => $this->db->BindTimeStamp( $start_date ),
+			':start_date' => Carbon::parse($start_date)->format('Y-m-d H:i:s'),
 		);
 
 		$query = '
@@ -342,8 +348,8 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$pplf = new PayPeriodListFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindTimeStamp( $start_date ),
-					'end_date' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		$query = '
@@ -353,8 +359,8 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 							'. $pplf->getTable() .' as c
 					where	a.user_id = b.id
 						AND a.pay_period_id = c.id
-						AND a.transaction_date >= ?
-						AND a.transaction_date <= ?
+						AND a.transaction_date >= :start_date
+						AND a.transaction_date <= :end_date
 						AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
 						AND ( a.deleted = 0 AND c.deleted = 0)
 					';
@@ -381,7 +387,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$pplf = new PayPeriodListFactory();
 
 		$ph = array(
-					'company_id' => $company_id
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -391,7 +397,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 							'. $pplf->getTable() .' as c
 					where	a.user_id = b.id
 						AND a.pay_period_id = c.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order );
@@ -424,7 +430,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$pplf = new PayPeriodListFactory();
 
 		$ph = array(
-					'company_id' => $company_id
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -434,7 +440,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 							'. $pplf->getTable() .' as c
 					where	a.user_id = b.id
 						AND a.pay_period_id = c.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.id in ('. $this->getListSQL($id, $ph) .')
 						AND a.deleted = 0
 						';
@@ -469,7 +475,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$pplf = new PayPeriodListFactory();
 
 		$ph = array(
-					'user_id' => $user_id
+					':user_id' => $user_id
 					);
 
 		$query = '
@@ -479,7 +485,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 							'. $pplf->getTable() .' as c
 					where	a.user_id = b.id
 						AND a.pay_period_id = c.id
-						AND b.id = ?
+						AND b.id = :user_id
 						AND a.id in ('. $this->getListSQL($id, $ph) .')
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -558,7 +564,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$pplf = new PayPeriodListFactory();
 
 		$ph = array(
-					'company_id' => $company_id
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -568,7 +574,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 							'. $pplf->getTable() .' as c
 					where	a.user_id = b.id
 						AND a.pay_period_id = c.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.pay_period_id in ('. $this->getListSQL($pay_period_id, $ph) .')
 						AND a.deleted = 0';
 
@@ -613,8 +619,8 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 							'. $ulf->getTable() .' as b
 					where	a.user_id = b.id
 						AND b.company_id = '. $company_id .'
-						AND a.transaction_date >= '. $this->db->BindTimeStamp( TTDate::getBeginDayEpoch( $start_date ) ) .'
-						AND a.transaction_date <= '. $this->db->BindTimeStamp( TTDate::getBeginDayEpoch( $end_date ) ) .'
+						AND a.transaction_date >= '. Carbon::parse( TTDate::getBeginDayEpoch( $start_date ) ) .'
+						AND a.transaction_date <= '. Carbon::parse( TTDate::getBeginDayEpoch( $end_date ) ) .'
 						AND a.deleted = 0';
 
 		$query .= $this->getWhereSQL( $where );
@@ -663,13 +669,13 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id, 
+					':pay_period_id' => $pay_period_id, 
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	pay_period_id = ?
+					where	pay_period_id = :pay_period_id
 						AND deleted = 0
                                                 GROUP BY user_id';
 		$query .= $this->getWhereSQL( $where );
@@ -701,17 +707,17 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		*/
 
 		$ph = array(
-					'pay_period_id' => $pay_period_id,
-					'user_id' => $user_id,
-					'advance' => $this->toBool( $advance ),
+					':pay_period_id' => $pay_period_id,
+					':user_id' => $user_id,
+					':advance' => $this->toBool( $advance ),
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	pay_period_id = ?
-						AND user_id = ?
-						AND advance = ?
+					where	pay_period_id = :pay_period_id
+						AND user_id = :user_id
+						AND advance = :advance
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -848,15 +854,15 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['transaction_start_date']) AND trim($filter_data['transaction_start_date']) != '' ) {
-			$ph[':transaction_start_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_start_date'])) );
+			$ph[':transaction_start_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_start_date'])) )->format('Y-m-d');
 			$query  .=	' AND a.transaction_date >= :transaction_start_date';
 		}
 		if ( isset($filter_data['transaction_end_date']) AND trim($filter_data['transaction_end_date']) != '' ) {
-			$ph[':transaction_end_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_end_date'])) );
+			$ph[':transaction_end_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_end_date'])) )->format('Y-m-d');
 			$query  .=	' AND a.transaction_date <= :transaction_end_date';
 		}
 		if ( isset($filter_data['transaction_date']) AND trim($filter_data['transaction_date']) != '' ) {
-			$ph[':transaction_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_date'])) );
+			$ph[':transaction_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_date'])) )->format('Y-m-d');
 			$query  .=	' AND a.transaction_date = :transaction_date';
 		}
 
@@ -916,7 +922,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$cf = new CurrencyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -956,7 +962,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -997,12 +1003,12 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['start_date']);
-			$query  .=	' AND a.transaction_date >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+			$query  .=	' AND a.transaction_date >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp( $filter_data['end_date'] );
-			$query  .=	' AND a.transaction_date <= ?';
+			$ph[':end_date'] = Carbon::parse( $filter_data['end_date'] )->format('Y-m-d');
+			$query  .=	' AND a.transaction_date <= :end_date';
 		}
 		/*
 		if ( isset($filter_data['transaction_date']) AND trim($filter_data['transaction_date']) != '' ) {
@@ -1094,16 +1100,16 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
             
             
             $ph = array(
-					'pay_period_id' => $pay_periods_id,
-                                        'user_id' => $user_id,
-					);
+					':pay_period_id' => $pay_periods_id,
+                    ':user_id' => $user_id,
+				);
             
             
             $query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
-					where	a.pay_period_id = ? AND a.user_id= ? 
+					where	a.pay_period_id = :pay_period_id AND a.user_id= :user_id
                                          AND (  b.deleted = 0 )
 					';
             

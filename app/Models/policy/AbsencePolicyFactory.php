@@ -102,7 +102,7 @@ class AbsencePolicyFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -120,7 +120,7 @@ class AbsencePolicyFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -238,7 +238,7 @@ class AbsencePolicyFactory extends Factory {
 	function setWageGroup($id) {
 		$id = trim($id);
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 
 		if ( $id == 0
 				OR
@@ -294,7 +294,7 @@ class AbsencePolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -327,7 +327,7 @@ class AbsencePolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (	$id == NULL
 				OR
@@ -346,7 +346,7 @@ class AbsencePolicyFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ) {
 			//Check to make sure there are no hours using this OT policy.
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getByAbsencePolicyId( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

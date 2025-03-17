@@ -33,9 +33,9 @@ extract	(FormVariables::GetVariables(
 												'data',
 												) ) );
 
-$mcf = TTnew( 'MessageControlFactory' );
-$mrf = TTnew( 'MessageRecipientFactory' );
-$msf = TTnew( 'MessageSenderFactory' );
+$mcf = new MessageControlFactory();
+$mrf = new MessageRecipientFactory();
+$msf = new MessageSenderFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -48,7 +48,7 @@ switch ($action) {
 		if ( is_array($filter_user_id) AND count($filter_user_id) > 0 AND ( isset($filter_user_id[0]) AND $filter_user_id[0] != 0 ) ) {
 			$mcf->StartTransaction();
 
-			$mcf = TTnew( 'MessageControlFactory' );
+			$mcf = new MessageControlFactory();
 			$mcf->setFromUserId( $current_user->getId() );
 			$mcf->setToUserId( $filter_user_id );
 			$mcf->setObjectType( 5 );
@@ -77,7 +77,7 @@ switch ($action) {
 			$filter_user_options = Misc::arrayIntersectByKey( (array)$filter_user_id, $user_options );
 		} else {
 			//Only allow sending to supervisors OR children.
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 
 			//FIXME: For supervisors, we may need to include supervisors at the same level
 			// Also how to handle cases where there are no To: recipients to select from.
@@ -93,7 +93,7 @@ switch ($action) {
 			$request_user_ids = array_merge( (array)$request_parent_level_user_ids, (array)$request_child_level_user_ids );
 			//Debug::Arr( $request_user_ids, 'User Ids', __FILE__, __LINE__, __METHOD__,10);
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getByIdAndCompanyId( $request_user_ids, $current_user->getCompany() );
 			$user_options = UserListFactory::getArrayByListFactory( $ulf, TRUE, FALSE);
 

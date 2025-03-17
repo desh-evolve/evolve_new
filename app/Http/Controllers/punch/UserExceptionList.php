@@ -71,8 +71,8 @@ if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
 	}
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
 //Handle different actions for different forms.
@@ -111,10 +111,10 @@ switch ($action) {
 															'page' => $page
 														) );
 
-		$ulf = TTnew( 'UserListFactory' );
-		$elf = TTnew( 'ExceptionListFactory' );
+		$ulf = new UserListFactory();
+		$elf = new ExceptionListFactory();
 
-		$hlf = TTnew( 'HierarchyListFactory' );
+		$hlf = new HierarchyListFactory();
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		$filter_data['permission_children_ids'] = array();
@@ -127,7 +127,7 @@ switch ($action) {
 			}
 		}
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByCompanyId( $current_company->getId() );
 		$pay_period_options = $pplf->getArrayByListFactory( $pplf, FALSE, FALSE );
 		$pay_period_ids = array_keys((array)$pay_period_options);
@@ -147,26 +147,26 @@ switch ($action) {
 
 		$pager = new Pager($elf);
 
-		$epf = TTnew( 'ExceptionPolicyFactory' );
+		$epf = new ExceptionPolicyFactory();
 		$exception_policy_type_options = $epf->getOptions('type');
 		$exception_policy_severity_options = $epf->getOptions('severity');
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIdArray( $current_company->getID(), FALSE );
 
 		foreach ($elf as $e_obj) {

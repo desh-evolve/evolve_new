@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 
 		foreach ($ids as $id) {
 			$mplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -79,7 +79,7 @@ switch ($action) {
 		break;
 
 	default:
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 		$mplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($mplf);

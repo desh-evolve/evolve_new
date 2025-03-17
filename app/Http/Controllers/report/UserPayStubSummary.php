@@ -46,8 +46,8 @@ switch ($action) {
 	default:
 
 
-		$psenlf = TTnew( 'PayStubEntryNameListFactory' );
-		$ulf = TTnew( 'UserListFactory' );
+		$psenlf = new PayStubEntryNameListFactory();
+		$ulf = new UserListFactory();
 
 		if ( !isset($user_ids) OR $user_ids == '' OR $user_ids[0] == 0) {
 			//$user_ids = array_keys( $ulf->getByCompanyIdArray( $current_company->getId() ) );
@@ -55,12 +55,12 @@ switch ($action) {
 		}
 
 		//Get all pay stubs for this pay period
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		$pslf->getByUserIdAndCompanyId( $user_ids, $current_company->getId(), NULL, NULL, array('advance' => '= \'f\''), array('user_id' => 'asc', 'pay_period_id' => 'asc') );
 		$pager = new Pager($pslf);
 
-		$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyId( $current_company->getId() );
 		if ( $pseallf->getRecordCount() > 0 ) {
 			$pseal_obj = $pseallf->getCurrent();
@@ -88,7 +88,7 @@ switch ($action) {
 		foreach($pslf as $pay_stub_obj) {
 			//Debug::text(' Pay Stub ID: '. $pay_stub_obj->getId() , __FILE__, __LINE__, __METHOD__,10);
 
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			//Order is very important here. We want the "last" entries to go last, as they should
 			//have the most up to date YTD values.
 			$pself->getByPayStubId( $pay_stub_obj->getId() );

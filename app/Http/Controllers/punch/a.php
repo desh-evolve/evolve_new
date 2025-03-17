@@ -358,8 +358,8 @@ function addLocalServerPunchdata($pc_data )
             }
     }
 
-    $pcf = TTnew( 'PunchControlFactory' );
-    $pf = TTnew( 'PunchFactory' );   
+    $pcf = new PunchControlFactory();
+    $pf = new PunchFactory();   
 
 
     Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
@@ -376,7 +376,7 @@ function addLocalServerPunchdata($pc_data )
 
     for( $i=0; $i <= (int)$pc_data['repeat']; $i++ ) {
 
-            $pf = TTnew( 'PunchFactory' );
+            $pf = new PunchFactory();
 
             Debug::Text('Punch Repeat: '. $i, __FILE__, __LINE__, __METHOD__,10);
             if ( $i == 0 ) {
@@ -425,7 +425,7 @@ function addLocalServerPunchdata($pc_data )
 
 
                     if ( $pf->Save( FALSE ) == TRUE ) {
-                            $pcf = TTnew( 'PunchControlFactory' );
+                            $pcf = new PunchControlFactory();
                             $pcf->setId( $pf->getPunchControlID() );
                             $pcf->setPunchObject( $pf );
 

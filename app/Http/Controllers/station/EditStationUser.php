@@ -31,7 +31,7 @@ extract	(FormVariables::GetVariables(
 												'station_data'
 												) ) );
 
-$sf = TTnew( 'StationFactory' );
+$sf = new StationFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -59,8 +59,8 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$slf = TTnew( 'StationListFactory' );
-			$sulf = TTnew( 'StationUserListFactory' );
+			$slf = new StationListFactory();
+			$sulf = new StationUserListFactory();
 
 			$slf->GetByIdAndCompanyId($id, $current_company->getId() );
 

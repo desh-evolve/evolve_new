@@ -30,14 +30,14 @@ extract	(FormVariables::GetVariables(
 												'company_data'
 												) ) );
 
-$cf = TTnew( 'CompanyFactory' );
+$cf = new CompanyFactory();
 
-$ulf = TTnew( 'UserListFactory' );
-$uf = TTnew( 'UserFactory' );
+$ulf = new UserListFactory();
+$uf = new UserFactory();
 //ARSP  EDIT --> ADDD NEW CODE FOR SALARY (WAGE)
-$uwf = TTnew('UserWageFactory');
+$uwf = new UserWageFactory();
 
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $action = Misc::findSubmitButton();
 switch ($action) {
 	case 'submit':
@@ -88,7 +88,7 @@ switch ($action) {
 		}
 
         //Get New Hire Defaults.
-        $udlf = TTnew( 'UserDefaultListFactory' );
+        $udlf = new UserDefaultListFactory();
         $udlf->getByCompanyId( $uf->getCompany() );
         if ( $udlf->getRecordCount() > 0 ) {
             Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
@@ -458,7 +458,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 
 			if ( $permission->Check('company','edit') ) {
 				$clf->GetByID($id);
@@ -534,7 +534,7 @@ switch ($action) {
 		$company_data['product_edition_options'] = $cf->getOptions('product_edition');
 
 		//Get other field names
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 		$company_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getID(), 2 );
 
 		$company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type');

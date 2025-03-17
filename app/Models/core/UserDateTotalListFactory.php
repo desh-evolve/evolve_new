@@ -20,6 +20,7 @@ use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserTitleFactory;
 use App\Models\Users\UserWageFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
@@ -931,8 +932,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':week_start_epoch' => $this->db->BindDate( $week_start_epoch ),
-					':epoch' =>  $this->db->BindDate( $epoch ),
+					':week_start_epoch' => Carbon::parse( $week_start_epoch )->format('Y-m-d'),
+					':epoch' =>  Carbon::parse( $epoch )->format('Y-m-d'),
 					);
 
 		//DO NOT Include paid absences. Only count regular time towards weekly overtime.
@@ -1032,8 +1033,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					':company_id' => $company_id,
 					':user_id' => $user_id,
 					':status_id' => $status,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		//Order by a.over_time_policy last so we never leave the ordering up to the database. This can cause
@@ -1096,8 +1097,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					':user_id' => $user_id,
 					//'status_id' => $status,
 					//'type' => $type,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		$query = '
@@ -1153,8 +1154,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$ph = array(
 					':company_id' => $company_id,
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		//						AND a.type_id != 40
@@ -1203,8 +1204,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		$query = '
@@ -1252,8 +1253,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		$query = '
@@ -1306,8 +1307,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		//Include only paid absences.
@@ -1359,8 +1360,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		//Include only paid absences.
@@ -1422,8 +1423,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					':day_of_week' => $day_of_week,
 					);
 
@@ -2077,7 +2078,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$ph = array(
 					':user_id' => $user_id,
 					':pay_period_id' => $pay_period_id,
-					':end_date' =>  $this->db->BindDate( $end_date ),
+					':end_date' =>  Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 /*
@@ -2329,21 +2330,21 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					}
 
 					if ( isset($filter_data['transaction_start_date']) AND trim($filter_data['transaction_start_date']) != '' ) {
-						$ph[] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_start_date'])) );
-						$query  .=	' AND c.transaction_date >= ?';
+						$ph[':transaction_start_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_start_date'])) );
+						$query  .=	' AND c.transaction_date >= :transaction_start_date';
 					}
 					if ( isset($filter_data['transaction_end_date']) AND trim($filter_data['transaction_end_date']) != '' ) {
-						$ph[] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_end_date'])) );
-						$query  .=	' AND c.transaction_date <= ?';
+						$ph[':transaction_end_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_end_date'])) );
+						$query  .=	' AND c.transaction_date <= :transaction_end_date';
 					}
 
 					if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-						$ph[] = $this->db->BindDate($filter_data['start_date']);
-						$query  .=	' AND b.date_stamp >= ?';
+						$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+						$query  .=	' AND b.date_stamp >= :start_date';
 					}
 					if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-						$ph[] = $this->db->BindDate($filter_data['end_date']);
-						$query  .=	' AND b.date_stamp <= ?';
+						$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
+						$query  .=	' AND b.date_stamp <= :end_date';
 					}
 
 					if ( isset($filter_data['job_id']) AND isset($filter_data['job_id'][0]) AND !in_array(-1, (array)$filter_data['job_id']) ) {
@@ -2353,13 +2354,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 						$query  .=	' AND a.job_item_id in ('. $this->getListSQL($filter_data['job_item_id'], $ph) .') ';
 					}
 
-		$ph[] = $company_id;
+		$ph[':company_id'] = $company_id;
 		$query .= '
 						AND a.status_id in (10,20,30)
 						AND ( a.deleted = 0 AND b.deleted = 0)
 					group by b.user_id, b.pay_period_id, a.branch_id, a.department_id, a.job_id, a.job_item_id, a.status_id, a.type_id, a.over_time_policy_id, a.absence_policy_id, a.premium_policy_id
 					) as tmp ON z.id = tmp.user_id
-				WHERE z.company_id = ? ';
+				WHERE z.company_id = :company_id ';
 
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
 			$query  .=	' AND z.id in ('.$this->getListSQL($filter_data['user_id'], $ph) .') ';
@@ -2593,11 +2594,11 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 								}
 
 								if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-									$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+									$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
 									$query  .=	' AND tmp2_a.date_stamp >= :start_date';
 								}
 								if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-									$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+									$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
 									$query  .=	' AND tmp2_a.date_stamp <= :end_date';
 								}
 
@@ -2626,11 +2627,11 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
 			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
 			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
@@ -2782,12 +2783,12 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 								}
 
 								if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-									$ph[] = $this->db->BindDate($filter_data['start_date']);
-									$query  .=	' AND tmp2_a.date_stamp >= ?';
+									$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+									$query  .=	' AND tmp2_a.date_stamp >= :start_date';
 								}
 								if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-									$ph[] = $this->db->BindDate($filter_data['end_date']);
-									$query  .=	' AND tmp2_a.date_stamp <= ?';
+									$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
+									$query  .=	' AND tmp2_a.date_stamp <= :end_date';
 								}
 
 								$query .= '
@@ -2815,12 +2816,12 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
 		$ph[] = $company_id;
@@ -2876,8 +2877,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$ppf = new PremiumPolicyFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		//Make it so employees with 0 hours still show up!! Very important!
@@ -2944,8 +2945,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 																			and z.deleted = 0
 																			order by z.effective_date desc limit 1)
 					where
-						b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
 						AND a.status_id in (10,30)
 						AND ( a.deleted = 0 AND b.deleted = 0)
@@ -2997,8 +2998,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$ppf = new PremiumPolicyFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		$query = '
@@ -3066,8 +3067,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 																			and z.deleted = 0
 																			order by z.effective_date desc limit 1)
 					where 	a.user_date_id = b.id
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND a.job_id in ('. $this->getListSQL($job_ids, $ph) .')
 						AND a.status_id in (10,20,30)
 						AND ( a.deleted = 0 AND b.deleted = 0)
@@ -3128,8 +3129,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$ppf = new PremiumPolicyFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		$query = '
@@ -3197,8 +3198,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 																			and z.deleted = 0
 																			order by z.effective_date desc limit 1)
 					where 	a.user_date_id = b.id
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
 						AND a.job_id in ('. $this->getListSQL($job_ids, $ph) .')
 					';
@@ -3267,9 +3268,9 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
 					);
 
 		$query = '
@@ -3297,9 +3298,9 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 									'. $uf->getTable() .' as c
 							where 	a.user_date_id = b.id
 								AND b.user_id = c.id
-								AND c.company_id = ?
-								AND b.date_stamp >= ?
-								AND b.date_stamp <= ?
+								AND c.company_id = :company_id
+								AND b.date_stamp >= :start_date
+								AND b.date_stamp <= :end_date
 								AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
 								AND a.total_time > 0
 								AND ( a.deleted = 0 AND b.deleted=0 AND c.deleted=0)
@@ -3355,7 +3356,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$ppf = new PremiumPolicyFactory();
 		$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		//Make it so employees with 0 hours still show up!! Very important!
 		//Order dock hours first, so it can be deducted from regular time.
@@ -3430,7 +3431,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 																		LIMIT 1
 																		)
 
-					where 	uf.company_id = ? ';
+					where 	uf.company_id = :company_id ';
 /*
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND uf.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -3492,12 +3493,12 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= ( isset($filter_data['pay_period_time_sheet_verify_status_id']) ) ? $this->getWhereClauseSQL( 'pptsvlf.status_id', $filter_data['pay_period_time_sheet_verify_status_id'], 'numeric_list', $ph ) : NULL;
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
 		$query .= '
@@ -3552,7 +3553,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$apf = new AbsencePolicyFactory();
 		$ppf = new PremiumPolicyFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		//Make it so employees with 0 hours still show up!! Very important!
 		//Order dock hours first, so it can be deducted from regular time.
@@ -3625,7 +3626,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 																		LIMIT 1
 																		)
 
-					where 	uf.company_id = ? ';
+					where 	uf.company_id = :company_id ';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND uf.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -3667,12 +3668,12 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
 		$query .= '
@@ -3727,7 +3728,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$apf = new AbsencePolicyFactory();
 		$ppf = new PremiumPolicyFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		//Make it so employees with 0 hours still show up!! Very important!
 		//Order dock hours first, so it can be deducted from regular time.
@@ -3783,7 +3784,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 																			and z.deleted = 0
 																			order by z.effective_date desc limit 1)
 
-					where 	uf.company_id = ? ';
+					where 	uf.company_id = :company_id ';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND uf.id in ('.$this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -3825,12 +3826,12 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
 		$query .= '
@@ -4099,16 +4100,16 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['date']) AND trim($filter_data['date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['date']);
+			$ph[] = Carbon::parse($filter_data['date'])->format('Y-m-d');
 			$query  .=	' AND c.date_stamp = ?';
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
 			$query  .=	' AND c.date_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
+			$ph[] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
 			$query  .=	' AND c.date_stamp <= ?';
 		}
 
@@ -4209,7 +4210,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -4312,7 +4313,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$query .= '	LEFT JOIN '. $jif->getTable() .' as y ON a.job_item_id = y.id';
 		}
 
-		$query .= '	WHERE d.company_id = ?';
+		$query .= '	WHERE d.company_id = :company_id';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND d.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -4383,17 +4384,17 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['date']) AND trim($filter_data['date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['date']);
-			$query  .=	' AND c.date_stamp = ?';
+			$ph[':date'] = Carbon::parse($filter_data['date'])->format('Y-m-d');
+			$query  .=	' AND c.date_stamp = :date';
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND c.date_stamp >= ?';
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->format('Y-m-d');
+			$query  .=	' AND c.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND c.date_stamp <= ?';
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->format('Y-m-d');
+			$query  .=	' AND c.date_stamp <= :end_date';
 		}
 
 		$query .= 	'
@@ -4414,25 +4415,22 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		
 	function getUserOPorOTValuesByDateAndType($date_stamp,$type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL){
 			
-			if($date_stamp == ''){ return FALSE; }
-			if($type_id == ''){ return FALSE; }
-			
-			
+		if($date_stamp == ''){ return FALSE; }
+		if($type_id == ''){ return FALSE; }
 		
-			
-			$uf = new UserFactory();            
+		$uf = new UserFactory();            
 		$udf = new UserDateFactory();
-			
-			$ph = array($this->db->BindDate($date_stamp));
-			$ph[] = $type_id;
+		
+		$ph[':date_stamp']= Carbon::parse($date_stamp)->format('Y-m-d');
+		$ph[':type_id'] = $type_id;
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 										Inner join '. $udf->getTable() .' as b ON a.user_date_id = b.id
 									
-					where	b.date_stamp = ? 
-										AND a.type_id = ? 
+					where	b.date_stamp = :date_stamp 
+										AND a.type_id = :type_id 
 										AND a.total_time >= 7200
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -4442,10 +4440,6 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		return $this;
 		
-
-		
-			
-			
 	}
 }
 ?>

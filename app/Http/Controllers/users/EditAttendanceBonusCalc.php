@@ -30,7 +30,7 @@ extract	(FormVariables::GetVariables(
 
 
 
-$abf = TTnew( 'AttendanceBonusFactory' );
+$abf = new AttendanceBonusFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -77,7 +77,7 @@ switch ($action) {
 	default:
 		if ( isset($id) ) {
                     
-                    $ablf = TTnew( 'AttendanceBonusListFactory' );
+                    $ablf = new AttendanceBonusListFactory();
                     $ablf->GetByIdAndCompanyId($id, $current_company->getId() );
                     
                     if($ablf->getRecordCount() > 0){
@@ -100,7 +100,7 @@ switch ($action) {
 }
 
 
-$bdlf = TTnew( 'BonusDecemberListFactory' );
+$bdlf = new BonusDecemberListFactory();
 $bonus_december_options = $bdlf->getByCompanyIdArray( $current_company->getId() );
 
 

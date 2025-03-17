@@ -16,7 +16,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -34,7 +34,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -60,7 +60,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -91,7 +91,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -122,7 +122,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -151,7 +151,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -180,7 +180,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -209,7 +209,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -238,7 +238,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -267,7 +267,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -296,7 +296,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )
@@ -325,7 +325,7 @@ class PayStubEntryAccountLinkFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				( $id == '' OR $id == 0 )

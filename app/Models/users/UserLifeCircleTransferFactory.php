@@ -47,7 +47,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -67,7 +67,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -91,7 +91,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 	function setCurrentDepartment($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'DepartmentListFactory' );
+		$ulf = new DepartmentListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'current_department',
@@ -123,7 +123,7 @@ class UserLifeCircleTransferFactory   extends Factory {
 	function setNewDepartment($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'DepartmentListFactory' );
+		$ulf = new DepartmentListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'new_department',

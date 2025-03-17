@@ -20,13 +20,13 @@ return new class extends Migration
             $table->integer('nopay_days');
             $table->integer('fullday_leave_days');
             $table->integer('halfday_leave_days');
-            $table->integer('created_date');
-            $table->unsignedBigInteger('created_by');
-            $table->integer('updated_date');
-            $table->unsignedBigInteger('updated_by');
-            $table->integer('deleted_date');
-            $table->unsignedBigInteger('deleted_by');
-            $table->tinyInteger('deleted')->default(0);
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

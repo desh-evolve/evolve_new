@@ -18,11 +18,11 @@ class HierarchyControlFactory extends Factory {
 		$retval = NULL;
 		switch( $name ) {
 			case 'object_type':
-				$hotlf = TTnew( 'HierarchyObjectTypeListFactory' );
+				$hotlf = new HierarchyObjectTypeListFactory();
 				$retval = $hotlf->getOptions('object_type');
 				break;
 			case 'short_object_type':
-				$hotlf = TTnew( 'HierarchyObjectTypeListFactory' );
+				$hotlf = new HierarchyObjectTypeListFactory();
 				$retval = $hotlf->getOptions('short_object_type');
 				break;
 			case 'columns':
@@ -86,7 +86,7 @@ class HierarchyControlFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -179,7 +179,7 @@ class HierarchyControlFactory extends Factory {
 	}
 
 	function getObjectType() {
-		$hotlf = TTnew( 'HierarchyObjectTypeListFactory' );
+		$hotlf = new HierarchyObjectTypeListFactory();
 		$hotlf->getByHierarchyControlId( $this->getId() );
 
 		foreach ($hotlf as $object_type) {
@@ -200,7 +200,7 @@ class HierarchyControlFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'HierarchyObjectTypeListFactory' );
+				$lf_a = new HierarchyObjectTypeListFactory();
 				$lf_a->getByHierarchyControlId( $this->getId() );
 				Debug::text('Existing Object Type Rows: '. $lf_a->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
@@ -224,7 +224,7 @@ class HierarchyControlFactory extends Factory {
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'HierarchyObjectTypeFactory' );
+					$f = new HierarchyObjectTypeFactory();
 					$f->setHierarchyControl( $this->getId() );
 					$f->setObjectType( $id );
 
@@ -247,7 +247,7 @@ class HierarchyControlFactory extends Factory {
 	}
 
 	function getUser() {
-		$hulf = TTnew( 'HierarchyUserListFactory' );
+		$hulf = new HierarchyUserListFactory();
 		$hulf->getByHierarchyControlID( $this->getId() );
 		foreach ($hulf as $obj) {
 			$list[] = $obj->getUser();
@@ -270,7 +270,7 @@ class HierarchyControlFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$hulf = TTnew( 'HierarchyUserListFactory' );
+				$hulf = new HierarchyUserListFactory();
 				$hulf->getByHierarchyControlID( $this->getId() );
 
 				foreach ($hulf as $obj) {
@@ -291,11 +291,11 @@ class HierarchyControlFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$huf = TTnew( 'HierarchyUserFactory' );
+					$huf = new HierarchyUserFactory();
 					$huf->setHierarchyControl( $this->getId() );
 					$huf->setUser( $id );
 
@@ -326,12 +326,12 @@ class HierarchyControlFactory extends Factory {
 
 			$user_ids = $this->getUser();
 			if ( is_array( $user_ids ) ) {
-				$huf = TTNew('HierarchyUserFactory');
+				$huf = new HierarchyUserFactory();
 				$huf->setHierarchyControl( $this->getID() );
 
 				foreach( $user_ids as $user_id ) {
 					if ( $huf->isUniqueUser( $user_id ) == FALSE ) {
-						$ulf = TTnew( 'UserListFactory' );
+						$ulf = new UserListFactory();
 						$ulf->getById( $user_id );
 						if ( $ulf->getRecordCount() > 0 ) {
 							$obj = $ulf->getCurrent();

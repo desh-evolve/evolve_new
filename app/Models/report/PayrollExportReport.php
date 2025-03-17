@@ -50,7 +50,7 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				$columns = Misc::prependArray( $static_columns, $columns);
 
 				//Get all Overtime policies.
-				$otplf = TTnew( 'OverTimePolicyListFactory' );
+				$otplf = new OverTimePolicyListFactory();
 				$otplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $otplf->getRecordCount() > 0 ) {
 					foreach ($otplf as $otp_obj ) {
@@ -61,7 +61,7 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				}
 
 				//Get all Premium policies.
-				$pplf = TTnew( 'PremiumPolicyListFactory' );
+				$pplf = new PremiumPolicyListFactory();
 				$pplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $pplf->getRecordCount() > 0 ) {
 					foreach ($pplf as $pp_obj ) {
@@ -73,7 +73,7 @@ class PayrollExportReport extends TimesheetSummaryReport {
 
 
 				//Get all Absence Policies.
-				$aplf = TTnew( 'AbsencePolicyListFactory' );
+				$aplf = new AbsencePolicyListFactory();
 				$aplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $aplf->getRecordCount() > 0 ) {
 					foreach ($aplf as $ap_obj ) {
@@ -158,7 +158,7 @@ class PayrollExportReport extends TimesheetSummaryReport {
 								'-0040-department_manual_id' => ('Department: Code'),
 								);
 
-				$oflf = TTnew( 'OtherFieldListFactory' );
+				$oflf = new OtherFieldListFactory();
 
 				//Put a colon or underscore in the name, thats how we know it needs to be replaced.
 

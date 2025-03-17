@@ -12,8 +12,8 @@ require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
 $smarty->assign('title', TTi18n::gettext($title = 'Todays Birthday'));
 
-$ulf = TTnew( 'UserListFactory' );
-$clf = TTnew( 'CompanyListFactory' );
+$ulf = new UserListFactory();
+$clf = new CompanyListFactory();
 
 $ulf->getByCompanyIdandBirthday(1);
 

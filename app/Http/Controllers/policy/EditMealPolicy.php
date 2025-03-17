@@ -40,7 +40,7 @@ if ( isset($data['trigger_time'] ) ) {
 	$data['maximum_punch_time'] = TTDate::parseTimeUnit($data['maximum_punch_time']);
 }
 
-$mpf = TTnew( 'MealPolicyFactory' );
+$mpf = new MealPolicyFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -79,7 +79,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$mplf = TTnew( 'MealPolicyListFactory' );
+			$mplf = new MealPolicyListFactory();
 			$mplf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($mplf as $mp_obj) {

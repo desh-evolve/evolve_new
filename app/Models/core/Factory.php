@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Throwable;
 
 class Factory {
@@ -25,10 +26,14 @@ class Factory {
     protected $cache;
     protected $Validator;
 
+	protected $currentUser;
+
 	function __construct() {
 		$this->db = DB::connection();
         $this->cache = Cache::store();
 		$this->Validator = new Validator();
+    
+        $this->currentUser = View::shared('current_user');
 
 		//Callback to the child constructor method.
 		if ( method_exists($this,'childConstruct') ) {
@@ -338,7 +343,7 @@ class Factory {
 		$id = (int)trim($id);
 
 		if ( empty($id) ) {
-			global $current_user;
+			$current_user = $this->currentUser;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -408,7 +413,7 @@ class Factory {
 		$id = (int)trim($id);
 
 		if ( empty($id) ) {
-			global $current_user;
+			$current_user = $this->currentUser;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -477,7 +482,7 @@ class Factory {
 		$id = trim($id);
 
 		if ( empty($id) ) {
-			global $current_user;
+			$current_user = $this->currentUser;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -1330,108 +1335,6 @@ class Factory {
         return DB::table($this->getTable())->max('id') + 1;
 	}
 
-	//check here => rewrite save function
-	//Determines to insert or update, and does it.
-	//Have this handle created, createdby, updated, updatedby.
-	/*
-	function Save($reset_data = TRUE, $force_lookup = FALSE) {
-		$this->StartTransaction();
-
-		//Don't validate when deleting, so we can delete records that may have some invalid options.
-		//However we can still manually call this function to check if we need too.
-		if ( $this->getDeleted() == FALSE AND $this->isValid() === FALSE ) {
-			throw new GeneralError('Invalid Data, not saving.');
-		}
-
-		//Should we insert, or update?
-		if ( $this->isNew( $force_lookup ) ) {
-			//Insert
-			$time = TTDate::getTime();
-
-			if ( $this->getCreatedDate() == '' ) {
-				$this->setCreatedDate($time);
-			}
-			if ( $this->getCreatedBy() == '' ) {
-				$this->setCreatedBy();
-			}
-
-			//Set updated date at the same time, so we can easily select last
-			//updated, or last created records.
-			$this->setUpdatedDate($time);
-			$this->setUpdatedBy();
-
-			unset($time);
-
-			$insert_id = $this->getID();
-
-			if ( $insert_id == FALSE ) {
-				//Append insert ID to data array.
-				$insert_id = $this->getNextInsertId();
-
-				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
-				$this->setId($insert_id);
-			}
-
-			try {
-				$query = $this->getInsertQuery();
-			} catch (Throwable $e) {
-				throw new DBError($e);
-			}
-
-			$retval = (int)$insert_id;
-			$log_action = 10; //'Add';
-		} else {
-			Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
-
-			//Update
-			$  = $this->getUpdateQuery(); //Don't pass data, too slow
-
-			//Debug::Arr($this->data, 'Save(): Query: ', __FILE__, __LINE__, __METHOD__,10);
-			$retval = TRUE;
-
-			if ( $this->getDeleted() === TRUE ) {
-				$log_action = 30; //'Delete';
-			} else {
-				$log_action = 20; //'Edit';
-			}
-		}
-
-		//Debug::text('Save(): Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
-		//Debug::Arr($query, 'Save(): Query: ', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( $query != '' OR $query === TRUE ) {
-
-			if ( is_string($query) AND $query != '' ) {
-				try {
-					DB::select($query);
-				} catch (Throwable $e) {
-					//Comment this out to see some errors on MySQL.
-					//throw new DBError($e);
-				}
-			}
-
-			//Clear the data.
-			if ( $reset_data == TRUE ) {
-				$this->clearData();
-			}
-			//IF YOUR NOT RESETTING THE DATA, BE SURE TO CLEAR THE OBJECT MANUALLY
-			//IF ITS IN A LOOP!! VERY IMPORTANT!
-
-			$this->CommitTransaction();
-
-			//Debug::Arr($retval, 'Save Retval: ', __FILE__, __LINE__, __METHOD__,10);
-
-			return $retval;
-		}
-
-		Debug::text('Save(): returning FALSE! Very BAD!' , __FILE__, __LINE__, __METHOD__,10);
-
-		throw new GeneralError('Save(): failed.');
-
-		return FALSE; //This should return false here?
-	}
-	*/
-
 	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		DB::beginTransaction();
 		try {
@@ -1442,19 +1345,16 @@ class Factory {
 			// Get the table name dynamically
 			$table = $this->getTable();
 			
-
-			// Get the data dynamically
-			$data = $this->data;
-
 			// Determine if we're inserting a new record or updating an existing one
 			if ($this->isNew($force_lookup)) {
 				//Insert
 				$time = TTDate::getTime();
-				
-				if ( $this->getCreatedDate() == '' ) {
+
+				if ( empty($this->getCreatedDate()) ) {
 					$this->setCreatedDate($time);
 				}
-				if ( $this->getCreatedBy() == '' ) {
+				
+				if ( empty($this->getCreatedBy()) ) {
 					$this->setCreatedBy();
 				}
 				
@@ -1466,7 +1366,7 @@ class Factory {
 				unset($time);
 				
 				// Perform the insert and get the insert ID
-				$insert_id = DB::table($table)->insertGetId($data);
+				$insert_id = DB::table($table)->insertGetId($this->data);
 				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
 				
 				// Set the insert ID in the model
@@ -1482,7 +1382,7 @@ class Factory {
 				// Perform the update
 				DB::table($table)
 					->where('id', $this->getId())
-					->update($data);
+					->update($this->data);
 
 				// Return true to indicate success
 				$retval = true;
@@ -1507,10 +1407,10 @@ class Factory {
 			
 			return $retval;
 		} catch (\Exception $e) {
-			dd($e->getMessage());
 			// Roll back the transaction on error
 			DB::rollBack();
 			Log::error('Save failed: ' . $e->getMessage());
+			print_r($e->getMessage());exit;
 			throw new \Exception('Save failed.');
 		}
 

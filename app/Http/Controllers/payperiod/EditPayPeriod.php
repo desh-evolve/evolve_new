@@ -50,7 +50,7 @@ if ( isset($data) ) {
 	}
 }
 
-$ppf = TTnew( 'PayPeriodFactory' );
+$ppf = new PayPeriodFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -99,7 +99,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getByIdAndCompanyId($id, $current_company->getId() );
 
 			foreach ($pplf as $pp_obj) {
@@ -126,7 +126,7 @@ switch ($action) {
 			}
 		} else {
 			if ( isset($pay_period_schedule_id) AND $pay_period_schedule_id != '') {
-				$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+				$ppslf = new PayPeriodScheduleListFactory();
 				$ppslf->getByIdAndCompanyId( $pay_period_schedule_id, $current_company->getId() );
 				if ( $ppslf->getRecordCount() > 0 ) {
 					$data['pay_period_schedule_type_id'] = $ppslf->getCurrent()->getType();
@@ -135,7 +135,7 @@ switch ($action) {
 				$data['pay_period_schedule_id'] = $pay_period_schedule_id;
 
 				//Get end date of previous pay period, and default the start date of the new pay period to that.
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 				$pplf->getByPayPeriodScheduleId( $pay_period_schedule_id, 1, NULL, NULL, array('start_date' => 'desc') );
 				if ( $pplf->getRecordCount() > 0 ) {
 					foreach( $pplf as $pp_obj) {

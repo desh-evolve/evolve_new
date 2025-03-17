@@ -32,7 +32,7 @@ extract	(FormVariables::GetVariables(
 
 												) ) );
 
-$dbuf = TTnew( 'DepartmentBranchUserFactory' );
+$dbuf = new DepartmentBranchUserFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -42,10 +42,10 @@ switch ($action) {
 		Debug::Text('Department ID: '. $department_data['id'] , __FILE__, __LINE__, __METHOD__,10);
 
 
-		$dbulf = TTnew( 'DepartmentBranchUserListFactory' );
+		$dbulf = new DepartmentBranchUserListFactory();
 
 		//Delete all mappings first?
-		$dblf = TTnew( 'DepartmentBranchListFactory' );
+		$dblf = new DepartmentBranchListFactory();
 		$dblf->getByDepartmentId( $department_data['id'] );
 
 		foreach ($dblf as $department_branch) {
@@ -57,7 +57,7 @@ switch ($action) {
 			}
 		}
 
-		$dbulf = TTnew( 'DepartmentBranchUserListFactory' );
+		$dbulf = new DepartmentBranchUserListFactory();
 
 		if ( isset($department_data['branch_data']) AND is_array($department_data['branch_data']) ) {
 			foreach($department_data['branch_data'] as $branch_id => $user_ids) {
@@ -92,7 +92,7 @@ switch ($action) {
 	default:
 		BreadCrumb::setCrumb($title);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 
 		$dlf->GetByIdAndCompanyId($id, $current_company->getId() );
 
@@ -101,7 +101,7 @@ switch ($action) {
 
 			$branch_data = array();
 
-			$dblf = TTnew( 'DepartmentBranchListFactory' );
+			$dblf = new DepartmentBranchListFactory();
 			$dblf->getByDepartmentId( $department->getId() );
 			foreach($dblf as $department_branch) {
 				$branch_id = $department_branch->getBranch();
@@ -109,7 +109,7 @@ switch ($action) {
 
 				if ( isset($id) ) {
 					//Get User ID's from database.
-					$dbulf = TTnew( 'DepartmentBranchUserListFactory' );
+					$dbulf = new DepartmentBranchUserListFactory();
 					$dbulf->getByDepartmentBranchId( $department_branch->getId() );
 
 					$department_branch_user_ids = array();
@@ -122,7 +122,7 @@ switch ($action) {
 					$department_branch_user_ids = $department_data['branch_data'][$branch_id];
 				}
 
-				$blf = TTnew( 'BranchListFactory' );
+				$blf = new BranchListFactory();
 				$blf->getById( $branch_id );
 				$branch = $blf->getIterator()->current();
 				$branch_data[$branch_id] = array(

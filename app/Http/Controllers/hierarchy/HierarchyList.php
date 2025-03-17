@@ -51,7 +51,7 @@ switch ($action) {
 		foreach ($ids as $id) {
 			Debug::Text(' Deleting ID: '. $id , __FILE__, __LINE__, __METHOD__,10);
 
-	        $hf = TTnew( 'HierarchyListFactory' );
+	        $hf = new HierarchyListFactory();
 			$hf->setUser( $id );
 			$hf->setHierarchyControl( $hierarchy_id );
 			$hf->Delete();
@@ -70,7 +70,7 @@ switch ($action) {
 	default:
 		BreadCrumb::setCrumb($title);
 
-		$hlf = TTnew( 'HierarchyListFactory' );
+		$hlf = new HierarchyListFactory();
 		//$nodes = $hlf->FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
 		//$nodes = FastTree::FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
 		$nodes = FastTree::FormatArray( $hlf->getByCompanyIdAndHierarchyControlId( $current_company->getId(), $hierarchy_id ), 'HTML' );

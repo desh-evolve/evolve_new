@@ -19,7 +19,7 @@ class RecurringScheduleUserFactory extends Factory {
 	function setRecurringScheduleControl($id) {
 		$id = trim($id);
 
-		$rsclf = TTnew( 'RecurringScheduleControlListFactory' );
+		$rsclf = new RecurringScheduleControlListFactory();
 
 		if (
 			  $this->Validator->isNumeric(	'recurring_schedule_control_id',
@@ -43,7 +43,7 @@ class RecurringScheduleUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -61,7 +61,7 @@ class RecurringScheduleUserFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id != 0
 

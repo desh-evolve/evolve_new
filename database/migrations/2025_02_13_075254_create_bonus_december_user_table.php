@@ -19,13 +19,13 @@ return new class extends Migration
             $table->integer('service_periods');
             $table->float('kpp_mark');
             $table->float('bonus_amount');
-            $table->integer('created_date');
-            $table->integer('created_by');
-            $table->integer('updated_date');
-            $table->integer('updated_by');
-            $table->integer('deleted_date');
-            $table->integer('deleted_by');
-            $table->tinyInteger('deleted')->default(0);
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

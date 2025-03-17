@@ -35,7 +35,7 @@ if ( isset($data['start_stop_window'] ) ) {
 	$data['start_stop_window'] = TTDate::parseTimeUnit($data['start_stop_window']);
 }
 
-$spf = TTnew( 'SchedulePolicyFactory' );
+$spf = new SchedulePolicyFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -69,7 +69,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$splf = TTnew( 'SchedulePolicyListFactory' );
+			$splf = new SchedulePolicyListFactory();
 			$splf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($splf as $sp_obj) {
@@ -97,17 +97,17 @@ switch ($action) {
 							);
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$absence_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 //		$over_time_options = $otplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 		$over_time_options = $otplf->getByCompanyIDArray( $current_company->getId(), TRUE, array('type_id' => '= 200') );
 
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 		$meal_options = $mplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$bplf = TTnew( 'BreakPolicyListFactory' );
+		$bplf = new BreakPolicyListFactory();
 		$break_options = $bplf->getByCompanyIdArray( $current_company->getId(), TRUE );
 
 		//Select box options;

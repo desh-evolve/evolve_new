@@ -18,13 +18,13 @@ return new class extends Migration
             $table->float('nopay');
             $table->float('leave_balance');
             $table->float('amount');
-            $table->integer('created_date');
-            $table->integer('created_by');
-            $table->integer('updated_date');
-            $table->integer('updated_by');
-            $table->integer('deleted_date');
-            $table->integer('deleted_by');
-            $table->integer('deleted');
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

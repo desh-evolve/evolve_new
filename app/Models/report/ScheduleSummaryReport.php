@@ -499,7 +499,7 @@ class ScheduleSummaryReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('schedule','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -533,7 +533,7 @@ class ScheduleSummaryReport extends Report {
 		//Debug::Arr($wage_permission_children_ids, 'Wage Children: '. count($wage_permission_children_ids), __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $this->getUserObject()->getCompanyObject()->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$job_status_options = $jlf->getOptions('status');
 		} else {
 			$job_status_options = array();
@@ -541,7 +541,7 @@ class ScheduleSummaryReport extends Report {
 
 		$pay_period_ids = array();
 
-		$slf = TTnew( 'ScheduleListFactory' );
+		$slf = new ScheduleListFactory();
 		$slf->getScheduleSummaryReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Total Rows: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -607,7 +607,7 @@ class ScheduleSummaryReport extends Report {
 		//Debug::Arr($this->tmp_data['schedule'], 'Schedule Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get user data for joining.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );

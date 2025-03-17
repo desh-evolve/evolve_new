@@ -67,7 +67,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$bbalf = TTnew( 'BranchBankAccountListFactory' );
+		$bbalf = new BranchBankAccountListFactory();
 
 		if ( isset($ids) AND is_array($ids) ) {
 			foreach ($ids as $id1) {
@@ -88,7 +88,7 @@ switch ($action) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
 		}
 
-		$bbalf = TTnew( 'BranchBankAccountListFactory' );
+		$bbalf = new BranchBankAccountListFactory();
 		$bbalf->getByBranchId($id, $current_user_prefs->getItemsPerPage(),$page, NULL, $sort_array );
 
 		$pager = new Pager($bbalf);
@@ -107,7 +107,7 @@ switch ($action) {
 			}
 		}
                 
-                $blf = TTnew( 'BranchListFactory' );
+                $blf = new BranchListFactory();
                 $company_branch_name = $blf->getById( $id )->getCurrent()->getName();                
                 $smarty->assign_by_ref('company_branch_name', $company_branch_name);
 

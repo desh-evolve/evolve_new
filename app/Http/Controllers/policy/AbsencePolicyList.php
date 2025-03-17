@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 
 		foreach ($ids as $id) {
 			$aplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -79,7 +79,7 @@ switch ($action) {
 		break;
 
 	default:
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$aplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($aplf);

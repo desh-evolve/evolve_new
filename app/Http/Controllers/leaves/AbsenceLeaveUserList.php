@@ -67,7 +67,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$alulf = TTnew( 'AbsenceLeaveUserListFactory' ); 
+		$alulf = new AbsenceLeaveUserListFactory(); 
 		foreach ($ids as $id) {
 			$alulf->getById($id);
 			foreach ($alulf as $cd_obj) {
@@ -82,7 +82,7 @@ switch ($action) {
 
 		break;
 	case 'copy':
-		$cdlf = TTnew( 'CompanyDeductionListFactory' );
+		$cdlf = new CompanyDeductionListFactory();
 
 		foreach ($ids as $id) {
 			$cdlf->getByCompanyIdAndId($current_company->getId(), $id );
@@ -117,9 +117,9 @@ switch ($action) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
 		}
 
-		$cdlf = TTnew( 'AbsenceLeaveUserListFactory' );
+		$cdlf = new AbsenceLeaveUserListFactory();
                 
-                $aplf = TTnew( 'AbsencePolicyListFactory' );
+                $aplf = new AbsencePolicyListFactory();
 		$cdlf->getAll();
 
 		$pager = new Pager($cdlf);

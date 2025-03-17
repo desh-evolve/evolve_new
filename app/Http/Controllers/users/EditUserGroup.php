@@ -32,7 +32,7 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$ugf = TTnew( 'UserGroupFactory' );
+$ugf = new UserGroupFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -53,7 +53,7 @@ switch ($action) {
 			break;
 		}
 	default:
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 
 		$nodes = FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE);
 

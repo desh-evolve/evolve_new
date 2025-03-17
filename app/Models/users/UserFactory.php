@@ -2354,7 +2354,7 @@ class UserFactory extends Factory {
 			$company_id = $this->getCompany();
 		}
 
-		$ulf = TTNew('UserListFactory');
+		$ulf = new UserListFactory();
 		$ulf->getHighestEmployeeNumberByCompanyId( $company_id );
 		if ( $ulf->getRecordCount() > 0 ) {
 			Debug::Text('Highest Employee Number: '. $ulf->getCurrent()->getEmployeeNumber(), __FILE__, __LINE__, __METHOD__,10);

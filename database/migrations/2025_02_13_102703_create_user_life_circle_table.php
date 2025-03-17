@@ -19,13 +19,13 @@ return new class extends Migration
             $table->integer('current_salary'); // Current salary
             $table->integer('new_salary'); // New salary
             $table->integer('effective_date'); // Effective date
-            $table->integer('created_date'); // Created date
-            $table->integer('created_by'); // Created by
-            $table->integer('updated_date'); // Updated date
-            $table->integer('updated_by'); // Updated by
-            $table->integer('deleted_date'); // Deleted date
-            $table->integer('deleted_by'); // Deleted by
-            $table->tinyInteger('deleted'); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

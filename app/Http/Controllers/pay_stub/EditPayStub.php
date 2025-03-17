@@ -46,7 +46,7 @@ if ( isset($data) ) {
 }
 $modified_entry = (int)$modified_entry;
 
-$psf = TTnew( 'PayStubFactory' );
+$psf = new PayStubFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -65,7 +65,7 @@ switch ( $action ) {
 		*/
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		if ( isset($id) ) {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$psf = $pslf->getByID( $id )->getCurrent();
 			$psf->StartTransaction();
@@ -96,7 +96,7 @@ switch ( $action ) {
 							Debug::Text('Pay Stub Entry ID: '. $pay_stub_entry_id , __FILE__, __LINE__, __METHOD__,10);
 							Debug::Text(' Amount: '. $pay_stub_entry['amount'] , __FILE__, __LINE__, __METHOD__,10);
 
-							$pself = TTnew( 'PayStubEntryListFactory' );
+							$pself = new PayStubEntryListFactory();
 							$pay_stub_entry_obj = $pself->getById( $pay_stub_entry_id )->getCurrent();
 
 							if ( !isset($pay_stub_entry['units']) OR $pay_stub_entry['units'] == '' ) {
@@ -148,14 +148,14 @@ switch ( $action ) {
 	default:
 		Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
 		if ( $id != '' AND $action != 'submit' ) {
-			$psealf = TTnew( 'PayStubEntryAccountListFactory' );
-			$pslf = TTnew( 'PayStubListFactory' );
+			$psealf = new PayStubEntryAccountListFactory();
+			$pslf = new PayStubListFactory();
 
 			$pslf->getByCompanyIdAndId( $current_company->getId(), $id );
 			if ( $pslf->getRecordCount() > 0 ) {
 				foreach ($pslf as $ps_obj) {
 					//Get pay stub entries.
-					$pself = TTnew( 'PayStubEntryListFactory' );
+					$pself = new PayStubEntryListFactory();
 					$pself->getByPayStubId( $ps_obj->getId() );
 
 					$prev_type = NULL;
@@ -236,11 +236,11 @@ switch ( $action ) {
 					unset($pay_stub_entries, $pay_stub_entry_descriptions);
 
 					//Get Pay Period information
-					$pplf = TTnew( 'PayPeriodListFactory' );
+					$pplf = new PayPeriodListFactory();
 					$pay_period_obj = $pplf->getById( $ps_obj->getPayPeriod() )->getCurrent();
 
 					//Get pay period numbers
-					$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+					$ppslf = new PayPeriodScheduleListFactory();
 					$pay_period_schedule_obj = $ppslf->getById( $pay_period_obj->getPayPeriodSchedule() )->getCurrent();
 
 
@@ -254,13 +254,13 @@ switch ( $action ) {
 											);
 
 					//Get User information
-					$ulf = TTnew( 'UserListFactory' );
+					$ulf = new UserListFactory();
 					$user_obj = $ulf->getById( $ps_obj->getUser() )->getCurrent();
 					$data['user_full_name'] = $user_obj->getFullName();
 
 					//Get company information
 					/*
-					$clf = TTnew( 'CompanyListFactory' );
+					$clf = new CompanyListFactory();
 					$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 					*/
 				}
@@ -270,7 +270,7 @@ switch ( $action ) {
 
 		$data['pay_stub_status_options'] = Option::getByArray( array(25,40), $pay_stub_status_options);
 
-		$culf = TTnew( 'CurrencyListFactory' );
+		$culf = new CurrencyListFactory();
         $culf->getByCompanyId( $current_company->getId() );
 		$data['currency_options'] = $culf->getArrayByListFactory( $culf, FALSE, TRUE );
 

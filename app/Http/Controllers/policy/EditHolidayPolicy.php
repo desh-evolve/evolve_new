@@ -41,7 +41,7 @@ if ( isset($data['maximum_time'] ) ) {
 }
 
 
-$hpf = TTnew( 'HolidayPolicyFactory' );
+$hpf = new HolidayPolicyFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -123,7 +123,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$hplf = TTnew( 'HolidayPolicyListFactory' );
+			$hplf = new HolidayPolicyListFactory();
 			$hplf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($hplf as $hp_obj) {
@@ -186,16 +186,16 @@ switch ($action) {
 						);
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$absence_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+		$riplf = new RoundIntervalPolicyListFactory();
 		$round_interval_options = $riplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$rhlf = TTnew( 'RecurringHolidayListFactory' );
+		$rhlf = new RecurringHolidayListFactory();
 		$recurring_holiday_options = $rhlf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 
 		//Select box options;
 		$data['type_options'] = $hpf->getOptions('type');

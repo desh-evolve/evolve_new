@@ -38,7 +38,7 @@ if ( isset($data)) {
 	}
 }
 
-$cdf = TTnew( 'CompanyDeductionFactory' );
+$cdf = new CompanyDeductionFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -181,7 +181,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$cdlf = TTnew( 'CompanyDeductionListFactory' );
+			$cdlf = new CompanyDeductionListFactory();
 			$cdlf->getByCompanyIdAndId( $current_company->getId(), $id );
 
 			foreach ($cdlf as $cd_obj) {
@@ -285,7 +285,7 @@ switch ($action) {
 		$data['length_of_service_unit_options'] = $cdf->getOptions('length_of_service_unit');
 		$data['account_amount_type_options'] = $cdf->getOptions('account_amount_type');
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 		$data['country_options'] = Misc::prependArray( array( 0 => '--' ), $cf->getOptions('country') );
 		if ( isset($data['country']) ) {
 			$data['province_options'] = $cf->getOptions('province', $data['country'] );
@@ -315,7 +315,7 @@ switch ($action) {
 		$data['calculation_options'] = $cdf->getOptions('calculation');
 		$data['js_arrays'] = $cdf->getJavaScriptArrays();
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$data['pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50), FALSE );
 		//$data['pay_stub_entry_account_options'] = PayStubEntryAccountListFactory::getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(20,30), FALSE );
 

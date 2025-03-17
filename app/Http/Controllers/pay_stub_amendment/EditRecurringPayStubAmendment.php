@@ -43,14 +43,14 @@ if ( isset($pay_stub_amendment_data) ) {
 
 }
 
-$rpsaf = TTnew( 'RecurringPayStubAmendmentFactory' );
+$rpsaf = new RecurringPayStubAmendmentFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
 switch ($action) {
 	case 'recalculate':
 		//Debug::setVerbosity(11);
-		$rpsalf = TTnew( 'RecurringPayStubAmendmentListFactory' );
+		$rpsalf = new RecurringPayStubAmendmentListFactory();
 		$rpsalf->getById( $pay_stub_amendment_data['id'] );
 		if ( $rpsalf->getRecordCount() > 0 ) {
 			$rpsa_obj = $rpsalf->getCurrent();
@@ -115,7 +115,7 @@ switch ($action) {
 		BreadCrumb::setCrumb($title);
 
 		if ( isset($id) ) {
-			$rpsalf = TTnew( 'RecurringPayStubAmendmentListFactory' );
+			$rpsalf = new RecurringPayStubAmendmentListFactory();
 
 			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
 			$rpsalf->GetById($id);
@@ -192,15 +192,15 @@ switch ($action) {
 
 		$pay_stub_amendment_data['type_options'] = $rpsaf->getOptions('type');
 
-		$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyId( $current_company->getId() );
 		if ( $pseallf->getRecordCount() > 0 ) {
 			$net_pay_psea_id = $pseal_obj = $pseallf->getCurrent()->getTotalNetPay();
 		}
 
-		//$psenlf = TTnew( 'PayStubEntryNameListFactory' );
+		//$psenlf = new PayStubEntryNameListFactory();
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_amendment_data['pay_stub_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50,60,65) );
 		$pay_stub_amendment_data['percent_amount_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50,60,65) );
 		if ( isset($net_pay_psea_id) ) {

@@ -36,7 +36,7 @@ if ( isset($pay_stub_amendment_data) ) {
 	}
 }
 
-$psaf = TTnew( 'PayStubAmendmentFactory' );
+$psaf = new PayStubAmendmentFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -104,7 +104,7 @@ switch ($action) {
 		BreadCrumb::setCrumb($title);
 
 		if ( isset($id) ) {
-			$psalf = TTnew( 'PayStubAmendmentListFactory' );
+			$psalf = new PayStubAmendmentListFactory();
 
 			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
 			$psalf->GetById($id);
@@ -162,7 +162,7 @@ switch ($action) {
 			$pay_stub_amendment_data['filter_user_id'] = array();
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), NULL );
 		$src_user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, FALSE );
 
@@ -173,13 +173,13 @@ switch ($action) {
 		$status_options = Option::getByArray( $status_options_filter, $psaf->getOptions('status') );
 		$pay_stub_amendment_data['status_options'] = $status_options;
 
-		$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyId( $current_company->getId() );
 		if ( $pseallf->getRecordCount() > 0 ) {
 			$net_pay_psea_id = $pseallf->getCurrent()->getTotalNetPay();
 		}
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_amendment_data['pay_stub_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50,60,65) );
 		$pay_stub_amendment_data['percent_amount_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50,60,65) );
 		if ( isset($net_pay_psea_id) ) {
@@ -195,7 +195,7 @@ switch ($action) {
 		$smarty->assign_by_ref('pay_stub_amendment_data', $pay_stub_amendment_data);
 
 /*
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 		$user_data = $ulf->getCurrent();
 

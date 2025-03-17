@@ -55,7 +55,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 
 		foreach ($ids as $id) {
 			$utlf->GetByIdAndCompanyId($id, $current_company->getId() );
@@ -75,7 +75,7 @@ switch ($action) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
 		}
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(),$page, NULL, $sort_array );
 
 		$pager = new Pager($utlf);

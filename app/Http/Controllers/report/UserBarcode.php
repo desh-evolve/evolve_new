@@ -84,7 +84,7 @@ if ( !isset($filter_data['column_ids']) ) {
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 $permission_children_ids = array();
 if ( $permission->Check('user','view') == FALSE ) {
-	$hlf = TTnew( 'HierarchyListFactory' );
+	$hlf = new HierarchyListFactory();
 	$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 	Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -98,8 +98,8 @@ if ( $permission->Check('user','view') == FALSE ) {
 	$filter_data['permission_children_ids'] = $permission_children_ids;
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $action = Misc::findSubmitButton();
 Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
@@ -110,7 +110,7 @@ switch ($action) {
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get all employees that match the criteria:
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		/*
 		$ulf->getSearchByCompanyIdAndStatusIdAndBranchIdAndDepartmentIdAndUserTitleIdAndIncludeIdAndExcludeId(
@@ -130,14 +130,14 @@ switch ($action) {
 			$ulf->getReportByCompanyIdAndUserIDList( $current_company->getId(), $filter_data['user_ids'] );
 
 			//Get title list,
-			$utlf = TTnew( 'UserTitleListFactory' );
+			$utlf = new UserTitleListFactory();
 			$user_titles = $utlf->getByCompanyIdArray( $current_company->getId() );
 
 			//Get default branch list
-			$blf = TTnew( 'BranchListFactory' );
+			$blf = new BranchListFactory();
 			$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-			$dlf = TTnew( 'DepartmentListFactory' );
+			$dlf = new DepartmentListFactory();
 			$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 			foreach ($ulf as $u_obj ) {
@@ -799,7 +799,7 @@ switch ($action) {
 		}
 
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
 
 		//Get include employee list.
@@ -833,7 +833,7 @@ switch ($action) {
 		if ( !isset($filter_data['group_ids']) ) {
 				$filter_data['group_ids'] = NULL;
 		}
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = Misc::prependArray( $all_array_option, $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) ) );
 		$filter_data['src_group_options'] = Misc::arrayDiffByKey( (array)$filter_data['group_ids'], $group_options );
 		$filter_data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$filter_data['group_ids'], $group_options );
@@ -842,7 +842,7 @@ switch ($action) {
 		if ( !isset($filter_data['branch_ids']) ) {
 				$filter_data['branch_ids'] = NULL;
 		}
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $all_array_option, $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		$filter_data['src_branch_options'] = Misc::arrayDiffByKey( (array)$filter_data['branch_ids'], $branch_options );
@@ -852,7 +852,7 @@ switch ($action) {
 		if ( !isset($filter_data['department_ids']) ) {
 				$filter_data['department_ids'] = NULL;
 		}
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $all_array_option, $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		$filter_data['src_department_options'] = Misc::arrayDiffByKey( (array)$filter_data['department_ids'], $department_options );
@@ -862,7 +862,7 @@ switch ($action) {
 		if ( !isset($filter_data['user_title_ids']) ) {
 				$filter_data['user_title_ids'] = NULL;
 		}
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$user_title_options = Misc::prependArray( $all_array_option, $utlf->getArrayByListFactory( $utlf, FALSE, TRUE ) );
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );

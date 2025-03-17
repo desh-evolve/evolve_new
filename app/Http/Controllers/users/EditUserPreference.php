@@ -31,15 +31,15 @@ extract	(FormVariables::GetVariables(
 												'data_saved',
 												) ) );
 
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId( $current_company->getId(), $current_user->getId() );
 //Include current user in list.
 if ( $permission->Check('user_preference','edit_own') ) {
 	$permission_children_ids[] = $current_user->getId();
 }
 
-$upf = TTnew( 'UserPreferenceFactory' );
-$ulf = TTnew( 'UserListFactory' );
+$upf = new UserPreferenceFactory();
+$ulf = new UserListFactory();
 $action = Misc::findSubmitButton('action');
 switch ($action) {
 	case 'submit':
@@ -112,7 +112,7 @@ switch ($action) {
 		if ( !isset($action) ) {
 			BreadCrumb::setCrumb($title);
 
-			$uplf = TTnew( 'UserPreferenceListFactory' );
+			$uplf = new UserPreferenceListFactory();
 			$uplf->getByUserIDAndCompanyID( $user_id, $current_company->getId() );
 
 			if ( isset($user_obj) AND is_object( $user_obj) ) {
@@ -153,7 +153,7 @@ switch ($action) {
 		}
 
 		if ( !isset($pref_data) AND isset($user_obj) ) {
-			$udlf = TTnew( 'UserDefaultListFactory' );
+			$udlf = new UserDefaultListFactory();
 			$udlf->getByCompanyId( $current_company->getId() );
 			if ( $udlf->getRecordCount() > 0 ) {
 				Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);

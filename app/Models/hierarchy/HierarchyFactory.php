@@ -122,12 +122,12 @@ class HierarchyFactory extends Factory {
 		}
 
 		//Make sure both user and parent belong to the same company
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getById( $this->getUser() );
 		$user = $ulf->getIterator()->current();
 		unset($ulf);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getById( $this->getParent() );
 		$parent = $ulf->getIterator()->current();
 		unset($ulf);
@@ -173,7 +173,7 @@ class HierarchyFactory extends Factory {
 
 /*
 			//Make sure we're not re-parenting to a child.
-			$uhlf = TTnew( 'UserHierarchyListFactory' );
+			$uhlf = new UserHierarchyListFactory();
 			$hierarchy = $uhlf->getByCompanyIdArray( $parent_company_id );
 
 			Debug::Text(' User ID: '. $this->getUser() .' Parent ID: '. $this->getParent(), __FILE__, __LINE__, __METHOD__,10);
@@ -237,7 +237,7 @@ class HierarchyFactory extends Factory {
 		if ( $retval === TRUE ) {
 			Debug::Text(' Retval true, Setting Shared flag ', __FILE__, __LINE__, __METHOD__,10);
 
-			$hslf = TTnew( 'HierarchyShareListFactory' );
+			$hslf = new HierarchyShareListFactory();
 			$hslf->getByHierarchyControlIdAndUserId( $this->getHierarchyControl(), $this->getUser() );
 			if ( $hslf->getRecordCount() > 0 ) {
 				Debug::Text(' Deleting already set shared flag ', __FILE__, __LINE__, __METHOD__,10);
@@ -249,7 +249,7 @@ class HierarchyFactory extends Factory {
 			if ( $this->getShared() === TRUE ) {
 				Debug::Text(' Setting Shared flag ', __FILE__, __LINE__, __METHOD__,10);
 
-				$hsf = TTnew( 'HierarchyShareFactory' );
+				$hsf = new HierarchyShareFactory();
 				$hsf->setHierarchyControl( $this->getHierarchyControl() );
 				$hsf->setUser( $this->getUser() );
 				$hsf->Save();
@@ -281,7 +281,7 @@ class HierarchyFactory extends Factory {
 			$this->getFastTreeObject()->delete( $this->getUser(), 'RECURSE');
 
 			//FIXME: When deleting recursively, we don't clear out the hierarhcy share table for all the children.
-			$hslf = TTnew( 'HierarchyShareListFactory' );
+			$hslf = new HierarchyShareListFactory();
 			Debug::Text(' Hierarchy Control ID: '. $this->getHierarchyControl() , __FILE__, __LINE__, __METHOD__,10);
 			$hslf->getByHierarchyControlIdAndUserId( $this->getHierarchyControl(), $this->getUser() );
 			if ( $hslf->getRecordCount() > 0 ) {

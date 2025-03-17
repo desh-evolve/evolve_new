@@ -31,7 +31,7 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$apf = TTnew( 'AbsencePolicyFactory' );
+$apf = new AbsencePolicyFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -61,7 +61,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$aplf = TTnew( 'AbsencePolicyListFactory' );
+			$aplf = new AbsencePolicyListFactory();
 			$aplf->getByIdAndCompanyID( $id, $current_company->getId() );
 
 			foreach ($aplf as $ap_obj) {
@@ -92,13 +92,13 @@ switch ($action) {
 
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 		$accrual_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_entry_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50) );
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 		$data['wage_group_options'] = $wglf->getArrayByListFactory( $wglf->getByCompanyId( $current_company->getId() ), TRUE );
 
 		//Select box options;

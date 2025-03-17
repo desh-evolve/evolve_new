@@ -3100,7 +3100,7 @@ class UserKpiFactory extends Factory {
 	function setDefaultBranch($id) {
 		$id = (int)trim($id);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		if (
 				$id == 0
 				OR
@@ -3136,7 +3136,7 @@ class UserKpiFactory extends Factory {
 	function setTitle($id) {
 		$id = (int)trim($id);
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		if (
 				$id == 0
 				OR
@@ -3172,7 +3172,7 @@ class UserKpiFactory extends Factory {
         function setDefaultDepartment($id) {
 		$id = (int)trim($id);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		if (
 				$id == 0
 				OR
@@ -3199,7 +3199,7 @@ class UserKpiFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -3224,7 +3224,7 @@ class UserKpiFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',

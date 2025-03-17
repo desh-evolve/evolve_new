@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('label', 1024)->nullable(); // Label (varchar(1024))
             $table->string('description', 1024)->nullable(); // Description (varchar(1024))
             $table->string('link', 1024)->nullable(); // Link (varchar(1024))
-            $table->integer('created_date')->nullable(); // Creation timestamp
-            $table->integer('created_by')->nullable(); // User who created the record
-            $table->integer('updated_date')->nullable(); // Last update timestamp
-            $table->integer('updated_by')->nullable(); // User who last updated the record
-            $table->integer('deleted_date')->nullable(); // Deletion timestamp
-            $table->integer('deleted_by')->nullable(); // User who deleted the record
-            $table->tinyInteger('deleted')->default(0); // Soft delete flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

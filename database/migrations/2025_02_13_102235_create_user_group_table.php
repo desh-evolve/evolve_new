@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id(); // Auto-incrementing primary key
             $table->integer('company_id'); // Company ID
             $table->string('name', 250); // Group name
-            $table->integer('created_date')->nullable(); // Creation timestamp
-            $table->integer('created_by')->nullable(); // User who created the record
-            $table->integer('updated_date')->nullable(); // Last update timestamp
-            $table->integer('updated_by')->nullable(); // User who last updated the record
-            $table->integer('deleted_date')->nullable(); // Deletion timestamp
-            $table->integer('deleted_by')->nullable(); // User who deleted the record
-            $table->tinyInteger('deleted')->default(0); // Soft delete flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

@@ -38,7 +38,7 @@ if ( isset($company_id) AND $company_id != '' ) {
 	}
 }
 
-$baf = TTnew( 'BankAccountFactory' );
+$baf = new BankAccountFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -46,7 +46,7 @@ switch ($action) {
 		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
 		Debug::Text('User ID: '. $bank_data['user_id'] .' Company ID: '. $bank_data['company_id'], __FILE__, __LINE__, __METHOD__,10);
 
-		$balf = TTnew( 'BankAccountListFactory' );
+		$balf = new BankAccountListFactory();
 
 		if ( ( $bank_data['user_id'] != '' AND $bank_data['user_id'] == $current_user->getId() ) AND $bank_data['company_id'] == '' AND $permission->Check('user','edit_own_bank') ) {
 			Debug::Text('Current User/Company', __FILE__, __LINE__, __METHOD__,10);
@@ -125,8 +125,8 @@ switch ($action) {
 			Debug::Text('Invalid bank data...', __FILE__, __LINE__, __METHOD__,10);
 		}
 	default:
-		$balf = TTnew( 'BankAccountListFactory' );
-		$ulf = TTnew( 'UserListFactory' );
+		$balf = new BankAccountListFactory();
+		$ulf = new UserListFactory();
 
 		$country = NULL;
 		if ( ( $user_id == '' OR $user_id == $current_user->getId() ) AND $company_id == '' AND $permission->Check('user','edit_own_bank') ) {
@@ -178,10 +178,10 @@ switch ($action) {
 
 		if ( isset($user_id) AND $company_id == '' ) {
 			//$user_id = $current_user->getId();
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$full_name = $ulf->getById( $user_id )->getCurrent()->getFullName();
 		} elseif ( $company_id != '' ) {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$full_name = $clf->getById( $company_id )->getCurrent()->getName();
 		}
 

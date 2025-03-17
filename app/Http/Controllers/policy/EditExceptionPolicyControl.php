@@ -46,8 +46,8 @@ if ( isset($data['exceptions'])) {
 	}
 }
 
-$epf = TTnew( 'ExceptionPolicyFactory' );
-$epcf = TTnew( 'ExceptionPolicyControlFactory' );
+$epf = new ExceptionPolicyFactory();
+$epcf = new ExceptionPolicyControlFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -113,13 +113,13 @@ switch ($action) {
 		if ( isset($id) AND $id != '' ) {
 			BreadCrumb::setCrumb($title);
 
-			$epclf = TTnew( 'ExceptionPolicyControlListFactory' );
+			$epclf = new ExceptionPolicyControlListFactory();
 			$epclf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($epclf as $epc_obj) {
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
-				$eplf = TTnew( 'ExceptionPolicyListFactory' );
+				$eplf = new ExceptionPolicyListFactory();
 				$eplf->getByExceptionPolicyControlID( $id );
 				if ( $eplf->getRecordCount() > 0 ) {
 					foreach( $eplf as $ep_obj ) {

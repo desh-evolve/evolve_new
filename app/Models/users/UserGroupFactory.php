@@ -87,7 +87,7 @@ class UserGroupFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -209,7 +209,7 @@ class UserGroupFactory extends Factory {
 			$parent_id = $this->getFastTreeObject()->getParentId( $this->getId() );
 
 			//Get items by group id.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getByCompanyIdAndGroupId( $this->getCompany(), $this->getId() );
 			if ( $ulf->getRecordCount() > 0 ) {
 				foreach( $ulf as $obj ) {
@@ -222,14 +222,14 @@ class UserGroupFactory extends Factory {
 			$this->getFastTreeObject()->delete( $this->getId() );
 
 			//Delete this group from station/job criteria
-			$sugf = TTnew( 'StationUserGroupFactory' );
+			$sugf = new StationUserGroupFactory();
 
 			$query = 'delete from '. $sugf->getTable() .' where group_id = '. (int)$this->getId();
 			DB::select($query);
 
                         
 			//Job employee criteria
-			$cgmlf = TTnew( 'CompanyGenericMapListFactory' );
+			$cgmlf = new CompanyGenericMapListFactory();
 			$cgmlf->getByCompanyIDAndObjectTypeAndMapID( $this->getCompany(), 1030, $this->getID() );
 			if ( $cgmlf->getRecordCount() > 0 ) {
 				foreach( $cgmlf as $cgm_obj ) {

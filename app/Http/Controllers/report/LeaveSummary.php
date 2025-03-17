@@ -70,8 +70,8 @@ $columns = Misc::prependArray( $static_columns, $columns);
 
 
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $action = Misc::findSubmitButton();
 
@@ -85,7 +85,7 @@ switch ($action) {
                 $start_dt = TTDate::parseDateTime($filter_data['start_date']);
                 $start_dt = date("Y-m-d", $start_dt);
                     
-                                //$pdf = TTnew('TimeReportHeaderFooter');
+                                //$pdf = new TimeReportHeaderFooter();
             $fileName = 'Leave Summery -' . $start_dt;
 
 
@@ -97,19 +97,19 @@ switch ($action) {
             
             
              
-        	$utlf = TTnew( 'UserTitleListFactory' );
+        	$utlf = new UserTitleListFactory();
 		$title_options = $utlf->getByCompanyIdArray( $current_company->getId() );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'no_tree_text', TRUE) );
 
-                $ulf = TTnew('UserListFactory');
+                $ulf = new UserListFactory();
                 $ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
 
         if ($ulf->getRecordCount() > 0) {
@@ -145,7 +145,7 @@ switch ($action) {
                 
                 $selected_date = $leave['start_date'];
 
-                $aplf = TTnew('AccrualPolicyListFactory');
+                $aplf = new AccrualPolicyListFactory();
                 $aplf->getByCompanyIdAndTypeId($current_company->getId(), 20);
 
                 $annual_entitle = 0;
@@ -157,11 +157,11 @@ switch ($action) {
                 
                 foreach ($aplf as $ap_o) {
 
-                    $ablf = TTnew('AccrualBalanceListFactory');
+                    $ablf = new AccrualBalanceListFactory();
                     $ablf->getByUserIdAndCompanyIdandPolicyId($u_obj->getId(), $current_company->getId(), $ap_o->getId());
                     $ab_o = $ablf->getCurrent();
                                       
-                    $alf = TTnew('AccrualListFactory');
+                    $alf = new AccrualListFactory();
                     $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatus($current_company->getId(), $u_obj->getId(), $ap_o->getId(), 30);
                     $af = $alf->getCurrent();
                     
@@ -304,19 +304,19 @@ switch ($action) {
     case 'display_report':
           
         
-        	$utlf = TTnew( 'UserTitleListFactory' );
+        	$utlf = new UserTitleListFactory();
 		$title_options = $utlf->getByCompanyIdArray( $current_company->getId() );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'no_tree_text', TRUE) );
 
-                $ulf = TTnew('UserListFactory');
+                $ulf = new UserListFactory();
                 $ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
 
         if ($ulf->getRecordCount() > 0) {
@@ -352,7 +352,7 @@ switch ($action) {
                 
                 $selected_date = $leave['start_date'];
 
-                $aplf = TTnew('AccrualPolicyListFactory');
+                $aplf = new AccrualPolicyListFactory();
                 $aplf->getByCompanyIdAndTypeId($current_company->getId(), 20);
 
                 $annual_entitle = 0;
@@ -364,11 +364,11 @@ switch ($action) {
                 
                 foreach ($aplf as $ap_o) {
 
-                    $ablf = TTnew('AccrualBalanceListFactory');
+                    $ablf = new AccrualBalanceListFactory();
                     $ablf->getByUserIdAndCompanyIdandPolicyId($u_obj->getId(), $current_company->getId(), $ap_o->getId());
                     $ab_o = $ablf->getCurrent();
                                       
-                    $alf = TTnew('AccrualListFactory');
+                    $alf = new AccrualListFactory();
                     $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatus($current_company->getId(), $u_obj->getId(), $ap_o->getId(), 30);
                     $af = $alf->getCurrent();
                     
@@ -447,7 +447,7 @@ switch ($action) {
                     'line_width' => 280,
                 );
 
-                $pdf = TTnew('TimeReportHeaderFooter');
+                $pdf = new TimeReportHeaderFooter();
 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -630,7 +630,7 @@ switch ($action) {
             
           $filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'punch_branch_ids', 'punch_department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
 
 		//Get include employee list.
@@ -650,13 +650,13 @@ switch ($action) {
 		$filter_data['selected_user_status_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_status_ids'], $user_status_options );
 
 		//Get Employee Groups
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = Misc::prependArray( $all_array_option, $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) ) );
 		$filter_data['src_group_options'] = Misc::arrayDiffByKey( (array)$filter_data['group_ids'], $group_options );
 		$filter_data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$filter_data['group_ids'], $group_options );
 
 		//Get branches
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $all_array_option, $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		$filter_data['src_branch_options'] = Misc::arrayDiffByKey( (array)$filter_data['branch_ids'], $branch_options );
@@ -666,7 +666,7 @@ switch ($action) {
 		$filter_data['selected_punch_branch_options'] = Misc::arrayIntersectByKey( (array)$filter_data['punch_branch_ids'], $branch_options );
 
 		//Get departments
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $all_array_option, $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		$filter_data['src_department_options'] = Misc::arrayDiffByKey( (array)$filter_data['department_ids'], $department_options );
@@ -676,14 +676,14 @@ switch ($action) {
 		$filter_data['selected_punch_department_options'] = Misc::arrayIntersectByKey( (array)$filter_data['punch_department_ids'], $department_options );
 
 		//Get employee titles
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$user_title_options = Misc::prependArray( $all_array_option, $utlf->getArrayByListFactory( $utlf, FALSE, TRUE ) );
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 		$filter_data['selected_user_title_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 
 		//Get pay periods
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByCompanyId( $current_company->getId() );
 		$pay_period_options = Misc::prependArray( $all_array_option, $pplf->getArrayByListFactory( $pplf, FALSE, TRUE ) );
 		$filter_data['src_pay_period_options'] = Misc::arrayDiffByKey( (array)$filter_data['pay_period_ids'], $pay_period_options );

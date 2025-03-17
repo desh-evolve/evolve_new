@@ -54,7 +54,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 
 		foreach ($ids as $id) {
 			$dlf->GetByIdAndCompanyId($id, $current_company->getId() );
@@ -74,7 +74,7 @@ switch ($action) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
 		}
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->GetByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		$pager = new Pager($dlf);

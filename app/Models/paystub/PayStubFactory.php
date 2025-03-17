@@ -1,88 +1,32 @@
 <?php
 
-/*********************************************************************************
-
- * TimeTrex is a Payroll and Time Management program developed by
-
- * TimeTrex Payroll Services Copyright (C) 2003 - 2012 TimeTrex Payroll Services.
-
- *
-
- * This program is free software; you can redistribute it and/or modify it under
-
- * the terms of the GNU Affero General Public License version 3 as published by
-
- * the Free Software Foundation with the addition of the following permission
-
- * added to Section 15 as permitted in Section 7(a): FOR ANY PART OF THE COVERED
-
- * WORK IN WHICH THE COPYRIGHT IS OWNED BY TIMETREX, TIMETREX DISCLAIMS THE
-
- * WARRANTY OF NON INFRINGEMENT OF THIRD PARTY RIGHTS.
-
- *
-
- * This program is distributed in the hope that it will be useful, but WITHOUT
-
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-
- * FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
-
- * details.
-
- *
-
- * You should have received a copy of the GNU Affero General Public License along
-
- * with this program; if not, see http://www.gnu.org/licenses or write to the Free
-
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-
- * 02110-1301 USA.
-
- *
-
- * You can contact TimeTrex headquarters at Unit 22 - 2475 Dobbin Rd. Suite
-
- * #292 Westbank, BC V4T 2E9, Canada or at email address info@timetrex.com.
-
- *
-
- * The interactive user interfaces in modified source and object code versions
-
- * of this program must display Appropriate Legal Notices, as required under
-
- * Section 5 of the GNU Affero General Public License version 3.
-
- *
-
- * In accordance with Section 7(b) of the GNU Affero General Public License
-
- * version 3, these Appropriate Legal Notices must retain the display of the
-
- * "Powered by TimeTrex" logo. If the display of the logo is not reasonably
-
- * feasible for technical reasons, the Appropriate Legal Notices must display
-
- * the words "Powered by TimeTrex".
-
- ********************************************************************************/
-
-/*
-
- * $Revision: 5457 $
-
- * $Id: PayStubFactory.class.php 5457 2011-11-04 20:49:58Z ipso $
-
- * $Date: 2011-11-04 13:49:58 -0700 (Fri, 04 Nov 2011) $
-
- */
-
-
-
 
 namespace App\Models\PayStub;
 use App\Models\Core\Factory;
+
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Core\CurrencyListFactory;
+use App\Models\Core\TTPDF;
+use App\Models\Core\UserDateListFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Company\CompanyListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Other\EFT;
+use App\Models\Other\EFT_record;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Users\BankAccountListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
 
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
@@ -91,7 +35,7 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 
-use App\Models\PayPeriod\PayPeriodListFactory;
+use Illuminate\Support\Facades\DB;
 
 //require_once( 'Numbers/Words.php');
 
@@ -441,7 +385,7 @@ class PayStubFactory extends Factory {
 
 		} else {
 
-			$clf = TTnew( 'CurrencyListFactory' );
+			$clf = new CurrencyListFactory();
 
 
 
@@ -473,7 +417,7 @@ class PayStubFactory extends Factory {
 
 		} else {
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
 			$ulf->getById( $this->getUser() );
 
@@ -515,7 +459,7 @@ class PayStubFactory extends Factory {
 
 
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 
 
@@ -563,7 +507,7 @@ class PayStubFactory extends Factory {
 
 
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
 
 
@@ -613,7 +557,7 @@ class PayStubFactory extends Factory {
 
 		Debug::Text('Currency ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		$culf = TTnew( 'CurrencyListFactory' );
+		$culf = new CurrencyListFactory();
 
 
 
@@ -1027,7 +971,7 @@ class PayStubFactory extends Factory {
 
 		if ( empty($id) ) {
 
-			global $current_user;
+			$current_user = $this->currentUser;
 
 
 
@@ -1045,7 +989,7 @@ class PayStubFactory extends Factory {
 
 
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 
 
@@ -1138,18 +1082,15 @@ class PayStubFactory extends Factory {
 		if ( $this->is_unique_pay_stub === NULL ) {
 
 			$ph = array(
-
-						'pay_period_id' => (int)$this->getPayPeriod(),
-
-						'user_id' => (int)$this->getUser(),
-
-						);
+				':pay_period_id' => (int)$this->getPayPeriod(),
+				':user_id' => (int)$this->getUser(),
+			);
 
 
 
-			$query = 'select id from '. $this->getTable() .' where pay_period_id = ? AND user_id = ? AND deleted = 0';
+			$query = 'select id from '. $this->getTable() .' where pay_period_id = :pay_period_id AND user_id = :user_id AND deleted = 0';
 
-			$pay_stub_id = $this->db->GetOne($query, $ph);
+			$pay_stub_id = DB::select($query, $ph);
 
 
 
@@ -1329,7 +1270,7 @@ class PayStubFactory extends Factory {
 
 
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 
 
@@ -1385,7 +1326,7 @@ class PayStubFactory extends Factory {
 
 			//Take a guess at the end of the newest open pay period.
 
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 
 			$ppslf->getByUserId( $pay_stub2_obj->getUser() );
 
@@ -1393,7 +1334,7 @@ class PayStubFactory extends Factory {
 
 				Debug::Text('Found Pay Period Schedule, ID: '. $ppslf->getCurrent()->getId(), __FILE__, __LINE__, __METHOD__,10);
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 
 				$pplf->getByPayPeriodScheduleIdAndTransactionDate( $ppslf->getCurrent()->getId(), time(), NULL, array('a.transaction_date' => 'DESC' ) );
 
@@ -1427,7 +1368,7 @@ class PayStubFactory extends Factory {
 
 		$pay_stub1_entry_ids = NULL;
 
-		$pay_stub1_entries = TTnew( 'PayStubEntryListFactory' );
+		$pay_stub1_entries = new PayStubEntryListFactory();
 
 		$pay_stub1_entries->getByPayStubIdAndType( $pay_stub1_obj->getId(), array(10,20,30) );
 
@@ -1461,7 +1402,7 @@ class PayStubFactory extends Factory {
 
 		$pay_stub2_entry_ids = NULL;
 
-		$pay_stub2_entries = TTnew( 'PayStubEntryListFactory' );
+		$pay_stub2_entries = new PayStubEntryListFactory();
 
 		$pay_stub2_entries->getByPayStubIdAndType( $pay_stub2_obj->getId(), array(10,20,30) );
 
@@ -1497,7 +1438,7 @@ class PayStubFactory extends Factory {
 
 
 
-		$pself = TTnew( 'PayStubEntryListFactory' );
+		$pself = new PayStubEntryListFactory();
 
 		if ( count($pay_stub_entry_ids) > 0 ) {
 
@@ -1527,7 +1468,7 @@ class PayStubFactory extends Factory {
 
 					//Generate PS Amendment.
 
-					$psaf = TTnew( 'PayStubAmendmentFactory' );
+					$psaf = new PayStubAmendmentFactory();
 
 					$psaf->setUser( $pay_stub1_obj->getUser() );
 
@@ -1613,7 +1554,7 @@ class PayStubFactory extends Factory {
 
 			Debug::text('Attempting to recalculate pay stub YTD for pay stub id:'. $pay_stub_id, __FILE__, __LINE__, __METHOD__,10);
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $pay_stub_id );
 
@@ -1675,7 +1616,7 @@ class PayStubFactory extends Factory {
 
 		//Get all pay stubs NEWER then this one.
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 
 
@@ -1757,9 +1698,9 @@ class PayStubFactory extends Factory {
 
 		/*
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		$pay_period_type = $ppslf->getById( $pplf->getById( $this->getPayPeriod() )->getCurrent()->getPayPeriodSchedule() )->getCurrent()->getType();
 
@@ -1999,7 +1940,7 @@ class PayStubFactory extends Factory {
 
 			//Instead of loading the current pay stub entries, just run a query instead.
 
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 
 			$pself->getByPayStubId( $this->getId() );
 
@@ -2033,7 +1974,7 @@ class PayStubFactory extends Factory {
 
 				//Set PS amendment status to match Pay stub.
 
-				$psalf = TTnew( 'PayStubAmendmentListFactory' );
+				$psalf = new PayStubAmendmentListFactory();
 
 				$psalf->getById( $ps_amendment_id );
 
@@ -2097,7 +2038,7 @@ class PayStubFactory extends Factory {
 
 		} else {
 
-			$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+			$pseallf = new PayStubEntryAccountLinkListFactory();
 
 			$pseallf->getByCompanyID( $this->getUserObject()->getCompany() );
 
@@ -2362,7 +2303,7 @@ class PayStubFactory extends Factory {
 
 			//Get pay stub entries
 
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 
 			$pself->getByPayStubId( $this->getID() );
 
@@ -2478,7 +2419,7 @@ class PayStubFactory extends Factory {
 
 		$pslf = new PayStubListFactory();
 		$pslf->getLastPayStubByUserIdAndStartDate( $this->getUser(), $this->getStartDate() );
-
+		
 		if ( $pslf->getRecordCount() > 0 ) {
 
 			$ps_obj = $pslf->getCurrent();
@@ -2714,29 +2655,30 @@ class PayStubFactory extends Factory {
 
 
 	function processEntries() {
+		// check here
 
-		Debug::Text('Processing PayStub ('. count($this->tmp_data['current_pay_stub']) .') Entries...', __FILE__, __LINE__, __METHOD__,10);
+		//Debug::Text('Processing PayStub ('. count($this->tmp_data['current_pay_stub']) .') Entries...', __FILE__, __LINE__, __METHOD__,10);
 
 		///Debug::Arr($this->tmp_data['current_pay_stub'], 'Current Entries...', __FILE__, __LINE__, __METHOD__,10);
 
 
-
+		echo 'processEntries 0: ';
 		$this->deleteEntries( FALSE ); //Delete only total entries
-
+		echo 'processEntries 1: ';
 		$this->addUnUsedYTDEntries();
-                
-               // $this->addGrossSum();
+		echo 'processEntries 2: ';
+        
+		// $this->addGrossSum();
 
 		$this->addEarningSum();
-
+		echo 'processEntries 3: ';
 		$this->addDeductionSum();
-
+		echo 'processEntries 4: ';
 		$this->addEmployerDeductionSum();
-
+		echo 'processEntries 5: ';
 		$this->addNetPay();
 
-
-
+		exit;
 		return TRUE;
 
 	}
@@ -2975,7 +2917,7 @@ class PayStubFactory extends Factory {
 
 				Debug::Text('Current Pay Stub ID: '. $this->getId() .' Adding Pay Stub Entry for: '. $pse_arr['pay_stub_entry_account_id'] .' Amount: '. $pse_arr['amount'] .' YTD Amount: '. $pse_arr['ytd_amount'] .' YTD Units: '. $pse_arr['ytd_units'], __FILE__, __LINE__, __METHOD__,10);
 
-				$psef = TTnew( 'PayStubEntryFactory' );
+				$psef = new PayStubEntryFactory();
 
 				$psef->setPayStub( $this->getId() );
 
@@ -3039,7 +2981,7 @@ class PayStubFactory extends Factory {
 
 		//Delete any entries from the pay stub, so they can be re-created.
 
-		$pself = TTnew( 'PayStubEntryListFactory' );
+		$pself = new PayStubEntryListFactory();
 
 
 
@@ -3609,7 +3551,7 @@ class PayStubFactory extends Factory {
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE  ) {
 
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory();
 
 
 
@@ -3799,7 +3741,7 @@ class PayStubFactory extends Factory {
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 
@@ -3843,7 +3785,7 @@ class PayStubFactory extends Factory {
 
 					//Get file creation number
 
-					$ugdlf = TTnew( 'UserGenericDataListFactory' );
+					$ugdlf = new UserGenericDataListFactory();
 
 					$ugdlf->getByCompanyIdAndScriptAndDefault( $current_company->getId(), 'PayStubFactory', TRUE );
 
@@ -3855,7 +3797,7 @@ class PayStubFactory extends Factory {
 
 					} else {
 
-						$ugd_obj = TTnew( 'UserGenericDataFactory' );
+						$ugd_obj = new UserGenericDataFactory();
 
 					}
 
@@ -3865,7 +3807,7 @@ class PayStubFactory extends Factory {
 
 					//get User Bank account info
 
-					$balf = TTnew( 'BankAccountListFactory' );
+					$balf = new BankAccountListFactory();
 
 					$balf->getCompanyAccountByCompanyId( $current_company->getID() );
 
@@ -3937,7 +3879,7 @@ class PayStubFactory extends Factory {
 
 
 
-					$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+					$psealf = new PayStubEntryAccountListFactory();
 
 					foreach ($pslf as $key => $pay_stub_obj) {
 
@@ -3947,7 +3889,7 @@ class PayStubFactory extends Factory {
 
 						//Get pay stub entries.
 
-						$pself = TTnew( 'PayStubEntryListFactory' );
+						$pself = new PayStubEntryListFactory();
 
 						$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -4101,7 +4043,7 @@ class PayStubFactory extends Factory {
 
 							//Get User information
 
-							$ulf = TTnew( 'UserListFactory' );
+							$ulf = new UserListFactory();
 
 							$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
@@ -4109,7 +4051,7 @@ class PayStubFactory extends Factory {
 
 							//Get company information
 
-							$clf = TTnew( 'CompanyListFactory' );
+							$clf = new CompanyListFactory();
 
 							$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -4117,7 +4059,7 @@ class PayStubFactory extends Factory {
 
 							//get User Bank account info
 
-							$balf = TTnew( 'BankAccountListFactory' );
+							$balf = new BankAccountListFactory();
 
 							$user_bank_obj = $balf->getUserAccountByCompanyIdAndUserId( $user_obj->getCompany(), $user_obj->getId() );
 
@@ -4233,7 +4175,7 @@ class PayStubFactory extends Factory {
 
 
 
-					$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+					$psealf = new PayStubEntryAccountListFactory();
 
 
 
@@ -4243,7 +4185,7 @@ class PayStubFactory extends Factory {
 
 						//Get pay stub entries.
 
-						$pself = TTnew( 'PayStubEntryListFactory' );
+						$pself = new PayStubEntryListFactory();
 
 						$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -4387,7 +4329,7 @@ class PayStubFactory extends Factory {
 
 						//Get User information
 
-						$ulf = TTnew( 'UserListFactory' );
+						$ulf = new UserListFactory();
 
 						$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
@@ -4395,7 +4337,7 @@ class PayStubFactory extends Factory {
 
 						//Get company information
 
-						$clf = TTnew( 'CompanyListFactory' );
+						$clf = new CompanyListFactory();
 
 						$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -4461,7 +4403,7 @@ class PayStubFactory extends Factory {
 
 						//Get Pay Period information
 
-						$pplf = TTnew( 'PayPeriodListFactory' );
+						$pplf = new PayPeriodListFactory();
 
 						$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
@@ -4477,7 +4419,7 @@ class PayStubFactory extends Factory {
 
 						//Get pay period numbers
 
-						$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+						$ppslf = new PayPeriodScheduleListFactory();
 
 						$pay_period_schedule_obj = $ppslf->getById( $pay_period_obj->getPayPeriodSchedule() )->getCurrent();
 
@@ -5411,7 +5353,7 @@ class PayStubFactory extends Factory {
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 
@@ -5456,7 +5398,7 @@ class PayStubFactory extends Factory {
 
 			foreach ($pslf as $pay_stub_obj) {
 
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 
 
@@ -5466,7 +5408,7 @@ class PayStubFactory extends Factory {
 
 				//Get Pay Period information
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
@@ -5484,7 +5426,7 @@ class PayStubFactory extends Factory {
 
 				//Get User information
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
@@ -5492,7 +5434,7 @@ class PayStubFactory extends Factory {
 
 				//Get company information
 
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -5652,7 +5594,7 @@ class PayStubFactory extends Factory {
 
 				//Get pay stub entries.
 
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -6447,7 +6389,7 @@ class PayStubFactory extends Factory {
 
 				//
 
-				$ablf = TTnew( 'AccrualBalanceListFactory' );
+				$ablf = new AccrualBalanceListFactory();
 
 				$ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE );
 
@@ -6789,7 +6731,7 @@ class PayStubFactory extends Factory {
         function getDetailedAquaPayStub( $pslf = NULL, $hide_employer_rows = TRUE ) {
             
             if (!is_object($pslf) AND $this->getId() != '') {
-                $pslf = TTnew('PayStubListFactory');
+                $pslf = new PayStubListFactory();
                 $pslf->getById($this->getId());
             }
             
@@ -6809,7 +6751,7 @@ class PayStubFactory extends Factory {
                 
                 foreach ($pslf as $pay_stub_obj) {
 
-                    $psealf = TTnew('PayStubEntryAccountListFactory');
+                    $psealf = new PayStubEntryAccountListFactory();
 
                     //Use Pay Stub dates, not Pay Period dates.
 
@@ -6820,7 +6762,7 @@ class PayStubFactory extends Factory {
 //                    echo '<pre><br>pay period start::'.date('Y-m-d',$pp_start_date);
 //                    echo '<br>pay period start::'.date('Y-m-d',$pp_end_date);
                     
-                    $udtlf = TTnew( 'UserDateTotalListFactory' );
+                    $udtlf = new UserDateTotalListFactory();
                     $udtlf->getByUserIdAndPayPeriodIdAndEndDate( $pay_stub_obj->getUser(), $pay_stub_obj->getPayPeriod(), $pay_stub_obj->getPayPeriodObject()->getEndDate() );
                     $normal_OT = 0;
                     $holiday_OT = 0;
@@ -6859,7 +6801,7 @@ class PayStubFactory extends Factory {
 
                 if (isset($absence_policy_id)){
                     
-                    $udlf = TTnew('UserDateListFactory');
+                    $udlf = new UserDateListFactory();
                     $udlf->getTotalNopayTimeByPayperiods($pay_stub_obj->getUser(),$absence_policy_id,$pay_stub_obj->getPayPeriod());
                     
                     
@@ -6873,7 +6815,7 @@ class PayStubFactory extends Factory {
                     
                     $nopay_days = $nopay_sum / 28800; 
                 /*    
-                    $aluerlf = TTnew('AbsenceLeaveUserEntryRecordListFactory');
+                    $aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
                     $aluerlf->getByAbsencePolicyIdAndUserId2($absence_policy_id,$pay_stub_obj->getUser());
                     foreach($aluerlf as $aluerlf_obj) {
                     $time_stamp = $aluerlf_obj->getTimeStamp();
@@ -6889,32 +6831,32 @@ class PayStubFactory extends Factory {
              
                     //Get User information
 
-                    $ulf = TTnew('UserListFactory');
+                    $ulf = new UserListFactory();
                     $user_obj = $ulf->getById($pay_stub_obj->getUser())->getCurrent();
 
 //                    echo '<pre>';
 //                    print_r($user_obj);die;
                     //Get company information
 
-                    $clf = TTnew('CompanyListFactory');
+                    $clf = new CompanyListFactory();
                     $company_obj = $clf->getById($user_obj->getCompany())->getCurrent();
                     
                     //Title
-                    $utlf = TTnew( 'UserTitleListFactory' );
+                    $utlf = new UserTitleListFactory();
                     $title_options = $utlf->getByCompanyIdArray($company_obj->getId() );
                     
                     //Get Branch information
 
-                    $blf = TTnew( 'BranchListFactory' );
+                    $blf = new BranchListFactory();
                     $branch_options = $blf->getByCompanyIdArray( $company_obj->getId() );
                     
                     //get department information
 
-                    $dlf = TTnew( 'DepartmentListFactory' );
+                    $dlf = new DepartmentListFactory();
                     $department_options = $dlf->getByCompanyIdArray( $company_obj->getId() );
                     
 
-                     $plf = TTnew( 'PunchListFactory' );
+                     $plf = new PunchListFactory();
 //                echo '<br> company::'.$company_obj->getId();
 //                echo '<br> getUser::'.$pay_stub_obj->getUser();
 //                echo '<br> pp_start_date::'.$pp_start_date;
@@ -6984,7 +6926,7 @@ class PayStubFactory extends Factory {
 
                     //Get pay stub entries.
 
-                    $pself = TTnew('PayStubEntryListFactory');
+                    $pself = new PayStubEntryListFactory();
 
 //                    echo 'paystub id::'.$pay_stub_obj->getId();
                     $pself->getByPayStubId($pay_stub_obj->getId());//4132
@@ -7552,7 +7494,7 @@ class PayStubFactory extends Factory {
                     //Accrual Policy Balances
                     //
 
-                    $ablf = TTnew('AccrualBalanceListFactory');
+                    $ablf = new AccrualBalanceListFactory();
 
                     $ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE);
 
@@ -7780,7 +7722,7 @@ class PayStubFactory extends Factory {
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 
@@ -7825,7 +7767,7 @@ class PayStubFactory extends Factory {
 
 			foreach ($pslf as $pay_stub_obj) {
 
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 
 
@@ -7835,7 +7777,7 @@ class PayStubFactory extends Factory {
 
 				//Get Pay Period information
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
@@ -7853,7 +7795,7 @@ class PayStubFactory extends Factory {
 
 				//Get User information
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
@@ -7861,7 +7803,7 @@ class PayStubFactory extends Factory {
 
 				//Get company information
 
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -8010,7 +7952,7 @@ class PayStubFactory extends Factory {
 
 				//Get pay stub entries.
 
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -8805,7 +8747,7 @@ class PayStubFactory extends Factory {
 
 				//
 
-				$ablf = TTnew( 'AccrualBalanceListFactory' );
+				$ablf = new AccrualBalanceListFactory();
 
 				$ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE );
 
@@ -9132,7 +9074,7 @@ class PayStubFactory extends Factory {
             
             if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 
@@ -9167,7 +9109,7 @@ class PayStubFactory extends Factory {
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 
@@ -9220,7 +9162,7 @@ class PayStubFactory extends Factory {
                             
                             $mail_body_array =  null;//ARSP ADD--> 
 
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 
 
@@ -9230,7 +9172,7 @@ class PayStubFactory extends Factory {
 
 				//Get Pay Period information
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
@@ -9248,7 +9190,7 @@ class PayStubFactory extends Factory {
 
 				//Get User information
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
@@ -9256,7 +9198,7 @@ class PayStubFactory extends Factory {
 
 				//Get company information
 
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -9417,7 +9359,7 @@ class PayStubFactory extends Factory {
 
 				//Get pay stub entries.
 
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -10243,7 +10185,7 @@ class PayStubFactory extends Factory {
 
 				//
 
-				$ablf = TTnew( 'AccrualBalanceListFactory' );
+				$ablf = new AccrualBalanceListFactory();
 
 				$ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE );
 
@@ -10933,7 +10875,7 @@ class PayStubFactory extends Factory {
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 		}
@@ -10979,7 +10921,7 @@ class PayStubFactory extends Factory {
                         $page_no = 1;//ARSP ADD
 			foreach ($pslf as $pay_stub_obj) {
 
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 
 
@@ -10989,7 +10931,7 @@ class PayStubFactory extends Factory {
 
 				//Get Pay Period information
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
@@ -11007,7 +10949,7 @@ class PayStubFactory extends Factory {
 
 				//Get User information
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
@@ -11015,7 +10957,7 @@ class PayStubFactory extends Factory {
 
 				//Get company information
 
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -11357,7 +11299,7 @@ class PayStubFactory extends Factory {
 
 				//Get pay stub entries.
 
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -12165,7 +12107,7 @@ class PayStubFactory extends Factory {
 
 				//
 
-				$ablf = TTnew( 'AccrualBalanceListFactory' );
+				$ablf = new AccrualBalanceListFactory();
 
 				$ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE );
 
@@ -12634,7 +12576,7 @@ class PayStubFactory extends Factory {
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 		}
@@ -12681,7 +12623,7 @@ class PayStubFactory extends Factory {
 			foreach ($pslf as $pay_stub_obj) {
                             $txt = '';
 
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 
 
@@ -12691,7 +12633,7 @@ class PayStubFactory extends Factory {
 
 				//Get Pay Period information
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
@@ -12709,7 +12651,7 @@ class PayStubFactory extends Factory {
 
 				//Get User information
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 //                                print_r($user_obj->getDefaultBranch());
@@ -12718,7 +12660,7 @@ class PayStubFactory extends Factory {
 
 				//Get company information
 
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -12966,7 +12908,7 @@ class PayStubFactory extends Factory {
                                 }
                                 else
                                 {
-                                    $blf = TTnew( 'BranchListFactory' );
+                                    $blf = new BranchListFactory();
                                     $blf->getById($user_obj->getDefaultBranch());
                                     
                                     foreach ($blf as $temp)
@@ -13204,7 +13146,7 @@ class PayStubFactory extends Factory {
 
 				//Get pay stub entries.
 
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -14020,7 +13962,7 @@ class PayStubFactory extends Factory {
 
 				//
 
-				$ablf = TTnew( 'AccrualBalanceListFactory' );
+				$ablf = new AccrualBalanceListFactory();
 
 				$ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE );
 
@@ -14548,7 +14490,7 @@ class PayStubFactory extends Factory {
                     
                                                 );
 												
-				$pdf = TTnew( 'PayStubMyPdfHeaderFooter' );								
+				$pdf = new PayStubMyPdfHeaderFooter();								
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -14725,7 +14667,7 @@ class PayStubFactory extends Factory {
                     
                                                 );
 												
-				$pdf = TTnew( 'PayStubMyPdfHeaderFooterLandscape' );								
+				$pdf = new PayStubMyPdfHeaderFooterLandscape();								
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -14884,7 +14826,7 @@ class PayStubFactory extends Factory {
             {
                                                         
                                                         
-                $pdf = TTnew( 'PayStubListFactoryFormE_payments' );			
+                $pdf = new PayStubListFactoryFormE_payments();			
                                                         
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -14929,16 +14871,16 @@ class PayStubFactory extends Factory {
                 $html = '<table border="1" cellspacing="0" cellpadding="2" width="100%">';  
                 
             
-                $ulf = TTnew( 'UserListFactory' );     
+                $ulf = new UserListFactory();     
                 
                     /*
                      *Fl Added track the  sumission Number for Child fund
                      * ---- each and every submission of form will be insert to db table => cform_submission
                      */
               
-                $cfsf = TTnew( 'CformSubmissionFactory' );    
+                $cfsf = new CformSubmissionFactory();    
                    
-                $clf1 = TTnew( 'CompanyListFactory' ); 
+                $clf1 = new CompanyListFactory(); 
 		$company_obj1 = $clf1->getById( $current_company->getId() )->getCurrent();
                     
 //                    var_dump($payperiod_string); die;
@@ -15122,11 +15064,11 @@ class PayStubFactory extends Factory {
                                                   'payperiod_string'     => $payperiod_string,
                                                   'epf_registration_no'  => $current_company->getOriginatorID()
                                                 );
-                $pdf = TTnew( 'PayStubListFactoryForm_ETF' );			
+                $pdf = new PayStubListFactoryForm_ETF();			
 				
 //--------------------------------- Get Contribution values --------------------  
                 
-                $ulf = TTnew( 'UserListFactory' ); 
+                $ulf = new UserListFactory(); 
                 $contributions = 0.0;  
                 $data_txtfile = array();
                 
@@ -15192,7 +15134,7 @@ class PayStubFactory extends Factory {
                 $html = '<table border="1" cellspacing="0" cellpadding="2" width="100%">';  
                 
             
-                $ulf = TTnew( 'UserListFactory' );     
+                $ulf = new UserListFactory();     
                 
                  
                 $i=1;   
@@ -15345,11 +15287,11 @@ class PayStubFactory extends Factory {
                                                   'payperiod_string'     => $payperiod_string,
                                                   'epf_registration_no'  => $current_company->getOriginatorID()
                                                 );
-                $pdf = TTnew( 'PayStubListFactoryFormE_epf' );			
+                $pdf = new PayStubListFactoryFormE_epf();			
 				
 //--------------------------------- Get Contribution values --------------------  
                 
-                $ulf = TTnew( 'UserListFactory' ); 
+                $ulf = new UserListFactory(); 
                 $contributions = 0.0;  
                 $data_txtfile = array();
                 foreach( $data as $row1 ) 
@@ -15441,16 +15383,16 @@ class PayStubFactory extends Factory {
                 $html = '<table border="1" cellspacing="0" cellpadding="2" width="100%">';  
                 
             
-                $ulf = TTnew( 'UserListFactory' );     
+                $ulf = new UserListFactory();     
                 
                     /*
                      *Fl Added track the  sumission Number for Child fund
                      * ---- each and every submission of form will be insert to db table => cform_submission
                      */
               
-                $cfsf = TTnew( 'CformSubmissionFactory' );    
+                $cfsf = new CformSubmissionFactory();    
                    
-                $clf1 = TTnew( 'CompanyListFactory' ); 
+                $clf1 = new CompanyListFactory(); 
 		$company_obj1 = $clf1->getById( $current_company->getId() )->getCurrent();
                 
                     $cfsf->data['pay_period'] = $payperiod_string;
@@ -15716,7 +15658,7 @@ class PayStubFactory extends Factory {
                 $_SESSION['header_data'] = array();// first we have to create session array then we can add new element into the session array
                 if($branch_id_only != "" || $branch_id_only != NULL)
                 {
-                    $blf = TTnew( 'BranchListFactory' );
+                    $blf = new BranchListFactory();
                     $blf->getById($branch_id_only);
 
                     foreach ($blf as $temp)
@@ -15760,11 +15702,11 @@ class PayStubFactory extends Factory {
 
                                                     );                
                 }
-                $pdf = TTnew( 'PayStubListFactoryFormC' );			
+                $pdf = new PayStubListFactoryFormC();			
 				
 //--------------------------------- Get Contribution values --------------------  
                 
-                $ulf = TTnew( 'UserListFactory' );     
+                $ulf = new UserListFactory();     
                 $contributions = 0.0;  
                 foreach( $data as $row1 ) 
                 {
@@ -15840,7 +15782,7 @@ class PayStubFactory extends Factory {
                 $html = '<table border="1" cellspacing="0" cellpadding="2" width="100%">';  
                 
             
-                $ulf = TTnew( 'UserListFactory' );     
+                $ulf = new UserListFactory();     
                 
                 //$contributions = 0.0;
                 $total_employer = 0.0;
@@ -16006,7 +15948,7 @@ class PayStubFactory extends Factory {
                 
                 
 
-                $pdf = TTnew( 'PayStubListFactoryFormCSixMonth' ); 
+                $pdf = new PayStubListFactoryFormCSixMonth(); 
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -16093,7 +16035,7 @@ class PayStubFactory extends Factory {
                     $first_name = $row[0]['first_name'];
                     $full_name =  $row[0]['last_name'].' '.$first_name[0].' '.$row[0]['middle_initial'] ;
                     
-                    $ulf = TTnew( 'UserListFactory' );     
+                    $ulf = new UserListFactory();     
                     $user_obj = $ulf->getById( $user_id )->getCurrent();//get user object  
                     
                     $epf_membership_no = $user_obj->getEmployeeNumber(); //get EPF REGISTRATION NO  but child fund client ask employee number same for the  EPF registration nuymbeer
@@ -16284,7 +16226,7 @@ class PayStubFactory extends Factory {
 
 		if ( !is_object($pslf) AND $this->getId() != '' ) {
 
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 
 			$pslf->getById( $this->getId() );
 
@@ -16337,7 +16279,7 @@ class PayStubFactory extends Factory {
                             
                             $mail_body_array =  null;//ARSP ADD--> 
 
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 
 
@@ -16347,7 +16289,7 @@ class PayStubFactory extends Factory {
 
 				//Get Pay Period information
 
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
@@ -16365,7 +16307,7 @@ class PayStubFactory extends Factory {
 
 				//Get User information
 
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
@@ -16373,7 +16315,7 @@ class PayStubFactory extends Factory {
 
 				//Get company information
 
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
@@ -16534,7 +16476,7 @@ class PayStubFactory extends Factory {
 
 				//Get pay stub entries.
 
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 
@@ -17658,7 +17600,7 @@ class PayStubFactory extends Factory {
 
 				//
 
-				$ablf = TTnew( 'AccrualBalanceListFactory' );
+				$ablf = new AccrualBalanceListFactory();
 
 				$ablf->getByUserIdAndCompanyIdAndEnablePayStubBalanceDisplay($user_obj->getId(), $user_obj->getCompany(), TRUE );
 
@@ -18031,7 +17973,7 @@ class PayStubFactory extends Factory {
                 
 
                 
-                $pdf = TTnew( 'PayStubTotalOrganizationPaySummary' );	
+                $pdf = new PayStubTotalOrganizationPaySummary();	
                 
 									
                 
@@ -18326,7 +18268,7 @@ class PayStubFactory extends Factory {
                 
 
                 
-                $pdf = TTnew( 'PayStubBankTransfer' );	
+                $pdf = new PayStubBankTransfer();	
                 
 									
                 
@@ -18373,8 +18315,8 @@ class PayStubFactory extends Factory {
                 $html = '<table border="1" cellspacing="0" cellpadding="2" width="108%">';  
                 
             
-                $ulf = TTnew( 'UserListFactory' );                     
-                $balf = TTnew( 'BankAccountListFactory' );        
+                $ulf = new UserListFactory();                     
+                $balf = new BankAccountListFactory();        
                 
       
                 $i=1;   

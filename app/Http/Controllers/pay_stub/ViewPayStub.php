@@ -43,7 +43,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) > 0 ) {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			if ( $permission->Check('pay_stub','view') ) {
 				$pslf->getByCompanyIdAndId( $current_company->getId(), $ids);
 			} else {
@@ -53,10 +53,10 @@ switch ($action) {
 			//foreach ($ids as $id) {
 			$i=0;
 			foreach ($pslf as $pay_stub_obj) {
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 
 				//Get pay stub entries.
-				$pself = TTnew( 'PayStubEntryListFactory' );
+				$pself = new PayStubEntryListFactory();
 				$pself->getByPayStubId( $pay_stub_obj->getId() );
 				Debug::text('Pay Stub Entries: '. $pself->getRecordCount()  , __FILE__, __LINE__, __METHOD__,10);
 
@@ -144,7 +144,7 @@ switch ($action) {
 				Debug::text($i .'. Pay Stub Transaction Date: '. $pay_stub_obj->getTransactionDate(), __FILE__, __LINE__, __METHOD__,10);
 
 				//Get Pay Period information
-				$pplf = TTnew( 'PayPeriodListFactory' );
+				$pplf = new PayPeriodListFactory();
 				$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
 				if ( $pay_stub_obj->getAdvance() == TRUE ) {
@@ -158,7 +158,7 @@ switch ($action) {
 				}
 
 				//Get pay period numbers
-				$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+				$ppslf = new PayPeriodScheduleListFactory();
 				$pay_period_schedule_obj = $ppslf->getById( $pay_period_obj->getPayPeriodSchedule() )->getCurrent();
 
 
@@ -172,11 +172,11 @@ switch ($action) {
 										);
 
 				//Get User information
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
 				//Get company information
-				$clf = TTnew( 'CompanyListFactory' );
+				$clf = new CompanyListFactory();
 				$company_obj = $clf->getById( $user_obj->getCompany() )->getCurrent();
 
 				//}

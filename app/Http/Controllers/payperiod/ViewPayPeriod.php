@@ -34,12 +34,12 @@ extract	(FormVariables::GetVariables(
 												'status_id'
 												) ) );
 
-$ppf = TTnew( 'PayPeriodFactory' );
+$ppf = new PayPeriodFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
 	case 'submit':
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
 		foreach ($pplf as $pay_period_obj) {
 			$pay_period_obj->setStatus( $status_id );
@@ -64,7 +64,7 @@ switch ($action) {
 	case 'import':
 		//Imports already created shifts in to this pay period, from another pay period.
 		//Get all users assigned to this pay period schedule.
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pay_period_obj = $pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() )->getCurrent();
 
 		$pay_period_obj->importData();
@@ -75,7 +75,7 @@ switch ($action) {
 	case 'delete_data':
 		//Deletes all data assigned to this pay period.
 		//Get all users assigned to this pay period schedule.
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pay_period_obj = $pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() )->getCurrent();
 
 		$pay_period_obj->deleteData();
@@ -89,7 +89,7 @@ switch ($action) {
 
 			$status_options = $ppf->getOptions('status');
 
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
 
 			foreach ($pplf as $pay_period_obj) {
@@ -140,7 +140,7 @@ switch ($action) {
 
 			$smarty->assign_by_ref('status_options', $status_options);
 
-			$elf = TTnew( 'ExceptionListFactory' );
+			$elf = new ExceptionListFactory();
 			$elf->getSumExceptionsByPayPeriodIdAndBeforeDate($pay_period_obj->getId(), $pay_period_obj->getEndDate() );
 			$exceptions = array(
 								'low' => 0,
@@ -171,7 +171,7 @@ switch ($action) {
 
 			//Get all pending requests
 			$pending_requests = 0;
-			$rlf = TTnew( 'RequestListFactory' );
+			$rlf = new RequestListFactory();
 			$rlf->getSumByPayPeriodIdAndStatus( $pay_period_obj->getId(), 30 );
 			if ( $rlf->getRecordCount() > 0 ) {
 				$pending_requests = $rlf->getCurrent()->getColumn('total');
@@ -179,7 +179,7 @@ switch ($action) {
 			$pay_period_data['pending_requests'] = $pending_requests;
 
 			//Count how many punches are in this pay period.
-			$plf = TTnew( 'PunchListFactory' );
+			$plf = new PunchListFactory();
 			$pay_period_data['total_punches'] = $plf->getByPayPeriodId( $pay_period_id )->getRecordCount();
 			Debug::Text(' Total Punches: '. $pay_period_data['total_punches'], __FILE__, __LINE__, __METHOD__,10);
 		}

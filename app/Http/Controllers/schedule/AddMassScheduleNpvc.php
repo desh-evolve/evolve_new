@@ -75,7 +75,7 @@ if ( isset($data) ) {
 }
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 //Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 $filter_data = array();
@@ -88,8 +88,8 @@ if ( $permission->Check('schedule','edit') == FALSE ) {
 	}
 }
 
-$sf = TTnew( 'ScheduleFactory' );
-$ulf = TTnew( 'UserListFactory' );
+$sf = new ScheduleFactory();
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -228,7 +228,7 @@ switch ($action) {
 		}
 		//var_dump($data);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$src_user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, FALSE );
 
@@ -237,28 +237,28 @@ switch ($action) {
 
 		$prepend_array_option = array( 0 => '--', -1 => TTi18n::gettext('-- Default --') );
 
-		$splf = TTnew( 'SchedulePolicyListFactory' );
+		$splf = new SchedulePolicyListFactory();
 		$schedule_policy_options = $splf->getByCompanyIdArray( $current_company->getId() );
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$absence_policy_options = $aplf->getByCompanyIdArray( $current_company->getId() );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $prepend_array_option,  $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $prepend_array_option,  $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByStatusIdAndCompanyId( array(10,20,30,40), $current_company->getId() );
 			//$jlf->getByCompanyIdAndUserIdAndStatus( $current_company->getId(),  $data['user_id'], array(10,20,30,40) );
 			$data['job_options'] = $jlf->getArrayByListFactory( $jlf, TRUE, TRUE );
 			$data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
 			$data['job_item_options'] = $jilf->getArrayByListFactory( $jilf, TRUE );
 			$data['job_item_manual_id_options'] = $jilf->getManualIdArrayByListFactory( $jilf, TRUE );

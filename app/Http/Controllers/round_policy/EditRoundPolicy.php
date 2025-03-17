@@ -42,7 +42,7 @@ if ( isset($round_policy_data) ) {
 	$round_policy_data['round_end'] = TTDate::parseTimeUnit( $round_policy_data['round_end'] );
 }
 
-$rpf = TTnew( 'RoundPolicyFactory' );
+$rpf = new RoundPolicyFactory();
 
 $action = strtolower($action);
 switch ($action) {
@@ -139,7 +139,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$rplf = TTnew( 'RoundPolicyListFactory' );
+			$rplf = new RoundPolicyListFactory();
 
 			$rplf->getByIdAndCompanyId($id, $current_company->getId() );
 

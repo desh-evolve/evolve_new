@@ -67,7 +67,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) > 0 ) {
-			$rlf = TTnew( 'ROEListFactory' );
+			$rlf = new ROEListFactory();
 			$rlf->getByIdAndCompanyId( $ids, $current_company->getId() );
 
 			if ( $action == 'export' ) {
@@ -114,7 +114,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$roelf = TTnew( 'ROEListFactory' );
+		$roelf = new ROEListFactory();
 
 		foreach ($ids as $id) {
 			$roelf->GetById( $id );
@@ -129,7 +129,7 @@ switch ($action) {
 		break;
 
 	default:
-		$roelf = TTnew( 'ROEListFactory' );
+		$roelf = new ROEListFactory();
 
 		/*
 		if ( $permission->Check('company','view') ) {
@@ -179,7 +179,7 @@ switch ($action) {
 		$smarty->assign_by_ref('user_id', $user_id);
 
 		if ( isset($user_id) ) {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$user_obj = $ulf->getById($user_id)->getCurrent();
 
 

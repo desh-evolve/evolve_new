@@ -67,7 +67,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		foreach ($ids as $id) {
 			$psealf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -85,7 +85,7 @@ switch ($action) {
 	default:
 		BreadCrumb::setCrumb($title);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($psealf);

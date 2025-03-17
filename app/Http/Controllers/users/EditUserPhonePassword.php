@@ -29,8 +29,8 @@ extract	(FormVariables::GetVariables(
 												'user_data'
 												) ) );
 
-$ulf = TTnew( 'UserListFactory' );
-$uf = TTnew( 'UserFactory' );
+$ulf = new UserListFactory();
+$uf = new UserFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);

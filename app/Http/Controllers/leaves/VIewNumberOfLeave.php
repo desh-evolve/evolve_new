@@ -40,9 +40,9 @@ $total_asign_leave = array();
 $total_taken_leave = array();
 $total_balance_leave = array();
 
-$alf = TTnew( 'AccrualListFactory' );
+$alf = new AccrualListFactory();
 
-$lrlf = TTnew( 'LeaveRequestListFactory' );
+$lrlf = new LeaveRequestListFactory();
 $lrlf->getById($id);
 
 if($lrlf->getRecordCount() >0){
@@ -51,7 +51,7 @@ if($lrlf->getRecordCount() >0){
     
    
     
-$aplf = TTnew( 'AccrualPolicyListFactory' );
+$aplf = new AccrualPolicyListFactory();
 $aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
 
 

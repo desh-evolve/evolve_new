@@ -60,7 +60,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 
 		foreach ($ids as $id) {
 			$slf->GetByIdAndCompanyId($id, $current_company->getId() );
@@ -75,7 +75,7 @@ switch ($action) {
 		break;
 
 	default:
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 
 		$slf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 

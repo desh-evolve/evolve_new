@@ -30,13 +30,13 @@ return new class extends Migration
             $table->integer('statutory_time')->nullable(); // Statutory time
             $table->integer('over_time_1')->nullable(); // Over time 1
             $table->integer('over_time_2')->nullable(); // Over time 2
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by
-            $table->tinyInteger('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('schedule_bank_time_2')->nullable(); // Additional scheduled bank time 2
             $table->integer('schedule_bank_time_3')->nullable(); // Additional scheduled bank time 3
             $table->integer('bank_time_2')->nullable(); // Additional bank time 2

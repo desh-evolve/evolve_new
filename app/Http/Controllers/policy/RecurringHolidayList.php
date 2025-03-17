@@ -67,7 +67,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$rhlf = TTnew( 'RecurringHolidayListFactory' );
+		$rhlf = new RecurringHolidayListFactory();
 
 		foreach ($ids as $id) {
 			$rhlf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -84,7 +84,7 @@ switch ($action) {
 		break;
 
 	default:
-		$rhlf = TTnew( 'RecurringHolidayListFactory' );
+		$rhlf = new RecurringHolidayListFactory();
 		$rhlf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 

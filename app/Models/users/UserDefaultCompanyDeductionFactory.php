@@ -21,7 +21,7 @@ class UserDefaultCompanyDeductionFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$udlf = TTnew( 'UserDefaultListFactory' );
+		$udlf = new UserDefaultListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'user_default',
@@ -48,7 +48,7 @@ class UserDefaultCompanyDeductionFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$cdlf = TTnew( 'CompanyDeductionListFactory' );
+		$cdlf = new CompanyDeductionListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'company_deduction',

@@ -52,7 +52,7 @@ if ( isset($data['appt-time']) && $data['appt-time'] != '') {
 }
 */
 
-$lrlf = TTnew( 'LeaveRequestListFactory' );
+$lrlf = new LeaveRequestListFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -63,12 +63,12 @@ switch ($action) {
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::setVerbosity(11);
             
-          //  $lrf = TTnew( 'LeaveRequestFactory' );
+          //  $lrf = new LeaveRequestFactory();
             
             //echo $data['leave_start_date'];
             //exit();
             
-            $ablf = TTnew( 'AccrualBalanceListFactory' );
+            $ablf = new AccrualBalanceListFactory();
             $ablf->getByUserIdAndAccrualPolicyId($current_user->getId(),$data['leave_type']);
             
             if( $ablf->getRecordCount() > 0){
@@ -396,9 +396,9 @@ if($lrlf->getRecordCount() > 0){
 
 
 
-$alf = TTnew( 'AccrualListFactory' );
+$alf = new AccrualListFactory();
 
-$aplf = TTnew( 'AccrualPolicyListFactory' );
+$aplf = new AccrualPolicyListFactory();
 $aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
 
 $header_leave = array();
@@ -466,7 +466,7 @@ $method_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Cho
 $data['method_options'] = $method_options;
         
 //check here
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 //$filter_data['default_branch_id'] = $current_user->getDefaultBranch();
 $filter_data['exclude_id'] = 1;
 

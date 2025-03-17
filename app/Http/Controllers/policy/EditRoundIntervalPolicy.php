@@ -37,7 +37,7 @@ if ( isset($data['interval'] ) ) {
 }
 
 
-$ripf = TTnew( 'RoundIntervalPolicyFactory' );
+$ripf = new RoundIntervalPolicyFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -70,7 +70,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+			$riplf = new RoundIntervalPolicyListFactory();
 			$riplf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($riplf as $rip_obj) {

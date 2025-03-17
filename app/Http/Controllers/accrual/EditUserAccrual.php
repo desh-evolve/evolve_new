@@ -39,7 +39,7 @@ if ( isset($data) ) {
 	$data['amount'] = TTDate::parseTimeUnit( $data['amount'] );
 }
 
-$af = TTnew( 'AccrualFactory' );
+$af = new AccrualFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -70,7 +70,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$alf = TTnew( 'AccrualListFactory' );
+			$alf = new AccrualListFactory();
 			$alf->getById($id);
 
 			foreach ($alf as $a_obj) {
@@ -104,10 +104,10 @@ switch ($action) {
 						);
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 		$accrual_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 		//Select box options;

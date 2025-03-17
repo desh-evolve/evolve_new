@@ -99,7 +99,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		if ( is_array($ids) ) {
 			$id_count = count($ids)-1;
 
@@ -130,36 +130,36 @@ switch ($action) {
 		}
 
 		if ( $user_date_id != '' ) {
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getByUserDateIDAndStatusAndType( $user_date_id, array(10,20,30), array(10,20,30,40,100), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
 
 			$pager = new Pager($udtlf);
 
-			$blf = TTnew( 'BranchListFactory' );
+			$blf = new BranchListFactory();
 			$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-			$dlf = TTnew( 'DepartmentListFactory' );
+			$dlf = new DepartmentListFactory();
 			$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 			//Absence policies
-			$otplf = TTnew( 'AbsencePolicyListFactory' );
+			$otplf = new AbsencePolicyListFactory();
 			$absence_policy_options = $otplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 			//Overtime policies
-			$otplf = TTnew( 'OverTimePolicyListFactory' );
+			$otplf = new OverTimePolicyListFactory();
 			$over_time_policy_options = $otplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 			//Premium policies
-			$pplf = TTnew( 'PremiumPolicyListFactory' );
+			$pplf = new PremiumPolicyListFactory();
 			$premium_policy_options = $pplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 			$job_options = array();
 			$job_item_options = array();
 			if ( $current_company->getProductEdition() == 20 ) {
-				$jlf = TTnew( 'JobListFactory' );
+				$jlf = new JobListFactory();
 				$job_options = $jlf->getByCompanyIdArray( $current_company->getId(), FALSE );
 
-				$jilf = TTnew( 'JobItemListFactory' );
+				$jilf = new JobItemListFactory();
 				$job_item_options = $jilf->getByCompanyIdArray( $current_company->getId(), TRUE );
 			}
 

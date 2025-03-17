@@ -37,13 +37,13 @@ return new class extends Migration
             $table->string('child4', 200); // Child 4 details (required)
             $table->string('child5', 200); // Child 5 details (required)
             $table->string('child6', 200); // Child 6 details (required)
-            $table->integer('created_date')->nullable(); // Created date (nullable)
-            $table->integer('created_by')->nullable(); // Created by (nullable)
-            $table->integer('updated_date')->nullable(); // Updated date (nullable)
-            $table->integer('updated_by')->nullable(); // Updated by (nullable)
-            $table->integer('deleted_date')->nullable(); // Deleted date (nullable)
-            $table->integer('deleted_by')->nullable(); // Deleted by (nullable)
-            $table->tinyInteger('deleted')->default(0); // Deleted flag (default 0)
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->text('note')->nullable(); // Additional note (nullable)
         });
     }

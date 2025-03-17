@@ -106,7 +106,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 		if ( is_object($this->schedule_policy_obj) ) {
 			return $this->schedule_policy_obj;
 		} else {
-			$splf = TTnew( 'SchedulePolicyListFactory' );
+			$splf = new SchedulePolicyListFactory();
 			$splf->getById( $this->getSchedulePolicyID() );
 			if ( $splf->getRecordCount() > 0 ) {
 				$this->schedule_policy_obj = $splf->getCurrent();
@@ -127,7 +127,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 	function setRecurringScheduleTemplateControl($id) {
 		$id = trim($id);
 
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'recurring_schedule_template_control',
 													$rstclf->getByID($id),
@@ -344,7 +344,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 			$id = NULL;
 		}
 
-		$splf = TTnew( 'SchedulePolicyListFactory' );
+		$splf = new SchedulePolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -371,7 +371,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 
 		Debug::text('Branch ID: '. $id ,__FILE__, __LINE__, __METHOD__, 10);
 
@@ -400,7 +400,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 	function setDepartment($id) {
 		$id = trim($id);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 
 		//-1 is for user default department.
 		if (  $id == 0 OR $id == -1
@@ -432,7 +432,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 		}
 
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 		}
 
 		if (  $id == NULL
@@ -464,7 +464,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 		}
 
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 		}
 
 		if (  $id == NULL
@@ -508,7 +508,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 		$start_date_week = TTDate::getBeginWeekEpoch( $recurring_schedule_control_start_date, 0 ); //Start week on Sunday to match Recurring Schedule.
 		//Debug::text('Week of Start Date: '. $start_date_week ,__FILE__, __LINE__, __METHOD__, 10);
 
-		$apf = TTnew( 'AbsencePolicyFactory' );
+		$apf = new AbsencePolicyFactory();
 		$absence_policy_paid_type_options = $apf->getOptions('paid_type');
 
 		for ( $i=$start_date; $i <= $end_date; $i+=(86400+43200)) {

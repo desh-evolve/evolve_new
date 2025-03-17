@@ -19,7 +19,7 @@ class PayPeriodScheduleUserFactory extends Factory {
 	function setPayPeriodSchedule($id) {
 		$id = trim($id);
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule',
@@ -38,7 +38,7 @@ class PayPeriodScheduleUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -49,7 +49,7 @@ class PayPeriodScheduleUserFactory extends Factory {
 		}
 	}
 	function isUniqueUser($id) {
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		$ph = array(
 					'id' => $id,
@@ -81,7 +81,7 @@ class PayPeriodScheduleUserFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',

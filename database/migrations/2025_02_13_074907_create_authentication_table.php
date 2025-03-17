@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('session_id');
             $table->unsignedBigInteger('user_id');
             $table->string('ip_address', 250)->nullable();
-            $table->integer('created_date');
+            $table->integer('created_date')->nullable();
             $table->integer('updated_date')->nullable();
         });
     }

@@ -56,9 +56,9 @@ switch ($action) {
 		break;
 	default:
              
-		$ulplf = TTnew( 'UserLifePromotionListFactory' );
+		$ulplf = new UserLifePromotionListFactory();
        
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $permission->Check('user','view') OR $permission->Check('user','view_child') ) {
 			if ( isset($filter_user_id) ) {
@@ -106,7 +106,7 @@ switch ($action) {
 
 			$smarty->assign_by_ref('lifepromotions', $lifepromotions);
 
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 			if ( $permission->Check('accrual','view') == FALSE ) {

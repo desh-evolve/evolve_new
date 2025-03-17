@@ -86,7 +86,7 @@ if ( isset($data)) {
 	}
 }
 
-$ppf = TTnew( 'PremiumPolicyFactory' );
+$ppf = new PremiumPolicyFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -283,7 +283,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$pplf = TTnew( 'PremiumPolicyListFactory' );
+			$pplf = new PremiumPolicyListFactory();
 			$pplf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($pplf as $pp_obj) {
@@ -390,21 +390,21 @@ switch ($action) {
 
 		$data = Misc::preSetArrayValues( $data, array('branch_ids', 'department_ids', 'job_group_ids', 'job_ids', 'job_item_group_ids', 'job_item_ids'), NULL);
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 		$accrual_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_entry_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50) );
 
 		//Get branches
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 		$data['src_branch_options'] = Misc::arrayDiffByKey( (array)$data['branch_ids'], $branch_options );
 		$data['selected_branch_options'] = Misc::arrayIntersectByKey( (array)$data['branch_ids'], $branch_options );
 
 		//Get departments
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 		$data['src_department_options'] = Misc::arrayDiffByKey( (array)$data['department_ids'], $department_options );
@@ -412,28 +412,28 @@ switch ($action) {
 
 		if ( $current_company->getProductEdition() == 20 ) {
 			//Get Job Groups
-			$jglf = TTnew( 'JobGroupListFactory' );
+			$jglf = new JobGroupListFactory();
 			$nodes = FastTree::FormatArray( $jglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE);
 			$job_group_options = $jglf->getArrayByNodes( $nodes, FALSE, FALSE );
 			$data['src_job_group_options'] = Misc::arrayDiffByKey( (array)$data['job_group_ids'], $job_group_options );
 			$data['selected_job_group_options'] = Misc::arrayIntersectByKey( (array)$data['job_group_ids'], $job_group_options );
 
 			//Get Jobs
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getByCompanyId( $current_company->getId() );
 			$job_options = $jlf->getArrayByListFactory( $jlf, FALSE, TRUE );
 			$data['src_job_options'] = Misc::arrayDiffByKey( (array)$data['job_ids'], $job_options );
 			$data['selected_job_options'] = Misc::arrayIntersectByKey( (array)$data['job_ids'], $job_options );
 
 			//Get Job Item Groups
-			$jiglf = TTnew( 'JobItemGroupListFactory' );
+			$jiglf = new JobItemGroupListFactory();
 			$nodes = FastTree::FormatArray( $jiglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE);
 			$job_item_group_options = $jiglf->getArrayByNodes( $nodes, FALSE, FALSE );
 			$data['src_job_item_group_options'] = Misc::arrayDiffByKey( (array)$data['job_item_group_ids'], $job_item_group_options );
 			$data['selected_job_item_group_options'] = Misc::arrayIntersectByKey( (array)$data['job_item_group_ids'], $job_item_group_options );
 
 			//Get Job Items
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
 			$job_item_options = $jilf->getArrayByListFactory( $jilf, FALSE, TRUE );
 			$data['src_job_item_options'] = Misc::arrayDiffByKey( (array)$data['job_item_ids'], $job_item_options );
@@ -441,7 +441,7 @@ switch ($action) {
 		}
 
 		//Select box options;
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 		$data['wage_group_options'] = $wglf->getArrayByListFactory( $wglf->getByCompanyId( $current_company->getId() ), TRUE );
 
 		$data['type_options'] = $ppf->getOptions('type');

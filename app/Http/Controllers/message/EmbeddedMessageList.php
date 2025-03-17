@@ -40,7 +40,7 @@ extract	(FormVariables::GetVariables(
 												'close'
 												) ) );
 
-$mcf = TTnew( 'MessageControlFactory' );
+$mcf = new MessageControlFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -60,7 +60,7 @@ switch ($action) {
 
 			$mcf->StartTransaction();
 
-			$mcf = TTnew( 'MessageControlFactory' );
+			$mcf = new MessageControlFactory();
 
 			$mcf->setObjectType( $object_type_id );
 			$mcf->setObject( $object_id );
@@ -70,7 +70,7 @@ switch ($action) {
 
 			//This needs to reply to all those involved in the object thread. As when the object (request) creator
 			//responds, we don't know who exactly they are responding to? Or should it be the last message sender only?
-			$mclf = TTnew( 'MessageControlListFactory' );
+			$mclf = new MessageControlListFactory();
 			$to_user_ids = $mclf->getByCompanyIdAndObjectTypeAndObjectAndNotUser( $current_user->getCompany(), $object_type_id, $object_id, $current_user->getId() );
 			if ( isset($object_user_id) AND $object_user_id > 0) {
 				$to_user_ids[] = $object_user_id;
@@ -97,14 +97,14 @@ switch ($action) {
 		}
 	default:
 		if ( isset($object_type_id) AND isset($object_id) ) {
-			$mclf = TTnew( 'MessageControlListFactory' );
+			$mclf = new MessageControlListFactory();
 			$mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject( $current_user->getCompany(), $current_user->getId(), $object_type_id, $object_id );
 
 			if ( $mclf->getRecordCount() > 0 ) {
 				$mark_read_message_ids = array();
 				$i=0;
 				foreach( $mclf as $message ) {
-					$ulf = TTnew( 'UserListFactory' );
+					$ulf = new UserListFactory();
 
 					$from_user_id = $message->getColumn('from_user_id');
 					$from_user_full_name = Misc::getFullName( $message->getColumn('from_first_name'), $message->getColumn('from_middle_name'), $message->getColumn('from_last_name') );

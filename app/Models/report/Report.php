@@ -586,9 +586,9 @@ class Report {
 		}
 
 		if ( is_object( $this->getUserObject() ) ) {
-			$urdf = TTnew( 'UserReportDataFactory' );
+			$urdf = new UserReportDataFactory();
 
-			$urdlf = TTnew( 'UserReportDataListFactory' );
+			$urdlf = new UserReportDataListFactory();
 			$urdlf->getByCompanyIdAndScriptAndDefault( $this->getUserObject()->getCompany(), get_class($this) );
 			if ( $urdlf->getRecordCount() > 0 ) {
 				$urdf->setID( $urdlf->getCurrent()->getID() );
@@ -615,7 +615,7 @@ class Report {
 			return FALSE;
 		}
 
-		$urdlf = TTnew( 'UserReportDataListFactory' );
+		$urdlf = new UserReportDataListFactory();
 		$urdlf->getByCompanyIdAndScriptAndDefault( $this->getUserObject()->getCompany(), get_class($this) );
 		if ( $urdlf->getRecordCount() > 0 ) {
 			Debug::Text('Found Company Report Setup!', __FILE__, __LINE__, __METHOD__,10);
@@ -1078,7 +1078,7 @@ class Report {
 				$config = $this->getFilterConfig();
 				if ( isset($config['pay_period_id']) AND is_array($config['pay_period_id']) ) {
 					//Pay Period based
-					$pplf = TTnew( 'PayPeriodListFactory' );
+					$pplf = new PayPeriodListFactory();
 					$pplf->getByCompanyId( $this->getUserObject()->getCompany() );
 					$pay_period_options = Misc::trimSortPrefix( $pplf->getArrayByListFactory( $pplf, FALSE, TRUE ) );
 

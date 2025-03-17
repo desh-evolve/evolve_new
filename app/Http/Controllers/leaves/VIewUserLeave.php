@@ -35,7 +35,7 @@ extract	(FormVariables::GetVariables(
 
 
 
-$lrlf = TTnew( 'LeaveRequestListFactory' );
+$lrlf = new LeaveRequestListFactory();
 $lrlf->getById($id);
 
 if($lrlf->getRecordCount() >0){
@@ -48,7 +48,7 @@ if($lrlf->getRecordCount() >0){
 //Select box options; getName() no_days
 
 
-$aplf = TTnew( 'AccrualPolicyListFactory' );
+$aplf = new AccrualPolicyListFactory();
 $aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
 
 $leave_options = array();
@@ -60,7 +60,7 @@ $data['leave_options'] = $leave_options;
         
         
         
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 //$filter_data['default_branch_id'] = $current_user->getDefaultBranch();
 $filter_data['exclude_id'] = 1;
 

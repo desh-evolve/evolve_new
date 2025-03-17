@@ -45,7 +45,7 @@ if ( isset($udt_data) ) {
 	}
 }
 
-$udtf = TTnew( 'UserDateTotalFactory' );
+$udtf = new UserDateTotalFactory();
 
 $action = strtolower($action);
 switch ($action) {
@@ -101,7 +101,7 @@ switch ($action) {
 		if ( $id != '' ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getById( $id );
 
 			foreach ($udtlf as $udt_obj) {
@@ -142,7 +142,7 @@ switch ($action) {
 			//UserID has to be set at minimum
 
 			if ( $user_date_id != '' ) {
-				$udlf = TTnew( 'UserDateListFactory' );
+				$udlf = new UserDateListFactory();
 				$udlf->getById( $user_date_id );
 				if ( $udlf->getRecordCount() > 0 ) {
 					$udt_obj = $udlf->getCurrent();
@@ -165,33 +165,33 @@ switch ($action) {
 			}
 		}
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
 		//Absence policies
-		$otplf = TTnew( 'AbsencePolicyListFactory' );
+		$otplf = new AbsencePolicyListFactory();
 		$absence_policy_options = $otplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 		//Overtime policies
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 		$over_time_policy_options = $otplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 		//Premium policies
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 		$premium_policy_options = $pplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 		//Meal policies
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 		$meal_policy_options = $mplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$udt_data['job_options'] = $jlf->getByCompanyIdAndUserIdAndStatusArray( $current_company->getId(),  $udt_data['user_id'], array(10,20,30,40), TRUE );
 
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$udt_data['job_item_options'] = $jilf->getByCompanyIdArray( $current_company->getId(), TRUE );
 		}
 

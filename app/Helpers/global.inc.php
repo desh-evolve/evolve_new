@@ -229,7 +229,7 @@ function custom_autoload( $name ) {
 spl_autoload_register('custom_autoload'); //Registers the autoloader mainly for use with PHPUnit
 
 //The basis for the plugin system, instantiate all classes through this, allowing the class to be overloaded on the fly by a class in the plugin directory.
-//ie: $uf = TTNew( 'UserFactory' ); OR $uf = TTNew( 'UserFactory', $arg1, $arg2, $arg3 );
+//ie: $uf = new UserFactory(); OR $uf = TTNew( 'UserFactory', $arg1, $arg2, $arg3 );
 function TTnew( $class_name ) { //Unlimited arguments are supported.
     global $config_vars;
 

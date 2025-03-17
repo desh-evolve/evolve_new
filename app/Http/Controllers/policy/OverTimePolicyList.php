@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 
 		foreach ($ids as $id) {
 			$otplf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -80,7 +80,7 @@ switch ($action) {
 		break;
 
 	default:
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 		$otplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($otplf);

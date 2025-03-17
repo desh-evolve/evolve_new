@@ -17,7 +17,7 @@ class PayStubEntryFactory extends Factory {
 		if ( is_object($this->pay_stub_entry_account_obj) ) {
 			return $this->pay_stub_entry_account_obj;
 		} else {
-			$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getByID( $this->getPayStubEntryNameID() );
 			if ( $psealf->getRecordCount() > 0 ) {
 				$this->pay_stub_entry_account_obj = $psealf->getCurrent();
@@ -32,7 +32,7 @@ class PayStubEntryFactory extends Factory {
 		if ( is_object($this->pay_stub_obj) ) {
 			return $this->pay_stub_obj;
 		} else {
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$pslf->getByID( $this->getPayStub() );
 			if ( $pslf->getRecordCount() > 0 ) {
 				$this->pay_stub_obj = $pslf->getCurrent();
@@ -53,7 +53,7 @@ class PayStubEntryFactory extends Factory {
 	function setPayStub($id) {
 		$id = trim($id);
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'pay_stub',
 													$pslf->getByID($id),
@@ -79,8 +79,8 @@ class PayStubEntryFactory extends Factory {
 
 		Debug::text('Entry Account ID: '. $id , __FILE__, __LINE__, __METHOD__,10);
 
-		//$psenlf = TTnew( 'PayStubEntryNameListFactory' );
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		//$psenlf = new PayStubEntryNameListFactory();
+		$psealf = new PayStubEntryAccountListFactory();
 		$result = $psealf->getById($id);
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_stub_entry_name_id',
@@ -108,7 +108,7 @@ class PayStubEntryFactory extends Factory {
 
 		Debug::text('PS Amendment ID: '. $id , __FILE__, __LINE__, __METHOD__,10);
 
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$psalf = new PayStubAmendmentListFactory();
 		$result = $psalf->getById($id);
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_stub_amendment_id',
@@ -379,10 +379,10 @@ class PayStubEntryFactory extends Factory {
 			Debug::text('Calculating YTD values...' , __FILE__, __LINE__, __METHOD__,10);
 
 			//Calculate things like YTD values
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$ps = $pslf->getById( $this->getPayStub() )->getCurrent();
 
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 
 			//if ( $this->getPayStubEntryNameId() == 24 ) { //Vacation accural
 			//Debug::text('aaCalculating YTD values...:  for Vacation Accrual....', __FILE__, __LINE__, __METHOD__,10);
@@ -515,7 +515,7 @@ class PayStubEntryFactory extends Factory {
 
 			if ( $amount != 0 ) {
 				//Add entry to do the opposite to the accrual.
-				$psef = TTnew( 'PayStubEntryFactory' );
+				$psef = new PayStubEntryFactory();
 				$psef->setPayStub( $this->getPayStub() );
 				$psef->setPayStubEntryNameId( $this->getPayStubEntryAccountObject()->getAccrual() );
 				$psef->setAmount( $amount );

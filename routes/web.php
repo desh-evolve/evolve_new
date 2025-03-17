@@ -8,6 +8,7 @@ use App\Http\Controllers\branch\EditBranch;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\users\UserGenericStatusList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -62,3 +63,8 @@ Route::get('/progress_bar/generate_attendance_bonuses', [ProgressBar::class, 'ge
 
 
 
+// ===============================================================================================================================
+// Users Functions
+// ===============================================================================================================================
+Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'index'])->name('users.user_generic_status_list');
+// ===============================================================================================================================

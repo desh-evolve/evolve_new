@@ -17,13 +17,13 @@ return new class extends Migration
             $table->string('name', 250);
             $table->integer('exception_policy_control_id')->nullable(); // NULLable column
             $table->integer('accrual_policy_id')->nullable(); // NULLable column
-            $table->integer('created_date')->nullable(); // Optional timestamp column
-            $table->integer('created_by')->nullable(); // Optional foreign key column
-            $table->integer('updated_date')->nullable(); // Optional timestamp column
-            $table->integer('updated_by')->nullable(); // Optional foreign key column
-            $table->integer('deleted_date')->nullable(); // Optional timestamp column
-            $table->integer('deleted_by')->nullable(); // Optional foreign key column
-            $table->tinyInteger('deleted')->default(0); // Default 0 for 'not deleted'
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

@@ -50,7 +50,7 @@ class AllowanceFactory extends Factory {
 
       
         
-        	function getPayPeriodObject() {
+    function getPayPeriodObject() {
 		if ( is_object($this->pay_period_obj) ) {
 			return $this->pay_period_obj;
 		} else {
@@ -62,7 +62,7 @@ class AllowanceFactory extends Factory {
 	}
         
         
-        function getPayPeriod() {
+    function getPayPeriod() {
 		if ( isset($this->data['payperiod_id']) ) {
 			return $this->data['payperiod_id'];
 		}

@@ -16,7 +16,7 @@ class HierarchyUserFactory extends Factory {
 		if ( is_object($this->hierarchy_control_obj) ) {
 			return $this->hierarchy_control_obj;
 		} else {
-			$hclf = TTnew( 'HierarchyControlListFactory' );
+			$hclf = new HierarchyControlListFactory();
 			$this->hierarchy_control_obj = $hclf->getById( $this->getHierarchyControl() )->getCurrent();
 
 			return $this->hierarchy_control_obj;
@@ -27,7 +27,7 @@ class HierarchyUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -48,7 +48,7 @@ class HierarchyUserFactory extends Factory {
 	function setHierarchyControl($id) {
 		$id = trim($id);
 
-		$hclf = TTnew( 'HierarchyControlListFactory' );
+		$hclf = new HierarchyControlListFactory();
 
 		//This is a sub-class, need to support setting HierachyControlID before its created.
 		if ( $id != 0
@@ -66,8 +66,8 @@ class HierarchyUserFactory extends Factory {
 	}
 
 	function isUniqueUser($id, $exclude_id = 0 ) {
-		$hcf = TTnew( 'HierarchyControlFactory' );
-		$hotf = TTnew( 'HierarchyObjectTypeFactory' );
+		$hcf = new HierarchyControlFactory();
+		$hotf = new HierarchyObjectTypeFactory();
 
 		$ph = array(
 					'hierarchy_control_id' => $this->getHierarchyControl(),
@@ -112,8 +112,8 @@ class HierarchyUserFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
-		$hllf = TTnew( 'HierarchyLevelListFactory' );
+		$ulf = new UserListFactory();
+		$hllf = new HierarchyLevelListFactory();
 
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',

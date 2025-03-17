@@ -36,7 +36,7 @@ if ( isset($data['date_stamp'] ) ) {
 	$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 }
 
-$hf = TTnew( 'HolidayFactory' );
+$hf = new HolidayFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -66,7 +66,7 @@ switch ($action) {
 		if ( isset($id) AND $id != '' ) {
 			BreadCrumb::setCrumb($title);
 
-			$hlf = TTnew( 'HolidayListFactory' );
+			$hlf = new HolidayListFactory();
 			$hlf->getByIdAndHolidayPolicyID( $id, $holiday_policy_id );
 			if ( $hlf->getRecordCount() > 0 ) {
 				foreach ($hlf as $h_obj) {

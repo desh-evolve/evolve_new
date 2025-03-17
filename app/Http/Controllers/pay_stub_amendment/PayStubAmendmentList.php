@@ -71,12 +71,12 @@ if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
 	}
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
-$pplf = TTnew( 'PayPeriodListFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
+$pplf = new PayPeriodListFactory();
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -104,7 +104,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$psalf = new PayStubAmendmentListFactory();
 
 		foreach ($ids as $id) {
 			$psalf->getById( $id );
@@ -154,8 +154,8 @@ switch ($action) {
 															'page' => $page
 														) );
 
-		$ulf = TTnew( 'UserListFactory' );
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$ulf = new UserListFactory();
+		$psalf = new PayStubAmendmentListFactory();
 
 		if ( $permission->Check('pay_stub_amendment','view') == FALSE ) {
 			if ( $permission->Check('pay_stub_amendment','view_child') ) {
@@ -181,30 +181,30 @@ switch ($action) {
 
 		$pager = new Pager($psalf);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_entry_name_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50,60,65) );
 
 		//Get pay periods
 		$pplf->getByCompanyId( $current_company->getId() );
 		$pay_period_options = $pplf->getArrayByListFactory( $pplf, FALSE, TRUE );
 
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-		$rpsalf = TTnew( 'RecurringPayStubAmendmentListFactory' );
+		$rpsalf = new RecurringPayStubAmendmentListFactory();
 		$rpsalf->getByCompanyId( $current_company->getId() );
 		$recurring_ps_amendment_options = $rpsalf->getArrayByListFactory( $rpsalf, FALSE, TRUE );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
 		foreach ($psalf as $psa_obj) {

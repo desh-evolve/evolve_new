@@ -81,7 +81,7 @@ switch ($action) {
 
 		Debug::text(' Start Date: '. TTDate::getDate('DATE+TIME', $start_date) .' End Date: '. TTDate::getDate('DATE+TIME', $end_date) , __FILE__, __LINE__, __METHOD__,10);
 
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 		$default_schedule_shifts = $sf->getScheduleArray( $user_id, $start_date, $end_date);
 		//var_dump($default_schedule_shifts);
 
@@ -90,14 +90,14 @@ switch ($action) {
 		$smarty->assign_by_ref('calendar_array', $calendar_array);
 		//$smarty->assign_by_ref('pay_period_locked_rows', $pay_period_locked_rows);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_obj = $ulf->getById( $user_id )->getCurrent();
 
 		/*
 		$holiday = new Holiday();
 		$holiday->GetByCountryAndProvince($user_obj->getCountry(), $user_obj->getProvince() );
 		*/
-		$hlf = TTnew( 'HolidayListFactory' );
+		$hlf = new HolidayListFactory();
 		$holiday_array = $hlf->getArrayByPolicyGroupUserId( $user_id, $start_date, $end_date );
 		//var_dump($holiday_array);
 

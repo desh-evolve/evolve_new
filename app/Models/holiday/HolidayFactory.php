@@ -68,7 +68,7 @@ class HolidayFactory extends Factory {
 			return $this->holiday_policy_obj;
 		} else {
 
-			$hplf = TTnew( 'HolidayPolicyListFactory' );
+			$hplf = new HolidayPolicyListFactory();
 			$hplf->getById( $this->getHolidayPolicyID() );
 
 			if ( $hplf->getRecordCount() == 1 ) {
@@ -98,7 +98,7 @@ class HolidayFactory extends Factory {
 	function setHolidayPolicyID($id) {
 		$id = trim($id);
 
-		$hplf = TTnew( 'HolidayPolicyListFactory' );
+		$hplf = new HolidayPolicyListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'holiday_policy',
@@ -271,7 +271,7 @@ class HolidayFactory extends Factory {
 	}
 
 	function getAverageTime( $user_id ) {
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 
 		//Check if Min and Max time is the same, if so we can skip any averaging.
 		if ( $this->getHolidayPolicyObject()->getMinimumTime() > 0
@@ -341,11 +341,11 @@ class HolidayFactory extends Factory {
 
 		//$this->getHolidayPolicyObject();
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_obj = $ulf->getById($user_id)->getCurrent();
 
-		$slf = TTnew( 'ScheduleListFactory' );
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$slf = new ScheduleListFactory();
+		$udtlf = new UserDateTotalListFactory();
 
 		//Make sure the employee has been employed long enough according to labor standards
 		//Also make sure that the employee hasn't been terminated on or before the holiday.

@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('station_id', 250); // Station ID
             $table->string('source', 250)->nullable(); // Source (nullable)
             $table->string('description', 250); // Description
-            $table->integer('created_date')->nullable(); // Created timestamp (nullable)
-            $table->integer('created_by')->nullable(); // Created by user ID (nullable)
-            $table->integer('updated_date')->nullable(); // Updated timestamp (nullable)
-            $table->integer('updated_by')->nullable(); // Updated by user ID (nullable)
-            $table->integer('deleted_date')->nullable(); // Deleted timestamp (nullable)
-            $table->integer('deleted_by')->nullable(); // Deleted by user ID (nullable)
-            $table->tinyInteger('deleted')->default(0); // Deleted flag (0 = not deleted)
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('allowed_date')->nullable(); // Allowed date (nullable)
             $table->integer('branch_id')->nullable(); // Foreign key to `branch` table (nullable)
             $table->integer('department_id')->nullable(); // Foreign key to `department` table (nullable)

@@ -79,7 +79,7 @@ $columns = array(
 $columns = Misc::prependArray( $static_columns, $columns);
 
 //Get all Overtime policies.
-$otplf = TTnew( 'OverTimePolicyListFactory' );
+$otplf = new OverTimePolicyListFactory();
 $otplf->getByCompanyId($current_company->getId());
 if ( $otplf->getRecordCount() > 0 ) {
 	foreach ($otplf as $otp_obj ) {
@@ -90,7 +90,7 @@ if ( $otplf->getRecordCount() > 0 ) {
 }
 
 //Get all Premium policies.
-$pplf = TTnew( 'PremiumPolicyListFactory' );
+$pplf = new PremiumPolicyListFactory();
 $pplf->getByCompanyId($current_company->getId());
 if ( $pplf->getRecordCount() > 0 ) {
 	foreach ($pplf as $pp_obj ) {
@@ -102,7 +102,7 @@ if ( $pplf->getRecordCount() > 0 ) {
 
 
 //Get all Absence Policies.
-$aplf = TTnew( 'AbsencePolicyListFactory' );
+$aplf = new AbsencePolicyListFactory();
 $aplf->getByCompanyId($current_company->getId());
 if ( $aplf->getRecordCount() > 0 ) {
 	foreach ($aplf as $ap_obj ) {
@@ -114,7 +114,7 @@ if ( $aplf->getRecordCount() > 0 ) {
 
 
 //Get all pay periods
-$pplf = TTnew( 'PayPeriodListFactory' );
+$pplf = new PayPeriodListFactory();
 $pplf->getByCompanyId( $current_company->getId() );
 if ( $pplf->getRecordCount() > 0 ) {
 	$pp=0;
@@ -129,7 +129,7 @@ if ( $pplf->getRecordCount() > 0 ) {
 		$pp++;
 	}
 
-	$pplf = TTnew( 'PayPeriodListFactory' );
+	$pplf = new PayPeriodListFactory();
 	$pay_period_options = $pplf->getByIdListArray($pay_period_ids, NULL, array('start_date' => 'desc'), FALSE );
 }
 
@@ -147,7 +147,7 @@ $filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 
 $permission_children_ids = array();
 $wage_permission_children_ids = array();
 if ( $permission->Check('punch','view') == FALSE ) {
-	$hlf = TTnew( 'HierarchyListFactory' );
+	$hlf = new HierarchyListFactory();
 	$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 	Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -173,8 +173,8 @@ if ( $permission->Check('wage','view') == FALSE ) {
 	$wage_filter_data['permission_children_ids'] = $wage_permission_children_ids;
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $action = Misc::findSubmitButton(); 
 switch ($action) {
@@ -232,7 +232,7 @@ switch ($action) {
 									);
 */
 
-        $ulf = TTnew( 'UserListFactory' );
+        $ulf = new UserListFactory();
         $ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
         if ( $ulf->getRecordCount() > 0 ) {
             if ( isset($filter_data['date_type']) AND $filter_data['date_type'] == 'pay_period_ids' ) {
@@ -284,7 +284,7 @@ switch ($action) {
             if ( $permission->Check('wage','view') == TRUE ) {
                 $wage_filter_data['permission_children_ids'] = $filter_data['user_id'];
             }
-			$uwlf = TTnew( 'UserWageListFactory' );
+			$uwlf = new UserWageListFactory();
 			$uwlf->getLastWageByUserIdAndDate( $wage_filter_data['permission_children_ids'], $end_date );
 			if ( $uwlf->getRecordCount() > 0 ) {
 				foreach($uwlf as $uw_obj) {
@@ -294,12 +294,12 @@ switch ($action) {
 			unset($end_date);
 			//var_dump($user_wage);
 
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			if ( isset($filter_data['user_id']) ) {
 				$udtlf->getDayReportByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			}
 
-			$slf = TTnew( 'ScheduleListFactory' );
+			$slf = new ScheduleListFactory();
 			if ( isset($filter_data['user_id']) ) {
 				$slf->getDayReportByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			}
@@ -453,7 +453,7 @@ switch ($action) {
 
 			//Get all punches
 			if ( $action == 'display_detailed_timesheet'  ) {
-				$plf = TTnew( 'PunchListFactory' );
+				$plf = new PunchListFactory();
 				$plf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data);
 				if ( $plf->getRecordCount() > 0 ) {
 					foreach( $plf as $p_obj ) {
@@ -463,25 +463,25 @@ switch ($action) {
 				unset($plf,$p_obj);
 			}
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
-			$utlf = TTnew( 'UserTitleListFactory' );
+			$utlf = new UserTitleListFactory();
 			$title_options = $utlf->getByCompanyIdArray( $current_company->getId() );
 
-			$blf = TTnew( 'BranchListFactory' );
+			$blf = new BranchListFactory();
 			$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-			$dlf = TTnew( 'DepartmentListFactory' );
+			$dlf = new DepartmentListFactory();
 			$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
-			$uglf = TTnew( 'UserGroupListFactory' );
+			$uglf = new UserGroupListFactory();
 			$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'no_tree_text', TRUE) );
 
 			//Get verified timesheets
 			//Ignore if more then one pay period is selected
 			$verified_time_sheets = NULL;
 			if ( isset($filter_data['pay_period_ids']) AND count($filter_data['pay_period_ids']) > 0 ) {
-				$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+				$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 				$pptsvlf->getByPayPeriodIdAndCompanyId( $filter_data['pay_period_ids'][0], $current_company->getId() );
 				if ( $pptsvlf->getRecordCount() > 0 ) {
 					foreach( $pptsvlf as $pptsv_obj ) {
@@ -680,7 +680,7 @@ switch ($action) {
 					if ( isset($user_data['data']) AND is_array($user_data['data']) ) {
 						if ( isset($filter_data['date_type']) AND $filter_data['date_type'] == 'pay_period_ids' )  {
 							//Fill in any missing days, only if they select by pay period.
-							$pplf = TTnew( 'PayPeriodListFactory' );
+							$pplf = new PayPeriodListFactory();
 							$pplf->getById( $user_data['pay_period_id'] );
 							if ( $pplf->getRecordCount() == 1 ) {
 								$pp_obj = $pplf->getCurrent();
@@ -946,7 +946,7 @@ switch ($action) {
 					if ( isset($user_data['data']) AND is_array($user_data['data']) ) {
 						if ( isset($filter_data['date_type']) AND $filter_data['date_type'] == 'pay_period_ids' )  {
 							//Fill in any missing days, only if they select by pay period.
-							$pplf = TTnew( 'PayPeriodListFactory' );
+							$pplf = new PayPeriodListFactory();
 							$pplf->getById( $user_data['pay_period_id'] );
 							if ( $pplf->getRecordCount() == 1 ) {
 								$pp_obj = $pplf->getCurrent();
@@ -1292,7 +1292,7 @@ switch ($action) {
                             	//Debug::setVerbosity(11);
                                 Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
                                 
-                                $tssr= TTnew( 'TimesheetDetailReport' );//new code                                
+                                $tssr= new TimesheetDetailReport();//new code                                
                                 $output = $tssr->MonthlyLeaveTakenReport($rows, $filter_columns, $filter_data, $current_user, $current_company);//new code                               
                                                                                                
                                 if ( Debug::getVerbosity() < 11 ) {                                    
@@ -1307,7 +1307,7 @@ switch ($action) {
 //                                 echo '<pre>'; print_r($rows[0]['data']); echo '<pre>';  die;
                                  Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
                                 
-                                $tssr= TTnew( 'TimesheetDetailReport' );//new code                                
+                                $tssr= new TimesheetDetailReport();//new code                                
                                 $output = $tssr->MonthlyLeavebalanceReport($rows, $filter_columns, $filter_data, $current_user, $current_company);//new code                               
                                                                                                
                                 if ( Debug::getVerbosity() < 11 ) {                                    
@@ -1396,7 +1396,7 @@ switch ($action) {
 		}
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'punch_branch_ids', 'punch_department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
 
 		//Get include employee list.
@@ -1416,13 +1416,13 @@ switch ($action) {
 		$filter_data['selected_user_status_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_status_ids'], $user_status_options );
 
 		//Get Employee Groups
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = Misc::prependArray( $all_array_option, $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) ) );
 		$filter_data['src_group_options'] = Misc::arrayDiffByKey( (array)$filter_data['group_ids'], $group_options );
 		$filter_data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$filter_data['group_ids'], $group_options );
 
 		//Get branches
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $all_array_option, $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		$filter_data['src_branch_options'] = Misc::arrayDiffByKey( (array)$filter_data['branch_ids'], $branch_options );
@@ -1432,7 +1432,7 @@ switch ($action) {
 		$filter_data['selected_punch_branch_options'] = Misc::arrayIntersectByKey( (array)$filter_data['punch_branch_ids'], $branch_options );
 
 		//Get departments
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $all_array_option, $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		$filter_data['src_department_options'] = Misc::arrayDiffByKey( (array)$filter_data['department_ids'], $department_options );
@@ -1442,14 +1442,14 @@ switch ($action) {
 		$filter_data['selected_punch_department_options'] = Misc::arrayIntersectByKey( (array)$filter_data['punch_department_ids'], $department_options );
 
 		//Get employee titles
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$user_title_options = Misc::prependArray( $all_array_option, $utlf->getArrayByListFactory( $utlf, FALSE, TRUE ) );
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 		$filter_data['selected_user_title_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 
 		//Get pay periods
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByCompanyId( $current_company->getId() );
 		$pay_period_options = Misc::prependArray( $all_array_option, $pplf->getArrayByListFactory( $pplf, FALSE, TRUE ) );
 		$filter_data['src_pay_period_options'] = Misc::arrayDiffByKey( (array)$filter_data['pay_period_ids'], $pay_period_options );

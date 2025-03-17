@@ -92,7 +92,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 
 		foreach ($ids as $id) {
 			$oflf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -107,14 +107,14 @@ switch ($action) {
 		break;
 
 	default:
-		$oflf = TTnew( 'OtherFieldListFactory' );
+		$oflf = new OtherFieldListFactory();
 
 		$oflf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		$pager = new Pager($oflf);
 
 		//Get types
-		$off = TTnew( 'OtherFieldFactory' );
+		$off = new OtherFieldFactory();
 		$type_options = $off->getOptions('type');
 
 		foreach ($oflf as $obj) {

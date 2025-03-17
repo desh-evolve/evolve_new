@@ -69,7 +69,7 @@ $static_columns = array(
 							'-1132-epf_20_persent' => TTi18n::gettext('E.P.F - 20%'),
 							);
 
-$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+$psealf = new PayStubEntryAccountListFactory();
 $psen_columns = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50,60,65), FALSE );
 
 $columns = Misc::prependArray( $static_columns, $psen_columns);
@@ -78,7 +78,7 @@ $default_transaction_start_date = TTDate::getBeginMonthEpoch( time() );
 $default_transaction_end_date = TTDate::getEndMonthEpoch( time() );
 
 //Get all pay periods
-$pplf = TTnew( 'PayPeriodListFactory' );
+$pplf = new PayPeriodListFactory();
 $pplf->getPayPeriodsWithPayStubsByCompanyId( $current_company->getId() );
 $pay_period_options = array();
 if ( $pplf->getRecordCount() > 0 ) {
@@ -93,7 +93,7 @@ if ( $pplf->getRecordCount() > 0 ) {
 		}
 		$pp++;
 	}
-	$pplf = TTnew( 'PayPeriodListFactory' );
+	$pplf = new PayPeriodListFactory();
 	$pay_period_options = $pplf->getByIdListArray($pay_period_ids, NULL, array('start_date' => 'desc'));
 }
 
@@ -110,7 +110,7 @@ $filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 $permission_children_ids = array();
 if ( $permission->Check('pay_stub','view') == FALSE ) {
-	$hlf = TTnew( 'HierarchyListFactory' );
+	$hlf = new HierarchyListFactory();
 	$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 	Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -124,8 +124,8 @@ if ( $permission->Check('pay_stub','view') == FALSE ) {
 	$filter_data['permission_children_ids'] = $permission_children_ids;
 }
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -137,7 +137,7 @@ switch ($action) {
 		Debug::Text('Submit! Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data, 'aFilter Data', __FILE__, __LINE__, __METHOD__,10);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		if ( $ulf->getRecordCount() > 0 ) {
 			if ( isset($filter_data['date_type']) AND $filter_data['date_type'] == 'pay_period_ids' ) {
@@ -173,7 +173,7 @@ switch ($action) {
                                     
 					Debug::Text('View Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
 
-					$pslf = TTnew( 'PayStubListFactory' );
+					$pslf = new PayStubListFactory();
 					//$pslf->getByUserIdAndCompanyIdAndPayPeriodId( $filter_data['user_ids'], $current_company->getId(), $filter_data['pay_period_ids']);
 					$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 					if ( $pslf->getRecordCount() > 0 ) {
@@ -206,7 +206,7 @@ switch ($action) {
                                     
 					Debug::Text('View Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
 
-					$pslf = TTnew( 'PayStubListFactory' );
+					$pslf = new PayStubListFactory();
 					//$pslf->getByUserIdAndCompanyIdAndPayPeriodId( $filter_data['user_ids'], $current_company->getId(), $filter_data['pay_period_ids']);
 					$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 					if ( $pslf->getRecordCount() > 0 ) {
@@ -236,7 +236,7 @@ switch ($action) {
 				if ( $action == 'view_pay_stubs' ) {
 					Debug::Text('View Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
 
-					$pslf = TTnew( 'PayStubListFactory' );
+					$pslf = new PayStubListFactory();
 					//$pslf->getByUserIdAndCompanyIdAndPayPeriodId( $filter_data['user_ids'], $current_company->getId(), $filter_data['pay_period_ids']);
 					$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 					if ( $pslf->getRecordCount() > 0 ) {
@@ -259,7 +259,7 @@ switch ($action) {
 				  {
 					Debug::Text('Export NON-CSV', __FILE__, __LINE__, __METHOD__,10);
 
-					$pslf = TTnew( 'PayStubListFactory' );
+					$pslf = new PayStubListFactory();
 					//$pslf->getByUserIdAndCompanyIdAndPayPeriodId( $filter_data['user_ids'], $current_company->getId(), $filter_data['pay_period_ids']);
 					$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 					if ( $pslf->getRecordCount() > 0 AND strlen($filter_data['export_type']) >= 3) {
@@ -272,7 +272,7 @@ switch ($action) {
 
 								//Include file creation number in the exported file name, so the user knows what it is without opening the file,
 								//and can generate multiple files if they need to match a specific number.
-								$ugdlf = TTnew( 'UserGenericDataListFactory' );
+								$ugdlf = new UserGenericDataListFactory();
 								$ugdlf->getByCompanyIdAndScriptAndDefault( $current_company->getId(), 'PayStubFactory', TRUE );
 								if ( $ugdlf->getRecordCount() > 0 ) {
 									$ugd_obj = $ugdlf->getCurrent();
@@ -312,7 +312,7 @@ switch ($action) {
 
 					$report_columns = Misc::prependArray( $static_columns, $report_columns);
 
-					$pself = TTnew( 'PayStubEntryListFactory' );
+					$pself = new PayStubEntryListFactory();
 					$pself->getReportByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 					if ( $pself->getRecordCount() > 0 ) {
 						//Prepare data for regular report.
@@ -342,21 +342,21 @@ switch ($action) {
 					//var_dump($raw_rows);
 
 					if ( isset($raw_rows) ) {
-						$ulf = TTnew( 'UserListFactory' );
+						$ulf = new UserListFactory();
 
-						$utlf = TTnew( 'UserTitleListFactory' );
+						$utlf = new UserTitleListFactory();
 						$title_options = $utlf->getByCompanyIdArray( $current_company->getId() );
 
-						$uglf = TTnew( 'UserGroupListFactory' );
+						$uglf = new UserGroupListFactory();
 						$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'no_tree_text', TRUE) );
 
-						$blf = TTnew( 'BranchListFactory' );
+						$blf = new BranchListFactory();
 						$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
-						$dlf = TTnew( 'DepartmentListFactory' );
+						$dlf = new DepartmentListFactory();
 						$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
 
-						$crlf = TTnew( 'CurrencyListFactory' );
+						$crlf = new CurrencyListFactory();
 						$crlf->getByCompanyId( $current_company->getId() );
 						$currency_options = $crlf->getArrayByListFactory( $crlf, FALSE, TRUE );
 
@@ -372,7 +372,7 @@ switch ($action) {
 							$currency_convert_to_base = TRUE;
 						}
 
-						$balf = TTnew( 'BankAccountListFactory' );
+						$balf = new BankAccountListFactory();
 
 						$x=0;
 						foreach($raw_rows as $user_id => $data_b) {
@@ -562,7 +562,7 @@ switch ($action) {
 
 				Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
                                 
-                                $pslf = TTnew( 'PayStubListFactory' );//new code                                
+                                $pslf = new PayStubListFactory();//new code                                
                                 $output = $pslf->Array2PDF($rows, $filter_columns, $current_user, $current_company, 	                                          $filter_data['transaction_start_date'], $filter_data['transaction_end_date'],                                          $payperiod_string);//new code                               
                                                                                                
                                 if ( Debug::getVerbosity() < 11 ) {                                    
@@ -608,7 +608,7 @@ switch ($action) {
 
 				Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
                                 
-                                $pslf = TTnew( 'PayStubListFactory' );//new code                                
+                                $pslf = new PayStubListFactory();//new code                                
                                 $output = $pslf->Array2PDFLandscape($rows, $filter_columns, $current_user, $current_company, 	                                          $filter_data['transaction_start_date'], $filter_data['transaction_end_date'],                                          $payperiod_string);//new code                               
                                                                                                
                                 if ( Debug::getVerbosity() < 11 ) {                                    
@@ -664,7 +664,7 @@ switch ($action) {
 
 				Debug::Text('Exporting as Form C PDF', __FILE__, __LINE__, __METHOD__,10);
                                 
-                                $pslf = TTnew( 'PayStubListFactory' );//new code                                
+                                $pslf = new PayStubListFactory();//new code                                
                                 $output = $pslf->FormC($rows, $filter_data['include_user_ids'], $current_user, $current_company, $payperiod_string);//new code    
                                 
                                    
@@ -751,7 +751,7 @@ switch ($action) {
                                                           13 => '18', 
                                                           14 => '75' );
 
-				$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+				$pseallf = new PayStubEntryAccountLinkListFactory();
 				$pseallf->getByCompanyId( $current_company->getId() );
 				if ( $pseallf->getRecordCount() > 0 ) {
 					$pseal_obj = $pseallf->getCurrent();
@@ -773,7 +773,7 @@ switch ($action) {
 		}
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'currency_ids', 'column_ids' ), NULL );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
 
 		//Get include employee list.
@@ -794,41 +794,41 @@ switch ($action) {
 		$filter_data['selected_user_status_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_status_ids'], $user_status_options );
 
 		//Get Employee Groups
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = Misc::prependArray( $all_array_option, $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) ) );
 		$filter_data['src_group_options'] = Misc::arrayDiffByKey( (array)$filter_data['group_ids'], $group_options );
 		$filter_data['selected_group_options'] = Misc::arrayIntersectByKey( (array)$filter_data['group_ids'], $group_options );
 
 		//Get branches
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = Misc::prependArray( $all_array_option, $blf->getArrayByListFactory( $blf, FALSE, TRUE ) );
 		$filter_data['src_branch_options'] = Misc::arrayDiffByKey( (array)$filter_data['branch_ids'], $branch_options );
 		$filter_data['selected_branch_options'] = Misc::arrayIntersectByKey( (array)$filter_data['branch_ids'], $branch_options );
 
 		//Get departments
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = Misc::prependArray( $all_array_option, $dlf->getArrayByListFactory( $dlf, FALSE, TRUE ) );
 		$filter_data['src_department_options'] = Misc::arrayDiffByKey( (array)$filter_data['department_ids'], $department_options );
 		$filter_data['selected_department_options'] = Misc::arrayIntersectByKey( (array)$filter_data['department_ids'], $department_options );
 
 		//Get employee titles
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$user_title_options = Misc::prependArray( $all_array_option, $utlf->getArrayByListFactory( $utlf, FALSE, TRUE ) );
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 		$filter_data['selected_user_title_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 
 		//Get pay periods
-		//$pplf = TTnew( 'PayPeriodListFactory' );
+		//$pplf = new PayPeriodListFactory();
 		//$pplf->getPayPeriodsWithPayStubsByCompanyId( $current_company->getId() );
 		$pay_period_options = Misc::prependArray( $all_array_option, $pplf->getArrayByListFactory( $pplf, FALSE, TRUE ) );
 		$filter_data['src_pay_period_options'] = Misc::arrayDiffByKey( (array)$filter_data['pay_period_ids'], $pay_period_options );
 		$filter_data['selected_pay_period_options'] = Misc::arrayIntersectByKey( (array)$filter_data['pay_period_ids'], $pay_period_options );
 
 		//Get currencies
-		$crlf = TTnew( 'CurrencyListFactory' );
+		$crlf = new CurrencyListFactory();
 		$crlf->getByCompanyId( $current_company->getId() );
 		$currency_options = Misc::prependArray( $all_array_option, $crlf->getArrayByListFactory( $crlf, FALSE, TRUE ) );
 		$filter_data['src_currency_options'] = Misc::arrayDiffByKey( (array)$filter_data['currency_ids'], $currency_options );
@@ -845,7 +845,7 @@ switch ($action) {
 
 		$filter_data['group_by_options'] = Misc::prependArray( array('0' => TTi18n::gettext('No Grouping')), $static_columns );
 
-		$psf = TTnew( 'PayStubFactory' );
+		$psf = new PayStubFactory();
 		//ARSP EDIT --> ADD Some New code('pdf' => TTi18n::gettext('PDF (PDF)')) ) for new 'pdf' dropdown list from export type  
 		$filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => TTi18n::gettext('CSV (Excel)'), 'pdfp' => TTi18n::gettext('PDF (PORTRAIT)'), 'pdfl' => TTi18n::gettext('PDF (LANDSCAPE)'), 'formc' => TTi18n::gettext('Form C (PDF)'), 'payslip3' => TTi18n::gettext('3 Payslip/Page (PDF)'), 'payslip4' => TTi18n::gettext('4 Payslip/Page (Landscape PDF)')), Misc::trimSortPrefix( $psf->getOptions('export_type') ) );
 		//$filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => TTi18n::gettext('CSV (Excel)') ), Misc::trimSortPrefix( $psf->getOptions('export_type') ) );

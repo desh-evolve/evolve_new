@@ -54,7 +54,7 @@ $filter_data = array();
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 $permission_children_ids = array();
 if ( $permission->Check('request','view') == FALSE ) {
-	$hlf = TTnew( 'HierarchyListFactory' );
+	$hlf = new HierarchyListFactory();
 	$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
 	if ( $permission->Check('request','view_child') == FALSE ) {
@@ -85,7 +85,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$rlf = TTnew( 'RequestListFactory' );
+		$rlf = new RequestListFactory();
 
 		foreach ($ids as $id) {
 			$rlf->getByIdAndCompanyId( $id, $current_company->getId() );
@@ -113,7 +113,7 @@ switch ($action) {
 			$filter_data['end_date'] = $filter_end_date;
 		}
 
-		$rlf = TTnew( 'RequestListFactory' );
+		$rlf = new RequestListFactory();
 		$rlf->getByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		/*
@@ -145,7 +145,7 @@ switch ($action) {
 
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, FALSE );
 

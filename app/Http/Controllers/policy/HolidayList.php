@@ -61,7 +61,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$hlf = TTnew( 'HolidayListFactory' );
+		$hlf = new HolidayListFactory();
 
 		foreach ($ids as $id) {
 			$hlf->getById($id );
@@ -80,7 +80,7 @@ switch ($action) {
 	default:
 		BreadCrumb::setCrumb($title);
 
-		$hlf = TTnew( 'HolidayListFactory' );
+		$hlf = new HolidayListFactory();
 		$hlf->getByCompanyIdAndHolidayPolicyId( $current_company->getId(), $id );
 
 		$pager = new Pager($hlf);

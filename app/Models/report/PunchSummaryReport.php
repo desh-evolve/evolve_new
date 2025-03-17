@@ -76,7 +76,7 @@ class PunchSummaryReport extends Report {
 				break;
 			case 'custom_columns':
 				//Get custom fields for report data.
-				$oflf = TTnew( 'OtherFieldListFactory' );
+				$oflf = new OtherFieldListFactory();
 				//User and Punch fields conflict as they are merged together in a secondary process.
 				$other_field_names = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), array(15,20,30), array( 15 => '', 20 => 'job_', 30 => 'job_item_') );
 				if ( is_array($other_field_names) ) {
@@ -579,7 +579,7 @@ class PunchSummaryReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('punch','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			//Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -612,11 +612,11 @@ class PunchSummaryReport extends Report {
 		//Debug::Arr($permission_children_ids, 'Permission Children: '. count($permission_children_ids), __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($wage_permission_children_ids, 'Wage Children: '. count($wage_permission_children_ids), __FILE__, __LINE__, __METHOD__,10);
 
-		$slf = TTnew( 'StationListFactory' );
+		$slf = new StationListFactory();
 		$station_type_options = $slf->getOptions('type');
 
 		if ( $this->getUserObject()->getCompanyObject()->getProductEdition() == 20 ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$job_status_options = $jlf->getOptions('status');
 		} else {
 			$job_status_options = array();
@@ -624,7 +624,7 @@ class PunchSummaryReport extends Report {
 
 		$pay_period_ids = array();
 
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$punch_type_options = $plf->getOptions('type');
 
 		$plf->getPunchSummaryReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
@@ -735,7 +735,7 @@ class PunchSummaryReport extends Report {
 		//Debug::Arr($this->tmp_data['punch'], 'Punch Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get user data for joining.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -749,7 +749,7 @@ class PunchSummaryReport extends Report {
 		//Get verified timesheets for all pay periods considered in report.
 		$pay_period_ids = array_keys( $pay_period_ids );
 		if ( isset($pay_period_ids) AND count($pay_period_ids) > 0 ) {
-			$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 			$pptsvlf->getByPayPeriodIdAndCompanyId( $pay_period_ids, $this->getUserObject()->getCompany() );
 			if ( $pptsvlf->getRecordCount() > 0 ) {
 				foreach( $pptsvlf as $pptsv_obj ) {

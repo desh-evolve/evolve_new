@@ -29,7 +29,7 @@ extract	(FormVariables::GetVariables(
 												'data'
 												) ) );
 
-$pgf = TTnew( 'PolicyGroupFactory' );
+$pgf = new PolicyGroupFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -114,7 +114,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$pglf = TTnew( 'PolicyGroupListFactory' );
+			$pglf = new PolicyGroupListFactory();
 			$pglf->getByIdAndCompanyID( $id, $current_company->getID() );
 
 			foreach ($pglf as $pg_obj) {
@@ -144,31 +144,31 @@ switch ($action) {
 
 		$none_array_option = array('0' => TTi18n::gettext('-- None --') );
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), FALSE, TRUE );
 
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 		$over_time_policy_options = Misc::prependArray( $none_array_option, $otplf->getByCompanyIDArray( $current_company->getId(), FALSE ) );
 
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 		$premium_policy_options = Misc::prependArray( $none_array_option, $pplf->getByCompanyIDArray( $current_company->getId(), FALSE ) );
 
-		$riplf = TTnew( 'RoundIntervalPolicyListFactory' );
+		$riplf = new RoundIntervalPolicyListFactory();
 		$round_interval_policy_options = Misc::prependArray( $none_array_option, $riplf->getByCompanyIDArray( $current_company->getId(), FALSE ) );
 
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 		$meal_options = Misc::prependArray( $none_array_option, $mplf->getByCompanyIdArray( $current_company->getId(), FALSE ) );
 
-		$bplf = TTnew( 'BreakPolicyListFactory' );
+		$bplf = new BreakPolicyListFactory();
 		$break_options = Misc::prependArray( $none_array_option, $bplf->getByCompanyIdArray( $current_company->getId(), FALSE ) );
 
-		$epclf = TTnew( 'ExceptionPolicyControlListFactory' );
+		$epclf = new ExceptionPolicyControlListFactory();
 		$exception_options = Misc::prependArray( $none_array_option, $epclf->getByCompanyIdArray( $current_company->getId(), FALSE ) );
 
-		$hplf = TTnew( 'HolidayPolicyListFactory' );
+		$hplf = new HolidayPolicyListFactory();
 		$holiday_policy_options = Misc::prependArray( $none_array_option, $hplf->getByCompanyIdArray( $current_company->getId(), FALSE ) );
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 		$aplf->getByCompanyIdAndTypeID( $current_company->getId(), array(20, 30) ); //Calendar and Hour based.
 		$accrual_options = Misc::prependArray( $none_array_option, $aplf->getArrayByListFactory( $aplf, FALSE ) );
 

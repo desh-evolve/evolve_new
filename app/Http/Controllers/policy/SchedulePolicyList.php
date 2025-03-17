@@ -62,7 +62,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$splf = TTnew( 'SchedulePolicyListFactory' );
+		$splf = new SchedulePolicyListFactory();
 
 		foreach ($ids as $id) {
 			$splf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -79,15 +79,15 @@ switch ($action) {
 		break;
 
 	default:
-		$splf = TTnew( 'SchedulePolicyListFactory' );
+		$splf = new SchedulePolicyListFactory();
 		$splf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($splf);
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 		$absence_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 		$meal_options = $mplf->getByCompanyIDArray( $current_company->getId(), TRUE );
 
 		foreach ($splf as $sp_obj) {

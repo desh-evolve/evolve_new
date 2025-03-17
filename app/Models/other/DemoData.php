@@ -341,7 +341,7 @@ class DemoData {
 	}
 
 	function createCompany() {
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 
 		$cf->setStatus( 10 ); //Active
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
@@ -377,7 +377,7 @@ class DemoData {
 	}
 
 	function createCurrency( $company_id, $type ) {
-		$cf = TTnew( 'CurrencyFactory' );
+		$cf = new CurrencyFactory();
 		$cf->setCompany( $company_id );
 		$cf->setStatus( 10 );
 		switch ( $type ) {
@@ -416,7 +416,7 @@ class DemoData {
 	}
 
 	function createBranch( $company_id, $type) {
-		$bf = TTnew( 'BranchFactory' );
+		$bf = new BranchFactory();
 		$bf->setCompany( $company_id );
 		$bf->setStatus( 10 );
 		switch ( $type ) {
@@ -462,7 +462,7 @@ class DemoData {
 	}
 
 	function createDepartment( $company_id, $type, $branch_ids = NULL) {
-		$df = TTnew( 'DepartmentFactory' );
+		$df = new DepartmentFactory();
 		$df->setCompany( $company_id );
 		$df->setStatus( 10 );
 
@@ -499,7 +499,7 @@ class DemoData {
 	}
 
 	function createStation( $company_id ) {
-		$sf = TTnew( 'StationFactory' );
+		$sf = new StationFactory();
 		$sf->setCompany( $company_id );
 
 		$sf->setStatus( 20 );
@@ -519,7 +519,7 @@ class DemoData {
 		}
 
 
-		$sf = TTnew( 'StationFactory' );
+		$sf = new StationFactory();
 		$sf->setCompany( $company_id );
 
 		$sf->setStatus( 20 );
@@ -563,7 +563,7 @@ class DemoData {
 	}
 
 	function createPayStubAccountLink( $company_id ) {
-		$psealf = TTnew( 'PayStubEntryAccountLinkFactory' );
+		$psealf = new PayStubEntryAccountLinkFactory();
 		$psealf->setCompany( $company_id );
 
 		$psealf->setTotalGross( CompanyDeductionFactory::getPayStubEntryAccountByCompanyIDAndTypeAndFuzzyName($company_id, 40, ('Total Gross')) );
@@ -598,7 +598,7 @@ class DemoData {
 	}
 
 	function createRoundingPolicy( $company_id, $type ) {
-		$ripf = TTnew( 'RoundIntervalPolicyFactory' );
+		$ripf = new RoundIntervalPolicyFactory();
 		$ripf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -658,7 +658,7 @@ class DemoData {
 	}
 
 	function createAccrualPolicy( $company_id, $type ) {
-		$apf = TTnew( 'AccrualPolicyFactory' );
+		$apf = new AccrualPolicyFactory();
 
 		$apf->setCompany( $company_id );
 
@@ -693,7 +693,7 @@ class DemoData {
 			$insert_id = $apf->Save();
 			Debug::Text('Accrual Policy ID: '. $insert_id, __FILE__, __LINE__, __METHOD__,10);
 
-			$apmf = TTnew( 'AccrualPolicyMilestoneFactory' );
+			$apmf = new AccrualPolicyMilestoneFactory();
 			if ( $type == 20 ) {
 				$apmf->setAccrualPolicy( $insert_id );
 				$apmf->setLengthOfService( 1 );
@@ -760,7 +760,7 @@ class DemoData {
 	}
 
 	function createOverTimePolicy( $company_id, $type, $accrual_policy_id = NULL ) {
-		$otpf = TTnew( 'OverTimePolicyFactory' );
+		$otpf = new OverTimePolicyFactory();
 		$otpf->setCompany( $company_id );
 
 
@@ -801,7 +801,7 @@ class DemoData {
 	}
 
 	function createPremiumPolicy( $company_id, $type ) {
-		$ppf = TTnew( 'PremiumPolicyFactory' );
+		$ppf = new PremiumPolicyFactory();
 		$ppf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -873,7 +873,7 @@ class DemoData {
 	}
 
 	function createAbsencePolicy( $company_id, $type, $accrual_policy_id = 0) {
-		$apf = TTnew( 'AbsencePolicyFactory' );
+		$apf = new AbsencePolicyFactory();
 		$apf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -913,7 +913,7 @@ class DemoData {
 	}
 
 	function createMealPolicy( $company_id ) {
-		$mpf = TTnew( 'MealPolicyFactory' );
+		$mpf = new MealPolicyFactory();
 
 		$mpf->setCompany( $company_id );
 		$mpf->setName( 'One Hour Min.' );
@@ -936,7 +936,7 @@ class DemoData {
 	}
 
 	function createSchedulePolicy( $company_id, $meal_policy_id ) {
-		$spf = TTnew( 'SchedulePolicyFactory' );
+		$spf = new SchedulePolicyFactory();
 
 		$spf->setCompany( $company_id );
 		$spf->setName( 'One Hour Lunch' );
@@ -958,7 +958,7 @@ class DemoData {
 	}
 
 	function createExceptionPolicy( $company_id ) {
-		$epcf = TTnew( 'ExceptionPolicyControlFactory' );
+		$epcf = new ExceptionPolicyControlFactory();
 
 		$epcf->setCompany( $company_id );
 		$epcf->setName( 'Default' );
@@ -1041,7 +1041,7 @@ class DemoData {
 				foreach ($data['exceptions'] as $code => $exception_data) {
 					Debug::Text('Looping Code: '. $code, __FILE__, __LINE__, __METHOD__,10);
 
-					$epf = TTnew( 'ExceptionPolicyFactory' );
+					$epf = new ExceptionPolicyFactory();
 					$epf->setExceptionPolicyControl( $epc_id );
 					if ( isset($exception_data['active'])  ) {
 						$epf->setActive( TRUE );
@@ -1074,7 +1074,7 @@ class DemoData {
 	}
 
 	function createPolicyGroup( $company_id, $meal_policy_ids = NULL, $exception_policy_id = NULL, $holiday_policy_ids = NULL, $over_time_policy_ids = NULL, $premium_policy_ids = NULL, $rounding_policy_ids = NULL, $user_ids = NULL, $break_policy_ids = NULL  ) {
-		$pgf = TTnew( 'PolicyGroupFactory' );
+		$pgf = new PolicyGroupFactory();
 
 		$pgf->StartTransaction();
 
@@ -1146,7 +1146,7 @@ class DemoData {
 
 	function createPayPeriodSchedule( $company_id, $user_ids ) {
 
-		$ppsf = TTnew( 'PayPeriodScheduleFactory' );
+		$ppsf = new PayPeriodScheduleFactory();
 
 		$ppsf->setCompany( $company_id );
 		$ppsf->setName( 'Bi-Weekly' );
@@ -1185,7 +1185,7 @@ class DemoData {
 	}
 
 	function createUserGroup( $company_id, $type, $parent_id = 0) {
-		$ugf = TTnew( 'UserGroupFactory' );
+		$ugf = new UserGroupFactory();
 		$ugf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -1229,7 +1229,7 @@ class DemoData {
 	}
 
 	function createUserTitle( $company_id, $type) {
-		$utf = TTnew( 'UserTitleFactory' );
+		$utf = new UserTitleFactory();
 		$utf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -1263,7 +1263,7 @@ class DemoData {
 	}
 
 	function createUser( $company_id, $type, $policy_group_id = 0, $default_branch_id = 0, $default_department_id = 0, $default_currency_id = 0, $user_group_id = 0, $user_title_id = 0) {
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory();
 
 		$uf->setCompany( $company_id );
 		$uf->setStatus( 10 );
@@ -1273,7 +1273,7 @@ class DemoData {
 			Debug::Text('Get Default Currency...', __FILE__, __LINE__, __METHOD__,10);
 
 			//Get Default.
-			$crlf = TTnew( 'CurrencyListFactory' );
+			$crlf = new CurrencyListFactory();
 			$crlf->getByCompanyIdAndDefault( $company_id, TRUE );
 			if ( $crlf->getRecordCount() > 0 ) {
 				$default_currency_id = $crlf->getCurrent()->getId();
@@ -2106,7 +2106,7 @@ class DemoData {
 	}
 
 	function createUserPreference( $user_id ) {
-		$upf = TTnew( 'UserPreferenceFactory' );
+		$upf = new UserPreferenceFactory();
 		$upf->setUser( $user_id );
 		$upf->setDateFormat( 'd-M-y' );
 		$upf->setTimeFormat( 'g:i A' );
@@ -2130,13 +2130,13 @@ class DemoData {
 	function createUserDeduction( $company_id, $user_id ) {
 		$fail_transaction = FALSE;
 
-		$cdlf = TTnew( 'CompanyDeductionListFactory' );
+		$cdlf = new CompanyDeductionListFactory();
 		$cdlf->getByCompanyId( $company_id  );
 
 		if ( $cdlf->getRecordCount() > 0 ) {
 			foreach( $cdlf as $cd_obj ) {
 				Debug::Text('Creating User Deduction: User Id:'. $user_id .' Company Deduction: '. $cd_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
-				$udf = TTnew( 'UserDeductionFactory' );
+				$udf = new UserDeductionFactory();
 				$udf->setUser( $user_id );
 				$udf->setCompanyDeduction( $cd_obj->getId() );
 				if ( $udf->isValid() ) {
@@ -2165,7 +2165,7 @@ class DemoData {
 	}
 
 	function createUserWageGroups( $company_id ) {
-		$wgf = TTnew( 'WageGroupFactory' );
+		$wgf = new WageGroupFactory();
 		$wgf->setCompany( $company_id );
 		$wgf->setName('Alternate Wage #1');
 
@@ -2174,7 +2174,7 @@ class DemoData {
 			Debug::Text('aUser Wage Group ID: '. $this->user_wage_groups[0], __FILE__, __LINE__, __METHOD__,10);
 		}
 
-		$wgf = TTnew( 'WageGroupFactory' );
+		$wgf = new WageGroupFactory();
 		$wgf->setCompany( $company_id );
 		$wgf->setName('Alternate Wage #2');
 
@@ -2187,7 +2187,7 @@ class DemoData {
 		return TRUE;
 	}
 	function createUserWage( $user_id, $rate, $effective_date, $wage_group_id = 0 ) {
-		$uwf = TTnew( 'UserWageFactory' );
+		$uwf = new UserWageFactory();
 
 		$uwf->setUser($user_id);
 		$uwf->setWageGroup( $wage_group_id );
@@ -2211,7 +2211,7 @@ class DemoData {
 	function createPermissionGroups( $company_id ) {
 		Debug::text('Adding Preset Permission Groups: '. $company_id, __FILE__, __LINE__, __METHOD__,9);
 
-		$pf = TTnew( 'PermissionFactory' );
+		$pf = new PermissionFactory();
 		$pf->StartTransaction();
 
 		if ( getTTProductEdition() == 20 ) {
@@ -2234,7 +2234,7 @@ class DemoData {
 		$preset_options = $pf->getOptions('preset');
 		$preset_levels = $pf->getOptions('preset_level');
 		foreach( $preset_options as $preset_id => $preset_name ) {
-			$pcf = TTnew( 'PermissionControlFactory' );
+			$pcf = new PermissionControlFactory();
 			$pcf->setCompany( $company_id );
 			$pcf->setName( $preset_name );
 			$pcf->setDescription( '' );
@@ -2254,12 +2254,12 @@ class DemoData {
 
 	function createUserPermission( $user_id, $preset_id ) {
 		if ( isset($this->permission_presets[$preset_id] ) ) {
-			$pclf = TTnew( 'PermissionControlListFactory' );
+			$pclf = new PermissionControlListFactory();
 			$pclf->getById( $this->permission_presets[$preset_id] );
 			if ( $pclf->getRecordCount() > 0 ) {
 				$pc_obj = $pclf->getCurrent();
 
-				$puf = TTnew( 'PermissionUserFactory' );
+				$puf = new PermissionUserFactory();
 				$puf->setPermissionControl( $pc_obj->getId() );
 				$puf->setUser( $user_id );
 				if ( $puf->isValid() ) {
@@ -2278,7 +2278,7 @@ class DemoData {
 	}
 
 	function createAuthorizationHierarchyControl( $company_id, $child_user_ids ) {
-		$hcf = TTnew( 'HierarchyControlFactory' );
+		$hcf = new HierarchyControlFactory();
 
 		$hcf->setCompany( $company_id );
 		$hcf->setObjectType( array(1010,1020,1030,1040,1100,80,90) ); //Exclude permissions.
@@ -2303,7 +2303,7 @@ class DemoData {
 	function createAuthorizationHierarchyLevel( $company_id, $hierarchy_id, $root_user_id, $level ) {
 		if ( $hierarchy_id != '' ) {
 			//Add level
-			$hlf = TTnew( 'HierarchyLevelFactory' );
+			$hlf = new HierarchyLevelFactory();
 			$hlf->setHierarchyControl( $hierarchy_id );
 			$hlf->setLevel( $level );
 			$hlf->setUser( $root_user_id );
@@ -2323,7 +2323,7 @@ class DemoData {
 
 		$date_stamp = TTDate::parseDateTime($date_stamp); //Make sure date_stamp is always an integer.
 
-		$rf = TTnew( 'RequestFactory' );
+		$rf = new RequestFactory();
 		$rf->setUserDate( $user_id, $date_stamp );
 
 		switch( $type ) {
@@ -2363,7 +2363,7 @@ class DemoData {
 	}
 
 	function createTaskGroup( $company_id, $type, $parent_id = 0 ) {
-		$jigf = TTnew( 'JobItemGroupFactory' );
+		$jigf = new JobItemGroupFactory();
 		$jigf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -2408,7 +2408,7 @@ class DemoData {
 	}
 
 	function createTask( $company_id, $type, $group_id, $product_id = NULL ) {
-		$jif = TTnew( 'JobItemFactory' );
+		$jif = new JobItemFactory();
 		$jif->setCompany( $company_id );
 		//$jif->setProduct( $data['product_id'] );
 		$jif->setStatus( 10 );
@@ -2530,7 +2530,7 @@ class DemoData {
 	}
 
 	function createJobGroup( $company_id, $type, $parent_id = 0 ) {
-		$jgf = TTnew( 'JobGroupFactory' );
+		$jgf = new JobGroupFactory();
 		$jgf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -2575,7 +2575,7 @@ class DemoData {
 	}
 
 	function createJob( $company_id, $type, $item_id, $job_group_id = 0, $branch_id = 0, $department_id = 0, $client_id = NULL ) {
-		$jf = TTnew( 'JobFactory' );
+		$jf = new JobFactory();
 
 		$jf->setCompany( $company_id );
 		//$jf->setClient( $data['client_id'] );
@@ -2906,7 +2906,7 @@ class DemoData {
 	}
 
 	function createRecurringSchedule( $company_id, $template_id, $start_date, $end_date, $user_ids ) {
-		$rscf = TTnew( 'RecurringScheduleControlFactory' );
+		$rscf = new RecurringScheduleControlFactory();
 		$rscf->setCompany( $company_id );
 		$rscf->setRecurringScheduleTemplateControl( $template_id );
 		$rscf->setStartWeek( 1 );
@@ -2933,7 +2933,7 @@ class DemoData {
 	}
 
 	function createRecurringScheduleTemplate( $company_id, $type, $schedule_policy_id = NULL ) {
-		$rstcf = TTnew( 'RecurringScheduleTemplateControlFactory' );
+		$rstcf = new RecurringScheduleTemplateControlFactory();
 		$rstcf->setCompany( $company_id );
 
 		switch ( $type ) {
@@ -2946,7 +2946,7 @@ class DemoData {
 					Debug::Text('bRecurring Schedule Template Control ID: '. $rstc_id , __FILE__, __LINE__, __METHOD__,10);
 
 					//Week 1
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 1 );
 					$rstf->setSun( FALSE );
@@ -2984,7 +2984,7 @@ class DemoData {
 					Debug::Text('bRecurring Schedule Template Control ID: '. $rstc_id , __FILE__, __LINE__, __METHOD__,10);
 
 					//Week 1
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 1 );
 					$rstf->setSun( FALSE );
@@ -3022,7 +3022,7 @@ class DemoData {
 					Debug::Text('bRecurring Schedule Template Control ID: '. $rstc_id , __FILE__, __LINE__, __METHOD__,10);
 
 					//Week 1
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 1 );
 					$rstf->setSun( FALSE );
@@ -3060,7 +3060,7 @@ class DemoData {
 					Debug::Text('bRecurring Schedule Template Control ID: '. $rstc_id , __FILE__, __LINE__, __METHOD__,10);
 
 					//Week 1
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 1 );
 					$rstf->setSun( FALSE );
@@ -3085,7 +3085,7 @@ class DemoData {
 						$rstf->Save();
 					}
 					//Week 1
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 1 );
 					$rstf->setSun( FALSE );
@@ -3123,7 +3123,7 @@ class DemoData {
 					Debug::Text('bRecurring Schedule Template Control ID: '. $rstc_id , __FILE__, __LINE__, __METHOD__,10);
 
 					//Week 1
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 1 );
 					$rstf->setSun( FALSE );
@@ -3149,7 +3149,7 @@ class DemoData {
 					}
 
 					//Week 2
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 2 );
 					$rstf->setSun( FALSE );
@@ -3174,7 +3174,7 @@ class DemoData {
 						$rstf->Save();
 					}
 					//Week 3
-					$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+					$rstf = new RecurringScheduleTemplateFactory();
 					$rstf->setRecurringScheduleTemplateControl( $rstc_id );
 					$rstf->setWeek( 3 );
 					$rstf->setSun( FALSE );
@@ -3212,7 +3212,7 @@ class DemoData {
 	}
 
 	function createSchedule( $user_id, $date_stamp, $data = NULL ) {
-		$sf = TTnew( 'ScheduleFactory' );
+		$sf = new ScheduleFactory();
 		$sf->setUserDateId( UserDateFactory::findOrInsertUserDate( $user_id, $date_stamp) );
 
 		if ( isset($data['status_id']) ) {
@@ -3270,7 +3270,7 @@ class DemoData {
 
 	function deletePunch( $id ) {
 
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$plf->getById( $id );
 		if ( $plf->getRecordCount() > 0 ) {
 			Debug::Text('Deleting Punch ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
@@ -3298,7 +3298,7 @@ class DemoData {
 		}
 
 		//Edit out punch so its on the next day.
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$plf->getById( $id );
 		if ( $plf->getRecordCount() == 1 ) {
 			//var_dump($data);
@@ -3346,13 +3346,13 @@ class DemoData {
 
 		Debug::Text('Punch Full In Time Stamp: ('.$in_time_stamp.') '. TTDate::getDate('DATE+TIME', $in_time_stamp) .' Out: ('.$out_time_stamp.') '. TTDate::getDate('DATE+TIME', $out_time_stamp), __FILE__, __LINE__, __METHOD__,10);
 
-		$pf = TTnew( 'PunchFactory' );
+		$pf = new PunchFactory();
 		$pf->StartTransaction();
 
 		//Out Punch
 		//Save out punch first so the $pf object is for the In Punch if there is one.
 		if ( $out_time_stamp !== NULL ) {
-			$pf_in = TTnew( 'PunchFactory' );
+			$pf_in = new PunchFactory();
 			$pf_in->setTransfer( FALSE );
 			$pf_in->setUser( $user_id );
 			$pf_in->setType( $data['out_type_id'] );
@@ -3375,7 +3375,7 @@ class DemoData {
 
 		if ( $in_time_stamp !== NULL ) {
 			//In Punch
-			$pf_out = TTnew( 'PunchFactory' );
+			$pf_out = new PunchFactory();
 			$pf_out->setTransfer( FALSE );
 			$pf_out->setUser( $user_id );
 			$pf_out->setType( $data['in_type_id'] );
@@ -3410,7 +3410,7 @@ class DemoData {
 				$pf = $pf_out;
 			}
 
-			$pcf = TTnew( 'PunchControlFactory' );
+			$pcf = new PunchControlFactory();
 			$pcf->setId( $pf->getPunchControlID() );
 			$pcf->setPunchObject( $pf );
 			$pcf->setBranch( $data['branch_id'] );
@@ -3454,7 +3454,7 @@ class DemoData {
 	}
 
 	function createAccrualBalance( $user_id, $accrual_policy_id, $type = 30) {
-		$af = TTnew( 'AccrualFactory' );
+		$af = new AccrualFactory();
 
 		$af->setUser( $user_id );
 		$af->setType( $type ); //Awarded
@@ -3483,12 +3483,12 @@ class DemoData {
 
 		$current_epoch = time();
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 		$cf->StartTransaction();
 
 		$company_id = $this->createCompany();
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 		$clf->getById( $company_id );
 		$current_company = $clf->getCurrent();
 
@@ -3575,7 +3575,7 @@ class DemoData {
 
 			Debug::Arr($user_ids, 'All User IDs:', __FILE__, __LINE__, __METHOD__,10);
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $current_user_id );
 			$current_user = $ulf->getCurrent();
 			if ( $current_user_id === FALSE ) {
@@ -3901,7 +3901,7 @@ class DemoData {
 
 
 			//Generate pay stubs for each pay period
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getByCompanyId( $company_id );
 			if ( $pplf->getRecordCount() > 0 ) {
 				foreach( $pplf as $pp_obj ) {

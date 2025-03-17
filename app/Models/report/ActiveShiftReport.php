@@ -428,7 +428,7 @@ class ActiveShiftReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('user','view') == FALSE ) {
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -454,7 +454,7 @@ class ActiveShiftReport extends Report {
 		//
 
 		//Get user data for joining.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -472,7 +472,7 @@ class ActiveShiftReport extends Report {
 
 
 		//Get user preference data for joining.
-		$uplf = TTnew( 'UserPreferenceListFactory' );
+		$uplf = new UserPreferenceListFactory();
 		$uplf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Preference Rows: '. $uplf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $uplf->getRecordCount(), NULL, ('Retrieving Data...') );
@@ -483,7 +483,7 @@ class ActiveShiftReport extends Report {
 		//Debug::Arr($this->tmp_data['user_preference'], 'TMP Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get last punch (active shift) data for joining with users. That way we can full data from both tables.
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$plf->getAPIActiveShiftReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Active Shift Rows: '. $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $plf->getRecordCount(), NULL, ('Retrieving Data...') );
