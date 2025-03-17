@@ -255,10 +255,10 @@ class ProgressBar extends Controller
 
 					$i++;
 				}
-				dd('generate_paystubs'); //check here
+				
 				unset($ppsulf);
 
-				$ugsf = TTnew( 'UserGenericStatusFactory' );
+				$ugsf = new UserGenericStatusFactory();
 				$ugsf->setUser( $current_user->getId() );
 				$ugsf->setBatchID( $ugsf->getNextBatchId() );
 				$ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );

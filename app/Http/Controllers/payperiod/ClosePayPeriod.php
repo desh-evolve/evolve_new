@@ -255,7 +255,7 @@ class ClosePayPeriod extends Controller
 	
 		$pplf->CommitTransaction();
 		
-		return redirect()->to(URLBuilder::getURL(NULL, 'payroll.payroll_processing'));
+		return redirect()->to(URLBuilder::getURL(NULL, '/payroll/payroll_processing'));
 	}
 	
 

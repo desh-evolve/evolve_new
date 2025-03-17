@@ -4,6 +4,16 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use App\Models\Core\BreadCrumb;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Pager;
+use App\Models\Core\TTi18n;
+use App\Models\Core\URLBuilder;
+
 /*
  * $Revision: 4104 $
  * $Id: UserGenericStatusList.php 4104 2011-01-04 19:04:05Z ipso $
@@ -62,7 +72,7 @@ switch ($action) {
 			//var_dump($ugslf);
 			Debug::Text('Record Count: '. $ugslf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
-			$pager = new Pager($ugslf);
+			//$pager = new Pager($ugslf);
 
 			if ( $ugslf->getRecordCount() > 0 ) {
 				$status_count_arr = $ugslf->getStatusCountArrayByUserIdAndBatchId( $current_user->getId(), $batch_id );
@@ -94,7 +104,7 @@ switch ($action) {
 		$smarty->assign_by_ref('sort_column', $sort_column );
 		$smarty->assign_by_ref('sort_order', $sort_order );
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+		//$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
 
 		break;
 }
