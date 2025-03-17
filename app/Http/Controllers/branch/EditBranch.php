@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\Core\OtherFieldListFactory;
 use App\Models\Core\Environment;
 use App\Models\company\BranchFactory;
-use app\Models\company\BranchListFactory;
+use App\Models\Company\BranchListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Misc;
 use App\Models\Core\URLBuilder;
@@ -56,6 +56,8 @@ class EditBranch extends Controller
 
             $branch = $blf->rs ?? [];
             if ($branch) {
+                // print_r($branch);
+                // exit;
                 foreach ($branch as $b_obj) {
                     $data = [
                         'id' => $b_obj->id,

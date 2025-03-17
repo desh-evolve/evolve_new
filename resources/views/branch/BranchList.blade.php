@@ -1,4 +1,4 @@
-{{-- <x-app-layout :title="'Branches List'">
+<x-app-layout :title="'Branches List'">
     <x-slot name="header">
         <h4 class="mb-sm-0">{{ __('Branches') }}</h4>
     </x-slot>
@@ -48,7 +48,7 @@
                                     <td>{{ $branch['branch_short_id'] ?? '' }}</td>
                                     <td>
                                         <!-- Edit Button -->
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch.edit', ['id' => $branch['id'] ?? '']) }}'">
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch.add', ['id' => $branch['id'] ?? '']) }}'">
                                             {{ __('Edit') }}
                                         </button>
                                         
@@ -93,5 +93,4 @@
             }
         }
     </script>
-</x-app-layout> --}}
-dd
+</x-app-layout>
