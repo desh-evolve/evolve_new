@@ -112,7 +112,7 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 			//Setting timezone failed, alert user to this fact.
 			$db_time_zone_error = TRUE;
 		}
-
+		
 		/*
 		 *	Check locale cookie, if it varies from UserPreference Language,
 		 *	change user preferences to match. This could cause some unexpected behavior
@@ -185,16 +185,17 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 	} else {
 		Debug::text('User NOT Authenticated!', __FILE__, __LINE__, __METHOD__, 10);
 		
+		//Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'login') );
+
+		/*
 		if ( isset($enable_wap) AND $enable_wap == TRUE ) {
-			dd('error: check here => interface.php');
-			//Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'wap/wap_login.php') );
+			Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'wap/wap_login.php') );
 		} elseif ( isset($enable_iphone) AND $enable_iphone == TRUE ) {
-			dd('error: check here => interface.php');
-			//Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'iphone/login/login.php') );
+			Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'iphone/login/login.php') );
 		} else {
-			//dd('error: check here => interface.php');
-			//Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'Login.php') );
+			Redirect::Page( URLBuilder::getURL(NULL, Environment::GetBaseURL().'Login.php') );
 		}
+		*/
 	}
 }
 unset($clf);

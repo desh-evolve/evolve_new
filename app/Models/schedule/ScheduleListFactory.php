@@ -1,6 +1,23 @@
 <?php
 
-namespace App\Models\Schedule; 
+namespace App\Models\Schedule;
+
+use App\Models\Company\BranchFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\UserDateFactory;
+use App\Models\Core\UserDateListFactory;
+use App\Models\Department\DepartmentFactory;
+use App\Models\PayPeriod\PayPeriodFactory;
+use App\Models\Policy\AbsencePolicyFactory;
+use App\Models\Policy\OverTimePolicyFactory;
+use App\Models\Policy\SchedulePolicyFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserTitleFactory;
+use App\Models\Users\UserWageFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
@@ -29,13 +46,13 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -61,7 +78,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		//Status sorting MUST be desc first, otherwise transfer punches are completely out of order.
@@ -72,7 +89,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
+						AND c.company_id = :company_id
 						AND a.id in ('. $this->getListSQL($id, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )
 					ORDER BY a.start_time asc, a.status_id desc
@@ -96,7 +113,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_date_id' => $id,
+					':user_date_id' => $id,
 					);
                 
                 //FL CHANGED THE QUERY FOR NPVC 20160812
@@ -106,7 +123,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					select 	a.*, b.name as shedule_policy_name
 					from	'. $this->getTable() .' a
                                         LEFT JOIN '.$spf->getTable().' b ON b.id = a.schedule_policy_id
-					where	a.user_date_id = ?
+					where	a.user_date_id = :user_date_id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -130,15 +147,15 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
-					'status_id' => $status_id,
+					':id' => $id,
+					':status_id' => $status_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_date_id = ?
-						AND status_id = ?
+					where	user_date_id = :id
+						AND status_id = :status_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -171,8 +188,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		//ORDER BY a.branch_id, a.department_id
@@ -182,8 +199,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $udf->getTable() .' as b
 					where 	a.user_date_id = b.id
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND b.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
@@ -212,9 +229,9 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$otpf = new OverTimePolicyFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'week_start_epoch' => $this->db->BindDate( $week_start_epoch ),
-					'epoch' =>  $this->db->BindDate( $epoch ),
+					':user_id' => $user_id,
+					':week_start_epoch' => $this->db->BindDate( $week_start_epoch ),
+					':epoch' =>  $this->db->BindDate( $epoch ),
 					);
 
 		//DO NOT Include paid absences. Only count regular time towards weekly overtime.
@@ -224,9 +241,9 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a
 					LEFT JOIN '. $udf->getTable() .' as b ON a.user_date_id = b.id
 					where
-						b.user_id = ?
-						AND b.date_stamp >= ?
-						AND b.date_stamp < ?
+						b.user_id = :user_id
+						AND b.date_stamp >= :week_start_epoch
+						AND b.date_stamp < :epoch
 						AND a.status_id = 10
 						AND a.deleted = 0
 				';
@@ -281,8 +298,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'date' => $this->db->BindDate( $date ),
-					'type_id' => $type_id,
+					':date' => $this->db->BindDate( $date ),
+					':type_id' => $type_id,
 					);
 
 		$query = '
@@ -290,8 +307,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $udf->getTable() .' as b
 					where 	a.user_date_id = b.id
-						AND b.date_stamp '. $direction .' ?
-						AND a.status_id = ?
+						AND b.date_stamp '. $direction .' :date
+						AND a.status_id = :type_id
 						AND b.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
@@ -320,8 +337,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -329,8 +346,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $udf->getTable() .' as b
 					where 	a.user_date_id = b.id
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND b.date_stamp >= :start_date
+						AND b.date_stamp <= :end_date
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -381,19 +398,19 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 */
 
 		$ph = array(
-					'user_id' => $user_id,
-					'start_date_a' => $start_datestamp,
-					'end_date_b' => $end_datestamp,
-					'start_date1' => $start_timestamp,
-					'end_date1' => $end_timestamp,
-					'start_date2' => $start_timestamp,
-					'end_date2' => $end_timestamp,
-					'start_date3' => $start_timestamp,
-					'end_date3' => $end_timestamp,
-					'start_date4' => $start_timestamp,
-					'end_date4' => $end_timestamp,
-					'start_date5' => $start_timestamp,
-					'end_date5' => $end_timestamp,
+					':user_id' => $user_id,
+					':start_date_a' => $start_datestamp,
+					':end_date_b' => $end_datestamp,
+					':start_date1' => $start_timestamp,
+					':end_date1' => $end_timestamp,
+					':start_date2' => $start_timestamp,
+					':end_date2' => $end_timestamp,
+					':start_date3' => $start_timestamp,
+					':end_date3' => $end_timestamp,
+					':start_date4' => $start_timestamp,
+					':end_date4' => $end_timestamp,
+					':start_date5' => $start_timestamp,
+					':end_date5' => $end_timestamp,
 					);
 
 		//Add filter on date_stamp for optimization
@@ -402,20 +419,20 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $udf->getTable() .' as b
 					where a.user_date_id = b.id
-						AND b.user_id = ?
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND b.user_id = :user_id
+						AND b.date_stamp >= :start_date_a
+						AND b.date_stamp <= :end_date_b
 						AND
 						(
-							(start_time >= ? AND end_time <= ? )
+							(start_time >= :start_date1 AND end_time <= :end_date1 )
 							OR
-							(start_time >= ? AND start_time < ? )
+							(start_time >= :start_date2 AND start_time < :end_date2 )
 							OR
-							(end_time > ? AND end_time <= ? )
+							(end_time > :start_date3 AND end_time <= :end_date3 )
 							OR
-							(start_time <= ? AND end_time >= ? )
+							(start_time <= :start_date4 AND end_time >= :end_date4 )
 							OR
-							(start_time = ? AND end_time = ? )
+							(start_time = :start_date5 AND end_time = :end_date5 )
 						)
 						AND ( a.deleted = 0 AND b.deleted=0 )
 					ORDER BY start_time';
@@ -467,19 +484,19 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 */
 
 		$ph = array(
-					'user_date_id' => $user_date_id,
-					'start_date_a' => $start_datestamp,
-					'end_date_b' => $end_datestamp,
-					'start_date1' => $start_timestamp,
-					'end_date1' => $end_timestamp,
-					'start_date2' => $start_timestamp,
-					'end_date2' => $end_timestamp,
-					'start_date3' => $start_timestamp,
-					'end_date3' => $end_timestamp,
-					'start_date4' => $start_timestamp,
-					'end_date4' => $end_timestamp,
-					'start_date5' => $start_timestamp,
-					'end_date5' => $end_timestamp,
+					':user_date_id' => $user_date_id,
+					':start_date_a' => $start_datestamp,
+					':end_date_b' => $end_datestamp,
+					':start_date1' => $start_timestamp,
+					':end_date1' => $end_timestamp,
+					':start_date2' => $start_timestamp,
+					':end_date2' => $end_timestamp,
+					':start_date3' => $start_timestamp,
+					':end_date3' => $end_timestamp,
+					':start_date4' => $start_timestamp,
+					':end_date4' => $end_timestamp,
+					':start_date5' => $start_timestamp,
+					':end_date5' => $end_timestamp,
 					);
 
 		//Add filter on date_stamp for optimization
@@ -488,20 +505,20 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $udf->getTable() .' as b
 					where a.user_date_id = b.id
-						AND a.user_date_id = ?
-						AND b.date_stamp >= ?
-						AND b.date_stamp <= ?
+						AND a.user_date_id = :user_date_id
+						AND b.date_stamp >= :start_date_a
+						AND b.date_stamp <= :end_date_b
 						AND
 						(
-							(start_time > ? AND end_time < ? )
+							(start_time > :start_date1 AND end_time < :end_date1 )
 							OR
-							(start_time > ? AND start_time < ? )
+							(start_time > :start_date2 AND start_time < :end_date2 )
 							OR
-							(end_time > ? AND end_time < ? )
+							(end_time > :start_date3 AND end_time < :end_date3 )
 							OR
-							(start_time < ? AND end_time > ? )
+							(start_time < :start_date4 AND end_time > :end_date4 )
 							OR
-							(start_time = ? AND end_time = ? )
+							(start_time = :start_date5 AND end_time = :end_date5 )
 						)
 						AND ( a.deleted = 0 AND b.deleted=0 )
 					ORDER BY start_time';
@@ -645,7 +662,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -727,7 +744,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 			$query .= '	LEFT JOIN '. $jif->getTable() .' as y ON a.job_item_id = y.id';
 		}
 
-		$query .= '	WHERE uf.company_id = ?';
+		$query .= '	WHERE uf.company_id = :company_id';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND uf.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -791,12 +808,12 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 		//====================
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['start_date']);
-			$query  .=	' AND a.start_time >= ?';
+			$ph[':start_date'] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$query  .=	' AND a.start_time >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['end_date']);
-			$query  .=	' AND a.start_time <= ?';
+			$ph[':end_date'] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$query  .=	' AND a.start_time <= :end_date';
 		}
 
 		$query .= 	'
@@ -872,7 +889,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 		$uf = new UserFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		$query = '
 					select 	b.user_id as user_id,
@@ -884,7 +901,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ? ';
+						AND c.company_id = :company_id ';
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
 			$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
 		}
@@ -902,12 +919,12 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
 		$query .= ' 	AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0)
@@ -984,7 +1001,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 		$uf = new UserFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		$query = '
 					select 	b.user_id as user_id,
@@ -999,7 +1016,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 							'. $uf->getTable() .' as c
 					where 	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
+						AND c.company_id = :company_id
 					';
 
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
@@ -1019,12 +1036,12 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND b.date_stamp >= ?';
+			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND b.date_stamp <= ?';
+			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
 		$query .= '
@@ -1136,7 +1153,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		//"group" is a reserved word in MySQL.
@@ -1232,7 +1249,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= '
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					WHERE d.company_id = ?';
+					WHERE d.company_id = :company_id';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND d.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -1304,12 +1321,12 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['start_date']);
-			$query  .=	' AND a.start_time >= ?';
+			$ph[':start_date'] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$query  .=	' AND a.start_time >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['end_date']);
-			$query  .=	' AND a.start_time <= ?';
+			$ph[':end_date'] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$query  .=	' AND a.start_time <= :end_date';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
@@ -1432,7 +1449,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		//"group" is a reserved word in MySQL.
@@ -1533,7 +1550,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= '
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					WHERE d.company_id = ?';
+					WHERE d.company_id = :company_id';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND d.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -1605,12 +1622,12 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['start_date']);
-			$query  .=	' AND a.start_time >= ?';
+			$ph[':start_date'] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$query  .=	' AND a.start_time >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['end_date']);
-			$query  .=	' AND a.start_time <= ?';
+			$ph[':end_date'] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$query  .=	' AND a.start_time <= :end_date';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {

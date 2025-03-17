@@ -2,12 +2,22 @@
 
 namespace App\Models\PayPeriod;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
+use App\Models\Core\ExceptionListFactory;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateFactory;
+use App\Models\Core\UserDateListFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Request\RequestListFactory;
+use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\DB;
 
 class PayPeriodFactory extends Factory {
@@ -127,7 +137,7 @@ class PayPeriodFactory extends Factory {
 		if ( is_object($this->pay_period_schedule_obj) ) {
 			return $this->pay_period_schedule_obj;
 		} else {
-			$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+			$ppslf = new PayPeriodScheduleListFactory();
 			//$this->pay_period_schedule_obj = $ppslf->getById( $this->getPayPeriodSchedule() )->getCurrent();
 			$ppslf->getById( $this->getPayPeriodSchedule() );
 			if ( $ppslf->getRecordCount() > 0 ) {
@@ -145,7 +155,7 @@ class PayPeriodFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company', $clf->getByID($id), ('Company is invalid') ) ) {
 			$this->data['company_id'] = $id;
@@ -207,7 +217,7 @@ class PayPeriodFactory extends Factory {
 	function setPayPeriodSchedule($id) {
 		$id = trim($id);
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule',
@@ -452,7 +462,7 @@ class PayPeriodFactory extends Factory {
 
 		$this->StartTransaction();
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory(); 
 		$pslf->getByPayPeriodId( $this->getId() );
 		foreach($pslf as $pay_stub) {
 			//Only change status of advance pay stubs if we're in the advance part of the pay period.
@@ -537,7 +547,7 @@ class PayPeriodFactory extends Factory {
 			}
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory(); 
 
 		if ( $this->Validator->isResultSetWithRows(	'tainted_by',
 													$ulf->getByID($id),
@@ -637,7 +647,7 @@ class PayPeriodFactory extends Factory {
 
 		if ( is_object( $pps_obj ) ) {
 			//Get all users assigned to this pp schedule
-			$udlf = TTnew( 'UserDateListFactory' );
+			$udlf = new UserDateListFactory(); 
 			$udlf->getByUserIdAndStartDateAndEndDateAndEmptyPayPeriod( $pps_obj->getUser(), $this->getStartDate(), $this->getEndDate() );
 			Debug::text(' Pay Period ID: '. $this->getId() .' Pay Period orphaned User Date Rows: '. $udlf->getRecordCount() .' Start Date: '. TTDate::getDate('DATE+TIME', $this->getStartDate() ) .' End Date: '. TTDate::getDate('DATE+TIME', $this->getEndDate() ), __FILE__, __LINE__, __METHOD__,10);
 			if ( $udlf->getRecordCount() > 0 ) {
@@ -661,7 +671,7 @@ class PayPeriodFactory extends Factory {
 	function importData() {
 		$pps_obj = $this->getPayPeriodScheduleObject();
 
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory();
 
 		$udlf->StartTransaction();
 		$udlf->getByUserIdAndStartDateAndEndDate($pps_obj->getUser(), $this->getStartDate(), $this->getEndDate() );
@@ -693,7 +703,7 @@ class PayPeriodFactory extends Factory {
 	function deleteData() {
 		Debug::text('Deleting all data from pay period: '. $this->getID(), __FILE__, __LINE__, __METHOD__, 10);
 		//Remove all user_date rows, punch control, punches, and schedules
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory();
 		$udlf->getByPayPeriodID( $this->getId() );
 		Debug::text(' Pay Period ID: '. $this->getId() .' Pay Period User Date Rows: '. $udlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		if ( $udlf->getRecordCount() > 0 ) {
@@ -714,7 +724,7 @@ class PayPeriodFactory extends Factory {
 	function getPendingRequests() {
 		if ( $this->getCompany() != '' AND $this->isNew() == FALSE ) {
 			//Get all pending requests
-			$rlf = TTnew( 'RequestListFactory' );
+			$rlf = new RequestListFactory();
 			$rlf->getSumByCompanyIDAndPayPeriodIdAndStatus( $this->getCompany(), $this->getID(), 30 );
 			if ( $rlf->getRecordCount() == 1 ) {
 				return $rlf->getCurrent()->getColumn('total');
@@ -734,7 +744,7 @@ class PayPeriodFactory extends Factory {
 						'exceptions_critical' => 0,
 						);
 
-		$elf = TTnew( 'ExceptionListFactory' );
+		$elf = new ExceptionListFactory(); 
 		$elf->getSumExceptionsByPayPeriodIdAndBeforeDate( $this->getID(), $this->getEndDate() );
 		if ( $elf->getRecordCount() > 0 ) {
 			//Debug::Text(' Found Exceptions: '. $elf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -761,7 +771,7 @@ class PayPeriodFactory extends Factory {
 
 	function getTotalPunches() {
 		//Count how many punches are in this pay period.
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory(); 
 		$retval = $plf->getByPayPeriodId( $this->getID() )->getRecordCount();
 		Debug::Text(' Total Punches: '. $retval, __FILE__, __LINE__, __METHOD__,10);
 		return $retval;
@@ -775,7 +785,7 @@ class PayPeriodFactory extends Factory {
 						);
 
 		//Get verified timesheets
-		$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+		$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 		$pptsvlf->getByPayPeriodIdAndCompanyId( $this->getID(), $this->getCompany() );
 		if ( $pptsvlf->getRecordCount() > 0 ) {
 			foreach( $pptsvlf as $pptsv_obj ) {
@@ -788,7 +798,7 @@ class PayPeriodFactory extends Factory {
 		}
 
 		//Get total employees with time for this pay period.
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 		$retarr['total_timesheets'] = $udtlf->getWorkedUsersByPayPeriodId( $this->getID() );
 
 		return $retarr;
@@ -796,7 +806,7 @@ class PayPeriodFactory extends Factory {
 
 	function getPayStubAmendments() {
 		//Get PS Amendments.
-		$psalf = TTnew( 'PayStubAmendmentListFactory' );
+		$psalf = new PayStubAmendmentListFactory(); 
 		$psalf->getByCompanyIdAndAuthorizedAndStartDateAndEndDate( $this->getCompany(), TRUE, $this->getStartDate(), $this->getEndDate() );
 		$total_ps_amendments = 0;
 		if ( is_object($psalf) ) {
@@ -809,7 +819,7 @@ class PayPeriodFactory extends Factory {
 
 	function getPayStubs() {
 		//Count how many pay stubs for each pay period.
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 		$total_pay_stubs = $pslf->getByPayPeriodId( $this->getId() )->getRecordCount();
 		//Debug::Text(' Total Pay Stubs: '. $total_pay_stubs, __FILE__, __LINE__, __METHOD__,10);
 		return $total_pay_stubs;
@@ -841,7 +851,7 @@ class PayPeriodFactory extends Factory {
 		}
 
 		//Make sure if this a monthly+advanc pay period, advance dates are set.
-        $ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+        $ppslf = new PayPeriodScheduleListFactory();
 		$ppslf->getById( $this->getPayPeriodSchedule() );
 		if ( $ppslf->getRecordCount() == 1 AND is_object($ppslf) ) {
 			Debug::text('Pay Period Type is NOT Monthly + Advance... Advance End Date: '. $this->getAdvanceEndDate(), __FILE__, __LINE__, __METHOD__, 10);
@@ -889,7 +899,7 @@ class PayPeriodFactory extends Factory {
 			Debug::text('Delete TRUE: ', __FILE__, __LINE__, __METHOD__, 10);
 			//Unassign user_date rows from this pay period, no need to delete this data anymore as it can be easily done otherways and users don't realize
 			//how much data will actually be deleted.
-			$udf = TTnew( 'UserDateFactory' );
+			$udf = new UserDateFactory();
 
 			$query = 'update '. $udf->getTable() .' set pay_period_id = 0 where pay_period_id = '. (int)$this->getId();
 			DB::select($query);
@@ -947,7 +957,7 @@ class PayPeriodFactory extends Factory {
 	function getObjectAsArray( $include_columns = NULL ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {
-	        $ppsf = TTnew( 'PayPeriodScheduleFactory' );
+	        $ppsf = new PayPeriodScheduleFactory();
 
 			foreach( $variable_function_map as $variable => $function_stub ) {
 				if ( $include_columns == NULL OR ( isset($include_columns[$variable]) AND $include_columns[$variable] == TRUE ) ) {

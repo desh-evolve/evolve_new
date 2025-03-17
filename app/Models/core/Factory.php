@@ -190,7 +190,7 @@ class Factory {
 	//Determines if the data is new data, or updated data.
 	public function isNew($force_lookup = false) {
 		// Check if the model has an ID (i.e., it's an existing record)
-		if ($this->getId() === false) {
+		if (empty($this->getId())) {
 			// New Data (no ID set)
 			return true;
 		} elseif ($force_lookup === true) {
@@ -202,7 +202,6 @@ class Factory {
 				return true;
 			}
 		}
-	
 		// Not new data (the record exists in the DB)
 		return false;
 	}
@@ -623,24 +622,15 @@ class Factory {
 		return FALSE;
 	}
 
-	protected function getListSQL($array, &$ph = null)
+	protected function getListSQL($array, $ph = null)
 	{
 		// Ensure it's an array
 		if (!is_array($array)) {
 			$array = explode(',', (string) $array); // Convert comma-separated string to array
 		}
-
+		
 		// Trim values and filter out empty ones
 		$array = array_filter(array_map('trim', $array));
-
-		// If `$ph` is an array (used for binding), merge the values
-		if (is_array($ph)) {
-			foreach ($array as $key => $value) {
-				$param = ':param' . $key;
-				$ph[$param] = $value;
-				$array[$key] = $param;
-			}
-		}
 
 		return implode(',', $array);
 	}
@@ -1098,10 +1088,13 @@ class Factory {
 
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-
+			
+			/*
+			//check later before uncomment - desh(2025-03-15)
 			if (is_array($additional_fields)) {
 				$fields = array_merge($fields, $additional_fields);
 			}
+			*/
 
 			foreach ($array as $orig_column => $order) {
 				$orig_column = trim($orig_column);
@@ -1433,9 +1426,8 @@ class Factory {
 	}
 	*/
 
-	function Save($reset_data = TRUE, $force_lookup = FALSE) {
+	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		DB::beginTransaction();
-		
 		try {
 			// Validate the model before saving (if not deleted)
 			if (!$this->getDeleted() && !$this->isValid()) {
@@ -1447,9 +1439,9 @@ class Factory {
 
 			// Get the data dynamically
 			$data = $this->data;
+
 			// Determine if we're inserting a new record or updating an existing one
 			if ($this->isNew($force_lookup)) {
-				
 				//Insert
 				$time = TTDate::getTime();
 				
@@ -1477,7 +1469,7 @@ class Factory {
 				// Return the ID of the newly created record
 				$retval = $insert_id;
 				$log_action = 10; // 'Add'
-				echo 'check error: ';
+				//echo 'check error: ';
 			} else {
 				Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
 
@@ -1509,6 +1501,7 @@ class Factory {
 			
 			return $retval;
 		} catch (\Exception $e) {
+			dd($e->getMessage());
 			// Roll back the transaction on error
 			DB::rollBack();
 			Log::error('Save failed: ' . $e->getMessage());

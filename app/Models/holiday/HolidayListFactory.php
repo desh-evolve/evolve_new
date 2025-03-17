@@ -37,13 +37,13 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -71,16 +71,16 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 		$hpf = new HolidayPolicyFactory();
 
-		$ph = array( 	'company_id' => $company_id,
-						'id' => $id
+		$ph = array( 	':company_id' => $company_id,
+						':id' => $id
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 						LEFT JOIN '. $hpf->getTable() .' as b ON a.holiday_policy_id = b.id
-					where	b.company_id = ?
-						AND a.id = ?
+					where	b.company_id = :company_id
+						AND a.id = :id
 						AND ( a.deleted = 0 AND b.deleted = 0 ) ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -94,15 +94,15 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
-					'holiday_policy_id' => $holiday_policy_id,
+					':id' => $id,
+					':holiday_policy_id' => $holiday_policy_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND holiday_policy_id = ?
+					where	id = :id
+						AND holiday_policy_id = :holiday_policy_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -155,13 +155,13 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 		$hpf = new HolidayPolicyFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 						LEFT JOIN '. $hpf->getTable() .' as b ON a.holiday_policy_id = b.id
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 						AND a.holiday_policy_id in ('. $this->getListSQL($id, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0) ';
 		$query .= $this->getWhereSQL( $where );
@@ -187,7 +187,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$hpf = new HolidayPolicyFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -199,7 +199,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 					where 	a.policy_group_id = b.id
 						AND b.holiday_policy_id = c.id
 						AND c.id = d.holiday_policy_id
-						AND a.user_id = ?
+						AND a.user_id = :user_id
 						AND ( c.deleted = 0 AND d.deleted = 0 AND b.deleted = 0)
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -233,8 +233,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 
 		$ph = array(
-					'user_id' => $user_id,
-					'date' => $this->db->BindDate( $date ),
+					':user_id' => $user_id,
+					':date' => $this->db->BindDate( $date ),
 					);
 
 		$query = '
@@ -248,8 +248,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 						AND ( b.id = z.object_id AND z.company_id = b.company_id AND z.object_type_id = 180)
 						AND z.map_id = d.holiday_policy_id
 						AND d.holiday_policy_id = c.id
-						AND a.user_id = ?
-						AND d.date_stamp = ?
+						AND a.user_id = :user_id
+						AND d.date_stamp = :date
 						AND ( c.deleted = 0 AND d.deleted = 0 AND b.deleted = 0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -287,8 +287,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 
 		$ph = array(
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		//Query was: distinct(d.*) but MySQL doesnt like that.
@@ -305,8 +305,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 						
 						AND d.holiday_policy_id = c.id
 
-						AND d.date_stamp >= ?
-						AND d.date_stamp <= ?
+						AND d.date_stamp >= :start_date
+						AND d.date_stamp <= :end_date
 						AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
 						AND ( c.deleted = 0 AND d.deleted=0 )
 						';
@@ -345,9 +345,9 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 
 		$ph = array(
-					'company_id' => $company_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date ),
+					':company_id' => $company_id,
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		//Query was: distinct(d.*) but MySQL doesnt like that.
@@ -362,9 +362,9 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 						AND ( b.id = z.object_id AND z.company_id = b.company_id AND z.object_type_id = 180)
 						AND z.map_id = d.holiday_policy_id
 						AND d.holiday_policy_id = c.id
-						AND b.company_id = ?
-						AND d.date_stamp >= ?
-						AND d.date_stamp <= ?
+						AND b.company_id = :company_id
+						AND d.date_stamp >= :start_date
+						AND d.date_stamp <= :end_date
 						AND ( c.deleted = 0 AND d.deleted=0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -427,7 +427,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$cgmf = new CompanyGenericMapFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 		
 		$query = '
@@ -445,7 +445,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 						LEFT JOIN '. $pguf->getTable() .' as pguf ON ( pguf.policy_group_id = pgf.id AND pgf.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	hpf.company_id = ?
+					where	hpf.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -466,17 +466,17 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = strtolower(trim($filter_data['name']));
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
-			$query  .=	' AND a.date_stamp >= ?';
+			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$query  .=	' AND a.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
-			$query  .=	' AND a.date_stamp <= ?';
+			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$query  .=	' AND a.date_stamp <= :end_date';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {

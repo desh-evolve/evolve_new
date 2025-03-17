@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\currency;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Currency;
@@ -31,7 +32,7 @@ class CurrencyList extends Controller
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
-    
+
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
@@ -39,6 +40,7 @@ class CurrencyList extends Controller
 
     public function index()
     {
+        // var_dump('a');
         $current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
 
@@ -46,11 +48,15 @@ class CurrencyList extends Controller
         //    !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
         //    return $this->permission->Redirect(false);
         //}
-        
+
         //$smarty->assign('title', ('Currency List'));
 
         extract(FormVariables::GetVariables([
-            'action', 'page', 'sort_column', 'sort_order', 'ids'
+            'action',
+            'page',
+            'sort_column',
+            'sort_order',
+            'ids'
         ]));
 
         URLBuilder::setURL($_SERVER['SCRIPT_NAME'], [
@@ -60,81 +66,85 @@ class CurrencyList extends Controller
         ]);
 
         $sort_array = $sort_column != '' ? [$sort_column => $sort_order] : null;
-        
+
         Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
-        
-        $action = Misc::findSubmitButton();
 
-        switch ($action) {
-            case 'update_rates':
-                CurrencyFactory::updateCurrencyRates($current_company->getId());
-                Redirect::Page(URLBuilder::getURL(NULL, '/currency'));
-                break;
+        BreadCrumb::setCrumb('Currency List');
 
-            case 'add':
-                Redirect::Page(URLBuilder::getURL(NULL, '/currency/add'));
-                break;
+        $clf = new CurrencyListFactory();
+        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
+        $pager = new Pager($clf);
+        $iso_code_options = $clf->getISOCodesArray();
 
-            case 'delete':
-            case 'undelete':
-                $delete = strtolower($action) == 'delete';
-                $clf = new CurrencyListFactory();
+        $currencies = [];
+        $base_currency = false;
 
-                if (!empty($ids) && is_array($ids)) {
-                    foreach ($ids as $id) {
-                        $clf->getByIdAndCompanyId($id, $current_company->getId());
-                        foreach ($clf as $c_obj) {
-                            $c_obj->setDeleted($delete);
-                            if ($c_obj->isValid()) {
-                                $c_obj->Save();
-                            }
-                        }
-                    }
-                }
-                Redirect::Page(URLBuilder::getURL(NULL, '/currency'));
-                break;
-
-            default:
-                BreadCrumb::setCrumb('Currency List');
-                $clf = new CurrencyListFactory();
-                $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
-                $pager = new Pager($clf);
-                $iso_code_options = $clf->getISOCodesArray();
-                
-                $currencies = [];
-                $base_currency = false;
-                
-                foreach ($clf->rs as $c_obj) {
-                    if ($c_obj->is_base) {
-                        $base_currency = true;
-                    }
-                    $currencies[] = [
-                        'id' => $c_obj->id,
-                        'status_id' => $c_obj->status_id,
-                        'name' => $c_obj->name,
-                        'iso_code' => $c_obj->iso_code,
-                        'currency_name' => Option::getByKey($c_obj->iso_code, $iso_code_options),
-                        'conversion_rate' => $c_obj->conversion_rate,
-                        'auto_update' => $c_obj->auto_update,
-                        'is_base' => $c_obj->is_base,
-                        'is_default' => $c_obj->is_default,
-                        'deleted' => $c_obj->deleted
-                    ];
-                }
-                
-                $data = [
-                    'title' => 'Currency List',
-                    'currencies' => $currencies,
-                    'base_currency' => $base_currency,
-                    'sort_column' => $sort_array['sort_column'] ?? '',
-                    'sort_order' => $sort_array['sort_order'] ?? '',
-                    'paging_data' => $pager->getPageVariables()
-                ];
-                
-                return view('currency.list', $data);
-                break;
+        foreach ($clf->rs as $c_obj) {
+            if ($c_obj->is_base) {
+                $base_currency = true;
+            }
+            $currencies[] = [
+                'id' => $c_obj->id,
+                'status_id' => $c_obj->status_id,
+                'name' => $c_obj->name,
+                'iso_code' => $c_obj->iso_code,
+                'currency_name' => Option::getByKey($c_obj->iso_code, $iso_code_options),
+                'conversion_rate' => $c_obj->conversion_rate,
+                'auto_update' => $c_obj->auto_update,
+                'is_base' => $c_obj->is_base,
+                'is_default' => $c_obj->is_default,
+                'deleted' => $c_obj->deleted
+            ];
         }
 
+        $data = [
+            'title' => 'Currency List',
+            'currencies' => $currencies,
+            'base_currency' => $base_currency,
+            'sort_column' => $sort_array['sort_column'] ?? '',
+            'sort_order' => $sort_array['sort_order'] ?? '',
+            'paging_data' => $pager->getPageVariables()
+        ];
+
+        return view('currency.CurrencyList', $data);
     }
 
+    public function update_rates(){
+        $current_company = $this->company;
+        CurrencyFactory::updateCurrencyRates($current_company->getId());
+        Redirect::Page(URLBuilder::getURL(NULL, '/currency'));
+    }
+
+    public function add(){
+        Redirect::Page(URLBuilder::getURL(NULL, '/currency/add'));
+    }
+
+    public function delete($id)
+    {
+        $current_company = $this->company;
+
+        if (empty($id)) {
+            return response()->json(['error' => 'No currencies selected.'], 400);
+        }
+        
+        $clf = new CurrencyListFactory();
+        $currency = $clf->getByIdAndCompanyId($id, $current_company->getId());
+        
+        foreach ($currency->rs as $c_obj) {
+            $currency->data = (array)$c_obj; // added bcz currency data is null and it gives an error
+            
+            $currency->setDeleted(true); // Set deleted flag to true
+
+            if ($currency->isValid()) {
+                $res = $currency->Save();
+                
+                if($res){
+                    return response()->json(['success' => 'Currency deleted successfully.']);
+                }else{
+                    return response()->json(['error' => 'Currency deleted failed.']);
+                }
+            }
+        }
+        
+    }
 }

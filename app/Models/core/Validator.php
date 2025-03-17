@@ -542,7 +542,6 @@ class Validator {
 				return FALSE;
 			}
 		}
-
 		Debug::Arr($this->errors, 'Errors', __FILE__, __LINE__, __METHOD__, $this->verbosity);
 
 		return FALSE;

@@ -22,6 +22,7 @@ use App\Models\Users\UserDeductionListFactory;
 use App\Models\Users\UserGenericStatusFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserWageListFactory;
+use Carbon\Carbon;
 use DateTime;
 
 class CalculatePayStub extends PayStubFactory {
@@ -42,14 +43,9 @@ class CalculatePayStub extends PayStubFactory {
 	}
 	function setUser($id) {
 		$id = trim($id);
-
 		$ulf = new UserListFactory(); 
 
-		if ( $id == 0
-				OR $this->Validator->isResultSetWithRows(	'user',
-															$ulf->getByID($id),
-															('Invalid User')
-															) ) {
+		if ( $id == 0 OR $this->Validator->isResultSetWithRows(	'user', $ulf->getByID($id), ('Invalid User') ) ) {
 			$this->data['user_id'] = $id;
 
 			return TRUE;
@@ -1077,56 +1073,53 @@ class CalculatePayStub extends PayStubFactory {
 	function calculateAllowance()
 	{
 		
-		
-		
 		$udlf = new UserDateListFactory();
 		
 		$filter_data['pay_period_ids'] = array($this->getPayPeriod());
 		$filter_data['include_user_ids'] = array($this->getUser());
 		$filter_data['user_id'] = array($this->getUser());
 		
-		//echo $this->getUserObject()->getCompany(); 
-		
 		$udtlf = new UserDateTotalListFactory();
 		$udtlf->getDayReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		
-					
 		$slf = new ScheduleListFactory();
 		$slf->getSearchByCompanyIdAndArrayCriteria($this->getUserObject()->getCompany(),$filter_data);
 		
 		if ( $slf->getRecordCount() > 0 ) {
-			foreach($slf as $s_obj) {
-				$user_id = $s_obj->getColumn('user_id');
-				$status_id = $s_obj->getColumn('status_id');
-				$status = strtolower( Option::getByKey($status_id, $s_obj->getOptions('status') ) );
-				$pay_period_id = $s_obj->getColumn('pay_period_id');
-				$date_stamp = TTDate::strtotime( $s_obj->getColumn('date_stamp') );
+			foreach($slf->rs as $s_obj) {
+				$slf->data = (array)$s_obj;
+				$user_id = $slf->getColumn('user_id');
+				$status_id = $slf->getColumn('status_id');
+				$status = strtolower( Option::getByKey($status_id, $slf->getOptions('status') ) );
+				$pay_period_id = $slf->getColumn('pay_period_id');
+				$date_stamp = TTDate::strtotime( $slf->getColumn('date_stamp') );
 
-				$schedule_rows[$pay_period_id][$user_id][$date_stamp][$status] = $s_obj->getColumn('total_time');  
-				$schedule_rows[$pay_period_id][$user_id][$date_stamp]['start_time'] = $s_obj->getColumn('start_time');  
-				$schedule_rows[$pay_period_id][$user_id][$date_stamp]['end_time'] = $s_obj->getColumn('end_time');  
+				$schedule_rows[$pay_period_id][$user_id][$date_stamp][$status] = $slf->getColumn('total_time');  
+				$schedule_rows[$pay_period_id][$user_id][$date_stamp]['start_time'] = $slf->getColumn('start_time');  
+				$schedule_rows[$pay_period_id][$user_id][$date_stamp]['end_time'] = $slf->getColumn('end_time');  
 				unset($user_id, $status_id, $status, $pay_period_id, $date_stamp);
 			}
 		}
 		//echo '<pre>'; print_r($schedule_rows); echo'<pre>';
 					
-					
-		foreach ($udtlf as $udt_obj ) {
-			$user_id = $udt_obj->getColumn('id');
-			$pay_period_id = $udt_obj->getColumn('pay_period_id');
-			$date_stamp = TTDate::strtotime( $udt_obj->getColumn('date_stamp') );
+		
+		foreach ($udtlf->rs as $udt_obj ) {
+			$udtlf->data = (array)$udt_obj;
+			
+			$user_id = $udtlf->getColumn('id');
+			$pay_period_id = $udtlf->getColumn('pay_period_id');
+			$date_stamp = TTDate::strtotime( $udtlf->getColumn('date_stamp') );
 							
-			$status_id = $udt_obj->getColumn('status_id');
-			$type_id = $udt_obj->getColumn('type_id');
-
-			$tmp_rows[$pay_period_id][$user_id][$date_stamp]['min_punch_time_stamp'] = TTDate::strtotime( $udt_obj->getColumn('min_punch_time_stamp') );
-			$tmp_rows[$pay_period_id][$user_id][$date_stamp]['max_punch_time_stamp'] = TTDate::strtotime( $udt_obj->getColumn('max_punch_time_stamp') );
+			$status_id = $udtlf->getColumn('status_id');
+			$type_id = $udtlf->getColumn('type_id');
+			
+			$tmp_rows[$pay_period_id][$user_id][$date_stamp]['min_punch_time_stamp'] = TTDate::strtotime( $udtlf->getColumn('min_punch_time_stamp') );
+			$tmp_rows[$pay_period_id][$user_id][$date_stamp]['max_punch_time_stamp'] = TTDate::strtotime( $udtlf->getColumn('max_punch_time_stamp') );
 							
 			if ( ($status_id == 20 AND $type_id == 10 ) OR ($status_id == 10 AND $type_id == 100 ) ) {
-				$tmp_rows[$pay_period_id][$user_id][$date_stamp]['worked_time'] += (int)$udt_obj->getColumn('total_time');
+				$tmp_rows[$pay_period_id][$user_id][$date_stamp]['worked_time'] += (int)$udtlf->getColumn('total_time');
 			}
-		}
-		
+		}	
 					
 		$worked_days_no = 0;
 		$late_days_no = 0;
@@ -1137,10 +1130,14 @@ class CalculatePayStub extends PayStubFactory {
 		foreach($tmp_rows as $pp_id=>$user_data) {
 			foreach ($user_data as $usr_id => $date_data) {
 				foreach ($date_data as $date_stamp => $att_data) {
-
+					
+					/*
 					$dt_stamp = new DateTime();
 					$dt_stamp->setTimestamp($date_stamp);
 					$current_date = $dt_stamp->format('Y-m-d');
+					*/
+
+					$current_date = Carbon::createFromTimestamp($date_stamp)->format('Y-m-d');
 					
 					if((isset($schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time']) && $schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time'] !='' )&& (isset($att_data['min_punch_time_stamp'])&& $att_data['min_punch_time_stamp']!='')){
 						
@@ -1149,257 +1146,118 @@ class CalculatePayStub extends PayStubFactory {
 						$late_time = TTDate::strtotime($schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time']) - $att_data['min_punch_time_stamp'];
 						
 						if($late_time < 0){
-						
-							
 							$alf_a = new AccrualListFactory();
-		
 							$alf_a->getByAccrualByUserIdAndTypeIdAndDate($usr_id,55,$current_date);
 				
 							if($alf_a->getRecordCount() > 0){
-
 								// echo $late_time.'<br>';
-							}
-							else{
+							} else {
 								$late_days_no++;
 							}
 						}
-					}
-					elseif((isset($schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time']) && $schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time'] !='' )&& (isset($att_data['min_punch_time_stamp'])&& $att_data['min_punch_time_stamp']=='') && (isset($att_data['max_punch_time_stamp'])&& $att_data['max_punch_time_stamp']=='')){
+					} elseif((isset($schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time']) && $schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time'] !='' )&& (isset($att_data['min_punch_time_stamp'])&& $att_data['min_punch_time_stamp']=='') && (isset($att_data['max_punch_time_stamp'])&& $att_data['max_punch_time_stamp']=='')){
 						
 							$hlf = new HolidayListFactory();
-						
-						
 							$hlf->getByPolicyGroupUserIdAndDate($usr_id, $current_date);
-							$hday_obj_arr = $hlf->getCurrent()->data;
+
+							$hday_obj_arr = $hlf->getCurrent()->rs;
 
 							if (!empty($hday_obj_arr)) {
 								
-							}
-							else{
+							}else{
 								
-								
-								
-										$alf = new AccrualListFactory();
-										$alf->getByAccrualByUserIdAndTypeIdAndDate($usr_id,55,$current_date);
+								$alf = new AccrualListFactory();
+								$alf->getByAccrualByUserIdAndTypeIdAndDate($usr_id,55,$current_date);
+								if($alf->getRecordCount() > 0){
+									
+									$af_obj = $alf->getCurrent();
+									
+									if($af_obj->getAmount()== -28800){
 										
-										//  echo ' '.$date_stamp;
-								
-											if($alf->getRecordCount() > 0){
-												
-												$af_obj = $alf->getCurrent();
-												// echo $late_time.'<br>'; getAmount()
-												
-											// echo ' '.$af_obj->getAmount();
-												
-												if($af_obj->getAmount()== -28800){
-													
-													$full_day_leave_no++;
-												}
-												elseif($af_obj->getAmount()==-14400){
-													$half_day_leave_no++;
-												}
-											}
-											else{
-												
-												// Used to calculate nopay days and place nopay on salary
-												
-												$ulf = new UserListFactory();
-												$ulf->getById($usr_id);
-												$user_obj = $ulf->getCurrent();
-												
-											// exclude directors from Nopay
-											if($user_obj->getTitle()!= 2){ 
-												
-													$udlf = new UserDateListFactory();
-													$udlf->getByUserIdAndDate($usr_id, $current_date);
+										$full_day_leave_no++;
+									}
+									elseif($af_obj->getAmount()==-14400){
+										$half_day_leave_no++;
+									}
+								}else{
+									
+									// Used to calculate nopay days and place nopay on salary
+									
+									$ulf = new UserListFactory();
+									$ulf->getById($usr_id);
+									$user_obj = $ulf->getCurrent();
+									
+									// exclude directors from Nopay
+									if($user_obj->getTitle()!= 2){ 
+									
+										$udlf = new UserDateListFactory();
+										$udlf->getByUserIdAndDate($usr_id, $current_date);
 
-													
-													if($udlf->getRecordCount() >0){
-														
-													$ud_obj = $udlf->getCurrent();
-
-
-													$udtlf = new UserDateTotalListFactory();
-													$udtlf->getByUserDateId($ud_obj->getId());
-
-													if($udtlf->getRecordCount() > 0){
-
-														foreach($udtlf as $udt_obj){
-
-															$udt_obj->setDeleted(TRUE);
-
-															if( $udt_obj->isValid()){
-																$udt_obj->Save(); 
-															}
-														}
-													}
-
-													
-													if(($user_obj->getTerminationDate()!='' && $user_obj->getTerminationDate() >= $dt_stamp->getTimestamp() )|| $user_obj->getTerminationDate() == ''){
-													
-													//// if($user_obj->getId()==1015 && $dt_stamp->getTimestamp()==1531420200){ echo $user_obj->getTerminationDate().'  MM'; }
-													$udt_obj1 = new UserDateTotalFactory();
-
-													$udt_obj1->setUserDateID($ud_obj->getId());
-													$udt_obj1->setStatus(10);
-													$udt_obj1->setType(10);
-													$udt_obj1->setTotalTime(0);
-
-													if( $udt_obj1->isValid()){
-																$udt_obj1->Save(); 
-													}
-
-													$udt_obj2 = new UserDateTotalFactory();
-
-
-													$udt_obj2->setUserDateID($ud_obj->getId());
-													$udt_obj2->setStatus(30);
-													$udt_obj2->setType(10);
-													$udt_obj2->setTotalTime(28800);
-													$udt_obj2->setAbsencePolicyID(10);
-													$udt_obj2->setDepartment($user_obj->getDefaultDepartment());
-													$udt_obj2->setBranch($user_obj->getDefaultBranch());
-
-
-													if( $udt_obj2->isValid()){
-																$udt_obj2->Save(); 
-													}
-
-													unset($udt_obj1);
-													unset($udt_obj2);
-													unset($ulf);
-													
-													}
-												}
-											}
-											
-												$nopay_days_no++;
-											}
-							}
-					}
-					/*
-					elseif((isset($schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time']) && $schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time'] !='' )&& (!isset($att_data['min_punch_time_stamp'])&& $att_data['min_punch_time_stamp']=='') && (isset($att_data['max_punch_time_stamp'])&& $att_data['max_punch_time_stamp']=='')){
-						
-							$hlf = new HolidayListFactory();
-						
-						
-							$hlf->getByPolicyGroupUserIdAndDate($usr_id, $current_date);
-							$hday_obj_arr = $hlf->getCurrent()->data;
-
-							if (!empty($hday_obj_arr)) {
-								
-							}
-							else{
-								
-								
-								
-										$alf = new AccrualListFactory();
-										$alf->getByAccrualByUserIdAndTypeIdAndDate($usr_id,55,$current_date);
 										
-										//  echo ' '.$date_stamp;
-								
-											if($alf->getRecordCount() > 0){
-												
-												$af_obj = $alf->getCurrent();
-												// echo $late_time.'<br>'; getAmount()
-												
-											// echo ' '.$af_obj->getAmount();
-												
-												if($af_obj->getAmount()== -28800){
-													
-													$full_day_leave_no++;
-												}
-												elseif($af_obj->getAmount()==-14400){
-													$half_day_leave_no++;
-												}
-											}
-											else{
-												
-												// Used to calculate nopay days and place nopay on salary
-												
-												$ulf = new UserListFactory();
-												$ulf->getById($usr_id);
-												$user_obj = $ulf->getCurrent();
-												
-											// exclude directors from Nopay
-											if($user_obj->getTitle()!= 2){ 
-												
-													$udlf = new UserDateListFactory();
-													$udlf->getByUserIdAndDate($usr_id, $current_date);
-
-													
-													if($udlf->getRecordCount() >0){
-														
-													$ud_obj = $udlf->getCurrent();
-
-
-													$udtlf = new UserDateTotalListFactory();
-													$udtlf->getByUserDateId($ud_obj->getId());
-
-													if($udtlf->getRecordCount() > 0){
-
-														foreach($udtlf as $udt_obj){
-
-															$udt_obj->setDeleted(TRUE);
-
-															if( $udt_obj->isValid()){
-																$udt_obj->Save(); 
-															}
-														}
-													}
-
-													
-													if(($user_obj->getTerminationDate()!='' && $user_obj->getTerminationDate() >= $dt_stamp->getTimestamp() )|| $user_obj->getTerminationDate() == ''){
-													
-													//// if($user_obj->getId()==1015 && $dt_stamp->getTimestamp()==1531420200){ echo $user_obj->getTerminationDate().'  MM'; }
-													$udt_obj1 = new UserDateTotalFactory();
-
-													$udt_obj1->setUserDateID($ud_obj->getId());
-													$udt_obj1->setStatus(10);
-													$udt_obj1->setType(10);
-													$udt_obj1->setTotalTime(0);
-
-													if( $udt_obj1->isValid()){
-																$udt_obj1->Save(); 
-													}
-
-													$udt_obj2 = new UserDateTotalFactory();
-
-
-													$udt_obj2->setUserDateID($ud_obj->getId());
-													$udt_obj2->setStatus(30);
-													$udt_obj2->setType(10);
-													$udt_obj2->setTotalTime(28800);
-													$udt_obj2->setAbsencePolicyID(10);
-													$udt_obj2->setDepartment($user_obj->getDefaultDepartment());
-													$udt_obj2->setBranch($user_obj->getDefaultBranch());
-
-
-													if( $udt_obj2->isValid()){
-																$udt_obj2->Save(); 
-													}
-
-													unset($udt_obj1);
-													unset($udt_obj2);
-													unset($ulf);
-													
-													}
-												}
-											}
+										if($udlf->getRecordCount() >0){
 											
-												$nopay_days_no++;
+											$ud_obj = $udlf->getCurrent();
+
+
+											$udtlf = new UserDateTotalListFactory();
+											$udtlf->getByUserDateId($ud_obj->getId());
+
+											if($udtlf->getRecordCount() > 0){
+
+												foreach($udtlf as $udt_obj){
+
+													$udt_obj->setDeleted(TRUE);
+
+													if( $udt_obj->isValid()){
+														$udt_obj->Save(); 
+													}
+												}
 											}
+
+											
+											if(($user_obj->getTerminationDate()!='' && $user_obj->getTerminationDate() >= $dt_stamp->getTimestamp() )|| $user_obj->getTerminationDate() == ''){
+											
+												//// if($user_obj->getId()==1015 && $dt_stamp->getTimestamp()==1531420200){ echo $user_obj->getTerminationDate().'  MM'; }
+												$udt_obj1 = new UserDateTotalFactory();
+
+												$udt_obj1->setUserDateID($ud_obj->getId());
+												$udt_obj1->setStatus(10);
+												$udt_obj1->setType(10);
+												$udt_obj1->setTotalTime(0);
+
+												if( $udt_obj1->isValid()){
+															$udt_obj1->Save(); 
+												}
+
+												$udt_obj2 = new UserDateTotalFactory();
+
+
+												$udt_obj2->setUserDateID($ud_obj->getId());
+												$udt_obj2->setStatus(30);
+												$udt_obj2->setType(10);
+												$udt_obj2->setTotalTime(28800);
+												$udt_obj2->setAbsencePolicyID(10);
+												$udt_obj2->setDepartment($user_obj->getDefaultDepartment());
+												$udt_obj2->setBranch($user_obj->getDefaultBranch());
+
+
+												if( $udt_obj2->isValid()){
+													$udt_obj2->Save(); 
+												}
+
+												unset($udt_obj1);
+												unset($udt_obj2);
+												unset($ulf);
+											
+											}
+										}
+									}
+								
+									$nopay_days_no++;
+								}
 							}
-					}
-					*/
-					elseif( (isset($att_data['min_punch_time_stamp'])&& $att_data['min_punch_time_stamp']!='')){
-						
-						// echo $att_data['worked_time'] ;
-						
-						// echo $schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time'];
+					} elseif( (isset($att_data['min_punch_time_stamp'])&& $att_data['min_punch_time_stamp']!='')){
 						if($att_data['worked_time'] >= 14400){
-							
-							// echo "gone";
 							$worked_days_no++;
 						}
 						
@@ -1457,16 +1315,15 @@ class CalculatePayStub extends PayStubFactory {
 		
 		$plf = new PayStubListFactory();
 		$plf->getByPayperiodsIdAndUserId($this->getPayPeriod(), $this->getUser());
+		
+		if($plf->getRecordCount() > 0){
 			
-			if($plf->getRecordCount() > 0){
+			$ps_obj = $plf->getCurrent();
 				
-				$ps_obj = $plf->getCurrent();
-					
-				$ps_obj->setDeleted(TRUE);
-				
-				$ps_obj->save();
-				
-			}
+			$ps_obj->setDeleted(TRUE);
+			
+			$ps_obj->Save();
+		}
 		
 		/*
 		$ulf = new UserListFactory();
