@@ -91,6 +91,7 @@ class EditBranch extends Controller
                     ];
                 }
             }
+            $data['next_available_manual_id'] = $this->branchListFactory->getNextAvailableManualId($current_company->getId());
         } else {
             // Add mode: Set default values
             $data = [
@@ -113,7 +114,6 @@ class EditBranch extends Controller
             'title' => $id ? 'Edit Branch' : 'Add Branch',
             'data' => $data,
         ];
-
         return view('branch.EditBranch', $viewData);
     }
 
@@ -145,7 +145,7 @@ class EditBranch extends Controller
         $this->branchFactory->setAddress1($data['address1'] ?? '');
         $this->branchFactory->setAddress2($data['address2'] ?? '');
         $this->branchFactory->setCity($data['city'] ?? '');
-        $this->branchFactory->setCountry($data['country'] ?? '');
+        // $this->branchFactory->setCountry($data['country'] ?? '');
         $this->branchFactory->setProvince($data['province'] ?? '');
         $this->branchFactory->setPostalCode($data['postal_code'] ?? '');
         $this->branchFactory->setWorkPhone($data['work_phone'] ?? '');
@@ -160,8 +160,11 @@ class EditBranch extends Controller
             $this->branchFactory->Save();
             return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Branch saved successfully.');
         }
+        // if ($this->branchFactory->isValid()) {
+        //     return redirect()->back()->withErrors(['error' => 'Invalid data provided 1.'])->withInput();
+        // } else {
 
-        // If validation fails, return back with errors
-        return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
+            // If validation fails, return back with errors
+            return redirect()->back()->withErrors(['error' => 'Invalid data provided2.'])->withInput();
     }
 }

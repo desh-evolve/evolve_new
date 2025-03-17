@@ -75,36 +75,77 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		return $this;
 	}
 
+	// function getByCompanyIdAndTypeID($id, $type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+	// 	if ( $id == '' ) {
+	// 		return FALSE;
+	// 	}
+
+	// 	if ( $type_id == '' ) {
+	// 		return FALSE;
+	// 	}
+
+	// 	$ph = array(
+	// 				'id' => (int)$id,
+	// 				//'type_id' => (int)$type_id,
+	// 				);
+
+	// 	$query = '
+	// 				select 	*
+	// 				from	'. $this->getTable() .' as a
+	// 				where	company_id = ?
+	// 					AND type_id in ('. $this->getListSQL($type_id, $ph) .')
+	// 					AND deleted = 0';
+	// 	$query .= $this->getWhereSQL( $where );
+	// 	$query .= $this->getSortSQL( $order );
+
+	// 	if ($limit == NULL) {
+	// 		$this->rs = DB::select($query, $ph);
+	// 	} else {
+	// 		$this->rs = DB::select($query, $ph);
+	// 		//$this->rs = DB::select($query, $ph);
+	// 	}
+
+	// 	return $this;
+	// }
+
 	function getByCompanyIdAndTypeID($id, $type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		if ( $id == '' ) {
+		if (empty($id) || empty($type_id)) {
 			return FALSE;
 		}
-
-		if ( $type_id == '' ) {
-			return FALSE;
+	
+		// Ensure $type_id is an array
+		if (!is_array($type_id)) {
+			$type_id = [$type_id];
 		}
-
-		$ph = array(
-					'id' => (int)$id,
-					//'type_id' => (int)$type_id,
-					);
-
+	
+		// Generate placeholders for the IN clause
+		$placeholders = implode(',', array_fill(0, count($type_id), '?'));
+	
+		// Prepare the query
 		$query = '
-					select 	*
-					from	'. $this->getTable() .' as a
-					where	company_id = ?
-						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
-						AND deleted = 0';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
-
-		if ($limit == NULL) {
+			SELECT *
+			FROM ' . $this->getTable() . ' AS a
+			WHERE company_id = ?
+			AND type_id IN (' . $placeholders . ')
+			AND deleted = 0';
+	
+		// Add additional WHERE and ORDER BY clauses if provided
+		$query .= $this->getWhereSQL($where);
+		$query .= $this->getSortSQL($order);
+	
+		// Prepare parameters
+		$ph = array_merge([$id], $type_id);
+	
+		// Debugging: Output the query and parameters
+		
+	
+		// Execute the query
+		if ($limit === NULL) {
 			$this->rs = DB::select($query, $ph);
 		} else {
+			// Handle pagination if needed
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = DB::select($query, $ph);
 		}
-
 		return $this;
 	}
 
@@ -137,8 +178,10 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 	}
 
 	function getByCompanyIdAndTypeIDArray($id, $type_id, $key_prefix = NULL, $name_prefix = NULL ) {
+	
 		$oflf = new OtherFieldListFactory();
 		$oflf->getByCompanyIdAndTypeID( $id, $type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL );
+	
 		if ( $oflf->getRecordCount() > 0 ) {
 			foreach($oflf as $obj) {
 				if ( is_array($key_prefix) ) {

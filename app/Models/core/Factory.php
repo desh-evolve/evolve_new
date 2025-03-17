@@ -622,15 +622,24 @@ class Factory {
 		return FALSE;
 	}
 
-	protected function getListSQL($array, $ph = null)
+	protected function getListSQL($array, &$ph = null)
 	{
 		// Ensure it's an array
 		if (!is_array($array)) {
 			$array = explode(',', (string) $array); // Convert comma-separated string to array
 		}
-		
+
 		// Trim values and filter out empty ones
 		$array = array_filter(array_map('trim', $array));
+
+		// If `$ph` is an array (used for binding), merge the values
+		if (is_array($ph)) {
+			foreach ($array as $key => $value) {
+				$param = ':param' . $key;
+				$ph[$param] = $value;
+				$array[$key] = $param;
+			}
+		}
 
 		return implode(',', $array);
 	}
@@ -1088,13 +1097,10 @@ class Factory {
 
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-			
-			/*
-			//check later before uncomment - desh(2025-03-15)
+
 			if (is_array($additional_fields)) {
 				$fields = array_merge($fields, $additional_fields);
 			}
-			*/
 
 			foreach ($array as $orig_column => $order) {
 				$orig_column = trim($orig_column);
@@ -1469,7 +1475,7 @@ class Factory {
 				// Return the ID of the newly created record
 				$retval = $insert_id;
 				$log_action = 10; // 'Add'
-				//echo 'check error: ';
+				echo 'check error: ';
 			} else {
 				Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
 
