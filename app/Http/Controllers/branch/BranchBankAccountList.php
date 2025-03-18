@@ -1,75 +1,158 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4822 $
- * $Id: BranchList.php 4822 2011-06-12 02:25:33Z ipso $
- * $Date: 2011-06-11 19:25:33 -0700 (Sat, 11 Jun 2011) $
- */
 
+namespace App\Http\Controllers\Branch;
 
-/*******************************************************************************
- * ARSP NOTE --> I ADDE THIS CODE FOR THUNDER AND NEON
- * I COPIED THIS CODE FROM thunder\interface\branch\BranchList.php
- *******************************************************************************/
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\Core\Environment;
+use App\Models\Core\BreadCrumb;
+use App\Models\Core\Debug;
+use App\Models\Core\Pager;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\TTi18n;
+use App\Models\Core\URLBuilder;
+use App\Models\Company\BranchBankAccountListFactory;
+use App\Models\Company\BranchListFactory;
+use Illuminate\Support\Facades\View;
 
+class BranchBankAccountList extends Controller
+{
+	protected $permission;
+	protected $company;
+	protected $userPrefs;
 
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-if ( !$permission->Check('branch','enabled')
-		OR !( $permission->Check('branch','view') OR $permission->Check('branch','view_own') ) ) {
+		$this->userPrefs = View::shared('current_user_prefs');
+		$this->company = View::shared('current_company');
+		$this->permission = View::shared('permission');
+	}
 
-	$permission->Redirect( FALSE ); //Redirect
+	/**
+	 * Default index method to handle the main logic.
+	 */
+	public function index(Request $request)
+	{
+		$current_company = $this->company;
+        $current_user_prefs = $this->userPrefs;
+		// // Permission check
+		// if (!$this->permission->Check('branch', 'enabled') ||
+		//     !($this->permission->Check('branch', 'view') || $this->permission->Check('branch', 'view_own'))) {
+		//     return $this->permission->Redirect(false);
+		// }
 
-}
+		// Extract form variables
+		extract(FormVariables::GetVariables([
+			'action',
+			'page',
+			'sort_column',
+			'sort_order',
+			'id',
+			'branch_id_new',
+			'ids'
+		]));
 
-$smarty->assign('title', TTi18n::gettext($title = 'Bank Account List') ); // See index.php
-BreadCrumb::setCrumb($title);
+		URLBuilder::setURL($request->getScriptName(), [
+			'sort_column' => $sort_column,
+			'sort_order' => $sort_order,
+			'page' => $page,
+			'id' => $id
+		]);
+		$id = $request->id;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-                                                                                                'id',//ARSP NOTE --> I ADDED THIS NEW CODE FOR THUNDER & NEON. THIS VALUE FROM URL QUERY STRING
-                                                                                                'branch_id_new',//ARSP NOTE --> I ADDED THIS NEW CODE FOR THUNDER & NEON. THIS VALUE FROM URL QUERY STRING. THIS VARIABLE WE MUST SET FROM FROM HIDDEN FIELD
-                                                                                                'ids'//ARSP NOTE --> I ADDED THIS NEW CODE FOR THUNDER & NEON. THIS VALUE FROM URL QUERY STRING
-												) ) );
+		Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page,
-                                                                                                        'id' => $id
-												) );
-
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-                Redirect::Page( URLBuilder::getURL(array('branch_id_new' => $branch_id_new), 'EditBankAccount.php',FALSE));
-
-		break;
-	case 'delete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
-		}
+		// Handle default logic
+		$sort_array = $sort_column != '' ? [Misc::trimSortPrefix($sort_column) => $sort_order] : NULL;
 
 		$bbalf = new BranchBankAccountListFactory();
+		// dd($current_user_prefs);
+		$bbalf->getByBranchId($id, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
 
-		if ( isset($ids) AND is_array($ids) ) {
+		$pager = new Pager($bbalf);
+
+		$bankAccounts = [];
+		// if ($bbalf->getRecordCount() > 0) {
+			foreach ($bbalf->rs as $bank) {
+				$bbalf->data = (array)$bank;
+				// print_r($blf->rs);
+				// exit;
+				$bankAccounts[] = [
+					'id' => $bbalf->GetId(),
+					'transit' => $bbalf->getTransit(),
+					'bank_name' => $bbalf->getBankName(),
+					'bank_branch' => $bbalf->getBankBranch(),
+					'account' => $bbalf->getAccount(),
+				];
+			}
+		// }
+
+		$blf = new BranchListFactory();
+		$blf->getById($id);
+		$company_branch_name = $blf->getById($id)->getCurrent()->getName();
+		View::share('company_branch_name', $company_branch_name);
+
+		$data = [
+			'title' => TTi18n::gettext('Bank Account List'),
+			'bankAccounts' => $bankAccounts,
+			'branch_id_new' => $id,
+			'sort_column' => $sort_column,
+			'sort_order' => $sort_order,
+			'paging_data' => $pager->getPageVariables()
+		];
+
+		return view('branch.BranchBankAccountList', $data);
+	}
+
+	/**
+	 * Handle the "add" action.
+	 */
+	public function add(Request $request)
+	{
+		// Permission check
+		if (
+			!$this->permission->Check('branch', 'enabled') ||
+			!($this->permission->Check('branch', 'edit') || $this->permission->Check('branch', 'edit_own'))
+		) {
+			return $this->permission->Redirect(false);
+		}
+
+		// Extract form variables
+		extract(FormVariables::GetVariables([
+			'branch_id_new'
+		]));
+
+		return Redirect::to(URLBuilder::getURL(['branch_id_new' => $branch_id_new], 'EditBankAccount.php', FALSE));
+	}
+
+	/**
+	 * Handle the "delete" action.
+	 */
+	public function delete(Request $request)
+	{
+		// Permission check
+		if (
+			!$this->permission->Check('branch', 'enabled') ||
+			!($this->permission->Check('branch', 'delete') || $this->permission->Check('branch', 'delete_own'))
+		) {
+			return $this->permission->Redirect(false);
+		}
+
+		// Extract form variables
+		extract(FormVariables::GetVariables([
+			'ids'
+		]));
+
+		$delete = true; // Assume delete action
+		$bbalf = new BranchBankAccountListFactory();
+
+		if (isset($ids) && is_array($ids)) {
 			foreach ($ids as $id1) {
 				$bbalf->getById($id1);
 				foreach ($bbalf as $branch) {
@@ -79,50 +162,6 @@ switch ($action) {
 			}
 		}
 
-                Redirect::Page( URLBuilder::getURL( $redirect_arr, 'BranchList.php') );
-
-		break;   
-	default:
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-		}
-
-		$bbalf = new BranchBankAccountListFactory();
-		$bbalf->getByBranchId($id, $current_user_prefs->getItemsPerPage(),$page, NULL, $sort_array );
-
-		$pager = new Pager($bbalf);
-
-		$branches = array();
-		if ( $bbalf->getRecordCount() > 0 ) {
-			foreach ($bbalf as $branch) {
-				$branches[] = array(
-									'id' => $branch->GetId(),
-									'transit' => $branch->getTransit(),
-									'bank_name' => $branch->getBankName(),
-									'bank_branch' => $branch->getBankBranch(),
-									'account' => $branch->getAccount(),
-									//'deleted' => $branch->getDeleted()
-								);
-			}
-		}
-                
-                $blf = new BranchListFactory();
-                $company_branch_name = $blf->getById( $id )->getCurrent()->getName();                
-                $smarty->assign_by_ref('company_branch_name', $company_branch_name);
-
-		$smarty->assign_by_ref('branches', $branches);
-                
-                
-                $smarty->assign_by_ref('branch_id_new', $id );//ARSP NOTE --> IADDED NEW CODE FOR THUNDER & NEON
-                
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-                
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		break;      
-            
+		return Redirect::to(URLBuilder::getURL([], 'BranchList.php'));
+	}
 }
-$smarty->display('branch/BranchBankAccountList.tpl');
-?>

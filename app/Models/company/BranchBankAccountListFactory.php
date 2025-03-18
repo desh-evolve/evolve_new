@@ -80,6 +80,8 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
          */
 	function getByBranchId($id, $where = NULL, $order = NULL) {
+		// print_r($this->getTable());
+		// exit;
 		if ( $id == '') {
 			return FALSE;
 		}

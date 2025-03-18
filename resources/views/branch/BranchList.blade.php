@@ -56,6 +56,10 @@
                                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteBranch({{ $branch['id'] }})">
                                             {{ __('Delete') }}
                                         </button>
+										  <!-- Delete Button -->
+										  <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch_bank.index', ['id' => $branch['id'] ?? '']) }}'">
+                                            {{ __('Bank') }}
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach

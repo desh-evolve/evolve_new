@@ -12,7 +12,7 @@
                     </div>
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button" href="/bank-account/add" class="btn btn-primary waves-effect waves-light material-shadow-none me-1" id="add_new_btn">New Bank Account <i class="ri-add-line"></i></a>
+                            <a type="button" href="/bank_account/add" class="btn btn-primary waves-effect waves-light material-shadow-none me-1" id="add_new_btn">New Bank Account <i class="ri-add-line"></i></a>
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                                     <td>{{ $bankAccount['bank_branch'] ?? '' }}</td>
                                     <td>{{ $bankAccount['account'] ?? '' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('bankAccount.edit', ['id' => $bankAccount['id'] ?? '']) }}'">{{ __('Edit') }}</button>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch_bank.add', ['id' => $bankAccount['id'] ?? '']) }}'">{{ __('Edit') }}</button>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteBankAccount({{ $bankAccount['id'] }})">{{ __('Delete') }}</button>
                                     </td>
                                 </tr>
@@ -60,7 +60,7 @@
             if (confirm('Are you sure you want to delete this item?')) {
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 try {
-                    const response = await fetch(`/bank-account/delete/${bankAccountId}`, {
+                    const response = await fetch(`/bank_account/delete/${bankAccountId}`, {
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': token,
