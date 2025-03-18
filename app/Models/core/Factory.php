@@ -1472,7 +1472,7 @@ class Factory {
 			Debug::text('Bulk Delete Query: '. $query, __FILE__, __LINE__, __METHOD__, 9);
 
 			try {
-				DB::select($query, $ph);
+				DB::delete($query, $ph);
 			} catch (Throwable $e) {
 				throw new DBError($e);
 			}

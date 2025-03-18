@@ -658,10 +658,7 @@ class CalculatePayStub extends PayStubFactory {
 
 		UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 10, $pay_stub->Validator->getTextErrors(), NULL );
 
-		$pay_stub->FailTransaction(); //Reduce transaction count by one.
-		//$pay_stub->FailTransaction(); //Reduce transaction count by one.
-
-		$pay_stub->CommitTransaction();
+		$pay_stub->FailTransaction();
 
 		return FALSE;
 	}

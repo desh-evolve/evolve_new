@@ -241,12 +241,8 @@ class ProgressBar extends Controller
 					// calculation functions
 					//=================================================================
                     $cps->removeTerminatePayStub();
-					echo '1'; 
                     $cps->calculateAllowance();
-					echo '2'; 
 					$cps->calculate();
-					echo '3'; 
-					exit;
 					//=================================================================
 					unset($cps);
 					$profiler->stopTimer( 'Calculating Pay Stub' );
@@ -257,7 +253,6 @@ class ProgressBar extends Controller
 
 					$i++;
 				}
-				exit;
 				unset($ppsulf);
 
 				$ugsf = new UserGenericStatusFactory();
