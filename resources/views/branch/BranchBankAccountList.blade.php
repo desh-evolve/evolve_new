@@ -12,7 +12,7 @@
                     </div>
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button" href="/bank-account/add" class="btn btn-primary waves-effect waves-light material-shadow-none me-1" id="add_new_btn">New Bank Account <i class="ri-add-line"></i></a>
+                            <a type="button" href="/bank_account/add" class="btn btn-primary waves-effect waves-light material-shadow-none me-1" id="add_new_btn">New Bank Account <i class="ri-add-line"></i></a>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
             if (confirm('Are you sure you want to delete this item?')) {
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 try {
-                    const response = await fetch(`/bank-account/delete/${bankAccountId}`, {
+                    const response = await fetch(`/bank_account/delete/${bankAccountId}`, {
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': token,
