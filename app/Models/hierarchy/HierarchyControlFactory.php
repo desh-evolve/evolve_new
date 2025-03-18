@@ -8,6 +8,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Users\UserListFactory;
 
 class HierarchyControlFactory extends Factory {
 	protected $table = 'hierarchy_control';

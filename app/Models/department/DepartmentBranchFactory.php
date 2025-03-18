@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Department;
+
+use App\Models\Company\BranchListFactory;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 
@@ -34,8 +36,8 @@ class DepartmentBranchFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 		
-		$blf = new BranchListFactory();
-		
+		$blf = new BranchListFactory(); 
+				
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'company',
 															$blf->getByID($id),

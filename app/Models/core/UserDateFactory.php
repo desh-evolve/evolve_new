@@ -316,18 +316,20 @@ class UserDateFactory extends Factory {
 			$slf = new ScheduleListFactory();
 			$slf->getByUserDateID( $this->getId() );
 			if ( $slf->getRecordCount() > 0 ) {
-				foreach( $slf as $schedule_obj ) {
-					$schedule_obj->setDeleted(TRUE);
-					$schedule_obj->Save();
+				foreach( $slf->rs as $schedule_obj ) {
+					$slf->data = (array)$schedule_obj;
+					$slf->setDeleted(TRUE);
+					$slf->Save();
 				}
 			}
 
 			$pclf = new PunchControlListFactory();
 			$pclf->getByUserDateID( $this->getId() );
 			if ( $pclf->getRecordCount() > 0 ) {
-				foreach( $pclf as $pc_obj ) {
-					$pc_obj->setDeleted(TRUE);
-					$pc_obj->Save();
+				foreach( $pclf->rs as $pc_obj ) {
+					$pclf->data = (array)$pc_obj;
+					$pclf->setDeleted(TRUE);
+					$pclf->Save();
 				}
 			}
 
@@ -335,9 +337,10 @@ class UserDateFactory extends Factory {
 			$elf = new ExceptionListFactory();
 			$elf->getByUserDateID( $this->getId() );
 			if ( $elf->getRecordCount() > 0 ) {
-				foreach( $elf as $e_obj ) {
-					$e_obj->setDeleted(TRUE);
-					$e_obj->Save();
+				foreach( $elf->rs as $e_obj ) {
+					$elf->data = (array)$e_obj;
+					$elf->setDeleted(TRUE);
+					$elf->Save();
 				}
 			}
 
@@ -345,9 +348,10 @@ class UserDateFactory extends Factory {
 			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getByUserDateID( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
-				foreach( $udtlf as $udt_obj ) {
-					$udt_obj->setDeleted(TRUE);
-					$udt_obj->Save();
+				foreach( $udtlf->rs as $udt_obj ) {
+					$udtlf->data = (array)$udt_obj;
+					$udtlf->setDeleted(TRUE);
+					$udtlf->Save();
 				}
 			}
 		}
