@@ -85,10 +85,7 @@ class AccrualBalanceFactory extends Factory {
 
 		$ulf = new UserListFactory();
 
-		if ( $this->Validator->isResultSetWithRows(	'user',
-															$ulf->getByID($id),
-															('Invalid User')
-															) ) {
+		if ( $this->Validator->isResultSetWithRows(	'user', $ulf->getByID($id), ('Invalid User') ) ) {
 			$this->data['user_id'] = $id;
 
 			return TRUE;
@@ -115,10 +112,7 @@ class AccrualBalanceFactory extends Factory {
 
 		if ( $id == NULL
 				OR
-				$this->Validator->isResultSetWithRows(	'accrual_policy',
-													$aplf->getByID($id),
-													('Accrual Policy is invalid')
-													) ) {
+				$this->Validator->isResultSetWithRows( 'accrual_policy', $aplf->getByID($id), ('Accrual Policy is invalid') ) ) {
 
 			$this->data['accrual_policy_id'] = $id;
 
@@ -142,10 +136,7 @@ class AccrualBalanceFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'balance',
-													$int,
-													('Incorrect Balance'))
-				) {
+		if 	($this->Validator->isNumeric( 'balance', $int, ('Incorrect Balance'))) {
 			$this->data['balance'] = $int;
 
 			return TRUE;
