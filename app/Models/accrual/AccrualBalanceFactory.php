@@ -179,8 +179,7 @@ class AccrualBalanceFactory extends Factory {
 	}
 
 	static function calcBalance( $user_id, $accrual_policy_id = NULL ) {
-		global $profiler;
-
+		$profiler = Factory::getProfiler();
 		$profiler->startTimer( "AccrualBalanceFactory::calcBalance()");
 
 		$alf = new AccrualListFactory();
@@ -191,8 +190,9 @@ class AccrualBalanceFactory extends Factory {
 		$ablf->getByUserIdAndAccrualPolicyId( $user_id, $accrual_policy_id);
 		Debug::text('Found balance records to delete: '. $ablf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		if ( $ablf->getRecordCount() > 0) {
-			foreach($ablf as $ab_obj) {
-				$ab_obj->Delete();
+			foreach($ablf->rs as $ab_obj) {
+				$ablf->data = (array)$ab_obj;
+				$ablf->Delete();
 			}
 		}
 

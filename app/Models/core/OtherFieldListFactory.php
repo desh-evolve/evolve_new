@@ -183,10 +183,11 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		$oflf->getByCompanyIdAndTypeID( $id, $type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL );
 	
 		if ( $oflf->getRecordCount() > 0 ) {
-			foreach($oflf as $obj) {
+			foreach($oflf->rs as $obj) {
+				$oflf->data = (array)$obj;
 				if ( is_array($key_prefix) ) {
-					if ( isset($key_prefix[$obj->getType()]) ) {
-						$prefix = $key_prefix[$obj->getType()];
+					if ( isset($key_prefix[$oflf->getType()]) ) {
+						$prefix = $key_prefix[$oflf->getType()];
 					} else {
 						$prefix = NULL;
 					}
@@ -195,8 +196,8 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 				}
 
 				if ( is_array($name_prefix) ) {
-					if ( isset($name_prefix[$obj->getType()]) ) {
-						$prefix2 = $name_prefix[$obj->getType()];
+					if ( isset($name_prefix[$oflf->getType()]) ) {
+						$prefix2 = $name_prefix[$oflf->getType()];
 					} else {
 						$prefix2 = NULL;
 					}
@@ -204,35 +205,35 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 					$prefix2 = $name_prefix;
 				}
 
-				if ( $obj->getOtherID1() != '' ) {
-					$retarr[$prefix.'other_id1'] = $prefix2.$obj->getOtherID1();
+				if ( $oflf->getOtherID1() != '' ) {
+					$retarr[$prefix.'other_id1'] = $prefix2.$oflf->getOtherID1();
 				}
-				if ( $obj->getOtherID2() != '' ) {
-					$retarr[$prefix.'other_id2'] = $prefix2.$obj->getOtherID2();
+				if ( $oflf->getOtherID2() != '' ) {
+					$retarr[$prefix.'other_id2'] = $prefix2.$oflf->getOtherID2();
 				}
-				if ( $obj->getOtherID3() != '' ) {
-					$retarr[$prefix.'other_id3'] = $prefix2.$obj->getOtherID3();
+				if ( $oflf->getOtherID3() != '' ) {
+					$retarr[$prefix.'other_id3'] = $prefix2.$oflf->getOtherID3();
 				}
-				if ( $obj->getOtherID4() != '' ) {
-					$retarr[$prefix.'other_id4'] = $prefix2.$obj->getOtherID4();
+				if ( $oflf->getOtherID4() != '' ) {
+					$retarr[$prefix.'other_id4'] = $prefix2.$oflf->getOtherID4();
 				}
-				if ( $obj->getOtherID5() != '' ) {
-					$retarr[$prefix.'other_id5'] = $prefix2.$obj->getOtherID5();
+				if ( $oflf->getOtherID5() != '' ) {
+					$retarr[$prefix.'other_id5'] = $prefix2.$oflf->getOtherID5();
 				}
-				if ( $obj->getOtherID6() != '' ) {
-					$retarr[$prefix.'other_id6'] = $prefix2.$obj->getOtherID6();
+				if ( $oflf->getOtherID6() != '' ) {
+					$retarr[$prefix.'other_id6'] = $prefix2.$oflf->getOtherID6();
 				}
-				if ( $obj->getOtherID7() != '' ) {
-					$retarr[$prefix.'other_id7'] = $prefix2.$obj->getOtherID7();
+				if ( $oflf->getOtherID7() != '' ) {
+					$retarr[$prefix.'other_id7'] = $prefix2.$oflf->getOtherID7();
 				}
-				if ( $obj->getOtherID8() != '' ) {
-					$retarr[$prefix.'other_id8'] = $prefix2.$obj->getOtherID8();
+				if ( $oflf->getOtherID8() != '' ) {
+					$retarr[$prefix.'other_id8'] = $prefix2.$oflf->getOtherID8();
 				}
-				if ( $obj->getOtherID9() != '' ) {
-					$retarr[$prefix.'other_id9'] = $prefix2.$obj->getOtherID9();
+				if ( $oflf->getOtherID9() != '' ) {
+					$retarr[$prefix.'other_id9'] = $prefix2.$oflf->getOtherID9();
 				}
-				if ( $obj->getOtherID10() != '' ) {
-					$retarr[$prefix.'other_id10'] = $prefix2.$obj->getOtherID10();
+				if ( $oflf->getOtherID10() != '' ) {
+					$retarr[$prefix.'other_id10'] = $prefix2.$oflf->getOtherID10();
 				}
 			}
 

@@ -77,8 +77,9 @@ class StationIncludeUserListFactory extends StationIncludeUserFactory implements
 
 		$siulf->getByStationId($id);
 
-		foreach ($siulf as $obj) {
-			$list[$obj->getStation()] = NULL;
+		foreach ($siulf->rs as $obj) {
+			$siulf->data = (array)$obj;
+			$list[$siulf->getStation()] = NULL;
 		}
 
 		if ( isset($list) ) {

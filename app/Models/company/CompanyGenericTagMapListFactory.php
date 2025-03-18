@@ -280,8 +280,9 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 			return FALSE;
 		}
 
-		foreach ($lf as $obj) {
-			$list[] = $obj->getColumn('name');
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getColumn('name');
 		}
 
 		if ( isset($list) ) {

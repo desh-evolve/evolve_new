@@ -265,8 +265,9 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 			return FALSE;
 		}
 
-		foreach ($lf as $obj) {
-			$list[] = $obj->getMapId();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getMapId();
 		}
 
 		if ( isset($list) ) {

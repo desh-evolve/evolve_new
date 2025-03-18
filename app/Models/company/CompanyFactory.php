@@ -2765,11 +2765,12 @@ class CompanyFactory extends Factory {
 			$ulf->getByCompanyId( $this->getID() );
 			if ( $ulf->getRecordCount() > 0 ) {
 				$ulf->StartTransaction();
-				foreach( $ulf as $u_obj ) {
-					Debug::text('Deleting User ID: '. $u_obj->getId() , __FILE__, __LINE__, __METHOD__,9);
-					$u_obj->setDeleted( TRUE );
-					if ( $u_obj->isValid() ) {
-						$u_obj->Save();
+				foreach( $ulf->rs as $u_obj ) {
+					$ulf->data = (array)$u_obj;
+					Debug::text('Deleting User ID: '. $ulf->getId() , __FILE__, __LINE__, __METHOD__,9);
+					$ulf->setDeleted( TRUE );
+					if ( $ulf->isValid() ) {
+						$ulf->Save();
 					}
 				}
 				$ulf->CommitTransaction();

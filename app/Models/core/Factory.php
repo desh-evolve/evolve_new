@@ -27,6 +27,11 @@ class Factory {
     protected $Validator;
 
 	protected $currentUser;
+	protected $profiler;
+	protected $userPrefs;
+	protected $currentCompany;
+	protected $permission;
+	protected $configVars;
 
 	function __construct() {
 		$this->db = DB::connection();
@@ -34,6 +39,11 @@ class Factory {
 		$this->Validator = new Validator();
     
         $this->currentUser = View::shared('current_user');
+        $this->profiler = View::shared('profiler');
+		$this->userPrefs = View::shared('current_user_prefs');
+        $this->currentCompany = View::shared('current_company');
+        $this->permission = View::shared('permission');
+        $this->configVars = View::shared('config_vars');
 
 		//Callback to the child constructor method.
 		if ( method_exists($this,'childConstruct') ) {
@@ -1371,8 +1381,9 @@ class Factory {
 			return FALSE;
 		}
 
-		foreach( $lf as $lf_obj ) {
-			$retarr[] = $lf_obj->getID();
+		foreach( $lf->rs as $lf_obj ) {
+			$lf->data = (array)$lf_obj;
+			$retarr[] = $lf->getID();
 		}
 
 		if ( isset($retarr) ) {
@@ -1425,5 +1436,29 @@ class Factory {
 	{
 		return Schema::hasTable($table_name);
 	}
+
+	//===========================================================================
+	// added by desh(2025-03-18)
+	//===========================================================================
+	public function getCurrentUser(){
+		return $this->currentUser;
+	}
+	public function getProfiler(){
+		return $this->profiler;
+	}
+	public function getUserPrefs(){
+		return $this->userPrefs;
+	}
+	public function getCurrentCompany(){
+		return $this->currentCompany;
+	}
+	public function getPermission(){
+		return $this->permission;
+	}
+	public function getConfigVars(){
+		return $this->configVars;
+	}
+	//===========================================================================
+	
 }
 ?>

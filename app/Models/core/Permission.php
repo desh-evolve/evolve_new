@@ -17,15 +17,16 @@ class Permission {
 			if ( $plf->getRecordCount() > 0 ) {
 				//Debug::Text('Found Permissions in DB!', __FILE__, __LINE__, __METHOD__,9);
 				$perm_arr['_system']['last_updated_date'] = NULL;
-				foreach($plf as $p_obj) {
+				foreach($plf->rs as $p_obj) {
+					$plf->data = (array)$p_obj;
 					//Debug::Text('Perm -  Section: '. $p_obj->getSection(), __FILE__, __LINE__, __METHOD__,9);
-					if ( $p_obj->getUpdatedDate() > $perm_arr['_system']['last_updated_date'] ) {
-						$perm_arr['_system']['last_updated_date'] =  $p_obj->getUpdatedDate();
+					if ( $plf->getUpdatedDate() > $perm_arr['_system']['last_updated_date'] ) {
+						$perm_arr['_system']['last_updated_date'] =  $plf->getUpdatedDate();
 					}
-					$perm_arr[$p_obj->getSection()][$p_obj->getName()] = $p_obj->getValue();
+					$perm_arr[$plf->getSection()][$plf->getName()] = $plf->getValue();
 				}
 				//Last iteration, grab the permission level.
-				$perm_arr['_system']['level'] =  $p_obj->getColumn('level');
+				$perm_arr['_system']['level'] =  $plf->getColumn('level');
 
 				$plf->saveCache($perm_arr,$cache_id);
 

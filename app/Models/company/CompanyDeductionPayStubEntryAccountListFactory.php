@@ -94,23 +94,5 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		return $this;
 	}
 
-
-/*
-	function getByPolicyGroupIdArray($id) {
-		$pgotplf = new PolicyGroupOverTimePolicyListFactory();
-
-		$pgotplf->getByPolicyGroupId($id);
-
-		foreach ($pgotplf as $obj) {
-			$list[$obj->getOverTimePolicy()] = NULL;
-		}
-
-		if ( isset($user) ) {
-			return $user;
-		}
-
-		return array();
-	}
-*/
 }
 ?>
