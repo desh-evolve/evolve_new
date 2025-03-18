@@ -39,6 +39,8 @@ class BranchBankAccountList extends Controller
 	 */
 	public function index(Request $request)
 	{
+		$current_company = $this->company;
+        $current_user_prefs = $this->userPrefs;
 		// // Permission check
 		// if (!$this->permission->Check('branch', 'enabled') ||
 		//     !($this->permission->Check('branch', 'view') || $this->permission->Check('branch', 'view_own'))) {
@@ -62,6 +64,7 @@ class BranchBankAccountList extends Controller
 			'page' => $page,
 			'id' => $id
 		]);
+		$id = $request->id;
 
 		Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
 
@@ -69,27 +72,29 @@ class BranchBankAccountList extends Controller
 		$sort_array = $sort_column != '' ? [Misc::trimSortPrefix($sort_column) => $sort_order] : NULL;
 
 		$bbalf = new BranchBankAccountListFactory();
-		$bbalf->getByBranchId($id, $this->userPrefs->getItemsPerPage(), $page, NULL, $sort_array);
+		// dd($current_user_prefs);
+		$bbalf->getByBranchId($id, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
 
 		$pager = new Pager($bbalf);
 
 		$bankAccounts = [];
-		if ($bbalf->getRecordCount() > 0) {
+		// if ($bbalf->getRecordCount() > 0) {
 			foreach ($bbalf->rs as $bank) {
 				$bbalf->data = (array)$bank;
-				// print_r($blf->data);
+				// print_r($blf->rs);
 				// exit;
 				$bankAccounts[] = [
-					'id' => $bank->GetId(),
-					'transit' => $bank->getTransit(),
-					'bank_name' => $bank->getBankName(),
-					'bank_branch' => $bank->getBankBranch(),
-					'account' => $bank->getAccount(),
+					'id' => $bbalf->GetId(),
+					'transit' => $bbalf->getTransit(),
+					'bank_name' => $bbalf->getBankName(),
+					'bank_branch' => $bbalf->getBankBranch(),
+					'account' => $bbalf->getAccount(),
 				];
 			}
-		}
+		// }
 
 		$blf = new BranchListFactory();
+		$blf->getById($id);
 		$company_branch_name = $blf->getById($id)->getCurrent()->getName();
 		View::share('company_branch_name', $company_branch_name);
 

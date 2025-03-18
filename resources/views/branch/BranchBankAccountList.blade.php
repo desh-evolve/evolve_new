@@ -43,7 +43,7 @@
                                     <td>{{ $bankAccount['bank_branch'] ?? '' }}</td>
                                     <td>{{ $bankAccount['account'] ?? '' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('bankAccount.edit', ['id' => $bankAccount['id'] ?? '']) }}'">{{ __('Edit') }}</button>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch_bank.add', ['id' => $bankAccount['id'] ?? '']) }}'">{{ __('Edit') }}</button>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteBankAccount({{ $bankAccount['id'] }})">{{ __('Delete') }}</button>
                                     </td>
                                 </tr>
