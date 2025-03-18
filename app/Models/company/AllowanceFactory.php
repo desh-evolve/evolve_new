@@ -36,10 +36,7 @@ class AllowanceFactory extends Factory {
 
 		$ulf = new UserListFactory();
 
-		if ( $this->Validator->isResultSetWithRows(	'user_id',
-															$ulf->getByID($id),
-															('Invalid Employee')
-															) ) {
+		if ( $this->Validator->isResultSetWithRows(	'user_id', $ulf->getByID($id), ('Invalid Employee') ) ) {
 			$this->data['user_id'] = $id;
 
 			return TRUE;
@@ -83,10 +80,8 @@ class AllowanceFactory extends Factory {
 		if (
 				$id == FALSE
 				OR
-				$this->Validator->isResultSetWithRows(	'payperiod_id',
-														$pplf->getByID($id),
-														('Invalid Pay Period')
-														) ) {
+				$this->Validator->isResultSetWithRows( 'payperiod_id', $pplf->getByID($id), ('Invalid Pay Period') ) 
+			) {
 			$this->data['payperiod_id'] = $id;
 
 			return TRUE;
@@ -109,11 +104,7 @@ class AllowanceFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'worked_days',
-													$int,
-													('Incorrect Worked Days'))
-				
-				) {
+		if 	(	$this->Validator->isNumeric( 'worked_days', $int, ('Incorrect Worked Days')) ) {
 			$this->data['worked_days'] = $int;
 
 			return TRUE;
@@ -138,11 +129,7 @@ class AllowanceFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'late_days',
-													$int,
-													('Incorrect Late Days'))
-				
-				) {
+		if 	( $this->Validator->isNumeric( 'late_days', $int, ('Incorrect Late Days')) ) {
 			$this->data['late_days'] = $int;
 
 			return TRUE;
@@ -167,11 +154,7 @@ class AllowanceFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'nopay_days',
-													$int,
-													('Incorrect nopay Days'))
-				
-				) {
+		if 	( $this->Validator->isNumeric( 'nopay_days', $int, ('Incorrect nopay Days')) ) {
 			$this->data['nopay_days'] = $int;
 
 			return TRUE;
@@ -179,10 +162,8 @@ class AllowanceFactory extends Factory {
 
 		return FALSE;
 	}
-       
-        
-                
-        function getFulldayLeaveDays() {
+                 
+    function getFulldayLeaveDays() {
 		if ( isset($this->data['fullday_leave_days']) ) {
 			return $this->data['fullday_leave_days'];
 		}
@@ -197,11 +178,7 @@ class AllowanceFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'fullday_leave_days',
-													$int,
-													('Incorrect Fullday leave days'))
-				
-				) {
+		if 	( $this->Validator->isNumeric( 'fullday_leave_days', $int, ('Incorrect Fullday leave days')) ) {
 			$this->data['fullday_leave_days'] = $int;
 
 			return TRUE;
@@ -212,7 +189,7 @@ class AllowanceFactory extends Factory {
        
         
         
-        function getHalfdayLeaveDays() {
+    function getHalfdayLeaveDays() {
 		if ( isset($this->data['halfday_leave_days']) ) {
 			return $this->data['halfday_leave_days'];
 		}
@@ -227,11 +204,7 @@ class AllowanceFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'halfday_leave_days',
-													$int,
-													('Incorrect Fullday leave days'))
-				
-				) {
+		if 	( $this->Validator->isNumeric( 'halfday_leave_days', $int, ('Incorrect Fullday leave days')) ) {
 			$this->data['halfday_leave_days'] = $int;
 
 			return TRUE;

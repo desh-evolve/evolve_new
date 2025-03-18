@@ -307,8 +307,9 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 
 		$type_options  = $this->getOptions('type');
 
-		foreach ($psenlf as $entry_name) {
-			$entry_name_list[$entry_name->getID()] = $type_options[$entry_name->getType()] .' - '. $entry_name->getDescription();
+		foreach ($psenlf->rs as $entry_name) {
+			$psenlf->data = (array)$entry_name;
+			$entry_name_list[$psenlf->getID()] = $type_options[$psenlf->getType()] .' - '. $psenlf->getDescription();
 		}
 
 		return $entry_name_list;
@@ -328,8 +329,9 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 			$list[0] = '--';
 		}
 
-		foreach ($cdlf as $obj) {
-			$list[$obj->getID()] = $obj->getName();
+		foreach ($cdlf->rs as $obj) {
+			$cdlf->data = (array)$obj;
+			$list[$cdlf->getID()] = $cdlf->getName();
 		}
 
 		return $list;
@@ -346,8 +348,9 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 
 		$use_names = FALSE;
 
-		foreach ($lf as $obj) {
-			$list[$obj->getId()] = $obj->getName();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[$lf->getId()] = $lf->getName();
 		}
 
 		if ( isset($list) ) {

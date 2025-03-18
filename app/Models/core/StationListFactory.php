@@ -375,8 +375,9 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 
 		$branch_list[0] = '--';
 
-		foreach ($blf as $branch) {
-			$branch_list[$branch->getID()] = $branch->getName();
+		foreach ($blf->rs as $branch) {
+			$blf->data = (array)$branch;
+			$branch_list[$blf->getID()] = $blf->getName();
 		}
 
 		return $branch_list;

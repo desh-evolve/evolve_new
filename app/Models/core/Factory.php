@@ -27,6 +27,11 @@ class Factory {
     protected $Validator;
 
 	protected $currentUser;
+	protected $profiler;
+	protected $userPrefs;
+	protected $currentCompany;
+	protected $permission;
+	protected $configVars;
 
 	function __construct() {
 		$this->db = DB::connection();
@@ -34,6 +39,11 @@ class Factory {
 		$this->Validator = new Validator();
     
         $this->currentUser = View::shared('current_user');
+        $this->profiler = View::shared('profiler');
+		$this->userPrefs = View::shared('current_user_prefs');
+        $this->currentCompany = View::shared('current_company');
+        $this->permission = View::shared('permission');
+        $this->configVars = View::shared('config_vars');
 
 		//Callback to the child constructor method.
 		if ( method_exists($this,'childConstruct') ) {
@@ -627,7 +637,7 @@ class Factory {
 		return FALSE;
 	}
 
-	protected function getListSQL($array, &$ph = null)
+	protected function getListSQL($array, $ph = null)
 	{
 		// Ensure it's an array
 		if (!is_array($array)) {
@@ -637,88 +647,9 @@ class Factory {
 		// Trim values and filter out empty ones
 		$array = array_filter(array_map('trim', $array));
 
-		// If `$ph` is an array (used for binding), merge the values
-		if (is_array($ph)) {
-			foreach ($array as $key => $value) {
-				$param = ':param' . $key;
-				$ph[$param] = $value;
-				$array[$key] = $param;
-			}
-		}
-
 		return implode(',', $array);
 	}
 
-
-/* //commented by desh(2025-03-10)
-	protected function getListSQL($array, &$ph = NULL) {
-		if ( $ph === NULL ) {
-			if ( is_array( $array ) AND count($array) > 0) {
-				return '\''.implode('\',\'',$array).'\'';
-			} elseif ( is_array($array) ) {
-				//Return NULL, because this is an empty array.
-				return 'NULL';
-			} elseif ( $array == '' ) {
-				return 'NULL';
-			}
-
-			//Just a single ID, return it.
-			return $array;
-		} else {
-			//Debug::Arr($ph, 'Place Holder BEFORE:', __FILE__, __LINE__, __METHOD__,10);
-
-			//Append $array values to end of $ph, return
-			//one "?," for each element in $array.
-
-			$array_count = is_array($array) ? count($array) : 0;
-			if ( is_array( $array ) AND $array_count > 0) {
-				foreach( $array as $key => $val ) {
-					$ph_arr[] = '?';
-
-					//Make sure we filter out any FALSE or NULL values from going into a SQL list.
-					//Replace them with "-1"'s so we keep the same number of place holders.
-					//This should hopefully prevent SQL errors if a FALSE creeps into the SQL list array.
-					if ( !is_null($val) AND ( is_numeric( $val ) OR is_string( $val ) ) ) {
-						$ph[] = $val;
-					} else {
-						$ph[] = '-1';
-					}
-				}
-
-				if ( isset($ph_arr) ) {
-					$retval = implode(',',$ph_arr);
-				}
-			} elseif ( is_array($array) ) {
-				//Return NULL, because this is an empty array.
-				//This may have to return -1 instead of NULL
-				//$ph[] = 'NULL';
-				$ph[] = -1;
-				$retval = '?';
-			} elseif ( $array == '' ) {
-				//$ph[] = 'NULL';
-				$ph[] = -1;
-				$retval = '?';
-			} else {
-				$ph[] = $array;
-				$retval = '?';
-			}
-
-			//Debug::Arr($ph, 'Place Holder AFTER:', __FILE__, __LINE__, __METHOD__,10);
-
-			//Just a single ID, return it.
-			return $retval;
-		}
-	}
-*/
-	//This function takes plain input from the user and creates a SQL statement for filtering
-	//based on a date range.
-	// Supported Syntax:
-	//					>=01-Jan-09
-	//					<=01-Jan-09
-	//					<01-Jan-09
-	//					>01-Jan-09
-	//					>01-Jan-09 & <10-Jan-09
-	//
 	function getDateRangeSQL( $str, $column, $use_epoch = TRUE ) {
 
 		if ( $str == '' ) {
@@ -1450,8 +1381,9 @@ class Factory {
 			return FALSE;
 		}
 
-		foreach( $lf as $lf_obj ) {
-			$retarr[] = $lf_obj->getID();
+		foreach( $lf->rs as $lf_obj ) {
+			$lf->data = (array)$lf_obj;
+			$retarr[] = $lf->getID();
 		}
 
 		if ( isset($retarr) ) {
@@ -1472,7 +1404,7 @@ class Factory {
 			Debug::text('Bulk Delete Query: '. $query, __FILE__, __LINE__, __METHOD__, 9);
 
 			try {
-				DB::select($query, $ph);
+				DB::delete($query, $ph);
 			} catch (Throwable $e) {
 				throw new DBError($e);
 			}
@@ -1504,5 +1436,29 @@ class Factory {
 	{
 		return Schema::hasTable($table_name);
 	}
+
+	//===========================================================================
+	// added by desh(2025-03-18)
+	//===========================================================================
+	public function getCurrentUser(){
+		return $this->currentUser;
+	}
+	public function getProfiler(){
+		return $this->profiler;
+	}
+	public function getUserPrefs(){
+		return $this->userPrefs;
+	}
+	public function getCurrentCompany(){
+		return $this->currentCompany;
+	}
+	public function getPermission(){
+		return $this->permission;
+	}
+	public function getConfigVars(){
+		return $this->configVars;
+	}
+	//===========================================================================
+	
 }
 ?>

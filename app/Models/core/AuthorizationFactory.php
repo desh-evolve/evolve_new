@@ -275,9 +275,10 @@ class AuthorizationFactory extends Factory {
 
 		$alf = new AuthorizationListFactory();
 		$alf->getByObjectTypeAndObjectId( $this->getObjectType(), $this->getObject() );
-		foreach( $alf as $authorization_obj ) {
-			$authorization_obj->setDeleted(TRUE);
-			$authorization_obj->Save();
+		foreach( $alf->rs as $authorization_obj ) {
+			$alf->data = (array)$authorization_obj;
+			$alf->setDeleted(TRUE);
+			$alf->Save();
 		}
 
 		return TRUE;

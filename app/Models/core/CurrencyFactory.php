@@ -755,13 +755,14 @@ class CurrencyFactory extends Factory {
 		$clf = new CurrencyListFactory();
 		$clf->getByCompanyId( $company_id );
 		if ( $clf->getRecordCount() > 0 ) {
-			foreach( $clf as $c_obj) {
-				if ( $c_obj->getBase() == TRUE ) {
-					$base_currency = $c_obj->getISOCode();
+			foreach( $clf->rs as $c_obj) {
+				$clf->data = (array)$c_obj;
+				if ( $clf->getBase() == TRUE ) {
+					$base_currency = $clf->getISOCode();
 				}
 
-				if ( $c_obj->getStatus() == 10 AND $c_obj->getAutoUpdate() == TRUE ) {
-					$active_currencies[] = $c_obj->getISOCode();
+				if ( $clf->getStatus() == 10 AND $clf->getAutoUpdate() == TRUE ) {
+					$active_currencies[] = $clf->getISOCode();
 				}
 			}
 		}

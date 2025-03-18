@@ -1822,8 +1822,9 @@ class PermissionFactory extends Factory {
 
 		$plf = new PermissionListFactory();
 		$plf->getByCompanyIDAndPermissionControlId( $company_id, $permission_control_id );
-		foreach($plf as $permission_obj) {
-			$permission_obj->delete(TRUE);
+		foreach($plf->rs as $permission_obj) {
+			$plf->data = (array)$permission_obj;
+			$plf->delete(TRUE);
 			$this->removeCache( $this->getCacheID() );
 		}
 

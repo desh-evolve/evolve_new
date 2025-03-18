@@ -596,12 +596,13 @@ class LogFactory extends Factory {
 				$ldlf = new LogDetailListFactory();
 				$ldlf->getBySystemLogIdAndCompanyId( $this->getID(), $this->getUserObject()->getCompany() );
 				if ( $ldlf->getRecordCount() > 0 ) {
-					foreach( $ldlf as $ld_obj ) {
+					foreach( $ldlf->rs as $ld_obj ) {
+						$ldlf->data = (array)$ld_obj;
 						$detail_row[] = array(
-											'field' => $ld_obj->getField(),
-											'display_field' => LogDetailDisplay::getDisplayField( $class, $ld_obj->getField() ),
-											'old_value' => LogDetailDisplay::getDisplayOldValue( $class, $ld_obj->getField(), $ld_obj->getOldValue() ),
-											'new_value' => LogDetailDisplay::getDisplayNewValue( $class, $ld_obj->getField(), $ld_obj->getNewValue() ),
+											'field' => $ldlf->getField(),
+											'display_field' => LogDetailDisplay::getDisplayField( $class, $ldlf->getField() ),
+											'old_value' => LogDetailDisplay::getDisplayOldValue( $class, $ldlf->getField(), $ldlf->getOldValue() ),
+											'new_value' => LogDetailDisplay::getDisplayNewValue( $class, $ldlf->getField(), $ldlf->getNewValue() ),
 											);
 					}
 

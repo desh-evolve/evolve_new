@@ -631,8 +631,9 @@ class StationFactory extends Factory {
 	function getGroup() {
 		$lf = new StationUserGroupListFactory();
 		$lf->getByStationId( $this->getId() );
-		foreach ($lf as $obj) {
-			$list[] = $obj->getGroup();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getGroup();
 		}
 
 		if ( isset($list) ) {
@@ -655,21 +656,22 @@ class StationFactory extends Factory {
 				$lf_a = new StationUserGroupListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
-					$id = $obj->getGroup();
-					Debug::text('Group ID: '. $obj->getGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$id = $lf_a->getGroup();
+					Debug::text('Group ID: '. $lf_a->getGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$lf_a->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $lf_a);
 			}
 
 			//Insert new mappings.
@@ -724,8 +726,9 @@ class StationFactory extends Factory {
 	function getBranch() {
 		$lf = new StationBranchListFactory();
 		$lf->getByStationId( $this->getId() );
-		foreach ($lf as $obj) {
-			$list[] = $obj->getBranch();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getBranch();
 		}
 
 		if ( isset($list) ) {
@@ -748,21 +751,22 @@ class StationFactory extends Factory {
 				$lf_a = new StationBranchListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
-					$id = $obj->getBranch();
-					//Debug::text('Branch ID: '. $obj->getBranch() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$id = $lf_a->getBranch();
+					//Debug::text('Branch ID: '. $lf_a->getBranch() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$lf_a->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $lf_a);
 			}
 
 			//Insert new mappings.
@@ -817,8 +821,9 @@ class StationFactory extends Factory {
 	function getDepartment() {
 		$lf = new StationDepartmentListFactory();
 		$lf->getByStationId( $this->getId() );
-		foreach ($lf as $obj) {
-			$list[] = $obj->getDepartment();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getDepartment();
 		}
 
 		if ( isset($list) ) {
@@ -841,21 +846,22 @@ class StationFactory extends Factory {
 				$lf_a = new StationDepartmentListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
-					$id = $obj->getDepartment();
-					//Debug::text('Department ID: '. $obj->getDepartment() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$id = $lf_a->getDepartment();
+					//Debug::text('Department ID: '. $lf_a->getDepartment() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$lf_a->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $lf_a);
 			}
 
 			//Insert new mappings.
@@ -887,8 +893,9 @@ class StationFactory extends Factory {
 	function getIncludeUser() {
 		$lf = new StationIncludeUserListFactory();
 		$lf->getByStationId( $this->getId() );
-		foreach ($lf as $obj) {
-			$list[] = $obj->getIncludeUser();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getIncludeUser();
 		}
 
 		if ( isset($list) ) {
@@ -911,21 +918,22 @@ class StationFactory extends Factory {
 				$lf_a = new StationIncludeUserListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
-					$id = $obj->getIncludeUser();
-					Debug::text('IncludeUser ID: '. $obj->getIncludeUser() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$id = $lf_a->getIncludeUser();
+					Debug::text('IncludeUser ID: '. $lf_a->getIncludeUser() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$lf_a->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $lf_a);
 			}
 
 			//Insert new mappings.
@@ -956,8 +964,9 @@ class StationFactory extends Factory {
 	function getExcludeUser() {
 		$lf = new StationExcludeUserListFactory();
 		$lf->getByStationId( $this->getId() );
-		foreach ($lf as $obj) {
-			$list[] = $obj->getExcludeUser();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getExcludeUser();
 		}
 
 		if ( isset($list) ) {
@@ -980,21 +989,22 @@ class StationFactory extends Factory {
 				$lf_a = new StationExcludeUserListFactory();
 				$lf_a->getByStationId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
-					$id = $obj->getExcludeUser();
-					Debug::text('ExcludeUser ID: '. $obj->getExcludeUser() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$id = $lf_a->getExcludeUser();
+					Debug::text('ExcludeUser ID: '. $lf_a->getExcludeUser() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$lf_a->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $lf_a);
 			}
 
 			//Insert new mappings.
@@ -1888,11 +1898,12 @@ class StationFactory extends Factory {
 		$slf = new StationListFactory();
 		$slf->getByUserIdAndStatusAndType($user_id, 'ENABLED', $type);
 		Debug::text('Station ID: '. $station_id .' Type: '. $type .' Found Stations: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-		foreach($slf as $station) {
-			Debug::text('Checking Station ID: '. $station->getId(), __FILE__, __LINE__, __METHOD__, 10);
+		foreach($slf->rs as $station) {
+			$slf->data = (array)$station;
+			Debug::text('Checking Station ID: '. $slf->getId(), __FILE__, __LINE__, __METHOD__, 10);
 
-			if ( $station->isAllowed( $user_id, $station_id, $station->getId() ) === TRUE) {
-				Debug::text('Station IS allowed! '. $station_id .' - ID: '. $station->getId() , __FILE__, __LINE__, __METHOD__, 10);
+			if ( $slf->isAllowed( $user_id, $station_id, $slf->getId() ) === TRUE) {
+				Debug::text('Station IS allowed! '. $station_id .' - ID: '. $slf->getId() , __FILE__, __LINE__, __METHOD__, 10);
 				return TRUE;
 			}
 		}

@@ -85,10 +85,7 @@ class AccrualBalanceFactory extends Factory {
 
 		$ulf = new UserListFactory();
 
-		if ( $this->Validator->isResultSetWithRows(	'user',
-															$ulf->getByID($id),
-															('Invalid User')
-															) ) {
+		if ( $this->Validator->isResultSetWithRows(	'user', $ulf->getByID($id), ('Invalid User') ) ) {
 			$this->data['user_id'] = $id;
 
 			return TRUE;
@@ -115,10 +112,7 @@ class AccrualBalanceFactory extends Factory {
 
 		if ( $id == NULL
 				OR
-				$this->Validator->isResultSetWithRows(	'accrual_policy',
-													$aplf->getByID($id),
-													('Accrual Policy is invalid')
-													) ) {
+				$this->Validator->isResultSetWithRows( 'accrual_policy', $aplf->getByID($id), ('Accrual Policy is invalid') ) ) {
 
 			$this->data['accrual_policy_id'] = $id;
 
@@ -142,10 +136,7 @@ class AccrualBalanceFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'balance',
-													$int,
-													('Incorrect Balance'))
-				) {
+		if 	($this->Validator->isNumeric( 'balance', $int, ('Incorrect Balance'))) {
 			$this->data['balance'] = $int;
 
 			return TRUE;
@@ -188,8 +179,7 @@ class AccrualBalanceFactory extends Factory {
 	}
 
 	static function calcBalance( $user_id, $accrual_policy_id = NULL ) {
-		global $profiler;
-
+		$profiler = Factory::getProfiler();
 		$profiler->startTimer( "AccrualBalanceFactory::calcBalance()");
 
 		$alf = new AccrualListFactory();
@@ -200,8 +190,9 @@ class AccrualBalanceFactory extends Factory {
 		$ablf->getByUserIdAndAccrualPolicyId( $user_id, $accrual_policy_id);
 		Debug::text('Found balance records to delete: '. $ablf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		if ( $ablf->getRecordCount() > 0) {
-			foreach($ablf as $ab_obj) {
-				$ab_obj->Delete();
+			foreach($ablf->rs as $ab_obj) {
+				$ablf->data = (array)$ab_obj;
+				$ablf->Delete();
 			}
 		}
 

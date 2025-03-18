@@ -140,15 +140,16 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
-			if ( $obj->getStatus() != 10 ) {
-				$status = '('.Option::getByKey($obj->getStatus(), $obj->getOptions('status') ).') ';
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			if ( $lf->getStatus() != 10 ) {
+				$status = '('.Option::getByKey($lf->getStatus(), $lf->getOptions('status') ).') ';
 			} else {
 				$status = NULL;
 			}
 
-			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $obj->getStatus() == 10 ) ) {
-				$list[$obj->getID()] = $status.$obj->getName();
+			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $lf->getStatus() == 10 ) ) {
+				$list[$lf->getID()] = $status.$lf->getName();
 			}
 		}
 
@@ -166,8 +167,9 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 
 		$company_list[0] = '--';
 
-		foreach ($clf as $company) {
-			$company_list[$company->getID()] = $company->getName();
+		foreach ($clf->rs as $company) {
+			$clf->data = (array)$company;
+			$company_list[$clf->getID()] = $clf->getName();
 		}
 
 		return $company_list;

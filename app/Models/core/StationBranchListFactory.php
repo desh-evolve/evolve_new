@@ -77,8 +77,9 @@ class StationBranchListFactory extends StationBranchFactory implements IteratorA
 
 		$sblf->getByStationId($id);
 
-		foreach ($sblf as $obj) {
-			$list[$obj->getStation()] = NULL;
+		foreach ($sblf->rs as $obj) {
+			$sblf->data = (array)$obj;
+			$list[$sblf->getStation()] = NULL;
 		}
 
 		if ( isset($list) ) {

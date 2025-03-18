@@ -4,6 +4,7 @@ namespace App\Models\Company;
 
 use App\Models\Core\Debug;
 use App\Models\Core\Misc;
+use App\Models\Core\Option;
 use App\Models\Users\UserFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
@@ -364,15 +365,16 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
-			if ( $obj->getStatus() == 20 ) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			if ( $lf->getStatus() == 20 ) {
 				$status = '(DISABLED) ';
 			} else {
 				$status = NULL;
 			}
 
-			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $obj->getStatus() == 10 ) ) {
-				$list[$obj->getID()] = $status.$obj->getName();
+			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $lf->getStatus() == 10 ) ) {
+				$list[$lf->getID()] = $status.$lf->getName();
 			}
 		}
 
