@@ -331,7 +331,9 @@ class Wage {
 		$prev_wage_effective_date = 0;
 		if ( $udtlf->getRecordCount() > 0 ) {
                     
-			foreach( $udtlf as $udt_obj ) {
+			foreach( $udtlf->rs as $udt_obj ) {
+				$udtlf->data = (array)$udt_obj;
+				$udt_obj = $udtlf;
 				//                            echo '<br>------------';
 				//                            echo '<br>type:: '.$udt_obj->getType();
 				//                            echo '<br>status:: '.$udt_obj->getStatus();
@@ -657,7 +659,9 @@ class Wage {
 		$paid_absence_amount = 0;
 		$prev_wage_effective_date = 0;
 		if ( $udtlf->getRecordCount() > 0 ) {
-			foreach( $udtlf as $udt_obj ) {
+			foreach( $udtlf->rs as $udt_obj ) {
+				$udtlf->data = (array)$udt_obj;
+				$udt_obj = $udtlf;
 				Debug::text('User Total Row... Type: '. $udt_obj->getType() .' OverTime Policy ID: '. $udt_obj->getOverTimePolicyID() .' User Wage ID: '. $udt_obj->getColumn('user_wage_id') , __FILE__, __LINE__, __METHOD__,10);
 
 				if ( $udt_obj->getStatus() == 10 AND $udt_obj->getType() == 20 ) { //Regular Time

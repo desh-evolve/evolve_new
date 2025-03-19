@@ -2,6 +2,7 @@
 
 namespace App\Models\Department;
 
+use App\Models\Company\CompanyGenericMapListFactory;
 use App\Models\Company\CompanyGenericTagMapFactory;
 use App\Models\Company\CompanyGenericTagMapListFactory;
 use App\Models\Core\Debug;
@@ -295,7 +296,9 @@ class DepartmentFactory extends Factory {
 	function getBranch() {
 		$dblf = new DepartmentBranchListFactory();
 		$dblf->getByDepartmentId( $this->getId() );
-		foreach ($dblf as $department_branch) {
+		foreach ($dblf->rs as $department_branch) {
+			$dblf->data = (array) $department_branch;
+			$department_branch = $dblf;
 			$branch_list[] = $department_branch->getBranch();
 		}
 
@@ -312,7 +315,9 @@ class DepartmentFactory extends Factory {
 			$dblf->getByDepartmentId( $this->getId() );
 
 			$branch_ids = array();
-			foreach ($dblf as $department_branch) {
+			foreach ($dblf->rs as $department_branch) {
+				$dblf->data = (array) $department_branch;
+				$department_branch = $dblf;
 				$branch_id = $department_branch->getBranch();
 				Debug::text('Department ID: '. $department_branch->getDepartment() .' Branch: '. $branch_id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -552,7 +557,9 @@ class DepartmentFactory extends Factory {
 			$cgmlf = new CompanyGenericMapListFactory();
 			$cgmlf->getByCompanyIDAndObjectTypeAndMapID( $this->getCompany(), 1020, $this->getID() );
 			if ( $cgmlf->getRecordCount() > 0 ) {
-				foreach( $cgmlf as $cgm_obj ) {
+				foreach( $cgmlf->rs as $cgm_obj ) {
+					$cgmlf->data = (array) $cgm_obj;
+					$cgm_obj = $cgmlf;
 					Debug::text('Deleteing from Company Generic Map: '. $cgm_obj->getID(), __FILE__, __LINE__, __METHOD__, 10);
 					$cgm_obj->Delete();
 				}

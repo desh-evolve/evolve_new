@@ -79,8 +79,9 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 			$sslf = new SystemSettingListFactory();
 			$sslf->getAll();
 			if ( $sslf->getRecordCount() > 0 ) {
-				foreach( $sslf as $ss_obj ) {
-					$retarr[$ss_obj->getName()] = $ss_obj->getValue();
+				foreach( $sslf->rs as $ss_obj ) {
+					$sslf->data = (array)$ss_obj;
+					$retarr[$sslf->getName()] = $sslf->getValue();
 				}
 
 				$this->saveCache($retarr,$id);

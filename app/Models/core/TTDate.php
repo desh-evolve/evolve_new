@@ -1977,8 +1977,9 @@ class TTDate {
 					$pplf = new PayPeriodListFactory();
 					$pplf->getThisPayPeriodByCompanyIdAndPayPeriodScheduleIdAndDate( $user_obj->getCompany(), $params['pay_period_schedule_id'], time() );
 					if ( $pplf->getRecordCount() > 0 ) {
-						foreach( $pplf as $pp_obj ) {
-							$pay_period_ids[] = $pp_obj->getId();
+						foreach( $pplf->rs as $pp_obj ) {
+							$pplf->data = (array)$pp_obj;
+							$pay_period_ids[] = $pplf->getId();
 						}
 					}
 				} elseif ( $time_period == 'last_pay_period' ) {
@@ -1986,8 +1987,9 @@ class TTDate {
 					$pplf = new PayPeriodListFactory();
 					$pplf->getLastPayPeriodByCompanyIdAndPayPeriodScheduleIdAndDate( $user_obj->getCompany(), $params['pay_period_schedule_id'], time() );
 					if ( $pplf->getRecordCount() > 0 ) {
-						foreach( $pplf as $pp_obj ) {
-							$pay_period_ids[] = $pp_obj->getId();
+						foreach( $pplf->rs as $pp_obj ) {
+							$pplf->data = (array)$pp_obj;
+							$pay_period_ids[] = $pplf->getId();
 						}
 					}
 				}
