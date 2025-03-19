@@ -2,12 +2,15 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company\CompanyDeductionListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use Illuminate\Support\Facades\DB;
 
 class UserDeductionFactory extends Factory {
 	protected $table = 'user_deduction';
@@ -93,7 +96,7 @@ class UserDeductionFactory extends Factory {
 		if ( is_object($this->company_deduction_obj) ) {
 			return $this->company_deduction_obj;
 		} else {
-			$cdlf = new CompanyDeductionListFactory();
+			$cdlf = new CompanyDeductionListFactory(); 
 			$this->company_deduction_obj = $cdlf->getById( $this->getCompanyDeduction() )->getCurrent();
 
 			return $this->company_deduction_obj;
@@ -104,7 +107,7 @@ class UserDeductionFactory extends Factory {
 		if ( is_object($this->pay_stub_entry_account_link_obj) ) {
 			return $this->pay_stub_entry_account_link_obj;
 		} else {
-			$pseallf = new PayStubEntryAccountLinkListFactory();
+			$pseallf = new PayStubEntryAccountLinkListFactory(); 
 			$pseallf->getByCompanyID( $this->getUserObject()->getCompany() );
 			if ( $pseallf->getRecordCount() > 0 ) {
 				$this->pay_stub_entry_account_link_obj = $pseallf->getCurrent();

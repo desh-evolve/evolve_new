@@ -1060,8 +1060,9 @@ class PayStubFactory extends Factory {
 
 			$pslf->StartTransaction();
 
-			foreach($pslf as $ps_obj ) {
-
+			foreach($pslf->rs as $ps_obj ) {
+				$pslf->data = (array)$ps_obj;
+				$ps_obj = $pslf;
 				$this->reCalculatePayStubYTD( $ps_obj->getId() );
 
 			}
@@ -1272,7 +1273,9 @@ class PayStubFactory extends Factory {
 
 			$pself->getByPayStubId( $this->getId() );
 
-			foreach($pself as $pay_stub_entry_obj) {
+			foreach($pself->rs as $pay_stub_entry_obj) {
+				$pself->data = (array)$pay_stub_entry_obj;
+				$pay_stub_entry_obj = $pself;
 
 				if ( $pay_stub_entry_obj->getPayStubAmendment() != FALSE ) {
 
@@ -1539,8 +1542,9 @@ class PayStubFactory extends Factory {
 
 				$this->tmp_data['current_pay_stub'] = NULL;
 
-				foreach( $pself as $pse_obj ) {
-
+				foreach( $pself->rs as $pse_obj ) {
+					$pself->data = (array)$pse_obj;
+					$pse_obj = $pself;
 					//Get PSE account type, group by that.
 
 					$psea_arr = $this->getPayStubEntryAccountArray( $pse_obj->getPayStubEntryNameId() );
@@ -2058,7 +2062,9 @@ class PayStubFactory extends Factory {
 			$pself->getByPayStubId( $this->getId() );
 		}
 
-		foreach( $pself as $pay_stub_entry_obj ) {
+		foreach( $pself->rs as $pay_stub_entry_obj ) {
+			$pself->data = (array)$pay_stub_entry_obj;
+			$pay_stub_entry_obj = $pself;
 			Debug::Text('Deleting Pay Stub Entry: '. $pay_stub_entry_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 			$del_ps_entry_ids[] = $pay_stub_entry_obj->getId();
 		}
@@ -2686,8 +2692,9 @@ class PayStubFactory extends Factory {
 
 					$psealf = new PayStubEntryAccountListFactory();
 
-					foreach ($pslf as $key => $pay_stub_obj) {
-
+					foreach ($pslf->rs as $key => $pay_stub_obj) {
+						$pslf->data = (array)$pay_stub_obj;
+						$pay_stub_obj = $pslf;
 						Debug::Text('Looping over Pay Stub... ID: '. $pay_stub_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 
 						//Get pay stub entries.
@@ -2700,7 +2707,9 @@ class PayStubFactory extends Factory {
 
 						$description_subscript_counter = 1;
 
-						foreach ($pself as $pay_stub_entry) {
+						foreach ($pself->rs as $pay_stub_entry) {
+							$pself->data = (array)$pay_stub_entry;
+							$pay_stub_entry = $pself;
 
 							$description_subscript = NULL;
 
@@ -2928,8 +2937,9 @@ class PayStubFactory extends Factory {
 
 					$i=0;
 
-					foreach ($pslf as $pay_stub_obj) {
-
+					foreach ($pslf->rs as $pay_stub_obj) {
+						$pslf->data = (array)$pay_stub_obj;
+						$pay_stub_obj = $pslf;
 						//Get pay stub entries.
 
 						$pself = new PayStubEntryListFactory();
@@ -2942,8 +2952,9 @@ class PayStubFactory extends Factory {
 
 						$description_subscript_counter = 1;
 
-						foreach ($pself as $pay_stub_entry) {
-
+						foreach ($pself->rs as $pay_stub_entry) {
+							$pself->data = (array)$pay_stub_entry;
+							$pay_stub_entry = $pself;
 							$description_subscript = NULL;
 
 							//$pay_stub_entry_name_obj = $psenlf->getById( $pay_stub_entry->getPayStubEntryNameId() ) ->getCurrent();
@@ -3875,8 +3886,9 @@ class PayStubFactory extends Factory {
 
 			$i=0;
 
-			foreach ($pslf as $pay_stub_obj) {
-
+			foreach ($pslf->rs as $pay_stub_obj) {
+				$pslf->data = (array)$pay_stub_obj;
+				$pay_stub_obj = $pslf;
 				$psealf = new PayStubEntryAccountListFactory();
 
 				Debug::text($i .'. Pay Stub Transaction Date: '. $pay_stub_obj->getTransactionDate(), __FILE__, __LINE__, __METHOD__,10);
@@ -4033,8 +4045,9 @@ class PayStubFactory extends Factory {
 
 				$description_subscript_counter = 1;
 
-				foreach ($pself as $pay_stub_entry) {
-//                        echo '<pre>'; print_r($pay_stub_entry); echo '<pre>'; die;
+				foreach ($pself->rs as $pay_stub_entry) {
+					$pself->data = (array)$pay_stub_entry;
+					$pay_stub_entry = $pself;
 
 					//Debug::text('Pay Stub Entry Account ID: '.$pay_stub_entry->getPayStubEntryNameId()  , __FILE__, __LINE__, __METHOD__,10);
 
@@ -4213,10 +4226,7 @@ class PayStubFactory extends Factory {
 					$pdf->SetFont('','',9);
 
 					foreach( $pay_stub_entries[10] as $pay_stub_entry ) {
-                                            
-                                       
-//pay_stub_entry_name_id
-
+                                
 
 						if ( $pay_stub_entry['type'] == 10 ) {
 
@@ -4708,8 +4718,9 @@ class PayStubFactory extends Factory {
 
 					$pdf->SetFont('','',10);
 
-					foreach( $ablf as $ab_obj ) {
-
+					foreach( $ablf->rs as $ab_obj ) {
+						$ablf->data = (array)$ab_obj;
+						$ab_obj = $ablf;
 						$balance = $ab_obj->getBalance();
 
 						if ( !is_numeric( $balance ) ) {
@@ -4974,8 +4985,9 @@ class PayStubFactory extends Factory {
 
                 $i = 0;
                 
-                foreach ($pslf as $pay_stub_obj) {
-
+                foreach ($pslf->rs as $pay_stub_obj) {
+					$pslf->data = (array)$pay_stub_obj;
+					$pay_stub_obj = $pslf;
                     $psealf = new PayStubEntryAccountListFactory();
 
                     //Use Pay Stub dates, not Pay Period dates.
@@ -4991,7 +5003,9 @@ class PayStubFactory extends Factory {
                     $udtlf->getByUserIdAndPayPeriodIdAndEndDate( $pay_stub_obj->getUser(), $pay_stub_obj->getPayPeriod(), $pay_stub_obj->getPayPeriodObject()->getEndDate() );
                     $normal_OT = 0;
                     $holiday_OT = 0;
-                foreach( $udtlf as $udt_obj ) {
+                foreach( $udtlf->rs as $udt_obj ) {
+					$udtlf->data = (array)$udt_obj;
+					$udt_obj = $udtlf;
                    // echo '<br><pre>';
 //                    print_r($udt_obj->getTimeCategory(). "   ");
 //                    print_r($udt_obj->getName(). "   ");
@@ -5087,7 +5101,9 @@ class PayStubFactory extends Factory {
 //                echo '<br> pp_end_date::'.$pp_end_date;
                 $plf->getByCompanyIDAndUserIdAndStartDateAndEndDate($company_obj->getId(), $pay_stub_obj->getUser(), $pp_start_date,$pp_end_date );
 
-                 foreach( $plf as $plf_obj ) {
+                 foreach( $plf->rs as $plf_obj ) {
+					$plf->data = (array)$plf_obj;
+					$plf_obj = $plf;
                      if(!in_array(date('Y-m-d',$plf_obj->getTimeStamp()), $punch_date_array)){
                          $punch_date_array[] = date('Y-m-d',$plf_obj->getTimeStamp());
                      }
@@ -5162,7 +5178,9 @@ class PayStubFactory extends Factory {
                     $description_subscript_counter = 1;
 
 //                    print_r($pself->getRecordCount());die;
-                    foreach ($pself as $pay_stub_entry) {
+                    foreach ($pself->rs as $pay_stub_entry) {
+						$pself->data = (array)$pay_stub_entry;
+						$pay_stub_entry = $pself;
                         $description_subscript = NULL;
 
                         $pay_stub_entry_name_obj = $psealf->getById( $pay_stub_entry->getPayStubEntryNameId() )->getCurrent();
@@ -5977,7 +5995,9 @@ class PayStubFactory extends Factory {
 
 			$i=0;
 
-			foreach ($pslf as $pay_stub_obj) {
+			foreach ($pslf->rs as $pay_stub_obj) {
+				$pslf->data = (array)$pay_stub_obj;
+				$pay_stub_obj = $pslf;
 
 				$psealf = new PayStubEntryAccountListFactory();
 
@@ -6142,7 +6162,9 @@ class PayStubFactory extends Factory {
 
 				$description_subscript_counter = 1;
 
-				foreach ($pself as $pay_stub_entry) {
+				foreach ($pself->rs as $pay_stub_entry) {
+					$pself->data = (array)$pay_stub_entry;
+					$pay_stub_entry = $pself;
 //                        echo '<pre>'; print_r($pay_stub_entry); echo '<pre>'; die;
 
 					//Debug::text('Pay Stub Entry Account ID: '.$pay_stub_entry->getPayStubEntryNameId()  , __FILE__, __LINE__, __METHOD__,10);
@@ -6817,8 +6839,9 @@ class PayStubFactory extends Factory {
 
 					$pdf->SetFont('','',10);
 
-					foreach( $ablf as $ab_obj ) {
-
+					foreach( $ablf->rs as $ab_obj ) {
+						$ablf->data = (array)$ab_obj;
+						$ab_obj = $ablf;
 						$balance = $ab_obj->getBalance();
 
 						if ( !is_numeric( $balance ) ) {
@@ -7121,10 +7144,10 @@ class PayStubFactory extends Factory {
                         
 			$i=0;
 
-			foreach ($pslf as $pay_stub_obj) {
-                            
-                            
-                            $mail_body_array =  null;//ARSP ADD--> 
+			foreach ($pslf->rs as $pay_stub_obj) {
+                $pslf->data = (array)$pay_stub_obj;
+				$pay_stub_obj = $pslf;
+                $mail_body_array =  null;//ARSP ADD--> 
 
 				$psealf = new PayStubEntryAccountListFactory();
 
@@ -7289,7 +7312,9 @@ class PayStubFactory extends Factory {
 
 				$description_subscript_counter = 1;
 
-				foreach ($pself as $pay_stub_entry) {
+				foreach ($pself->rs as $pay_stub_entry) {
+					$pself->data = (array)$pay_stub_entry;
+					$pay_stub_entry = $pself;
 
 					//Debug::text('Pay Stub Entry Account ID: '.$pay_stub_entry->getPayStubEntryNameId()  , __FILE__, __LINE__, __METHOD__,10);
 
@@ -7979,8 +8004,9 @@ class PayStubFactory extends Factory {
 
 					//@ARSP-->$pdf->SetFont('','',10);
 
-					foreach( $ablf as $ab_obj ) {
-
+					foreach( $ablf->rs as $ab_obj ) {
+						$ablf->data = (array)$ab_obj;
+						$ab_obj = $ablf;
 						$balance = $ab_obj->getBalance();
 
 						if ( !is_numeric( $balance ) ) {
@@ -8578,7 +8604,9 @@ class PayStubFactory extends Factory {
 			$i=0;
                         
                         $page_no = 1;//ARSP ADD
-			foreach ($pslf as $pay_stub_obj) {
+			foreach ($pslf->rs as $pay_stub_obj) {
+				$pslf->data = (array)$pay_stub_obj;
+				$pay_stub_obj = $pslf;
 
 				$psealf = new PayStubEntryAccountListFactory();
 
@@ -8904,7 +8932,9 @@ class PayStubFactory extends Factory {
 
 				$description_subscript_counter = 1;
 
-				foreach ($pself as $pay_stub_entry) {
+				foreach ($pself->rs as $pay_stub_entry) {
+					$pslf->data = (array)$pay_stub_entry;																
+					$pay_stub_entry = $pslf;
 
 					//Debug::text('Pay Stub Entry Account ID: '.$pay_stub_entry->getPayStubEntryNameId()  , __FILE__, __LINE__, __METHOD__,10);
 
@@ -9587,8 +9617,9 @@ class PayStubFactory extends Factory {
 
 					$pdf->SetFont('','',10);
 
-					foreach( $ablf as $ab_obj ) {
-
+					foreach( $ablf->rs as $ab_obj ) {
+						$ablf->data = (array)$ab_obj;
+						$ab_obj = $ablf;
 						$balance = $ab_obj->getBalance();
 
 						if ( !is_numeric( $balance ) ) {
@@ -9964,7 +9995,9 @@ class PayStubFactory extends Factory {
 			$i=0;
                         
                         $page_no = 1;//ARSP ADD
-			foreach ($pslf as $pay_stub_obj) {
+			foreach ($pslf->rs as $pay_stub_obj) {
+				$pslf->data = (array)$pay_stub_obj;
+				$pay_stub_obj = $pslf;
                             $txt = '';
 
 				$psealf = new PayStubEntryAccountListFactory();
@@ -10226,7 +10259,9 @@ class PayStubFactory extends Factory {
                                     $blf = new BranchListFactory();
                                     $blf->getById($user_obj->getDefaultBranch());
                                     
-                                    foreach ($blf as $temp)
+                                    foreach ($blf->rs as $temp)
+									$blf->data = (array)$temp;
+									$temp = $blf;
                                     {
                                     $txt .= $temp->getNameById($user_obj->getDefaultBranch())."\n";
                                     $txt .= $temp->getAddress1() . ' ' . $temp->getAddress2()."\n";                                
@@ -10437,8 +10472,9 @@ class PayStubFactory extends Factory {
 
 				$description_subscript_counter = 1;
 
-				foreach ($pself as $pay_stub_entry) {
-
+				foreach ($pself->rs as $pay_stub_entry) {
+					$pself->data = (array)$pay_stub_entry;
+					$pay_stub_entry = $pself;
 					//Debug::text('Pay Stub Entry Account ID: '.$pay_stub_entry->getPayStubEntryNameId()  , __FILE__, __LINE__, __METHOD__,10);
 
 					$description_subscript = NULL;
@@ -11148,7 +11184,9 @@ class PayStubFactory extends Factory {
 
 					$pdf->SetFont('','',7);//8 ARSP NOTE --> I CHANGED THIS CODE FOR THUNDER & NEON
 
-					foreach( $ablf as $ab_obj ) {
+					foreach( $ablf->rs as $ab_obj ) {
+						$ablf->data = (array)$ab_obj;
+						$ab_obj = $ablf;
 
 						$balance = $ab_obj->getBalance();
 
@@ -12692,8 +12730,10 @@ class PayStubFactory extends Factory {
                     $blf = new BranchListFactory();
                     $blf->getById($branch_id_only);
 
-                    foreach ($blf as $temp)
+                    foreach ($blf->rs as $temp)
                     {
+						$blf->data = (array)$temp;
+						$temp = $blf;
                         //echo $test1->getName();
                         $_SESSION['header_data'] = array( 
                                                           //'image_path'   => $current_company->getLogoFileName(),
@@ -13291,10 +13331,11 @@ class PayStubFactory extends Factory {
                         
 			$i=0;
 
-			foreach ($pslf as $pay_stub_obj) {
+			foreach ($pslf->rs as $pay_stub_obj) {
+                $pslf->data = (array)$pay_stub_obj;
+				$pay_stub_obj = $pslf;
                             
-                            
-                            $mail_body_array =  null;//ARSP ADD--> 
+                $mail_body_array =  null;//ARSP ADD--> 
 
 				$psealf = new PayStubEntryAccountListFactory();
 
@@ -13459,8 +13500,9 @@ class PayStubFactory extends Factory {
 
 				$description_subscript_counter = 1;
 
-				foreach ($pself as $pay_stub_entry) {
-
+				foreach ($pself->rs as $pay_stub_entry) {
+					$pself->data = (array)$pay_stub_entry;
+					$pay_stub_entry = $pself;
 					//Debug::text('Pay Stub Entry Account ID: '.$pay_stub_entry->getPayStubEntryNameId()  , __FILE__, __LINE__, __METHOD__,10);
 
 					$description_subscript = NULL;

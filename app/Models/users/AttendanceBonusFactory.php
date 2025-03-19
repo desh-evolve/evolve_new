@@ -2,6 +2,8 @@
 
 
 namespace App\Models\Users;
+
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 
@@ -11,28 +13,25 @@ class AttendanceBonusFactory   extends Factory{
     
         
     	protected $table = 'bonus_attendance';
-	protected $pk_sequence_name = 'bonus_attendance_id_seq'; //PK Sequence name
+		protected $pk_sequence_name = 'bonus_attendance_id_seq'; //PK Sequence name
         
-         var $bonus_december_obj = NULL;
-         var $company_obj= NULL;
+        var $bonus_december_obj = NULL;
+        var $company_obj= NULL;
          
-         
-               
-        
         function getBonusDecemberObject() {
-		if ( is_object($this->bonus_december_obj) ) {
-			return $this->bonus_december_obj;
-		} else {
-			$bdlf = new BonusDecemberListFactory();
-			$bdlf->getById( $this->getBonusDecember() );
-			if ( $bdlf->getRecordCount() == 1 ) {
-				$this->bonus_december_obj = $bdlf->getCurrent();
+			if ( is_object($this->bonus_december_obj) ) {
 				return $this->bonus_december_obj;
-			}
+			} else {
+				$bdlf = new BonusDecemberListFactory();
+				$bdlf->getById( $this->getBonusDecember() );
+				if ( $bdlf->getRecordCount() == 1 ) {
+					$this->bonus_december_obj = $bdlf->getCurrent();
+					return $this->bonus_december_obj;
+				}
 
-			return FALSE;
+				return FALSE;
+			}
 		}
-	}
 
         
         
@@ -69,7 +68,7 @@ class AttendanceBonusFactory   extends Factory{
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = new CompanyListFactory();
+			$clf = new CompanyListFactory(); 
 			$clf->getById( $this->getCompany() );
 			if ( $clf->getRecordCount() == 1 ) {
 				$this->company_obj = $clf->getCurrent();

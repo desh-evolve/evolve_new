@@ -380,7 +380,9 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$hlf->getByPolicyGroupUserIdAndStartDateAndEndDate( $user_id, $start_date, $end_date);
 
 		if ( $hlf->getRecordCount() > 0 ) {
-			foreach($hlf as $h_obj) {
+			foreach($hlf->rs as $h_obj) {
+				$hlf->data = (array)$h_obj;
+				$h_obj = $hlf;
 				$list[$h_obj->getDateStamp()] = $h_obj->getName();
 			}
 

@@ -1,7 +1,14 @@
 <?php
 
 namespace App\Models\Schedule;
-use App\Models\Core\Factory; 
+
+use App\Models\Company\CompanyListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTLog;
+use App\Models\Users\UserListFactory;
 
 class RecurringScheduleControlFactory extends Factory {
 	protected $table = 'recurring_schedule_control';
@@ -95,7 +102,7 @@ class RecurringScheduleControlFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = new CompanyListFactory();
+		$clf = new CompanyListFactory(); 
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -234,7 +241,9 @@ class RecurringScheduleControlFactory extends Factory {
 	function getUser() {
 		$rsulf = new RecurringScheduleUserListFactory();
 		$rsulf->getByRecurringScheduleControlId( $this->getId() );
-		foreach ($rsulf as $obj) {
+		foreach ($rsulf->rs as $obj) {
+			$rsulf->data = (array)$obj;
+			$obj = $rsulf;
 			$list[] = $obj->getUser();
 		}
 
@@ -256,7 +265,9 @@ class RecurringScheduleControlFactory extends Factory {
 				$rsulf->getByRecurringScheduleControlId( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($rsulf as $obj) {
+				foreach ($rsulf->rs as $obj) {
+					$rsulf->data = (array)$obj;
+					$obj = $rsulf;
 					$id = $obj->getUser();
 					Debug::text('Recurring Schedule ID: '. $obj->getRecurringScheduleControl() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -274,7 +285,7 @@ class RecurringScheduleControlFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = new UserListFactory();
+			$ulf = new UserListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
@@ -378,7 +389,9 @@ class RecurringScheduleControlFactory extends Factory {
 		$max_week = 1;
 		$weeks = array();
 		if ( $rstlf->getRecordCount() > 0 ) {
-			foreach($rstlf as $rst_obj) {
+			foreach($rstlf->rs as $rst_obj) {
+				$rstlf->data = (array)$rst_obj;
+				$rst_obj = $rstlf;
 				//Debug::text('Week: '. $rst_obj->getWeek(), __FILE__, __LINE__, __METHOD__, 10);
 				$template_week_rows[$rst_obj->getWeek()][] = $rst_obj->getObjectAsArray();
 

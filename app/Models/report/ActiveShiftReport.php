@@ -2,6 +2,14 @@
 
 namespace App\Models\Report;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserPreferenceListFactory;
+
 class ActiveShiftReport extends Report {
 
 	function __construct() {
@@ -428,7 +436,7 @@ class ActiveShiftReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('user','view') == FALSE ) {
-			$hlf = new HierarchyListFactory();
+			$hlf = new HierarchyListFactory(); 
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -454,11 +462,13 @@ class ActiveShiftReport extends Report {
 		//
 
 		//Get user data for joining.
-		$ulf = new UserListFactory();
+		$ulf = new UserListFactory(); 
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
-		foreach ( $ulf as $key => $u_obj ) {
+		foreach ( $ulf->rs as $key => $u_obj ) {
+			$ulf->data = (array)$u_obj;
+			$u_obj = $ulf;
 			//$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->data;
 			//$this->tmp_data['user'][$u_obj->getId()]['status'] = Option::getByKey( $u_obj->getStatus(), $u_obj->getOptions( 'status' ) );
@@ -472,22 +482,26 @@ class ActiveShiftReport extends Report {
 
 
 		//Get user preference data for joining.
-		$uplf = new UserPreferenceListFactory();
+		$uplf = new UserPreferenceListFactory(); 
 		$uplf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Preference Rows: '. $uplf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $uplf->getRecordCount(), NULL, ('Retrieving Data...') );
-		foreach ( $uplf as $key => $up_obj ) {
+		foreach ( $uplf->rs as $key => $up_obj ) {
+			$uplf->data = (array)$up_obj;
+			$up_obj = $uplf;
 			$this->tmp_data['user_preference'][$up_obj->getUser()] = (array)$up_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
 		}
 		//Debug::Arr($this->tmp_data['user_preference'], 'TMP Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get last punch (active shift) data for joining with users. That way we can full data from both tables.
-		$plf = new PunchListFactory();
+		$plf = new PunchListFactory(); 
 		$plf->getAPIActiveShiftReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Active Shift Rows: '. $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $plf->getRecordCount(), NULL, ('Retrieving Data...') );
-		foreach ( $plf as $key => $p_obj ) {
+		foreach ( $plf->rs as $key => $p_obj ) {
+			$plf->data = (array)$p_obj;
+			$p_obj = $plf;
 			$this->tmp_data['punch'][$p_obj->getColumn('user_id')] = (array)$p_obj->getObjectAsArray( $this->getColumnConfig() );
 			if ( $p_obj->getStatus() == 10 ) {
 				$this->tmp_data['punch'][$p_obj->getColumn('user_id')]['_bgcolor'] = array(225,255,225);

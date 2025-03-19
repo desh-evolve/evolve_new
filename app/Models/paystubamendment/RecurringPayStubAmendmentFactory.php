@@ -2,6 +2,7 @@
 
 namespace App\Models\PayStubAmendment;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,6 +10,10 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserListFactory;
 
 class RecurringPayStubAmendmentFactory extends Factory {
 	protected $table = 'recurring_ps_amendment';
@@ -310,7 +315,9 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	function getUser() {
 		$rpsaulf = new RecurringPayStubAmendmentUserListFactory();
 		$rpsaulf->getByRecurringPayStubAmendment( $this->getId() );
-		foreach ($rpsaulf as $ps_amendment_user) {
+		foreach ($rpsaulf->rs as $ps_amendment_user) {
+			$rpsaulf->data = (array)$ps_amendment_user;
+			$ps_amendment_user = $rpsaulf;
 			$user_list[] = $ps_amendment_user->getUser();
 		}
 
@@ -338,7 +345,9 @@ class RecurringPayStubAmendmentFactory extends Factory {
 				$rpsaulf->getByRecurringPayStubAmendment( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($rpsaulf as $obj) {
+				foreach ($rpsaulf->rs as $obj) {
+					$rpsaulf->data = (array)$obj;
+					$obj = $rpsaulf;
 					$id = $obj->getUser();
 					Debug::text('Recurring Schedule ID: '. $obj->getRecurringPayStubAmendment() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -755,7 +764,9 @@ class RecurringPayStubAmendmentFactory extends Factory {
 		$tmp_user_ids = $this->getUser();
 		if ( $tmp_user_ids[0] == -1) {
 			$ulf->getByCompanyIdAndStatus( $this->getCompany(), 10 );
-			foreach($ulf as $user_obj) {
+			foreach($ulf->rs as $user_obj) {
+				$ulf->data = (array)$user_obj;
+				$user_obj = $ulf;
 				$user_ids[] = $user_obj->getId();
 			}
 			unset($user_obj);
@@ -776,7 +787,9 @@ class RecurringPayStubAmendmentFactory extends Factory {
 					//FIXME: Get all non-closed pay periods AFTER the start date.
 					$pplf->getByUserIdListAndNotStatusAndStartDateAndEndDate($user_ids, 20, $this->getStartDate(), $this->getEndDate() ); //All non-closed pay periods
 					Debug::text('Found Open Pay Periods: '. $pplf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-					foreach($pplf as $pay_period_obj) {
+					foreach($pplf->rs as $pay_period_obj) {
+						$pplf->data = (array)$pay_period_obj;
+						$pay_period_obj = $pplf;
 						Debug::text('Working on Pay Period: '. $pay_period_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 
 						//If near the end of a pay period, or a pay period is already ended, add PS amendment if

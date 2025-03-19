@@ -2,6 +2,7 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;

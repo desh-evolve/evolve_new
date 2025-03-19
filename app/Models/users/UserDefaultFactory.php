@@ -2,12 +2,21 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company\BranchListFactory;
+use App\Models\Company\CompanyDeductionListFactory;
+use App\Models\Company\CompanyFactory;
+use App\Models\Company\CompanyListFactory;
+use App\Models\Core\CurrencyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
+use App\Models\Core\PermissionControlListFactory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\Policy\PolicyGroupListFactory;
 
 class UserDefaultFactory extends Factory {
 	protected $table = 'user_default';
@@ -118,7 +127,7 @@ class UserDefaultFactory extends Factory {
 	function setPermissionControl($id) {
 		$id = trim($id);
 
-		$pclf = new PermissionControlListFactory();
+		$pclf = new PermissionControlListFactory(); 
 
 		if (  $this->Validator->isResultSetWithRows(		'permission_control_id',
 															$pclf->getByID($id),
@@ -142,7 +151,7 @@ class UserDefaultFactory extends Factory {
 	function setPayPeriodSchedule($id) {
 		$id = trim($id);
 
-		$ppslf = new PayPeriodScheduleListFactory();
+		$ppslf = new PayPeriodScheduleListFactory(); 
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule_id',
@@ -167,7 +176,7 @@ class UserDefaultFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = trim($id);
 
-		$pglf = new PolicyGroupListFactory();
+		$pglf = new PolicyGroupListFactory(); 
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'policy_group_id',
@@ -249,7 +258,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Branch ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$blf = new BranchListFactory();
+		$blf = new BranchListFactory(); 
 
 		if (
 				$id == 0
@@ -278,7 +287,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Department ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$dlf = new DepartmentListFactory();
+		$dlf = new DepartmentListFactory(); 
 
 		if (
 				$id == 0
@@ -307,7 +316,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Currency ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$culf = new CurrencyListFactory();
+		$culf = new CurrencyListFactory(); 
 
 		if (
 				$this->Validator->isResultSetWithRows(	'currency',
@@ -368,7 +377,7 @@ class UserDefaultFactory extends Factory {
 	function setCountry($country) {
 		$country = trim($country);
 
-		$cf = new CompanyFactory();
+		$cf = new CompanyFactory(); 
 
 		if ( $this->Validator->inArrayKey(		'country',
 												$country,
@@ -753,7 +762,9 @@ class UserDefaultFactory extends Factory {
 	function getCompanyDeduction() {
 		$udcdlf = new UserDefaultCompanyDeductionListFactory();
 		$udcdlf->getByUserDefaultId( $this->getId() );
-		foreach ($udcdlf as $obj) {
+		foreach ($udcdlf->rs as $obj) {
+			$udcdlf->data = (array)$obj;
+			$obj = $udcdlf;
 			$list[] = $obj->getCompanyDeduction();
 		}
 
@@ -772,7 +783,9 @@ class UserDefaultFactory extends Factory {
 				$udcdlf->getByUserDefaultId( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($udcdlf as $obj) {
+				foreach ($udcdlf->rs as $obj) {
+					$udcdlf->data = (array)$obj;
+					$obj = $udcdlf;
 					$id = $obj->getCompanyDeduction();
 					Debug::text('ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -793,7 +806,7 @@ class UserDefaultFactory extends Factory {
 
 			//Insert new mappings.
 			//$lf = new UserListFactory();
-			$cdlf = new CompanyDeductionListFactory();
+			$cdlf = new CompanyDeductionListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( $id != FALSE AND isset($ids) AND !in_array($id, $tmp_ids) ) {

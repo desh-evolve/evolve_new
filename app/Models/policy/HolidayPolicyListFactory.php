@@ -24,7 +24,6 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query);
 		}
-
 		return $this;
 	}
 
@@ -254,7 +253,9 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 			$list[0] = '--';
 		}
 
-		foreach ($hplf as $hp_obj) {
+		foreach ($hplf->rs as $hp_obj) {
+			$hplf->data = (array)$hp_obj;
+			$hp_obj = $hplf;
 			$list[$hp_obj->getID()] = $hp_obj->getName();
 		}
 

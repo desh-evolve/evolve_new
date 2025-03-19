@@ -2,12 +2,15 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Holiday\RecurringHolidayListFactory;
+use App\Models\Schedule\ScheduleFactory;
 
 class HolidayPolicyFactory extends Factory {
 	protected $table = 'holiday_policy';
@@ -163,7 +166,7 @@ class HolidayPolicyFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = new CompanyListFactory();
+		$clf = new CompanyListFactory(); 
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -239,7 +242,7 @@ class HolidayPolicyFactory extends Factory {
 	function setDefaultScheduleStatus($value) {
 		$value = trim($value);
 
-		$sf = new ScheduleFactory();
+		$sf = new ScheduleFactory(); 
 
 		$key = Option::getByValue($value, $sf->getOptions('status') );
 		if ($key !== FALSE) {
@@ -675,7 +678,9 @@ class HolidayPolicyFactory extends Factory {
 		$hprhlf = new HolidayPolicyRecurringHolidayListFactory();
 		$hprhlf->getByHolidayPolicyId( $this->getId() );
 		Debug::text('Found Recurring Holidays Attached to this Policy: '. $hprhlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-		foreach ($hprhlf as $obj) {
+		foreach ($hprhlf->rs as $obj) {
+			$hprhlf->data[] = (array)$obj;
+			$obj = $hprhlf;
 			$list[] = $obj->getRecurringHoliday();
 		}
 
@@ -694,7 +699,9 @@ class HolidayPolicyFactory extends Factory {
 				$hprhlf = new HolidayPolicyRecurringHolidayListFactory();
 				$hprhlf->getByHolidayPolicyId( $this->getId() );
 
-				foreach ($hprhlf as $obj) {
+				foreach ($hprhlf->rs as $obj) {
+					$hprhlf->data = (array)$obj;
+					$obj = $hprhlf;
 					$id = $obj->getRecurringHoliday();
 					Debug::text('Policy ID: '. $obj->getHolidayPolicy() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -712,7 +719,7 @@ class HolidayPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$rhlf = new RecurringHolidayListFactory();
+			$rhlf = new RecurringHolidayListFactory(); ;
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) AND $id > 0 ) {

@@ -2,6 +2,9 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Company\BranchListFactory;
+use App\Models\Company\CompanyListFactory;
+use App\Models\Company\WageGroupListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,6 +12,9 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
 
 class PremiumPolicyFactory extends Factory {
 	protected $table = 'premium_policy';
@@ -796,7 +802,7 @@ class PremiumPolicyFactory extends Factory {
 	function setWageGroup($id) {
 		$id = trim($id);
 
-		$wglf = new WageGroupListFactory();
+		$wglf = new WageGroupListFactory(); 
 
 		if ( $id == 0
 				OR
@@ -990,7 +996,9 @@ class PremiumPolicyFactory extends Factory {
 	function getBranch() {
 		$lf = new PremiumPolicyBranchListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getBranch();
 		}
 
@@ -1011,7 +1019,9 @@ class PremiumPolicyFactory extends Factory {
 				$lf_a = new PremiumPolicyBranchListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getBranch();
 					Debug::text('Branch ID: '. $obj->getBranch() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1029,7 +1039,7 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = new BranchListFactory();
+			$lf_b = new BranchListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
@@ -1094,7 +1104,9 @@ class PremiumPolicyFactory extends Factory {
 	function getDepartment() {
 		$lf = new PremiumPolicyDepartmentListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getDepartment();
 		}
 
@@ -1114,7 +1126,9 @@ class PremiumPolicyFactory extends Factory {
 				$lf_a = new PremiumPolicyDepartmentListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getDepartment();
 					Debug::text('Department ID: '. $obj->getDepartment() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1132,7 +1146,7 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = new DepartmentListFactory();
+			$lf_b = new DepartmentListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
@@ -1189,9 +1203,11 @@ class PremiumPolicyFactory extends Factory {
 			return FALSE;
 		}
 
-		$lf = new PremiumPolicyJobGroupListFactory();
+		$lf = new PremiumPolicyJobGroupListFactory(); 
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getJobGroup();
 		}
 
@@ -1215,7 +1231,9 @@ class PremiumPolicyFactory extends Factory {
 				$lf_a = new PremiumPolicyJobGroupListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getJobGroup();
 					Debug::text('Job Group ID: '. $obj->getJobGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1289,7 +1307,9 @@ class PremiumPolicyFactory extends Factory {
 
 		$lf = new PremiumPolicyJobListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getjob();
 		}
 
@@ -1313,7 +1333,9 @@ class PremiumPolicyFactory extends Factory {
 				$lf_a = new PremiumPolicyJobListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getjob();
 					Debug::text('job ID: '. $obj->getJob() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1387,7 +1409,9 @@ class PremiumPolicyFactory extends Factory {
 
 		$lf = new PremiumPolicyJobItemGroupListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getJobItemGroup();
 		}
 
@@ -1411,7 +1435,9 @@ class PremiumPolicyFactory extends Factory {
 				$lf_a = new PremiumPolicyJobItemGroupListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getJobItemGroup();
 					Debug::text('Job Item Group ID: '. $obj->getJobItemGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1485,7 +1511,9 @@ class PremiumPolicyFactory extends Factory {
 
 		$lf = new PremiumPolicyJobItemListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getJobItem();
 		}
 
@@ -1509,7 +1537,9 @@ class PremiumPolicyFactory extends Factory {
 				$lf_a = new PremiumPolicyJobItemListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getJobItem();
 					Debug::text('Job Item ID: '. $obj->getJobItem() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1745,7 +1775,7 @@ class PremiumPolicyFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ) {
 			//Check to make sure there are no hours using this premium policy.
-			$udtlf = new UserDateTotalListFactory();
+			$udtlf = new UserDateTotalListFactory(); 
 			$udtlf->getByPremiumTimePolicyId( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

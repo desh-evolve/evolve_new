@@ -4,11 +4,14 @@ namespace App\Models\Policy;
 
 use App\Models\Company\CompanyGenericMapFactory;
 use App\Models\Company\CompanyGenericMapListFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Users\UserDefaultFactory;
+use App\Models\Users\UserListFactory;
 
 class PolicyGroupFactory extends Factory {
 	protected $table = 'policy_group';
@@ -77,7 +80,7 @@ class PolicyGroupFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = new CompanyListFactory();
+			$clf = new CompanyListFactory(); 
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -145,7 +148,9 @@ class PolicyGroupFactory extends Factory {
 	function getUser() {
 		$pgulf = new PolicyGroupUserListFactory();
 		$pgulf->getByPolicyGroupId( $this->getId() );
-		foreach ($pgulf as $obj) {
+		foreach ($pgulf->rs as $obj) {
+			$pgulf->data = (array) $obj;
+			$obj = $pgulf;
 			$list[] = $obj->getUser();
 		}
 
@@ -167,7 +172,9 @@ class PolicyGroupFactory extends Factory {
 				$pgulf->getByPolicyGroupId( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($pgulf as $obj) {
+				foreach ($pgulf->rs as $obj) {
+					$pgulf->data = (array) $obj;
+					$obj = $pgulf;
 					$id = $obj->getUser();
 					Debug::text('Policy ID: '. $obj->getPolicyGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 

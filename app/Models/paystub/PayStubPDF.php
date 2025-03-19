@@ -2,6 +2,8 @@
 
 namespace App\Models\PayStub;
 
+use App\Models\Core\Environment;
+
 class PayStubPDF {
 	var $pdf = NULL;
 	var $page = NULL;

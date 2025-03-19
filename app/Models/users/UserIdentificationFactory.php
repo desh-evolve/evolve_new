@@ -5,6 +5,7 @@ use App\Models\Core\Factory;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class UserIdentificationFactory extends Factory {
 	protected $table = 'user_identification';

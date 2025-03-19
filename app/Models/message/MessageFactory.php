@@ -11,6 +11,7 @@ use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\TTMail;
+use App\Models\Users\UserPreferenceListFactory;
 
 class MessageFactory extends Factory {
 	protected $table = 'message';
@@ -449,7 +450,9 @@ class MessageFactory extends Factory {
 						$mlf->getMessagesInThreadById( $this->getId() );
 						Debug::Text(' Messages In Thread: '. $mlf->getRecordCount() , __FILE__, __LINE__, __METHOD__,10);
 						if ( $mlf->getRecordCount() > 0 ) {
-							foreach( $mlf as $m_obj ) {
+							foreach( $mlf->rs as $m_obj ) {
+								$mlf->data = (array) $m_obj;
+								$m_obj = $mlf;
 								$user_ids[] = $m_obj->getCreatedBy();
 							}
 						}
@@ -495,7 +498,9 @@ class MessageFactory extends Factory {
 				$uplf = new UserPreferenceListFactory();
 				$uplf->getByUserId( $user_ids );
 				if ( $uplf->getRecordCount() > 0 ) {
-					foreach( $uplf as $up_obj ) {
+					foreach( $uplf->rs as $up_obj ) {
+						$uplf->data = (array) $up_obj;
+						$up_obj = $uplf;
 						if ( $up_obj->getEnableEmailNotificationMessage() == TRUE AND $up_obj->getUserObject()->getStatus() == 10 ) {
 							if ( $up_obj->getUserObject()->getWorkEmail() != '' ) {
 								$retarr[] = $up_obj->getUserObject()->getWorkEmail();

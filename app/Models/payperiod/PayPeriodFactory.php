@@ -464,7 +464,9 @@ class PayPeriodFactory extends Factory {
 
 		$pslf = new PayStubListFactory(); 
 		$pslf->getByPayPeriodId( $this->getId() );
-		foreach($pslf as $pay_stub) {
+		foreach($pslf->rs as $pay_stub) {
+			$pslf->data = (array)$pay_stub;
+			$pay_stub = $pslf;
 			//Only change status of advance pay stubs if we're in the advance part of the pay period.
 			//What if the person is too late, set status anyways?
 			if ( $pay_stub->getStatus() != $status
@@ -652,7 +654,9 @@ class PayPeriodFactory extends Factory {
 			Debug::text(' Pay Period ID: '. $this->getId() .' Pay Period orphaned User Date Rows: '. $udlf->getRecordCount() .' Start Date: '. TTDate::getDate('DATE+TIME', $this->getStartDate() ) .' End Date: '. TTDate::getDate('DATE+TIME', $this->getEndDate() ), __FILE__, __LINE__, __METHOD__,10);
 			if ( $udlf->getRecordCount() > 0 ) {
 				$udlf->StartTransaction();
-				foreach( $udlf as $ud_obj ) {
+				foreach( $udlf->rs as $ud_obj ) {
+					$udlf->data = (array)$ud_obj;
+					$ud_obj = $udlf;
 					$ud_obj->setPayPeriod( $this->getId() );
 					if ( $ud_obj->isValid() ) {
 						$ud_obj->Save();
@@ -676,7 +680,9 @@ class PayPeriodFactory extends Factory {
 		$udlf->StartTransaction();
 		$udlf->getByUserIdAndStartDateAndEndDate($pps_obj->getUser(), $this->getStartDate(), $this->getEndDate() );
 		Debug::text(' Pay Period ID: '. $this->getId() .' Pay Period User Date Rows: '. $udlf->getRecordCount() .' Start Date: '. TTDate::getDate('DATE+TIME', $this->getStartDate() ) .' End Date: '. TTDate::getDate('DATE+TIME', $this->getEndDate() ), __FILE__, __LINE__, __METHOD__,10);
-		foreach($udlf as $ud_obj) {
+		foreach($udlf->rs as $ud_obj) {
+			$udlf->data = (array)$ud_obj;
+			$ud_obj = $udlf;
 			$new_pay_period_id = $ud_obj->findPayPeriod();
 			Debug::Text('Current Pay Period: '. $ud_obj->getPayPeriod() .' ('.$this->getID() .') New PayPeriod ID: '. $new_pay_period_id , __FILE__, __LINE__, __METHOD__,10);
 
@@ -709,7 +715,9 @@ class PayPeriodFactory extends Factory {
 		if ( $udlf->getRecordCount() > 0 ) {
 				$udlf->StartTransaction();
 				Debug::text('Delete User Date Rows: '. $udlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-				foreach($udlf as $ud_obj ) {
+				foreach($udlf->rs as $ud_obj ) {
+					$udlf->data = (array)$ud_obj;
+					$ud_obj = $udlf;
 					$ud_obj->setDeleted(TRUE);
 					$ud_obj->Save();
 				}
@@ -748,7 +756,9 @@ class PayPeriodFactory extends Factory {
 		$elf->getSumExceptionsByPayPeriodIdAndBeforeDate( $this->getID(), $this->getEndDate() );
 		if ( $elf->getRecordCount() > 0 ) {
 			//Debug::Text(' Found Exceptions: '. $elf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-			foreach($elf as $e_obj ) {
+			foreach($elf->rs as $e_obj ) {
+				$elf->data = (array)$e_obj;
+				$e_obj = $elf;
 				if ( $e_obj->getColumn('severity_id') == 10 ) {
 					$retarr['exceptions_low'] = $e_obj->getColumn('count');
 				}
@@ -788,7 +798,9 @@ class PayPeriodFactory extends Factory {
 		$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 		$pptsvlf->getByPayPeriodIdAndCompanyId( $this->getID(), $this->getCompany() );
 		if ( $pptsvlf->getRecordCount() > 0 ) {
-			foreach( $pptsvlf as $pptsv_obj ) {
+			foreach( $pptsvlf->rs as $pptsv_obj ) {
+				$pptsvlf->data = (array)$pptsv_obj;
+				$pptsv_obj = $pptsvlf;
 				if ( $pptsv_obj->getAuthorized() == TRUE ) {
 					$retarr['verified_timesheets']++;
 				} elseif (  $pptsv_obj->getStatus() == 30 OR $pptsv_obj->getStatus() == 45 ) {

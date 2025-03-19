@@ -133,7 +133,9 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		//Get all pay period schedules, if more than one pay period schedule is in use, include PP schedule name.
 		$pay_period_schedule_id = array();
 		$i=0;
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			if ( !isset($pay_period_schedule_id[$obj->getPayPeriodSchedule()]) ) {
 				$pay_period_schedule_id[$obj->getPayPeriodSchedule()] = TRUE;
 				$i++;
@@ -147,8 +149,9 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$prefix = NULL;
 		$i=0;
-		foreach ($lf as $obj) {
-
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			if ( $sort_prefix == TRUE ) {
 				$prefix = '-'.str_pad( $i, 4, 0, STR_PAD_LEFT).'-';
 			}
@@ -1258,7 +1261,9 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 			$retarr = FALSE;
 			if ( $pplf->getRecordCount() > 0 ) {
-				foreach( $pplf as $pp_obj) {
+				foreach( $pplf->rs as $pp_obj) {	
+					$pplf->data = (array)$pp_obj;
+					$pp_obj = $pplf;
 					//$retarr['start_date'][] = TTDate::getDate('Ymd', $pp_obj->getStartDate() );
 					$retarr['end_date'][] = TTDate::getDate('Ymd', $pp_obj->getEndDate() );
 					$retarr['transaction_date'][] = TTDate::getDate('Ymd', $pp_obj->getTransactionDate() );

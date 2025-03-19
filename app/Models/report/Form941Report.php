@@ -2,6 +2,13 @@
 
 namespace App\Models\Report;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\Users\UserListFactory;
+
 class Form941Report extends Report {
 
 	protected $user_ids = array();
@@ -385,10 +392,12 @@ class Form941Report extends Report {
 		$filter_data = $this->getFilterConfig();
 		$form_data = $this->formatFormConfig();
 
-		$pself = new PayStubEntryListFactory();
+		$pself = new PayStubEntryListFactory(); 
 		$pself->getAPIReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		if ( $pself->getRecordCount() > 0 ) {
-			foreach( $pself as $pse_obj ) {
+			foreach( $pself->rs as $pse_obj ) {
+				$pself->data = (array)$pse_obj;
+				$pse_obj = $pself;
 
 				$user_id = $this->user_ids[] = $pse_obj->getColumn('user_id');
 				$date_stamp = TTDate::strtotime( $pse_obj->getColumn('pay_stub_transaction_date') );
@@ -475,11 +484,13 @@ class Form941Report extends Report {
 		//Debug::Arr($this->tmp_data, 'Tmp Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get user data for joining.
-		$ulf = new UserListFactory();
+		$ulf = new UserListFactory(); 
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
-		foreach ( $ulf as $key => $u_obj ) {
+		foreach ( $ulf->rs as $key => $u_obj ) {
+			$ulf->data = (array)$u_obj;
+			$u_obj = $ulf;
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
 		}

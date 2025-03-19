@@ -308,7 +308,9 @@ class BreakPolicyListFactory extends BreakPolicyFactory implements IteratorAggre
 			$list[0] = '--';
 		}
 
-		foreach ($mplf as $mp_obj) {
+		foreach ($mplf->rs as $mp_obj) {
+			$mplf->data = (array)$mp_obj;
+			$mp_obj = $mplf;
 			$list[$mp_obj->getID()] = $mp_obj->getName();
 		}
 

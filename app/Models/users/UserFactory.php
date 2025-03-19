@@ -4816,7 +4816,9 @@ class UserFactory extends Factory {
 					$pulf->getByPermissionControlIdAndUserID( $pc_obj->getId(), $this->getId() );
 					Debug::text('Record Count: '. $pulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 					if ( $pulf->getRecordCount() > 0 ) {
-						foreach( $pulf as $pu_obj ) {
+						foreach( $pulf->rs as $pu_obj ) {
+							$pulf->data = (array)$pu_obj;
+							$pu_obj = $pulf;
 							Debug::text('Deleteing from Permission Group: '. $pu_obj->getPermissionControl(), __FILE__, __LINE__, __METHOD__, 10);
 							$pu_obj->Delete();
 						}
@@ -4869,7 +4871,9 @@ class UserFactory extends Factory {
 					$ppsulf->getByPayPeriodScheduleIdAndUserID( $pps_obj->getId(), $this->getId() );
 					Debug::text('Record Count: '. $ppsulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 					if ( $ppsulf->getRecordCount() > 0 ) {
-						foreach( $ppsulf as $ppsu_obj ) {
+						foreach( $ppsulf->rs as $ppsu_obj ) {
+							$ppsulf->data = (array)$ppsu_obj;
+							$ppsu_obj = $ppsulf;
 							Debug::text('Deleteing from Pay Period Schedule: '. $ppsu_obj->getPayPeriodSchedule(), __FILE__, __LINE__, __METHOD__, 10);
 							$ppsu_obj->Delete();
 						}
@@ -4913,7 +4917,9 @@ class UserFactory extends Factory {
 					$pgulf->getByPolicyGroupIdAndUserId( $pg_obj->getId(), $this->getId() );
 					Debug::text('Record Count: '. $pgulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 					if ( $pgulf->getRecordCount() > 0 ) {
-						foreach( $pgulf as $pgu_obj ) {
+						foreach( $pgulf->rs as $pgu_obj ) {
+							$pgulf->data = (array)$pgu_obj;
+							$pgu_obj = $pgulf;
 							Debug::text('Deleting from Policy Group: '. $pgu_obj->getPolicyGroup(), __FILE__, __LINE__, __METHOD__, 10);
 							$pgu_obj->Delete();
 						}
@@ -5075,7 +5081,9 @@ class UserFactory extends Factory {
 				$ppsulf->getByPayPeriodScheduleIdAndUserID( $pps_obj->getId(), $this->getId() );
 				Debug::text('Record Count: '. $ppsulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 				if ( $ppsulf->getRecordCount() > 0 ) {
-					foreach( $ppsulf as $ppsu_obj ) {
+					foreach( $ppsulf->rs as $ppsu_obj ) {
+						$ppsulf->data = (array)$ppsu_obj;
+						$ppsu_obj = $ppsulf;
 						Debug::text('Deleting from Pay Period Schedule: '. $ppsu_obj->getPayPeriodSchedule(), __FILE__, __LINE__, __METHOD__, 10);
 						$ppsu_obj->Delete();
 					}
@@ -5092,7 +5100,9 @@ class UserFactory extends Factory {
 				$pgulf->getByPolicyGroupIdAndUserId( $pg_obj->getId(), $this->getId() );
 				Debug::text('Record Count: '. $pgulf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 				if ( $pgulf->getRecordCount() > 0 ) {
-					foreach( $pgulf as $pgu_obj ) {
+					foreach( $pgulf->rs as $pgu_obj ) {
+						$pgulf->data = (array)$pgu_obj;
+						$pgu_obj = $pgulf;
 						Debug::text('Deleteing from Policy Group: '. $pgu_obj->getPolicyGroup(), __FILE__, __LINE__, __METHOD__, 10);
 						$pgu_obj->Delete();
 					}
@@ -5103,7 +5113,9 @@ class UserFactory extends Factory {
 			$hclf = new HierarchyControlListFactory();
 			$hclf->getByCompanyId( $this->getCompany() );
 			if ( $hclf->getRecordCount() > 0 ) {
-				foreach( $hclf as $hc_obj ) {
+				foreach( $hclf->rs as $hc_obj ) {
+					$hclf->data = (array)$hc_obj;
+					$hc_obj = $hclf;
 					$hf = new HierarchyListFactory();
 					$hf->setUser( $this->getID() );
 					$hf->setHierarchyControl( $hc_obj->getId() );
@@ -5117,7 +5129,9 @@ class UserFactory extends Factory {
 			$alf = new AccrualListFactory();
 			$alf->getByUserIdAndCompanyId( $this->getId(), $this->getCompany() );
 			if ( $alf->getRecordCount()> 0 ) {
-				foreach( $alf as $a_obj ) {
+				foreach( $alf->rs as $a_obj ) {
+					$alf->data = (array)$a_obj;
+					$a_obj = $alf;
 					$a_obj->setDeleted(TRUE);
 					if ( $a_obj->isValid() ) {
 						$a_obj->Save();
@@ -5139,7 +5153,9 @@ class UserFactory extends Factory {
 			$cgmlf = new CompanyGenericMapListFactory();
 			$cgmlf->getByCompanyIDAndObjectTypeAndMapID( $this->getCompany(), array(1040,1050), $this->getID() );
 			if ( $cgmlf->getRecordCount() > 0 ) {
-				foreach( $cgmlf as $cgm_obj ) {
+				foreach( $cgmlf->rs as $cgm_obj ) {
+					$cgmlf->data = (array)$cgm_obj;
+					$cgm_obj = $cgmlf;
 					Debug::text('Deleteing from Company Generic Map: '. $cgm_obj->getID(), __FILE__, __LINE__, __METHOD__, 10);
 					$cgm_obj->Delete();
 				}

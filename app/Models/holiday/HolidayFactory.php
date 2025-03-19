@@ -6,7 +6,6 @@ use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
-use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 
 class HolidayFactory extends Factory {
@@ -361,7 +360,9 @@ class HolidayFactory extends Factory {
 
 					if ( $slf->getRecordCount() > 0 ) {
 						//Get user_date_ids
-						foreach( $slf as $s_obj ) {
+						foreach( $slf->rs as $s_obj ) {
+							$slf->data = (array) $s_obj;
+							$s_obj = $slf;
 							$scheduled_user_date_ids_before[] = $s_obj->getUserDateID();
 						}
 						//Debug::Arr($scheduled_user_date_ids_before, 'Scheduled UserDateIDs Before: ', __FILE__, __LINE__, __METHOD__,10);
@@ -376,7 +377,9 @@ class HolidayFactory extends Factory {
 					Debug::text('bUsing scheduled days!', __FILE__, __LINE__, __METHOD__,10);
 					if ( $slf->getRecordCount() > 0 ) {
 						//Get user_date_ids
-						foreach( $slf as $s_obj ) {
+						foreach( $slf->rs as $s_obj ) {
+							$slf->data = (array) $s_obj;
+							$s_obj = $slf;
 							$scheduled_user_date_ids_after[] = $s_obj->getUserDateID();
 						}
 						//Debug::Arr($scheduled_user_date_ids_after, 'Scheduled UserDateIDs After: ', __FILE__, __LINE__, __METHOD__,10);

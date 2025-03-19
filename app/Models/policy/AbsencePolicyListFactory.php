@@ -222,7 +222,9 @@ class AbsencePolicyListFactory extends AbsencePolicyFactory implements IteratorA
 			$list[0] = '--';
 		}
 
-		foreach ($aplf as $ap_obj) {
+		foreach ($aplf->rs as $ap_obj) {
+			$aplf->data = (array)$ap_obj;
+			$ap_obj = $aplf;
 			$list[$ap_obj->getID()] = $ap_obj->getName();
 		}
 

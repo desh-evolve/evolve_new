@@ -120,7 +120,9 @@ class HierarchyControlListFactory extends HierarchyControlFactory implements Ite
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			if ( $object_sorted_array == TRUE ) {
 				if ( $include_blank == TRUE AND !isset($list[$obj->getColumn('object_type_id')][0]) ) {
 					$list[$obj->getColumn('object_type_id')][0] = '--';

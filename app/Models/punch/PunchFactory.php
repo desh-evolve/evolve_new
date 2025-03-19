@@ -6,9 +6,17 @@ use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
+use App\Models\Core\StationFactory;
+use App\Models\Core\StationListFactory;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Policy\BreakPolicyListFactory;
+use App\Models\Policy\MealPolicyListFactory;
+use App\Models\Policy\RoundIntervalPolicyListFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Users\UserFactory;
 use App\Models\Users\UserListFactory;
 
 class PunchFactory extends Factory {
@@ -197,7 +205,7 @@ class PunchFactory extends Factory {
 			return $this->schedule_obj;
 		} else {
 			if ( $this->getScheduleID() !== FALSE ) {
-				$slf = new ScheduleListFactory();
+				$slf = new ScheduleListFactory(); 
 				$slf->getById( $this->getScheduleID() );
 				if ( $slf->getRecordCount() > 0 ) {
 					$this->schedule_obj = $slf->getCurrent();
@@ -443,7 +451,7 @@ class PunchFactory extends Factory {
 
 		//Punch control is no longer used for rounding.
 		//Check for rounding policies.
-		$riplf = new RoundIntervalPolicyListFactory();
+		$riplf = new RoundIntervalPolicyListFactory(); 
 		$type_id = $riplf->getPunchTypeFromPunchStatusAndType( $this->getStatus(), $this->getType() );
 
 		Debug::text(' Round Interval Punch Type: '. $type_id .' User: '. $this->getUser(), __FILE__, __LINE__, __METHOD__,10);
@@ -594,7 +602,9 @@ class PunchFactory extends Factory {
 							$day_total_time = $epoch - $plf->getCurrent()->getTimeStamp();
 							Debug::text('aDay Total Time: '. $day_total_time .' Current Punch Control ID: '. $this->getPunchControlID(), __FILE__, __LINE__, __METHOD__,10);
 
-							foreach( $pclf as $pc_obj ) {
+							foreach( $pclf->rs as $pc_obj ) {
+								$pclf->data = (array)$pc_obj;
+								$pc_obj = $pclf;
 								if ( $plf->getCurrent()->getPunchControlID() != $pc_obj->getID() ) {
 									Debug::text('Punch Control Total Time: '. $pc_obj->getTotalTime() .' ID: '. $pc_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 									$day_total_time += $pc_obj->getTotalTime();
@@ -603,10 +613,12 @@ class PunchFactory extends Factory {
 
 							//Take into account paid meal/breaks when doing day total rounding...
 							$meal_and_break_adjustment = 0;
-							$udtlf = new UserDateTotalListFactory();
+							$udtlf = new UserDateTotalListFactory(); 
 							$udtlf->getByUserDateIdAndStatusAndType( $plf->getCurrent()->getPunchControlObject()->getUserDateID(), 10, array(100,110) );
 							if ( $udtlf->getRecordCount() > 0 ) {
-								foreach( $udtlf as $udt_obj ) {
+								foreach( $udtlf->rs as $udt_obj ) {
+									$udtlf->data = (array)$udt_obj;
+									$udt_obj = $udtlf;
 									$meal_and_break_adjustment += $udt_obj->getTotalTime();
 								}
 								Debug::text('Meal and Break Adjustment: '. $meal_and_break_adjustment .' Records: '. $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -917,7 +929,9 @@ class PunchFactory extends Factory {
 		$slf->getByUserIdAndStartDateAndEndDate( $user_id, ($epoch-43200), ($epoch+43200) );
 		if ( $slf->getRecordCount() > 0 ) {
 			//Check for schedule policy
-			foreach ( $slf as $s_obj ) {
+			foreach ( $slf->rs as $s_obj ) {
+				$slf->data = (array)$s_obj;
+				$s_obj = $slf;
 				Debug::text(' Checking Schedule ID: '. $s_obj->getID(), __FILE__, __LINE__, __METHOD__,10);
 				if ( $s_obj->inSchedule( $epoch ) ) {
 					Debug::text(' Within Start/Stop window. ', __FILE__, __LINE__, __METHOD__,10);
@@ -1116,7 +1130,7 @@ class PunchFactory extends Factory {
 		} else {
 			//Make sure prev punch is a Lunch Out Punch
 			//Check NON-scheduled meal policies
-			$mplf = new MealPolicyListFactory();
+			$mplf = new MealPolicyListFactory(); 
 			$mplf->getByPolicyGroupUserId( $this->getUser() );
 			if ( $mplf->getRecordCount() > 0 ) {
 				$mp_obj = $mplf->getCurrent();
@@ -1186,7 +1200,7 @@ class PunchFactory extends Factory {
 		} else {
 			//Make sure prev punch is a Break Out Punch
 			//Check NON-scheduled break policies
-			$bplf = new BreakPolicyListFactory();
+			$bplf = new BreakPolicyListFactory(); 
 			$bplf->getByPolicyGroupUserId( $this->getUser() );
 			if ( $bplf->getRecordCount() > 0 ) {
 				$bp_objs[] = $bplf->getCurrent();
@@ -1623,7 +1637,7 @@ class PunchFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE ) {
-		$uf = new UserFactory();
+		$uf = new UserFactory(); 
 		$sf = new StationFactory();
 
 		$variable_function_map = $this->getVariableToFunctionMap();

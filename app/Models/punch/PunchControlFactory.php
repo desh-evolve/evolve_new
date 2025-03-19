@@ -2,6 +2,7 @@
 
 namespace App\Models\Punch;
 
+use App\Models\Company\BranchListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,7 +10,13 @@ use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\UserDateFactory;
+use App\Models\Core\UserDateListFactory;
 use App\Models\Core\UserDateTotalFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Policy\MealPolicyListFactory;
 use App\Models\Users\UserListFactory;
 
 class PunchControlFactory extends Factory {
@@ -384,7 +391,7 @@ class PunchControlFactory extends Factory {
 			$id = 0;
 		}
 
-		$dlf = new DepartmentListFactory();
+		$dlf = new DepartmentListFactory(); 
 
 		if (  $id == 0
 				OR
@@ -576,7 +583,7 @@ class PunchControlFactory extends Factory {
 			$id = NULL;
 		}
 
-		$mplf = new MealPolicyListFactory();
+		$mplf = new MealPolicyListFactory(); 
 
 		if ( $id == NULL
 				OR
@@ -753,7 +760,9 @@ class PunchControlFactory extends Factory {
 				Debug::text(' Found Punches to calculate.', __FILE__, __LINE__, __METHOD__,10);
 				$in_pair = FALSE;
 				$schedule_obj = NULL;
-				foreach( $plf as $punch_obj ) {
+				foreach( $plf->rs as $punch_obj ) {
+					$plf->data = (array)$punch_obj;
+					$punch_obj = $plf;
 					//Check for proper in/out pairs
 					//First row should be an Out status (reverse ordering)
 					Debug::text(' Punch: Status: '. $punch_obj->getStatus() .' TimeStamp: '. $punch_obj->getTimeStamp(), __FILE__, __LINE__, __METHOD__,10);
@@ -1229,12 +1238,14 @@ class PunchControlFactory extends Factory {
 		if ( is_object( $this->getPayPeriodScheduleObject() )
 				AND $this->getPayPeriodScheduleObject()->getTimeSheetVerifyType() != 10 ) {
 			//Find out if timesheet is verified or not.
-			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
+			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory(); 
 			$pptsvlf->getByPayPeriodIdAndUserId( $this->getUserDateObject()->getPayPeriod(), $this->getUser() );
 			if ( $pptsvlf->getRecordCount() > 0 ) {
 				//Pay period is veriferied, delete all records and make log entry.
 				Debug::text('Pay Period is verified, deleting verification records: '. $pptsvlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-				foreach( $pptsvlf as $pptsv_obj ) {
+				foreach( $pptsvlf->rs as $pptsv_obj ) {
+					$pptsvlf->data = (array)$pptsv_obj;
+					$pptsv_obj = $pptsvlf;
 					if ( is_object( $this->getPunchObject() ) ) {
 						TTLog::addEntry( $pptsv_obj->getId(), 500,  ('TimeSheet Modified After Verification').': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. ('Punch').': '. TTDate::getDate('DATE+TIME', $this->getPunchObject()->getTimeStamp() ) , NULL, $pptsvlf->getTable() );
 					}
@@ -1298,12 +1309,14 @@ class PunchControlFactory extends Factory {
 
 			//Add a row to the user date total table, as "worked" hours.
 			//Edit if it already exists and is not set as override.
-			$udtlf = new UserDateTotalListFactory();
+			$udtlf = new UserDateTotalListFactory(); 
 			$udtlf->getByUserDateIdAndPunchControlId( $this->getUserDateID(), $this->getId() );
 			Debug::text(' Checking for Conflicting User Date Total Records, count: '. $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 			if ( $udtlf->getRecordCount() > 0 ) {
 				Debug::text(' Found Conflicting User Date Total Records, removing them before re-calc', __FILE__, __LINE__, __METHOD__,10);
-				foreach($udtlf as $udt_obj) {
+				foreach($udtlf->rs as $udt_obj) {
+					$udtlf->data = (array)$udt_obj;
+					$udt_obj = $udtlf;
 					if ( $udt_obj->getOverride() == FALSE ) {
 						Debug::text(' bFound Conflicting User Date Total Records, removing them before re-calc', __FILE__, __LINE__, __METHOD__,10);
 						$udt_obj->Delete();
@@ -1581,7 +1594,9 @@ class PunchControlFactory extends Factory {
 				$new_punch_control_id = (int)$pclf->getNextInsertId();
 				Debug::text(' Punch Control ID: '. $punch_control_id .' only has two punches assigned, splitting... New Punch Control ID: '. $new_punch_control_id, __FILE__, __LINE__, __METHOD__,10);
 				$i = 0;
-				foreach( $plf as $p_obj ) {
+				foreach( $plf->rs as $p_obj ) {
+					$plf->data = (array)$p_obj;
+					$p_obj = $plf;
 					if ( $i == 0 ) {
 						//First punch (out)
 						//Get the PunchControl Object before we change to the new punch_control_id

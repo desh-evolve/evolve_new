@@ -611,7 +611,9 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 			$sum = 0;
 			Debug::text('Record Count: '. $psalf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
-			foreach($psalf as $psa_obj) {
+			foreach($psalf->rs as $psa_obj) {
+				$psalf->data = (array)$psa_obj;
+				$psa_obj = $psalf;
 				$amount = $psa_obj->getCalculatedAmount();
 				Debug::text('PS Amendment Amount: '. $amount, __FILE__, __LINE__, __METHOD__,10);
 				$sum += $amount;

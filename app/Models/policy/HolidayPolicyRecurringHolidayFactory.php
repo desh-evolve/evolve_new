@@ -4,6 +4,7 @@ namespace App\Models\Policy;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Holiday\RecurringHolidayListFactory;
 
 class HolidayPolicyRecurringHolidayFactory extends Factory {
 	protected $table = 'holiday_policy_recurring_holiday';

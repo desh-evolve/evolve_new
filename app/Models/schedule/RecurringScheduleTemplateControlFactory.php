@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Models\Schedule;
-use App\Models\Core\Factory; 
+
+use App\Models\Company\CompanyListFactory;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTLog;
 
 class RecurringScheduleTemplateControlFactory extends Factory {
 	protected $table = 'recurring_schedule_template_control';

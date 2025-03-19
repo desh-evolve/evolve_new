@@ -2,6 +2,17 @@
 
 namespace App\Models\Report;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\OtherFieldListFactory;
+use App\Models\Core\StationListFactory;
+use App\Models\Core\TTDate;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Users\UserListFactory;
+
 class PunchSummaryReport extends Report {
 
 	function __construct() {
@@ -76,7 +87,7 @@ class PunchSummaryReport extends Report {
 				break;
 			case 'custom_columns':
 				//Get custom fields for report data.
-				$oflf = new OtherFieldListFactory();
+				$oflf = new OtherFieldListFactory(); 
 				//User and Punch fields conflict as they are merged together in a secondary process.
 				$other_field_names = $oflf->getByCompanyIdAndTypeIdArray( $this->getUserObject()->getCompany(), array(15,20,30), array( 15 => '', 20 => 'job_', 30 => 'job_item_') );
 				if ( is_array($other_field_names) ) {
@@ -579,7 +590,7 @@ class PunchSummaryReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('punch','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-			$hlf = new HierarchyListFactory();
+			$hlf = new HierarchyListFactory(); 
 			$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			//Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -612,7 +623,7 @@ class PunchSummaryReport extends Report {
 		//Debug::Arr($permission_children_ids, 'Permission Children: '. count($permission_children_ids), __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($wage_permission_children_ids, 'Wage Children: '. count($wage_permission_children_ids), __FILE__, __LINE__, __METHOD__,10);
 
-		$slf = new StationListFactory();
+		$slf = new StationListFactory(); 
 		$station_type_options = $slf->getOptions('type');
 
 		if ( $this->getUserObject()->getCompanyObject()->getProductEdition() == 20 ) {
@@ -624,14 +635,16 @@ class PunchSummaryReport extends Report {
 
 		$pay_period_ids = array();
 
-		$plf = new PunchListFactory();
+		$plf = new PunchListFactory(); 
 		$punch_type_options = $plf->getOptions('type');
 
 		$plf->getPunchSummaryReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Total Rows: '. $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $plf->getRecordCount(), NULL, ('Retrieving Data...') );
 		if ( $plf->getRecordCount() > 0 ) {
-			foreach ( $plf as $key => $p_obj ) {
+			foreach ( $plf->rs as $key => $p_obj ) {
+				$plf->data = (array)$p_obj;
+				$p_obj = $plf;
 				$pay_period_ids[$p_obj->getColumn('pay_period_id')] = TRUE;
 
 				if ( !isset($this->tmp_data['punch'][$p_obj->getColumn('user_id')][$p_obj->getColumn('punch_control_id')]) ) {
@@ -735,11 +748,13 @@ class PunchSummaryReport extends Report {
 		//Debug::Arr($this->tmp_data['punch'], 'Punch Raw Data: ', __FILE__, __LINE__, __METHOD__,10);
 
 		//Get user data for joining.
-		$ulf = new UserListFactory();
+		$ulf = new UserListFactory(); 
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
-		foreach ( $ulf as $key => $u_obj ) {
+		foreach ( $ulf->rs as $key => $u_obj ) {
+			$ulf->data = (array)$u_obj;
+			$u_obj = $ulf;
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
@@ -749,10 +764,12 @@ class PunchSummaryReport extends Report {
 		//Get verified timesheets for all pay periods considered in report.
 		$pay_period_ids = array_keys( $pay_period_ids );
 		if ( isset($pay_period_ids) AND count($pay_period_ids) > 0 ) {
-			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
+			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory(); 
 			$pptsvlf->getByPayPeriodIdAndCompanyId( $pay_period_ids, $this->getUserObject()->getCompany() );
 			if ( $pptsvlf->getRecordCount() > 0 ) {
-				foreach( $pptsvlf as $pptsv_obj ) {
+				foreach( $pptsvlf->rs as $pptsv_obj ) {
+					$pptsvlf->data = (array)$pptsv_obj;
+					$pptsv_obj = $pptsvlf;
 					$this->tmp_data['verified_timesheet'][$pptsv_obj->getUser()][$pptsv_obj->getPayPeriod()] = array(
 																									'status' => $pptsv_obj->getVerificationStatusShortDisplay(),
 																									'created_date' => $pptsv_obj->getCreatedDate(),

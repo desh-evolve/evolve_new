@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Users;
+
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Factory;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
@@ -20,7 +22,7 @@ class BonusDecemberFactory  extends Factory{
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = new CompanyListFactory();
+		$clf = new CompanyListFactory(); 
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),

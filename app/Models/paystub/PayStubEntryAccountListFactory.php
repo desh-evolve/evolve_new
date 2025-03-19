@@ -453,7 +453,9 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 			unset($key, $val);
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $type_options[$obj->getType()] .' - '. $obj->getName();
 		}
 
@@ -478,7 +480,9 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 
 		$type_options  = $this->getOptions('type');
 
-		foreach ($psealf as $entry_name) {
+		foreach ($psealf->rs as $entry_name) {
+			$psealf->data = (array)$entry_name;
+			$entry_name = $psealf;
 			$entry_name_list[$entry_name->getID()] = $type_options[$entry_name->getType()] .' - '. $entry_name->getName();
 		}
 
@@ -508,7 +512,9 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 			unset($key, $val);
 		}
 
-		foreach ($psealf as $entry_name) {
+		foreach ($psealf->rs as $entry_name) {
+			$psealf->data = (array)$entry_name;
+			$entry_name = $psealf;
 			$entry_name_list[$entry_name->getID()] = $type_options[$entry_name->getType()] .' - '. $entry_name->getName();
 		}
 
@@ -529,7 +535,9 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$psea_type_map = $pseallf->getCurrent()->getPayStubEntryAccountIDToTypeIDMap();
 
 		if ( $psealf->getRecordCount() > 0 ) {
-			foreach ($psealf as $psea_obj) {
+			foreach ($psealf->rs as $psea_obj) {
+				$psealf->data = (array)$psea_obj;
+				$psea_obj = $psealf;
 				$entry_name_list[$psea_obj->getType()][] = $psea_obj->getId();
 			}
 

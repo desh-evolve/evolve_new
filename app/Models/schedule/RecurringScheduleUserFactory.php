@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Models\Schedule;
-use App\Models\Core\Factory; 
+use App\Models\Core\Factory;
+use App\Models\Core\TTLog;
+use App\Models\Users\UserListFactory;
 
 class RecurringScheduleUserFactory extends Factory {
 	protected $table = 'recurring_schedule_user';
@@ -43,7 +45,7 @@ class RecurringScheduleUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = new UserListFactory();
+			$ulf = new UserListFactory(); 
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();

@@ -9,6 +9,12 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\Users\UserFactory;
 use App\Models\Users\UserListFactory;
 
 class PayStubAmendmentFactory extends Factory {
@@ -783,7 +789,9 @@ class PayStubAmendmentFactory extends Factory {
 		$psealf->getByCompanyIdAndStatusIdAndTypeId( $user_obj->getCompany(), 10, 50);
 		if ( $psealf->getRecordCount() > 0 ) {
 			$ulf->StartTransaction();
-			foreach( $psealf as $psea_obj ) {
+			foreach( $psealf->rs as $psea_obj ) { 
+				$psealf->data = (array)$psea_obj;
+				$psea_obj = $psealf;
 				//Get PSE account that affects this accrual.
 				//What if there are two accounts? It takes the first one in the list.
 				$psealf_tmp = new PayStubEntryAccountListFactory();
@@ -912,7 +920,7 @@ class PayStubAmendmentFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE ) {
-		$uf = new UserFactory();
+		$uf = new UserFactory(); 
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

@@ -3,11 +3,15 @@
 namespace App\Models\Policy;
 
 use App\Models\Company\CompanyGenericMapFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Schedule\RecurringScheduleTemplateFactory;
+use App\Models\Schedule\ScheduleFactory;
+use Illuminate\Support\Facades\DB;
 
 class SchedulePolicyFactory extends Factory {
 	protected $table = 'schedule_policy';
@@ -309,7 +313,7 @@ class SchedulePolicyFactory extends Factory {
 	function postSave() {
 		if ( $this->getDeleted() == TRUE ) {
 			Debug::Text('UnAssign Schedule Policy from Schedule/Recurring Schedules...'. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
-			$sf = new ScheduleFactory();
+			$sf = new ScheduleFactory(); 
 			$rstf = new RecurringScheduleTemplateFactory();
 
 			$query = 'update '. $sf->getTable() .' set schedule_policy_id = 0 where schedule_policy_id = '. (int)$this->getId();

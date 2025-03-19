@@ -736,32 +736,36 @@ class AbsenceLeaveUserFactory extends Factory {
 	}
         
         function getUser() {
-                        $udlf = new AbsenceLeaveUserEntryListFactory();
-                        $udlf->getByAbsenceUserId( $this->getId() );
-                        foreach ($udlf as $obj) {
-                                $list[$obj->getUserId()] = array('user_id' => $obj->getUserId(),'id'=>$obj->getId());
-                        }
+			$udlf = new AbsenceLeaveUserEntryListFactory();
+			$udlf->getByAbsenceUserId( $this->getId() );
+			foreach ($udlf->rs as $obj) {
+				$udlf->data = (array) $obj;
+				$obj = $udlf;
+				$list[$obj->getUserId()] = array('user_id' => $obj->getUserId(),'id'=>$obj->getId());
+			}
 
-                        if ( isset($list) ) {
-                                return $list;
-                        }
+			if ( isset($list) ) {
+					return $list;
+			}
 
-                        return FALSE;
-                }
+			return FALSE;
+		}
         
         function SetUser() {
-                        $udlf = new AbsenceLeaveUserEntryListFactory();
-                        $udlf->getByAbsenceUserId( $this->getId() );
-                        foreach ($udlf as $obj) {
-                                $list[] = $obj->getUserId();
-                        }
+			$udlf = new AbsenceLeaveUserEntryListFactory();
+			$udlf->getByAbsenceUserId( $this->getId() );
+			foreach ($udlf->rs as $obj) {
+				$udlf->data = (array) $obj;
+				$obj = $udlf;
+				$list[] = $obj->getUserId();
+			}
 
-                        if ( isset($list) ) {
-                                return $list;
-                        }
+			if ( isset($list) ) {
+					return $list;
+			}
 
-                        return FALSE;
-                }
+			return FALSE;
+		}
         
 	function getLengthServiceToSec( $lngt, $l_unit ) {
             $retVal = null;

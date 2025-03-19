@@ -77,7 +77,9 @@ class PremiumPolicyDepartmentListFactory extends PremiumPolicyDepartmentFactory 
 
 		$ppdlf->getByPremiumPolicyId($id);
 
-		foreach ($ppdlf as $obj) {
+		foreach ($ppdlf->rs as $obj) {
+			$ppdlf->data = (array) $obj;
+			$obj = $ppdlf;
 			$list[$obj->getPremiumPolicy()] = NULL;
 		}
 

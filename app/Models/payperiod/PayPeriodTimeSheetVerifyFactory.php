@@ -2,6 +2,7 @@
 
 namespace App\Models\PayPeriod;
 
+use App\Models\Core\AuthorizationListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -549,7 +550,9 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 		$alf = new AuthorizationListFactory();
 		$alf->getByObjectTypeAndObjectId(90, $this->getId() );
 		if ($alf->getRecordCount() > 0 ) {
-			foreach( $alf as $a_obj ) {
+			foreach( $alf->rs as $a_obj ) {
+				$alf->data = (array) $a_obj;
+				$a_obj = $alf;
 				if ( $a_obj->getAuthorized() == TRUE ) {
 					$retarr[] = $a_obj->getCreatedBy();
 				}
@@ -638,7 +641,9 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 			$alf = new AuthorizationListFactory();
 			$alf->getByObjectTypeAndObjectId( 90, $this->getId() );
 			if ( $alf->getRecordCount() > 0 ) {
-				foreach( $alf as $a_obj ) {
+				foreach( $alf->rs as $a_obj ) {
+					$alf->data = (array) $a_obj;
+					$a_obj = $alf;
 					//Delete the record outright for now, as marking it as deleted causes transaction issues
 					//and it never gets committed.
 					$a_obj->Delete();

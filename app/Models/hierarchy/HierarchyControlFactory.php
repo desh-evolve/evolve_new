@@ -183,7 +183,9 @@ class HierarchyControlFactory extends Factory {
 		$hotlf = new HierarchyObjectTypeListFactory();
 		$hotlf->getByHierarchyControlId( $this->getId() );
 
-		foreach ($hotlf as $object_type) {
+		foreach ($hotlf->rs as $object_type) {
+			$hotlf->data = (array)$object_type;
+			$object_type = $hotlf;
 			$object_type_list[] = $object_type->getObjectType();
 		}
 
@@ -205,7 +207,9 @@ class HierarchyControlFactory extends Factory {
 				$lf_a->getByHierarchyControlId( $this->getId() );
 				Debug::text('Existing Object Type Rows: '. $lf_a->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					//$id = $obj->getId();
 					$id = $obj->getObjectType(); //Need to use object_types rather than row IDs.
 					Debug::text('Hierarchy Object Type ID: '. $obj->getId() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
@@ -250,7 +254,9 @@ class HierarchyControlFactory extends Factory {
 	function getUser() {
 		$hulf = new HierarchyUserListFactory();
 		$hulf->getByHierarchyControlID( $this->getId() );
-		foreach ($hulf as $obj) {
+		foreach ($hulf->rs as $obj) {
+			$hulf->data = (array)$obj;
+			$obj = $hulf;
 			$list[] = $obj->getUser();
 		}
 
@@ -274,7 +280,9 @@ class HierarchyControlFactory extends Factory {
 				$hulf = new HierarchyUserListFactory();
 				$hulf->getByHierarchyControlID( $this->getId() );
 
-				foreach ($hulf as $obj) {
+				foreach ($hulf->rs as $obj) {
+					$hulf->data = (array)$obj;
+					$obj = $hulf;
 					$id = $obj->getUser();
 					Debug::text('HierarchyControl ID: '. $obj->getHierarchyControl() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 

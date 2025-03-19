@@ -2,6 +2,10 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,6 +13,10 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\PayPeriod\PayPeriodFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Users\UserListFactory;
 
 class AccrualPolicyFactory extends Factory {
 	protected $table = 'accrual_policy';
@@ -605,7 +613,9 @@ class AccrualPolicyFactory extends Factory {
 			$worked_time = NULL;
 			$length_of_service_days = NULL;
 
-			foreach( $apmlf as $apm_obj ) {
+			foreach( $apmlf->rs as $apm_obj ) {
+				$apmlf->data = (array)$apm_obj;
+				$apm_obj = $apmlf;
 				if ( $apm_obj->getLengthOfServiceUnit() == 50 ) {
 					Debug::Text('&nbsp;&nbsp;MileStone is in Hours...', __FILE__, __LINE__, __METHOD__,10);
 					//Hour based
@@ -701,7 +711,9 @@ class AccrualPolicyFactory extends Factory {
 		$pglf->getSearchByCompanyIdAndArrayCriteria( $this->getCompany(), array( 'accrual_policy_id' => array( $this->getId() ) ) );
 		if ( $pglf->getRecordCount() > 0 ) {
 			Debug::Text('Found Policy Group...', __FILE__, __LINE__, __METHOD__,10);
-			foreach( $pglf as $pg_obj ) {
+			foreach( $pglf->rs as $pg_obj ) {
+				$pglf->data = (array)$pg_obj;
+				$pg_obj = $pglf;
 				//Get all users assigned to this policy group.
 				$policy_group_users = $pg_obj->getUser();
 				if ( is_array($policy_group_users) AND count($policy_group_users) > 0 ) {
@@ -742,7 +754,9 @@ class AccrualPolicyFactory extends Factory {
 										$pplf = new PayPeriodListFactory();
 										$pplf->getByUserIdAndEndDate( $user_id, ($epoch-$offset) );
 										if ( $pplf->getRecordCount() > 0 ) {
-											foreach( $pplf as $pp_obj ) {
+											foreach( $pplf->rs as $pp_obj ) {
+												$pplf->data = (array)$pp_obj;
+												$pp_obj = $pplf;
 												Debug::Text('&nbsp;&nbsp;Pay Period End Date: '. TTDate::getDate('DATE+TIME', $pp_obj->getEndDate() ), __FILE__, __LINE__, __METHOD__,10);
 												if ( $this->inApplyFrequencyWindow( $epoch, $offset, $pp_obj->getEndDate() ) == TRUE ) {
 													$in_apply_frequency_window = TRUE;
@@ -785,7 +799,7 @@ class AccrualPolicyFactory extends Factory {
 
 										//Check to make sure there isn't an identical entry already made.
 										//Ignore rollover adjustment is another adjustment of any amount has been made on the same day.
-										$alf = new AccrualListFactory();
+										$alf = new AccrualListFactory(); 
 										$alf->getByCompanyIdAndUserIdAndAccrualPolicyIDAndTypeIDAndTimeStamp( $u_obj->getCompany(), $user_id, $this->getId(), 60, TTDate::getMiddleDayEpoch( $epoch ) );
 										if ( $alf->getRecordCount() == 0 ) {
 
@@ -797,7 +811,7 @@ class AccrualPolicyFactory extends Factory {
 											}
 
 											//Round to nearest 1min
-											$af = new AccrualFactory();
+											$af = new AccrualFactory(); 
 											$af->setUser( $user_id );
 											$af->setType( 60 ); //Rollover Adjustment
 											$af->setAccrualPolicyID( $this->getId() );

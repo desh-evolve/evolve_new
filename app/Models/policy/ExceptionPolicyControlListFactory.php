@@ -203,7 +203,9 @@ class ExceptionPolicyControlListFactory extends ExceptionPolicyControlFactory im
 			$list[0] = '--';
 		}
 
-		foreach ($epclf as $epc_obj) {
+		foreach ($epclf->rs as $epc_obj) {
+			$epclf->data = (array)$epc_obj;
+			$epc_obj = $epclf;
 			$list[$epc_obj->getID()] = $epc_obj->getName();
 		}
 

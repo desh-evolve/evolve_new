@@ -223,7 +223,9 @@ class UserGenericDataFactory extends Factory {
 				$ugdlf->getByUserIdAndScriptAndDefault( $this->getUser(), $this->getScript(), TRUE );
 			}
 			if ( $ugdlf->getRecordCount() > 0 ) {
-				foreach( $ugdlf as $ugd_obj ) {
+				foreach( $ugdlf->rs as $ugd_obj ) {
+					$ugdlf->data = (array)$ugd_obj;
+					$ugd_obj = $ugdlf;
 					Debug::Text('Removing Default Flag From: '. $ugd_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 					$ugd_obj->setDefault(FALSE);
 					if ( $ugd_obj->isValid() ) {

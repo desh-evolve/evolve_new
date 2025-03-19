@@ -2,11 +2,13 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class BankAccountFactory extends Factory {
 	protected $table = 'bank_account';

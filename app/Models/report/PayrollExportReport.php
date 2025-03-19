@@ -2,6 +2,14 @@
 
 namespace App\Models\Report;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\OtherFieldListFactory;
+use App\Models\Core\TTDate;
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\OverTimePolicyListFactory;
+use App\Models\Policy\PremiumPolicyListFactory;
+
 class PayrollExportReport extends TimesheetSummaryReport {
 
 	function __construct() {
@@ -53,7 +61,9 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				$otplf = new OverTimePolicyListFactory();
 				$otplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $otplf->getRecordCount() > 0 ) {
-					foreach ($otplf as $otp_obj ) {
+					foreach ($otplf->rs as $otp_obj ) {
+						$otplf->data = (array)$otp_obj;
+						$otp_obj = $otplf;
 						$otp_columns['-0020-over_time_policy-'.$otp_obj->getId()] = ('Overtime').': '.$otp_obj->getName();
 					}
 
@@ -64,7 +74,9 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				$pplf = new PremiumPolicyListFactory();
 				$pplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $pplf->getRecordCount() > 0 ) {
-					foreach ($pplf as $pp_obj ) {
+					foreach ($pplf->rs as $pp_obj ) {
+						$pplf->data = (array)$pp_obj;
+						$pp_obj = $pplf;
 						$pp_columns['-0030-premium_policy-'.$pp_obj->getId()] = ('Premium').': '.$pp_obj->getName();
 					}
 
@@ -76,7 +88,9 @@ class PayrollExportReport extends TimesheetSummaryReport {
 				$aplf = new AbsencePolicyListFactory();
 				$aplf->getByCompanyId( $this->getUserObject()->getCompany() );
 				if ( $aplf->getRecordCount() > 0 ) {
-					foreach ($aplf as $ap_obj ) {
+					foreach ($aplf->rs as $ap_obj ) {
+						$aplf->data = (array)$ap_obj;
+						$ap_obj = $aplf;
 						$ap_columns['-0040-absence_policy-'.$ap_obj->getId()] = ('Absence').': '.$ap_obj->getName();
 					}
 

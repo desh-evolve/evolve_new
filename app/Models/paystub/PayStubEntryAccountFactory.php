@@ -945,7 +945,9 @@ class PayStubEntryAccountFactory extends Factory {
 			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getByCompanyIdAndTypeId( $this->getCompany(), 40 );
 			if ( $psealf->getRecordCount() > 0 ) {
-				foreach( $psealf as $psea_obj ) {
+				foreach( $psealf->rs as $psea_obj ) {
+					$psealf->data = (array)$psea_obj;
+					$psea_obj = $psealf;
 					$psea_map[$psea_obj->getId()] = $psea_obj->getOrder();
 				}
 				unset($psea_obj);

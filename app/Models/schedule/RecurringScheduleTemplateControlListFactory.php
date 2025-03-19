@@ -1,6 +1,10 @@
 <?php
 
-namespace App\Models\Schedule; 
+namespace App\Models\Schedule;
+
+use App\Models\Core\Misc;
+use App\Models\Users\UserFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTemplateControlFactory implements IteratorAggregate {
@@ -117,7 +121,9 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 			$list[0] = '--';
 		}
 
-		foreach ($rstclf as $obj) {
+		foreach ($rstclf->rs as $obj) {
+			$rstclf->data = (array)$obj;
+			$obj = $rstclf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 
@@ -219,7 +225,7 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 		//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 
-		$uf = new UserFactory();
+		$uf = new UserFactory(); 
 
 		$ph = array(
 					'company_id' => $company_id,

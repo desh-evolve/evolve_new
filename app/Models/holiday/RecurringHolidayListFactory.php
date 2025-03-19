@@ -213,7 +213,9 @@ class RecurringHolidayListFactory extends RecurringHolidayFactory implements Ite
 			$list[0] = '--';
 		}
 
-		foreach ($rhlf as $rh_obj) {
+		foreach ($rhlf->rs as $rh_obj) {
+			$rhlf->data = (array) $rh_obj;
+			$rh_obj = $rhlf;
 			$list[$rh_obj->getID()] = $rh_obj->getName();
 		}
 

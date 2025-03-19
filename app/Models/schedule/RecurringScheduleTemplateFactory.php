@@ -1,7 +1,16 @@
 <?php
 
 namespace App\Models\Schedule;
-use App\Models\Core\Factory; 
+
+use App\Models\Company\BranchListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTLog;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Policy\AbsencePolicyFactory;
+use App\Models\Policy\SchedulePolicyListFactory;
 
 class RecurringScheduleTemplateFactory extends Factory {
 	protected $table = 'recurring_schedule_template';
@@ -106,7 +115,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 		if ( is_object($this->schedule_policy_obj) ) {
 			return $this->schedule_policy_obj;
 		} else {
-			$splf = new SchedulePolicyListFactory();
+			$splf = new SchedulePolicyListFactory(); 
 			$splf->getById( $this->getSchedulePolicyID() );
 			if ( $splf->getRecordCount() > 0 ) {
 				$this->schedule_policy_obj = $splf->getCurrent();
@@ -400,7 +409,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 	function setDepartment($id) {
 		$id = trim($id);
 
-		$dlf = new DepartmentListFactory();
+		$dlf = new DepartmentListFactory(); 
 
 		//-1 is for user default department.
 		if (  $id == 0 OR $id == -1
@@ -508,7 +517,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 		$start_date_week = TTDate::getBeginWeekEpoch( $recurring_schedule_control_start_date, 0 ); //Start week on Sunday to match Recurring Schedule.
 		//Debug::text('Week of Start Date: '. $start_date_week ,__FILE__, __LINE__, __METHOD__, 10);
 
-		$apf = new AbsencePolicyFactory();
+		$apf = new AbsencePolicyFactory(); 
 		$absence_policy_paid_type_options = $apf->getOptions('paid_type');
 
 		for ( $i=$start_date; $i <= $end_date; $i+=(86400+43200)) {

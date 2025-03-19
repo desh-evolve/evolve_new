@@ -10,6 +10,7 @@ use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\TTMail;
+use App\Models\Users\UserPreferenceListFactory;
 
 class MessageControlFactory extends Factory {
 	protected $table = 'message_control';
@@ -466,7 +467,9 @@ class MessageControlFactory extends Factory {
 		$mrlf = new MessageRecipientListFactory();
 		$mrlf->getByCompanyIdAndUserIdAndMessageSenderIdAndStatus( $company_id, $user_id, $ids, 10 );
 		if ( $mrlf->getRecordCount() > 0 ) {
-			foreach( $mrlf as $mr_obj ) {
+			foreach( $mrlf->rs as $mr_obj ) {
+				$mrlf->data = (array)$mr_obj;
+				$mr_obj = $mrlf;
 				$mr_obj->setStatus( 20 ); //Read
 				$mr_obj->Save();
 			}
@@ -481,10 +484,12 @@ class MessageControlFactory extends Factory {
 			//Get user preferences and determine if they accept email notifications.
 			Debug::Arr($user_ids, 'Recipient User Ids: ', __FILE__, __LINE__, __METHOD__,10);
 
-			$uplf = new UserPreferenceListFactory();
+			$uplf = new UserPreferenceListFactory(); 
 			$uplf->getByUserId( $user_ids );
 			if ( $uplf->getRecordCount() > 0 ) {
-				foreach( $uplf as $up_obj ) {
+				foreach( $uplf->rs as $up_obj ) {
+					$uplf->data = (array)$up_obj;
+					$up_obj = $uplf;
 					if ( $up_obj->getEnableEmailNotificationMessage() == TRUE AND $up_obj->getUserObject()->getStatus() == 10 ) {
 						if ( $up_obj->getUserObject()->getWorkEmail() != '' ) {
 							$retarr[] = $up_obj->getUserObject()->getWorkEmail();

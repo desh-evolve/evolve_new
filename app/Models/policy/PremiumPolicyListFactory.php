@@ -321,7 +321,9 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 			$list[0] = '--';
 		}
 
-		foreach ($pplf as $pp_obj) {
+		foreach ($pplf->rs as $pp_obj) {
+			$pplf->data = (array)$pp_obj;
+			$pp_obj = $pplf;
 			$list[$pp_obj->getID()] = $pp_obj->getName();
 		}
 

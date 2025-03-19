@@ -2,6 +2,14 @@
 
 namespace App\Models\Report;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Users\UserListFactory;
+
 class ScheduleSummaryReport extends Report {
 
 	function __construct() {
@@ -499,7 +507,7 @@ class ScheduleSummaryReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('schedule','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-			$hlf = new HierarchyListFactory();
+			$hlf = new HierarchyListFactory(); 
 			$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -541,12 +549,14 @@ class ScheduleSummaryReport extends Report {
 
 		$pay_period_ids = array();
 
-		$slf = new ScheduleListFactory();
+		$slf = new ScheduleListFactory(); 
 		$slf->getScheduleSummaryReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' Total Rows: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, ('Retrieving Data...') );
 		if ( $slf->getRecordCount() > 0 ) {
-			foreach ( $slf as $key => $s_obj ) {
+			foreach ( $slf->rs as $key => $s_obj ) {
+				$slf->data = (array)$s_obj;
+				$s_obj = $slf;
 				$hourly_rate = 0;
 				if ( $wage_permission_children_ids === TRUE OR in_array( $s_obj->getColumn('user_id'), $wage_permission_children_ids) ) {
 					$hourly_rate = $s_obj->getColumn( 'user_wage_hourly_rate' );
@@ -611,7 +621,9 @@ class ScheduleSummaryReport extends Report {
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
-		foreach ( $ulf as $key => $u_obj ) {
+		foreach ( $ulf->rs as $key => $u_obj ) {
+			$ulf->data = (array)$u_obj;
+			$u_obj = $ulf;
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 
 			//$this->tmp_data['user'][$u_obj->getId()]['total_shift'] = 1;
