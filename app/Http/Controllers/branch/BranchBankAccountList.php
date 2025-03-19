@@ -62,7 +62,6 @@ class BranchBankAccountList extends Controller
 			'sort_column' => $sort_column,
 			'sort_order' => $sort_order,
 			'page' => $page,
-			'id' => $id
 		]);
 		$id = $request->id;
 
@@ -73,7 +72,7 @@ class BranchBankAccountList extends Controller
 
 		$bbalf = new BranchBankAccountListFactory();
 		// dd($current_user_prefs);
-		$bbalf->getByBranchId($id, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
+		$bbalf->getByBranchId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
 
 		$pager = new Pager($bbalf);
 

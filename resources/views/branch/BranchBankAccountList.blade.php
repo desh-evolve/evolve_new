@@ -12,7 +12,9 @@
                     </div>
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button" href="/bank_account/add" class="btn btn-primary waves-effect waves-light material-shadow-none me-1" id="add_new_btn">New Bank Account <i class="ri-add-line"></i></a>
+                            <a type="button" href="/bank_account/add"
+                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
+                                id="add_new_btn">New Bank Account <i class="ri-add-line"></i></a>
                         </div>
                     </div>
                 </div>
@@ -32,9 +34,13 @@
                         <tbody id="table_body">
                             @foreach ($bankAccounts as $index => $bankAccount)
                                 @php
-                                    $row_class = isset($bankAccount['deleted']) && $bankAccount['deleted'] || isset($bankAccount['status_id']) && $bankAccount['status_id'] == 20
-                                        ? 'table-danger'
-                                        : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
+                                    $row_class =
+                                        (isset($bankAccount['deleted']) && $bankAccount['deleted']) ||
+                                        (isset($bankAccount['status_id']) && $bankAccount['status_id'] == 20)
+                                            ? 'table-danger'
+                                            : ($loop->iteration % 2 == 0
+                                                ? 'table-light'
+                                                : 'table-white');
                                 @endphp
                                 <tr class="{{ $row_class }}">
                                     <td>{{ $loop->iteration }}</td>
@@ -43,13 +49,23 @@
                                     <td>{{ $bankAccount['bank_branch'] ?? '' }}</td>
                                     <td>{{ $bankAccount['account'] ?? '' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch_bank.add', ['id' => $bankAccount['id'] ?? '']) }}'">{{ __('Edit') }}</button>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteBankAccount({{ $bankAccount['id'] }})">{{ __('Delete') }}</button>
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                            onclick="window.location.href='{{ route('branch_bank.add', ['id' => $bankAccount['id'] ?? '']) }}'">{{ __('Edit') }}</button>
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="deleteBankAccount({{ $bankAccount['id'] }})">{{ __('Delete') }}</button>
+                                        {{-- <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="submitBankAccount({{ $bankAccount['id'] }})">{{ __('Edit') }}</button> --}}
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch_bank.add', ['id' => $bankAccount['id'] ?? '']) }}'">
+                                                {{ __('Edit') }}
+                                            </button>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <button type="button" class="btn btn-danger btn-sm"
+                        onclick="addBankAccount()">{{ __('Add') }}</button>
+
                 </div>
             </div>
         </div>
@@ -79,5 +95,98 @@
                 }
             }
         }
+
+        // async function submitBankAccount(bankAccountId) {
+        //     if (confirm('Are you sure you want to Update this item?')) {
+        //         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        //         try {
+        //             dataList = [
+
+        //             let id = bankAccountId;
+        //             let company_id = '';
+        //             let user_id = '';
+        //             let branch_id_new = '';
+        //             let branch_id_saved = '1';
+        //         ]
+        //             const response = await fetch(`/bank_account/add/${dataList}`, {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': token,
+        //                     'Content-Type': 'application/json'
+        //                 }
+        //             });
+        //             const data = await response.json();
+        //             if (response.ok) {
+        //                 alert(data.success);
+        //                 window.location.reload();
+        //             } else {
+        //                 console.error(`Error deleting item ID ${bankAccountId}:`, data.error);
+        //             }
+        //         } catch (error) {
+        //             console.error(`Error deleting item ID ${bankAccountId}:`, error);
+        //         }
+        //     }
+        // }
+        // async function submitBankAccount(bankAccountId) {
+        //     if (confirm('Are you sure you want to update this item?')) {
+        //         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        //         try {
+        //             // Creating an object with bank account details
+        //             let data = {
+        //                 id: bankAccountId,
+        //                 company_id: '1',
+        //                 user_id: '',
+        //                 branch_id_new: '',
+        //                 branch_id_saved: '1',
+        //                 _token: token // Laravel expects CSRF token in the body
+        //             };
+
+        //             const response = await fetch(`/branch_bank/add`, { // Fixed route
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify(data) // Send data in JSON format
+        //             });
+
+        //             const result = await response.json();
+        //             if (response.ok) {
+        //                 alert(result.success);
+        //                 window.location.reload();
+        //             } else {
+        //                 alert('Error: ' + result.error);
+        //                 console.error(`Error updating item ID ${bankAccountId}:`, result.error);
+        //             }
+        //         } catch (error) {
+        //             console.error(`Error updating item ID ${bankAccountId}:`, error);
+        //         }
+        //     }
+        // }
+
+
+        // async function addBankAccount() {
+        //     if (confirm('Are you sure you want to delete this item?')) {
+        //         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        //         try {
+        //             const response = await fetch(`/bank_account/add`, {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': token,
+        //                     'Content-Type': 'application/json'
+        //                 }
+        //             });
+        //             const data = await response.json();
+        //             if (response.ok) {
+        //                 alert(data.success);
+        //                 window.location.reload();
+        //             } else {
+        //                 console.error(`Error deleting item ID ${bankAccountId}:`, data.error);
+        //             }
+        //         } catch (error) {
+        //             console.error(`Error deleting item ID ${bankAccountId}:`, error);
+        //         }
+        //     }
+        // }
     </script>
 </x-app-layout>
