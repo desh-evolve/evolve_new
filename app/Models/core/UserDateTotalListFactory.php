@@ -2330,11 +2330,11 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					}
 
 					if ( isset($filter_data['transaction_start_date']) AND trim($filter_data['transaction_start_date']) != '' ) {
-						$ph[':transaction_start_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_start_date'])) );
+						$ph[':transaction_start_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_start_date'])->toDateTimeString()) );
 						$query  .=	' AND c.transaction_date >= :transaction_start_date';
 					}
 					if ( isset($filter_data['transaction_end_date']) AND trim($filter_data['transaction_end_date']) != '' ) {
-						$ph[':transaction_end_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_end_date'])) );
+						$ph[':transaction_end_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_end_date'])->toDateTimeString()) );
 						$query  .=	' AND c.transaction_date <= :transaction_end_date';
 					}
 

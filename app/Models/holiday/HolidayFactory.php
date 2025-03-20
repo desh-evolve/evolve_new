@@ -7,6 +7,7 @@ use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTLog;
+use Carbon\Carbon;
 
 class HolidayFactory extends Factory {
 	protected $table = 'holidays';
@@ -116,7 +117,7 @@ class HolidayFactory extends Factory {
 	function isUniqueDateStamp($date_stamp) {
 		$ph = array(
 					'policy_id' => $this->getHolidayPolicyID(),
-					'date_stamp' => $this->db->BindDate( $date_stamp ),
+					'date_stamp' => Carbon::parse( $date_stamp )->toDateString(),
 					);
 
 		$query = 'select id from '. $this->getTable() .'
@@ -190,10 +191,10 @@ class HolidayFactory extends Factory {
 		$ph = array(
 					'policy_id' => $this->getHolidayPolicyID(),
 					'name' => $name,
-					'start_date1' => $this->db->BindDate( TTDate::getBeginYearEpoch( $this->getDateStamp() )+(86400*3) ),
-					'end_date1' => $this->db->BindDate( TTDate::getEndYearEpoch( $this->getDateStamp() ) ),
-					'start_date2' => $this->db->BindDate( $this->getDateStamp()-(86400*15) ),
-					'end_date2' => $this->db->BindDate( $this->getDateStamp()+(86400*15) ),
+					'start_date1' => Carbon::parse( TTDate::getBeginYearEpoch( $this->getDateStamp()->toDateString() )+(86400*3) ),
+					'end_date1' => Carbon::parse( TTDate::getEndYearEpoch( $this->getDateStamp()->toDateString() ) ),
+					'start_date2' => Carbon::parse( $this->getDateStamp()->toDateString()-(86400*15) ),
+					'end_date2' => Carbon::parse( $this->getDateStamp()->toDateString()+(86400*15) ),
 					);
 
 		$query = 'select id from '. $this->getTable() .'

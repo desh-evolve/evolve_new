@@ -319,7 +319,9 @@ class UserReportDataFactory extends Factory {
 				$urdlf->getByUserIdAndScriptAndDefault( $this->getUser(), $this->getScript(), TRUE );
 			}
 			if ( $urdlf->getRecordCount() > 0 ) {
-				foreach( $urdlf as $urd_obj ) {
+				foreach( $urdlf->rs as $urd_obj ) {
+					$urdlf->data = (array)$urd_obj;
+					$urd_obj = $urdlf;
 					Debug::Text('Removing Default Flag From: '. $urd_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 					$urd_obj->setDefault(FALSE);
 					if ( $urd_obj->isValid() ) {

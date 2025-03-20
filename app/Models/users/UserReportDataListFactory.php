@@ -183,7 +183,9 @@ class UserReportDataListFactory extends UserReportDataFactory implements Iterato
 			$list[0] = '--';
 		}
 
-		foreach ($ugdlf as $ugd_obj) {
+		foreach ($ugdlf->rs as $ugd_obj) {
+			$ugdlf->data = (array)$ugd_obj;
+			$ugd_obj = $ugdlf;
 			if ( $ugd_obj->getDefault() == TRUE ) {
 				$default = ' (Default)';
 			} else {
@@ -414,7 +416,9 @@ class UserReportDataListFactory extends UserReportDataFactory implements Iterato
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 
@@ -434,7 +438,9 @@ class UserReportDataListFactory extends UserReportDataFactory implements Iterato
 			$list[0] = '--';
 		}
 
-		foreach ($ugdlf as $ugd_obj) {
+		foreach ($ugdlf->rs as $ugd_obj) {
+			$ugdlf->data = (array)$ugd_obj;
+			$ugd_obj = $ugdlf;
 			if ( $ugd_obj->getDefault() == TRUE ) {
 				$default = ' (Default)';
 			} else {

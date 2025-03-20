@@ -32,13 +32,13 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -60,15 +60,15 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-                                        'bonus_attendance_id' =>$bonus_attendance_id,
-					);
+					':user_id' => $user_id,
+                    ':bonus_attendance_id' =>$bonus_attendance_id,
+				);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ? 
-                                                AND bonus_attendance_id = ? 
+					where	user_id = :user_id
+                        AND bonus_attendance_id = :bonus_attendance_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -87,14 +87,13 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 		}
 
 		$ph = array(
-					
-                                        'bonus_attendance_id' =>$bonus_attendance_id,
-					);
+				':bonus_attendance_id' =>$bonus_attendance_id,
+			);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	bonus_attendance_id = ? 
+					where	bonus_attendance_id = :bonus_attendance_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

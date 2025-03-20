@@ -599,7 +599,9 @@ class UserWageFactory extends Factory {
                 $udlf = new UserDeductionListFactory();
                 $udlf->getByUserIdAndCompanyDeductionId($this->getUser(), 3);
                 if($udlf->getRecordCount()>0){
-                    foreach ($udlf as $udlf_obj){
+                    foreach ($udlf->rs as $udlf_obj){
+						$udlf->data = (array)$udlf_obj;
+						$udlf_obj = $udlf;
                         $budgetary_allowance = $udlf_obj->getUserValue1();
                     }
                 }
