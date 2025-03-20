@@ -40,7 +40,8 @@ class BreadCrumb {
 						AND name = :name
 					LIMIT 1';
 		try {
-			$rs = $db->Execute($query, $ph);
+			// $rs = $db->Execute($query, $ph);
+            $rs = DB::select($query, $ph);
 		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
@@ -75,7 +76,8 @@ class BreadCrumb {
 								)';
 		}
 		try {
-			$db->Execute($query, $ph);
+			// $db->Execute($query, $ph);
+            DB::statement($query, $ph);
 		} catch (Throwable $e) {
 			throw new DBError($e);
 		}
@@ -99,7 +101,7 @@ class BreadCrumb {
 		//Debug::text('Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 
 		try {
-			$rs = DB::select($query, $ph);
+			$rs = $db->Execute($query, $ph);
 		} catch (Throwable $e) {
 			throw new DBError($e);
 			$rs = [];

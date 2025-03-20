@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use App\Models\Company\CompanyListFactory;
+use Illuminate\Support\Facades\DB;
 
 class OtherFieldFactory extends Factory {
 	protected $table = 'other_field';
@@ -133,15 +134,22 @@ class OtherFieldFactory extends Factory {
 
 	function isUniqueType($type) {
 		$ph = array(
-					'company_id' => (int)$this->getCompany(),
-					'type_id' => (int)$type,
+					':company_id' => (int)$this->getCompany(),
+					':type_id' => (int)$type,
 					);
 
 		$query = 'select id from '. $this->getTable() .'
-					where company_id = ?
-						AND type_id = ?
+					where company_id = :company_id
+						AND type_id = :type_id
 						AND deleted = 0';
-		$type_id = $this->db->GetOne($query, $ph);
+		// $type_id = $this->db->GetOne($query, $ph);
+        $type_id = DB::select($query, $ph);
+        if ($type_id === FALSE ) {
+            $type_id = 0;
+        }else{
+            $type_id = current(get_object_vars($type_id[0]));
+        }
+
 		Debug::Arr($type_id,'Unique Type: '. $type, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $type_id === FALSE ) {

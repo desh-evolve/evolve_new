@@ -164,9 +164,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 			return FALSE;
 		}
 
-		$uf = new UserFactory(); 
+		$uf = new UserFactory();
 		$udf = new UserDateFactory();
-		$epf = new ExceptionPolicyFactory(); 
+		$epf = new ExceptionPolicyFactory();
 
 		$ph = array(
 					':company_id' => $company_id,
@@ -191,7 +191,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 						AND b.date_stamp <= :end_date
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					ORDER BY b.date_stamp asc, d.type_id
-					'; 
+					';
 
 		$this->rs = DB::select($query, $ph);
 
@@ -210,8 +210,8 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$uf = new UserFactory();
 		$udf = new UserDateFactory();
 		$epf = new ExceptionPolicyFactory();
-		$ppf = new PayPeriodFactory(); 
-		$rf = new RequestFactory(); 
+		$ppf = new PayPeriodFactory();
+		$rf = new RequestFactory();
 /*
 							b.date_stamp as user_date_stamp,
 							d.severity_id as severity_id,
@@ -288,7 +288,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					';
 
 		$this->rs = DB::select($query, $ph);
-		
+
 		return $this;
 	}
 
@@ -504,9 +504,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		$uf = new UserFactory();
 		$udf = new UserDateFactory();
 
-		$pguf = new PolicyGroupUserFactory(); 
-		$pgf = new PolicyGroupFactory(); 
-		$epcf = new ExceptionPolicyControlFactory(); 
+		$pguf = new PolicyGroupUserFactory();
+		$pgf = new PolicyGroupFactory();
+		$epcf = new ExceptionPolicyControlFactory();
 
 		//Get total date units
 		switch (strtolower($time_period)) {
@@ -605,11 +605,19 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 					':end_date' => Carbon::parse($end_date)->toDateString(),
 					);
 
-		if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
-			$dow_sql = '(dayofweek( b.date_stamp)-1)';
-		} else {
-			$dow_sql = '(date_part(\'DOW\', b.date_stamp))';
-		}
+		// if ( strncmp($this->db->databaseType,'mysql',5) == 0 ) {
+		// 	$dow_sql = '(dayofweek( b.date_stamp)-1)';
+		// } else {
+		// 	$dow_sql = '(date_part(\'DOW\', b.date_stamp))';
+		// }
+
+
+        if (DB::connection()->getDriverName() == 'mysql') {
+            $dow_sql = DB::raw('DAYOFWEEK(b.date_stamp) - 1');
+        } else {
+            $dow_sql = DB::raw("DATE_PART('DOW', b.date_stamp)");
+        }
+
 
 		$query = '
 						select 	b.user_id,
@@ -750,9 +758,9 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 		$udf = new UserDateFactory();
 		$uf = new UserFactory();
-		$bf = new BranchFactory(); 
-		$df = new DepartmentFactory(); 
-		$ugf = new UserGroupFactory(); 
+		$bf = new BranchFactory();
+		$df = new DepartmentFactory();
+		$ugf = new UserGroupFactory();
 		$utf = new UserTitleFactory();
 		$ppf = new PayPeriodFactory();
 		$epf = new ExceptionPolicyFactory();

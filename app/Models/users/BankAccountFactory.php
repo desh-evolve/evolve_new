@@ -125,11 +125,11 @@ class BankAccountFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' =>  (int)$this->getCompany(),
-					'user_id' => (int)$this->getUser(),
+					':company_id' =>  (int)$this->getCompany(),
+					':user_id' => (int)$this->getUser(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND user_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {
@@ -187,16 +187,16 @@ class BankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
+
+
+
         /*
          * ARSP EDIT--> I Hide this code. use this same function and change some codes below
-         * 
+         *
          */
-        
-        
-        
+
+
+
 //	function setTransit($value) {
 //		$value = trim($value);
 //
@@ -219,15 +219,15 @@ class BankAccountFactory extends Factory {
 //
 //		return FALSE;
 //	}
-        
-        
-        
-        
+
+
+
+
         //---------------------------------------------------------------------
-        
+
         /*
-         * ARSP EDIT--> THIS CODE USE TO ADD  THE BANK CODE NOT TRANSIT 
-         * 
+         * ARSP EDIT--> THIS CODE USE TO ADD  THE BANK CODE NOT TRANSIT
+         *
          */
 	function setTransit($value) {
 		$value = trim($value);
@@ -251,12 +251,12 @@ class BankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /*
          * FL ADDED
-         * 
-         */        
+         *
+         */
 	function getBankCode() {
 		if ( isset($this->data['transit']) ) {
 			return $this->data['transit'];
@@ -264,12 +264,12 @@ class BankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-                        
-        
+
+
         /*
          * ARSP EDIT--> I ADD NEW CODE FOR GET BANK NAME
-         * 
-         */        
+         *
+         */
 	function getBankName() {
 		if ( isset($this->data['bank_name']) ) {
 			return $this->data['bank_name'];
@@ -277,11 +277,11 @@ class BankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /*
          * RSP EDIT--> I ADD NEW CODE FOR SET BANK NAME
-         * 
+         *
          */
 	function setBankName($value) {
 		$value = trim($value);
@@ -301,13 +301,13 @@ class BankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
+
+
+
         /*
          * ARSP EDIT--> I ADD NEW CODE FOR GET BANK BRANCH NAME
-         * 
-         */        
+         *
+         */
 	function getBankBranch() {
 		if ( isset($this->data['bank_branch']) ) {
 			return $this->data['bank_branch'];
@@ -315,11 +315,11 @@ class BankAccountFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /*
          * RSP EDIT--> I ADD NEW CODE FOR SET BANK BRANCH NAME
-         * 
+         *
          */
 	function setBankBranch($value) {
 		$value = trim($value);
@@ -338,10 +338,10 @@ class BankAccountFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
-        
-        
+	}
+
+
+
         //---------------------------------------------------------------------
 
 	function getSecureAccount( $value = NULL ) {

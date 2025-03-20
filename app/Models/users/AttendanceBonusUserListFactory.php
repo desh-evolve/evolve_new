@@ -7,7 +7,7 @@ use IteratorAggregate;
 
 class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implements IteratorAggregate {
     //put your code here
-    
+
     function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -47,20 +47,21 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 
 		return $this;
 	}
-        
-    
+
+
    function getByUserIdAndAttendanceBonusId($user_id,$bonus_attendance_id, $where = NULL, $order = NULL) {
 		if ( $user_id == '') {
 			return FALSE;
 		}
-                
-                
+
+
                 if ( $bonus_attendance_id == '') {
 			return FALSE;
 		}
 
 		$ph = array(
 					':user_id' => $user_id,
+
                     ':bonus_attendance_id' =>$bonus_attendance_id,
 				);
 
@@ -68,6 +69,7 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 					select 	*
 					from	'. $this->getTable() .'
 					where	user_id = :user_id
+
                         AND bonus_attendance_id = :bonus_attendance_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -78,15 +80,16 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 		return $this;
 	}
 
-  
+
     function getByBonusAttendanceId($bonus_attendance_id, $where = NULL, $order = NULL) {
-		
-                
+
+
                 if ( $bonus_attendance_id == '') {
 			return FALSE;
 		}
 
 		$ph = array(
+
 				':bonus_attendance_id' =>$bonus_attendance_id,
 			);
 
@@ -103,5 +106,5 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 		return $this;
 	}
 
-        
+
 }
