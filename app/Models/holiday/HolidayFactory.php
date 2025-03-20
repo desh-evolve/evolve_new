@@ -8,6 +8,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTLog;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class HolidayFactory extends Factory {
 	protected $table = 'holidays';
@@ -116,15 +117,21 @@ class HolidayFactory extends Factory {
 
 	function isUniqueDateStamp($date_stamp) {
 		$ph = array(
-					'policy_id' => $this->getHolidayPolicyID(),
-					'date_stamp' => Carbon::parse( $date_stamp )->toDateString(),
+					':policy_id' => $this->getHolidayPolicyID(),
+					':date_stamp' => Carbon::parse( $date_stamp )->toDateString(),
 					);
 
 		$query = 'select id from '. $this->getTable() .'
-					where holiday_policy_id = ?
-						AND date_stamp = ?
+					where holiday_policy_id = :policy_id
+						AND date_stamp = :date_stamp
 						AND deleted=0';
-		$date_stamp_id = $this->db->GetOne($query, $ph);
+		$date_stamp_id = DB::select($query, $ph);
+        if ($date_stamp_id === FALSE ) {
+            $date_stamp_id = 0;
+        }else{
+            $date_stamp_id = current(get_object_vars($date_stamp_id[0]));
+        }
+
 		Debug::Arr($date_stamp_id,'Unique Date Stamp: '. $date_stamp, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $date_stamp_id === FALSE ) {
@@ -189,27 +196,27 @@ class HolidayFactory extends Factory {
 		//I think this can only happen with New Years, or other holidays that fall within two days of the new year.
 		//So exclude the first three days of the year to allow for weekend adjustments.
 		$ph = array(
-					'policy_id' => $this->getHolidayPolicyID(),
-					'name' => $name,
-					'start_date1' => Carbon::parse( TTDate::getBeginYearEpoch( $this->getDateStamp()->toDateString() )+(86400*3) ),
-					'end_date1' => Carbon::parse( TTDate::getEndYearEpoch( $this->getDateStamp()->toDateString() ) ),
-					'start_date2' => Carbon::parse( $this->getDateStamp()->toDateString()-(86400*15) ),
-					'end_date2' => Carbon::parse( $this->getDateStamp()->toDateString()+(86400*15) ),
+					':policy_id' => $this->getHolidayPolicyID(),
+					':name' => $name,
+					':start_date1' => Carbon::parse( TTDate::getBeginYearEpoch( $this->getDateStamp()->toDateString() )+(86400*3) ),
+					':end_date1' => Carbon::parse( TTDate::getEndYearEpoch( $this->getDateStamp()->toDateString() ) ),
+					':start_date2' => Carbon::parse( $this->getDateStamp()->toDateString()-(86400*15) ),
+					':end_date2' => Carbon::parse( $this->getDateStamp()->toDateString()+(86400*15) ),
 					);
 
 		$query = 'select id from '. $this->getTable() .'
-					where holiday_policy_id = ?
-						AND name = ?
+					where holiday_policy_id = :policy_id
+						AND name = :name
 						AND
 							(
 								(
-								date_stamp >= ?
-								AND date_stamp <= ?
+								date_stamp >= :start_date1
+								AND date_stamp <= :end_date1
 								)
 							OR
 								(
-								date_stamp >= ?
-								AND date_stamp <= ?
+								date_stamp >= :start_date2
+								AND date_stamp <= :end_date2
 								)
 							)
 						AND deleted=0';

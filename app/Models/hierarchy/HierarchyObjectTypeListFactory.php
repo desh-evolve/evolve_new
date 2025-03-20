@@ -31,13 +31,13 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 				';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -53,13 +53,13 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	hierarchy_control_id = ?
+					where	hierarchy_control_id = :id
 				';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -92,8 +92,8 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		$this->rs = $this->getCache($cache_id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
-						'object_type_id' => $object_type_id,
+						':id' => $id,
+						':object_type_id' => $object_type_id,
 						);
 
 			$query = '
@@ -104,8 +104,8 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 
 						where	a.hierarchy_control_id = b.id
 							AND a.hierarchy_control_id = c.hierarchy_control_id
-							AND b.company_id = ?
-							AND c.object_type_id = ?
+							AND b.company_id = :id
+							AND c.object_type_id = :object_type_id
 							AND b.deleted = 0
 					';
 			$query .= $this->getWhereSQL( $where );
@@ -133,7 +133,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -142,7 +142,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 							'. $hcf->getTable() .' as b
 
 					where	a.hierarchy_control_id = b.id
-						AND b.company_id = ?
+						AND b.company_id = :id
 						AND b.deleted = 0
 				';
 		$query .= $this->getWhereSQL( $where );

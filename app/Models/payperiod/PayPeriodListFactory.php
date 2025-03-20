@@ -250,7 +250,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$strict = TRUE;
 		}
-		
+
 		$ppsf = new PayPeriodScheduleFactory();
 
 		$ph = array(
@@ -269,14 +269,14 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
-		
+
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
-        
-        
-        
+
+
+
     function getByCompanyIdAndStatusForHrProcess($company_id, $status_ids, $where = NULL, $order = NULL) {
 		if ( $company_id == '' ) {
 			return FALSE;
@@ -1194,7 +1194,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$uf = new UserFactory();
@@ -1214,7 +1214,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query = '	select 	distinct a.*
 					from	'. $this->getTable() .' as a
 						LEFT JOIN '.  $psf->getTable() .' as b on ( a.id = b.pay_period_id )
-					where	a.company_id = ?
+					where	a.company_id = :id
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 
 		$query .= $this->getWhereSQL( $where );
@@ -1262,7 +1262,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 			$retarr = FALSE;
 			if ( $pplf->getRecordCount() > 0 ) {
-				foreach( $pplf->rs as $pp_obj) {	
+				foreach( $pplf->rs as $pp_obj) {
 					$pplf->data = (array)$pp_obj;
 					$pp_obj = $pplf;
 					//$retarr['start_date'][] = TTDate::getDate('Ymd', $pp_obj->getStartDate() );

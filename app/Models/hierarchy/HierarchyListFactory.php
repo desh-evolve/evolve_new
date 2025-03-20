@@ -6,6 +6,7 @@ use App\Models\Core\Debug;
 use App\Models\Core\FastTree;
 use App\Models\Users\UserFactory;
 use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate {
@@ -252,12 +253,12 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		$huf = new HierarchyUserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'idb' => $id,
-					'idc' => $id,
-					'min_level' => $min_level,
-					'max_level' => $max_level,
-					'user_id' => $user_id,
+					':id' => $id,
+					':idb' => $id,
+					':idc' => $id,
+					':min_level' => $min_level,
+					':max_level' => $max_level,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -265,19 +266,19 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 						select 	a.level,
 								a.user_id
 						from	'. $hlf->getTable() .' as a
-						where	a.hierarchy_control_id = ?
+						where	a.hierarchy_control_id = :id
 							AND a.deleted = 0
 
 						UNION ALL
 
-						select 	(select max(level)+1 from '. $hlf->getTable() .' as z where z.hierarchy_control_id = ? AND z.deleted = 0 ) as level,
+						select 	(select max(level)+1 from '. $hlf->getTable() .' as z where z.hierarchy_control_id = :idb AND z.deleted = 0 ) as level,
 								b.user_id
 						from	'. $huf->getTable() .' as b
-						where	b.hierarchy_control_id = ?
+						where	b.hierarchy_control_id = :idc
 					) as tmp
-					WHERE level >= ?
-						AND level <= ?
-					ORDER BY user_id = ? DESC, level ASC, user_id ASC
+					WHERE level >= :min_level
+						AND level <= :max_level
+					ORDER BY user_id = :user_id DESC, level ASC, user_id ASC
 				';
 
 
@@ -566,8 +567,8 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
+					':user_id' => $user_id,
+					':company_id' => $company_id,
 					//'object_type_id' => $object_type_id,
 					);
 
@@ -579,8 +580,8 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 						LEFT JOIN '. $uf->getTable() .' as z ON x.user_id = z.id
 						LEFT JOIN '. $hcf->getTable() .' as e ON w.hierarchy_control_id = e.id
 						WHERE
-							x.user_id = ?
-							AND z.company_id = ?
+							x.user_id = :user_id
+							AND z.company_id = :company_id
 							AND y.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 							AND ( w.deleted = 0 AND e.deleted = 0 )
 						ORDER BY w.level DESC
@@ -647,8 +648,8 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		//When it comes to permissions we only consider subordinates, not other supervisors/managers in the hierarchy.
 
 		$ph = array(
-					'user_id' => $user_id,
-					'company_id' => $company_id,
+					':user_id' => $user_id,
+					':company_id' => $company_id,
 					//'object_type_id' => $object_type_id,
 					//'user_idb' => $user_id,
 					//'object_type_idb' => $object_type_id,
@@ -663,8 +664,8 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 						LEFT JOIN '. $uf->getTable() .' as z ON x.user_id = z.id
 						LEFT JOIN '. $hcf->getTable() .' as z2 ON w.hierarchy_control_id = z2.id
 						WHERE
-							x.user_id = ?
-							AND z.company_id = ?
+							x.user_id = :user_id
+							AND z.company_id = :company_id
 							AND y.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 							AND ( x.deleted = 0 AND z2.deleted = 0 AND z.deleted = 0 )
 					';

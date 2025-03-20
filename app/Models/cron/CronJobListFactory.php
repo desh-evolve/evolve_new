@@ -40,13 +40,13 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -69,15 +69,15 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
-					'status_id' => $status_id,
+					':id' => $id,
+					':status_id' => $status_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND status_id = ?
+					where	id = :id
+						AND status_id = :status_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -93,13 +93,13 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'name' => $name,
+					':name' => $name,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	name = ?
+					where	name = :name
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

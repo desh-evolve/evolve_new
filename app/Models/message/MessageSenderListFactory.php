@@ -32,13 +32,13 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -60,7 +60,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -68,7 +68,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					WHERE
-							b.company_id = ?
+							b.company_id = :company_id
 							AND a.id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
@@ -90,7 +90,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		//Ignore deleted message_sender rows, as the sender could have deleted the original message.
@@ -100,7 +100,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 						LEFT JOIN '. $mrf->getTable() .' as b ON a.id = b.message_sender_id
 						LEFT JOIN '. $uf->getTable() .' as c ON a.user_id = c.id
 					WHERE
-							c.company_id = ?
+							c.company_id = :company_id
 							AND b.id in ('. $this->getListSQL($id, $ph) .')
 							AND ( b.deleted = 0 )
 					';
@@ -121,7 +121,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -129,7 +129,7 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					WHERE
-							b.company_id = ?
+							b.company_id = :company_id
 							AND a.message_control_id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
@@ -156,10 +156,10 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 		$mcf = new MessageControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'object_type_id' => $object_type_id,
-					'object_id' => $object_id,
-					'user_id' => (int)$user_id,
+					':company_id' => $company_id,
+					':object_type_id' => $object_type_id,
+					':object_id' => $object_id,
+					':user_id' => (int)$user_id,
 					);
 
 		$query = '
@@ -168,9 +168,9 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 						LEFT JOIN '. $mcf->getTable() .' as b ON a.message_control_id = b.id
 						LEFT JOIN '. $uf->getTable() .' as c ON a.user_id = c.id
 					WHERE
-							c.company_id = ?
-							AND ( b.object_type_id = ? AND b.object_id = ? )
-							AND a.user_id != ?
+							c.company_id = :company_id
+							AND ( b.object_type_id = :object_type_id AND b.object_id = :object_id )
+							AND a.user_id != :user_id
 							AND ( b.deleted = 0 AND c.deleted = 0 )
 					';
 		$this->rs = DB::select($query, $ph);
@@ -194,8 +194,8 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -203,8 +203,8 @@ class MessageSenderListFactory extends MessageSenderFactory implements IteratorA
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					WHERE
-							b.company_id = ?
-							AND a.user_id = ?
+							b.company_id = :company_id
+							AND a.user_id = :user_id
 							AND a.id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
