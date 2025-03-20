@@ -10,6 +10,7 @@ use App\Models\Users\UserPreferenceListFactory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class UserDateFactory extends Factory {
 	protected $table = 'user_date';
@@ -240,9 +241,8 @@ class UserDateFactory extends Factory {
 		}
 
 		$ph = array(
-					':user_id' => $this->getUser(),
-					// 'date_stamp' => $this->db->BindDate( $this->getDateStamp() ),
-                    ':date_stamp' => Carbon::parse($this->getDateStamp())->toDateString(),
+					'user_id' => $this->getUser(),
+					'date_stamp' => Carbon::parse( $this->getDateStamp()->toDateString() ),
 					);
 
 		$query = 'select id from '. $this->getTable() .' where user_id = :user_id AND date_stamp = :date_stamp AND deleted=0';

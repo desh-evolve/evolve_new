@@ -13,6 +13,7 @@ use App\Models\Users\UserTitleFactory;
 use App\Models\Users\UserWageFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFactory implements IteratorAggregate {
 
@@ -40,13 +41,13 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -68,16 +69,16 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 		$rstcf = new RecurringScheduleTemplateControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					LEFT JOIN '. $rstcf->getTable() .' as b ON a.recurring_schedule_template_control_id = b.id
-					where	b.company_id = ?
-						AND a.id = ?
+					where	b.company_id = :company_id
+						AND a.id = :id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -93,13 +94,13 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	recurring_schedule_template_control_id = ?
+					where	recurring_schedule_template_control_id = :id
 						AND deleted = 0
 					ORDER BY week asc';
 		$query .= $this->getWhereSQL( $where );
@@ -198,8 +199,8 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 		}
 
 		$ph = array(
-					'filter_end_date' => $this->db->BindDate( $filter_data['end_date'] ),
-					'company_id' => $company_id,
+					':filter_end_date' => Carbon::parse( $filter_data['end_date'] )->toDateString(),
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -273,7 +274,7 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 						LEFT JOIN '. $uwf->getTable() .' as uw ON uw.id = (select uwb.id
 																	from '. $uwf->getTable() .' as uwb
 																	where uwb.user_id = cb.user_id
-																		and uwb.effective_date <= ?
+																		and uwb.effective_date <= :filter_end_date
 																		and uwb.deleted = 0
 																		order by uwb.effective_date desc limit 1)
 
@@ -284,7 +285,7 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 			$query .= '	LEFT JOIN '. $jif->getTable() .' as y ON a.job_item_id = y.id';
 		}
 
-		$query .=' where 	b.company_id = ?
+		$query .=' where 	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -343,46 +344,46 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != ''
 				AND isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '') {
-			$start_date_stamp = $this->db->BindDate( $filter_data['start_date'] );
-			$end_date_stamp = $this->db->BindDate( $filter_data['end_date'] );
+			$start_date_stamp = Carbon::parse( $filter_data['start_date'] )->toDateString();
+			$end_date_stamp = Carbon::parse( $filter_data['end_date'] )->toDateString();
 
-			$ph[] = $start_date_stamp;
-			$ph[] = $end_date_stamp;
-			$ph[] = $start_date_stamp;
-			$ph[] = $start_date_stamp;
-			$ph[] = $end_date_stamp;
-			$ph[] = $start_date_stamp;
-			$ph[] = $end_date_stamp;
-			$ph[] = $start_date_stamp;
-			$ph[] = $end_date_stamp;
-			$ph[] = $start_date_stamp;
-			$ph[] = $end_date_stamp;
-			$ph[] = $start_date_stamp;
-			$ph[] = $end_date_stamp;
+			$ph[':start_date_stamp1'] = $start_date_stamp;
+			$ph[':end_date_stamp1'] = $end_date_stamp;
+			$ph[':start_date_stamp2'] = $start_date_stamp;
+			$ph[':start_date_stamp3'] = $start_date_stamp;
+			$ph[':end_date_stamp2'] = $end_date_stamp;
+			$ph[':start_date_stamp4'] = $start_date_stamp;
+			$ph[':end_date_stamp3'] = $end_date_stamp;
+			$ph[':start_date_stamp5'] = $start_date_stamp;
+			$ph[':end_date_stamp4'] = $end_date_stamp;
+			$ph[':start_date_stamp6'] = $start_date_stamp;
+			$ph[':end_date_stamp5'] = $end_date_stamp;
+			$ph[':start_date_stamp7'] = $start_date_stamp;
+			$ph[':end_date_stamp6'] = $end_date_stamp;
 
-			$ph[] = $filter_data['end_date'] ;
-			$ph[] = $filter_data['start_date'];
+			$ph[':end_date'] = $filter_data['end_date'] ;
+			$ph[':start_date'] = $filter_data['start_date'];
 
 			$query  .=	' AND (
-								(c.start_date >= ? AND c.start_date <= ? AND c.end_date IS NULL )
+								(c.start_date >= :start_date_stamp1 AND c.start_date <= :end_date_stamp1 AND c.end_date IS NULL )
 								OR
-								(c.start_date <= ? AND c.end_date IS NULL )
+								(c.start_date <= :start_date_stamp2 AND c.end_date IS NULL )
 								OR
-								(c.start_date <= ? AND c.end_date >= ? )
+								(c.start_date <= :start_date_stamp3 AND c.end_date >= :end_date_stamp2 )
 								OR
-								(c.start_date >= ? AND c.end_date <= ? )
+								(c.start_date >= :start_date_stamp4 AND c.end_date <= :end_date_stamp3 )
 								OR
-								(c.start_date >= ? AND c.start_date <= ? )
+								(c.start_date >= :start_date_stamp5 AND c.start_date <= :end_date_stamp4 )
 								OR
-								(c.end_date >= ? AND c.end_date <= ? )
+								(c.end_date >= :start_date_stamp6 AND c.end_date <= :end_date_stamp5 )
 								OR
-								(c.start_date <= ? AND c.end_date >= ? )
+								(c.start_date <= :start_date_stamp7 AND c.end_date >= :end_date_stamp6 )
 							)
 							AND
 							(
-								( d.hire_date is NULL OR d.hire_date <= ? )
+								( d.hire_date is NULL OR d.hire_date <= :end_date )
 								AND
-								( d.termination_date is NULL OR d.termination_date >= ? )
+								( d.termination_date is NULL OR d.termination_date >= :start_date )
 							)
 						';
 		}
@@ -443,7 +444,7 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -458,7 +459,7 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 						LEFT JOIN '. $rstcf->getTable() .' as b ON a.recurring_schedule_template_control_id = b.id
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

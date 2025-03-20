@@ -61,14 +61,16 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 
 		$ph = array(
 					':user_id' => $user_id,
-                                        ':bonus_attendance_id' =>$bonus_attendance_id,
-					);
+
+                    ':bonus_attendance_id' =>$bonus_attendance_id,
+				);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where	user_id = :user_id
-                                                AND bonus_attendance_id = :bonus_attendance_id
+
+                        AND bonus_attendance_id = :bonus_attendance_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -88,8 +90,8 @@ class AttendanceBonusUserListFactory extends AttendanceBonusUserFactory implemen
 
 		$ph = array(
 
-                                        ':bonus_attendance_id' =>$bonus_attendance_id,
-					);
+				':bonus_attendance_id' =>$bonus_attendance_id,
+			);
 
 		$query = '
 					select 	*

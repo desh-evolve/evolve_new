@@ -57,8 +57,7 @@ class BranchBankAccountFactory extends Factory {
 				);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
-				$retval = array(
-								);
+				$retval = array();
 				break;
 
 		}

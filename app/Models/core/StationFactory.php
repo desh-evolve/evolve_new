@@ -10,7 +10,7 @@ use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceFactory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Throwable;
+use Carbon\Carbon;
 
 //include_once('Net/IPv4.php');
 
@@ -1291,10 +1291,9 @@ class StationFactory extends Factory {
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
-						':last_poll_date' => $last_poll_date,
-						// ':last_punch_date' => $this->db->BindTimeStamp( $last_punch_date ),
-                        ':last_punch_date' => Carbon::parse( $last_punch_date )->toDateTimeString(),
-						':id' => $id,
+						'last_poll_date' => $last_poll_date,
+						'last_punch_date' => Carbon::parse( $last_punch_date )->toDateTimeString(),
+						'id' => $id,
 						);
 			$query = 'UPDATE '. $this->getTable() .' set last_poll_date = :last_poll_date ,last_punch_time_stamp = :last_punch_date where id = :id';
 			DB::select($query, $ph);

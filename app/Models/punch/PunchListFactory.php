@@ -19,6 +19,7 @@ use App\Models\Users\UserTitleFactory;
 use App\Models\Users\UserWageFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class PunchListFactory extends PunchFactory implements IteratorAggregate {
 	//Helper function get to maximum shift time from pay period schedule.
@@ -410,7 +411,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id' => $user_id,
-					'time_stamp' => $this->db->BindTimeStamp($epoch),
+					'time_stamp' => Carbon::parse($epoch)->toDateTimeString(),
 					);
 
 		//Status order matters, because if its a.status_id desc, OUT comes first, but if the last
@@ -461,10 +462,10 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id' => $user_id,
-					'start_date_stamp' => $this->db->BindDate( $start_time_stamp ),
-					'end_date_stamp' => $this->db->BindDate( $end_time_stamp ),
-					'start_time_stamp2' => $this->db->BindTimeStamp( $start_time_stamp ),
-					'end_time_stamp2' => $this->db->BindTimeStamp( $end_time_stamp ),
+					'start_date_stamp' => Carbon::parse( $start_time_stamp )->toDateString(),
+					'end_date_stamp' => Carbon::parse( $end_time_stamp )->toDateString(),
+					'start_time_stamp2' => Carbon::parse( $start_time_stamp )->toDateTimeString(),
+					'end_time_stamp2' => Carbon::parse( $end_time_stamp )->toDateTimeString(),
 					);
 
 		//Order by a.punch_control_id is extremely important here so two punches at the same time, one paired already, and one not paired don't come in the wrong order, and cause getShiftData() to handle them incorrectly.
@@ -550,7 +551,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id' => $user_id,
-					'user_date_stamp' => $this->db->BindDate($user_date_stamp),
+					'user_date_stamp' => Carbon::parse($user_date_stamp)->toDateString(),
 					);
 
 		$query = '
@@ -595,10 +596,10 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id' => $user_id,
-					'start_date' => $this->db->BindDate($start_time),
-					'end_date' => $this->db->BindDate($epoch),
-					'start_time' => $this->db->BindTimeStamp($start_time),
-					'end_time' => $this->db->BindTimeStamp($epoch),
+					'start_date' => Carbon::parse($start_time)->toDateString(),
+					'end_date' => Carbon::parse($epoch)->toDateString(),
+					'start_time' => Carbon::parse($start_time)->toDateTimeString(),
+					'end_time' => Carbon::parse($epoch)->toDateTimeString(),
 					);
 
 		//Status order matters, because if its a.status_id desc, OUT comes first, but if the last
@@ -650,10 +651,10 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id' => $user_id,
-					'start_date' => $this->db->BindDate($start_time),
-					'end_date' => $this->db->BindDate($epoch),
-					'start_time' => $this->db->BindTimeStamp($start_time),
-					'end_time' => $this->db->BindTimeStamp($epoch),
+					'start_date' => Carbon::parse($start_time)->toDateString(),
+					'end_date' => Carbon::parse($epoch)->toDateString(),
+					'start_time' => Carbon::parse($start_time)->toDateTimeString(),
+					'end_time' => Carbon::parse($epoch)->toDateTimeString(),
 					'punch_id' => (int)$punch_id,
 					);
 
@@ -709,7 +710,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					'user_date_id' => $user_date_id,
 					'status_id' => $status_id,
 					'type_id' => $type_id,
-					'time_stamp' => $this->db->BindTimeStamp($epoch),
+					'time_stamp' => Carbon::parse($epoch)->toDateTimeString(),
 					);
 
 		//Status order matters, because if its a.status_id desc, OUT comes first, but if the last
@@ -759,7 +760,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 					'user_id' => $user_id,
 					'status_id' => $status_id,
 					'type_id' => $type_id,
-					'time_stamp' => $this->db->BindTimeStamp($epoch),
+					'time_stamp' => Carbon::parse($epoch)->toDateTimeString(),
 					);
 
 		//Status order matters, because if its a.status_id desc, OUT comes first, but if the last
@@ -870,8 +871,8 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		$ph = array(
 					'company_id' => $company_id,
 					'user_id' => $user_id,
-					'start_date' => $this->db->BindDate( $start_date ),
-					'end_date' => $this->db->BindDate( $end_date )
+					'start_date' => Carbon::parse( $start_date )->toDateString(),
+					'end_date' => Carbon::parse( $end_date )->toDateString()
 					);
 
 		//Status sorting MUST be desc first, otherwise transfer punches are completely out of order.
@@ -1244,8 +1245,8 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'start_date' => $this->db->BindDate($start_date),
-					'end_date' => $this->db->BindDate($end_date),
+					'start_date' => Carbon::parse($start_date)->toDateString(),
+					'end_date' => Carbon::parse($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -1545,11 +1546,11 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND c.date_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
+			$ph[] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND c.date_stamp <= ?';
 		}
 
@@ -1766,11 +1767,11 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND b.date_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
+			$ph[] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND b.date_stamp <= ?';
 		}
 
@@ -1976,11 +1977,11 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 								WHERE tmp2_d.company_id = ?';
 
 								if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-									$ph[] = $this->db->BindDate($filter_data['start_date']);
+									$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 									$query  .=	' AND tmp2_c.date_stamp >= ?';
 								}
 								if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-									$ph[] = $this->db->BindDate($filter_data['end_date']);
+									$ph[] = Carbon::parse($filter_data['end_date'])->toDateString();
 									$query  .=	' AND tmp2_c.date_stamp <= ?';
 								}
 
@@ -2091,11 +2092,11 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND c.date_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
+			$ph[] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND c.date_stamp <= ?';
 		}
 
@@ -2411,11 +2412,11 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND c.date_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
+			$ph[] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND c.date_stamp <= ?';
 		}
 
@@ -2552,11 +2553,11 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 									WHERE tmp2_d.company_id = ?';
 
 									if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-										$ph[] = $this->db->BindDate($filter_data['start_date']);
+										$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 										$query  .=	' AND tmp2_c.date_stamp >= ?';
 									}
 									if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-										$ph[] = $this->db->BindDate($filter_data['end_date']);
+										$ph[] = Carbon::parse($filter_data['end_date'])->toDateString();
 										$query  .=	' AND tmp2_c.date_stamp <= ?';
 									}
 
@@ -2632,14 +2633,14 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
 			/*
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND c.date_stamp >= ?';
 			*/
-			$ph[] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->toDateTimeString();
 			$query  .=	' AND a.time_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$ph[] = Carbon::parse($filter_data['end_date'])->toDateTimeString();
 			$query  .=	' AND a.time_stamp <= ?';
 		}
 

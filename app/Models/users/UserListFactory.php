@@ -185,17 +185,18 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				$ulf = new UserListFactory();
 				$ulf->getAll();
 					
-				foreach ($ulf as $user) {
+				foreach ($ulf->rs as $user) {
+					$ulf->data = (array)$user;
+					$user = $ulf;
 							
-							if($user->getJobSkills() != '' OR $user->getJobSkills() != NULL)
-							{
-								
-								// split the phrase by any number of commas or space characters,
-								// which include " ", \r, \t, \n and \f
-								$keywords = preg_split("/[\s,]+/", $user->getJobSkills());
-								
-								$array[] = $keywords;
-							}
+					if($user->getJobSkills() != '' OR $user->getJobSkills() != NULL) {
+						
+						// split the phrase by any number of commas or space characters,
+						// which include " ", \r, \t, \n and \f
+						$keywords = preg_split("/[\s,]+/", $user->getJobSkills());
+						
+						$array[] = $keywords;
+					}
 				}
 								
 						//$final = array();
@@ -953,7 +954,10 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$user_list[0] = '--';
 				}
 
-				foreach ($ulf as $user) {
+				foreach ($ulf->rs as $user) {
+					$ulf->data = (array)$user;
+					$user = $ulf;
+
 					if ( $user->getStatus() > 10 ) { //INACTIVE
 						$status = '('.Option::getByKey( $user->getStatus(), $user->getOptions('status') ).') ';
 					} else {
@@ -984,7 +988,9 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$user_list[0] = '--';
 				}
 
-				foreach ($ulf as $user) {
+				foreach ($ulf->rs as $user) {
+					$ulf->data = (array)$user;
+					$user = $ulf;
 					if ( $user->getStatus() > 10 ) { //INACTIVE
 						$status = '('.Option::getByKey( $user->getStatus(), $user->getOptions('status') ).') ';
 					} else {
@@ -1022,7 +1028,9 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$list[0] = '--';
 				
 				}
-				foreach ($lf as $obj) {
+				foreach ($lf->rs as $obj) {
+					$lf->data = (array)$obj;
+					$obj = $lf;
 					if ( !isset($status_options) ) {
 						$status_options = $obj->getOptions('status');
 					}

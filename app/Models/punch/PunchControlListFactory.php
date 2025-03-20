@@ -15,6 +15,7 @@ use App\Models\Users\UserTitleFactory;
 use App\Models\Users\UserWageFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class PunchControlListFactory extends PunchControlFactory implements IteratorAggregate {
 
@@ -498,11 +499,11 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND c.date_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
+			$ph[] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND c.date_stamp <= ?';
 		}
 

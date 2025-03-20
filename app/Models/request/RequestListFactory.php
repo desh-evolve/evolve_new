@@ -203,8 +203,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$ph = array(
 					':company_id' => $company_id,
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateString(),
+					':end_date' => Carbon::parse( $end_date )->toDateString(),
 					);
 
 		$query = '
@@ -267,8 +267,8 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 					':company_id' => $company_id,
 					':user_id' => $user_id,
 					':status_id' => $status_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateString(),
+					':end_date' => Carbon::parse( $end_date )->toDateString(),
 					);
 
 		$query = '
@@ -622,7 +622,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 		$ph = array(
 					':pay_period_id' => $pay_period_id,
 					':status_id' => $status,
-					':before_date' => $this->db->BindDate( $before_date ),
+					':before_date' => Carbon::parse( $before_date )->toDateString(),
 					);
 
 		$query = '

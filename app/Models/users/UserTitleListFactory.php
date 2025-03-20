@@ -115,7 +115,9 @@ class UserTitleListFactory extends UserTitleFactory implements IteratorAggregate
 
 		$title_list[0] = '--';
 
-		foreach ($utlf as $title_obj) {
+		foreach ($utlf->rs as $title_obj) {
+			$utlf->data = (array)$title_obj;
+			$title_obj = $utlf;
 			$title_list[$title_obj->getID()] = $title_obj->getName();
 		}
 
@@ -131,7 +133,9 @@ class UserTitleListFactory extends UserTitleFactory implements IteratorAggregate
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 

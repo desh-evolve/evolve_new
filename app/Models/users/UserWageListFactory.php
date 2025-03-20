@@ -12,6 +12,7 @@ use App\Models\Core\TTi18n;
 use App\Models\Department\DepartmentFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
@@ -183,7 +184,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$ph = array(
 					'user_id' => $user_id,
 					'wage_group_id' => $wage_group_id,
-					'date' => $this->db->BindTimeStamp( $epoch ),
+					'date' => Carbon::parse( $epoch )->toDateTimeString(),
 
 					);
 
@@ -280,7 +281,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'epoch' => $this->db->BindTimeStamp( $epoch ),
+					'epoch' => Carbon::parse( $epoch )->toDateTimeString(),
 					);
 
 		$query = '
@@ -321,7 +322,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id' => $user_id,
-					'epoch' => $this->db->BindTimeStamp( $pay_period_end_date ),
+					'epoch' => Carbon::parse( $pay_period_end_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -354,7 +355,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id' => $user_id,
-					'date' => $this->db->BindTimeStamp(  $date ),
+					'date' => Carbon::parse(  $date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -391,10 +392,10 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 		$ph = array(
 					'user_id1' => $user_id,
-					'start_date1' => $this->db->BindTimeStamp( $start_date ),
-					'end_date1' => $this->db->BindTimeStamp( $end_date ),
+					'start_date1' => Carbon::parse( $start_date )->toDateTimeString(),
+					'end_date1' => Carbon::parse( $end_date )->toDateTimeString(),
 					'user_id2' => $user_id,
-					'start_date2' => $this->db->BindTimeStamp( $start_date ),
+					'start_date2' => Carbon::parse( $start_date )->toDateTimeString(),
 
 					);
 
@@ -452,14 +453,14 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 		$ph = array(
 					'company_id' => $company_id,
-					'start_date' => $this->db->BindTimeStamp( $start_date ),
-					'end_date' => $this->db->BindTimeStamp( $end_date ),
+					'start_date' => Carbon::parse( $start_date )->toDateTimeString(),
+					'end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					);
 
 		$b_user_id_sql = $this->getListSQL($user_id, $ph);
 
 		$ph['company_id2'] = $company_id;
-		$ph['start_date2'] = $this->db->BindTimeStamp( $start_date );
+		$ph['start_date2'] = Carbon::parse( $start_date )->toDateTimeString();
 
 		$query = '
 					(
@@ -503,13 +504,15 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uwlf = new UserWageListFactory();
 		$uwlf->getByUserIdAndStartDateAndEndDate($user_id, $start_date, $end_date);
 
-		foreach ($uwlf as $uw_obj) {
+		foreach ($uwlf->rs as $uw_obj) {
+			$uwlf->data = (array)$uw_obj;
+			$uw_obj = $uwlf;
 			$list[$uw_obj->getEffectiveDate()] = array(
-														'wage' => $uw_obj->getWage(),
-														'type_id' => $uw_obj->getType(),
-														'hourly_rate' => $uw_obj->getHourlyRate(),
-														'effective_date' => $uw_obj->getEffectiveDate()
-														);
+													'wage' => $uw_obj->getWage(),
+													'type_id' => $uw_obj->getType(),
+													'hourly_rate' => $uw_obj->getHourlyRate(),
+													'effective_date' => $uw_obj->getEffectiveDate()
+												);
 		}
 
 		if ( isset($list) ) {
@@ -803,7 +806,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$wgf = new WageGroupFactory();
 
 		$ph = array(
-					'effective_date' => $this->db->BindTimeStamp($filter_data['effective_date']),
+					'effective_date' => Carbon::parse($filter_data['effective_date'])->toDateTimeString(),
 					'company_id' => $company_id,
 					);
 
