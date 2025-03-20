@@ -8,7 +8,7 @@ use IteratorAggregate;
 
 class AttendanceBonusListFactory extends AttendanceBonusFactory implements IteratorAggregate {
     //put your code here
-	
+
     function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -33,13 +33,13 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -48,7 +48,7 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 
 		return $this;
 	}
-        
+
     function getByCompanyId($id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
@@ -62,13 +62,13 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 		}
 
 		$ph = array(
-					'company_id' => $id,
+					':company_id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND deleted=0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -82,7 +82,7 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 		return $this;
 	}
 
-    
+
     function getByIdAndCompanyId($id, $company_id, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
@@ -93,15 +93,15 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND id = ?
+					where	company_id = :company_id
+						AND id = :id
 						AND deleted=0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -111,8 +111,8 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 		return $this;
 	}
 
-        
-    
-        
-        
+
+
+
+
 }

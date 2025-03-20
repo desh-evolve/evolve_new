@@ -284,13 +284,12 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 			$query  .=	' AND a.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['iso_code']) AND trim($filter_data['iso_code']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['iso_code']));
-			$query  .=	' AND lower(a.iso_code) LIKE ?';
+			$ph[':iso_code'] = '%' . strtolower(trim($filter_data['iso_code'])) . '%';
+			$query  .=	' AND lower(a.iso_code) LIKE :iso_code';
 		}
-
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = '%' . strtolower(trim($filter_data['name'])) . '%';
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 
 		//Returns the default currency of a specific user.

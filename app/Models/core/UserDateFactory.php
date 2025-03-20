@@ -7,7 +7,10 @@ use App\Models\Punch\PunchControlListFactory;
 use App\Models\Schedule\ScheduleListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceListFactory;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class UserDateFactory extends Factory {
 	protected $table = 'user_date';
@@ -159,10 +162,10 @@ class UserDateFactory extends Factory {
 	}
 
 	static function findOrInsertUserDate($user_id, $date, $timezone = NULL ) {
-		
+
 		$date = TTDate::getMiddleDayEpoch( $date ); //Use mid day epoch so the timezone conversion across DST doesn't affect the date.
 
-                
+
 		if ( $timezone == NULL ) {
 			//Find the employees preferred timezone, base the user date off that instead of the pay period timezone,
 			//as it can be really confusing to the user if they punch in at 10AM on Sept 27th, but it records as Sept 26th because
@@ -190,7 +193,7 @@ class UserDateFactory extends Factory {
 			$udf = new UserDateFactory();
 			$udf->setUser( $user_id );
 			$udf->setDateStamp( $date );
-			$udf->setPayPeriod(); 
+			$udf->setPayPeriod();
 
 			if ( $udf->isValid() ) {
 				return $udf->Save();
@@ -239,11 +242,18 @@ class UserDateFactory extends Factory {
 
 		$ph = array(
 					'user_id' => $this->getUser(),
-					'date_stamp' => $this->db->BindDate( $this->getDateStamp() ),
+					'date_stamp' => Carbon::parse( $this->getDateStamp()->toDateString() ),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where user_id = ? AND date_stamp = ? AND deleted=0';
-		$user_date_id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->getTable() .' where user_id = :user_id AND date_stamp = :date_stamp AND deleted=0';
+		// $user_date_id = $this->db->GetOne($query, $ph);
+        $user_date_id = DB::select($query, $ph);
+        if ($user_date_id === FALSE ) {
+            $user_date_id = 0;
+        }else{
+            $user_date_id = current(get_object_vars($user_date_id[0]));
+        }
+        
 		Debug::Arr($user_date_id,'Unique User Date.', __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_date_id === FALSE ) {

@@ -8,6 +8,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class UserKpiFactory extends Factory {
 	protected $table = 'user_kpi';
@@ -22,45 +23,41 @@ class UserKpiFactory extends Factory {
 		switch( $name ) {
 			case 'columns':
 				$retval = array(
+					'-1010-first_name' => ('First Name'),
+					'-1020-last_name' => ('Last Name'),
 
-										'-1010-first_name' => ('First Name'),
-										'-1020-last_name' => ('Last Name'),
+					'-1090-title' => ('Title'),
+					//'-1099-group' => ('Group'),
+					'-1100-default_branch' => ('Branch'),
+					'-1110-default_department' => ('Department'),
+				
+					'-1200-start_date' => ('Start Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+					'-1210-end_date' => ('End Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+					'-1210-review_date' => ('Review Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
-										'-1090-title' => ('Title'),
-										//'-1099-group' => ('Group'),
-										'-1100-default_branch' => ('Branch'),
-										'-1110-default_department' => ('Department'),
-                                    
-                                    						'-1200-start_date' => ('Start Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-										'-1210-end_date' => ('End Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                                                                                '-1210-review_date' => ('Review Date'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+					//'-5010-transit' => ('Transit/Routing'),
+					//'-5020-account' => ('Account'),
+					//'-5030-institution' => ('Institution'),
+					//'-1290-note' => ('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
-
-										//'-5010-transit' => ('Transit/Routing'),
-										//'-5020-account' => ('Account'),
-										//'-5030-institution' => ('Institution'),
-                                    
-                                                                                //'-1290-note' => ('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-
-										'-2000-created_by' => ('Created By'),
-										'-2010-created_date' => ('Created Date'),
-										'-2020-updated_by' => ('Updated By'),
-										'-2030-updated_date' => ('Updated Date'),
-							);
+					'-2000-created_by' => ('Created By'),
+					'-2010-created_date' => ('Created Date'),
+					'-2020-updated_by' => ('Updated By'),
+					'-2030-updated_date' => ('Updated Date'),
+				);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( $this->getOptions('default_display_columns'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
 				break;
 			case 'default_display_columns': //Columns that are displayed by default.
 				$retval = array(
-								'start_date',//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-								'end_name',//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-								'review_date',//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-								);
+							'start_date',//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+							'end_name',//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+							'review_date',//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+						);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
-				$retval = array(
-								);
+				$retval = array();
 				break;
 
 		}
@@ -76,22 +73,18 @@ class UserKpiFactory extends Factory {
 		$variable_function_map = array(
 										'id' => 'ID',
 										'user_id' => 'User',
-
 										'deleted' => 'Deleted',
-                    
-                                                                                'first_date' => 'FirstDate',
-                                                                                'last_date' => 'LastDate',
-                                                                                'review_date' => 'ReviewDate',
-                                                                                'scorea1' => 'ScoreA1',
-                    
-                    
+										'first_date' => 'FirstDate',
+										'last_date' => 'LastDate',
+										'review_date' => 'ReviewDate',
+										'scorea1' => 'ScoreA1',
 										'title_id' => 'Title',
 										'title' => FALSE,
 										'default_branch_id' => 'DefaultBranch',
 										'default_branch' => FALSE,
 										'default_department_id' => 'DefaultDepartment',
 										'default_department' => FALSE,                                                                               
-										);
+								);
 		return $variable_function_map;
 	}
         
@@ -3245,11 +3238,11 @@ class UserKpiFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' =>  (int)$this->getCompany(),
-					'user_id' => (int)$this->getUser(),
+					':company_id' =>  (int)$this->getCompany(),
+					':user_id' => (int)$this->getUser(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND user_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {

@@ -34,13 +34,13 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -60,15 +60,15 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND company_id = ?
+					where	id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -126,7 +126,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 */
 		$pguf = new PolicyGroupUserFactory();
 
-		$ph = array( 'company_id' => $company_id );
+		$ph = array( ':company_id' => $company_id );
 
 		$query = '
 					select 	a.*,
@@ -134,7 +134,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 					from	'. $this->getTable() .' as a,
 							'. $pguf->getTable() .' as b
 					where 	a.id = b.policy_group_id
-						AND a.company_id = ? ';
+						AND a.company_id = :company_id ';
 
 		if ( $user_ids AND is_array($user_ids) AND isset($user_ids[0]) ) {
 			$query  .=	' AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .') ';
@@ -160,13 +160,13 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -200,7 +200,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		$cgmf = new CompanyGenericMapFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -211,7 +211,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 						LEFT JOIN '. $cgmf->getTable() .' as d ON ( a.id = d.object_id AND d.company_id = a.company_id AND d.object_type_id = 110)
 						LEFT JOIN '. $cgmf->getTable() .' as e ON ( a.id = e.object_id AND e.company_id = a.company_id AND e.object_type_id = 120)
 						LEFT JOIN '. $cgmf->getTable() .' as f ON ( a.id = f.object_id AND f.company_id = a.company_id AND f.object_type_id = 140)
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
@@ -353,7 +353,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		$cgmf = new CompanyGenericMapFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -373,7 +373,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 						LEFT JOIN '. $cgmf->getTable() .' as f ON ( a.id = f.object_id AND f.company_id = a.company_id AND f.object_type_id = 140)
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -404,8 +404,8 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		}
 
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = strtolower(trim($filter_data['name']));
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';

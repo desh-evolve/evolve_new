@@ -15,6 +15,7 @@ use App\Models\Users\UserTitleFactory;
 use App\Models\Users\UserWageFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class PunchControlListFactory extends PunchControlFactory implements IteratorAggregate {
 
@@ -42,7 +43,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		}
 
 		$ph = array(
-					'id' => (int)$id,
+					':id' => (int)$id,
 					);
 
 		$this->rs = $this->getCache($id);
@@ -51,7 +52,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -77,7 +78,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -87,7 +88,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 							'. $uf->getTable() .' as c
 					where	a.user_date_id = b.id
 						AND b.user_id = c.id
-						AND c.company_id = ?
+						AND c.company_id = :company_id
 						AND a.id in ('. $this->getListSQL($id, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0 )
 					';
@@ -105,7 +106,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		$pf = new PunchFactory();
 
 		$ph = array(
-					'punch_id' => (int)$punch_id,
+					':punch_id' => (int)$punch_id,
 					);
 
 		$query = '
@@ -113,7 +114,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 					from	'. $this->getTable() .' as a,
 							'. $pf->getTable() .' as b
 					where 	a.id = b.punch_control_id
-						AND b.id = ?
+						AND b.id = :punch_id
 						AND ( a.deleted = 0 AND b.deleted=0 )
 					';
 		$query .= $this->getSortSQL( $order );
@@ -129,14 +130,14 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		}
 
 		$ph = array(
-					'user_date_id' => $user_date_id,
+					':user_date_id' => $user_date_id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					where
-						a.user_date_id = ?
+						a.user_date_id = :user_date_id
 						AND ( a.deleted = 0 )
 					';
 		$query .= $this->getSortSQL( $order );
@@ -350,7 +351,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -432,7 +433,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 			$query .= '	LEFT JOIN '. $jif->getTable() .' as y ON b.job_item_id = y.id';
 		}
 
-		$query .= '	WHERE d.company_id = ?';
+		$query .= '	WHERE d.company_id = :company_id';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND d.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -498,11 +499,11 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND c.date_stamp >= ?';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $this->db->BindDate($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND c.date_stamp <= ?';
 		}
 

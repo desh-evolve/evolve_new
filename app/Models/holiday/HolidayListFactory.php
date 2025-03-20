@@ -10,6 +10,7 @@ use App\Models\Policy\PolicyGroupUserFactory;
 use App\Models\Users\UserFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
@@ -234,7 +235,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-					':date' => $this->db->BindDate( $date ),
+					':date' => Carbon::parse( $date )->toDateString(),
 					);
 
 		$query = '
@@ -287,8 +288,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 
 		$ph = array(
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateString(),
+					':end_date' => Carbon::parse( $end_date )->toDateString(),
 					);
 
 		//Query was: distinct(d.*) but MySQL doesnt like that.
@@ -346,8 +347,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateString(),
+					':end_date' => Carbon::parse( $end_date )->toDateString(),
 					);
 
 		//Query was: distinct(d.*) but MySQL doesnt like that.
@@ -473,11 +474,11 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND a.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND a.date_stamp <= :end_date';
 		}
 

@@ -17,6 +17,7 @@ use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserTitleFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAggregate {
 
@@ -320,8 +321,8 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 
 		$ph = array(
 					':id' => $id,
-					':begin_year' => $this->db->BindTimeStamp( $begin_year_epoch ),
-					':end_date' => $this->db->BindTimeStamp( $date ),
+					':begin_year' => Carbon::parse( $begin_year_epoch )->toDateTimeString(),
+					':end_date' => Carbon::parse( $date )->toDateTimeString(),
 					':exclude_id' => (int)$exclude_id,
 					);
 
@@ -407,8 +408,8 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 
 		$ph = array(
 					':id' => $id,
-					':begin_year' => $this->db->BindTimeStamp( $begin_year_epoch ),
-					':end_date' => $this->db->BindTimeStamp( $date ),
+					':begin_year' => Carbon::parse( $begin_year_epoch )->toDateTimeString(),
+					':end_date' => Carbon::parse( $date )->toDateTimeString(),
 					':exclude_id' => (int)$exclude_id,
 					);
 
@@ -505,7 +506,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$psealf = new PayStubEntryAccountListFactory();
 
 		$ph = array(
-					':transaction_date' => $this->db->BindTimeStamp( $begin_year_epoch ),
+					':transaction_date' => Carbon::parse( $begin_year_epoch )->toDateTimeString(),
 					':user_id' => $user_id,
 					':pay_stub_id' => $pay_stub_id,
 					);
@@ -556,7 +557,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$psalf = new PayStubAmendmentListFactory();
 
 		$ph = array(
-					':date' => $this->db->BindTimeStamp( $date ),
+					':date' => Carbon::parse( $date )->toDateTimeString(),
 					':user_id' => $id,
 					':entry_name_id' => $entry_name_id,
 					':exclude_id' => (int)$exclude_id,
@@ -680,8 +681,8 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$pslf = new PayStubListFactory();
 
 		$ph = array(
-					':start_date' => $this->db->BindTimeStamp( $start_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					':user_id' => $id,
 					':exclude_id' => (int)$exclude_id,
 					);
@@ -1190,8 +1191,8 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 
 		$ph = array(
 					':company_id' => $company_id,
-					':transaction_start_date' => $this->db->BindTimeStamp( strtolower(trim($transaction_start_date)) ),
-					':transaction_end_date' => $this->db->BindTimeStamp( strtolower(trim($transaction_end_date)) )
+					':transaction_start_date' => Carbon::parse( strtolower(trim($transaction_start_date)->toDateTimeString()) ),
+					':transaction_end_date' => Carbon::parse( strtolower(trim($transaction_end_date)->toDateTimeString()) )
 					);
 
 		$query = '
@@ -1245,8 +1246,8 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$uf = new UserFactory();
 
 		$ph = array(
-					':start_date' => $this->db->BindTimeStamp( $start_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					':user_id' => $id,
 					':exclude_id' => (int)$exclude_id,
 					);
@@ -1281,13 +1282,13 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 										group by b.user_id,b.pay_period_id
 									) as tmp ON y.id = tmp.user_id AND x.id = tmp.pay_period_id ';
 
-		$ph[] = $id;
-		$ph[] = $this->db->BindTimeStamp( $start_date );
-		$ph[] = $this->db->BindTimeStamp( $end_date );
+		$ph[':id'] = $id;
+		$ph[':start_date'] = Carbon::parse( $start_date )->toDateTimeString();
+		$ph[':start_date'] = Carbon::parse( $end_date )->toDateTimeString();
 		$query .= '
-					where y.id = ?
-						AND x.start_date >= ?
-						AND x.start_date < ?
+					where y.id = :id
+						AND x.start_date >= :start_date
+						AND x.start_date < :start_date
 						AND x.deleted = 0
 				';
 
@@ -1496,15 +1497,15 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 							}
 
 							if ( isset($filter_data['transaction_start_date']) AND trim($filter_data['transaction_start_date']) != '' ) {
-								$ph[':transaction_start_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_start_date'])) );
+								$ph[':transaction_start_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_start_date'])->toDateTimeString()) );
 								$query  .=	' AND bb.transaction_date >= :transaction_start_date';
 							}
 							if ( isset($filter_data['transaction_end_date']) AND trim($filter_data['transaction_end_date']) != '' ) {
-								$ph[':transaction_end_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_end_date'])) );
+								$ph[':transaction_end_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_end_date'])->toDateTimeString()) );
 								$query  .=	' AND bb.transaction_date <= :transaction_end_date';
 							}
 							if ( isset($filter_data['transaction_date']) AND trim($filter_data['transaction_date']) != '' ) {
-								$ph[':transaction_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_date'])) );
+								$ph[':transaction_date'] = Carbon::parse( strtolower(trim($filter_data['transaction_date'])->toDateTimeString()) );
 								$query  .=	' AND bb.transaction_date = :transaction_date';
 							}
 
@@ -1644,16 +1645,16 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 							}
 
 							if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-								$ph[':start_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['start_date'])) );
+								$ph[':start_date'] = Carbon::parse( strtolower(trim($filter_data['start_date'])->toDateTimeString()) );
 								$query  .=	' AND bb.transaction_date >= :start_date';
 							}
 							if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-								$ph[':end_date'] = $this->db->BindTimeStamp( strtolower(trim($filter_data['end_date'])) );
+								$ph[':end_date'] = Carbon::parse( strtolower(trim($filter_data['end_date'])->toDateTimeString()) );
 								$query  .=	' AND bb.transaction_date <= :end_date';
 							}
 							/*
 							if ( isset($filter_data['transaction_date']) AND trim($filter_data['transaction_date']) != '' ) {
-								$ph[] = $this->db->BindTimeStamp( strtolower(trim($filter_data['transaction_date'])) );
+								$ph[] = Carbon::parse( strtolower(trim($filter_data['transaction_date'])->toDateTimeString()) );
 								$query  .=	' AND bb.transaction_date = ?';
 							}
 							*/

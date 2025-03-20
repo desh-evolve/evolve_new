@@ -30,13 +30,13 @@ class PremiumPolicyBranchListFactory extends PremiumPolicyBranchFactory implemen
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,7 +54,7 @@ class PremiumPolicyBranchListFactory extends PremiumPolicyBranchFactory implemen
 		$ppf = new PremiumPolicyFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -62,7 +62,7 @@ class PremiumPolicyBranchListFactory extends PremiumPolicyBranchFactory implemen
 					from	'. $this->getTable() .' as a,
 							'. $ppf->getTable() .' as b
 					where	b.id = a.premium_policy_id
-						AND a.premium_policy_id = ?
+						AND a.premium_policy_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

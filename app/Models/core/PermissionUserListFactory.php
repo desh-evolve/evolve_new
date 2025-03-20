@@ -30,13 +30,13 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -62,8 +62,8 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		$pcf = new PermissionControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'permission_control_id' => $permission_control_id,
+					':company_id' => $company_id,
+					':permission_control_id' => $permission_control_id,
 					);
 
 		$query = '
@@ -71,8 +71,8 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 					from	'. $this->getTable() .' as a,
 							'. $pcf->getTable() .' as b
 					where	a.permission_control_id = b.id
-						AND b.company_id = ?
-						AND a.permission_control_id != ?
+						AND b.company_id = :company_id
+						AND a.permission_control_id != :permission_control_id
 						AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
 						AND b.deleted = 0
 					';
@@ -97,13 +97,13 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where 	a.permission_control_id = ?
+					where 	a.permission_control_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -123,15 +123,15 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
-					'user_id' => $user_id
+					':id' => $id,
+					':user_id' => $user_id
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.permission_control_id = ?
-						AND a.user_id = ?
+					where	a.permission_control_id = :id
+						AND a.user_id = :user_id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

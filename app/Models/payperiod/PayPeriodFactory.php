@@ -19,6 +19,7 @@ use App\Models\Punch\PunchListFactory;
 use App\Models\Request\RequestListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PayPeriodFactory extends Factory {
 	protected $table = 'pay_period';
@@ -241,8 +242,8 @@ class PayPeriodFactory extends Factory {
 
 		$ph = array(
 					'pay_period_schedule_id' => (int)$this->getPayPeriodSchedule(),
-					'start_date' => $this->db->BindTimeStamp($epoch),
-					'end_date' => $this->db->BindTimeStamp($epoch),
+					'start_date' => Carbon::parse($epoch)->toDateTimeString(),
+					'end_date' => Carbon::parse($epoch)->toDateTimeString(),
 					'id' => (int)$id,
 					);
 

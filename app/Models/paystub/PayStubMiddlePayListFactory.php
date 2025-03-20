@@ -33,13 +33,13 @@ class PayStubMiddlePayListFactory extends PayStubMiddlePayFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -67,16 +67,16 @@ class PayStubMiddlePayListFactory extends PayStubMiddlePayFactory implements Ite
 		}
 
 
-		$ph = array(
-					'pay_period_id' => $pay_period_id,
-                                        'user_id'=>$user_id,
-					);
+		$ph = 	array(
+					':pay_period_id' => $pay_period_id,
+                    ':user_id'=>$user_id,
+				);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.pay_period_id = ?
-						AND a.user_id = ?
+					where	a.pay_period_id = :pay_period_id
+						AND a.user_id = :user_id
 						AND a.deleted = 0
 					';
 

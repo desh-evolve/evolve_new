@@ -12,6 +12,7 @@ use App\Models\Core\TTi18n;
 use App\Models\Department\DepartmentFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
@@ -41,13 +42,13 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -66,13 +67,13 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -98,8 +99,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -107,8 +108,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
-						AND	a.id = ?
+						AND	b.company_id = :company_id
+						AND	a.id = :id
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -125,15 +126,15 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$this->rs = $this->getCache($id.$user_id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
-						'user_id' => $user_id,
+						':id' => $id,
+						':user_id' => $user_id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
-							AND user_id = ?
+						where	id = :id
+							AND user_id = :user_id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -152,13 +153,13 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -181,18 +182,18 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'wage_group_id' => $wage_group_id,
-					'date' => $this->db->BindTimeStamp( $epoch ),
+					':user_id' => $user_id,
+					':wage_group_id' => $wage_group_id,
+					':date' => Carbon::parse( $epoch )->toDateTimeString(),
 
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND wage_group_id = ?
-						AND effective_date <= ?
+					where	user_id = :user_id
+						AND wage_group_id = :wage_group_id
+						AND effective_date <= :date
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -213,18 +214,18 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'created_date' => $date,
-					'updated_date' => $date,
+					':user_id' => $user_id,
+					':created_date' => $date,
+					':updated_date' => $date,
 					);
 
 		//INCLUDE Deleted rows in this query.
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND
-							( created_date >= ? OR updated_date >= ? )
+							( created_date >= :created_date OR updated_date >= :updated_date )
 						';
 		$query .= $this->getSortSQL( $order );
 
@@ -247,7 +248,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -255,7 +256,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND	b.user_id = ?
+						AND	b.user_id = :user_id
 						AND b.wage_group_id = 0
 						AND a.deleted = 0
 						AND b.deleted = 0
@@ -280,7 +281,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'epoch' => $this->db->BindTimeStamp( $epoch ),
+					':epoch' => Carbon::parse( $epoch )->toDateTimeString(),
 					);
 
 		$query = '
@@ -290,7 +291,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 						select 	z.user_id, max(effective_date) as effective_date
 						from	'. $this->getTable() .' as z
 						where
-							z.effective_date <= ?
+							z.effective_date <= :epoch
 							AND z.wage_group_id = 0
 							AND z.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 							AND ( z.deleted = 0 )
@@ -320,8 +321,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'epoch' => $this->db->BindTimeStamp( $pay_period_end_date ),
+					':user_id' => $user_id,
+					':epoch' => Carbon::parse( $pay_period_end_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -329,8 +330,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND	b.user_id = ?
-						AND b.effective_date <= ?
+						AND	b.user_id = :user_id
+						AND b.effective_date <= :epoch
 						AND b.wage_group_id = 0
 						AND (a.deleted = 0 AND b.deleted=0)
 					ORDER BY b.effective_date desc
@@ -353,8 +354,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'date' => $this->db->BindTimeStamp(  $date ),
+					':user_id' => $user_id,
+					':date' => Carbon::parse(  $date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -362,8 +363,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND	b.user_id = ?
-						AND b.effective_date <= ?
+						AND	b.user_id = :user_id
+						AND b.effective_date <= :date
 						AND b.wage_group_id = 0
 						AND (a.deleted = 0 AND b.deleted=0)
 					ORDER BY b.effective_date desc
@@ -390,11 +391,11 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'user_id1' => $user_id,
-					'start_date1' => $this->db->BindTimeStamp( $start_date ),
-					'end_date1' => $this->db->BindTimeStamp( $end_date ),
-					'user_id2' => $user_id,
-					'start_date2' => $this->db->BindTimeStamp( $start_date ),
+					':ser_id1' => $user_id,
+					':tart_date1' => Carbon::parse( $start_date )->toDateTimeString(),
+					':nd_date1' => Carbon::parse( $end_date )->toDateTimeString(),
+					':ser_id2' => $user_id,
+					':tart_date2' => Carbon::parse( $start_date )->toDateTimeString(),
 
 					);
 
@@ -404,9 +405,9 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND	b.user_id = ?
-						AND b.effective_date >= ?
-						AND b.effective_date <= ?
+						AND	b.user_id = :ser_id1
+						AND b.effective_date >= :tart_date1
+						AND b.effective_date <= :nd_date1
 						AND b.wage_group_id = 0
 						AND (a.deleted = 0 AND b.deleted=0)
 					)
@@ -416,8 +417,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 						from	'. $uf->getTable() .' as c,
 								'. $this->getTable() .' as d
 						where	c.id = d.user_id
-							AND	d.user_id = ?
-							AND d.effective_date <= ?
+							AND	d.user_id = :ser_id2
+							AND d.effective_date <= :tart_date2
 							AND d.wage_group_id = 0
 							AND (c.deleted = 0 AND d.deleted=0)
 						ORDER BY d.effective_date desc
@@ -451,15 +452,15 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'start_date' => $this->db->BindTimeStamp( $start_date ),
-					'end_date' => $this->db->BindTimeStamp( $end_date ),
+					':company_id' => $company_id,
+					':start_date' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					);
 
 		$b_user_id_sql = $this->getListSQL($user_id, $ph);
 
 		$ph['company_id2'] = $company_id;
-		$ph['start_date2'] = $this->db->BindTimeStamp( $start_date );
+		$ph['start_date2'] = Carbon::parse( $start_date )->toDateTimeString();
 
 		$query = '
 					(
@@ -467,9 +468,9 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND a.company_id = ?
-						AND b.effective_date >= ?
-						AND b.effective_date <= ?
+						AND a.company_id = :company_id
+						AND b.effective_date >= :start_date
+						AND b.effective_date <= :end_date
 						AND	b.user_id in ('. $b_user_id_sql .')
 						AND (a.deleted = 0 AND b.deleted=0)
 
@@ -484,8 +485,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 									from 	'. $uf->getTable() .' as c,
 											'. $this->getTable() .' as d
 									where c.id = d.user_id
-										AND c.company_id = ?
-										AND d.effective_date <= ?
+										AND c.company_id = :company_id2
+										AND d.effective_date <= :start_date2
 										AND	d.user_id in ('. $this->getListSQL($user_id, $ph) .')
 										AND (c.deleted = 0 AND d.deleted=0)
 									group by d.user_id
@@ -503,13 +504,15 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uwlf = new UserWageListFactory();
 		$uwlf->getByUserIdAndStartDateAndEndDate($user_id, $start_date, $end_date);
 
-		foreach ($uwlf as $uw_obj) {
+		foreach ($uwlf->rs as $uw_obj) {
+			$uwlf->data = (array)$uw_obj;
+			$uw_obj = $uwlf;
 			$list[$uw_obj->getEffectiveDate()] = array(
-														'wage' => $uw_obj->getWage(),
-														'type_id' => $uw_obj->getType(),
-														'hourly_rate' => $uw_obj->getHourlyRate(),
-														'effective_date' => $uw_obj->getEffectiveDate()
-														);
+													'wage' => $uw_obj->getWage(),
+													'type_id' => $uw_obj->getType(),
+													'hourly_rate' => $uw_obj->getHourlyRate(),
+													'effective_date' => $uw_obj->getEffectiveDate()
+												);
 		}
 
 		if ( isset($list) ) {
@@ -539,8 +542,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -548,8 +551,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND a.company_id = ?
-						AND	b.user_id = ?
+						AND a.company_id = :company_id
+						AND	b.user_id = :user_id
 						AND b.deleted = 0';
 		$query .= $this->getSortSQL( $order, $strict );
 
@@ -581,8 +584,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'wage_group_id' => $wage_group_id,
+					':company_id' => $company_id,
+					':wage_group_id' => $wage_group_id,
 					);
 
 		$query = '
@@ -590,8 +593,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND a.company_id = ?
-						AND	b.wage_group_id = ?
+						AND a.company_id = :company_id
+						AND	b.wage_group_id = :wage_group_id
 						AND b.deleted = 0';
 		$query .= $this->getSortSQL( $order, $strict );
 
@@ -645,7 +648,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$wgf = new WageGroupFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -686,7 +689,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -803,8 +806,8 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$wgf = new WageGroupFactory();
 
 		$ph = array(
-					'effective_date' => $this->db->BindTimeStamp($filter_data['effective_date']),
-					'company_id' => $company_id,
+					':effective_date' => Carbon::parse($filter_data['effective_date'])->toDateTimeString(),
+					':company_id' => $company_id,
 					);
 
 /*
@@ -857,7 +860,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					from 	(
 								select 	uwf.user_id as user_id, uwf.wage_group_id as wage_group_id, max(effective_date) as effective_date
 								from	'. $this->getTable() .' as uwf
-								where uwf.effective_date <= ? AND uwf.deleted = 0
+								where uwf.effective_date <= :effective_date AND uwf.deleted = 0
 								GROUP BY uwf.wage_group_id, uwf.user_id
 							) as uwf_b
 
@@ -875,7 +878,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

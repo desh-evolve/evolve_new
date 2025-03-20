@@ -30,13 +30,13 @@ class UserDefaultCompanyDeductionListFactory extends UserDefaultCompanyDeduction
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -52,14 +52,14 @@ class UserDefaultCompanyDeductionListFactory extends UserDefaultCompanyDeduction
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					where
-						a.user_default_id = ?
+						a.user_default_id = :id
 						';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

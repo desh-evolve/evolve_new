@@ -10,6 +10,7 @@ use App\Models\PayStub\PayStubFactory;
 use App\Models\Users\UserFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate {
 
@@ -356,8 +357,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindTimeStamp( $end_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse( $end_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -384,8 +385,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindTimeStamp( $transaction_date ),
-					':end_date' => $this->db->BindTimeStamp( $transaction_date ),
+					':start_date' => Carbon::parse( $transaction_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $transaction_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -424,8 +425,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindTimeStamp( $start_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -504,8 +505,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindTimeStamp( $start_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					);
 
 		//No pay period
@@ -547,12 +548,12 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindTimeStamp( $start_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_date ),
-					':start_date2' => $this->db->BindTimeStamp( $start_date ),
-					':end_date2' => $this->db->BindTimeStamp( $end_date ),
-					':start_date3' => $this->db->BindTimeStamp( $start_date ),
-					':end_date3' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
+					':start_date2' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date2' => Carbon::parse( $end_date )->toDateTimeString(),
+					':start_date3' => Carbon::parse( $start_date )->toDateTimeString(),
+					':end_date3' => Carbon::parse( $end_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -597,8 +598,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindTimeStamp( $end_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_date ),
+					':start_date' => Carbon::parse( $end_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
 					);
 
 		//No pay period
@@ -639,8 +640,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => $this->db->BindTimeStamp( $transaction_date ),
-					':end_date' => $this->db->BindTimeStamp( $transaction_date ),
+					':start_date' => Carbon::parse( $transaction_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $transaction_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -683,8 +684,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':id' => $id,
-					':start_date' => $this->db->BindTimeStamp( $start_transaction_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_transaction_date ),
+					':start_date' => Carbon::parse( $start_transaction_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_transaction_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -733,8 +734,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindTimeStamp( $start_transaction_date ),
-					':end_date' => $this->db->BindTimeStamp( $end_transaction_date ),
+					':start_date' => Carbon::parse( $start_transaction_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $end_transaction_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -780,9 +781,9 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindTimeStamp( $date ),
-					':end_date' => $this->db->BindTimeStamp( $date ),
-					':transaction_date' => $this->db->BindTimeStamp( $date ),
+					':start_date' => Carbon::parse( $date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $date )->toDateTimeString(),
+					':transaction_date' => Carbon::parse( $date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -821,8 +822,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => $this->db->BindTimeStamp( $date ),
-					':end_date' => $this->db->BindTimeStamp( $date ),
+					':start_date' => Carbon::parse( $date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -862,7 +863,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':company_id' => $company_id,
-					':end_date' => $this->db->BindTimeStamp( $date ),
+					':end_date' => Carbon::parse( $date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -910,8 +911,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$ph = array(
 					':id' => $id,
-					':start_date' => $this->db->BindTimeStamp( $transaction_date ),
-					':end_date' => $this->db->BindTimeStamp( $transaction_date ),
+					':start_date' => Carbon::parse( $transaction_date )->toDateTimeString(),
+					':end_date' => Carbon::parse( $transaction_date )->toDateTimeString(),
 					);
 
 		$query = '
@@ -1088,8 +1089,8 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 		$user_ids_sql = $this->getListSQL($user_ids, $ph);
 
-		$ph[':end_date'] = $this->db->BindTimeStamp( $end_date );
-		$ph[':start_date'] = $this->db->BindTimeStamp( $start_date );
+		$ph[':end_date'] = Carbon::parse( $end_date )->toDateTimeString();
+		$ph[':start_date'] = Carbon::parse( $start_date )->toDateTimeString();
 
 		//Start Date arg should be greater then pay period END DATE.
 		//So recurring PS amendments start_date can fall anywhere in the pay period and still get applied.
@@ -1361,11 +1362,11 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateTimeString();
 			$query  .=	' AND a.start_date >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateTimeString();
 			$query  .=	' AND a.start_date <= :end_date';
 		}
 

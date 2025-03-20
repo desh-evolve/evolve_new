@@ -348,8 +348,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		}
 
 		$ph = array(
-					// ':start_date' => $this->db->BindDate( $start_date ),
-					// ':end_date' => $this->db->BindDate( $end_date ),
+					// ':start_date' => Carbon::parse( $start_date )->toDateString(),
+					// ':end_date' => Carbon::parse( $end_date )->toDateString(),
                     ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
                     ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
@@ -419,8 +419,8 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 		$ph = array(
 					':status_id' => $status_id,
-					// ':start_date' => $this->db->BindDate( $start_date ),
-					// ':end_date' => $this->db->BindDate( $end_date ),
+					// ':start_date' => Carbon::parse( $start_date )->toDateString(),
+					// ':end_date' => Carbon::parse( $end_date )->toDateString(),
                     ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
                     ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);

@@ -36,13 +36,13 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		if ( $this->rs === FALSE ) {
 
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -65,15 +65,15 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND company_id = ?
+					where	id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -96,13 +96,13 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -146,7 +146,7 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		$apf = new AbsencePolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -164,7 +164,7 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 						LEFT JOIN '. $apf->getTable() .' as c ON a.absence_policy_id = c.id
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -182,8 +182,8 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 			$query  .=	' AND a.absence_policy_id in ('. $this->getListSQL($filter_data['absence_policy_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = strtolower(trim($filter_data['name']));
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';

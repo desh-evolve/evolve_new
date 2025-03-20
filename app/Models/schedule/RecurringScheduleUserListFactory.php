@@ -30,13 +30,13 @@ class RecurringScheduleUserListFactory extends RecurringScheduleUserFactory impl
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,14 +54,14 @@ class RecurringScheduleUserListFactory extends RecurringScheduleUserFactory impl
 		//$rscf = new RecurringSchedulePolicyGroupFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					where
-						a.recurring_schedule_control_id = ?
+						a.recurring_schedule_control_id = :id
 						';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

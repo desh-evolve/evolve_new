@@ -19,6 +19,7 @@ use App\Models\Users\UserTitleFactory;
 use App\Models\Users\UserWageFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
+use Carbon\Carbon;
 
 class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
@@ -188,8 +189,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateString(),
+					':end_date' => Carbon::parse( $end_date )->toDateString(),
 					);
 
 		//ORDER BY a.branch_id, a.department_id
@@ -230,8 +231,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-					':week_start_epoch' => $this->db->BindDate( $week_start_epoch ),
-					':epoch' =>  $this->db->BindDate( $epoch ),
+					':week_start_epoch' => Carbon::parse( $week_start_epoch )->toDateString(),
+					':epoch' =>  Carbon::parse( $epoch )->toDateString(),
 					);
 
 		//DO NOT Include paid absences. Only count regular time towards weekly overtime.
@@ -298,7 +299,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					':date' => $this->db->BindDate( $date ),
+					':date' => Carbon::parse( $date )->toDateString(),
 					':type_id' => $type_id,
 					);
 
@@ -337,8 +338,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					':start_date' => $this->db->BindDate( $start_date ),
-					':end_date' => $this->db->BindDate( $end_date ),
+					':start_date' => Carbon::parse( $start_date )->toDateString(),
+					':end_date' => Carbon::parse( $end_date )->toDateString(),
 					);
 
 		$query = '
@@ -374,11 +375,11 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		//MySQL is picky when it comes to timestamp filters on datestamp columns.
-		$start_datestamp = $this->db->BindDate( $start_date );
-		$end_datestamp = $this->db->BindDate( $end_date );
+		$start_datestamp = Carbon::parse( $start_date )->toDateString();
+		$end_datestamp = Carbon::parse( $end_date )->toDateString();
 
-		$start_timestamp = $this->db->BindTimeStamp( $start_date );
-		$end_timestamp = $this->db->BindTimeStamp( $end_date );
+		$start_timestamp = Carbon::parse( $start_date )->toDateTimeString();
+		$end_timestamp = Carbon::parse( $end_date )->toDateTimeString();
 
 		$udf = new UserDateFactory();
 /*
@@ -460,11 +461,11 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		//MySQL is picky when it comes to timestamp filters on datestamp columns.
-		$start_datestamp = $this->db->BindDate( $start_date );
-		$end_datestamp = $this->db->BindDate( $end_date );
+		$start_datestamp = Carbon::parse( $start_date )->toDateString();
+		$end_datestamp = Carbon::parse( $end_date )->toDateString();
 
-		$start_timestamp = $this->db->BindTimeStamp( $start_date );
-		$end_timestamp = $this->db->BindTimeStamp( $end_date );
+		$start_timestamp = Carbon::parse( $start_date )->toDateTimeString();
+		$end_timestamp = Carbon::parse( $end_date )->toDateTimeString();
 
 		$udf = new UserDateFactory();
 /*
@@ -810,11 +811,11 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 		//====================
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateTimeString();
 			$query  .=	' AND a.start_time >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateTimeString();
 			$query  .=	' AND a.start_time <= :end_date';
 		}
 
@@ -921,11 +922,11 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
@@ -1038,11 +1039,11 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindDate($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query  .=	' AND b.date_stamp >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindDate($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query  .=	' AND b.date_stamp <= :end_date';
 		}
 
@@ -1323,11 +1324,11 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateTimeString();
 			$query  .=	' AND a.start_time >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateTimeString();
 			$query  .=	' AND a.start_time <= :end_date';
 		}
 
@@ -1624,11 +1625,11 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[':start_date'] = $this->db->BindTimeStamp($filter_data['start_date']);
+			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateTimeString();
 			$query  .=	' AND a.start_time >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[':end_date'] = $this->db->BindTimeStamp($filter_data['end_date']);
+			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateTimeString();
 			$query  .=	' AND a.start_time <= :end_date';
 		}
 
