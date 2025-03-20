@@ -36,13 +36,13 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -72,14 +72,14 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
 					where
-						company_id = ?
+						company_id = :company_id
 						AND id in ('. $this->getListSQL($id, $ph) .')
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -107,14 +107,14 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		//$pgppf = new PolicyGroupPremiumPolicyFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*,
 							( select count(*) from '. $cgmf->getTable() .' as w, '. $pgf->getTable() .' as v where w.company_id = a.company_id AND w.object_type_id = 120 AND w.map_id = a.id AND w.object_id = v.id AND v.deleted = 0) as assigned_policy_groups
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -140,7 +140,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		$ppf = new PremiumPolicyFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -152,7 +152,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 					where 	a.policy_group_id = b.id
 						AND ( b.id = c.object_id AND b.company_id = c.company_id AND c.object_type_id = 120 )
 						AND c.map_id = d.id
-						AND a.user_id = ?
+						AND a.user_id = :user_id
 						AND ( b.deleted = 0 AND d.deleted = 0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -250,7 +250,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -264,7 +264,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -287,8 +287,8 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		}
 
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = strtolower(trim($filter_data['name']));
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';
@@ -321,7 +321,9 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 			$list[0] = '--';
 		}
 
-		foreach ($pplf as $pp_obj) {
+		foreach ($pplf->rs as $pp_obj) {
+			$pplf->data = (array)$pp_obj;
+			$pp_obj = $pplf;
 			$list[$pp_obj->getID()] = $pp_obj->getName();
 		}
 

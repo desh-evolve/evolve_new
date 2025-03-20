@@ -2,6 +2,18 @@
 
 namespace App\Models\Report;
 
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\PayStub\PayStubFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserListFactory;
+
 class PayStubSummaryReport extends Report {
 
 	function __construct() {
@@ -101,7 +113,7 @@ class PayStubSummaryReport extends Report {
 				//Get all pay stub accounts
 				$retval = array();
 
-				$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf = new PayStubEntryAccountListFactory();
 				$psealf->getByCompanyIdAndStatusIdAndTypeId( $this->getUserObject()->getCompany(), 10, array(10,20,30,40,50,60,65) );
 				if ( $psealf->getRecordCount() > 0 ) {
 					$type_options  = $psealf->getOptions('type');
@@ -109,7 +121,9 @@ class PayStubSummaryReport extends Report {
 						$type_options[$key] = str_replace( array('Employee', 'Employer', 'Deduction', 'Total'), array('EE', 'ER', 'Ded', ''), $val);
 					}
 					$i=0;
-					foreach( $psealf as $psea_obj ) {
+					foreach( $psealf->rs as $psea_obj ) {
+						$psealf->data = (array)$psea_obj;
+						$psea_obj = $psealf;
 						//Need to make the PSEA_ID a string so we can array_merge it properly later.
 						if ( $psea_obj->getType() == 40 ) { //Total accounts.
 							$prefix = NULL;
@@ -190,7 +204,7 @@ class PayStubSummaryReport extends Report {
 			case 'template_config':
 				$template = strtolower( Misc::trimSortPrefix( $params['template'] ) );
 				if ( isset($template) AND $template != '' ) {
-					$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+					$pseallf = new PayStubEntryAccountLinkListFactory(); 
 					$pseallf->getByCompanyId( $this->getUserObject()->getCompany() );
 					if ( $pseallf->getRecordCount() > 0 ) {
 						$pseal_obj = $pseallf->getCurrent();
@@ -222,10 +236,12 @@ class PayStubSummaryReport extends Report {
 											$retval['columns'][] = 'P'.$default_linked_columns[0]; //Total Gross
 											$retval['columns'][] = 'P'.$default_linked_columns[1]; //Net Pay
 
-											$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+											$psealf = new PayStubEntryAccountListFactory();
 											$psealf->getByCompanyIdAndStatusIdAndTypeId( $this->getUserObject()->getCompany(), 10, array(10) );
 											if ( $psealf->getRecordCount() > 0 ) {
-												foreach( $psealf as $psea_obj ) {
+												foreach( $psealf->rs as $psea_obj ) {
+													$psealf->data = (array)$psea_obj;
+													$psea_obj = $psealf;
 													$retval['columns'][] = 'P'.$psea_obj->getID();
 												}
 											}
@@ -233,10 +249,12 @@ class PayStubSummaryReport extends Report {
 										case 'employee_deductions':
 											$retval['columns'][] = 'P'.$default_linked_columns[2]; //Employee Deductions
 
-											$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+											$psealf = new PayStubEntryAccountListFactory();
 											$psealf->getByCompanyIdAndStatusIdAndTypeId( $this->getUserObject()->getCompany(), 10, array(20) );
 											if ( $psealf->getRecordCount() > 0 ) {
-												foreach( $psealf as $psea_obj ) {
+												foreach( $psealf->rs as $psea_obj ) {
+													$psealf->data = (array)$psea_obj;
+													$psea_obj = $psealf;
 													$retval['columns'][] = 'P'.$psea_obj->getID();
 												}
 											}
@@ -244,28 +262,34 @@ class PayStubSummaryReport extends Report {
 										case 'employer_deductions':
 											$retval['columns'][] = 'P'.$default_linked_columns[3]; //Employor Deductions
 
-											$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+											$psealf = new PayStubEntryAccountListFactory();
 											$psealf->getByCompanyIdAndStatusIdAndTypeId( $this->getUserObject()->getCompany(), 10, array(30) );
 											if ( $psealf->getRecordCount() > 0 ) {
-												foreach( $psealf as $psea_obj ) {
+												foreach( $psealf->rs as $psea_obj ) {
+													$psealf->data = (array)$psea_obj;
+													$psea_obj = $psealf;
 													$retval['columns'][] = 'P'.$psea_obj->getID();
 												}
 											}
 											break;
 										case 'totals':
-											$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+											$psealf = new PayStubEntryAccountListFactory();
 											$psealf->getByCompanyIdAndStatusIdAndTypeId( $this->getUserObject()->getCompany(), 10, array(40) );
 											if ( $psealf->getRecordCount() > 0 ) {
-												foreach( $psealf as $psea_obj ) {
+												foreach( $psealf->rs as $psea_obj ) {
+													$psealf->data = (array)$psea_obj;
+													$psea_obj = $psealf;
 													$retval['columns'][] = 'P'.$psea_obj->getID();
 												}
 											}
 											break;
 										case 'accruals':
-											$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+											$psealf = new PayStubEntryAccountListFactory();
 											$psealf->getByCompanyIdAndStatusIdAndTypeId( $this->getUserObject()->getCompany(), 10, array(50) );
 											if ( $psealf->getRecordCount() > 0 ) {
-												foreach( $psealf as $psea_obj ) {
+												foreach( $psealf->rs as $psea_obj ) {
+													$psealf->data = (array)$psea_obj;
+													$psea_obj = $psealf;
 													$retval['columns'][] = 'P'.$psea_obj->getID();
 												}
 											}
@@ -486,7 +510,7 @@ class PayStubSummaryReport extends Report {
 		$this->tmp_data = array('pay_stub_entry' => array(), 'user' => array() );
 
 		//Don't need to process data unless we're preparing the report.
-		$psf = TTnew( 'PayStubFactory' );
+		$psf = new PayStubFactory(); 
 		$export_type_options = Misc::trimSortPrefix( $psf->getOptions('export_type') );
 		Debug::Arr($export_type_options, 'zFormat: '. $format, __FILE__, __LINE__, __METHOD__,10);
 		if ( isset($export_type_options[$format]) ) {
@@ -498,7 +522,7 @@ class PayStubSummaryReport extends Report {
 		$filter_data = $this->getFilterConfig();
 
 		if ( $this->getPermissionObject()->Check('pay_stub','view') == FALSE OR $this->getPermissionObject()->Check('wage','view') == FALSE ) {
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory(); 
 			$permission_children_ids = $wage_permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		} else {
@@ -531,11 +555,13 @@ class PayStubSummaryReport extends Report {
 		//Debug::Arr($permission_children_ids, 'Permission Children: '. count($permission_children_ids), __FILE__, __LINE__, __METHOD__,10);
 		//Debug::Arr($wage_permission_children_ids, 'Wage Children: '. count($wage_permission_children_ids), __FILE__, __LINE__, __METHOD__,10);
 
-		$pself = TTnew( 'PayStubEntryListFactory' );
+		$pself = new PayStubEntryListFactory(); 
 		$pself->getAPIReportByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $pself->getRecordCount(), NULL, ('Retrieving Data...') );
 		if ( $pself->getRecordCount() > 0 ) {
-			foreach( $pself as $key => $pse_obj ) {
+			foreach( $pself->rs as $key => $pse_obj ) {
+				$pself->data = (array)$pse_obj;
+				$pse_obj = $pself;
 				$hourly_rate = 0;
 				if ( $wage_permission_children_ids === TRUE OR in_array( $user_id, $wage_permission_children_ids) ) {
 					$hourly_rate = $pse_obj->getColumn( 'hourly_rate' );
@@ -571,11 +597,13 @@ class PayStubSummaryReport extends Report {
 		}
 
 		//Get user data for joining.
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory(); 
 		$ulf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text(' User Total Rows: '. $ulf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 		$this->getProgressBarObject()->start( $this->getAMFMessageID(), $ulf->getRecordCount(), NULL, ('Retrieving Data...') );
-		foreach ( $ulf as $key => $u_obj ) {
+		foreach ( $ulf->rs as $key => $u_obj ) {
+			$ulf->data = (array)$u_obj;
+			$u_obj = $ulf;
 			$this->tmp_data['user'][$u_obj->getId()] = (array)$u_obj->getObjectAsArray( $this->getColumnConfig() );
 			$this->getProgressBarObject()->set( $this->getAMFMessageID(), $key );
 		}
@@ -627,7 +655,7 @@ class PayStubSummaryReport extends Report {
 		$filter_data['permission_children_ids'] = $this->getPermissionObject()->getPermissionChildren( 'pay_stub', 'view' );
 
 		Debug::Arr($filter_data, 'Filter Data: ', __FILE__, __LINE__, __METHOD__, 10);
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory(); 
 		$pslf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text('Record Count: '. $pslf->getRecordCount() .' Format: '. $format, __FILE__, __LINE__, __METHOD__, 10);
 		if ( $pslf->getRecordCount() > 0 ) {
@@ -662,7 +690,7 @@ class PayStubSummaryReport extends Report {
 		$filter_data['permission_children_ids'] = $this->getPermissionObject()->getPermissionChildren( 'pay_stub', 'view' );
 
 		//Debug::Arr($filter_data, 'Filter Data: ', __FILE__, __LINE__, __METHOD__, 10);
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 		$pslf->getAPISearchByCompanyIdAndArrayCriteria( $this->getUserObject()->getCompany(), $filter_data );
 		Debug::Text('Record Count: '. $pslf->getRecordCount() .' Format: '. $format, __FILE__, __LINE__, __METHOD__, 10);
 		if ( $pslf->getRecordCount() > 0 ) {
@@ -678,7 +706,7 @@ class PayStubSummaryReport extends Report {
 			} else {
 				//Include file creation number in the exported file name, so the user knows what it is without opening the file,
 				//and can generate multiple files if they need to match a specific number.
-				$ugdlf = TTnew( 'UserGenericDataListFactory' );
+				$ugdlf = new UserGenericDataListFactory(); 
 				$ugdlf->getByCompanyIdAndScriptAndDefault( $this->getUserObject()->getCompany(), 'PayStubFactory', TRUE );
 				if ( $ugdlf->getRecordCount() > 0 ) {
 					$ugd_obj = $ugdlf->getCurrent();
@@ -703,7 +731,7 @@ class PayStubSummaryReport extends Report {
 	}
 
 	function _output( $format = NULL ) {
-		$psf = TTnew( 'PayStubFactory' );
+		$psf = new PayStubFactory();
 		$export_type_options = Misc::trimSortPrefix( $psf->getOptions('export_type') );
 		Debug::Arr($export_type_options, 'Format: '. $format, __FILE__, __LINE__, __METHOD__,10);
 		if ( $format == 'pdf_employee_pay_stub' OR $format == 'pdf_employee_pay_stub_print'

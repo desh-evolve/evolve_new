@@ -52,7 +52,7 @@ if ( $sort_column != '' ) {
 	$sort_array = array($sort_column => $sort_order);
 }
 
-//$ppslf = TTnew( 'PayPeriodScheduleFactory' );
+//$ppslf = new PayPeriodScheduleFactory();
 
 Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
 
@@ -70,7 +70,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
 		$pplf->StartTransaction();
 
@@ -90,8 +90,8 @@ switch ($action) {
 		break;
 
 	default:
-		$pplf = TTnew( 'PayPeriodListFactory' );
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$pplf = new PayPeriodListFactory();
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		//$pplf->GetByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, array($sort_column => $sort_order) );
 		//$pplf->GetByPayPeriodScheduleId($id, $current_user_prefs->getItemsPerPage(), $page, NULL, array($sort_column => $sort_order) );

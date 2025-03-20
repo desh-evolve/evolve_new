@@ -1164,15 +1164,18 @@ class UserDateTotalFactory extends Factory {
         $pglf = new PolicyGroupListFactory();
         $pglf->getByCompanyIdAndUserId($this->getUserDateObject()->getUserObject()->getCompany(), $user_ids);
 
-        foreach ($pglf as $pglf_obj) {
+        foreach ($pglf->rs as $pglf_obj) {
+            $pglf->data = (array) $pglf_obj;
+            $pglf_obj = $pglf;
             $policy_group_id = $pglf_obj->getId();
         }
 
         if ($slf->getRecordCount() > 0) {
 
             //Check for schedule policy
-            foreach ($slf as $s_obj) {
-
+            foreach ($slf->rs as $s_obj) {
+                $slf->data = (array) $s_obj;
+                $s_obj = $slf;
                 Debug::text(' Schedule Total Time: ' . $s_obj->getTotalTime(), __FILE__, __LINE__, __METHOD__, 10);
                 $schedule_total_time += $s_obj->getTotalTime();
                 $schedule_start_time = $s_obj->getStartTime();
@@ -1249,13 +1252,17 @@ class UserDateTotalFactory extends Factory {
             $hlf = new HolidayListFactory();
             $hlf->getByPolicyGroupUserIdAndDate($this->getUserDateObject()->getUser(), $this->getUserDateObject()->getDateStamp());
 
-            foreach ($hlf as $hlf_obj) {
+            foreach ($hlf->rs as $hlf_obj) {
+                $hlf->data = (array) $hlf_obj;
+                $hlf_obj = $hlf;
                 $holiday_policy_id = $hlf_obj->getHolidayPolicyID();
             }
 
             $tmp_trigger_time_arr = array();
             $npvc_daily = false;
-            foreach ($otplf as $otp_obj) {
+            foreach ($otplf->rs as $otp_obj) {
+                $otplf->data = (array) $otp_obj;
+                $otp_obj = $otplf;
 
                 Debug::text('&nbsp;&nbsp;Checking Against Policy: ' . $otp_obj->getName() . ' Trigger Time: ' . $otp_obj->getTriggerTime(), __FILE__, __LINE__, __METHOD__, 10);
                 $trigger_time = NULL;
@@ -1568,7 +1575,9 @@ class UserDateTotalFactory extends Factory {
                 }
 
                 $tmp_policy_total_time = NULL;
-                foreach ($udtlf as $udt_obj) {
+                foreach ($udtlf->rs as $udt_obj) {
+                    $udtlf->data = (array) $udt_obj;
+                    $udt_obj = $udtlf;
                     //Ignore incomplete punches
                     if ($udt_obj->getTotalTime() == 0) {
                         continue;
@@ -1851,8 +1860,9 @@ class UserDateTotalFactory extends Factory {
 
                                     $plf = new PunchListFactory();
                                     $plf->getByUserDateId($this->getUserDateID());
-                                    foreach ($plf as $plf_obj) {
-
+                                    foreach ($plf->rs as $plf_obj) {
+                                        $plf->data = (array) $plf_obj;
+                                        $plf_obj = $plf;
                                         $inout_time[$plf_obj->getStatus()][] = $plf_obj->getTimeStamp();
                                     }
 
@@ -1934,8 +1944,9 @@ class UserDateTotalFactory extends Factory {
 
                                     $plf = new PunchListFactory();
                                     $plf->getByUserDateId($this->getUserDateID());
-                                    foreach ($plf as $plf_obj) {
-
+                                    foreach ($plf->rs as $plf_obj) {
+                                        $plf->data = (array) $plf_obj;
+                                        $plf_obj = $plf;
                                         $inout_time[$plf_obj->getStatus()][] = $plf_obj->getTimeStamp();
                                     }
 
@@ -2071,8 +2082,9 @@ class UserDateTotalFactory extends Factory {
 
                                     $plf = new PunchListFactory();
                                     $plf->getByUserDateId($this->getUserDateID());
-                                    foreach ($plf as $plf_obj) {
-
+                                    foreach ($plf->rs as $plf_obj) {
+                                        $plf->data = (array) $plf_obj;
+                                        $plf_obj = $plf;
                                         $inout_time[$plf_obj->getStatus()][] = $plf_obj->getTimeStamp();
                                     }
 
@@ -2278,7 +2290,9 @@ class UserDateTotalFactory extends Factory {
         if ($plf->getRecordCount() > 0) {
             $shift = 0;
             $i = 0;
-            foreach ($plf as $p_obj) {
+            foreach ($plf->rs as $p_obj) {
+                $plf->data = (array) $p_obj;
+                $p_obj = $plf;
                 $total_time = $p_obj->getPunchControlObject()->getTotalTime();
 
                 if ($total_time == 0) {
@@ -2330,7 +2344,9 @@ class UserDateTotalFactory extends Factory {
         if ($pplf->getRecordCount() > 0) {
             Debug::text('Found Premium Policies to apply.', __FILE__, __LINE__, __METHOD__, 10);
 
-            foreach ($pplf as $pp_obj) {
+            foreach ($pplf->rs as $pp_obj) {
+                $pplf->data = (array) $pp_obj;
+                $pp_obj = $pplf;
                 Debug::text('Found Premium Policy: ID: ' . $pp_obj->getId() . ' Type: ' . $pp_obj->getType(), __FILE__, __LINE__, __METHOD__, 10);
 
 
@@ -2393,7 +2409,9 @@ class UserDateTotalFactory extends Factory {
                                 Debug::text('Found Total Hours to attempt to apply premium policy... Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
                                 $valid_user_date_total_ids = array();
-                                foreach ($udtlf as $udt_obj) {
+                                foreach ($udtlf->rs as $udt_obj) {
+                                    $udtlf->data = (array) $udt_obj;
+                                    $udt_obj = $udtlf;
                                     Debug::text('UserDateTotal ID: ' . $udt_obj->getID() . ' Total Time: ' . $udt_obj->getTotalTime(), __FILE__, __LINE__, __METHOD__, 10);
 
 
@@ -2422,7 +2440,9 @@ class UserDateTotalFactory extends Factory {
                                         $plf->getByPunchControlId($udt_obj->getPunchControlID());
                                         if ($plf->getRecordCount() > 0) {
                                             Debug::text('Found Punches: ' . $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-                                            foreach ($plf as $punch_obj) {
+                                            foreach ($plf->rs as $punch_obj) {
+                                                $plf->data = (array) $punch_obj;
+                                                $punch_obj = $plf;
                                                 if ($pp_obj->getIncludePartialPunch() == TRUE) {
                                                     //Debug::text('Including Partial Punches...', __FILE__, __LINE__, __METHOD__, 10);
 
@@ -2616,7 +2636,9 @@ class UserDateTotalFactory extends Factory {
                         if ($udtlf->getRecordCount() > 0) {
                             Debug::text('Found Total Hours to attempt to apply premium policy... Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
-                            foreach ($udtlf as $udt_obj) {
+                            foreach ($udtlf->rs as $udt_obj) {
+                                $udtlf->data = (array) $udt_obj;
+                                $udt_obj = $udtlf;
                                 //Ignore incomplete punches
                                 if ($udt_obj->getTotalTime() == 0) {
                                     continue;
@@ -2798,7 +2820,9 @@ class UserDateTotalFactory extends Factory {
                             $plf->getByUserDateId($this->getUserDateID()); //Get all punches for the day.
                             if ($plf->getRecordCount() > 0) {
                                 Debug::text('Found Punches: ' . $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-                                foreach ($plf as $p_obj) {
+                                foreach ($plf->rs as $p_obj) {
+                                    $plf->data = (array) $p_obj;
+                                    $p_obj = $plf;
                                     Debug::text('TimeStamp: ' . $p_obj->getTimeStamp() . ' Status: ' . $p_obj->getStatus(), __FILE__, __LINE__, __METHOD__, 10);
                                     $punch_pairs[$p_obj->getPunchControlID()][] = array(
                                         'status_id' => $p_obj->getStatus(),
@@ -2894,7 +2918,9 @@ class UserDateTotalFactory extends Factory {
                         if ($plf->getRecordCount() > 0) {
                             Debug::text('Found Punches: ' . $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
                             $i = 0;
-                            foreach ($plf as $p_obj) {
+                            foreach ($plf->rs as $p_obj) {
+                                $plf->data = (array) $p_obj;
+                                $p_obj = $plf;
                                 Debug::text('TimeStamp: ' . $p_obj->getTimeStamp() . ' Status: ' . $p_obj->getStatus(), __FILE__, __LINE__, __METHOD__, 10);
                                 if ($i == 0) {
                                     $first_punch_epoch = $p_obj->getTimeStamp();
@@ -2951,7 +2977,9 @@ class UserDateTotalFactory extends Factory {
                                             Debug::text('Found Total Hours to attempt to apply premium policy... Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
                                             $x = 1;
-                                            foreach ($udtlf as $udt_obj) {
+                                            foreach ($udtlf->rs as $udt_obj) {
+                                                $udtlf->data = (array) $udt_obj;
+                                                $udt_obj = $udtlf;
                                                 Debug::text('X: ' . $x . '/' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
                                                 //Ignore incomplete punches
@@ -3077,14 +3105,18 @@ class UserDateTotalFactory extends Factory {
                             Debug::text('Found Total Hours to attempt to apply premium policy... Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
                             $x = 1;
-                            foreach ($udtlf as $udt_obj) { //We only use last punch pair.
+                            foreach ($udtlf->rs as $udt_obj) { //We only use last punch pair.
+                                $udtlf->data = (array) $udt_obj;
+                                $udt_obj = $udtlf;
                                 $punch_obj = FALSE;
                                 if ($udt_obj->getPunchControlID() > 0) {
                                     $plf = new PunchListFactory();
                                     $plf->getByPunchControlId($udt_obj->getPunchControlID());
                                     if ($plf->getRecordCount() > 0) {
                                         Debug::text('Found Punches: ' . $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-                                        foreach ($plf as $punch_obj) {
+                                        foreach ($plf->rs as $punch_obj) {
+                                            $plf->data = (array) $punch_obj;
+                                            $punch_obj = $plf;
                                             break; //Get first punch_obj.
                                         }
                                     }
@@ -3209,7 +3241,9 @@ class UserDateTotalFactory extends Factory {
                                     if ($udtlf->getRecordCount() > 0) {
                                         Debug::text('Found Total Hours to attempt to apply premium policy... Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
-                                        foreach ($udtlf as $udt_obj) {
+                                        foreach ($udtlf->rs as $udt_obj) {
+                                            $udtlf->data = (array) $udt_obj;
+                                            $udt_obj = $udtlf;
                                             //Ignore incomplete punches
                                             if ($udt_obj->getTotalTime() == 0) {
                                                 continue;
@@ -3343,7 +3377,9 @@ class UserDateTotalFactory extends Factory {
                             if ($udtlf->getRecordCount() > 0) {
                                 Debug::text('Found Total Hours to attempt to apply premium policy... Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
-                                foreach ($udtlf as $udt_obj) {
+                                foreach ($udtlf->rs as $udt_obj) {
+                                    $udtlf->data = (array) $udt_obj;
+                                    $udt_obj = $udtlf;
                                     //Ignore incomplete punches
                                     if ($udt_obj->getTotalTime() == 0) {
                                         continue;
@@ -3437,7 +3473,9 @@ class UserDateTotalFactory extends Factory {
                                                                 $plf->getByPunchControlId($udt_obj->getPunchControlID());
                                                                 if ($plf->getRecordCount() > 0) {
                                                                     Debug::text('Found Punches: ' . $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-                                                                    foreach ($plf as $punch_obj) {
+                                                                    foreach ($plf->rs as $punch_obj) {
+                                                                        $plf->data = (array) $punch_obj;
+                                                                        $punch_obj = $plf;
                                                                         if ($pp_obj->getIncludePartialPunch() == TRUE) {
                                                                             //Debug::text('Including Partial Punches...', __FILE__, __LINE__, __METHOD__, 10);
 
@@ -3652,7 +3690,9 @@ class UserDateTotalFactory extends Factory {
         $udtlf = new UserDateTotalListFactory();
         $udtlf->getByUserDateIdAndStatus($this->getUserDateID(), 20);
         if ($udtlf->getRecordCount() > 0) {
-            foreach ($udtlf as $udt_obj) {
+            foreach ($udtlf->rs as $udt_obj) {
+                $udtlf->data = (array) $udt_obj;
+                $udt_obj = $udtlf;
                 $udt_arr[$udt_obj->getId()] = $udt_obj->getTotalTime();
 
                 $day_total_time = bcadd($day_total_time, $udt_obj->getTotalTime());
@@ -3721,7 +3761,9 @@ class UserDateTotalFactory extends Factory {
                 $pair = 0;
                 $x = 0;
                 $out_for_lunch = FALSE;
-                foreach ($plf as $p_obj) {
+                foreach ($plf->rs as $p_obj) {
+                    $plf->data = (array) $p_obj;
+                    $p_obj = $plf;
                     if ($p_obj->getStatus() == 20 AND $p_obj->getType() == 20) {
                         $lunch_out_timestamp = $p_obj->getTimeStamp();
                         $out_for_lunch = TRUE;
@@ -3822,7 +3864,9 @@ class UserDateTotalFactory extends Factory {
         $udtlf = new UserDateTotalListFactory();
         $udtlf->getByUserDateIdAndStatus($this->getUserDateID(), 20);
         if ($udtlf->getRecordCount() > 0) {
-            foreach ($udtlf as $udt_obj) {
+            foreach ($udtlf->rs as $udt_obj) {
+                $udtlf->data = (array) $udt_obj;
+                $udt_obj = $udtlf;
                 $udt_arr[$udt_obj->getId()] = $udt_obj->getTotalTime();
 
                 $day_total_time = bcadd($day_total_time, $udt_obj->getTotalTime());
@@ -3888,7 +3932,9 @@ class UserDateTotalFactory extends Factory {
                 $pair = 0;
                 $x = 0;
                 $out_for_break = FALSE;
-                foreach ($plf as $p_obj) {
+                foreach ($plf->rs as $p_obj) {
+                    $plf->data = (array) $p_obj;
+                    $p_obj = $plf;
                     if ($p_obj->getStatus() == 20 AND $p_obj->getType() == 30) {
                         $break_out_timestamp = $p_obj->getTimeStamp();
                         $out_for_break = TRUE;
@@ -3925,7 +3971,9 @@ class UserDateTotalFactory extends Factory {
             $remaining_break_time = $break_overall_total_time;
 
             $i = 0;
-            foreach ($bplf as $break_policy_obj) {
+            foreach ($bplf->rs as $break_policy_obj) {
+                $bplf->data = (array) $break_policy_obj;
+                $break_policy_obj = $bplf;
                 $break_policy_time = 0;
                 if (!isset($break_total_time_arr[$i])) {
                     $break_total_time_arr[$i] = 0; //Prevent PHP warnings.
@@ -4123,7 +4171,10 @@ class UserDateTotalFactory extends Factory {
                 $aplf->getByPolicyGroupUserIdAndType($this->getUserDateObject()->getUser(), 30);
                 if ($aplf->getRecordCount() > 0) {
                     Debug::text('Found Hour Based Accrual Policies to apply.', __FILE__, __LINE__, __METHOD__, 10);
-                    foreach ($aplf as $ap_obj) {
+                    foreach ($aplf->rs as $ap_obj) {
+                        $aplf->data = (array) $ap_obj;
+                        $ap_obj = $aplf;
+
                         if ($ap_obj->getMinimumEmployedDays() == 0
                                 OR TTDate::getDays(($this->getUserDateObject()->getDateStamp() - $this->getUserDateObject()->getUserObject()->getHireDate())) >= $ap_obj->getMinimumEmployedDays()) {
                             Debug::Text('&nbsp;&nbsp;User has been employed long enough.', __FILE__, __LINE__, __METHOD__, 10);
@@ -4243,7 +4294,9 @@ class UserDateTotalFactory extends Factory {
             $schedule_absence_total_time = 0;
             if ($slf->getRecordCount() > 0) {
                 //Check for schedule policy
-                foreach ($slf as $s_obj) {
+                foreach ($slf->rs as $s_obj) {
+                    $slf->data = (array) $s_obj;
+                    $s_obj = $slf;
                     Debug::text(' Schedule Absence Total Time: ' . $s_obj->getTotalTime(), __FILE__, __LINE__, __METHOD__, 10);
 
                     $schedule_absence_total_time += $s_obj->getTotalTime();
@@ -4281,7 +4334,9 @@ class UserDateTotalFactory extends Factory {
         $slf->getByUserDateId($this->getUserDateID());
         if ($slf->getRecordCount() > 0) {
             //Check for schedule policy
-            foreach ($slf as $s_obj) {
+            foreach ($slf->rs as $s_obj) {
+                $slf->data = (array) $s_obj;
+                $s_obj = $slf;
                 Debug::text(' Schedule Total Time: ' . $s_obj->getTotalTime(), __FILE__, __LINE__, __METHOD__, 10);
                 if ($s_obj->getStatus() == 20 AND $s_obj->getAbsencePolicyID() != '') {
                     Debug::text(' Scheduled Absence Found of Total Time: ' . $s_obj->getTotalTime(), __FILE__, __LINE__, __METHOD__, 10);
@@ -4499,7 +4554,9 @@ class UserDateTotalFactory extends Factory {
             if ($udtlf->getRecordCount() > 0) {
                 Debug::text('Found Total Hours for just regular time: Record Count: ' . $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
                 $user_date_regular_time_compact_arr = NULL;
-                foreach ($udtlf as $udt_obj) {
+                foreach ($udtlf->rs as $udt_obj) {
+                    $udtlf->data = (array) $udt_obj;
+                    $udt_obj = $udtlf;
                     //Create compact array, so we don't make as many system entries.
                     //Check if this is a paid absence or not.
                     if ($udt_obj->getStatus() == 20 AND $udt_obj->getTotalTime() > 0) {
@@ -4622,7 +4679,10 @@ class UserDateTotalFactory extends Factory {
         $hplf = new HolidayPolicyListFactory();
         $hplf->getByCompanyId($this->getUserDateObject()->getUserObject()->getCompany());
         if ($hplf->getRecordCount() > 0) {
-            foreach ($hplf as $hp_obj) {
+            foreach ($hplf->rs as $hp_obj) {
+                $hplf->data = (array) $hp_obj;
+                $hp_obj = $hplf;
+
                 if ($hp_obj->getMinimumWorkedPeriodDays() > $holiday_before_days) {
                     $holiday_before_days = $hp_obj->getMinimumWorkedPeriodDays();
                 }
@@ -4650,7 +4710,9 @@ class UserDateTotalFactory extends Factory {
                 Debug::text('Found Holidays within range: ' . $hlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 
                 $udlf = new UserDateListFactory();
-                foreach ($hlf as $h_obj) {
+                foreach ($hlf->rs as $h_obj) {
+                    $hlf->data = (array) $h_obj;
+                    $h_obj = $hlf;
                     Debug::text('ReCalculating Day due to Holiday: ' . TTDate::getDate('DATE', $h_obj->getDateStamp()), __FILE__, __LINE__, __METHOD__, 10);
                     $user_date_ids = $udlf->getArrayByListFactory($udlf->getByUserIdAndDate($this->getUserDateObject()->getUser(), $h_obj->getDateStamp()));
                     if (is_array($user_date_ids)) {
@@ -4707,7 +4769,9 @@ class UserDateTotalFactory extends Factory {
             $udlf->StartTransaction();
             $x = 0;
             $x_max = $udlf->getRecordCount();
-            foreach ($udlf as $ud_obj) {
+            foreach ($udlf->rs as $ud_obj) {
+                $udlf->data = (array) $ud_obj;
+                $ud_obj = $udlf;
 
                 if ($x == $x_max) {
                     //At the end of each range, make sure we calculate holidays.
@@ -4762,7 +4826,10 @@ class UserDateTotalFactory extends Factory {
             //Need to consider re-calculating multiple weeks at once.
 
             $i = 0;
-            foreach ($udlf as $ud_obj) {
+            foreach ($udlf->rs as $ud_obj) {
+                $udlf->data = (array) $ud_obj;
+                $ud_obj = $udlf;
+
                 $start_week_epoch = TTDate::getBeginWeekEpoch($ud_obj->getDateStamp(), $start_week_day_id);
                 $end_week_epoch = TTDate::getEndWeekEpoch($ud_obj->getDateStamp(), $start_week_day_id);
 
@@ -4815,7 +4882,9 @@ class UserDateTotalFactory extends Factory {
 
                         $z = 1;
                         $z_max = $udlf->getRecordCount();
-                        foreach ($udlf as $ud_obj) {
+                        foreach ($udlf->rs as $ud_obj) {
+                            $udlf->data = (array) $ud_obj;
+                            $ud_obj = $udlf;
                             //We only need to re-calculate exceptions on the exact days specified by user_date_ids.
                             //This was the case before we Over Weekly Time/Over Scheduled Weekly Time exceptions,
                             //Now we have to enable calculating exceptions for the entire week.

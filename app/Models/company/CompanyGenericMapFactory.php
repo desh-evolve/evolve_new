@@ -211,21 +211,22 @@ class CompanyGenericMapFactory extends Factory {
 				$cgmlf->getByCompanyIDAndObjectTypeAndObjectID( $company_id, $object_type_id, $object_id );
 
 				$tmp_ids = array();
-				foreach ($cgmlf as $obj) {
-					$id = $obj->getMapID();
-					Debug::text('Object Type ID: '. $object_type_id .' Object ID: '. $obj->getObjectID() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ($cgmlf->rs as $obj) {
+					$cgmlf->data = (array)$obj;
+					$id = $cgmlf->getMapID();
+					Debug::text('Object Type ID: '. $object_type_id .' Object ID: '. $cgmlf->getObjectID() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete objects that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$cgmlf->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $cgmlf);
 			}
 
 			foreach ($ids as $id) {

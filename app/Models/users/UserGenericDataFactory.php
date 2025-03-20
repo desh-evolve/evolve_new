@@ -36,7 +36,7 @@ class UserGenericDataFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(			'company',
 															$clf->getByID($id),
@@ -60,7 +60,7 @@ class UserGenericDataFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
@@ -216,14 +216,16 @@ class UserGenericDataFactory extends Factory {
 	function preSave() {
 		if ( $this->getDefault() == TRUE ) {
 			//Remove default flag from all other entries.
-			$ugdlf = TTnew( 'UserGenericDataListFactory' );
+			$ugdlf = new UserGenericDataListFactory();
 			if ( $this->getUser() == FALSE ) {
 				$ugdlf->getByCompanyIdAndScriptAndDefault( $this->getUser(), $this->getScript(), TRUE );
 			} else {
 				$ugdlf->getByUserIdAndScriptAndDefault( $this->getUser(), $this->getScript(), TRUE );
 			}
 			if ( $ugdlf->getRecordCount() > 0 ) {
-				foreach( $ugdlf as $ugd_obj ) {
+				foreach( $ugdlf->rs as $ugd_obj ) {
+					$ugdlf->data = (array)$ugd_obj;
+					$ugd_obj = $ugdlf;
 					Debug::Text('Removing Default Flag From: '. $ugd_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 					$ugd_obj->setDefault(FALSE);
 					if ( $ugd_obj->isValid() ) {
@@ -256,7 +258,7 @@ class UserGenericDataFactory extends Factory {
 
 		$retarr = array();
 
-		$ugdlf = TTnew( 'UserGenericDataListFactory' );
+		$ugdlf = new UserGenericDataListFactory();
 		if ( isset($saved_search_id) AND $saved_search_id != 0 AND $saved_search_id != '' ) {
 			$ugdlf->getByUserIdAndId( $current_user->getId(), $saved_search_id );
 		} else {
@@ -296,8 +298,8 @@ class UserGenericDataFactory extends Factory {
 
 		$saved_search_id = FALSE;
 
-		$ugdlf = TTnew( 'UserGenericDataListFactory' );
-		$ugdf = TTnew( 'UserGenericDataFactory' );
+		$ugdlf = new UserGenericDataListFactory();
+		$ugdf = new UserGenericDataFactory();
 		if ( $action == 'search_form_update' OR $action == 'search_form_save' ) {
 			Debug::Text('Save Report!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -368,7 +370,7 @@ class UserGenericDataFactory extends Factory {
 
 		$retarr = array();
 
-		$ugdlf = TTnew( 'UserGenericDataListFactory' );
+		$ugdlf = new UserGenericDataListFactory();
 		if ( isset($saved_search_id) AND $saved_search_id != 0 AND $saved_search_id != '' ) {
 			$ugdlf->getByUserIdAndId( $current_user->getId(), $saved_search_id );
 		} else {
@@ -401,8 +403,8 @@ class UserGenericDataFactory extends Factory {
 
 		$saved_report_id = FALSE;
 
-		$ugdlf = TTnew( 'UserGenericDataListFactory' );
-		$ugdf = TTnew( 'UserGenericDataFactory' );
+		$ugdlf = new UserGenericDataListFactory();
+		$ugdf = new UserGenericDataFactory();
 		if ( $action == 'save' OR $action == 'update' ) {
 			Debug::Text('Save Report!', __FILE__, __LINE__, __METHOD__,10);
 

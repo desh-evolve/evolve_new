@@ -19,13 +19,13 @@ return new class extends Migration
             $table->decimal('federal_additional_deduction', 9, 2); // Federal additional deduction
             $table->decimal('wcb_rate', 9, 2); // WCB rate
             $table->boolean('ei_exempt')->default(0); // EI exemption flag
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by
-            $table->boolean('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->boolean('cpp_exempt')->default(0); // CPP exemption flag
             $table->boolean('federal_tax_exempt')->default(0); // Federal tax exemption flag
             $table->boolean('provincial_tax_exempt')->default(0); // Provincial tax exemption flag

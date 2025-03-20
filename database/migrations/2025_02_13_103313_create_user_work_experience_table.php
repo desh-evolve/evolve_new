@@ -20,13 +20,13 @@ return new class extends Migration
             $table->string('department', 250); // Department name
             $table->string('designation', 250); // Designation
             $table->string('remaks', 250); // Remarks
-            $table->integer('created_date'); // Created date
-            $table->integer('created_by'); // Created by
-            $table->integer('updated_date'); // Updated date
-            $table->integer('updated_by'); // Updated by
-            $table->integer('deleted_date'); // Deleted date
-            $table->integer('deleted_by'); // Deleted by
-            $table->tinyInteger('deleted'); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

@@ -11,6 +11,7 @@ use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\TTMail;
+use App\Models\Users\UserPreferenceListFactory;
 
 class MessageFactory extends Factory {
 	protected $table = 'message';
@@ -93,7 +94,7 @@ class MessageFactory extends Factory {
 			$id = 0;
 		}
 
-		$mlf = TTnew( 'MessageListFactory' );
+		$mlf = new MessageListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'parent',
@@ -115,16 +116,16 @@ class MessageFactory extends Factory {
 			switch ( $this->getObjectType() ) {
 				case 5:
 				case 100:
-					$this->obj_handler = TTnew( 'UserListFactory' );
+					$this->obj_handler = new UserListFactory();
 					break;
 				case 40:
-					$this->obj_handler = TTnew( 'AuthorizationListFactory' );
+					$this->obj_handler = new AuthorizationListFactory();
 					break;
 				case 50:
-					$this->obj_handler = TTnew( 'RequestListFactory' );
+					$this->obj_handler = new RequestListFactory();
 					break;
 				case 90:
-					$this->obj_handler = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+					$this->obj_handler = new PayPeriodTimeSheetVerifyListFactory();
 					break;
 			}
 
@@ -400,7 +401,7 @@ class MessageFactory extends Factory {
 			}
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'ack_by',
 													$ulf->getByID($id),
@@ -430,7 +431,7 @@ class MessageFactory extends Factory {
 						if ( $this->getParent() == 0 ) {
 							$user_ids[] = $obj->getId();
 						} else {
-							$mlf = TTnew( 'MessageListFactory' );
+							$mlf = new MessageListFactory();
 							$mlf->getById( $this->getParent() );
 							if ( $mlf->getRecordCount() > 0 ) {
 								$m_obj = $mlf->getCurrent();
@@ -445,11 +446,13 @@ class MessageFactory extends Factory {
 						break;
 					case 50: //Request
 						//Get all users who have contributed to the thread.
-						$mlf = TTnew( 'MessageListFactory' );
+						$mlf = new MessageListFactory();
 						$mlf->getMessagesInThreadById( $this->getId() );
 						Debug::Text(' Messages In Thread: '. $mlf->getRecordCount() , __FILE__, __LINE__, __METHOD__,10);
 						if ( $mlf->getRecordCount() > 0 ) {
-							foreach( $mlf as $m_obj ) {
+							foreach( $mlf->rs as $m_obj ) {
+								$mlf->data = (array) $m_obj;
+								$m_obj = $mlf;
 								$user_ids[] = $m_obj->getCreatedBy();
 							}
 						}
@@ -462,7 +465,7 @@ class MessageFactory extends Factory {
 							//Get direct parent in hierarchy.
 							$u_obj = $obj->getUserObject();
 
-							$hlf = TTnew( 'HierarchyListFactory' );
+							$hlf = new HierarchyListFactory();
 							$user_ids[] = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $u_obj->getCompany(), $u_obj->getId(), $this->getObjectType(), TRUE, FALSE );
 							unset($hlf);
 						}
@@ -492,10 +495,12 @@ class MessageFactory extends Factory {
 				//Get user preferences and determine if they accept email notifications.
 				Debug::Arr($user_ids, 'Recipient User Ids: ', __FILE__, __LINE__, __METHOD__,10);
 
-				$uplf = TTnew( 'UserPreferenceListFactory' );
+				$uplf = new UserPreferenceListFactory();
 				$uplf->getByUserId( $user_ids );
 				if ( $uplf->getRecordCount() > 0 ) {
-					foreach( $uplf as $up_obj ) {
+					foreach( $uplf->rs as $up_obj ) {
+						$uplf->data = (array) $up_obj;
+						$up_obj = $uplf;
 						if ( $up_obj->getEnableEmailNotificationMessage() == TRUE AND $up_obj->getUserObject()->getStatus() == 10 ) {
 							if ( $up_obj->getUserObject()->getWorkEmail() != '' ) {
 								$retarr[] = $up_obj->getUserObject()->getWorkEmail();

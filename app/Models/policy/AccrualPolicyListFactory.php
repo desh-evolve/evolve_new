@@ -247,7 +247,9 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 
@@ -267,7 +269,9 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 			$list[0] = ('-- None --');
 		}
 
-		foreach ($aplf as $ap_obj) {
+		foreach ($aplf->rs as $ap_obj) {
+			$aplf->data = (array)$ap_obj;
+			$ap_obj = $aplf;
 			$list[$ap_obj->getID()] = $ap_obj->getName();
 		}
 

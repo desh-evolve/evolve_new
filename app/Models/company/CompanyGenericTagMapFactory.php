@@ -135,20 +135,21 @@ class CompanyGenericTagMapFactory extends Factory {
 				$cgtmlf->getByCompanyIDAndObjectTypeAndObjectID( $company_id, $object_type_id, $object_id );
 
 				$tmp_ids = array();
-				foreach ( $cgtmlf as $obj ) {
-					$id = $obj->getTagID();
-					Debug::text('Object Type ID: '. $object_type_id .' Object ID: '. $obj->getObjectID() .' Tag ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ( $cgtmlf->rs as $obj ) {
+					$cgtmlf->data = (array)$obj;
+					$id = $cgtmlf->getTagID();
+					Debug::text('Object Type ID: '. $object_type_id .' Object ID: '. $cgtmlf->getObjectID() .' Tag ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					if ( isset($del_tag_ids) AND in_array($id, $del_tag_ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$cgtmlf->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $cgtmlf);
 				//Debug::Arr($tmp_ids, 'TMP Ids: ', __FILE__, __LINE__, __METHOD__, 10);
 
 				//Add new tags.

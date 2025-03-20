@@ -272,12 +272,13 @@ class CalculatePayStub extends PayStubFactory {
 		if ( is_object($udlf) ) {
 			//Loop over all User Deductions getting Include/Exclude and PS accounts.
 			if ( $udlf->getRecordCount() > 0 ) {
-				foreach ( $udlf as $ud_obj ) {
-					Debug::text('User Deduction: ID: '. $ud_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
-					if ( $ud_obj->getCompanyDeductionObject()->getStatus() == 10 ) {
+				foreach ( $udlf->rs as $ud_obj ) {
+					$udlf->data = (array)$ud_obj;
+					Debug::text('User Deduction: ID: '. $udlf->getId(), __FILE__, __LINE__, __METHOD__,10);
+					if ( $udlf->getCompanyDeductionObject()->getStatus() == 10 ) {
 						//$deduction_order_arr = $this->calculateDeductionOrder( $deduction_order_arr, $ud_obj );
-						$global_id = substr(get_class( $ud_obj ),0,1) . $ud_obj->getId();
-						$deduction_order_arr[$global_id] = $this->getDeductionObjectArrayForSorting( $ud_obj );
+						$global_id = substr(get_class( $udlf ),0,1) . $udlf->getId();
+						$deduction_order_arr[$global_id] = $this->getDeductionObjectArrayForSorting( $udlf );
 
 						$dependency_tree->addNode( $global_id, $deduction_order_arr[$global_id]['require_accounts'], $deduction_order_arr[$global_id]['affect_accounts'], $deduction_order_arr[$global_id]['order']);
 					} else {
@@ -290,11 +291,12 @@ class CalculatePayStub extends PayStubFactory {
 
 		if ( is_object( $psalf) ) {
 			if ( $psalf->getRecordCount() > 0 ) {
-				foreach ( $psalf as $psa_obj ) {
-					Debug::text('PS Amendment ID: '. $psa_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
+				foreach ( $psalf->rs as $psa_obj ) {
+					$psalf->data = (array)$psa_obj;
+					Debug::text('PS Amendment ID: '. $psalf->getId(), __FILE__, __LINE__, __METHOD__,10);
 					//$deduction_order_arr = $this->calculateDeductionOrder( $deduction_order_arr, $ud_obj );
-					$global_id = substr(get_class( $psa_obj ),0,1) . $psa_obj->getId();
-					$deduction_order_arr[$global_id] = $this->getDeductionObjectArrayForSorting( $psa_obj );
+					$global_id = substr(get_class( $psalf ),0,1) . $psalf->getId();
+					$deduction_order_arr[$global_id] = $this->getDeductionObjectArrayForSorting( $psalf );
 
 					$dependency_tree->addNode( $global_id, $deduction_order_arr[$global_id]['require_accounts'], $deduction_order_arr[$global_id]['affect_accounts'], $deduction_order_arr[$global_id]['order']);
 				}
@@ -326,7 +328,6 @@ class CalculatePayStub extends PayStubFactory {
 	}
 
 	function calculate($epoch = NULL) {
-
 		if ( $this->getUserObject() == FALSE OR $this->getUserObject()->getStatus() !== 10 ) {
 			return FALSE;
 		}
@@ -376,7 +377,7 @@ class CalculatePayStub extends PayStubFactory {
 		} else {
 			$is_terminated = FALSE;
 		}
-
+		
 		if ( $is_terminated == TRUE ) {
 			Debug::text('User is Terminated, assuming final pay, setting End Date to terminated date: '. TTDate::getDate('DATE+TIME', $this->getUserObject()->getTerminationDate() ), __FILE__, __LINE__, __METHOD__,10);
 
@@ -423,12 +424,11 @@ class CalculatePayStub extends PayStubFactory {
 			UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 10, $pay_stub->Validator->getTextErrors(), NULL );
 
 			$this->FailTransaction();
-			$this->CommitTransaction();
 			return FALSE;
 		}
 
 		$pay_stub->loadPreviousPayStub();
-
+		
 		$user_date_total_arr = $this->getWageObject()->getUserDateTotalArray();
                 
 		if ( isset($user_date_total_arr['entries']) AND is_array( $user_date_total_arr['entries'] ) ) {
@@ -453,7 +453,8 @@ class CalculatePayStub extends PayStubFactory {
                 
                 if($pgplf->getRecordCount() > 0){
                     
-                    foreach($pgplf as $ppf_obj){
+                    foreach($pgplf->rs as $ppf_obj){
+						$pgplf->data = (array)$ppf_obj;
 
                         //$ppf_obj = $pgplf->getCurrent();
 
@@ -465,14 +466,14 @@ class CalculatePayStub extends PayStubFactory {
                              $amount = 0;
                              $alf_obj = $allf->getCurrent();
                              
-                             if($ppf_obj->getId() == 1){
+                             if($pgplf->getId() == 1){
                                  
                                  $amount = ( $alf_obj->getWorkedDays() - $alf_obj->getLateDays())*120;
                              }
-                             elseif ($ppf_obj->getId() == 3) {
+                             elseif ($pgplf->getId() == 3) {
                                  $amount = ( $alf_obj->getWorkedDays() - $alf_obj->getLateDays())*160;
                              }
-                             elseif ($ppf_obj->getId() == 2) {
+                             elseif ($pgplf->getId() == 2) {
                                  
                                  $nopay_days = $alf_obj->getNopayDays();
                                  $full_day = $alf_obj->getFulldayLeaveDays();
@@ -486,7 +487,7 @@ class CalculatePayStub extends PayStubFactory {
                              
                          }
                              if($amount > 0){
-                                 $pay_stub->addEntry( $ppf_obj->getPayStubEntryAccountId(), $amount, 2, 1 );
+                                 $pay_stub->addEntry( $pgplf->getPayStubEntryAccountId(), $amount, 2, 1 );
                              }
                          
                     
@@ -497,16 +498,12 @@ class CalculatePayStub extends PayStubFactory {
 		$psalf = new PayStubAmendmentListFactory();
 		$psalf->getByUserIdAndAuthorizedAndStartDateAndEndDate( $this->getUser(), TRUE, $this->getPayPeriodObject()->getStartDate(), $this->getPayPeriodObject()->getEndDate() );
 
-		//                echo '<br>';
-		//                print_r($psalf->getRecordCount());
 		$udlf = new UserDeductionListFactory();
 		$udlf->getByCompanyIdAndUserId( $this->getUserObject()->getCompany(), $this->getUserObject()->getId() );
 
-		//                echo '<br>';
-		//                print_r($udlf->getRecordCount());
                 
 		$deduction_order_arr = $this->getOrderedDeductionAndPSAmendment( $udlf, $psalf );
-               // print_r($deduction_order_arr); exit;
+		
 		if ( is_array($deduction_order_arr) AND count($deduction_order_arr) > 0 ) {
                     
                       $deduction_slary_advance = 0;
@@ -531,61 +528,59 @@ class CalculatePayStub extends PayStubFactory {
 								$amount = $ud_obj->getDeductionAmount( $this->getUserObject()->getId(), $pay_stub, $this->getPayPeriodObject() );
 								Debug::text('User Deduction: '. $ud_obj->getCompanyDeductionObject()->getName() .' Amount: '. $amount .' Calculation Order: '. $ud_obj->getCompanyDeductionObject()->getCalculationOrder(), __FILE__, __LINE__, __METHOD__,10);
 
-                                                                if($ud_obj->getCompanyDeduction()==3){
-                                                                    
-                                                                    $wage_obj = $this->getWageObject();
-                                                                    
-                                                                    $date_now = new DateTime();
-                                                                    
-                                                                    $user_wage_list = new UserWageListFactory();
-                                                                    $user_wage_list->getLastWageByUserIdAndDate($this->getUserObject()->getId(),$date_now->getTimestamp());
-                                                                    
-                                                                    if($user_wage_list->getRecordCount() > 0){
-                                                                        
-                                                                       $uw_obj =  $user_wage_list->getCurrent();
-                                                                       
-                                                                       $total_pay_period_days = ceil( TTDate::getDayDifference( $pay_stub->getPayPeriodObject()->getStartDate(), $pay_stub->getPayPeriodObject()->getEndDate()) );
-                                                                      
-                                                                        
-                                                                        $wage_effective_date = new DateTime($uw_obj->getColumn('effective_date'));
-                                                                        $prev_wage_effective_date = $pay_stub->getPayPeriodObject()->getEndDate();
-                                                                        
-                                                                        $total_wage_effective_days = ceil( TTDate::getDayDifference( $wage_effective_date->getTimestamp(), $prev_wage_effective_date ) );
-                                                                        
-                                                                         
-                                                                        
-                                                                        if($total_pay_period_days > $total_wage_effective_days){
-                                                                            
-                                                                            $total_pay_period_days = 30;
-                                                                            
-                                                                           // if($this->getUserObject()->getId()==971){
-                                                                            
-                                                                            //echo $total_wage_effective_days.' '.$uw_obj->getColumn('effective_date').'<br>';
-                                                                           // echo $total_pay_period_days.' ';
-                                                                            
-                                                                           $amount = abs(bcmul( $amount, bcdiv($total_wage_effective_days, $total_pay_period_days) ));
-                                                                           
-                                                                          // exit();
-                                                                          //  }
-                                                                            
-                                                                        }
-                                                                    }
-                                                                  
-                                                                }
-                                                                
-                                                                if($ud_obj->getCompanyDeduction()==10){//no pay
-                                                                    $amount = $user_date_total_arr['other']['dock_absence_amount'];
-                                                                }
-                                                                
-                                                                
-                                                                $deduction_slary_advance++;
-                                                                //}
+								if($ud_obj->getCompanyDeduction()==3){
+									
+									$wage_obj = $this->getWageObject();
+									
+									$date_now = new DateTime();
+									
+									$user_wage_list = new UserWageListFactory();
+									$user_wage_list->getLastWageByUserIdAndDate($this->getUserObject()->getId(),$date_now->getTimestamp());
+									
+									if($user_wage_list->getRecordCount() > 0){
+										
+										$uw_obj =  $user_wage_list->getCurrent();
+										
+										$total_pay_period_days = ceil( TTDate::getDayDifference( $pay_stub->getPayPeriodObject()->getStartDate(), $pay_stub->getPayPeriodObject()->getEndDate()) );
+										
+										
+										$wage_effective_date = new DateTime($uw_obj->getColumn('effective_date'));
+										$prev_wage_effective_date = $pay_stub->getPayPeriodObject()->getEndDate();
+										
+										$total_wage_effective_days = ceil( TTDate::getDayDifference( $wage_effective_date->getTimestamp(), $prev_wage_effective_date ) );
+										
+											
+										
+										if($total_pay_period_days > $total_wage_effective_days){
+											
+											$total_pay_period_days = 30;
+											
+											// if($this->getUserObject()->getId()==971){
+											
+											//echo $total_wage_effective_days.' '.$uw_obj->getColumn('effective_date').'<br>';
+											// echo $total_pay_period_days.' ';
+											
+											$amount = abs(bcmul( $amount, bcdiv($total_wage_effective_days, $total_pay_period_days) ));
+											
+											// exit();
+											//  }
+											
+										}
+									}
+									
+								}
+								
+								if($ud_obj->getCompanyDeduction()==10){//no pay
+									$amount = $user_date_total_arr['other']['dock_absence_amount'];
+								}
+								
+								
+								$deduction_slary_advance++;
+								//}
 								//Allow negative amounts, so they can reduce previously calculated deductions or something. getEmpBasisType()
-                                                                // added by thusitha 2017/08/10
+								// added by thusitha 2017/08/10
 								if ( isset($amount) AND $amount != 0 ) {
-                                                                   
-                                                                       $pay_stub->addEntry( $ud_obj->getCompanyDeductionObject()->getPayStubEntryAccount(), $amount );
-                                                                   
+                                    $pay_stub->addEntry( $ud_obj->getCompanyDeductionObject()->getPayStubEntryAccount(), $amount );                         
 								} else {
 									Debug::text('Amount is 0, skipping...', __FILE__, __LINE__, __METHOD__,10);
 								}
@@ -619,17 +614,16 @@ class CalculatePayStub extends PayStubFactory {
 				}
 
 			}
-		//                        die;
-                        
-                       
-
 		}
+
 		unset($deduction_order_arr, $calculation_order, $data_arr);
 
 		$pay_stub_id = $pay_stub->getId();
 
 		$pay_stub->setEnableProcessEntries(TRUE);
 		$pay_stub->processEntries();
+
+
 		if ( $pay_stub->isValid() == TRUE ) {
 			Debug::text('Pay Stub is valid, final save.', __FILE__, __LINE__, __METHOD__,10);
 			$pay_stub->Save();
@@ -667,10 +661,7 @@ class CalculatePayStub extends PayStubFactory {
 
 		UserGenericStatusFactory::queueGenericStatus( $generic_queue_status_label, 10, $pay_stub->Validator->getTextErrors(), NULL );
 
-		$pay_stub->FailTransaction(); //Reduce transaction count by one.
-		//$pay_stub->FailTransaction(); //Reduce transaction count by one.
-
-		$pay_stub->CommitTransaction();
+		$pay_stub->FailTransaction();
 
 		return FALSE;
 	}
@@ -983,7 +974,8 @@ class CalculatePayStub extends PayStubFactory {
                        
                     $prev_type = NULL;
                     
-                    foreach ($pslf as $pay_stub_obj) {
+                    foreach ($pslf->rs as $pay_stub_obj) {
+						$pslf->data = (array)$pay_stub_obj;
                         
                          
                         
@@ -993,16 +985,17 @@ class CalculatePayStub extends PayStubFactory {
 
 			$pplf = new PayPeriodListFactory();
 
-			$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
+			$pay_period_obj = $pplf->getById( $pslf->getPayPeriod() )->getCurrent();
                         
                         $pself = new PayStubEntryListFactory();
 
-			$pself->getByPayStubId( $pay_stub_obj->getId() );
+			$pself->getByPayStubId( $pslf->getId() );
                         
-                        foreach ($pself as $pay_stub_entry) {
+                        foreach ($pself->rs as $pay_stub_entry) {
+							$pself->data = (array)$pay_stub_entry;
                             
                            
-                            $pay_stub_entry_name_obj = $psealf->getById( $pay_stub_entry->getPayStubEntryNameId() )->getCurrent();
+                            $pay_stub_entry_name_obj = $psealf->getById( $pself->getPayStubEntryNameId() )->getCurrent();
                             
                             
                             if ( $prev_type == 40 OR $pay_stub_entry_name_obj->getType() != 40 ) {
@@ -1014,7 +1007,7 @@ class CalculatePayStub extends PayStubFactory {
                             
                             if ( $type != 40 OR ( $type == 40 AND $pay_stub_entry->getAmount() != 0 ) ) {
                                 
-                                    if($pay_stub_entry->getPayStubEntryNameId() == 89){
+                                    if($pself->getPayStubEntryNameId() == 89){
                                             
                                        // $psmplf = new PayStubMiddlePayListFactory();
                                         
@@ -1030,7 +1023,7 @@ class CalculatePayStub extends PayStubFactory {
                                            
                                           $psmpf->setPayPeriod($pay_period_obj->getId());
                                           $psmpf->setUser($this->getUserObject()->getId());
-                                          $psmpf->setAmount($pay_stub_entry->getAmount());
+                                          $psmpf->setAmount($pself->getAmount());
                                           
                                           $psmpf->Save();
                                             
@@ -1042,7 +1035,7 @@ class CalculatePayStub extends PayStubFactory {
                                        // $psmpf = new PayStubMiddlePayFactory();                     
                                           $psmpf->setPayPeriod($pay_period_obj->getId());
                                           $psmpf->setUser($this->getUserObject()->getId());
-                                          $psmpf->setAmount($pay_stub_entry->getAmount());
+                                          $psmpf->setAmount($pself->getAmount());
                                           
                                           $psmpf->Save();
                                         }
@@ -1100,9 +1093,7 @@ class CalculatePayStub extends PayStubFactory {
 				unset($user_id, $status_id, $status, $pay_period_id, $date_stamp);
 			}
 		}
-		//echo '<pre>'; print_r($schedule_rows); echo'<pre>';
 					
-		
 		foreach ($udtlf->rs as $udt_obj ) {
 			$udtlf->data = (array)$udt_obj;
 			
@@ -1136,7 +1127,7 @@ class CalculatePayStub extends PayStubFactory {
 					$dt_stamp->setTimestamp($date_stamp);
 					$current_date = $dt_stamp->format('Y-m-d');
 					*/
-
+					
 					$current_date = Carbon::createFromTimestamp($date_stamp)->format('Y-m-d');
 					
 					if((isset($schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time']) && $schedule_rows[$pp_id][$usr_id][$date_stamp]['start_time'] !='' )&& (isset($att_data['min_punch_time_stamp'])&& $att_data['min_punch_time_stamp']!='')){
@@ -1207,7 +1198,7 @@ class CalculatePayStub extends PayStubFactory {
 												foreach($udtlf as $udt_obj){
 
 													$udt_obj->setDeleted(TRUE);
-
+													
 													if( $udt_obj->isValid()){
 														$udt_obj->Save(); 
 													}
@@ -1219,14 +1210,14 @@ class CalculatePayStub extends PayStubFactory {
 											
 												//// if($user_obj->getId()==1015 && $dt_stamp->getTimestamp()==1531420200){ echo $user_obj->getTerminationDate().'  MM'; }
 												$udt_obj1 = new UserDateTotalFactory();
-
+												
 												$udt_obj1->setUserDateID($ud_obj->getId());
 												$udt_obj1->setStatus(10);
 												$udt_obj1->setType(10);
 												$udt_obj1->setTotalTime(0);
 
 												if( $udt_obj1->isValid()){
-															$udt_obj1->Save(); 
+													$udt_obj1->Save(); 
 												}
 
 												$udt_obj2 = new UserDateTotalFactory();
@@ -1262,38 +1253,35 @@ class CalculatePayStub extends PayStubFactory {
 						}
 						
 					}
-					
 				
 				}// end foreach datestamp
 				
 			}// end of user foreach
 			
 		}// end of payperiods  foreach
-					
-					// echo $this->getPayPeriod(); exit;
-					
+				
+		
 		$allf = new AllowanceListFactory();
 		$allf->getByUserIdAndPayperiodsId($this->getUser(), $this->getPayPeriod());
 		
 		if($allf->getRecordCount() >0){
 			
 			$alf_obj = $allf->getCurrent();
-			
-			
-				$alf_obj->setUser($this->getUser());
-				$alf_obj->setPayPeriod($this->getPayPeriod());
-				$alf_obj->setWorkedDays($worked_days_no);
-				$alf_obj->setLateDays($late_days_no);
-				$alf_obj->setNopayDays($nopay_days_no);
-				$alf_obj->setFulldayLeaveDays($full_day_leave_no);
-				$alf_obj->setHalfdayLeaveDays($half_day_leave_no);
+		
+		
+			$alf_obj->setUser($this->getUser());
+			$alf_obj->setPayPeriod($this->getPayPeriod());
+			$alf_obj->setWorkedDays($worked_days_no);
+			$alf_obj->setLateDays($late_days_no);
+			$alf_obj->setNopayDays($nopay_days_no);
+			$alf_obj->setFulldayLeaveDays($full_day_leave_no);
+			$alf_obj->setHalfdayLeaveDays($half_day_leave_no);
 
-				if($alf_obj->isValid()){
-					$alf_obj->Save();
-				}
+			if($alf_obj->isValid()){
+				$alf_obj->Save();
+			}
 			
 		}else{
-		
 				$alf = new AllowanceFactory();
 
 				$alf->setUser($this->getUser());

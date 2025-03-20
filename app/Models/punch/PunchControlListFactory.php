@@ -163,7 +163,9 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		if ( $plf->getRecordCount() > 0 ) {
 			//Check for gaps.
 			$prev_time_stamp = 0;
-			foreach( $plf as $p_obj) {
+			foreach( $plf->rs as $p_obj) {
+				$plf->data = (array) $p_obj;
+				$p_obj = $plf;
 				if ( $p_obj->getStatus() == 10 ) {
 					$punch_arr[$p_obj->getPunchControlId()]['in'] = $p_obj->getTimeStamp();
 				} else {

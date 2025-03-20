@@ -329,7 +329,9 @@ class OverTimePolicyListFactory extends OverTimePolicyFactory implements Iterato
 			$list[0] = '--';
 		}
 
-		foreach ($otplf as $otp_obj) {
+		foreach ($otplf->rs as $otp_obj) {
+			$otplf->data = (array)$otp_obj;
+			$otp_obj = $otplf;
 			$list[$otp_obj->getID()] = $otp_obj->getName();
 		}
 

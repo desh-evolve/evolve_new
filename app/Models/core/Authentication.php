@@ -144,6 +144,7 @@ class Authentication {
 
 		return FALSE;
 	}
+
 	function setObject($user_id) {
 		if ( !empty($user_id) ) {
 
@@ -257,9 +258,10 @@ class Authentication {
 
 		$ulf->getByPhoneIdAndStatus($phone_id, 10 );
 
-		foreach ($ulf as $user) {
-			if ( $user->checkPhonePassword($password) ) {
-				$this->setObject( $user->getID() );
+		foreach ($ulf->rs as $user) {
+			$ulf->data = (array)$user;
+			if ( $ulf->checkPhonePassword($password) ) {
+				$this->setObject( $ulf->getID() );
 
 				return TRUE;
 			} else {
@@ -274,29 +276,15 @@ class Authentication {
 		$uilf = new UserIdentificationListFactory();
 		$uilf->getByTypeIdAndValue(10, $id);
 		if ( $uilf->getRecordCount() > 0 ) {
-			foreach( $uilf as $ui_obj ) {
-				if ( is_object( $ui_obj->getUserObject() ) AND $ui_obj->getUserObject()->getStatus() == 10 ) {
-					$this->setObject( $ui_obj->getUser() );
+			foreach( $uilf->rs as $ui_obj ) {
+				$uilf->data = (array)$ui_obj;
+				if ( is_object( $uilf->getUserObject() ) AND $uilf->getUserObject()->getStatus() == 10 ) {
+					$this->setObject( $uilf->getUser() );
 					return TRUE;
 				}
 			}
 		}
-/*
-		//Use UserFactory to set name.
-		$ulf = new UserListFactory();
 
-		$ulf->getByIButtonIdAndStatus($id, 10 );
-
-		foreach ($ulf as $user) {
-			if ( $user->checkIButton($id) ) {
-				$this->setObject( $user->getID() );
-
-				return TRUE;
-			} else {
-				return FALSE;
-			}
-		}
-*/
 		return FALSE;
 	}
 
@@ -306,9 +294,10 @@ class Authentication {
 
 		$ulf->getByIdAndStatus($user_id, 10 );
 
-		foreach ($ulf as $user) {
-			if ( $user->checkEmployeeNumber($employee_number) ) {
-				$this->setObject( $user->getID() );
+		foreach ($ulf->rs as $user) {
+			$ulf->data = (array)$user;
+			if ( $ulf->checkEmployeeNumber($employee_number) ) {
+				$this->setObject( $ulf->getID() );
 
 				return TRUE;
 			} else {
@@ -324,10 +313,11 @@ class Authentication {
 
 		$ulf->getByIdAndStatus($id, 10 );
 
-		foreach ($ulf as $user) {
-			//if ( $user->checkEmployeeNumber($id) ) {
-			if ( $user->getId() == $id ) {
-				$this->setObject( $user->getID() );
+		foreach ($ulf->rs as $user) {
+			$ulf->data = (array)$user;
+			//if ( $ulf->checkEmployeeNumber($id) ) {
+			if ( $ulf->getId() == $id ) {
+				$this->setObject( $ulf->getID() );
 
 				return TRUE;
 			} else {
@@ -344,9 +334,10 @@ class Authentication {
 
 		$ulf->getByUserNameAndStatus(strtolower($user_name), 10 );
 
-		foreach ($ulf as $user) {
-			if ( $user->getUserName() == $user_name ) {
-				$this->setObject( $user->getID() );
+		foreach ($ulf->rs as $user) {
+			$ulf->data = (array)$user;
+			if ( $ulf->getUserName() == $user_name ) {
+				$this->setObject( $ulf->getID() );
 
 				return TRUE;
 			} else {

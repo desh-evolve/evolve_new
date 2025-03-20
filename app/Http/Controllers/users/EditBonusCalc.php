@@ -39,7 +39,7 @@ if ( isset($data) ) {
         
 }
 
-$bdf = TTnew( 'BonusDecemberFactory' );
+$bdf = new BonusDecemberFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -83,7 +83,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
 
-			$bdlf = TTnew( 'BonusDecemberListFactory' );
+			$bdlf = new BonusDecemberListFactory();
 			$bdlf->getByIdAndCompanyId($id, $current_company->getId() );
 
 			foreach ($bdlf as $bd_obj) {

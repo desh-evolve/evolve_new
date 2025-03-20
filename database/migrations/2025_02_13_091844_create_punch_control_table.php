@@ -24,13 +24,13 @@ return new class extends Migration
             $table->integer('actual_total_time')->default(0); // Actual total time worked
             $table->integer('meal_policy_id')->nullable(); // Foreign key to `meal_policy`
             $table->boolean('overlap')->default(0); // Overlap flag
-            $table->integer('created_date')->nullable(); // Created date (Unix timestamp)
-            $table->integer('created_by')->nullable(); // Created by user ID
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by user ID
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by user ID
-            $table->boolean('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->string('other_id1', 255)->nullable(); // Other ID field 1
             $table->string('other_id2', 255)->nullable(); // Other ID field 2
             $table->string('other_id3', 255)->nullable(); // Other ID field 3

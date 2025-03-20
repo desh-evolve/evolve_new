@@ -4,6 +4,7 @@ namespace App\Models\Policy;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Holiday\RecurringHolidayListFactory;
 
 class HolidayPolicyRecurringHolidayFactory extends Factory {
 	protected $table = 'holiday_policy_recurring_holiday';
@@ -15,7 +16,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 		if ( is_object($this->recurring_holiday_obj) ) {
 			return $this->recurring_holiday_obj;
 		} else {
-			$lf = TTnew( 'RecurringHolidayListFactory' );
+			$lf = new RecurringHolidayListFactory();
 			$lf->getById( $this->getRecurringHoliday() );
 			if ( $lf->getRecordCount() == 1 ) {
 				$this->recurring_holiday_obj = $lf->getCurrent();
@@ -36,7 +37,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 	function setHolidayPolicy($id) {
 		$id = trim($id);
 
-		$hplf = TTnew( 'HolidayPolicyListFactory' );
+		$hplf = new HolidayPolicyListFactory();
 
 		if (
 			  $this->Validator->isNumeric(	'holiday_policy',
@@ -65,7 +66,7 @@ class HolidayPolicyRecurringHolidayFactory extends Factory {
 	function setRecurringHoliday($id) {
 		$id = trim($id);
 
-		$rhlf = TTnew( 'RecurringHolidayListFactory' );
+		$rhlf = new RecurringHolidayListFactory();
 
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'recurring_holiday',

@@ -2,6 +2,7 @@
 
 namespace App\Models\Department;
 
+use App\Models\Company\CompanyGenericMapListFactory;
 use App\Models\Company\CompanyGenericTagMapFactory;
 use App\Models\Company\CompanyGenericTagMapListFactory;
 use App\Models\Core\Debug;
@@ -84,7 +85,7 @@ class DepartmentFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
@@ -164,7 +165,7 @@ class DepartmentFactory extends Factory {
 			$company_id = $this->getCompany();
 		}
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getHighestManualIDByCompanyId( $company_id );
 		if ( $dlf->getRecordCount() > 0 ) {
 			$next_available_manual_id = $dlf->getCurrent()->getManualId()+1;
@@ -293,9 +294,11 @@ class DepartmentFactory extends Factory {
 	}
 
 	function getBranch() {
-		$dblf = TTnew( 'DepartmentBranchListFactory' );
+		$dblf = new DepartmentBranchListFactory();
 		$dblf->getByDepartmentId( $this->getId() );
-		foreach ($dblf as $department_branch) {
+		foreach ($dblf->rs as $department_branch) {
+			$dblf->data = (array) $department_branch;
+			$department_branch = $dblf;
 			$branch_list[] = $department_branch->getBranch();
 		}
 
@@ -308,11 +311,13 @@ class DepartmentFactory extends Factory {
 	function setBranch($ids) {
 		if (is_array($ids) and count($ids) > 0) {
 			//If needed, delete mappings first.
-			$dblf = TTnew( 'DepartmentBranchListFactory' );
+			$dblf = new DepartmentBranchListFactory();
 			$dblf->getByDepartmentId( $this->getId() );
 
 			$branch_ids = array();
-			foreach ($dblf as $department_branch) {
+			foreach ($dblf->rs as $department_branch) {
+				$dblf->data = (array) $department_branch;
+				$department_branch = $dblf;
 				$branch_id = $department_branch->getBranch();
 				Debug::text('Department ID: '. $department_branch->getDepartment() .' Branch: '. $branch_id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -328,7 +333,7 @@ class DepartmentFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$dbf = TTnew( 'DepartmentBranchFactory' );
+			$dbf = new DepartmentBranchFactory();
 			foreach ($ids as $id) {
 				if ( !in_array($id, $branch_ids) ) {
 					$dbf->setDepartment( $this->getId() );
@@ -515,14 +520,14 @@ class DepartmentFactory extends Factory {
 		if ( $this->getDeleted() == TRUE ) {
 			Debug::Text('UnAssign Hours from Department: '. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
 			//Unassign hours from this department.
-			$pcf = TTnew( 'PunchControlFactory' );
-			$udtf = TTnew( 'UserDateTotalFactory' );
-			$uf = TTnew( 'UserFactory' );
-			$sf = TTnew( 'StationFactory' );
-			$sdf = TTnew( 'StationDepartmentFactory' );
-			$sf_b = TTnew( 'ScheduleFactory' );
-			$udf = TTnew( 'UserDefaultFactory' );
-			$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+			$pcf = new PunchControlFactory();
+			$udtf = new UserDateTotalFactory();
+			$uf = new UserFactory();
+			$sf = new StationFactory();
+			$sdf = new StationDepartmentFactory();
+			$sf_b = new ScheduleFactory();
+			$udf = new UserDefaultFactory();
+			$rstf = new RecurringScheduleTemplateFactory();
 
 			$query = 'update '. $pcf->getTable() .' set department_id = 0 where department_id = '. (int)$this->getId();
 			DB::select($query);
@@ -549,10 +554,12 @@ class DepartmentFactory extends Factory {
 			DB::select($query);
 
 			//Job employee criteria
-			$cgmlf = TTnew( 'CompanyGenericMapListFactory' );
+			$cgmlf = new CompanyGenericMapListFactory();
 			$cgmlf->getByCompanyIDAndObjectTypeAndMapID( $this->getCompany(), 1020, $this->getID() );
 			if ( $cgmlf->getRecordCount() > 0 ) {
-				foreach( $cgmlf as $cgm_obj ) {
+				foreach( $cgmlf->rs as $cgm_obj ) {
+					$cgmlf->data = (array) $cgm_obj;
+					$cgm_obj = $cgmlf;
 					Debug::text('Deleteing from Company Generic Map: '. $cgm_obj->getID(), __FILE__, __LINE__, __METHOD__, 10);
 					$cgm_obj->Delete();
 				}

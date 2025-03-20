@@ -87,10 +87,7 @@ class BranchBankAccountFactory extends Factory {
 
 		$clf = new CompanyListFactory();
 
-		if ( $this->Validator->isResultSetWithRows(	'company',
-													$clf->getByID($id),
-													('Company is invalid')
-													) ) {
+		if ( $this->Validator->isResultSetWithRows( 'company', $clf->getByID($id), ('Company is invalid') ) ) {
 
 			$this->data['company_id'] = $id;
 
@@ -113,10 +110,7 @@ class BranchBankAccountFactory extends Factory {
 		$ulf = new UserListFactory();
 
 		if ( $id == 0
-				OR $this->Validator->isResultSetWithRows(	'user',
-															$ulf->getByID($id),
-															('Invalid User')
-															) ) {
+				OR $this->Validator->isResultSetWithRows( 'user', $ulf->getByID($id), ('Invalid User') ) ) {
 			$this->data['user_id'] = $id;
 
 			return TRUE;
@@ -169,15 +163,9 @@ class BranchBankAccountFactory extends Factory {
 		$value = trim($value);
 
 		if (
-						$this->Validator->isNumeric(	'institution',
-														$value,
-														('Invalid institution number, must be digits only'))
+				$this->Validator->isNumeric( 'institution', $value, ('Invalid institution number, must be digits only'))
 				AND
-						$this->Validator->isLength(		'institution',
-														$value,
-														('Invalid institution number length'),
-														2,
-														3)
+				$this->Validator->isLength( 'institution', $value, ('Invalid institution number length'), 2, 3)
 			) {
 
 			$this->data['institution'] = $value;
@@ -205,15 +193,9 @@ class BranchBankAccountFactory extends Factory {
 		$value = trim($value);
 
 		if (
-						$this->Validator->isNumeric(	'transit',
-														$value,
-														('Invalid Bank Code, must be digits only '))
+				$this->Validator->isNumeric( 'transit', $value, ('Invalid Bank Code, must be digits only '))
 				AND
-						$this->Validator->isLength(		'transit',
-														$value,
-														('Invalid Bank Code length'),
-														2,
-														15)
+				$this->Validator->isLength( 'transit', $value, ('Invalid Bank Code length'), 2, 15)
 			) {
 
 			$this->data['transit'] = $value;
@@ -246,13 +228,7 @@ class BranchBankAccountFactory extends Factory {
 	function setBankName($value) {
 		$value = trim($value);
 
-		if (
-						$this->Validator->isLength(		'bank_name',
-														$value,
-														('Incorrect Bank Name length'),
-														1,
-														100)
-			) {
+		if ( $this->Validator->isLength( 'bank_name', $value, ('Incorrect Bank Name length'), 1, 100) ) {
 
 			$this->data['bank_name'] = $value;
 
@@ -284,13 +260,7 @@ class BranchBankAccountFactory extends Factory {
 	function setBankBranch($value) {
 		$value = trim($value);
 
-		if (
-						$this->Validator->isLength(		'bank_branch',
-														$value,
-														('Incorrect Bank Branch Length'),
-														1,
-														100)
-			) {
+		if ( $this->Validator->isLength( 'bank_branch', $value, ('Incorrect Bank Branch Length'), 1, 100) ) {
 
 			$this->data['bank_branch'] = $value;
 
@@ -310,13 +280,7 @@ class BranchBankAccountFactory extends Factory {
 		$id = (int)trim($id);
 
 		$blf = new BranchListFactory();
-		if (
-				$id == 0
-				OR
-				$this->Validator->isResultSetWithRows(	'default_branch',
-														$blf->getByID($id),
-														('Invalid Default Branch')
-													) ) {
+		if ( $id == 0 OR $this->Validator->isResultSetWithRows( 'default_branch', $blf->getByID($id), ('Invalid Default Branch') ) ) {
 
 			$this->data['default_branch_id'] = $id;
 
@@ -361,13 +325,7 @@ class BranchBankAccountFactory extends Factory {
 		}
 
 		$value = $this->Validator->stripNonNumeric( trim($value) );
-		if (
-						$this->Validator->isLength(		'account',
-														$value,
-														('Invalid account number length'),
-														3,
-														20)
-			) {
+		if ( $this->Validator->isLength( 'account', $value, ('Invalid account number length'), 3, 20) ) {
 
 			$this->data['account'] = $value;
 
@@ -380,9 +338,7 @@ class BranchBankAccountFactory extends Factory {
 	function Validate() {
 		//Make sure this entry is unique.
 		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
-			$this->Validator->isTRUE(		'account',
-											FALSE,
-											('Bank account already exists') );
+			$this->Validator->isTRUE( 'account', FALSE, ('Bank account already exists') );
 
 			return FALSE;
 		}

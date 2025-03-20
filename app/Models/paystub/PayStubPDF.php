@@ -2,6 +2,8 @@
 
 namespace App\Models\PayStub;
 
+use App\Models\Core\Environment;
+
 class PayStubPDF {
 	var $pdf = NULL;
 	var $page = NULL;
@@ -41,9 +43,9 @@ class PayStubPDF {
 	}
 
 	function getData() {
-		$psenlf = TTnew( 'PayStubEntryNameListFactory' );
+		$psenlf = new PayStubEntryNameListFactory();
 
-		$pslf = TTnew( 'PayStubListFactory' );
+		$pslf = new PayStubListFactory();
 
 		//$pslf->getByIdAndUserId($id, $current_user->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, array($sort_column => $sort_order) );
 		$pslf->getById( $this->pay_stub_id );
@@ -53,7 +55,7 @@ class PayStubPDF {
 		foreach ($pslf as $pay_stub_obj) {
 
 			//Get pay stub entries.
-			$pself = TTnew( 'PayStubEntryListFactory' );
+			$pself = new PayStubEntryListFactory();
 			$pself->getByPayStubId( $pay_stub_obj->getId() );
 
 			$prev_type = NULL;
@@ -120,7 +122,7 @@ class PayStubPDF {
 							);
 
 			//Get Pay Period information
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pay_period_obj = $pplf->getById( $pay_stub_obj->getPayPeriod() )->getCurrent();
 
 			if ( $pay_stub_obj->getAdvance() == TRUE ) {
@@ -140,11 +142,11 @@ class PayStubPDF {
 									);
 
 			//Get User information
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $pay_stub_obj->getUser() )->getCurrent();
 
 			//Get company information
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->user_obj->getCompany() )->getCurrent();
 
 		}

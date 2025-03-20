@@ -114,7 +114,6 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 	}
 
 	function getById($id) {
-		$id = 1159;
 		if ( $id == '') {
 			return FALSE;
 		}

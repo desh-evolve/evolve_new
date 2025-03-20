@@ -92,11 +92,11 @@ if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
 }
 Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
 
-$ugdlf = TTnew( 'UserGenericDataListFactory' );
-$ugdf = TTnew( 'UserGenericDataFactory' );
+$ugdlf = new UserGenericDataListFactory();
+$ugdf = new UserGenericDataFactory();
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -128,7 +128,7 @@ switch ($action) {
 			AND ( $permission->Check('user','delete') OR $permission->Check('user','delete_own') OR $permission->Check('user','delete_child')  ) ) {
 
 			if ( is_array($ids) ) {
-				$ulf = TTnew( 'UserListFactory' );
+				$ulf = new UserListFactory();
 				$ulf->StartTransaction();
 
 				foreach ($ids as $id) {
@@ -186,8 +186,8 @@ switch ($action) {
 															'page' => $page
 														) );
 
-		$ulf = TTnew( 'UserListFactory' );
-		$clf = TTnew( 'CompanyListFactory' );
+		$ulf = new UserListFactory();
+		$clf = new CompanyListFactory();
 
 		if ( $permission->Check('company','view') ) {
 			$ulf->getSearchByArrayCriteria( $filter_data, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
@@ -208,25 +208,25 @@ switch ($action) {
 		$pager = new Pager($ulf);
 
 		if ( $permission->Check('company','view') ) {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$clf->getAll();
 			$company_options = $clf->getArrayByListFactory( $clf, FALSE, TRUE );
 		}
 
 		//Get title list,
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-		$uglf = TTnew( 'UserGroupListFactory' );
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
 		foreach ($ulf as $u_obj) {
@@ -299,7 +299,7 @@ switch ($action) {
 		$filter_data['sex_options'] = Misc::prependArray( $all_array_option, $ulf->getOptions('sex') );
 		$filter_data['status_options'] = Misc::prependArray( $all_array_option, $ulf->getOptions('status') );
 
-		$cf = TTnew( 'CompanyFactory' );
+		$cf = new CompanyFactory();
 		$filter_data['country_options'] = Misc::prependArray( $all_array_option, $cf->getOptions('country') );
 		if ( isset($filter_data['country']) ) {
 			$filter_data['province_options'] = Misc::prependArray( $all_array_option, $cf->getOptions('province', $filter_data['country'] ) );
@@ -307,10 +307,10 @@ switch ($action) {
 			$filter_data['province_options'] = $all_array_option;
 		}
 
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 		$filter_data['pay_period_schedule_options'] = Misc::prependArray( $all_array_option, $ppslf->getByCompanyIDArray( $current_company->getId() ) );
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 		$filter_data['policy_group_options'] = Misc::prependArray( $all_array_option, $pglf->getByCompanyIDArray( $current_company->getId() ) );
 
 		$filter_data['saved_search_options'] = $ugdlf->getArrayByListFactory( $ugdlf->getByUserIdAndScript( $current_user->getId(), $_SERVER['SCRIPT_NAME']), FALSE );

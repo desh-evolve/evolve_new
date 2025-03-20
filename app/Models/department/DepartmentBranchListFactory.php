@@ -180,7 +180,9 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 
 		$branch_list[0] = '--';
 
-		foreach ($blf as $branch) {
+		foreach ($blf->rs as $branch) {
+			$blf->data = (array) $branch;
+			$branch = $blf;
 			$branch_list[$branch->getID()] = $branch->getName();
 		}
 

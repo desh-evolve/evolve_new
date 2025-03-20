@@ -212,7 +212,9 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 			$list[0] = '--';
 		}
 
-		foreach ($ppslf as $pps_obj) {
+		foreach ($ppslf->rs as $pps_obj) {
+			$ppslf->data = (array) $pps_obj;
+			$pps_obj = $ppslf;
 			$list[$pps_obj->getID()] = $pps_obj->getName();
 		}
 
@@ -232,7 +234,9 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array) $obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 
@@ -248,7 +252,9 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 			return FALSE;
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array) $obj;
+			$obj = $lf;
 			$retarr[$obj->getColumn('user_id')] = $obj->getId();
 		}
 

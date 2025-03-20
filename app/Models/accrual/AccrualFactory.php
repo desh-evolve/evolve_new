@@ -136,10 +136,7 @@ class AccrualFactory extends Factory {
 
 		$ulf = new UserListFactory();
 
-		if ( $this->Validator->isResultSetWithRows(	'user_id',
-															$ulf->getByID($id),
-															('Invalid Employee')
-															) ) {
+		if ( $this->Validator->isResultSetWithRows(	'user_id', $ulf->getByID($id), ('Invalid Employee') ) ) {
 			$this->data['user_id'] = $id;
 
 			return TRUE;
@@ -164,12 +161,7 @@ class AccrualFactory extends Factory {
 
 		$aplf = new AccrualPolicyListFactory();
 
-		if ( $id == NULL
-				OR
-				$this->Validator->isResultSetWithRows(	'accrual_policy_id',
-													$aplf->getByID($id),
-													('Accrual Policy is invalid')
-													) ) {
+		if ( $id == NULL OR $this->Validator->isResultSetWithRows( 'accrual_policy_id', $aplf->getByID($id), ('Accrual Policy is invalid') ) ) {
 
 			$this->data['accrual_policy_id'] = $id;
 
@@ -194,10 +186,7 @@ class AccrualFactory extends Factory {
 			$value = $key;
 		}
 
-		if ( $this->Validator->inArrayKey(	'type',
-											$value,
-											('Incorrect Type'),
-											$this->getOptions('type')) ) {
+		if ( $this->Validator->inArrayKey( 'type', $value, ('Incorrect Type'), $this->getOptions('type')) ) {
 
 			$this->data['type_id'] = $value;
 
@@ -225,12 +214,7 @@ class AccrualFactory extends Factory {
 		
 		$udtlf = new UserDateTotalListFactory();
 
-		if ( $id == 0
-				OR
-				$this->Validator->isResultSetWithRows(	'user_date_total',
-															$udtlf->getByID($id),
-															('User Date Total ID is invalid')
-															) ) {
+		if ( $id == 0 OR $this->Validator->isResultSetWithRows( 'user_date_total', $udtlf->getByID($id), ('User Date Total ID is invalid') ) ) {
 			$this->data['user_date_total_id'] = $id;
 
 			return TRUE;
@@ -253,12 +237,7 @@ class AccrualFactory extends Factory {
 	function setTimeStamp($epoch) {
 		$epoch = trim($epoch);
 
-		if 	(	$this->Validator->isDate(		'times_tamp',
-												$epoch,
-												('Incorrect time stamp'))
-
-			) {
-
+		if 	( $this->Validator->isDate( 'times_tamp', $epoch, ('Incorrect time stamp')) ) {
 			$this->data['time_stamp'] = $epoch;
 
 			return TRUE;
@@ -267,7 +246,7 @@ class AccrualFactory extends Factory {
 		return FALSE;
 	}
 
-        function getLeaveRequestId()
+    function getLeaveRequestId()
         {
             if ( isset($this->data['leave_requset_id']) ) {
 			return $this->data['leave_requset_id'];
@@ -275,27 +254,18 @@ class AccrualFactory extends Factory {
 
 		return FALSE;
             
-        }
+    }
         
-        function setLeaveRequestId($id)
-        {
-            $id = (int)trim($id);
+    function setLeaveRequestId($id) {
+        $id = (int)trim($id);
             
-            	if ( $id == '' OR empty($id) ) {
+        if ( $id == '' OR empty($id) ) {
 			$id = NULL;
 		}
 
 		$lrlf = new LeaveRequestListFactory();
 
-		if ( $id == NULL
-				OR
-				$this->Validator->isResultSetWithRows(	'leave_requset_id',
-													$lrlf->getByID($id),
-													('Leave Request is invalid')
-													) ) {
-                    
-                                                                                                
-
+		if ( $id == NULL OR $this->Validator->isResultSetWithRows( 'leave_requset_id', $lrlf->getByID($id), ('Leave Request is invalid') ) ) {
 			$this->data['leave_requset_id'] = $id;
 
 			return TRUE;
@@ -303,9 +273,7 @@ class AccrualFactory extends Factory {
 
 		return FALSE;
             
-        }
-        
-        
+    }
         
 	function isValidAmount($amount) {
 		Debug::text('Type: '. $this->getType() .' Amount: '. $amount , __FILE__, __LINE__, __METHOD__, 10);
@@ -348,14 +316,11 @@ class AccrualFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	$this->Validator->isNumeric(		'amount',
-													$int,
-													('Incorrect Amount'))
+		if 	(	
+				$this->Validator->isNumeric( 'amount', $int, ('Incorrect Amount'))
 				AND
-				$this->Validator->isTrue(		'amount',
-													$this->isValidAmount($int),
-													('Amount does not match type, try using a negative or positive value instead'))
-				) {
+				$this->Validator->isTrue( 'amount', $this->isValidAmount($int), ('Amount does not match type, try using a negative or positive value instead'))
+			) {
 			$this->data['amount'] = $int;
 
 			return TRUE;
@@ -379,10 +344,7 @@ class AccrualFactory extends Factory {
 
 	function Validate() {
 		if ( $this->getAccrualPolicyID() == FALSE OR $this->getAccrualPolicyID() == 0 ) {
-			$this->Validator->isTrue(		'accrual_policy_id',
-											FALSE,
-											('Please select an accrual policy'));
-
+			$this->Validator->isTrue( 'accrual_policy_id', FALSE, ('Please select an accrual policy'));
 		}
 
 		return TRUE;
@@ -401,8 +363,9 @@ class AccrualFactory extends Factory {
 			$alf->getByUserIdAndAccrualPolicyIDAndUserDateTotalID( $this->getUser(), $this->getAccrualPolicyID(), $this->getUserDateTotalID() );
 			Debug::text('Found Duplicate Records: '. (int)$alf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 			if ( $alf->getRecordCount() > 0 ) {
-				foreach($alf as $a_obj ) {
-					$a_obj->Delete();
+				foreach($alf->rs as $a_obj ) {
+					$alf->data = (array)$a_obj;
+					$alf->Delete();
 				}
 			}
 		}
@@ -427,10 +390,11 @@ class AccrualFactory extends Factory {
 		$alf->getOrphansByUserId( $user_id );
 		Debug::text('Found Orphaned Records: '. $alf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		if ( $alf->getRecordCount() > 0 ) {
-			foreach( $alf as $a_obj ) {
-				Debug::text('Orphan Record ID: '. $a_obj->getID(), __FILE__, __LINE__, __METHOD__, 10);
-				$accrual_policy_ids[] = $a_obj->getAccrualPolicyId();
-				$a_obj->Delete();
+			foreach( $alf->rs as $a_obj ) {
+				$alf->data = (array)$a_obj;
+				Debug::text('Orphan Record ID: '. $alf->getID(), __FILE__, __LINE__, __METHOD__, 10);
+				$accrual_policy_ids[] = $alf->getAccrualPolicyId();
+				$alf->Delete();
 			}
 
 			//ReCalc balances

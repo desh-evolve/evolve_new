@@ -90,12 +90,12 @@ if ( isset($job_history_data) ) {
 }
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = TTnew( 'HierarchyListFactory' );
+$hlf = new HierarchyListFactory();
 $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
-$ujf = TTnew( 'UserJobFactory' );
+$ujf = new UserJobFactory();
 
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 $action = strtolower($action);
@@ -139,7 +139,7 @@ switch ($action) {
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
                         
-                        $uwlf = TTnew( 'UserJobListFactory' );
+                        $uwlf = new UserJobListFactory();
                         
 			$uwlf->getByIdAndCompanyId($id, $current_company->getId() );
 
@@ -187,7 +187,7 @@ switch ($action) {
 		} else {
 			if ( $action != 'submit' ) {                        
                             
-                            $ulf = TTnew( 'UserListFactory' );
+                            $ulf = new UserListFactory();
                             $temp_default_branch_id  = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent()->getDefaultBranch();                            
                             $temp_default_department_id  = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent()->getDefaultDepartment();
                             $temp_title_id  = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent()->getTitle();
@@ -201,21 +201,21 @@ switch ($action) {
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
 		//Select box options;
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 		$job_history_data['branch_options'] = $blf->getByCompanyIdArray( $current_company->getId() );
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
                 //Select box options;
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory();
 		$job_history_data['department_options'] = $dlf->getByCompanyIdArray( $current_company->getId() );  
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
                 //Select box options;
-		$utlf = TTnew( 'UserTitleListFactory' );
+		$utlf = new UserTitleListFactory();
 		$job_history_data['title_options'] = $utlf->getByCompanyIdArray( $current_company->getId() );
 
                 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 		$user_data = $ulf->getCurrent();
 

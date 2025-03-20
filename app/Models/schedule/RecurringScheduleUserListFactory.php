@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models\Schedule; 
+namespace App\Models\Schedule;
+
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class RecurringScheduleUserListFactory extends RecurringScheduleUserFactory implements IteratorAggregate {

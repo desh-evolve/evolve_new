@@ -19,13 +19,13 @@ return new class extends Migration
             $table->date('start_date'); // Start date
             $table->date('end_date')->nullable(); // End date, nullable
             $table->tinyInteger('auto_fill')->default(0); // Auto fill, defaults to 0
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by
-            $table->tinyInteger('deleted')->default(0); // Deleted flag, defaults to 0
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

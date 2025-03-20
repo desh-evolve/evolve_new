@@ -4,11 +4,14 @@ namespace App\Models\Policy;
 
 use App\Models\Company\CompanyGenericMapFactory;
 use App\Models\Company\CompanyGenericMapListFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Users\UserDefaultFactory;
+use App\Models\Users\UserListFactory;
 
 class PolicyGroupFactory extends Factory {
 	protected $table = 'policy_group';
@@ -77,7 +80,7 @@ class PolicyGroupFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory(); 
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -95,7 +98,7 @@ class PolicyGroupFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -143,9 +146,11 @@ class PolicyGroupFactory extends Factory {
 	}
 
 	function getUser() {
-		$pgulf = TTnew( 'PolicyGroupUserListFactory' );
+		$pgulf = new PolicyGroupUserListFactory();
 		$pgulf->getByPolicyGroupId( $this->getId() );
-		foreach ($pgulf as $obj) {
+		foreach ($pgulf->rs as $obj) {
+			$pgulf->data = (array) $obj;
+			$obj = $pgulf;
 			$list[] = $obj->getUser();
 		}
 
@@ -163,11 +168,13 @@ class PolicyGroupFactory extends Factory {
 		if ( is_array($ids) ) {
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$pgulf = TTnew( 'PolicyGroupUserListFactory' );
+				$pgulf = new PolicyGroupUserListFactory();
 				$pgulf->getByPolicyGroupId( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($pgulf as $obj) {
+				foreach ($pgulf->rs as $obj) {
+					$pgulf->data = (array) $obj;
+					$obj = $pgulf;
 					$id = $obj->getUser();
 					Debug::text('Policy ID: '. $obj->getPolicyGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -185,10 +192,10 @@ class PolicyGroupFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
-					$pguf = TTnew( 'PolicyGroupUserFactory' );
+					$pguf = new PolicyGroupUserFactory();
 					$pguf->setPolicyGroup( $this->getId() );
 					$pguf->setUser( $id );
 
@@ -282,7 +289,7 @@ class PolicyGroupFactory extends Factory {
 			$id = NULL;
 		}
 
-		$epclf = TTnew( 'ExceptionPolicyControlListFactory' );
+		$epclf = new ExceptionPolicyControlListFactory();
 
 		if ( $id == NULL
 				OR
@@ -310,7 +317,7 @@ class PolicyGroupFactory extends Factory {
 	function postSave() {
 		if ( $this->getDeleted() == TRUE ) {
 			Debug::Text('UnAssign Policy Group from User Defaults...'. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
-			$udf = TTnew( 'UserDefaultFactory' );
+			$udf = new UserDefaultFactory();
 
 			$query = 'update '. $udf->getTable() .' set policy_group_id = 0 where company_id = '. (int)$this->getCompany() .' AND policy_group_id = '. (int)$this->getId();
 			DB::select($query);

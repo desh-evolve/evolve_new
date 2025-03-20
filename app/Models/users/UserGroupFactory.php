@@ -2,12 +2,16 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company\CompanyGenericMapListFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\FastTree;
 use App\Models\Core\Misc;
+use App\Models\Core\StationUserGroupFactory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class UserGroupFactory extends Factory {
 	protected $table = 'user_group';
@@ -87,7 +91,7 @@ class UserGroupFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory(); 
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -209,10 +213,12 @@ class UserGroupFactory extends Factory {
 			$parent_id = $this->getFastTreeObject()->getParentId( $this->getId() );
 
 			//Get items by group id.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getByCompanyIdAndGroupId( $this->getCompany(), $this->getId() );
 			if ( $ulf->getRecordCount() > 0 ) {
-				foreach( $ulf as $obj ) {
+				foreach( $ulf->rs as $obj ) {
+					$ulf->data = (array)$obj;
+					$obj = $ulf;
 					Debug::Text(' Re-Grouping Item: '. $obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 					$obj->setGroup($parent_id);
 					$obj->Save();
@@ -222,17 +228,19 @@ class UserGroupFactory extends Factory {
 			$this->getFastTreeObject()->delete( $this->getId() );
 
 			//Delete this group from station/job criteria
-			$sugf = TTnew( 'StationUserGroupFactory' );
+			$sugf = new StationUserGroupFactory(); 
 
 			$query = 'delete from '. $sugf->getTable() .' where group_id = '. (int)$this->getId();
 			DB::select($query);
 
                         
 			//Job employee criteria
-			$cgmlf = TTnew( 'CompanyGenericMapListFactory' );
+			$cgmlf = new CompanyGenericMapListFactory();
 			$cgmlf->getByCompanyIDAndObjectTypeAndMapID( $this->getCompany(), 1030, $this->getID() );
 			if ( $cgmlf->getRecordCount() > 0 ) {
-				foreach( $cgmlf as $cgm_obj ) {
+				foreach( $cgmlf->rs as $cgm_obj ) {
+					$cgmlf->data = (array)$cgm_obj;
+					$cgm_obj = $cgmlf;
 					Debug::text('Deleteing from Company Generic Map: '. $cgm_obj->getID(), __FILE__, __LINE__, __METHOD__, 10);
 					$cgm_obj->Delete();
 				}

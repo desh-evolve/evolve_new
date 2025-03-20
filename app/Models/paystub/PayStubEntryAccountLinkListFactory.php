@@ -55,13 +55,13 @@ class PayStubEntryAccountLinkListFactory extends PayStubEntryAccountLinkFactory 
 
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $company_id,
+						':id' => $company_id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	company_id = ?
+						where	company_id = :id
 							AND deleted = 0
 						';
 			$query .= $this->getWhereSQL( $where );

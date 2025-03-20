@@ -117,7 +117,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					);
                 
                 //FL CHANGED THE QUERY FOR NPVC 20160812
-                $spf = TTnew('SchedulePolicyFactory');
+                $spf = new SchedulePolicyFactory();
                   
 		$query = '
 					select 	a.*, b.name as shedule_policy_name
@@ -548,7 +548,9 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 			$slf->getByUserDateId( $udlf->getCurrent()->getId() );
 			if ( $slf->getRecordCount() > 0 ) {
 				Debug::Text(' Found Schedule!: ', __FILE__, __LINE__, __METHOD__,10);
-				foreach($slf as $s_obj ) {
+				foreach($slf->rs as $s_obj ) {
+					$slf->data = (array)$s_obj;
+					$s_obj = $slf;
 					if ( $s_obj->inSchedule( $epoch ) ) {
 						Debug::Text(' in Found Schedule! Branch: '. $s_obj->getBranch(), __FILE__, __LINE__, __METHOD__,10);
 						return $s_obj;

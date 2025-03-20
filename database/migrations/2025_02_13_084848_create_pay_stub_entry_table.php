@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
-            $table->tinyInteger('deleted')->default(0);
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('pay_stub_entry_name_id');
             $table->integer('pay_stub_amendment_id')->nullable();
         });

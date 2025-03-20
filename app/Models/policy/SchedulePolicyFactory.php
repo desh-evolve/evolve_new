@@ -3,11 +3,15 @@
 namespace App\Models\Policy;
 
 use App\Models\Company\CompanyGenericMapFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Schedule\RecurringScheduleTemplateFactory;
+use App\Models\Schedule\ScheduleFactory;
+use Illuminate\Support\Facades\DB;
 
 class SchedulePolicyFactory extends Factory {
 	protected $table = 'schedule_policy';
@@ -85,7 +89,7 @@ class SchedulePolicyFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -96,7 +100,7 @@ class SchedulePolicyFactory extends Factory {
 		if ( is_object($this->meal_policy_obj) ) {
 			return $this->meal_policy_obj;
 		} else {
-			$mplf = TTnew( 'MealPolicyListFactory' );
+			$mplf = new MealPolicyListFactory();
 			$mplf->getById( $this->getMealPolicyID() );
 			if ( $mplf->getRecordCount() > 0 ) {
 				$this->meal_policy_obj = $mplf->getCurrent();
@@ -118,7 +122,7 @@ class SchedulePolicyFactory extends Factory {
 			AND is_object($this->break_policy_obj[$break_policy_id]) ) {
 			return $this->break_policy_obj[$break_policy_id];
 		} else {
-			$bplf = TTnew( 'BreakPolicyListFactory' );
+			$bplf = new BreakPolicyListFactory();
 			$bplf->getById( $break_policy_id );
 			if ( $bplf->getRecordCount() > 0 ) {
 				$this->break_policy_obj[$break_policy_id] = $bplf->getCurrent();
@@ -140,7 +144,7 @@ class SchedulePolicyFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -192,7 +196,7 @@ class SchedulePolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -231,7 +235,7 @@ class SchedulePolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$otplf = TTnew( 'OverTimePolicyListFactory' );
+		$otplf = new OverTimePolicyListFactory();
 
 		if (  $id == NULL
 				OR
@@ -261,7 +265,7 @@ class SchedulePolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 
 		if (
 				$id == NULL
@@ -309,8 +313,8 @@ class SchedulePolicyFactory extends Factory {
 	function postSave() {
 		if ( $this->getDeleted() == TRUE ) {
 			Debug::Text('UnAssign Schedule Policy from Schedule/Recurring Schedules...'. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
-			$sf = TTnew( 'ScheduleFactory' );
-			$rstf = TTnew( 'RecurringScheduleTemplateFactory' );
+			$sf = new ScheduleFactory(); 
+			$rstf = new RecurringScheduleTemplateFactory();
 
 			$query = 'update '. $sf->getTable() .' set schedule_policy_id = 0 where schedule_policy_id = '. (int)$this->getId();
 			DB::select($query);

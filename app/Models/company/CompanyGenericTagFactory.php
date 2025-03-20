@@ -385,8 +385,9 @@ class CompanyGenericTagFactory extends Factory {
 			$cgtlf = new CompanyGenericTagListFactory();
 			$cgtlf->getByCompanyIdAndObjectTypeAndTags($company_id, $object_type_id, $parsed_tags['all']);
 			if ( $cgtlf->getRecordCount() > 0 ) {
-				foreach( $cgtlf as $cgt_obj ) {
-					$existing_tags[strtolower($cgt_obj->getName())] = $cgt_obj->getID();
+				foreach( $cgtlf->rs as $cgt_obj ) {
+					$cgtlf->data = (array)$cgt_obj;
+					$existing_tags[strtolower($cgtlf->getName())] = $cgtlf->getID();
 				}
 				//Debug::Arr($existing_tags, 'aExisting tags:', __FILE__, __LINE__, __METHOD__, 10);
 				$tags_diff = array_diff( $parsed_tags['all'], array_keys($existing_tags) );

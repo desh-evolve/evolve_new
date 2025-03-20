@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id(); // Auto-incrementing ID
             $table->integer('company_id'); // Company ID
             $table->string('name', 250)->nullable(); // Name of the wage group
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by
-            $table->smallInteger('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

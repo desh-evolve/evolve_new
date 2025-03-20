@@ -15,7 +15,7 @@ class MessageSenderFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -44,7 +44,7 @@ class MessageSenderFactory extends Factory {
 			$id = 0;
 		}
 
-		$mslf = TTnew( 'MessageSenderListFactory' );
+		$mslf = new MessageSenderListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'parent',
@@ -69,7 +69,7 @@ class MessageSenderFactory extends Factory {
 	function setMessageControl($id) {
 		$id = trim($id);
 
-		$mclf = TTnew( 'MessageControlListFactory' );
+		$mclf = new MessageControlListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'message_control_id',
 													$mclf->getByID($id),

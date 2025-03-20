@@ -67,7 +67,7 @@ class HierarchyObjectTypeFactory extends Factory {
 		if ( is_object($this->hierarchy_control_obj) ) {
 			return $this->hierarchy_control_obj;
 		} else {
-			$hclf = TTnew( 'HierarchyControlListFactory' );
+			$hclf = new HierarchyControlListFactory();
 			$this->hierarchy_control_obj = $hclf->getById( $this->getHierarchyControl() )->getCurrent();
 
 			return $this->hierarchy_control_obj;
@@ -84,7 +84,7 @@ class HierarchyObjectTypeFactory extends Factory {
 	function setHierarchyControl($id) {
 		$id = trim($id);
 
-		$hclf = TTnew( 'HierarchyControlListFactory' );
+		$hclf = new HierarchyControlListFactory();
 		Debug::Text('Hierarchy Control ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $id != 0
@@ -104,7 +104,7 @@ class HierarchyObjectTypeFactory extends Factory {
 /*
 		$company_id = $this->getHierarchyControlObject()->getCompany();
 
-		$hotlf = TTnew( 'HierarchyObjectTypeListFactory' );
+		$hotlf = new HierarchyObjectTypeListFactory();
 		$hotlf->getByCompanyId( $company_id );
 		foreach ( $hotlf as $object_type_obj) {
 			if ( $object_type_obj->getId() !== $this->getId() ) {

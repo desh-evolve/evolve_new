@@ -179,7 +179,9 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 

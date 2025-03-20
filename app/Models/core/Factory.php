@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Throwable;
 
 class Factory {
@@ -25,10 +26,24 @@ class Factory {
     protected $cache;
     protected $Validator;
 
+	protected $currentUser;
+	protected $profiler;
+	protected $userPrefs;
+	protected $currentCompany;
+	protected $permission;
+	protected $configVars;
+
 	function __construct() {
 		$this->db = DB::connection();
         $this->cache = Cache::store();
 		$this->Validator = new Validator();
+    
+        $this->currentUser = View::shared('current_user');
+        $this->profiler = View::shared('profiler');
+		$this->userPrefs = View::shared('current_user_prefs');
+        $this->currentCompany = View::shared('current_company');
+        $this->permission = View::shared('permission');
+        $this->configVars = View::shared('config_vars');
 
 		//Callback to the child constructor method.
 		if ( method_exists($this,'childConstruct') ) {
@@ -338,7 +353,7 @@ class Factory {
 		$id = (int)trim($id);
 
 		if ( empty($id) ) {
-			global $current_user;
+			$current_user = $this->currentUser;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -408,7 +423,7 @@ class Factory {
 		$id = (int)trim($id);
 
 		if ( empty($id) ) {
-			global $current_user;
+			$current_user = $this->currentUser;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -477,7 +492,7 @@ class Factory {
 		$id = trim($id);
 
 		if ( empty($id) ) {
-			global $current_user;
+			$current_user = $this->currentUser;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -628,83 +643,13 @@ class Factory {
 		if (!is_array($array)) {
 			$array = explode(',', (string) $array); // Convert comma-separated string to array
 		}
-		
+
 		// Trim values and filter out empty ones
 		$array = array_filter(array_map('trim', $array));
 
 		return implode(',', $array);
 	}
 
-
-/* //commented by desh(2025-03-10)
-	protected function getListSQL($array, &$ph = NULL) {
-		if ( $ph === NULL ) {
-			if ( is_array( $array ) AND count($array) > 0) {
-				return '\''.implode('\',\'',$array).'\'';
-			} elseif ( is_array($array) ) {
-				//Return NULL, because this is an empty array.
-				return 'NULL';
-			} elseif ( $array == '' ) {
-				return 'NULL';
-			}
-
-			//Just a single ID, return it.
-			return $array;
-		} else {
-			//Debug::Arr($ph, 'Place Holder BEFORE:', __FILE__, __LINE__, __METHOD__,10);
-
-			//Append $array values to end of $ph, return
-			//one "?," for each element in $array.
-
-			$array_count = is_array($array) ? count($array) : 0;
-			if ( is_array( $array ) AND $array_count > 0) {
-				foreach( $array as $key => $val ) {
-					$ph_arr[] = '?';
-
-					//Make sure we filter out any FALSE or NULL values from going into a SQL list.
-					//Replace them with "-1"'s so we keep the same number of place holders.
-					//This should hopefully prevent SQL errors if a FALSE creeps into the SQL list array.
-					if ( !is_null($val) AND ( is_numeric( $val ) OR is_string( $val ) ) ) {
-						$ph[] = $val;
-					} else {
-						$ph[] = '-1';
-					}
-				}
-
-				if ( isset($ph_arr) ) {
-					$retval = implode(',',$ph_arr);
-				}
-			} elseif ( is_array($array) ) {
-				//Return NULL, because this is an empty array.
-				//This may have to return -1 instead of NULL
-				//$ph[] = 'NULL';
-				$ph[] = -1;
-				$retval = '?';
-			} elseif ( $array == '' ) {
-				//$ph[] = 'NULL';
-				$ph[] = -1;
-				$retval = '?';
-			} else {
-				$ph[] = $array;
-				$retval = '?';
-			}
-
-			//Debug::Arr($ph, 'Place Holder AFTER:', __FILE__, __LINE__, __METHOD__,10);
-
-			//Just a single ID, return it.
-			return $retval;
-		}
-	}
-*/
-	//This function takes plain input from the user and creates a SQL statement for filtering
-	//based on a date range.
-	// Supported Syntax:
-	//					>=01-Jan-09
-	//					<=01-Jan-09
-	//					<01-Jan-09
-	//					>01-Jan-09
-	//					>01-Jan-09 & <10-Jan-09
-	//
 	function getDateRangeSQL( $str, $column, $use_epoch = TRUE ) {
 
 		if ( $str == '' ) {
@@ -1088,13 +1033,10 @@ class Factory {
 
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-			
-			/*
-			//check later before uncomment - desh(2025-03-15)
+
 			if (is_array($additional_fields)) {
 				$fields = array_merge($fields, $additional_fields);
 			}
-			*/
 
 			foreach ($array as $orig_column => $order) {
 				$orig_column = trim($orig_column);
@@ -1324,108 +1266,6 @@ class Factory {
         return DB::table($this->getTable())->max('id') + 1;
 	}
 
-	//check here => rewrite save function
-	//Determines to insert or update, and does it.
-	//Have this handle created, createdby, updated, updatedby.
-	/*
-	function Save($reset_data = TRUE, $force_lookup = FALSE) {
-		$this->StartTransaction();
-
-		//Don't validate when deleting, so we can delete records that may have some invalid options.
-		//However we can still manually call this function to check if we need too.
-		if ( $this->getDeleted() == FALSE AND $this->isValid() === FALSE ) {
-			throw new GeneralError('Invalid Data, not saving.');
-		}
-
-		//Should we insert, or update?
-		if ( $this->isNew( $force_lookup ) ) {
-			//Insert
-			$time = TTDate::getTime();
-
-			if ( $this->getCreatedDate() == '' ) {
-				$this->setCreatedDate($time);
-			}
-			if ( $this->getCreatedBy() == '' ) {
-				$this->setCreatedBy();
-			}
-
-			//Set updated date at the same time, so we can easily select last
-			//updated, or last created records.
-			$this->setUpdatedDate($time);
-			$this->setUpdatedBy();
-
-			unset($time);
-
-			$insert_id = $this->getID();
-
-			if ( $insert_id == FALSE ) {
-				//Append insert ID to data array.
-				$insert_id = $this->getNextInsertId();
-
-				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
-				$this->setId($insert_id);
-			}
-
-			try {
-				$query = $this->getInsertQuery();
-			} catch (Throwable $e) {
-				throw new DBError($e);
-			}
-
-			$retval = (int)$insert_id;
-			$log_action = 10; //'Add';
-		} else {
-			Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
-
-			//Update
-			$  = $this->getUpdateQuery(); //Don't pass data, too slow
-
-			//Debug::Arr($this->data, 'Save(): Query: ', __FILE__, __LINE__, __METHOD__,10);
-			$retval = TRUE;
-
-			if ( $this->getDeleted() === TRUE ) {
-				$log_action = 30; //'Delete';
-			} else {
-				$log_action = 20; //'Edit';
-			}
-		}
-
-		//Debug::text('Save(): Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
-		//Debug::Arr($query, 'Save(): Query: ', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( $query != '' OR $query === TRUE ) {
-
-			if ( is_string($query) AND $query != '' ) {
-				try {
-					DB::select($query);
-				} catch (Throwable $e) {
-					//Comment this out to see some errors on MySQL.
-					//throw new DBError($e);
-				}
-			}
-
-			//Clear the data.
-			if ( $reset_data == TRUE ) {
-				$this->clearData();
-			}
-			//IF YOUR NOT RESETTING THE DATA, BE SURE TO CLEAR THE OBJECT MANUALLY
-			//IF ITS IN A LOOP!! VERY IMPORTANT!
-
-			$this->CommitTransaction();
-
-			//Debug::Arr($retval, 'Save Retval: ', __FILE__, __LINE__, __METHOD__,10);
-
-			return $retval;
-		}
-
-		Debug::text('Save(): returning FALSE! Very BAD!' , __FILE__, __LINE__, __METHOD__,10);
-
-		throw new GeneralError('Save(): failed.');
-
-		return FALSE; //This should return false here?
-	}
-	*/
-
 	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		DB::beginTransaction();
 		try {
@@ -1436,19 +1276,16 @@ class Factory {
 			// Get the table name dynamically
 			$table = $this->getTable();
 			
-
-			// Get the data dynamically
-			$data = $this->data;
-
 			// Determine if we're inserting a new record or updating an existing one
 			if ($this->isNew($force_lookup)) {
 				//Insert
 				$time = TTDate::getTime();
-				
-				if ( $this->getCreatedDate() == '' ) {
+
+				if ( empty($this->getCreatedDate()) ) {
 					$this->setCreatedDate($time);
 				}
-				if ( $this->getCreatedBy() == '' ) {
+				
+				if ( empty($this->getCreatedBy()) ) {
 					$this->setCreatedBy();
 				}
 				
@@ -1460,7 +1297,7 @@ class Factory {
 				unset($time);
 				
 				// Perform the insert and get the insert ID
-				$insert_id = DB::table($table)->insertGetId($data);
+				$insert_id = DB::table($table)->insertGetId($this->data);
 				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
 				
 				// Set the insert ID in the model
@@ -1469,14 +1306,14 @@ class Factory {
 				// Return the ID of the newly created record
 				$retval = $insert_id;
 				$log_action = 10; // 'Add'
-				//echo 'check error: ';
+				echo 'check error: ';
 			} else {
 				Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
 
 				// Perform the update
 				DB::table($table)
 					->where('id', $this->getId())
-					->update($data);
+					->update($this->data);
 
 				// Return true to indicate success
 				$retval = true;
@@ -1501,10 +1338,10 @@ class Factory {
 			
 			return $retval;
 		} catch (\Exception $e) {
-			dd($e->getMessage());
 			// Roll back the transaction on error
 			DB::rollBack();
 			Log::error('Save failed: ' . $e->getMessage());
+			print_r($e->getMessage());exit;
 			throw new \Exception('Save failed.');
 		}
 
@@ -1544,8 +1381,9 @@ class Factory {
 			return FALSE;
 		}
 
-		foreach( $lf as $lf_obj ) {
-			$retarr[] = $lf_obj->getID();
+		foreach( $lf->rs as $lf_obj ) {
+			$lf->data = (array)$lf_obj;
+			$retarr[] = $lf->getID();
 		}
 
 		if ( isset($retarr) ) {
@@ -1566,7 +1404,7 @@ class Factory {
 			Debug::text('Bulk Delete Query: '. $query, __FILE__, __LINE__, __METHOD__, 9);
 
 			try {
-				DB::select($query, $ph);
+				DB::delete($query, $ph);
 			} catch (Throwable $e) {
 				throw new DBError($e);
 			}
@@ -1598,5 +1436,29 @@ class Factory {
 	{
 		return Schema::hasTable($table_name);
 	}
+
+	//===========================================================================
+	// added by desh(2025-03-18)
+	//===========================================================================
+	public function getCurrentUser(){
+		return $this->currentUser;
+	}
+	public function getProfiler(){
+		return $this->profiler;
+	}
+	public function getUserPrefs(){
+		return $this->userPrefs;
+	}
+	public function getCurrentCompany(){
+		return $this->currentCompany;
+	}
+	public function getPermission(){
+		return $this->permission;
+	}
+	public function getConfigVars(){
+		return $this->configVars;
+	}
+	//===========================================================================
+	
 }
 ?>

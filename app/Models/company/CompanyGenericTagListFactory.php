@@ -228,9 +228,10 @@ class CompanyGenericTagListFactory extends CompanyGenericTagFactory implements I
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
 			if ( $include_disabled == TRUE OR ( $include_disabled == FALSE ) ) {
-				$list[$obj->getID()] = $obj->getName();
+				$list[$lf->getID()] = $lf->getName();
 			}
 		}
 

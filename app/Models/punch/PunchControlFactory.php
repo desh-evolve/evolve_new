@@ -2,6 +2,7 @@
 
 namespace App\Models\Punch;
 
+use App\Models\Company\BranchListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,7 +10,13 @@ use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\UserDateFactory;
+use App\Models\Core\UserDateListFactory;
 use App\Models\Core\UserDateTotalFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Policy\MealPolicyListFactory;
 use App\Models\Users\UserListFactory;
 
 class PunchControlFactory extends Factory {
@@ -62,7 +69,7 @@ class PunchControlFactory extends Factory {
 				$id = $this->getUserDateID();
 			}
 
-			$udlf = TTnew( 'UserDateListFactory' );
+			$udlf = new UserDateListFactory();
 			$udlf->getById( $id );
 			if ( $udlf->getRecordCount() > 0 ) {
 				$this->user_date_obj = $udlf->getCurrent();
@@ -75,7 +82,7 @@ class PunchControlFactory extends Factory {
 
 	function getPLFByPunchControlID() {
 		if ( $this->plf == NULL AND $this->getID() != FALSE ) {
-			$this->plf = TTnew( 'PunchListFactory' );
+			$this->plf = new PunchListFactory();
 			$this->plf->getByPunchControlID( $this->getID() );
 		}
 
@@ -87,7 +94,7 @@ class PunchControlFactory extends Factory {
 			return $this->pay_period_schedule_obj;
 		} else {
 			if ( $this->getUser() > 0 ) {
-				$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+				$ppslf = new PayPeriodScheduleListFactory();
 				$ppslf->getByUserId( $this->getUser() );
 				if ( $ppslf->getRecordCount() == 1 ) {
 					$this->pay_period_schedule_obj = $ppslf->getCurrent();
@@ -115,7 +122,7 @@ class PunchControlFactory extends Factory {
 		if ( is_object($this->job_obj) ) {
 			return $this->job_obj;
 		} else {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 			$jlf->getById( $this->getJob() );
 			if ( $jlf->getRecordCount() > 0 ) {
 				$this->job_obj = $jlf->getCurrent();
@@ -130,7 +137,7 @@ class PunchControlFactory extends Factory {
 		if ( is_object($this->job_item_obj) ) {
 			return $this->job_item_obj;
 		} else {
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 			$jilf->getById( $this->getJobItem() );
 			if ( $jilf->getRecordCount() > 0 ) {
 				$this->job_item_obj = $jilf->getCurrent();
@@ -321,7 +328,7 @@ class PunchControlFactory extends Factory {
 	function setUserDateID( $id ) {
 		$id = trim($id);
 
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory();
 		if (  $this->Validator->isResultSetWithRows(	'user_date',
 														$udlf->getByID($id),
 														('Invalid User Date ID')
@@ -354,7 +361,7 @@ class PunchControlFactory extends Factory {
 			$id = 0;
 		}
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 
 		if (  $id == 0
 				OR
@@ -384,7 +391,7 @@ class PunchControlFactory extends Factory {
 			$id = 0;
 		}
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory(); 
 
 		if (  $id == 0
 				OR
@@ -415,7 +422,7 @@ class PunchControlFactory extends Factory {
 		}
 
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 		}
 
 		if (  $id == 0
@@ -447,7 +454,7 @@ class PunchControlFactory extends Factory {
 		}
 
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 		}
 
 		if (  $id == 0
@@ -576,7 +583,7 @@ class PunchControlFactory extends Factory {
 			$id = NULL;
 		}
 
-		$mplf = TTnew( 'MealPolicyListFactory' );
+		$mplf = new MealPolicyListFactory(); 
 
 		if ( $id == NULL
 				OR
@@ -746,14 +753,16 @@ class PunchControlFactory extends Factory {
 		if ( $force == TRUE OR $this->is_total_time_calculated == FALSE ) {
 			$this->is_total_time_calculated == TRUE;
 
-			$plf = TTnew( 'PunchListFactory' );
+			$plf = new PunchListFactory();
 			$plf->getByPunchControlId( $this->getId() );
 			//Make sure punches are in In/Out pairs before we bother calculating.
 			if ( $plf->getRecordCount() > 0 AND ( $plf->getRecordCount() % 2 ) == 0 ) {
 				Debug::text(' Found Punches to calculate.', __FILE__, __LINE__, __METHOD__,10);
 				$in_pair = FALSE;
 				$schedule_obj = NULL;
-				foreach( $plf as $punch_obj ) {
+				foreach( $plf->rs as $punch_obj ) {
+					$plf->data = (array)$punch_obj;
+					$punch_obj = $plf;
 					//Check for proper in/out pairs
 					//First row should be an Out status (reverse ordering)
 					Debug::text(' Punch: Status: '. $punch_obj->getStatus() .' TimeStamp: '. $punch_obj->getTimeStamp(), __FILE__, __LINE__, __METHOD__,10);
@@ -855,7 +864,7 @@ class PunchControlFactory extends Factory {
 					if ( $this->getPunchObject()->inMealPolicyWindow( $this->getPunchObject()->getTimeStamp(), $previous_punch_arr['time_stamp'] ) == TRUE ) {
 						Debug::text(' Previous Punch needs to change to Lunch...', __FILE__, __LINE__, __METHOD__,10);
 
-						$plf = TTnew( 'PunchListFactory' );
+						$plf = new PunchListFactory();
 						$plf->getById( $previous_punch_arr['id'] );
 						if ( $plf->getRecordCount() == 1 ) {
 							Debug::text(' Modifying previous punch...', __FILE__, __LINE__, __METHOD__,10);
@@ -890,7 +899,7 @@ class PunchControlFactory extends Factory {
 					if ( $this->getPunchObject()->inBreakPolicyWindow( $this->getPunchObject()->getTimeStamp(), $previous_punch_arr['time_stamp'] ) == TRUE ) {
 						Debug::text(' Previous Punch needs to change to Break...', __FILE__, __LINE__, __METHOD__,10);
 
-						$plf = TTnew( 'PunchListFactory' );
+						$plf = new PunchListFactory();
 						$plf->getById( $previous_punch_arr['id'] );
 						if ( $plf->getRecordCount() == 1 ) {
 							Debug::text(' Modifying previous punch...', __FILE__, __LINE__, __METHOD__,10);
@@ -1154,7 +1163,7 @@ class PunchControlFactory extends Factory {
 
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL AND $this->getEnableStrictJobValidation() == TRUE ) {
 			if ( $this->getJob() > 0 ) {
-				$jlf = TTnew( 'JobListFactory' );
+				$jlf = new JobListFactory();
 				$jlf->getById( $this->getJob() );
 				if ( $jlf->getRecordCount() > 0 ) {
 					$j_obj = $jlf->getCurrent();
@@ -1229,12 +1238,14 @@ class PunchControlFactory extends Factory {
 		if ( is_object( $this->getPayPeriodScheduleObject() )
 				AND $this->getPayPeriodScheduleObject()->getTimeSheetVerifyType() != 10 ) {
 			//Find out if timesheet is verified or not.
-			$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+			$pptsvlf = new PayPeriodTimeSheetVerifyListFactory(); 
 			$pptsvlf->getByPayPeriodIdAndUserId( $this->getUserDateObject()->getPayPeriod(), $this->getUser() );
 			if ( $pptsvlf->getRecordCount() > 0 ) {
 				//Pay period is veriferied, delete all records and make log entry.
 				Debug::text('Pay Period is verified, deleting verification records: '. $pptsvlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-				foreach( $pptsvlf as $pptsv_obj ) {
+				foreach( $pptsvlf->rs as $pptsv_obj ) {
+					$pptsvlf->data = (array)$pptsv_obj;
+					$pptsv_obj = $pptsvlf;
 					if ( is_object( $this->getPunchObject() ) ) {
 						TTLog::addEntry( $pptsv_obj->getId(), 500,  ('TimeSheet Modified After Verification').': '. UserListFactory::getFullNameById( $this->getUser() ) .' '. ('Punch').': '. TTDate::getDate('DATE+TIME', $this->getPunchObject()->getTimeStamp() ) , NULL, $pptsvlf->getTable() );
 					}
@@ -1266,7 +1277,7 @@ class PunchControlFactory extends Factory {
 					$this->old_user_date_ids[] = $this->getOldUserDateID();
 
 					foreach( $shift_data['punch_control_ids'] as $punch_control_id ) {
-						$pclf = TTnew( 'PunchControlListFactory' );
+						$pclf = new PunchControlListFactory();
 						$pclf->getById( $punch_control_id );
 						if ( $pclf->getRecordCount() == 1 ) {
 							$pc_obj = $pclf->getCurrent();
@@ -1298,12 +1309,14 @@ class PunchControlFactory extends Factory {
 
 			//Add a row to the user date total table, as "worked" hours.
 			//Edit if it already exists and is not set as override.
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory(); 
 			$udtlf->getByUserDateIdAndPunchControlId( $this->getUserDateID(), $this->getId() );
 			Debug::text(' Checking for Conflicting User Date Total Records, count: '. $udtlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 			if ( $udtlf->getRecordCount() > 0 ) {
 				Debug::text(' Found Conflicting User Date Total Records, removing them before re-calc', __FILE__, __LINE__, __METHOD__,10);
-				foreach($udtlf as $udt_obj) {
+				foreach($udtlf->rs as $udt_obj) {
+					$udtlf->data = (array)$udt_obj;
+					$udt_obj = $udtlf;
 					if ( $udt_obj->getOverride() == FALSE ) {
 						Debug::text(' bFound Conflicting User Date Total Records, removing them before re-calc', __FILE__, __LINE__, __METHOD__,10);
 						$udt_obj->Delete();
@@ -1314,7 +1327,7 @@ class PunchControlFactory extends Factory {
 			Debug::text(' cFound Conflicting User Date Total Records, removing them before re-calc: PreMature: '. (int)$this->getEnablePreMatureException(), __FILE__, __LINE__, __METHOD__,10);
 			if ( $this->getDeleted() == FALSE ) {
 				Debug::text(' Calculating Total Time for day. Punch Control ID: '. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
-				$udtf = TTnew( 'UserDateTotalFactory' );
+				$udtf = new UserDateTotalFactory();
 				$udtf->setUserDateID( $this->getUserDateID() );
 				$udtf->setPunchControlID( $this->getId() );
 				$udtf->setStatus( 20 ); //Worked
@@ -1369,7 +1382,7 @@ class PunchControlFactory extends Factory {
 		$retval = FALSE;
 
 		//Get source and destination punch objects.
-		$plf = TTnew( 'PunchListFactory' );
+		$plf = new PunchListFactory();
 		$plf->StartTransaction();
 
 		$plf->getByCompanyIDAndId( $company_id, $src_punch_id );
@@ -1573,15 +1586,17 @@ class PunchControlFactory extends Factory {
 	static function splitPunchControl( $punch_control_id ) {
 		$retval = FALSE;
 		if ( $punch_control_id != '' ) {
-			$plf = TTnew( 'PunchListFactory' );
+			$plf = new PunchListFactory();
 			$plf->StartTransaction();
 			$plf->getByPunchControlID( $punch_control_id, NULL, array( 'time_stamp' => 'desc' ) ); //Move out punch to new punch_control_id.
 			if ( $plf->getRecordCount() == 2 ) {
-				$pclf = TTnew( 'PunchControlListFactory' );
+				$pclf = new PunchControlListFactory();
 				$new_punch_control_id = (int)$pclf->getNextInsertId();
 				Debug::text(' Punch Control ID: '. $punch_control_id .' only has two punches assigned, splitting... New Punch Control ID: '. $new_punch_control_id, __FILE__, __LINE__, __METHOD__,10);
 				$i = 0;
-				foreach( $plf as $p_obj ) {
+				foreach( $plf->rs as $p_obj ) {
+					$plf->data = (array)$p_obj;
+					$p_obj = $plf;
 					if ( $i == 0 ) {
 						//First punch (out)
 						//Get the PunchControl Object before we change to the new punch_control_id

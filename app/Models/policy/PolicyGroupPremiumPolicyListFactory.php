@@ -78,7 +78,9 @@ class PolicyGroupPremiumPolicyListFactory extends PolicyGroupPremiumPolicyFactor
 
 		$pgpplf->getByPolicyGroupId($id);
 
-		foreach ($pgpplf as $obj) {
+		foreach ($pgpplf->rs as $obj) {
+			$pgpplf->data = (array) $obj;
+			$obj = $pgpplf;
 			$list[$obj->getPremiumPolicy()] = NULL;
 		}
 

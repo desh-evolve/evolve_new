@@ -75,8 +75,8 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -85,8 +85,8 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 							'. $uf->getTable() .' as b
 					where
 						a.user_id = b.id
-						AND b.company_id = ?
-						AND a.id = ?
+						AND b.company_id = :company_id
+						AND a.id = :id
 						AND a.deleted = 0
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -106,7 +106,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$cdf = new CompanyDeductionFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -117,7 +117,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 					where
 						a.user_id = b.id
 						AND a.company_deduction_id = c.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.deleted = 0
 					ORDER BY c.calculation_order
 					';
@@ -141,8 +141,8 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'deduction_id' => $deduction_id,
+					':company_id' => $company_id,
+					':deduction_id' => $deduction_id,
 					);
 
 		$query = '
@@ -151,8 +151,8 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 							'. $uf->getTable() .' as b
 					where
 						a.user_id = b.id
-						AND b.company_id = ?
-						AND a.company_deduction_id = ?
+						AND b.company_id = :company_id
+						AND a.company_deduction_id = :deduction_id
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -175,7 +175,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'deduction_id' => $deduction_id,
+					':deduction_id' => $deduction_id,
 					);
                 
                 if ( $order == NULL ) {
@@ -189,7 +189,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 							'. $uf->getTable() .' as b
 					where
 						a.user_id = b.id
-						AND a.company_deduction_id = ?
+						AND a.company_deduction_id = :deduction_id
 						AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
 						AND (a.deleted = 0 AND b.deleted = 0)
 					';
@@ -214,8 +214,8 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$cdf = new CompanyDeductionFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'country_id' => $country_id,
+					':user_id' => $user_id,
+					':country_id' => $country_id,
 					);
 
 		$query = '
@@ -224,8 +224,8 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 							'. $cdf->getTable() .' as b
 					where
 						a.company_deduction_id = b.id
-						AND a.user_id = ?
-						AND b.country = ?
+						AND a.user_id = :user_id
+						AND b.country = :country_id
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -249,7 +249,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$cdf = new CompanyDeductionFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -258,7 +258,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 							'. $cdf->getTable() .' as b
 					where
 						a.company_deduction_id = b.id
-						AND a.user_id = ?
+						AND a.user_id = :user_id
 						AND b.pay_stub_entry_account_id in ('. $this->getListSQL($pse_account_id, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 					';
@@ -290,7 +290,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$cdf = new CompanyDeductionFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -301,7 +301,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 					where
 						a.user_id = b.id
 						AND a.company_deduction_id = c.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
 						AND (a.deleted = 0 AND c.deleted = 0)
 					';
@@ -334,7 +334,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$cdf = new CompanyDeductionFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -345,7 +345,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 					where
 						a.user_id = b.id
 						AND a.company_deduction_id = c.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.user_id in ('. $this->getListSQL($user_id, $ph) .')
                                                 AND a.company_deduction_id not in (2,97,24,61,66,67,72)
 						AND (a.deleted = 0 AND c.deleted = 0)
@@ -376,9 +376,9 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -387,9 +387,9 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 							'. $uf->getTable() .' as b
 					where
 						a.user_id = b.id
-						AND b.company_id = ?
-						AND a.user_id = ?
-						AND a.id = ?
+						AND b.company_id = :company_id
+						AND a.user_id = :user_id
+						AND a.id = :id
 						AND a.deleted = 0
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -432,7 +432,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -452,7 +452,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 						LEFT JOIN '. $uf->getTable() .' as uf ON ( a.user_id = uf.id AND uf.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	uf.company_id = ?
+					where	uf.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

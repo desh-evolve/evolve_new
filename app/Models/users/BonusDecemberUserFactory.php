@@ -20,7 +20,7 @@ class BonusDecemberUserFactory  extends Factory {
 		if ( is_object($this->bonus_december_obj) ) {
 			return $this->bonus_december_obj;
 		} else {
-			$bdlf = TTnew( 'BonusDecemberListFactory' );
+			$bdlf = new BonusDecemberListFactory();
 			$bdlf->getById( $this->getBonusDecember() );
 			if ( $bdlf->getRecordCount() == 1 ) {
 				$this->bonus_december_obj = $bdlf->getCurrent();
@@ -38,7 +38,7 @@ class BonusDecemberUserFactory  extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -62,7 +62,7 @@ class BonusDecemberUserFactory  extends Factory {
 	function setBonusDecember($id) {
 		$id = trim($id);
 
-		$bdlf = TTnew( 'BonusDecemberListFactory' );
+		$bdlf = new BonusDecemberListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows( 'bonus',
@@ -90,7 +90,7 @@ class BonusDecemberUserFactory  extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',

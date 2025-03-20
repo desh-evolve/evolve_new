@@ -50,7 +50,7 @@ if ( $sort_column != '' ) {
 Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
 
 
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -66,7 +66,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$udlf = TTnew( 'UserDeductionListFactory' );
+		$udlf = new UserDeductionListFactory();
 
 		if ( isset($ids) AND is_array($ids) ) {
 			foreach ($ids as $id) {
@@ -87,10 +87,10 @@ switch ($action) {
 		BreadCrumb::setCrumb($title);
 
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-		$hlf = TTnew( 'HierarchyListFactory' );
+		$hlf = new HierarchyListFactory();
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
-		$udlf = TTnew( 'UserDeductionListFactory' );
+		$udlf = new UserDeductionListFactory();
 		$udlf->getByCompanyIdAndUserId( $current_company->getId(), $user_id );
 
 		$pager = new Pager($udlf);
@@ -130,7 +130,7 @@ switch ($action) {
 		$smarty->assign_by_ref('rows', $rows);
 		$smarty->assign_by_ref('user_id', $user_id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$filter_data = NULL;
 		extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, NULL ) );

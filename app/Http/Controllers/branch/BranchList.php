@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Core\Environment;
 use App\Models\Core\BreadCrumb;
 use App\Models\Core\OtherFieldListFactory;
-use app\Models\company\BranchListFactory;
+use App\Models\Company\BranchListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Misc;
@@ -74,17 +74,20 @@ class BranchList extends Controller
         $pager = new Pager($blf);
 
         $branches = [];
-        foreach ($blf->rs as $b_obj) {
+        foreach ($blf->rs as $branch) {
+            $blf->data = (array)$branch;
+            // print_r($blf->data);
+            // exit;
             $branches[] = [
-                'id' => $b_obj->id,
-                'status_id' => $b_obj->status_id,
-                'manual_id' => $b_obj->manual_id,
-                'name' => $b_obj->name,
-                'city' => $b_obj->city,
-                'province' => $b_obj->province,
-                'map_url' => $b_obj->map_url,
-                'deleted' => $b_obj->deleted,
-                'branch_short_id' => $b_obj->branch_short_id // Added for Thunder & Neon
+                'id' =>  $blf->GetId(),
+                'status_id' => $blf->getStatus(),
+                'manual_id' => $blf->getManualID(),
+                'name' => $blf->getName(),
+                'city' => $blf->getCity(),
+                'province' => $blf->getProvince(),
+                'map_url' => $blf->getMapURL(),
+                'deleted' => $blf->getDeleted(),
+                'branch_short_id' => $blf->getBranchShortID() // Added for Thunder & Neon
             ];
         }
 

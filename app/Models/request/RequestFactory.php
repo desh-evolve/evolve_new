@@ -2,6 +2,7 @@
 
 namespace App\Models\Request;
 
+use App\Models\Core\AuthorizationListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -10,6 +11,9 @@ use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\UserDateFactory;
+use App\Models\Core\UserDateListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Message\MessageControlFactory;
 
 class RequestFactory extends Factory {
 	protected $table = 'request';
@@ -118,7 +122,7 @@ class RequestFactory extends Factory {
 		if ( is_object( $this->user_date_obj ) ) {
 			return $this->user_date_obj;
 		} else {
-			$udlf = TTnew( 'UserDateListFactory' );
+			$udlf = new UserDateListFactory();
 			$udlf->getById( $this->getUserDateID() );
 			if ( $udlf->getRecordCount() > 0 ) {
 				$this->user_date_obj = $udlf->getCurrent();
@@ -169,7 +173,7 @@ class RequestFactory extends Factory {
 	function setUserDateID($id = NULL) {
 		$id = trim($id);
 
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory(); 
 
 		if (  $this->Validator->isResultSetWithRows(	'user_date',
 														$udlf->getByID($id),
@@ -345,7 +349,7 @@ class RequestFactory extends Factory {
 		}
 
 		//Check to make sure this user has superiors to send a request too, otherwise we can't save the request.
-		$hlf = TTnew( 'HierarchyListFactory' );
+		$hlf = new HierarchyListFactory(); 
 		$request_parent_level_user_ids = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUser(), $this->getHierarchyTypeId(), TRUE, FALSE ); //Request - Immediate parents only.
 		Debug::Arr($request_parent_level_user_ids, 'Check for Superiors: ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -363,7 +367,7 @@ class RequestFactory extends Factory {
 		if ( $this->isNew() == TRUE ) {
 
 			if ( is_object( $this->getUserObject() ) ) {
-				$hlf = TTnew( 'HierarchyListFactory' );
+				$hlf = new HierarchyListFactory();
 				$hierarchy_arr = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID(), $this->getHierarchyTypeId(), FALSE);
 			}
 
@@ -389,14 +393,14 @@ class RequestFactory extends Factory {
 	function postSave() {
 		//Save message here after we have the request_id.
 		if ( $this->getMessage() !== FALSE ) {
-			$mcf = TTnew( 'MessageControlFactory' );
+			$mcf = new MessageControlFactory(); 
 			$mcf->StartTransaction();
 
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$request_parent_level_user_ids = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUser(), $this->getHierarchyTypeId(), TRUE, FALSE ); //Request - Immediate parents only.
 			Debug::Arr($request_parent_level_user_ids, 'Sending message to current direct Superiors: ', __FILE__, __LINE__, __METHOD__,10);
 
-			$mcf = TTnew( 'MessageControlFactory' );
+			$mcf = new MessageControlFactory();
 			$mcf->setFromUserId( $this->getUser() );
 			$mcf->setToUserId( $request_parent_level_user_ids );
 			$mcf->setObjectType( 50 ); //Messages don't break out request types like hierarchies do.
@@ -416,9 +420,11 @@ class RequestFactory extends Factory {
 
 		if ( $this->getDeleted() == TRUE ) {
 			Debug::Text('Delete authorization history for this request...'. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
-			$alf = TTnew( 'AuthorizationListFactory' );
+			$alf = new AuthorizationListFactory(); 
 			$alf->getByObjectTypeAndObjectId( $this->getHierarchyTypeId(), $this->getId() );
-			foreach( $alf as $authorization_obj ) {
+			foreach( $alf->rs as $authorization_obj ) {
+				$alf->data = (array)$authorization_obj;
+				$authorization_obj = $alf;
 				Debug::Text('Deleting authorization ID: '. $authorization_obj->getID(), __FILE__, __LINE__, __METHOD__,10);
 				$authorization_obj->setDeleted(TRUE);
 				$authorization_obj->Save();

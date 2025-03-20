@@ -21,7 +21,7 @@ class PolicyGroupUserFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = trim($id);
 
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		if ( $id != 0
 				OR $this->Validator->isResultSetWithRows(	'policy_group',
@@ -40,7 +40,7 @@ class PolicyGroupUserFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -51,7 +51,7 @@ class PolicyGroupUserFactory extends Factory {
 		}
 	}
 	function isUniqueUser($id) {
-		$pglf = TTnew( 'PolicyGroupListFactory' );
+		$pglf = new PolicyGroupListFactory();
 
 		$ph = array(
 					'id' => $id,
@@ -81,7 +81,7 @@ class PolicyGroupUserFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id != 0
 				AND $this->Validator->isResultSetWithRows(	'user',

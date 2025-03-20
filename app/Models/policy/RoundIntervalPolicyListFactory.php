@@ -127,7 +127,9 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 			$list[0] = '--';
 		}
 
-		foreach ($riplf as $rip_obj) {
+		foreach ($riplf->rs as $rip_obj) {
+			$riplf->data = (array) $rip_obj;
+			$rip_obj = $riplf;
 			$list[$rip_obj->getID()] = $rip_obj->getName();
 		}
 

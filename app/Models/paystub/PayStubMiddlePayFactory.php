@@ -50,7 +50,7 @@ class PayStubMiddlePayFactory extends Factory {
 
 		} else {
 
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 
 
 
@@ -83,7 +83,7 @@ class PayStubMiddlePayFactory extends Factory {
 
 		} else {
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 
 			$ulf->getById( $this->getUser() );
 
@@ -127,7 +127,7 @@ class PayStubMiddlePayFactory extends Factory {
 
 
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 
 
@@ -173,7 +173,7 @@ function getPayPeriod() {
 
 
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
 
 

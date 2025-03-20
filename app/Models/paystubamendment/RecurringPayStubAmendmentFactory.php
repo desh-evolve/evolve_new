@@ -2,6 +2,7 @@
 
 namespace App\Models\PayStubAmendment;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,6 +10,10 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserListFactory;
 
 class RecurringPayStubAmendmentFactory extends Factory {
 	protected $table = 'recurring_ps_amendment';
@@ -160,7 +165,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -308,9 +313,11 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	}
 
 	function getUser() {
-		$rpsaulf = TTnew( 'RecurringPayStubAmendmentUserListFactory' );
+		$rpsaulf = new RecurringPayStubAmendmentUserListFactory();
 		$rpsaulf->getByRecurringPayStubAmendment( $this->getId() );
-		foreach ($rpsaulf as $ps_amendment_user) {
+		foreach ($rpsaulf->rs as $ps_amendment_user) {
+			$rpsaulf->data = (array)$ps_amendment_user;
+			$ps_amendment_user = $rpsaulf;
 			$user_list[] = $ps_amendment_user->getUser();
 		}
 
@@ -334,11 +341,13 @@ class RecurringPayStubAmendmentFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$rpsaulf = TTnew( 'RecurringPayStubAmendmentUserListFactory' );
+				$rpsaulf = new RecurringPayStubAmendmentUserListFactory();
 				$rpsaulf->getByRecurringPayStubAmendment( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($rpsaulf as $obj) {
+				foreach ($rpsaulf->rs as $obj) {
+					$rpsaulf->data = (array)$obj;
+					$obj = $rpsaulf;
 					$id = $obj->getUser();
 					Debug::text('Recurring Schedule ID: '. $obj->getRecurringPayStubAmendment() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -356,12 +365,12 @@ class RecurringPayStubAmendmentFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
 					if ( $id == -1 ) {
 						Debug::text('--ALL-- Employees selected...', __FILE__, __LINE__, __METHOD__, 10);
-						$rpsauf = TTnew( 'RecurringPayStubAmendmentUserFactory' );
+						$rpsauf = new RecurringPayStubAmendmentUserFactory();
 						$rpsauf->setRecurringPayStubAmendment( $this->getId() );
 						$rpsauf->setUser( $id );
 
@@ -372,7 +381,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 						}
 
 					} else {
-						$rpsauf = TTnew( 'RecurringPayStubAmendmentUserFactory' );
+						$rpsauf = new RecurringPayStubAmendmentUserFactory();
 						$rpsauf->setRecurringPayStubAmendment( $this->getId() );
 						$rpsauf->setUser( $id );
 
@@ -407,7 +416,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	function setPayStubEntryNameId($id) {
 		$id = trim($id);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getById( $id );
 
 		if (  $this->Validator->isResultSetWithRows(	'pay_stub_entry_name_id',
@@ -426,7 +435,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	function setPayStubEntryName($name) {
 		$name = trim($name);
 
-		$psenlf = TTnew( 'PayStubEntryNameListFactory' );
+		$psenlf = new PayStubEntryNameListFactory();
 		$result = $psenlf->getByName($name);
 
 		if (  $this->Validator->isResultSetWithRows(	'ps_entry_name',
@@ -679,7 +688,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	function setPercentAmountEntryNameId($id) {
 		$id = trim($id);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getById( $id );
 		//Not sure why we tried to use $result here, as if the ID passed is NULL, it causes a fatal error.
 		//$result = $psealf->getById( $id )->getCurrent();
@@ -746,7 +755,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 			$epoch = TTDate::getTime();
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		Debug::text('Recurring PS Amendment ID: '. $this->getId() .' Frequency: '. $this->getFrequency(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -755,7 +764,9 @@ class RecurringPayStubAmendmentFactory extends Factory {
 		$tmp_user_ids = $this->getUser();
 		if ( $tmp_user_ids[0] == -1) {
 			$ulf->getByCompanyIdAndStatus( $this->getCompany(), 10 );
-			foreach($ulf as $user_obj) {
+			foreach($ulf->rs as $user_obj) {
+				$ulf->data = (array)$user_obj;
+				$user_obj = $ulf;
 				$user_ids[] = $user_obj->getId();
 			}
 			unset($user_obj);
@@ -772,11 +783,13 @@ class RecurringPayStubAmendmentFactory extends Factory {
 			switch( $this->getFrequency() ) {
 				case 10:
 					//Get all open pay periods
-					$pplf = TTnew( 'PayPeriodListFactory' );
+					$pplf = new PayPeriodListFactory();
 					//FIXME: Get all non-closed pay periods AFTER the start date.
 					$pplf->getByUserIdListAndNotStatusAndStartDateAndEndDate($user_ids, 20, $this->getStartDate(), $this->getEndDate() ); //All non-closed pay periods
 					Debug::text('Found Open Pay Periods: '. $pplf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-					foreach($pplf as $pay_period_obj) {
+					foreach($pplf->rs as $pay_period_obj) {
+						$pplf->data = (array)$pay_period_obj;
+						$pay_period_obj = $pplf;
 						Debug::text('Working on Pay Period: '. $pay_period_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 
 						//If near the end of a pay period, or a pay period is already ended, add PS amendment if
@@ -785,7 +798,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 								AND $this->checkTimeFrame($epoch) ) {
 							Debug::text('After end of pay period. Start Date: '. TTDate::getDate('DATE+TIME', $pay_period_obj->getStartDate() ) .' End Date: '. TTDate::getDate('DATE+TIME', $pay_period_obj->getEndDate() ) , __FILE__, __LINE__, __METHOD__,10);
 
-							$psalf = TTnew( 'PayStubAmendmentListFactory' );
+							$psalf = new PayStubAmendmentListFactory();
 
 							//Loop through each user of this Pay Period Schedule adding PS amendments if they don't already exist.
 							$pay_period_schedule_users = $pay_period_obj->getPayPeriodScheduleObject()->getUser();
@@ -804,7 +817,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 										//No amendment, good to insert one
 										Debug::text('Inserting Recurring PS Amendment for User: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-										$psaf = TTnew( 'PayStubAmendmentFactory' );
+										$psaf = new PayStubAmendmentFactory();
 										$psaf->setUser( $user_id );
 										$psaf->setStatus( 50 );
 
@@ -886,12 +899,12 @@ class RecurringPayStubAmendmentFactory extends Factory {
 								continue;
 							}
 
-							$psalf = TTnew( 'PayStubAmendmentListFactory' );
+							$psalf = new PayStubAmendmentListFactory();
 							if ( $psalf->getByUserIdAndRecurringPayStubAmendmentIdAndStartDateAndEndDate( $user_id, $this->getId(), $start_date, $end_date )->getRecordCount() == 0 ) {
 								//No amendment, good to insert one
 								Debug::text('Inserting Recurring PS Amendment for User: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-								$psaf = TTnew( 'PayStubAmendmentFactory' );
+								$psaf = new PayStubAmendmentFactory();
 								$psaf->setUser( $user_id );
 								$psaf->setStatus( 50 );
 
@@ -1038,7 +1051,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL ) {
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory();
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

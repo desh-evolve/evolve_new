@@ -64,7 +64,7 @@ class UserTitleFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'company',
@@ -161,8 +161,8 @@ class UserTitleFactory extends Factory {
 		if ( $this->getDeleted() == TRUE ) {
 			Debug::Text('UnAssign title from employees: '. $this->getId(), __FILE__, __LINE__, __METHOD__,10);
 			//Unassign hours from this job.
-			$uf = TTnew( 'UserFactory' );
-			$udf = TTnew( 'UserDefaultFactory' );
+			$uf = new UserFactory();
+			$udf = new UserDefaultFactory();
 
 			$query = 'update '. $uf->getTable() .' set title_id = 0 where company_id = '. (int)$this->getCompany() .' AND title_id = '. (int)$this->getId();
 			DB::select($query);

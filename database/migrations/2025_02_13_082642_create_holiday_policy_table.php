@@ -34,7 +34,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
-            $table->tinyInteger('deleted')->default(0);
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->tinyInteger('force_over_time_policy')->nullable()->default(0);
             $table->tinyInteger('average_time_worked_days')->nullable()->default(1);
             $table->smallInteger('worked_scheduled_days')->nullable()->default(0);

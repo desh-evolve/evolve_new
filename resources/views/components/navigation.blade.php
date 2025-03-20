@@ -43,6 +43,45 @@
                         </a>
                     </li>
 
+                    <!-- Attendance -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#attendance" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false">
+                            <i class="ri-bar-chart-line"></i> <span>Attendance</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="attendance">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item"><a href="#" class="nav-link">My Timesheet</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Punches</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Requests</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Apply Leaves</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Accruals</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Schedule -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#schedule" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false">
+                            <i class="ri-bar-chart-line"></i> <span>Schedule</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="schedule">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item"><a href="#" class="nav-link">My Schedule</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Scheduled Shifts</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Mass Schedule</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule Templates</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
                     <!-- Reports -->
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#reports" data-bs-toggle="collapse" role="button"
@@ -57,8 +96,122 @@
                         </div>
                     </li>
 
-                    
+                    <!-- Company -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#company" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false">
+                            <i class="ri-bar-chart-line"></i> <span>Company</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="company">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Designations</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Employee Titles</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Currencies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Locations</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Departments</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Secondary Wage Groups</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Stations</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">New Hire Defaults</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Company Bank Information</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Recurring Holidays</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Other Fields</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Policies -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#policy" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false">
+                            <i class="ri-bar-chart-line"></i> <span>Policies</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="policy">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item"><a href="#" class="nav-link">Policy Groups</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Schedule Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Rounding Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Meal Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Break Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Accrual Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Overtime Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Premium Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Absence Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Exception Policies</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Holiday Policies</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Payroll -->
+                    @php
+                        $checkPayrollNav = request()->routeIs('payroll.*');
+                    @endphp
+                    <li class="nav-item">
+                        <a 
+                            class="nav-link menu-link {{ $checkPayrollNav ? 'active' : '' }}" href="#payroll"
+                            data-bs-toggle="collapse" role="button"
+                            aria-expanded="{{ $checkPayrollNav ? 'true' : 'false' }}"
+                            aria-controls="payroll">
+                            <i class="ri-bar-chart-line"></i> <span>Payroll</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="payroll">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.payroll_processing') }}" 
+                                        class="nav-link {{ request()->routeIs('payroll.payroll_processing') ? 'active' : '' }}">End of Pay Period
+                                    </a>
+                                </li>
+                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Amendments</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Recurring PS Amendments</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Pay Period Schedules</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Accounts</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Taxes/Deductions/Earnings</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Account Linking</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Employees -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#employee" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false">
+                            <i class="ri-bar-chart-line"></i> <span>Employees</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="employee">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item"><a href="#" class="nav-link">Messages</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Preferences</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Bank Information</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Admin -->
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#admin" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false">
+                            <i class="ri-bar-chart-line"></i> <span>Admin</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="admin">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item"><a href="#" class="nav-link">Employee Administration</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Census Infortion</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">December Bonus Calculation</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Attendance Bonus Calculation</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Gratuity Calculation</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Authorization</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!--
                     <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
+                    -->
 
                     <!-- Logout -->
                     <li class="nav-item">

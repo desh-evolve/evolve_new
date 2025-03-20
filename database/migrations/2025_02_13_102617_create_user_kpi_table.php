@@ -91,13 +91,13 @@ return new class extends Migration
             $table->float('total_score_genaral'); // Total general score
             $table->float('avg_key_peformance'); // Average key performance
             $table->string('total_score', 30)->nullable(); // Total score
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by
-            $table->boolean('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

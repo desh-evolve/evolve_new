@@ -77,8 +77,9 @@ class StationUserGroupListFactory extends StationUserGroupFactory implements Ite
 
 		$suglf->getByStationId($id);
 
-		foreach ($suglf as $obj) {
-			$list[$obj->getStation()] = NULL;
+		foreach ($suglf->rs as $obj) {
+			$suglf->data = (array)$obj;
+			$list[$suglf->getStation()] = NULL;
 		}
 
 		if ( isset($list) ) {

@@ -147,8 +147,9 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 
 		$pculf->getByPayPermissionControlId($id);
 
-		foreach ($pculf as $user) {
-			$user_list[$user->getUser()] = NULL;
+		foreach ($pculf->rs as $user) {
+			$pculf->data = (array)$user;
+			$user_list[$pculf->getUser()] = NULL;
 		}
 
 		if ( isset($user_list) ) {

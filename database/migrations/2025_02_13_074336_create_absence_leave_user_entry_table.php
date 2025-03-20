@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('absence_leave_user_id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('created_date');
-            $table->unsignedBigInteger('created_by');
+            
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
             $table->integer('updated_date')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->unsignedTinyInteger('deleted')->default(0);
+            $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

@@ -1,7 +1,24 @@
 <?php
 
 namespace App\Models\Schedule;
-use App\Models\Core\Factory; 
+
+use App\Models\Company\BranchListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTLog;
+use App\Models\Core\UserDateFactory;
+use App\Models\Core\UserDateListFactory;
+use App\Models\Core\UserDateTotalFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Holiday\HolidayListFactory;
+use App\Models\Policy\AbsencePolicyFactory;
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\SchedulePolicyListFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserListFactory;
 
 class ScheduleFactory extends Factory {
 	protected $table = 'schedule';
@@ -149,7 +166,7 @@ class ScheduleFactory extends Factory {
 		if ( is_object($this->schedule_policy_obj) ) {
 			return $this->schedule_policy_obj;
 		} else {
-			$splf = TTnew( 'SchedulePolicyListFactory' );
+			$splf = new SchedulePolicyListFactory(); 
 			$splf->getById( $this->getSchedulePolicyID() );
 			if ( $splf->getRecordCount() > 0 ) {
 				$this->schedule_policy_obj = $splf->getCurrent();
@@ -164,7 +181,7 @@ class ScheduleFactory extends Factory {
 		if ( is_object($this->absence_policy_obj) ) {
 			return $this->absence_policy_obj;
 		} else {
-			$aplf = TTnew( 'AbsencePolicyListFactory' );
+			$aplf = new AbsencePolicyListFactory(); 
 			$aplf->getById( $this->getAbsencePolicyID() );
 			if ( $aplf->getRecordCount() > 0 ) {
 				$this->absence_policy_obj = $aplf->getCurrent();
@@ -178,7 +195,7 @@ class ScheduleFactory extends Factory {
 		if ( is_object($this->user_date_obj) ) {
 			return $this->user_date_obj;
 		} else {
-			$udlf = TTnew( 'UserDateListFactory' );
+			$udlf = new UserDateListFactory();
 			$udlf->getById( $this->getUserDateID() );
 			if ( $udlf->getRecordCount() > 0 ) {
 				$this->user_date_obj = $udlf->getCurrent();
@@ -197,7 +214,7 @@ class ScheduleFactory extends Factory {
 	function setUser($id) {
 		$id = (int)trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory(); 
 
 		if ( $id > 0 AND
 				$this->Validator->isResultSetWithRows(	'user_id',
@@ -216,13 +233,13 @@ class ScheduleFactory extends Factory {
 		//Get pay period start/continuous time
 		//FIXME: Add proper schedule support for new_day_trigger_time.
 		/*
-		$ppslf = TTnew( 'PayPeriodScheduleListFactory' );
+		$ppslf = new PayPeriodScheduleListFactory();
 		$ppslf->getByUserId( $user_id );
 		if ( $ppslf->getRecordCount() == 1 ) {
 			$pps_obj = $ppslf->getCurrent();
 			Debug::Text(' Pay Period Schedule Maximum Shift Time: '. $pps_obj->getMaximumShiftTime(), __FILE__, __LINE__, __METHOD__,10);
 
-			$plf = TTnew( 'PunchListFactory' );
+			$plf = new PunchListFactory();
 			$plf->getFirstPunchByUserIDAndEpoch( $user_id, $epoch, $pps_obj->getMaximumShiftTime() );
 
 			if ( $plf->getRecordCount() > 0 ) {
@@ -243,7 +260,7 @@ class ScheduleFactory extends Factory {
 	}
 
 	function setUserDate($user_id, $date) {
-		$user_date_id = UserDateFactory::findOrInsertUserDate( $user_id, $date);
+		$user_date_id = UserDateFactory::findOrInsertUserDate( $user_id, $date); 
 		Debug::text(' User Date ID: '. $user_date_id, __FILE__, __LINE__, __METHOD__,10);
 		if ( $user_date_id != '' ) {
 			$this->setUserDateID( $user_date_id );
@@ -265,7 +282,7 @@ class ScheduleFactory extends Factory {
 	function setUserDateID($id, $skip_check = FALSE ) {
 		$id = (int)trim($id);
 
-		$udlf = TTnew( 'UserDateListFactory' );
+		$udlf = new UserDateListFactory();
 
 		if (  	$skip_check == TRUE
 				OR
@@ -420,7 +437,7 @@ class ScheduleFactory extends Factory {
 			$id = NULL;
 		}
 
-		$splf = TTnew( 'SchedulePolicyListFactory' );
+		$splf = new SchedulePolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -451,7 +468,7 @@ class ScheduleFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AbsencePolicyListFactory' );
+		$aplf = new AbsencePolicyListFactory();
 
 		if (	$id == NULL
 				OR
@@ -477,7 +494,7 @@ class ScheduleFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory(); 
 
 		if (  $id == 0
 				OR
@@ -503,7 +520,7 @@ class ScheduleFactory extends Factory {
 	function setDepartment($id) {
 		$id = trim($id);
 
-		$dlf = TTnew( 'DepartmentListFactory' );
+		$dlf = new DepartmentListFactory(); 
 
 		if (  $id == 0
 				OR
@@ -534,7 +551,7 @@ class ScheduleFactory extends Factory {
 		}
 
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jlf = TTnew( 'JobListFactory' );
+			$jlf = new JobListFactory();
 		}
 
 		if (  $id == 0
@@ -566,7 +583,7 @@ class ScheduleFactory extends Factory {
 		}
 
 		if ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL ) {
-			$jilf = TTnew( 'JobItemListFactory' );
+			$jilf = new JobItemListFactory();
 		}
 
 		if (  $id == 0
@@ -711,25 +728,27 @@ class ScheduleFactory extends Factory {
 		$filter_data['start_date'] = TTDate::getBeginDayEpoch( $filter_data['start_date'] );
 		$filter_data['end_date'] = TTDate::getEndDayEpoch( $filter_data['end_date'] );
 
-		//$blf = TTnew( 'BranchListFactory' );
+		//$blf = new BranchListFactory();
 		//$branch_options = $blf->getByCompanyIdArray( $current_user->getCompany(), FALSE );
 		$branch_options = array(); //No longer needed, use SQL instead.
 
-		//$dlf = TTnew( 'DepartmentListFactory' );
+		//$dlf = new DepartmentListFactory();
 		//$department_options = $dlf->getByCompanyIdArray( $current_user->getCompany(), FALSE );
 		$department_options = array(); //No longer needed, use SQL instead.
 
-		$apf = TTnew( 'AbsencePolicyFactory' );
+		$apf = new AbsencePolicyFactory(); 
 		$absence_policy_paid_type_options = $apf->getOptions('paid_type');
 
-		$slf = TTnew( 'ScheduleListFactory' );
+		$slf = new ScheduleListFactory();
 		$slf->getSearchByCompanyIdAndArrayCriteria( $current_user->getCompany(), $filter_data );
 		Debug::text('Found Scheduled Rows: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		Debug::Arr($absence_policy_paid_type_options, 'Paid Absences: ', __FILE__, __LINE__, __METHOD__, 10);
 		if ( $slf->getRecordCount() > 0 ) {
 			$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, ('Processing Committed Shifts...') );
 
-			foreach( $slf as $s_obj ) {
+			foreach( $slf->rs as $s_obj ) {
+				$slf->data = (array)$s_obj;
+				$s_obj = $slf;
 				//Debug::text('Schedule ID: '. $s_obj->getId() .' User ID: '. $s_obj->getColumn('user_id') .' Start Time: '. $s_obj->getStartTime(), __FILE__, __LINE__, __METHOD__, 10);
 				if ( $s_obj->getAbsencePolicyID() > 0 AND is_object($s_obj->getAbsencePolicyObject()) ) {
 					$absence_policy_name = (string)$s_obj->getAbsencePolicyObject()->getName();
@@ -825,10 +844,12 @@ class ScheduleFactory extends Factory {
 		//FIXME: What if there are two holiday policies, one that defaults to working, and another that defaults to not working, and they are assigned
 		//to two different groups of employees? For that matter what if the holiday policy isn't assigned to a specific user at all.
 		$holiday_data = array();
-		$hlf = TTnew( 'HolidayListFactory' );
+		$hlf = new HolidayListFactory();
 		$hlf->getByCompanyIdAndStartDateAndEndDate( $current_user->getCompany(), $filter_data['start_date'], $filter_data['end_date'] );
 		Debug::text('Found Holiday Rows: '. $hlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-		foreach( $hlf as $h_obj ) {
+		foreach( $hlf->rs as $h_obj ) {
+			$hlf->data = (array) $h_obj;
+			$h_obj = $hlf;
 			if ( is_object( $h_obj->getHolidayPolicyObject() ) AND is_object( $h_obj->getHolidayPolicyObject()->getAbsencePolicyObject() ) ) {
 				$holiday_data[TTDate::getISODateStamp($h_obj->getDateStamp())] = array('status_id' => (int)$h_obj->getHolidayPolicyObject()->getDefaultScheduleStatus(), 'absence_policy_id' => $h_obj->getHolidayPolicyObject()->getAbsencePolicyID(), 'type_id' => $h_obj->getHolidayPolicyObject()->getAbsencePolicyObject()->getType(), 'absence_policy' => $h_obj->getHolidayPolicyObject()->getAbsencePolicyObject()->getName() );
 			} else {
@@ -842,13 +863,15 @@ class ScheduleFactory extends Factory {
 
 		//If they just want to see absence shifts, ignore recurring schedules completely.
 		if ( !(isset($filter_data['status_id']) AND in_array( 20, (array)$filter_data['status_id'] )) ) {
-			$rstlf = TTnew( 'RecurringScheduleTemplateListFactory' );
+			$rstlf = new RecurringScheduleTemplateListFactory();
 			$rstlf->getSearchByCompanyIdAndArrayCriteria( $current_user->getCompany(), $filter_data );
 			Debug::text('Found Recurring Schedule Template Rows: '. $rstlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 			if ( $rstlf->getRecordCount() > 0 ) {
 				$this->getProgressBarObject()->start( $this->getAMFMessageID(), $rstlf->getRecordCount(), NULL, ('Processing Recurring Shifts...') );
 
-				foreach( $rstlf as $rst_obj ) {
+				foreach( $rstlf->rs as $rst_obj ) {
+					$rstlf->data = (array)$rst_obj;
+					$rst_obj = $rstlf;
 					//Debug::text('Recurring Schedule Template ID: '. $rst_obj->getID() , __FILE__, __LINE__, __METHOD__, 10);
 					$rst_obj->getShifts( $filter_data['start_date'], $filter_data['end_date'], $holiday_data, $branch_options, $department_options, $schedule_shifts, $schedule_shifts_index );
 
@@ -1099,7 +1122,7 @@ class ScheduleFactory extends Factory {
 		if ( $group_schedule == FALSE ) {
 			$valid_schedules = 0;
 
-			$sf = TTnew( 'ScheduleFactory' );
+			$sf = new ScheduleFactory();
 			$tmp_schedule_shifts = $sf->getScheduleArray( $filter_data );
 			//Re-arrange array by user_id->date
 			if ( is_array($tmp_schedule_shifts) ) {
@@ -1191,7 +1214,7 @@ class ScheduleFactory extends Factory {
 						continue; //Skip to next user.
 					}
 
-					$ulf = TTnew( 'UserListFactory' );
+					$ulf = new UserListFactory();
 					$ulf->getByIdAndCompanyId( $user_id, $current_user->getCompany() );
 					if ( $ulf->getRecordCount() != 1 ) {
 						continue;
@@ -1268,7 +1291,7 @@ class ScheduleFactory extends Factory {
 		} else {
 			$valid_schedules = 1;
 
-			$sf = TTnew( 'ScheduleFactory' );
+			$sf = new ScheduleFactory();
 			$raw_schedule_shifts = $sf->getScheduleArray( $filter_data );
 			if ( is_array($raw_schedule_shifts) ) {
 				foreach( $raw_schedule_shifts as $day_epoch => $day_schedule_shifts ) {
@@ -1444,7 +1467,7 @@ class ScheduleFactory extends Factory {
 		if ( $this->getEnableOverwrite() == FALSE AND $this->getDeleted() == FALSE AND is_object( $this->getUserDateObject() ) ) {
 			Debug::Text('User Date ID: '. $this->getUserDateID() .' User ID: '. $this->getUserDateObject()->getUser(), __FILE__, __LINE__, __METHOD__,10);
 			//Make sure we're not conflicting with any other schedule shifts.
-			$slf = TTnew( 'ScheduleListFactory' );
+			$slf = new ScheduleListFactory();
 			$conflicting_schedule_shift_obj = $slf->getConflictingByUserIdAndStartDateAndEndDate( $this->getUserDateObject()->getUser(), $this->getStartTime(), $this->getEndTime() );
 
 			if ( is_object($conflicting_schedule_shift_obj) ) {
@@ -1480,12 +1503,14 @@ class ScheduleFactory extends Factory {
 
 		if ( $this->getEnableOverwrite() == TRUE AND $this->isNew() == TRUE ) {
 			//Delete any conflicting schedule shift before saving.
-			$slf = TTnew( 'ScheduleListFactory' );
+			$slf = new ScheduleListFactory();
 			$slf->getConflictingByUserIdAndStartDateAndEndDate( $this->getUserDateObject()->getUser(), $this->getStartTime(), $this->getEndTime() );
 			if ( $slf->getRecordCount() > 0 ) {
 				Debug::Text('Found Conflicting Shift!!', __FILE__, __LINE__, __METHOD__,10);
 				//Delete shifts.
-				foreach( $slf as $s_obj ) {
+				foreach( $slf->rs as $s_obj ) {
+					$slf->data = (array)$s_obj;
+					$s_obj = $slf;
 					Debug::Text('Deleting Schedule Shift ID: '. $s_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 					$s_obj->setDeleted(TRUE);
 					if ( $s_obj->isValid() ) {
@@ -1504,7 +1529,7 @@ class ScheduleFactory extends Factory {
 		if ( $this->getEnableReCalculateDay() == TRUE ) {
 			//Calculate total time. Mainly for docked.
 			//Calculate entire week as Over Schedule (Weekly) OT policy needs to be reapplied if the schedule changes.
-			UserDateTotalFactory::smartReCalculate( $this->getUserDateObject()->getUser(), $this->getUserDateID(), TRUE, FALSE );
+			UserDateTotalFactory::smartReCalculate( $this->getUserDateObject()->getUser(), $this->getUserDateID(), TRUE, FALSE ); 
 			//UserDateTotalFactory::reCalculateDay( $this->getUserDateID(), TRUE, FALSE );
 		}
 
@@ -1597,7 +1622,7 @@ class ScheduleFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE  ) {
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory(); 
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

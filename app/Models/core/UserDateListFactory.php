@@ -570,8 +570,9 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 			return FALSE;
 		}
 
-		foreach ($lf as $obj) {
-			$list[] = $obj->getID();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[] = $lf->getID();
 		}
 
 		if ( isset($list) ) {

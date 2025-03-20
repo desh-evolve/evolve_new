@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('name'); // Name of the data (varchar(250))
             $table->tinyInteger('is_default')->default(0); // Flag indicating if the data is default
             $table->text('data')->nullable(); // Generic data (text)
-            $table->integer('created_date')->nullable(); // Date when the record was created
-            $table->integer('created_by')->nullable(); // User who created the record
-            $table->integer('updated_date')->nullable(); // Date when the record was last updated
-            $table->integer('updated_by')->nullable(); // User who last updated the record
-            $table->integer('deleted_date')->nullable(); // Date when the record was deleted
-            $table->integer('deleted_by')->nullable(); // User who deleted the record
-            $table->tinyInteger('deleted')->default(0); // Soft delete flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('company_id'); // Foreign key referencing the company
         });
     }

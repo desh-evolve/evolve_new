@@ -35,7 +35,7 @@ extract	(FormVariables::GetVariables(
 												'data_saved'
 												) ) );
 
-$utf = TTnew( 'UserTaxFactory' );
+$utf = new UserTaxFactory();
 
 $action = Misc::findSubmitButton();
 switch ($action) {
@@ -162,13 +162,13 @@ switch ($action) {
 
 			Debug::Text('User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 			if ($ulf->getRecordCount() > 0 ) {
 				$user_obj = $ulf->getCurrent();
 			}
 
-			$utlf = TTnew( 'UserTaxListFactory' );
+			$utlf = new UserTaxListFactory();
 
 			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
 			$utlf->GetByUserId($user_id);
@@ -248,7 +248,7 @@ switch ($action) {
 		$smarty->assign_by_ref('tax_data', $tax_data);
 		$smarty->assign_by_ref('user_id', $user_id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 		$user_data = $ulf->getCurrent();
 

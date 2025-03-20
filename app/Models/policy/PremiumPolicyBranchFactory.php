@@ -15,7 +15,7 @@ class PremiumPolicyBranchFactory extends Factory {
 		if ( is_object($this->branch_obj) ) {
 			return $this->branch_obj;
 		} else {
-			$lf = TTnew( 'BranchListFactory' );
+			$lf = new BranchListFactory();
 			$lf->getById( $this->getBranch() );
 			if ( $lf->getRecordCount() == 1 ) {
 				$this->branch_obj = $lf->getCurrent();
@@ -34,7 +34,7 @@ class PremiumPolicyBranchFactory extends Factory {
 	function setPremiumPolicy($id) {
 		$id = trim($id);
 
-		$pplf = TTnew( 'PremiumPolicyListFactory' );
+		$pplf = new PremiumPolicyListFactory();
 
 		if (	$id == 0
 				OR
@@ -67,7 +67,7 @@ class PremiumPolicyBranchFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 
-		$blf = TTnew( 'BranchListFactory' );
+		$blf = new BranchListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'branch',
 													$blf->getByID($id),

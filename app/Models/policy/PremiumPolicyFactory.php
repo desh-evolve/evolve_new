@@ -2,6 +2,9 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Company\BranchListFactory;
+use App\Models\Company\CompanyListFactory;
+use App\Models\Company\WageGroupListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -9,6 +12,9 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
 
 class PremiumPolicyFactory extends Factory {
 	protected $table = 'premium_policy';
@@ -192,7 +198,7 @@ class PremiumPolicyFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -210,7 +216,7 @@ class PremiumPolicyFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -796,7 +802,7 @@ class PremiumPolicyFactory extends Factory {
 	function setWageGroup($id) {
 		$id = trim($id);
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory(); 
 
 		if ( $id == 0
 				OR
@@ -877,7 +883,7 @@ class PremiumPolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -910,7 +916,7 @@ class PremiumPolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account_id',
@@ -988,9 +994,11 @@ class PremiumPolicyFactory extends Factory {
 	}
 
 	function getBranch() {
-		$lf = TTnew( 'PremiumPolicyBranchListFactory' );
+		$lf = new PremiumPolicyBranchListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getBranch();
 		}
 
@@ -1008,10 +1016,12 @@ class PremiumPolicyFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'PremiumPolicyBranchListFactory' );
+				$lf_a = new PremiumPolicyBranchListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getBranch();
 					Debug::text('Branch ID: '. $obj->getBranch() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1029,11 +1039,11 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'BranchListFactory' );
+			$lf_b = new BranchListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'PremiumPolicyBranchFactory' );
+					$f = new PremiumPolicyBranchFactory();
 					$f->setPremiumPolicy( $this->getId() );
 					$f->setBranch( $id );
 
@@ -1092,9 +1102,11 @@ class PremiumPolicyFactory extends Factory {
 	}
 
 	function getDepartment() {
-		$lf = TTnew( 'PremiumPolicyDepartmentListFactory' );
+		$lf = new PremiumPolicyDepartmentListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getDepartment();
 		}
 
@@ -1111,10 +1123,12 @@ class PremiumPolicyFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'PremiumPolicyDepartmentListFactory' );
+				$lf_a = new PremiumPolicyDepartmentListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getDepartment();
 					Debug::text('Department ID: '. $obj->getDepartment() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1132,11 +1146,11 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'DepartmentListFactory' );
+			$lf_b = new DepartmentListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'PremiumPolicyDepartmentFactory' );
+					$f = new PremiumPolicyDepartmentFactory();
 					$f->setPremiumPolicy( $this->getId() );
 					$f->setDepartment( $id );
 
@@ -1189,9 +1203,11 @@ class PremiumPolicyFactory extends Factory {
 			return FALSE;
 		}
 
-		$lf = TTnew( 'PremiumPolicyJobGroupListFactory' );
+		$lf = new PremiumPolicyJobGroupListFactory(); 
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getJobGroup();
 		}
 
@@ -1212,10 +1228,12 @@ class PremiumPolicyFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'PremiumPolicyJobGroupListFactory' );
+				$lf_a = new PremiumPolicyJobGroupListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getJobGroup();
 					Debug::text('Job Group ID: '. $obj->getJobGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1233,11 +1251,11 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'JobGroupListFactory' );
+			$lf_b = new JobGroupListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'PremiumPolicyJobGroupFactory' );
+					$f = new PremiumPolicyJobGroupFactory();
 					$f->setPremiumPolicy( $this->getId() );
 					$f->setJobGroup( $id );
 
@@ -1287,9 +1305,11 @@ class PremiumPolicyFactory extends Factory {
 			return FALSE;
 		}
 
-		$lf = TTnew( 'PremiumPolicyJobListFactory' );
+		$lf = new PremiumPolicyJobListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getjob();
 		}
 
@@ -1310,10 +1330,12 @@ class PremiumPolicyFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'PremiumPolicyJobListFactory' );
+				$lf_a = new PremiumPolicyJobListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getjob();
 					Debug::text('job ID: '. $obj->getJob() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1331,11 +1353,11 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'JobListFactory' );
+			$lf_b = new JobListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'PremiumPolicyJobFactory' );
+					$f = new PremiumPolicyJobFactory();
 					$f->setPremiumPolicy( $this->getId() );
 					$f->setJob( $id );
 
@@ -1385,9 +1407,11 @@ class PremiumPolicyFactory extends Factory {
 			return FALSE;
 		}
 
-		$lf = TTnew( 'PremiumPolicyJobItemGroupListFactory' );
+		$lf = new PremiumPolicyJobItemGroupListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getJobItemGroup();
 		}
 
@@ -1408,10 +1432,12 @@ class PremiumPolicyFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'PremiumPolicyJobItemGroupListFactory' );
+				$lf_a = new PremiumPolicyJobItemGroupListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getJobItemGroup();
 					Debug::text('Job Item Group ID: '. $obj->getJobItemGroup() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1429,11 +1455,11 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'JobItemGroupListFactory' );
+			$lf_b = new JobItemGroupListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'PremiumPolicyJobItemGroupFactory' );
+					$f = new PremiumPolicyJobItemGroupFactory();
 					$f->setPremiumPolicy( $this->getId() );
 					$f->setJobItemGroup( $id );
 
@@ -1483,9 +1509,11 @@ class PremiumPolicyFactory extends Factory {
 			return FALSE;
 		}
 
-		$lf = TTnew( 'PremiumPolicyJobItemListFactory' );
+		$lf = new PremiumPolicyJobItemListFactory();
 		$lf->getByPremiumPolicyId( $this->getId() );
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[] = $obj->getJobItem();
 		}
 
@@ -1506,10 +1534,12 @@ class PremiumPolicyFactory extends Factory {
 
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$lf_a = TTnew( 'PremiumPolicyJobItemListFactory' );
+				$lf_a = new PremiumPolicyJobItemListFactory();
 				$lf_a->getByPremiumPolicyId( $this->getId() );
 
-				foreach ($lf_a as $obj) {
+				foreach ($lf_a->rs as $obj) {
+					$lf_a->data = (array)$obj;
+					$obj = $lf_a;
 					$id = $obj->getJobItem();
 					Debug::text('Job Item ID: '. $obj->getJobItem() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -1527,11 +1557,11 @@ class PremiumPolicyFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = TTnew( 'JobItemListFactory' );
+			$lf_b = new JobItemListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND $id > 0 AND !in_array($id, $tmp_ids) ) {
-					$f = TTnew( 'PremiumPolicyJobItemFactory' );
+					$f = new PremiumPolicyJobItemFactory();
 					$f->setPremiumPolicy( $this->getId() );
 					$f->setJobItem( $id );
 
@@ -1745,7 +1775,7 @@ class PremiumPolicyFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ) {
 			//Check to make sure there are no hours using this premium policy.
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory(); 
 			$udtlf->getByPremiumTimePolicyId( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

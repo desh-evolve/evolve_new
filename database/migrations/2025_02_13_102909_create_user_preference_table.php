@@ -21,13 +21,13 @@ return new class extends Migration
             $table->integer('items_per_page')->nullable(); // Items per page
             $table->integer('timesheet_view')->nullable(); // Timesheet view
             $table->integer('start_week_day')->nullable(); // Start week day
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by
-            $table->tinyInteger('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->string('language', 5)->nullable(); // Language
             $table->tinyInteger('enable_email_notification_exception')->default(0); // Email notification exception flag
             $table->tinyInteger('enable_email_notification_message')->default(0); // Email notification message flag

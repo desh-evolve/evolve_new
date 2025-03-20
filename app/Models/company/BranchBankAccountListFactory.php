@@ -1,11 +1,6 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
 
- namespace App\Models\Company;
+namespace App\Models\Company;
 
 use App\Models\Core\CurrencyFactory;
 use App\Models\Core\Misc;
@@ -16,15 +11,6 @@ use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserTitleFactory;
 use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
-/*
- * $Revision: 4993 $
- * $Id: BankAccountListFactory.class.php 4993 2011-07-15 23:32:11Z ipso $
- * $Date: 2011-07-15 16:32:11 -0700 (Fri, 15 Jul 2011) $
- */
-
-/**
- * @package Module_Users
- */
 
 class BranchBankAccountListFactory extends BranchBankAccountFactory implements IteratorAggregate {
 
@@ -94,6 +80,8 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
          */
 	function getByBranchId($id, $where = NULL, $order = NULL) {
+		// print_r($this->getTable());
+		// exit;
 		if ( $id == '') {
 			return FALSE;
 		}
@@ -311,9 +299,7 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 			$query  .=	' AND a.updated_by in ('. $this->getListSQL($filter_data['updated_by'], $ph) .') ';
 		}
 
-		$query .= 	'
-						AND a.deleted = 0
-					';
+		$query .= 	' AND a.deleted = 0 ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
@@ -321,7 +307,6 @@ class BranchBankAccountListFactory extends BranchBankAccountFactory implements I
 			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = DB::select($query, $ph);
-			//$this->rs = DB::select($query, $ph);
 		}
 
 		return $this;

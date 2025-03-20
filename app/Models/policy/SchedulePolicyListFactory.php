@@ -216,7 +216,9 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 			$list[0] = '--';
 		}
 
-		foreach ($splf as $sp_obj) {
+		foreach ($splf->rs as $sp_obj) {
+			$splf->data = (array)$sp_obj;
+			$sp_obj = $splf;
 			$list[$sp_obj->getID()] = $sp_obj->getName();
 		}
 

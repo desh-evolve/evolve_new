@@ -1,0 +1,167 @@
+<?php
+/*********************************************************************************
+ * Evolve is a Payroll and Time Management program developed by
+ * Evolve Technology PVT LTD.
+ *
+ ********************************************************************************/
+/*
+ * $Revision: 4104 $
+ * $Id: EditDepartmentBranchUser.php 4104 2011-01-04 19:04:05Z ipso $
+ * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
+ */
+require_once('../../includes/global.inc.php');
+require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+
+if ( !$permission->Check('department','enabled')
+		OR !( $permission->Check('department','assign') ) ) {
+
+	$permission->Redirect( FALSE ); //Redirect
+
+}
+
+$smarty->assign('title', TTi18n::gettext($title = 'Department Employees')); // See index.php
+
+/*
+ * Get FORM variables
+ */
+extract	(FormVariables::GetVariables(
+										array	(
+												'action',
+												'id',
+												'department_data'
+
+												) ) );
+
+$dbuf = new DepartmentBranchUserFactory();
+
+$action = Misc::findSubmitButton();
+switch ($action) {
+	case 'submit':
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		Debug::Text('Department ID: '. $department_data['id'] , __FILE__, __LINE__, __METHOD__,10);
+
+
+		$dbulf = new DepartmentBranchUserListFactory();
+
+		//Delete all mappings first?
+		$dblf = new DepartmentBranchListFactory();
+		$dblf->getByDepartmentId( $department_data['id'] );
+
+		foreach ($dblf as $department_branch) {
+			$dbulf->getByDepartmentBranchId( $department_branch->getId() );
+
+			foreach($dbulf as $department_branch_user) {
+				Debug::Text('Deleting Department Branch Mapping: '. $department_branch_user->getId() , __FILE__, __LINE__, __METHOD__,10);
+				$department_branch_user->Delete();
+			}
+		}
+
+		$dbulf = new DepartmentBranchUserListFactory();
+
+		if ( isset($department_data['branch_data']) AND is_array($department_data['branch_data']) ) {
+			foreach($department_data['branch_data'] as $branch_id => $user_ids) {
+				Debug::Text('BranchID: '. $branch_id , __FILE__, __LINE__, __METHOD__,10);
+				Debug::Arr($user_ids, 'Branch User IDs: ', __FILE__, __LINE__, __METHOD__,10);
+
+				//Get DepartmentBranchId
+				$dblf->getByDepartmentIdAndBranchId($department_data['id'],$branch_id);
+				$department_branch_id = $dblf->getIterator()->current()->getId();
+
+				Debug::Text('DepartmentBranchID: '. $department_branch_id, __FILE__, __LINE__, __METHOD__,10);
+
+				foreach ($user_ids as $user_id) {
+					Debug::Text('Mapping User: '. $user_id .' To DepartmentBranchID: '. $department_branch_id, __FILE__, __LINE__, __METHOD__,10);
+					$dbuf->setDepartmentBranch($department_branch_id);
+					$dbuf->setUser($user_id);
+					if ( $dbuf->isValid() ) {
+						$dbuf->Save();
+					}
+
+				}
+			}
+		}
+
+		if ( $dbuf->isValid() ) {
+
+			Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
+
+			break;
+		}
+
+	default:
+		BreadCrumb::setCrumb($title);
+
+		$dlf = new DepartmentListFactory();
+
+		$dlf->GetByIdAndCompanyId($id, $current_company->getId() );
+
+		foreach ($dlf as $department) {
+			//Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
+
+			$branch_data = array();
+
+			$dblf = new DepartmentBranchListFactory();
+			$dblf->getByDepartmentId( $department->getId() );
+			foreach($dblf as $department_branch) {
+				$branch_id = $department_branch->getBranch();
+				Debug::Text('DepartmentBranchId: '. $branch_id , __FILE__, __LINE__, __METHOD__,10);
+
+				if ( isset($id) ) {
+					//Get User ID's from database.
+					$dbulf = new DepartmentBranchUserListFactory();
+					$dbulf->getByDepartmentBranchId( $department_branch->getId() );
+
+					$department_branch_user_ids = array();
+					foreach($dbulf as $department_branch_user) {
+						$department_branch_user_ids[] = $department_branch_user->getUser();
+						Debug::Text('DepartmentBranchUser: '. $department_branch_user->getUser(), __FILE__, __LINE__, __METHOD__,10);
+					}
+				} else {
+					//Use selected User Id's.
+					$department_branch_user_ids = $department_data['branch_data'][$branch_id];
+				}
+
+				$blf = new BranchListFactory();
+				$blf->getById( $branch_id );
+				$branch = $blf->getIterator()->current();
+				$branch_data[$branch_id] = array(
+														'id' => $branch->getId(),
+														'name' => $branch->getName(),
+														'user_ids' => $department_branch_user_ids
+													);
+			}
+
+			$department_data = array(
+								'id' => $department->getId(),
+								'company_name' => $current_company->getName(),
+								'status' => $department->getStatus(),
+								'name' => $department->getName(),
+								'branch_list' => $department->getBranch(),
+								'branch_data' => $branch_data,
+								'created_date' => $department->getCreatedDate(),
+								'created_by' => $department->getCreatedBy(),
+								'updated_date' => $department->getUpdatedDate(),
+								'updated_by' => $department->getUpdatedBy(),
+								'deleted_date' => $department->getDeletedDate(),
+								'deleted_by' => $department->getDeletedBy()
+							);
+		}
+
+
+		//Select box options;
+		$department_data['branch_list_options'] = BranchListFactory::getByCompanyIdArray($current_company->getId());
+
+		//$ulf = new UserListFactory;
+		$department_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
+		//var_dump($te);
+
+		$smarty->assign_by_ref('department_data', $department_data);
+
+		break;
+}
+
+$smarty->assign_by_ref('dbuf', $dbuf);
+
+$smarty->display('department/EditDepartmentBranchUser.tpl');
+?>

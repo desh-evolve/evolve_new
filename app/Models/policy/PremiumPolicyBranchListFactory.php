@@ -77,7 +77,9 @@ class PremiumPolicyBranchListFactory extends PremiumPolicyBranchFactory implemen
 
 		$ppblf->getByPremiumPolicyId($id);
 
-		foreach ($ppblf as $obj) {
+		foreach ($ppblf->rs as $obj) {
+			$ppblf->data = (array) $obj;
+			$obj = $ppblf;
 			$list[$obj->getPremiumPolicy()] = NULL;
 		}
 

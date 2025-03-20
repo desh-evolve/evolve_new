@@ -20,13 +20,13 @@ return new class extends Migration
             $table->timestamp('time_stamp')->nullable(); // Timestamp for the punch time
             $table->timestamp('original_time_stamp')->nullable(); // Original timestamp for the punch
             $table->timestamp('actual_time_stamp')->nullable(); // Actual timestamp for the punch
-            $table->integer('created_date')->nullable(); // Created date (integer, assuming Unix timestamp)
-            $table->integer('created_by')->nullable(); // Created by user ID
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by user ID
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by user ID
-            $table->boolean('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->boolean('transfer')->default(0); // Transfer flag
             $table->decimal('longitude', 15, 10)->nullable(); // Longitude for punch
             $table->decimal('latitude', 15, 10)->nullable();

@@ -183,7 +183,9 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 			$list[0] = '--';
 		}
 
-		foreach ($ugdlf as $ugd_obj) {
+		foreach ($ugdlf->rs as $ugd_obj) {
+			$ugdlf->data = (array)$ugd_obj;
+			$ugd_obj = $ugdlf;
 			if ( $ugd_obj->getDefault() == TRUE ) {
 				$default = ' (Default)';
 			} else {
@@ -408,7 +410,9 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 
@@ -428,7 +432,9 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 			$list[0] = '--';
 		}
 
-		foreach ($ugdlf as $ugd_obj) {
+		foreach ($ugdlf->rs as $ugd_obj) {
+			$ugdlf->data = (array)$ugd_obj;
+			$ugd_obj = $ugdlf;
 			if ( $ugd_obj->getDefault() == TRUE ) {
 				$default = ' (Default)';
 			} else {

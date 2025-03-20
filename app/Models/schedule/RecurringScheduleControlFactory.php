@@ -1,7 +1,14 @@
 <?php
 
 namespace App\Models\Schedule;
-use App\Models\Core\Factory; 
+
+use App\Models\Company\CompanyListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Factory;
+use App\Models\Core\Misc;
+use App\Models\Core\TTDate;
+use App\Models\Core\TTLog;
+use App\Models\Users\UserListFactory;
 
 class RecurringScheduleControlFactory extends Factory {
 	protected $table = 'recurring_schedule_control';
@@ -95,7 +102,7 @@ class RecurringScheduleControlFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory(); 
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -120,7 +127,7 @@ class RecurringScheduleControlFactory extends Factory {
 	function setRecurringScheduleTemplateControl($id) {
 		$id = trim($id);
 
-		$rstclf = TTnew( 'RecurringScheduleTemplateControlListFactory' );
+		$rstclf = new RecurringScheduleTemplateControlListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'recurring_schedule_template_control_id',
 													$rstclf->getByID($id),
@@ -232,9 +239,11 @@ class RecurringScheduleControlFactory extends Factory {
 	}
 
 	function getUser() {
-		$rsulf = TTnew( 'RecurringScheduleUserListFactory' );
+		$rsulf = new RecurringScheduleUserListFactory();
 		$rsulf->getByRecurringScheduleControlId( $this->getId() );
-		foreach ($rsulf as $obj) {
+		foreach ($rsulf->rs as $obj) {
+			$rsulf->data = (array)$obj;
+			$obj = $rsulf;
 			$list[] = $obj->getUser();
 		}
 
@@ -252,11 +261,13 @@ class RecurringScheduleControlFactory extends Factory {
 		if ( is_array($ids) ) {
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
-				$rsulf = TTnew( 'RecurringScheduleUserListFactory' );
+				$rsulf = new RecurringScheduleUserListFactory();
 				$rsulf->getByRecurringScheduleControlId( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($rsulf as $obj) {
+				foreach ($rsulf->rs as $obj) {
+					$rsulf->data = (array)$obj;
+					$obj = $rsulf;
 					$id = $obj->getUser();
 					Debug::text('Recurring Schedule ID: '. $obj->getRecurringScheduleControl() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -274,7 +285,7 @@ class RecurringScheduleControlFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory(); 
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
@@ -282,7 +293,7 @@ class RecurringScheduleControlFactory extends Factory {
 					if ( $ulf->getRecordCount() > 0 ) {
 						$obj = $ulf->getCurrent();
 
-						$rsuf = TTnew( 'RecurringScheduleUserFactory' );
+						$rsuf = new RecurringScheduleUserFactory();
 						$rsuf->setRecurringScheduleControl( $this->getId() );
 						$rsuf->setUser( $id );
 
@@ -373,12 +384,14 @@ class RecurringScheduleControlFactory extends Factory {
 		Debug::text('Start Date: '. TTDate::getDate('DATE+TIME', $start_date) .'('.$start_date.') End Date: '. TTDate::getDate('DATE+TIME', $end_date) .'('.$end_date.')', __FILE__, __LINE__, __METHOD__, 10);
 
 		//Get week data
-		$rstlf = TTnew( 'RecurringScheduleTemplateListFactory' );
+		$rstlf = new RecurringScheduleTemplateListFactory();
 		$rstlf->getByRecurringScheduleTemplateControlId( $this->getRecurringScheduleTemplateControl() )->getCurrent();
 		$max_week = 1;
 		$weeks = array();
 		if ( $rstlf->getRecordCount() > 0 ) {
-			foreach($rstlf as $rst_obj) {
+			foreach($rstlf->rs as $rst_obj) {
+				$rstlf->data = (array)$rst_obj;
+				$rst_obj = $rstlf;
 				//Debug::text('Week: '. $rst_obj->getWeek(), __FILE__, __LINE__, __METHOD__, 10);
 				$template_week_rows[$rst_obj->getWeek()][] = $rst_obj->getObjectAsArray();
 

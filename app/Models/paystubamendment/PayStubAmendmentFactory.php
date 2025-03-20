@@ -9,6 +9,12 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\Users\UserFactory;
 use App\Models\Users\UserListFactory;
 
 class PayStubAmendmentFactory extends Factory {
@@ -156,7 +162,7 @@ class PayStubAmendmentFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -167,7 +173,7 @@ class PayStubAmendmentFactory extends Factory {
 		if ( is_object($this->pay_stub_entry_account_link_obj) ) {
 			return $this->pay_stub_entry_account_link_obj;
 		} else {
-			$pseallf = TTnew( 'PayStubEntryAccountLinkListFactory' );
+			$pseallf = new PayStubEntryAccountLinkListFactory();
 			$pseallf->getByCompanyID( $this->getUserObject()->getCompany() );
 			if ( $pseallf->getRecordCount() > 0 ) {
 				$this->pay_stub_entry_account_link_obj = $pseallf->getCurrent();
@@ -182,7 +188,7 @@ class PayStubAmendmentFactory extends Factory {
 		if ( is_object($this->pay_stub_entry_name_obj) ) {
 			return $this->pay_stub_entry_name_obj;
 		} else {
-			$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getByID( $this->getPayStubEntryNameId() );
 			if ( $psealf->getRecordCount() > 0 ) {
 				$this->pay_stub_entry_name_obj = $psealf->getCurrent();
@@ -197,7 +203,7 @@ class PayStubAmendmentFactory extends Factory {
 		if ( is_object($this->percent_amount_entry_name_obj) ) {
 			return $this->percent_amount_entry_name_obj;
 		} else {
-			$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getByID( $this->getPercentAmountEntryNameId() );
 			if ( $psealf->getRecordCount() > 0 ) {
 				$this->percent_amount_entry_name_obj = $psealf->getCurrent();
@@ -214,7 +220,7 @@ class PayStubAmendmentFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user_id',
 															$ulf->getByID($id),
@@ -238,8 +244,8 @@ class PayStubAmendmentFactory extends Factory {
 	function setPayStubEntryNameId($id) {
 		$id = trim($id);
 
-		//$psenlf = TTnew( 'PayStubEntryNameListFactory' );
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		//$psenlf = new PayStubEntryNameListFactory();
+		$psealf = new PayStubEntryAccountListFactory();
 		$result = $psealf->getById( $id );
 		//Debug::Arr($result, 'Result: ID: '. $id .' Rows: '. $result->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -259,7 +265,7 @@ class PayStubAmendmentFactory extends Factory {
 	function setName($name) {
 		$name = trim($name);
 
-		$psenlf = TTnew( 'PayStubEntryNameListFactory' );
+		$psenlf = new PayStubEntryNameListFactory();
 		$result = $psenlf->getByName($name);
 
 		if (  $this->Validator->isResultSetWithRows(	'name',
@@ -285,7 +291,7 @@ class PayStubAmendmentFactory extends Factory {
 	function setRecurringPayStubAmendmentId($id) {
 		$id = trim($id);
 
-		$rpsalf = TTnew( 'RecurringPayStubAmendmentListFactory' );
+		$rpsalf = new RecurringPayStubAmendmentListFactory();
 		$rpsalf->getById( $id );
 		//Not sure why we tried to use $result here, as if the ID passed is NULL, it causes a fatal error.
 		//$result = $rpsalf->getById( $id )->getCurrent();
@@ -491,14 +497,14 @@ class PayStubAmendmentFactory extends Factory {
 
 	function getPayStubId() {
 		//Find which pay period this effective date belongs too
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getByUserIdAndEndDate( $this->getUser(), $this->getEffectiveDate() );
 		if ( $pplf->getRecordCount() > 0 ) {
 			$pp_obj = $pplf->getCurrent();
 			Debug::text('Found Pay Period ID: '. $pp_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
 
 			//Percent PS amendments can't work on advances.
-			$pslf = TTnew( 'PayStubListFactory' );
+			$pslf = new PayStubListFactory();
 			$pslf->getByUserIdAndPayPeriodIdAndAdvance( $this->getUser(), $pp_obj->getId(), FALSE );
 			if ( $pslf->getRecordCount() > 0 ) {
 				$ps_obj = $pslf->getCurrent();
@@ -520,7 +526,7 @@ class PayStubAmendmentFactory extends Factory {
 			return FALSE;
 		}
 
-		$pself = TTnew( 'PayStubEntryListFactory' );
+		$pself = new PayStubEntryListFactory();
 
 		//Get Linked accounts so we know which IDs are totals.
 		$total_gross_key = array_search( $this->getPayStubEntryAccountLinkObject()->getTotalGross(), $ids);
@@ -686,7 +692,7 @@ class PayStubAmendmentFactory extends Factory {
 	function setPercentAmountEntryNameId($id) {
 		$id = trim($id);
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getById( $id );
 		//Not sure why we tried to use $result here, as if the ID passed is NULL, it causes a fatal error.
 		//$result = $psealf->getById( $id )->getCurrent();
@@ -770,7 +776,7 @@ class PayStubAmendmentFactory extends Factory {
 		}
 		Debug::Text('Effective Date: '. TTDate::getDate('DATE+TIME', $effective_date), __FILE__, __LINE__, __METHOD__,10);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getById( $user_id );
 		if ( $ulf->getRecordCount() > 0 ) {
 			$user_obj = $ulf->getCurrent();
@@ -779,19 +785,21 @@ class PayStubAmendmentFactory extends Factory {
 		}
 
 		//Get all PSE acccount accruals
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getByCompanyIdAndStatusIdAndTypeId( $user_obj->getCompany(), 10, 50);
 		if ( $psealf->getRecordCount() > 0 ) {
 			$ulf->StartTransaction();
-			foreach( $psealf as $psea_obj ) {
+			foreach( $psealf->rs as $psea_obj ) { 
+				$psealf->data = (array)$psea_obj;
+				$psea_obj = $psealf;
 				//Get PSE account that affects this accrual.
 				//What if there are two accounts? It takes the first one in the list.
-				$psealf_tmp = TTnew( 'PayStubEntryAccountListFactory' );
+				$psealf_tmp = new PayStubEntryAccountListFactory();
 				$psealf_tmp->getByCompanyIdAndAccrualId( $user_obj->getCompany(), $psea_obj->getId() );
 				if ( $psealf_tmp->getRecordCount() > 0 ) {
 					$release_account_id = $psealf_tmp->getCurrent()->getId();
 
-					$psaf = TTnew( 'PayStubAmendmentFactory' );
+					$psaf = new PayStubAmendmentFactory();
 					$psaf->setStatus( 50 ); //Active
 					$psaf->setType( 20 ) ; //Percent
 					$psaf->setUser( $user_obj->getId() );
@@ -912,7 +920,7 @@ class PayStubAmendmentFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE ) {
-		$uf = TTnew( 'UserFactory' );
+		$uf = new UserFactory(); 
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

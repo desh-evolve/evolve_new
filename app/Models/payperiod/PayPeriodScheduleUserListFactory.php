@@ -192,7 +192,9 @@ class PayPeriodScheduleUserListFactory extends PayPeriodScheduleUserFactory impl
 
 		$ppsulf->getByPayPeriodScheduleId($id);
 
-		foreach ($ppsulf as $user) {
+		foreach ($ppsulf->rs as $user) {
+			$ppsulf->data = (array) $user;
+			$user = $ppsulf;
 			$user_list[$user->getUser()] = NULL;
 		}
 

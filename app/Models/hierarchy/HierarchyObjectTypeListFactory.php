@@ -165,7 +165,9 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		$hotlf->getByCompanyId( $id ) ;
 
 		$object_type = array();
-		foreach ($hotlf as $object_type) {
+		foreach ($hotlf->rs as $object_type) {
+			$hotlf->data = (array) $object_type;
+			$object_type = $hotlf;
 			$object_types[] = $object_type->getObjectType();
 		}
 

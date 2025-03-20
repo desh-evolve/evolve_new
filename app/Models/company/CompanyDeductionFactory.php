@@ -1773,8 +1773,9 @@ class CompanyDeductionFactory extends Factory {
 			$cdpsealf->getByCompanyDeductionIdAndTypeId( $this->getId(), 10 );
 
 			$list = NULL;
-			foreach ($cdpsealf as $obj) {
-				$list[] = $obj->getPayStubEntryAccount();
+			foreach ($cdpsealf->rs as $obj) {
+				$cdpsealf->data = (array)$obj;
+				$list[] = $cdpsealf->getPayStubEntryAccount();
 			}
 			$this->saveCache( $list, $cache_id);
 		} else {
@@ -1797,21 +1798,22 @@ class CompanyDeductionFactory extends Factory {
 				$cdpsealf = new CompanyDeductionPayStubEntryAccountListFactory();
 				$cdpsealf->getByCompanyDeductionIdAndTypeId( $this->getId(), 10 );
 
-				foreach ($cdpsealf as $obj) {
-					$id = $obj->getPayStubEntryAccount();
+				foreach ($cdpsealf->rs as $obj) {
+					$cdpsealf->data = (array)$obj;
+					$id = $cdpsealf->getPayStubEntryAccount();
 					Debug::text('ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$cdpsealf->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $cdpsealf);
 			}
 
 			//Insert new mappings.
@@ -1873,8 +1875,9 @@ class CompanyDeductionFactory extends Factory {
 			$cdpsealf->getByCompanyDeductionIdAndTypeId( $this->getId(), 20 );
 
 			$list = NULL;
-			foreach ($cdpsealf as $obj) {
-				$list[] = $obj->getPayStubEntryAccount();
+			foreach ($cdpsealf->rs as $obj) {
+				$cdpsealf->data = (array)$obj;
+				$list[] = $cdpsealf->getPayStubEntryAccount();
 			}
 
 			$this->saveCache( $list, $cache_id);
@@ -1898,21 +1901,22 @@ class CompanyDeductionFactory extends Factory {
 				$cdpsealf->getByCompanyDeductionIdAndTypeId( $this->getId(), 20 );
 
 				$tmp_ids = array();
-				foreach ($cdpsealf as $obj) {
-					$id = $obj->getPayStubEntryAccount();
+				foreach ($cdpsealf->rs as $obj) {
+					$cdpsealf->data = (array)$obj;
+					$id = $cdpsealf->getPayStubEntryAccount();
 					Debug::text('ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$cdpsealf->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $cdpsealf);
 			}
 
 			//Insert new mappings.
@@ -1946,8 +1950,9 @@ class CompanyDeductionFactory extends Factory {
 	function getUser() {
 		$udlf = new UserDeductionListFactory();
 		$udlf->getByCompanyIdAndCompanyDeductionId( $this->getCompany(), $this->getId() );
-		foreach ($udlf as $obj) {
-			$list[] = $obj->getUser();
+		foreach ($udlf->rs as $obj) {
+			$udlf->data = (array)$obj;
+			$list[] = $udlf->getUser();
 		}
 
 		if ( isset($list) ) {
@@ -1968,21 +1973,22 @@ class CompanyDeductionFactory extends Factory {
 				$udlf->getByCompanyIdAndCompanyDeductionId( $this->getCompany(), $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($udlf as $obj) {
-					$id = $obj->getUser();
+				foreach ($udlf->rs as $obj) {
+					$udlf->data = (array)$obj;
+					$id = $udlf->getUser();
 					Debug::text('ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
-						$obj->Delete();
+						$udlf->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $udlf);
 			}
 
 			//Insert new mappings.
@@ -4145,10 +4151,11 @@ class CompanyDeductionFactory extends Factory {
 			$udlf->StartTransaction();
 			$udlf->getByCompanyIdAndCompanyDeductionId( $this->getCompany(), $this->getId() );
 			if ( $udlf->getRecordCount() ) {
-				foreach( $udlf as $ud_obj ) {
-					$ud_obj->setDeleted(TRUE);
-					if ( $ud_obj->isValid() ) {
-						$ud_obj->Save();
+				foreach( $udlf->rs as $ud_obj ) {
+					$udlf->rs = (array)$ud_obj;
+					$udlf->setDeleted(TRUE);
+					if ( $udlf->isValid() ) {
+						$udlf->Save();
 					}
 				}
 			}

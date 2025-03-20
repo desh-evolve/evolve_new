@@ -21,11 +21,11 @@ return new class extends Migration
             $table->unsignedBigInteger('premium_policy_id')->nullable();
             $table->unsignedBigInteger('pay_stub_entry_account_id')->nullable();
             $table->integer('created_date')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->integer('created_by')->nullable();
             $table->integer('updated_date')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->integer('deleted_date')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->integer('deleted_by')->nullable();
             $table->unsignedTinyInteger('deleted')->default(0);
             $table->unsignedBigInteger('wage_group_id')->default(0);
             $table->decimal('rate', 9, 4)->nullable();

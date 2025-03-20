@@ -5,9 +5,12 @@ use App\Http\Controllers\currency\CurrencyList;
 use App\Http\Controllers\currency\EditCurrency;
 use App\Http\Controllers\branch\BranchList;
 use App\Http\Controllers\branch\EditBranch;
+use App\Http\Controllers\Branch\BranchBankAccountList;
+use App\Http\Controllers\Branch\EditBankAccount;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\users\UserGenericStatusList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,12 +38,21 @@ Route::get('/branch/add/{id?}', [EditBranch::class, 'index'])->name('branch.add'
 Route::post('/branch/save/{id?}', [EditBranch::class, 'save'])->name('branch.save');
 Route::delete('/branch/delete/{id}', [BranchList::class, 'delete'])->name('branch.delete');
 
+// ==================== branch bank account =====================================================================================
+Route::get('/branch_bank/{id?}', [BranchBankAccountList::class, 'index'])->name('branch_bank.index');
+
+// Route::get('/branch_bank/add/{id?}', [EditBankAccount::class, 'index'])->name('branch_bank.add');
+Route::get('/branch_bank/add/{id?}', [EditBankAccount::class, 'index'])->name('branch_bank.add');
+
+Route::post('/branch_bank/save/{id?}', [EditBankAccount::class, 'save'])->name('branch_bank.save');
+Route::delete('/branch_bank/delete/{id}', [EditBankAccount::class, 'delete'])->name('branch_bank.delete');
 
 
 
-Route::get('/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll_processing');
-Route::get('/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll_action');
-Route::get('/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('generate_pay_stubs');
+
+Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
+Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll.payroll_action');
+Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
 
 
 // ===============================================================================================================================
@@ -62,3 +74,8 @@ Route::get('/progress_bar/generate_attendance_bonuses', [ProgressBar::class, 'ge
 
 
 
+// ===============================================================================================================================
+// Users Functions
+// ===============================================================================================================================
+Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'index'])->name('users.user_generic_status_list');
+// ===============================================================================================================================

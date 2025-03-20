@@ -17,13 +17,13 @@ return new class extends Migration
             $table->integer('type_id'); // Foreign key to `type`
             $table->integer('status_id'); // Foreign key to `status`
             $table->tinyInteger('authorized')->default(0);
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by user ID
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by user ID
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by user ID
-            $table->tinyInteger('deleted')->default(0); // Deleted flag (0 = not deleted)
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->smallInteger('authorization_level')->default(99); // Default value 99
         });
     }

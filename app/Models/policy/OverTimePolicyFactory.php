@@ -2,12 +2,16 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Company\CompanyListFactory;
+use App\Models\Company\WageGroupListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
 
 class OverTimePolicyFactory extends Factory {
 	protected $table = 'over_time_policy';
@@ -145,7 +149,7 @@ class OverTimePolicyFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory(); 
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -163,7 +167,7 @@ class OverTimePolicyFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -320,7 +324,7 @@ class OverTimePolicyFactory extends Factory {
 	function setWageGroup($id) {
 		$id = trim($id);
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 
 		if ( $id == 0
 				OR
@@ -376,7 +380,7 @@ class OverTimePolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$aplf = TTnew( 'AccrualPolicyListFactory' );
+		$aplf = new AccrualPolicyListFactory();
 
 		if ( $id == NULL
 				OR
@@ -409,7 +413,7 @@ class OverTimePolicyFactory extends Factory {
 			$id = NULL;
 		}
 
-		$psealf = TTnew( 'PayStubEntryAccountListFactory' );
+		$psealf = new PayStubEntryAccountListFactory(); 
 
 		if (
 				$this->Validator->isResultSetWithRows(	'pay_stub_entry_account_id',
@@ -427,7 +431,7 @@ class OverTimePolicyFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ){
 			//Check to make sure there are no hours using this OT policy.
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory(); 
 			$udtlf->getByOverTimePolicyId( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

@@ -26,9 +26,9 @@ class CompanyDeductionPayStubEntryAccountFactory extends Factory {
 		switch( $name ) {
 			case 'type':
 				$retval = array(
-										10 => ('Include'),
-										20 => ('Exclude'),
-									);
+							10 => ('Include'),
+							20 => ('Exclude'),
+						);
 				break;
 
 		}

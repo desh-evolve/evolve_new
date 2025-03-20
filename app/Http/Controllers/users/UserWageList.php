@@ -36,7 +36,7 @@ extract	(FormVariables::GetVariables(
 												'user_id'
 												) ) );
 
-$ulf = TTnew( 'UserListFactory' );
+$ulf = new UserListFactory();
 //$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 //$user_data = $ulf->getCurrent();
 //$smarty->assign('title', $user_data->getFullName().'\'s Wage List' );
@@ -70,7 +70,7 @@ switch ($action) {
 			$delete = FALSE;
 		}
 
-		$uwlf = TTnew( 'UserWageListFactory' );
+		$uwlf = new UserWageListFactory();
 
 		if ( $ids != '' ) {
 			foreach ($ids as $id) {
@@ -90,16 +90,16 @@ switch ($action) {
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 		$user_has_default_wage = FALSE;
 
-		$hlf = TTnew( 'HierarchyListFactory' );
+		$hlf = new HierarchyListFactory();
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
-		$uwlf = TTnew( 'UserWageListFactory' );
+		$uwlf = new UserWageListFactory();
 		$uwlf->GetByUserIdAndCompanyId($user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		$pager = new Pager($uwlf);
 
-		$wglf = TTnew( 'WageGroupListFactory' );
+		$wglf = new WageGroupListFactory();
 		$wage_group_options = $wglf->getArrayByListFactory( $wglf->getByCompanyId( $current_company->getId() ), TRUE );
 
 		$user_obj = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent();
@@ -138,7 +138,7 @@ switch ($action) {
 			}
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		$filter_data = NULL;
 		extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, NULL ) );

@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('institute'); // Institute name
             $table->string('year'); // Year of qualification
             $table->string('remarks'); // Remarks related to the qualification
-            $table->integer('created_date'); // Date when the record was created
-            $table->integer('created_by'); // User who created the record
-            $table->integer('updated_date'); // Date when the record was last updated
-            $table->integer('updated_by'); // User who last updated the record
-            $table->integer('deleted_date'); // Date when the record was deleted
-            $table->integer('deleted_by'); // User who deleted the record
-            $table->tinyInteger('deleted'); // Soft delete flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

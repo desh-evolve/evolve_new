@@ -49,7 +49,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = TTnew( 'CompanyListFactory' );
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -67,7 +67,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Company ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -92,7 +92,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 	function setUserId($id) {
 		$id = trim($id);
                 
-		$uf = TTnew( 'UserListFactory' );
+		$uf = new UserListFactory();
 		if (	$this->Validator->isResultSetWithRows(	'user_id',
 											$uf->getById($id),
 											('User is invalid'),
@@ -118,7 +118,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 	function setAbsencePolicyId($id) {
 		$id = trim($id);
                 
-		$alf = TTnew( 'AbsencePolicyListFactory' );
+		$alf = new AbsencePolicyListFactory();
 		if (	$this->Validator->isResultSetWithRows(	'absence_policy_id',
 											$alf->getById($id),
 											('Absence Policy  is invalid'),
@@ -144,7 +144,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 	function setAbsenceLeaveId($id) {
 		$id = trim($id);
                 
-		$alf = TTnew( 'AbsenceLeaveListFactory' );
+		$alf = new AbsenceLeaveListFactory();
 		if (	$this->Validator->isResultSetWithRows(	'absence_leave_id',
 											$alf->getById($id),
 											('Absence Leave is invalid'),
@@ -268,7 +268,7 @@ class AbsenceLeaveUserEntryRecordFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ) {
 			//Check to make sure there are no hours using this OT policy.
-			$udtlf = TTnew( 'UserDateTotalListFactory' );
+			$udtlf = new UserDateTotalListFactory();
 			$udtlf->getByAbsencePolicyId( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

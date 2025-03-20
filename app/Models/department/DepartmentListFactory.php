@@ -234,7 +234,9 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array) $obj;
+			$obj = $lf;
 			if ( $obj->getStatus() == 20 ) {
 				$status = '(DISABLED) ';
 			} else {

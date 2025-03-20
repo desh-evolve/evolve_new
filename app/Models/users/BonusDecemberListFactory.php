@@ -126,10 +126,12 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
                 $start_date = new DateTime();
                 $end_date = new DateTime();
                 
-		foreach ($bdlf as $bonus_december_obj) {
+		foreach ($bdlf->rs as $bonus_december_obj) {
+			$bdlf->data = (array)$bonus_december_obj;
+			$bonus_december_obj = $bdlf;
                     
-                    $start_date->setTimestamp($bonus_december_obj->getStartDate());
-                    $end_date->setTimestamp($bonus_december_obj->getEndDate());
+            $start_date->setTimestamp($bonus_december_obj->getStartDate());
+            $end_date->setTimestamp($bonus_december_obj->getEndDate());
                     
 			$bonus_list[$bonus_december_obj->getID()] = $start_date->format('Y-m-d').' - '.$end_date->format('Y-m-d');
 		}

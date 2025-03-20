@@ -101,13 +101,13 @@ class BreadCrumb {
 		//Debug::text('Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 
 		try {
-			// $rs = $db->Execute($query, $ph);
-            $rs = DB::select($query, $ph);
+			$rs = $db->Execute($query, $ph);
 		} catch (Throwable $e) {
 			throw new DBError($e);
+			$rs = [];
 		}
 
-		$result = $rs->GetRows();
+		$result = $rs;
 
 		foreach ($result as $row) {
 			$retarr[] = array(

@@ -21,7 +21,7 @@ class AttendanceBonusUserFactory    extends Factory{
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$ulf->getById( $this->getUser() );
 			if ( $ulf->getRecordCount() == 1 ) {
 				$this->user_obj = $ulf->getCurrent();
@@ -38,7 +38,7 @@ class AttendanceBonusUserFactory    extends Factory{
 		if ( is_object($this->$bonus_attendance_obj) ) {
 			return $this->$bonus_attendance_obj;
 		} else {
-			$balf = TTnew( 'AttendanceBonusListFactory' );
+			$balf = new AttendanceBonusListFactory();
 			$balf->getById( $this->getBonusAttendance() );
 			if ( $bdlf->getRecordCount() == 1 ) {
 				$this->$bonus_attendance_obj = $balf->getCurrent();
@@ -64,7 +64,7 @@ class AttendanceBonusUserFactory    extends Factory{
 	function setBonusAttendance($id) {
 		$id = trim($id);
 
-		$ablf = TTnew( 'AttendanceBonusListFactory' );
+		$ablf = new AttendanceBonusListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows( 'bonus',
@@ -95,7 +95,7 @@ class AttendanceBonusUserFactory    extends Factory{
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',

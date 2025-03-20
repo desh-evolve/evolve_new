@@ -27,13 +27,13 @@ return new class extends Migration
             $table->decimal('percent_amount', 20, 4)->nullable(); // Percentage amount for the amendment
             $table->integer('percent_amount_entry_name_id')->nullable(); // Foreign key for percent amount entry name
             $table->string('ps_amendment_description', 250)->nullable(); // Additional description for the amendment
-            $table->integer('created_date')->nullable(); // Timestamp for creation
-            $table->integer('created_by')->nullable(); // User ID who created
-            $table->integer('updated_date')->nullable(); // Timestamp for update
-            $table->integer('updated_by')->nullable(); // User ID who updated
-            $table->integer('deleted_date')->nullable(); // Timestamp for deletion
-            $table->integer('deleted_by')->nullable(); // User ID who deleted
-            $table->tinyInteger('deleted')->default(0); // Flag to mark as deleted
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('type_id'); // Foreign key for amendment type
         });
     }

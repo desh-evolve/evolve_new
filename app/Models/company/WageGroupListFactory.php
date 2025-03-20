@@ -108,21 +108,8 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 
 		return $this;
 	}
-/*
-	function getByCompanyIdArray($company_id) {
 
-		$utlf = new UserTitleListFactory();
-		$utlf->getByCompanyId($company_id);
-
-		$title_list[0] = '--';
-
-		foreach ($utlf as $title_obj) {
-			$title_list[$title_obj->getID()] = $title_obj->getName();
-		}
-
-		return $title_list;
-	}
-*/
+	
 	function getArrayByListFactory($lf, $include_blank = TRUE ) {
 		if ( !is_object($lf) ) {
 			return FALSE;
@@ -132,8 +119,9 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 			$list[0] = ('-Default-');
 		}
 
-		foreach ($lf as $obj) {
-			$list[$obj->getID()] = $obj->getName();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[$lf->getID()] = $lf->getName();
 		}
 
 		if ( isset($list) ) {

@@ -55,8 +55,8 @@ switch ($action) {
 		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserEducation.php') );
 		break;
 	default:
-		$uelf = TTnew( 'UserEducationListFactory' );
-		$ulf = TTnew( 'UserListFactory' );
+		$uelf = new UserEducationListFactory();
+		$ulf = new UserListFactory();
 
 		if ( $permission->Check('user','view') OR $permission->Check('user','view_child') ) {
 			if ( isset($filter_user_id) ) {
@@ -100,7 +100,7 @@ switch ($action) {
 
 			$smarty->assign_by_ref('qualifications', $qualifications);
 
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 			if ( $permission->Check('accrual','view') == FALSE ) {

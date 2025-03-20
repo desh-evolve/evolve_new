@@ -129,7 +129,9 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 			return FALSE;
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName(TRUE);
 		}
 

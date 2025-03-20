@@ -401,17 +401,18 @@ class ExceptionFactory extends Factory {
 						$ulf = new UserListFactory(); 
 						$ulf->getByIdAndCompanyId( $parent_user_id, $u_obj->getCompany() );
 						if ( $ulf->getRecordCount() > 0 ) {
-							foreach( $ulf as $parent_user_obj ) {
+							foreach( $ulf->rs as $parent_user_obj ) {
+								$ulf->data = (array)$parent_user_obj;
 								//$parent_user_obj = $ulf->getCurrent();
 
-								if ( is_object( $parent_user_obj->getUserPreferenceObject() ) AND $parent_user_obj->getUserPreferenceObject()->getEnableEmailNotificationException() == TRUE ) {
+								if ( is_object( $ulf->getUserPreferenceObject() ) AND $ulf->getUserPreferenceObject()->getEnableEmailNotificationException() == TRUE ) {
 									Debug::Text(' Emailing exception to supervisor!', __FILE__, __LINE__, __METHOD__,10);
-									if ( $parent_user_obj->getWorkEmail() != '' ) {
-										$retarr[] = $parent_user_obj->getWorkEmail();
+									if ( $ulf->getWorkEmail() != '' ) {
+										$retarr[] = $ulf->getWorkEmail();
 									}
 
-									if ( $up_obj->getEnableEmailNotificationHome() == TRUE AND $parent_user_obj->getHomeEmail() != '' ) {
-										$retarr[] = $parent_user_obj->getHomeEmail();
+									if ( $up_obj->getEnableEmailNotificationHome() == TRUE AND $ulf->getHomeEmail() != '' ) {
+										$retarr[] = $ulf->getHomeEmail();
 									}
 								} else {
 									Debug::Text(' Skipping email to supervisor.', __FILE__, __LINE__, __METHOD__,10);

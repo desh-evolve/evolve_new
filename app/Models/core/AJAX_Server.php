@@ -539,7 +539,7 @@ class AJAX_Server {
 		//Debug::Arr($data, 'Input Transaction Data...', __FILE__, __LINE__, __METHOD__, 10);
 		//Debug::Arr($invoice_data, 'Input Invoice Data...', __FILE__, __LINE__, __METHOD__, 10);
 
-		$ilf = new InvoiceListFactory();
+		$ilf = new InvoiceListFactory(); 
 
 		$transaction_arr = FALSE;
 		if ( is_array($data) ) {
@@ -709,9 +709,10 @@ class AJAX_Server {
                 $alulf = new AbsenceLeaveUserListFactory();
                 $alulf->getEmployeeTotalLeaves($absence_policy_id, $user_id, $date);
                 $total_assigned_leaves = 0;
-                if(count($alulf) > 0){
-                    foreach($alulf as $alulf_obj){
-                        $total_assigned_leaves = $total_assigned_leaves + $alulf_obj->getAmount();
+                if(count($alulf->rs) > 0){
+                    foreach($alulf->rs as $alulf_obj){
+						$alulf->data = (array)$alulf_obj;
+                        $total_assigned_leaves = $total_assigned_leaves + $alulf->getAmount();
                     }
                 } 
               
@@ -722,12 +723,13 @@ class AJAX_Server {
                  $aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
                  $aluerlf->getByAbsencePolicyIdAndUserId2($absence_policy_id,$user_id);
                  $total_used_leaves = 0;
-                 if(count($aluerlf) > 0){
+                 if(count($aluerlf->rs) > 0){
                      
                     $allf1 = new AbsenceLeaveListFactory();
-                     foreach($aluerlf as $aluerlf_obj){
-                         $amount = $aluerlf_obj->getAmount();
-                         //$amount = $allf1->getRelatedAmountTime($aluerlf_obj->getAbsenceLeaveId());
+                     foreach($aluerlf->rs as $aluerlf_obj){
+						$aluerlf->data = (array)$aluerlf_obj;
+                         $amount = $aluerlf->getAmount();
+                         //$amount = $allf1->getRelatedAmountTime($aluerlf->getAbsenceLeaveId());
                          $total_used_leaves = $total_used_leaves + $amount;
                     }
                  }
@@ -738,8 +740,9 @@ class AJAX_Server {
                 
                 $allf->getAll();
                 
-                foreach ($allf as $allf_obj){
-                    $absence_leave[$allf_obj->getId()] = $allf_obj;  
+                foreach ($allf->rs as $allf_obj){
+					$allf->data = (array)$allf_obj;
+                    $absence_leave[$allf->getId()] = $allf;  
                 }
                 
                // return 'total_assigned_leaves - '.$total_assigned_leaves.'total_used_leaves - '.$total_used_leaves;
@@ -766,76 +769,7 @@ class AJAX_Server {
                 
                 
         }
-//FL ADDED FOR GET LEAVE BALANCE 20160729
-        /*
-	function getLeaveBalance( $absence_policy_id, $user_id, $date = '', $repAbsence = 1) {
-		global $current_company;
-
-		if ( !is_object($current_company) ) {
-			return FALSE;
-		}
-		if ($date == '') {
-            $date = date('Y');
-		}
-                 
-                 //get total leaves for particular date year 
-                $alulf = new AbsenceLeaveUserListFactory();
-                $alulf->getEmployeeTotalLeaves($absence_policy_id, $user_id, $date);
-                $total_assigned_leaves = 0;
-                if(count($alulf) > 0){
-                    foreach($alulf as $alulf_obj){
-                        $total_assigned_leaves = $total_assigned_leaves + $alulf_obj->getAmount();
-                    }
-                } 
-
-                
-                //get used Leave for particular date year
-                 $aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
-                 $aluerlf->getByAbsencePolicyIdAndUserId2($absence_policy_id,$user_id);
-                 $total_used_leaves = 0;
-                 if(count($aluerlf) > 0){
-                     
-                    $allf1 = new AbsenceLeaveListFactory();
-                     foreach($aluerlf as $aluerlf_obj){
-                         $amount = $aluerlf_obj->getAmount();
-                         //$amount = $allf1->getRelatedAmountTime($aluerlf_obj->getAbsenceLeaveId());
-                         $total_used_leaves = $total_used_leaves + $amount;
-                    }
-                 }
-                 //return 'tot - '.$amount;
-                 
-                $total_balance_leave = $total_assigned_leaves - $total_used_leaves;
-                $allf = new AbsenceLeaveListFactory();
-                
-                $allf->getAll();
-                
-                foreach ($allf as $allf_obj){
-                    $absence_leave[$allf_obj->getId()] = $allf_obj;  
-                }
-                
-               // return 'total_assigned_leaves - '.$total_assigned_leaves.'total_used_leaves - '.$total_used_leaves;
-
-                $absence_bal['full_day'] = floor($total_balance_leave/$absence_leave[1]->getTimeSec());
-                $absence_bal['half_day'] = floor(($total_balance_leave%$absence_leave[1]->getTimeSec())/($absence_leave[$absence_leave[2]->getRelatedLeaveId()]->getTimeSec()/$absence_leave[2]->getRelatedLeaveUnit()));
-                $absence_bal['short_leave'] = floor(($total_balance_leave%$absence_leave[1]->getTimeSec())/($absence_leave[$absence_leave[3]->getRelatedLeaveId()]->getTimeSec()/$absence_leave[3]->getRelatedLeaveUnit()));
-
-              
-                if($absence_bal['full_day']<0)
-                	{$absence_bal['full_day']=0;}
-
-	            if($absence_bal['half_day']<0)
-	                {$absence_bal['half_day']=0;}
-	            
-	            if($absence_bal['short_leave']<0)
-	                {$absence_bal['short_leave']=0;}
-                 
-                 
-
-                return $absence_leave[1]->getShortCode().' - '.$absence_bal['full_day'].'  |  '.$absence_leave[2]->getShortCode().' - '.$absence_bal['half_day'].' or '.$absence_leave[3]->getShortCode().' - '.$absence_bal['short_leave'];
-                 
-	}
-*/
-        
+ 
         
                 //FL ADDED 20160717
 	function getAbsenceLeaveMethod( $absence_policy_id ) {
@@ -912,15 +846,16 @@ class AJAX_Server {
                         $absencePolicy = $apf->getCurrent();
                         
                         if($absencePolicy->getApplyFrequencyHireDate()==0 && $userHireYear != date('Y')){
-                            foreach ($apmlf as $ms_obj){
+                            foreach ($apmlf->rs as $ms_obj){
+								$apmlf->data = (array)$ms_obj;
                                  $workDays = floor((strtotime(date('Y').'-'.$absencePolicy->getApplyFrequencyMonth().'-'.$absencePolicy->getApplyFrequencyDayOfMonth()) - $user->getHireDate())/(60*60*24));
 //                                 $workDays = floor((time() - $user->getHireDate())/(60*60*24));
-                                 if($ms_obj->getLengthOfServiceDays() >= $workDays){
-                                     $accrual_balance = $ms_obj->getMaximumTime();
+                                 if($apmlf->getLengthOfServiceDays() >= $workDays){
+                                     $accrual_balance = $apmlf->getMaximumTime();
                                      break;
                                  }
 
-                                 $prev_obj = $ms_obj;
+                                 $prev_obj = $apmlf;
                             }    
                         
                         }          
@@ -948,8 +883,9 @@ class AJAX_Server {
 		}
                 
                 $allf->getAll();
-                foreach ($allf as $allf_obj){
-                    $absence_leave[$allf_obj->getId()] = $allf_obj; 
+                foreach ($allf->rs as $allf_obj){
+					$allf->data = (array)$allf_obj;
+                    $absence_leave[$allf->getId()] = $allf; 
 //                    $absence[]
                 }
                 $absence['full_day'] = floor($accrual_balance/$absence_leave[1]->getTimeSec());
@@ -976,8 +912,9 @@ class AJAX_Server {
 		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getHighestOrderByCompanyIdAndTypeId( $current_company->getId(), $type_id );
 		if ( $psealf->getRecordCount() > 0 ) {
-			foreach( $psealf as $psea_obj ) {
-				return ($psea_obj->getOrder()+1);
+			foreach( $psealf->rs as $psea_obj ) {
+				$psealf->data = (array)$psea_obj;
+				return ($psealf->getOrder()+1);
 			}
 		}
 

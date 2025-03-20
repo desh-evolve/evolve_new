@@ -232,8 +232,9 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
-			$list[$obj->getID()] = $obj->getName().' ['. $obj->getLevel().']';
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$list[$lf->getID()] = $lf->getName().' ['. $lf->getLevel().']';
 		}
 
 		if ( isset($list) ) {
@@ -248,8 +249,9 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 			return FALSE;
 		}
 
-		foreach ($lf as $obj) {
-			$retarr[$obj->getColumn('user_id')] = $obj->getId();
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$retarr[$lf->getColumn('user_id')] = $lf->getId();
 		}
 
 		if ( isset($retarr) ) {

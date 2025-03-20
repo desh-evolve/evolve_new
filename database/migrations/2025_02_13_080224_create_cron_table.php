@@ -22,13 +22,13 @@ return new class extends Migration
             $table->string('day_of_week');
             $table->string('command');
             $table->timestamp('last_run_date')->nullable();
-            $table->unsignedBigInteger('created_date')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_date')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->unsignedBigInteger('deleted_date')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
-            $table->tinyInteger('deleted')->default(0);
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
         });
     }
 

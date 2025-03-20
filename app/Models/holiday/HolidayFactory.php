@@ -6,7 +6,6 @@ use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
-use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 
 class HolidayFactory extends Factory {
@@ -68,7 +67,7 @@ class HolidayFactory extends Factory {
 			return $this->holiday_policy_obj;
 		} else {
 
-			$hplf = TTnew( 'HolidayPolicyListFactory' );
+			$hplf = new HolidayPolicyListFactory();
 			$hplf->getById( $this->getHolidayPolicyID() );
 
 			if ( $hplf->getRecordCount() == 1 ) {
@@ -98,7 +97,7 @@ class HolidayFactory extends Factory {
 	function setHolidayPolicyID($id) {
 		$id = trim($id);
 
-		$hplf = TTnew( 'HolidayPolicyListFactory' );
+		$hplf = new HolidayPolicyListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'holiday_policy',
@@ -271,7 +270,7 @@ class HolidayFactory extends Factory {
 	}
 
 	function getAverageTime( $user_id ) {
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$udtlf = new UserDateTotalListFactory();
 
 		//Check if Min and Max time is the same, if so we can skip any averaging.
 		if ( $this->getHolidayPolicyObject()->getMinimumTime() > 0
@@ -341,11 +340,11 @@ class HolidayFactory extends Factory {
 
 		//$this->getHolidayPolicyObject();
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$user_obj = $ulf->getById($user_id)->getCurrent();
 
-		$slf = TTnew( 'ScheduleListFactory' );
-		$udtlf = TTnew( 'UserDateTotalListFactory' );
+		$slf = new ScheduleListFactory();
+		$udtlf = new UserDateTotalListFactory();
 
 		//Make sure the employee has been employed long enough according to labor standards
 		//Also make sure that the employee hasn't been terminated on or before the holiday.
@@ -361,7 +360,9 @@ class HolidayFactory extends Factory {
 
 					if ( $slf->getRecordCount() > 0 ) {
 						//Get user_date_ids
-						foreach( $slf as $s_obj ) {
+						foreach( $slf->rs as $s_obj ) {
+							$slf->data = (array) $s_obj;
+							$s_obj = $slf;
 							$scheduled_user_date_ids_before[] = $s_obj->getUserDateID();
 						}
 						//Debug::Arr($scheduled_user_date_ids_before, 'Scheduled UserDateIDs Before: ', __FILE__, __LINE__, __METHOD__,10);
@@ -376,7 +377,9 @@ class HolidayFactory extends Factory {
 					Debug::text('bUsing scheduled days!', __FILE__, __LINE__, __METHOD__,10);
 					if ( $slf->getRecordCount() > 0 ) {
 						//Get user_date_ids
-						foreach( $slf as $s_obj ) {
+						foreach( $slf->rs as $s_obj ) {
+							$slf->data = (array) $s_obj;
+							$s_obj = $slf;
 							$scheduled_user_date_ids_after[] = $s_obj->getUserDateID();
 						}
 						//Debug::Arr($scheduled_user_date_ids_after, 'Scheduled UserDateIDs After: ', __FILE__, __LINE__, __METHOD__,10);

@@ -264,7 +264,9 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 			$list[0] = '--';
 		}
 
-		foreach ($pglf as $pg_obj) {
+		foreach ($pglf->rs as $pg_obj) {
+			$pglf->data = (array)$pg_obj;
+			$pg_obj = $pglf;
 			$list[$pg_obj->getID()] = $pg_obj->getName();
 		}
 
@@ -284,7 +286,9 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 			$list[0] = '--';
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$list[$obj->getID()] = $obj->getName();
 		}
 
@@ -300,7 +304,9 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 			return FALSE;
 		}
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			$retarr[$obj->getColumn('user_id')] = $obj->getId();
 		}
 

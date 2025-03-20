@@ -2,6 +2,7 @@
 
 namespace App\Models\PayPeriod;
 
+use App\Models\Core\AuthorizationListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -113,7 +114,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 		if ( is_object($this->user_obj) ) {
 			return $this->user_obj;
 		} else {
-			$ulf = TTnew( 'UserListFactory' );
+			$ulf = new UserListFactory();
 			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
 
 			return $this->user_obj;
@@ -124,7 +125,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 		if ( is_object($this->pay_period_obj) ) {
 			return $this->pay_period_obj;
 		} else {
-			$pplf = TTnew( 'PayPeriodListFactory' );
+			$pplf = new PayPeriodListFactory();
 			$pplf->getById( $this->getPayPeriod() );
 			if ( $pplf->getRecordCount() > 0 ) {
 				$this->pay_period_obj = $pplf->getCurrent();
@@ -150,7 +151,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 			$id = $this->findPayPeriod();
 		}
 
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'pay_period',
@@ -187,7 +188,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -401,7 +402,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 	}
 
 	function getPreviousPayPeriodObject() {
-		$pplf = TTnew( 'PayPeriodListFactory' );
+		$pplf = new PayPeriodListFactory();
 		$pplf->getPreviousPayPeriodById( $this->getPayPeriod() );
 		if ( $pplf->getRecordCount() > 0 ) {
 			return $pplf->getCurrent();
@@ -423,7 +424,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 			if ( $previous_pay_period_obj->getStatus() == 20 ) {
 				$is_previous_time_sheet_verified = TRUE;
 			} else {
-				$pptsvlf = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+				$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 				$pptsvlf->getByPayPeriodIdAndUserId( $previous_pay_period_obj->getId(), $user_id );
 				if ( $pptsvlf->getRecordCount() > 0 ) {
 					$pptsv_obj = $pptsvlf->getCurrent();
@@ -522,13 +523,13 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 			$user_id = $this->getUser();
 		}
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 		$ulf->getById( $user_id );
 		if ( $ulf->getRecordCount() == 1 ) {
 			$user_obj = $ulf->getCurrent();
 
 			//Get timesheet verification hierarchy, so we know who the superiors are.
-			$hlf = TTnew( 'HierarchyListFactory' );
+			$hlf = new HierarchyListFactory();
 			$timesheet_parent_level_user_ids = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $user_obj->getCompany(), $user_obj->getId(), 90, TRUE, FALSE ); //Immediate superiors only can verify timesheets directly.
 			Debug::Arr( $timesheet_parent_level_user_ids, 'TimeSheet Parent Level Ids', __FILE__, __LINE__, __METHOD__,10);
 			if ( in_array( $current_user_id, (array)$timesheet_parent_level_user_ids ) ) {
@@ -546,10 +547,12 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 
 	//Returns all superiors that have authorized this timesheet so far.
 	function getAuthorizedUsers() {
-		$alf = TTnew( 'AuthorizationListFactory' );
+		$alf = new AuthorizationListFactory();
 		$alf->getByObjectTypeAndObjectId(90, $this->getId() );
 		if ($alf->getRecordCount() > 0 ) {
-			foreach( $alf as $a_obj ) {
+			foreach( $alf->rs as $a_obj ) {
+				$alf->data = (array) $a_obj;
+				$a_obj = $alf;
 				if ( $a_obj->getAuthorized() == TRUE ) {
 					$retarr[] = $a_obj->getCreatedBy();
 				}
@@ -612,7 +615,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 
 			//If this is a new verification, find the current authorization level to assign to it.
 			if ( ( $this->isNew() == TRUE  OR $this->getStatus() == 55 ) AND ( $time_sheet_verification_type_id == 30 OR $time_sheet_verification_type_id == 40 )  ) {
-				$hlf = TTnew( 'HierarchyListFactory' );
+				$hlf = new HierarchyListFactory();
 				$hierarchy_arr = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $this->getUserObject()->getCompany(), $this->getUserObject()->getID(), 90, FALSE);
 
 				$hierarchy_highest_level = 99;
@@ -635,10 +638,12 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 	function postSave() {
 		//If status is pending auth (55=declined) delete all authorization history, because they could be re-verifying.
 		if ( $this->getCurrentUser() != FALSE AND $this->getStatus() == 55 ) {
-			$alf = TTnew( 'AuthorizationListFactory' );
+			$alf = new AuthorizationListFactory();
 			$alf->getByObjectTypeAndObjectId( 90, $this->getId() );
 			if ( $alf->getRecordCount() > 0 ) {
-				foreach( $alf as $a_obj ) {
+				foreach( $alf->rs as $a_obj ) {
+					$alf->data = (array) $a_obj;
+					$a_obj = $alf;
 					//Delete the record outright for now, as marking it as deleted causes transaction issues
 					//and it never gets committed.
 					$a_obj->Delete();
@@ -663,7 +668,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 			}
 
 			if ( $authorize_timesheet == TRUE ) {
-				$af = TTnew( 'AuthorizationFactory' );
+				$af = new AuthorizationFactory();
 				$af->setObjectType('timesheet');
 				$af->setObject( $this->getId() );
 				$af->setAuthorized(TRUE);

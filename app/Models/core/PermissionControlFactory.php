@@ -239,8 +239,9 @@ class PermissionControlFactory extends Factory {
 	function getUser() {
 		$pulf = new PermissionUserListFactory();
 		$pulf->getByPermissionControlId( $this->getId() );
-		foreach ($pulf as $obj) {
-			$list[] = $obj->getUser();
+		foreach ($pulf->rs as $obj) {
+			$pulf->data = (array)$obj;
+			$list[] = $pulf->getUser();
 		}
 
 		if ( isset($list) ) {
@@ -259,8 +260,9 @@ class PermissionControlFactory extends Factory {
 			$pulf->getByCompanyIdAndUserIdAndNotPermissionControlId( $this->getCompany(), $ids, (int)$this->getId() );
 			if ( $pulf->getRecordCount() > 0 ) {
 				Debug::text('Found User IDs assigned to another Permission Group, unassigning them!', __FILE__, __LINE__, __METHOD__, 10);
-				foreach( $pulf as $pu_obj ) {
-					$pu_obj->Delete();
+				foreach( $pulf->rs as $pu_obj ) {
+					$pulf->data = (array)$pu_obj;
+					$pulf->Delete();
 				}
 			}
 			unset($pulf, $pu_obj);
@@ -274,22 +276,23 @@ class PermissionControlFactory extends Factory {
 				$pulf->getByPermissionControlId( $this->getId() );
 
 				$tmp_ids = array();
-				foreach ($pulf as $obj) {
-					$id = $obj->getUser();
-					Debug::text('Permission Control ID: '. $obj->getPermissionControl() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
+				foreach ($pulf->rs as $obj) {
+					$pulf->data = (array)$obj;
+					$id = $pulf->getUser();
+					Debug::text('Permission Control ID: '. $pulf->getPermissionControl() .' ID: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 
 					//Delete users that are not selected.
 					if ( !in_array($id, $ids) ) {
 						Debug::text('Deleting: '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$this->tmp_previous_user_ids[] = $id;
-						$obj->Delete();
+						$pulf->Delete();
 					} else {
 						//Save ID's that need to be updated.
 						Debug::text('NOT Deleting : '. $id, __FILE__, __LINE__, __METHOD__, 10);
 						$tmp_ids[] = $id;
 					}
 				}
-				unset($id, $obj);
+				unset($id, $pulf);
 			}
 
 			//Insert new mappings.
@@ -352,8 +355,9 @@ class PermissionControlFactory extends Factory {
 		$plf->getByCompanyIdAndPermissionControlId( $this->getCompany(), $this->getId() );
 		if ( $plf->getRecordCount() > 0 ) {
 			Debug::Text('Found Permissions: '. $plf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-			foreach($plf as $p_obj) {
-				$current_permissions[$p_obj->getSection()][$p_obj->getName()] = $p_obj->getValue();
+			foreach($plf->rs as $p_obj) {
+				$plf->data = (array)$p_obj;
+				$current_permissions[$plf->getSection()][$plf->getName()] = $plf->getValue();
 			}
 
 			return $current_permissions;

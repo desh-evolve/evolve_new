@@ -17,13 +17,13 @@ return new class extends Migration
             $table->integer('type_id'); // Wage type ID
             $table->decimal('wage', 20, 4)->nullable(); // Wage amount
             $table->date('effective_date')->nullable(); // Effective date
-            $table->integer('created_date')->nullable(); // Created date
-            $table->integer('created_by')->nullable(); // Created by
-            $table->integer('updated_date')->nullable(); // Updated date
-            $table->integer('updated_by')->nullable(); // Updated by
-            $table->integer('deleted_date')->nullable(); // Deleted date
-            $table->integer('deleted_by')->nullable(); // Deleted by
-            $table->boolean('deleted')->default(0); // Deleted flag
+            $table->integer('created_date')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_date')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_date')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->unsignedTinyInteger('deleted')->default(0);
             $table->integer('weekly_time')->nullable(); // Weekly time
             $table->decimal('labor_burden_percent', 9, 2)->nullable(); // Labor burden percent
             $table->text('note')->nullable(); // Note

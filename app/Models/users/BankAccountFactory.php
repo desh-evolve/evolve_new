@@ -2,11 +2,13 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class BankAccountFactory extends Factory {
 	protected $table = 'bank_account';
@@ -77,7 +79,7 @@ class BankAccountFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = TTnew( 'CompanyListFactory' );
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -102,7 +104,7 @@ class BankAccountFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',

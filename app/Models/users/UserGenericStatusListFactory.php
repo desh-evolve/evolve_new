@@ -31,13 +31,13 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -53,13 +53,13 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 		}
 
 		$ph = array(
-					'user_id' => $id,
+					':user_id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -91,15 +91,15 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'batch_id' => $batch_id,
+					':user_id' => $user_id,
+					':batch_id' => $batch_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND batch_id = ?
+					where	user_id = :user_id
+						AND batch_id = :batch_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -124,24 +124,25 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'batch_id' => $batch_id,
+					':user_id' => $user_id,
+					':batch_id' => $batch_id,
 					);
 
 		$query = '
 					select 	status_id,count(*) as total
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND batch_id = ?
+					where	user_id = :user_id
+						AND batch_id = :batch_id
 						AND deleted = 0
 					GROUP BY status_id';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$result = $this->db->GetArray($query, $ph);
+		$result = DB::select($query, $ph);
 
 		$total = 0;
 		foreach( $result as $row ) {
+			$row = (array)$row;
 			$total = $total + $row['total'];
 		}
 		$retarr['total'] = $total;
@@ -153,6 +154,7 @@ class UserGenericStatusListFactory extends UserGenericStatusFactory implements I
 								);
 								
 		foreach( $result as $row ) {
+			$row = (array)$row;
 			$retarr['status'][$row['status_id']] = array('total' => $row['total'], 'percent' => round( ($row['total'] / $total) * 100, 1 ) );
 		}
 

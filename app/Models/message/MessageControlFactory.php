@@ -10,6 +10,7 @@ use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\TTMail;
+use App\Models\Users\UserPreferenceListFactory;
 
 class MessageControlFactory extends Factory {
 	protected $table = 'message_control';
@@ -255,16 +256,16 @@ class MessageControlFactory extends Factory {
 			switch ( $this->getObjectType() ) {
 				case 5:
 				case 100:
-					$this->obj_handler = TTnew( 'UserListFactory' );
+					$this->obj_handler = new UserListFactory();
 					break;
 				case 40:
-					$this->obj_handler = TTnew( 'AuthorizationListFactory' );
+					$this->obj_handler = new AuthorizationListFactory();
 					break;
 				case 50:
-					$this->obj_handler = TTnew( 'RequestListFactory' );
+					$this->obj_handler = new RequestListFactory();
 					break;
 				case 90:
-					$this->obj_handler = TTnew( 'PayPeriodTimeSheetVerifyListFactory' );
+					$this->obj_handler = new PayPeriodTimeSheetVerifyListFactory();
 					break;
 			}
 
@@ -463,10 +464,12 @@ class MessageControlFactory extends Factory {
 
 		Debug::Arr($ids, 'Message Recipeint Ids: ', __FILE__, __LINE__, __METHOD__,10);
 
-		$mrlf = TTnew( 'MessageRecipientListFactory' );
+		$mrlf = new MessageRecipientListFactory();
 		$mrlf->getByCompanyIdAndUserIdAndMessageSenderIdAndStatus( $company_id, $user_id, $ids, 10 );
 		if ( $mrlf->getRecordCount() > 0 ) {
-			foreach( $mrlf as $mr_obj ) {
+			foreach( $mrlf->rs as $mr_obj ) {
+				$mrlf->data = (array)$mr_obj;
+				$mr_obj = $mrlf;
 				$mr_obj->setStatus( 20 ); //Read
 				$mr_obj->Save();
 			}
@@ -481,10 +484,12 @@ class MessageControlFactory extends Factory {
 			//Get user preferences and determine if they accept email notifications.
 			Debug::Arr($user_ids, 'Recipient User Ids: ', __FILE__, __LINE__, __METHOD__,10);
 
-			$uplf = TTnew( 'UserPreferenceListFactory' );
+			$uplf = new UserPreferenceListFactory(); 
 			$uplf->getByUserId( $user_ids );
 			if ( $uplf->getRecordCount() > 0 ) {
-				foreach( $uplf as $up_obj ) {
+				foreach( $uplf->rs as $up_obj ) {
+					$uplf->data = (array)$up_obj;
+					$up_obj = $uplf;
 					if ( $up_obj->getEnableEmailNotificationMessage() == TRUE AND $up_obj->getUserObject()->getStatus() == 10 ) {
 						if ( $up_obj->getUserObject()->getWorkEmail() != '' ) {
 							$retarr[] = $up_obj->getUserObject()->getWorkEmail();
@@ -619,7 +624,7 @@ class MessageControlFactory extends Factory {
 					//On the other hand, having multiple sender records, one for each recipient makes it hard to show
 					//just the necessary messages on the embedded message list, as it wants to show duplicates messages for
 					//each recipient.
-					$msf = TTnew( 'MessageSenderFactory' );
+					$msf = new MessageSenderFactory();
 					$msf->setUser( $this->getFromUserId() );
 					Debug::Text('Parent ID: '. $this->getParent(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -635,7 +640,7 @@ class MessageControlFactory extends Factory {
 						Debug::Text('Message Sender ID: '. $message_sender_id, __FILE__, __LINE__, __METHOD__,10);
 
 						if ( $message_sender_id != FALSE ) {
-							$mrf = TTnew( 'MessageRecipientFactory' );
+							$mrf = new MessageRecipientFactory();
 							$mrf->setUser( $to_user_id );
 							$mrf->setMessageSender( $message_sender_id );
 							if ( isset($this->migration_status) ) {

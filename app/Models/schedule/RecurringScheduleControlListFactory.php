@@ -1,6 +1,16 @@
 <?php
 
-namespace App\Models\Schedule; 
+namespace App\Models\Schedule;
+
+use App\Models\Company\BranchFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Misc;
+use App\Models\Department\DepartmentFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserGroupFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserTitleFactory;
+use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class RecurringScheduleControlListFactory extends RecurringScheduleControlFactory implements IteratorAggregate {
@@ -356,7 +366,7 @@ class RecurringScheduleControlListFactory extends RecurringScheduleControlFactor
 		}
 		if ( isset($filter_data['group_id']) AND isset($filter_data['group_id'][0]) AND !in_array(-1, (array)$filter_data['group_id']) ) {
 			if ( isset($filter_data['include_subgroups']) AND (bool)$filter_data['include_subgroups'] == TRUE ) {
-				$uglf = new UserGroupListFactory();
+				$uglf = new UserGroupListFactory(); 
 				$filter_data['group_id'] = $uglf->getByCompanyIdAndGroupIdAndSubGroupsArray( $company_id, $filter_data['group_id'], TRUE);
 			}
 			$query  .=	' AND d.group_id in ('. $this->getListSQL($filter_data['group_id'], $ph) .') ';

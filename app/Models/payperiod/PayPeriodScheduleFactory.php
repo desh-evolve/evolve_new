@@ -13,6 +13,7 @@ use App\Models\Core\TTLog;
 use App\Models\Holiday\HolidayListFactory;
 use App\Models\Punch\PunchListFactory;
 use App\Models\Users\UserDefaultListFactory;
+use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceFactory;
 
 class PayPeriodScheduleFactory extends Factory {
@@ -809,7 +810,9 @@ class PayPeriodScheduleFactory extends Factory {
 	function getUser() {
 		$ppsulf = new PayPeriodScheduleUserListFactory();
 		$ppsulf->getByPayPeriodScheduleId( $this->getId() );
-		foreach ($ppsulf as $pay_period_schedule) {
+		foreach ($ppsulf->rs as $pay_period_schedule) {
+			$ppsulf->data = (array)$pay_period_schedule;
+			$pay_period_schedule = $ppsulf;
 			$user_list[] = $pay_period_schedule->getUser();
 		}
 
@@ -831,7 +834,9 @@ class PayPeriodScheduleFactory extends Factory {
 				$ppsulf->getByPayPeriodScheduleId( $this->getId() );
 
 				$user_ids = array();
-				foreach ($ppsulf as $pay_period_schedule) {
+				foreach ($ppsulf->rs as $pay_period_schedule) {
+					$ppsulf->data = (array)$pay_period_schedule;
+					$pay_period_schedule = $ppsulf;
 					$user_id = $pay_period_schedule->getUser();
 					Debug::text('Schedule ID: '. $pay_period_schedule->getPayPeriodSchedule() .' User ID: '. $user_id, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -883,7 +888,9 @@ class PayPeriodScheduleFactory extends Factory {
 			$hlf = new HolidayListFactory(); 
 			$hlf->getByPolicyGroupUserIdAndStartDateAndEndDate( $user_ids, $epoch-(86400*14), $epoch+(86400*2) );
 			if ( $hlf->getRecordCount() > 0 ) {
-				foreach( $hlf as $h_obj ) {
+				foreach( $hlf->rs as $h_obj ) {
+					$hlf->data = (array)$h_obj;
+					$h_obj = $hlf;
 					Debug::Text('Found Holiday Epoch: '. TTDate::getDate('DATE+TIME', $h_obj->getDateStamp() ) .' Name: '. $h_obj->getName() , __FILE__, __LINE__, __METHOD__, 10);
 					$holiday_epochs[] = $h_obj->getDateStamp();
 				}
@@ -1404,7 +1411,9 @@ class PayPeriodScheduleFactory extends Factory {
 			$nearest_shift_id = 0;
 			$nearest_punch_difference = FALSE;
 			$prev_punch_obj = FALSE;
-			foreach( $plf as $p_obj ) {
+			foreach( $plf->rs as $p_obj ) {
+				$plf->data = (array)$p_obj;
+				$p_obj = $plf;
 				//Debug::text('Shift: '. $shift .' Punch ID: '. $p_obj->getID() .' Punch Control ID: '. $p_obj->getPunchControlID() .' TimeStamp: '. TTDate::getDate('DATE+TIME', $p_obj->getTimeStamp() ), __FILE__, __LINE__, __METHOD__, 10);
 
 				//If we're editing a punch, we need to use the object passed to this function instead of the one
@@ -1648,7 +1657,9 @@ class PayPeriodScheduleFactory extends Factory {
 			$pplf->getByPayPeriodScheduleId( $this->getId() );
 			if ( $pplf->getRecordCount() > 0 ) {
 				Debug::text('Delete Pay Periods: '. $pplf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
-				foreach( $pplf as $pp_obj ) {
+				foreach( $pplf->rs as $pp_obj ) {
+					$pplf->data = (array)$pp_obj;
+					$pp_obj = $pplf;
 					$pp_obj->setDeleted(TRUE);
 					$pp_obj->Save();
 				}
@@ -1691,7 +1702,9 @@ class PayPeriodScheduleFactory extends Factory {
 			$udlf = new UserDefaultListFactory(); 
 			$udlf->getByCompanyId( $this->getCompany() );
 			if ( $udlf->getRecordCount() > 0 ) {
-				foreach( $udlf as $udf_obj ) {
+				foreach( $udlf->rs as $udf_obj ) {
+					$udlf->data = (array)$udf_obj;
+					$udf_obj = $udlf;
 					$udf_obj->setPayPeriodSchedule( 0 );
 					if ( $udf_obj->isValid() ) {
 						$udf_obj->Save();

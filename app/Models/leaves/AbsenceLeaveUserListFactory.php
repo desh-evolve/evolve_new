@@ -106,7 +106,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 
 					);
 
-        $aluef = TTnew( 'AbsenceLeaveUserEntryFactory' );
+        $aluef = new AbsenceLeaveUserEntryFactory();
                 
 		$query = '
                             SELECT ale.user_id, al.* 
@@ -272,7 +272,9 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 			$list[0] = '--';
 		}
 
-		foreach ($aplf as $ap_obj) {
+		foreach ($aplf->rs as $ap_obj) {
+			$aplf->data = (array) $ap_obj;
+			$ap_obj = $aplf;
 			$list[$ap_obj->getID()] = $ap_obj->getName();
 		}
 
@@ -311,7 +313,9 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 			$list[0] = '--';
 		} 
 
-		foreach ($lf as $obj) {
+		foreach ($lf->rs as $obj) {
+			$lf->data = (array)$obj;
+			$obj = $lf;
 			if ( $obj->getStatus() == 20 ) {
 				$status = '(DISABLED) ';
 			} else {

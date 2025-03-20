@@ -183,7 +183,9 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		$hslf = new HierarchyShareListFactory();
 		$hslf->getByHierarchyControlId( $tree_id );
 		$shared_user_ids = array();
-		foreach( $hslf as $hierarchy_share ) {
+		foreach( $hslf->rs as $hierarchy_share ) {
+			$hslf->data = (array)$hierarchy_share;
+			$hierarchy_share = $hslf;
 			$shared_user_ids[] = $hierarchy_share->getUser();
 		}
 

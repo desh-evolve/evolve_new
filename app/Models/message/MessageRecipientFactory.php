@@ -32,7 +32,7 @@ class MessageRecipientFactory extends Factory {
 	function setUser($id) {
 		$id = trim($id);
 
-		$ulf = TTnew( 'UserListFactory' );
+		$ulf = new UserListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'user',
@@ -57,7 +57,7 @@ class MessageRecipientFactory extends Factory {
 	function setMessageSender($id) {
 		$id = trim($id);
 
-		$mslf = TTnew( 'MessageSenderListFactory' );
+		$mslf = new MessageSenderListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'message_sender_id',
 													$mslf->getByID($id),
@@ -81,7 +81,7 @@ class MessageRecipientFactory extends Factory {
 	function setMessageControl($id) {
 		$id = trim($id);
 
-		$mclf = TTnew( 'MessageControlListFactory' );
+		$mclf = new MessageControlListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'message_control_id',
 													$mclf->getByID($id),

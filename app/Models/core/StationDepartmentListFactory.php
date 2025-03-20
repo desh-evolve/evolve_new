@@ -77,8 +77,9 @@ class StationDepartmentListFactory extends StationDepartmentFactory implements I
 
 		$sdlf->getByStationId($id);
 
-		foreach ($sdlf as $obj) {
-			$list[$obj->getStation()] = NULL;
+		foreach ($sdlf->rs as $obj) {
+			$sdlf->data = (array)$obj;
+			$list[$sdlf->getStation()] = NULL;
 		}
 
 		if ( isset($list) ) {
