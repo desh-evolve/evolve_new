@@ -4,6 +4,8 @@ namespace App\Models\Policy;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 
 class PolicyGroupUserFactory extends Factory {
 	protected $table = 'policy_group_user';
@@ -54,10 +56,10 @@ class PolicyGroupUserFactory extends Factory {
 		$pglf = new PolicyGroupListFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
-		$query = 'select a.id from '. $this->getTable() .' as a, '. $pglf->getTable() .' as b where a.policy_group_id = b.id AND a.user_id = ? AND b.deleted=0';
+		$query = 'select a.id from '. $this->getTable() .' as a, '. $pglf->getTable() .' as b where a.policy_group_id = b.id AND a.user_id = :id AND b.deleted=0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {

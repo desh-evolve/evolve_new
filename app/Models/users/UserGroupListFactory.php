@@ -31,13 +31,13 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'id' => (int)$id,
+					':id' => (int)$id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 				';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -57,15 +57,15 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND id = ?
+					where	company_id = :company_id
+						AND id = :id
 						AND deleted = 0
 				';
 
@@ -83,13 +83,13 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0
 				';
 		$query .= $this->getWhereSQL( $where );
@@ -246,7 +246,7 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -260,7 +260,7 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

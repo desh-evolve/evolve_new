@@ -8,6 +8,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class PayStubEntryAccountFactory extends Factory {
 	protected $table = 'pay_stub_entry_account';
@@ -197,12 +198,12 @@ class PayStubEntryAccountFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'type_id' => $this->getType(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':type_id' => $this->getType(),
+					':name' => $name,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND type_id = ? AND name = ? AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND type_id = :type_id AND name = :name AND deleted=0';
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {

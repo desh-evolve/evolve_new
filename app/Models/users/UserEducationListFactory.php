@@ -46,13 +46,13 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 
 		
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from 	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 
 			$this->rs = DB::select($query, $ph);
@@ -86,7 +86,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 		
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -95,7 +95,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 							'. $uf->getTable() .' as b
 					
 					where 	a.user_id = b.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );

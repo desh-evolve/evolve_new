@@ -10,7 +10,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
        
      
     
-    	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+    function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $order == NULL ) {
 			$order = array( 'name' => 'asc' );
 			$strict = FALSE;
@@ -39,20 +39,20 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
         
         
         
-        function getById($id) {
+    function getById($id) {
 		if ( $id == '') {
 			return FALSE;
 		}
 
 		
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from 	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 
 			$this->rs = DB::select($query, $ph);
@@ -65,7 +65,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
         
         
           
-      function getByUserIdAndCompanyId($user_id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+    function getByUserIdAndCompanyId($user_id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $user_id == '') {
 			return FALSE;
 		}
@@ -86,7 +86,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 		
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -95,7 +95,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 							'. $uf->getTable() .' as b
 					
 					where 	a.user_id = b.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );

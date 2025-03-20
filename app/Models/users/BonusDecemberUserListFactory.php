@@ -32,13 +32,13 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -59,15 +59,15 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-                                        'bonus_december_id' =>$bonus_december_id,
-					);
+					':user_id' => $user_id,
+                    ':bonus_december_id' =>$bonus_december_id,
+				);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ? 
-                                                AND bonus_december_id = ? 
+					where	user_id = :user_id
+                        AND bonus_december_id = :bonus_december_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -84,15 +84,15 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
-                                        'bonus_december_id' => $bonus_december_id,
-					);
+					':id' => $id,
+                    ':bonus_december_id' => $bonus_december_id,
+				);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ? 
-                                                AND bonus_december_id = ? 
+					where	user_id = :id
+                        AND bonus_december_id = :bonus_december_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -112,14 +112,13 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		}
 
 		$ph = array(
-					
-                                        'bonus_december_id' =>$bonus_december_id,
-					);
+				':bonus_december_id' =>$bonus_december_id,
+				);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	bonus_december_id = ? 
+					where	bonus_december_id = :bonus_december_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

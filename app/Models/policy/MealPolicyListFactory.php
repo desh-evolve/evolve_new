@@ -37,13 +37,13 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 		if ( $this->rs === FALSE ) {
 
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -66,15 +66,15 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND company_id = ?
+					where	id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -101,7 +101,7 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 		$cgmf = new CompanyGenericMapFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -113,7 +113,7 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 					where 	a.policy_group_id = b.id
 						AND ( b.id = c.object_id AND c.company_id = b.company_id AND c.object_type_id = 150)
 						AND c.map_id = d.id
-						AND a.user_id = ?
+						AND a.user_id = :user_id
 						AND ( b.deleted = 0 AND d.deleted = 0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -141,8 +141,8 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 		$cgmf = new CompanyGenericMapFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'day_total_time' => $day_total_time,
+					':user_id' => $user_id,
+					':day_total_time' => $day_total_time,
 					);
 
 		$query = '
@@ -154,8 +154,8 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 					where 	a.policy_group_id = b.id
 						AND ( b.id = c.object_id AND c.company_id = b.company_id AND c.object_type_id = 150)
 						AND c.map_id = d.id
-						AND a.user_id = ?
-						AND d.trigger_time <= ?
+						AND a.user_id = :user_id
+						AND d.trigger_time <= :day_total_time
 						AND ( b.deleted = 0 AND d.deleted = 0 )
 					ORDER BY d.trigger_time DESC
 					LIMIT 1
@@ -184,14 +184,14 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 		$cgmf = new CompanyGenericMapFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*,
 							(select count(*) from '. $cgmf->getTable() .' as z where z.company_id = a.company_id AND z.object_type_id = 150 AND z.map_id = a.id) as assigned_policy_groups
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -239,7 +239,7 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -253,7 +253,7 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -269,8 +269,8 @@ class MealPolicyListFactory extends MealPolicyFactory implements IteratorAggrega
 			$query  .=	' AND a.type_id in ('. $this->getListSQL($filter_data['type_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = strtolower(trim($filter_data['name']));
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';

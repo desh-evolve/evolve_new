@@ -33,13 +33,13 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -64,13 +64,13 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		}
 
 		$ph = array(
-					'company_id' => $id,
+					':company_id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND deleted=0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -95,15 +95,15 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND id = ?
+					where	company_id = :company_id
+						AND id = :id
 						AND deleted=0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

@@ -34,13 +34,13 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -56,13 +56,13 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		}
 
 		$ph = array(
-					'status_id' => $status_id,
+					':status_id' => $status_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	status_id = ?
+					where	status_id = :status_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -82,15 +82,15 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		}
 
 		$ph = array(
-					'status_id' => $status_id,
-					'start_date' => $start_date,
+					':status_id' => $status_id,
+					':start_date' => $start_date,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	status_id = ?
-						AND start_date <= ?
+					where	status_id = :status_id
+						AND start_date <= :start_date
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -110,15 +110,15 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND company_id = ?
+					where	id = :id
+						AND company_id = :company_id
 						AND deleted = 0
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -141,13 +141,13 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		}
 
 		$ph = array(
-					'company_id' => $id,
+					':company_id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -230,7 +230,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		$pseaf = new PayStubEntryAccountFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -248,7 +248,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -271,12 +271,12 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		}
 
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = strtolower(trim($filter_data['name']));
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['description']) AND trim($filter_data['description']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['description']));
-			$query  .=	' AND lower(a.description) LIKE ?';
+			$ph[':description'] = strtolower(trim($filter_data['description']));
+			$query  .=	' AND lower(a.description) LIKE :description';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {

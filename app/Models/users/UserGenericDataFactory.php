@@ -7,6 +7,7 @@ use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTi18n;
+use Illuminate\Support\Facades\DB;
 
 class UserGenericDataFactory extends Factory {
 	protected $table = 'user_generic_data';
@@ -115,16 +116,16 @@ class UserGenericDataFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'script' => $this->getScript(),
-					'name' => strtolower( $name ),
+					':company_id' => $this->getCompany(),
+					':script' => $this->getScript(),
+					':name' => strtolower( $name ),
 					);
 
 		$query = 'select id from '. $this->getTable() .'
 					where
-						company_id = ?
-						AND script = ?
-						AND lower(name) = ? ';
+						company_id = :company_id
+						AND script = :script
+						AND lower(name) = :name ';
 		if (  $this->getUser() != '' ) {
 			$query .= ' AND user_id = '. (int)$this->getUser();
 		} else {

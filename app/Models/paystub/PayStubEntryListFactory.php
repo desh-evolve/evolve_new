@@ -1282,13 +1282,13 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 										group by b.user_id,b.pay_period_id
 									) as tmp ON y.id = tmp.user_id AND x.id = tmp.pay_period_id ';
 
-		$ph[] = $id;
-		$ph[] = Carbon::parse( $start_date )->toDateTimeString();
-		$ph[] = Carbon::parse( $end_date )->toDateTimeString();
+		$ph[':id'] = $id;
+		$ph[':start_date'] = Carbon::parse( $start_date )->toDateTimeString();
+		$ph[':start_date'] = Carbon::parse( $end_date )->toDateTimeString();
 		$query .= '
-					where y.id = ?
-						AND x.start_date >= ?
-						AND x.start_date < ?
+					where y.id = :id
+						AND x.start_date >= :start_date
+						AND x.start_date < :start_date
 						AND x.deleted = 0
 				';
 

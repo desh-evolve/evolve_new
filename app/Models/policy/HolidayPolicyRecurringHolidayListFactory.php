@@ -30,13 +30,13 @@ class HolidayPolicyRecurringHolidayListFactory extends HolidayPolicyRecurringHol
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -55,13 +55,13 @@ class HolidayPolicyRecurringHolidayListFactory extends HolidayPolicyRecurringHol
 		//$pgf = new PolicyGroupFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.holiday_policy_id = ?
+					where	a.holiday_policy_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

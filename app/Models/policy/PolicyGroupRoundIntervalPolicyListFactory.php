@@ -30,13 +30,13 @@ class PolicyGroupRoundIntervalPolicyListFactory extends PolicyGroupRoundInterval
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,7 +54,7 @@ class PolicyGroupRoundIntervalPolicyListFactory extends PolicyGroupRoundInterval
 		$pgf = new PolicyGroupFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -62,7 +62,7 @@ class PolicyGroupRoundIntervalPolicyListFactory extends PolicyGroupRoundInterval
 					from	'. $this->getTable() .' as a,
 							'. $pgf->getTable() .' as b
 					where	b.id = a.policy_group_id
-						AND a.policy_group_id = ?
+						AND a.policy_group_id = :id
 						';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

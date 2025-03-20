@@ -32,13 +32,13 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,13 +54,13 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'user_id' => $id,
+					':user_id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -80,15 +80,15 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'id' => $id,
+					':user_id' => $user_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND id = ?
+					where	user_id = :user_id
+						AND id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -117,15 +117,15 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'script' => $script,
+					':user_id' => $user_id,
+					':script' => $script,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND script = ?
+					where	user_id = :user_id
+						AND script = :script
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -154,17 +154,17 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'script' => $script,
-					'default' => $this->toBool($default),
+					':user_id' => $user_id,
+					':script' => $script,
+					':default' => $this->toBool($default),
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND script = ?
-						AND is_default = ?
+					where	user_id = :user_id
+						AND script = :script
+						AND is_default = :default
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -212,13 +212,13 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND user_id is NULL
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -239,16 +239,16 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND user_id is NULL
-						AND id = ?
+						AND id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -277,16 +277,16 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'script' => $script
+					':company_id' => $company_id,
+					':script' => $script
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND user_id is NULL
-						AND script = ?
+						AND script = :script
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -315,18 +315,18 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'script' => $script,
-					'default' =>  $this->toBool($default)
+					':company_id' => $company_id,
+					':script' => $script,
+					':default' =>  $this->toBool($default)
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND user_id is NULL
-						AND script = ?
-						AND is_default = ?
+						AND script = :script
+						AND is_default = :default
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -359,13 +359,13 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['id']) AND isset($filter_data['id'][0]) AND !in_array(-1, (array)$filter_data['id']) ) {
@@ -382,8 +382,8 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		}
 
 		if ( isset($filter_data['is_default']) ) {
-			$ph[] = $this->toBool($filter_data['is_default']);
-			$query  .=	' AND a.is_default = ? ';
+			$ph[':is_default'] = $this->toBool($filter_data['is_default']);
+			$query  .=	' AND a.is_default = :is_default ';
 		}
 
 		$query .= 	'

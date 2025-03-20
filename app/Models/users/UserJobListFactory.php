@@ -35,13 +35,13 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -57,13 +57,13 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -89,8 +89,8 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -98,8 +98,8 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
-						AND	a.id = ?
+						AND	b.company_id = :company_id
+						AND	a.id = :id
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -131,8 +131,8 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -140,8 +140,8 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND a.company_id = ?
-						AND	b.user_id = ?
+						AND a.company_id = :company_id
+						AND	b.user_id = :user_id
 						AND b.deleted = 0';
 		$query .= $this->getSortSQL( $order, $strict );
 
@@ -163,13 +163,13 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	default_branch_id = ?
+					where	default_branch_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -185,13 +185,13 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -207,13 +207,13 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 						AND user_id is NULL
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -234,15 +234,15 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
-						AND user_id = ?
+					where	company_id = :company_id
+						AND user_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -286,7 +286,7 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 		$cf = new CurrencyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -326,7 +326,7 @@ class UserJobListFactory extends UserJobFactory implements IteratorAggregate {
 
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

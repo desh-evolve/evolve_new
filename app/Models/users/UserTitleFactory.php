@@ -81,13 +81,13 @@ class UserTitleFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':name' => $name,
 					);
 
 		$query = 'select id from '. $this->table .'
-					where company_id = ?
-						AND name = ?
+					where company_id = :company_id
+						AND name = :name
 						AND deleted = 0';
 		$name_id = DB::select($query, $ph);
 

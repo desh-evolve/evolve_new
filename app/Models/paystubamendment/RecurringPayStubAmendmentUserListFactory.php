@@ -30,13 +30,13 @@ class RecurringPayStubAmendmentUserListFactory extends RecurringPayStubAmendment
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -52,13 +52,13 @@ class RecurringPayStubAmendmentUserListFactory extends RecurringPayStubAmendment
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	recurring_ps_amendment_id = ?
+					where	recurring_ps_amendment_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -74,13 +74,13 @@ class RecurringPayStubAmendmentUserListFactory extends RecurringPayStubAmendment
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -100,15 +100,15 @@ class RecurringPayStubAmendmentUserListFactory extends RecurringPayStubAmendment
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'id' => $id,
+					':user_id' => $user_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	user_id = ?
-						AND	id = ?
+					where	user_id = :user_id
+						AND	id = :id
 					';
 		$query .= $this->getSortSQL( $order );
 

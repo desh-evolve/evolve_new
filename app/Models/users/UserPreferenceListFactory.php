@@ -106,8 +106,8 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -115,8 +115,8 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
-						AND	a.id = ?
+						AND	b.company_id = :company_id
+						AND	a.id = :id
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -137,8 +137,8 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -146,8 +146,8 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 					from	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where 	a.user_id = b.id
-						AND	a.user_id = ?
-						AND b.company_id = ?
+						AND	a.user_id = :id
+						AND b.company_id = :company_id
 						AND (a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -209,7 +209,7 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 		$utf = new UserTitleFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -246,7 +246,7 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -293,20 +293,20 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 			$query  .=	' AND b.province in ('. $this->getListSQL($filter_data['province'], $ph) .') ';
 		}
 		if ( isset($filter_data['user_name']) AND trim($filter_data['user_name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['user_name']));
-			$query  .=	' AND lower(b.user_name) LIKE ?';
+			$ph[':user_name'] = strtolower(trim($filter_data['user_name']));
+			$query  .=	' AND lower(b.user_name) LIKE :user_name';
 		}
 		if ( isset($filter_data['first_name']) AND trim($filter_data['first_name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['first_name']));
-			$query  .=	' AND lower(b.first_name) LIKE ?';
+			$ph[':first_name'] = strtolower(trim($filter_data['first_name']));
+			$query  .=	' AND lower(b.first_name) LIKE :first_name';
 		}
 		if ( isset($filter_data['last_name']) AND trim($filter_data['last_name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['last_name']));
-			$query  .=	' AND lower(b.last_name) LIKE ?';
+			$ph[':last_name'] = strtolower(trim($filter_data['last_name']));
+			$query  .=	' AND lower(b.last_name) LIKE :last_name';
 		}
 		if ( isset($filter_data['employee_number']) AND trim($filter_data['employee_number']) != '' ) {
-			$ph[] = trim($filter_data['employee_number']);
-			$query  .=	' AND b.employee_number LIKE ?';
+			$ph[':employee_number'] = trim($filter_data['employee_number']);
+			$query  .=	' AND b.employee_number LIKE :employee_number';
 		}
 
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {

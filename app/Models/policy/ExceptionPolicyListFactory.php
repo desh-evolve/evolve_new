@@ -33,13 +33,13 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -61,8 +61,8 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$epcf = new ExceptionPolicyControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -71,8 +71,8 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 							'. $epcf->getTable() .' as b
 					where
 						a.exception_policy_control_id = b.id
-						AND b.company_id = ?
-						AND a.id = ?
+						AND b.company_id = :company_id
+						AND a.id = :id
 						AND ( a.deleted = 0 AND b.deleted=0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -91,7 +91,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$epcf = new ExceptionPolicyControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -100,7 +100,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 							'. $epcf->getTable() .' as b
 					where
 						a.exception_policy_control_id = b.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND ( a.deleted = 0 AND b.deleted=0 )
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -124,13 +124,13 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	exception_policy_control_id = ?
+					where	exception_policy_control_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -159,8 +159,8 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$epcf = new ExceptionPolicyControlFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'active' => $this->toBool( $active ),
+					':user_id' => $user_id,
+					':active' => $this->toBool( $active ),
 					);
 
 		$query = '
@@ -172,8 +172,8 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 					where 	a.policy_group_id = b.id
 						AND b.exception_policy_control_id = c.id
 						AND c.id = d.exception_policy_control_id
-						AND a.user_id = ?
-						AND d.active = ?
+						AND a.user_id = :user_id
+						AND d.active = :active
 						AND d.type_id in ('. $this->getListSQL($type_id, $ph) .')
 						AND ( b.deleted = 0 AND c.deleted=0 AND d.deleted=0)
 						';
@@ -202,8 +202,8 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$epcf = new ExceptionPolicyControlFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
-					'active' => $this->toBool( $active ),
+					':user_id' => $user_id,
+					':active' => $this->toBool( $active ),
 					);
 
 		$query = '
@@ -215,8 +215,8 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 					where 	a.policy_group_id = b.id
 						AND b.exception_policy_control_id = c.id
 						AND c.id = d.exception_policy_control_id
-						AND a.user_id = ?
-						AND d.active = ?
+						AND a.user_id = :user_id
+						AND d.active = :active
 						AND ( b.deleted = 0 AND c.deleted=0 AND d.deleted=0)
 						';
 		$query .= $this->getWhereSQL( $where );
@@ -269,7 +269,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$epcf = new ExceptionPolicyControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -284,7 +284,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
 						LEFT JOIN '. $epcf->getTable() .' as b ON ( a.exception_policy_control_id = b.id AND b.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -303,7 +303,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 			$query  .=	' AND a.type_id in ('. $this->getListSQL($filter_data['type_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
+			$ph[':name'] = strtolower(trim($filter_data['name']));
 			$query  .=	' AND lower(a.name) LIKE ?';
 		}
 
