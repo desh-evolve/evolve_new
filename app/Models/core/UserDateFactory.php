@@ -10,7 +10,6 @@ use App\Models\Users\UserPreferenceListFactory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class UserDateFactory extends Factory {
 	protected $table = 'user_date';

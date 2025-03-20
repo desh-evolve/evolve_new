@@ -28,7 +28,7 @@ class Authentication {
 		global $db;
 
 		// $this->db = $db;
-        DB::select($db);
+        //DB::select($db);
 
 		$this->rl = new RateLimit();
 		$this->rl->setID( 'authentication_'.$_SERVER['REMOTE_ADDR'] );
