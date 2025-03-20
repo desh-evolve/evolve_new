@@ -120,22 +120,42 @@ class EditBankAccount extends Controller
         // var_dump($data['company_id']);
         Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
 
+        // $this->branchBankAccountFactory->setId($id ?? null); // Use $id if editing, otherwise null for add
+        // $this->branchBankAccountFactory->setDefaultBranch($data['default_branch_id'] ?? null);
+        // $this->branchBankAccountFactory->setInstitution($data['institution'] ?? null);
+        // $this->branchBankAccountFactory->setTransit($data['transit'] ?? null);
+        // $this->branchBankAccountFactory->setAccount($data['account'] ?? null);
+        // $this->branchBankAccountFactory->setBankName($data['bank_name'] ?? null);
+        // $this->branchBankAccountFactory->setBankBranch($data['bank_branch'] ?? null);
+        // $this->branchBankAccountFactory->setCompany($data['company_id'] ?? null);
+
+
         $this->branchBankAccountFactory->setId($id ?? null); // Use $id if editing, otherwise null for add
-        $this->branchBankAccountFactory->setDefaultBranch($data['default_branch_id'] ?? null);
-        $this->branchBankAccountFactory->setInstitution($data['institution'] ?? null);
-        $this->branchBankAccountFactory->setTransit($data['transit'] ?? null);
-        $this->branchBankAccountFactory->setAccount($data['account'] ?? null);
-        $this->branchBankAccountFactory->setBankName($data['bank_name'] ?? null);
-        $this->branchBankAccountFactory->setBankBranch($data['bank_branch'] ?? null);
-        $this->branchBankAccountFactory->setCompany($data['company_id'] ?? null);
-        
-        if (isset($data)) {
-           
+        // $this->branchBankAccountFactory->setCompany($current_company->getId());
+        $this->branchBankAccountFactory->setDefaultBranch($data['default_branch_id'] ?? '');
+        $this->branchBankAccountFactory->setInstitution('000');
+        $this->branchBankAccountFactory->setTransit($data['transit'] ?? '');
+        $this->branchBankAccountFactory->setAccount($data['account'] ?? '');
+        $this->branchBankAccountFactory->setBankName($data['bank_name'] ?? '');
+        $this->branchBankAccountFactory->setBankBranch($data['bank_branch'] ?? '');
+        $this->branchBankAccountFactory->setCompany($data['company_id'] ?? '');
+
+        // var_dump($data);
+
+        if ($this->branchBankAccountFactory->isValid()) {
             $this->branchBankAccountFactory->Save();
-            return redirect()->to(URLBuilder::getURL(null, '/branch/BranchList.php'))->with('success', 'Bank account saved successfully.');
-        } else {
-            // If validation fails, return back with errors
-            return redirect()->back()->withErrors(['error' => 'Invalid bank account data.'])->withInput();
+            return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Bank account  saved successfully.');
+        }else{
+            var_dump('aaa');
         }
+        
+        // if (isset($data)) {
+           
+        //     $this->branchBankAccountFactory->Save();
+        //     return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Bank account saved successfully.');
+        // } else {
+            // If validation fails, return back with errors
+            // return redirect()->back()->withErrors(['error' => 'Invalid bank account data.'])->withInput();
+        // }
     }
 }

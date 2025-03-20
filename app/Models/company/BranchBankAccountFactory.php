@@ -336,6 +336,14 @@ class BranchBankAccountFactory extends Factory {
 	}
 
 	function Validate() {
+		
+		echo 'getDeleted: ';
+		print_r($this->getDeleted());
+		echo '<br>';
+		echo 'isUnique: ';
+		print_r($this->isUnique());
+		echo '<br>';
+		exit;
 		//Make sure this entry is unique.
 		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
 			$this->Validator->isTRUE( 'account', FALSE, ('Bank account already exists') );

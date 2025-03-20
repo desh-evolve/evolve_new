@@ -40,7 +40,7 @@ class BranchBankAccountList extends Controller
 	public function index(Request $request)
 	{
 		$current_company = $this->company;
-        $current_user_prefs = $this->userPrefs;
+		$current_user_prefs = $this->userPrefs;
 		// // Permission check
 		// if (!$this->permission->Check('branch', 'enabled') ||
 		//     !($this->permission->Check('branch', 'view') || $this->permission->Check('branch', 'view_own'))) {
@@ -78,18 +78,18 @@ class BranchBankAccountList extends Controller
 
 		$bankAccounts = [];
 		// if ($bbalf->getRecordCount() > 0) {
-			foreach ($bbalf->rs as $bank) {
-				$bbalf->data = (array)$bank;
-				// print_r($blf->rs);
-				// exit;
-				$bankAccounts[] = [
-					'id' => $bbalf->GetId(),
-					'transit' => $bbalf->getTransit(),
-					'bank_name' => $bbalf->getBankName(),
-					'bank_branch' => $bbalf->getBankBranch(),
-					'account' => $bbalf->getAccount(),
-				];
-			}
+		foreach ($bbalf->rs as $bank) {
+			$bbalf->data = (array)$bank;
+			// print_r($blf->rs);
+			// exit;
+			$bankAccounts[] = [
+				'id' => $bbalf->GetId(),
+				'transit' => $bbalf->getTransit(),
+				'bank_name' => $bbalf->getBankName(),
+				'bank_branch' => $bbalf->getBankBranch(),
+				'account' => $bbalf->getAccount(),
+			];
+		}
 		// }
 
 		$blf = new BranchListFactory();
@@ -105,7 +105,6 @@ class BranchBankAccountList extends Controller
 			'sort_order' => $sort_order,
 			'paging_data' => $pager->getPageVariables()
 		];
-
 		return view('branch.BranchBankAccountList', $data);
 	}
 

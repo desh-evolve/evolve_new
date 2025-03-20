@@ -97,6 +97,7 @@
                         <input type="hidden" name="company_id" value="{{ $data['company_id'] ?? '' }}">
                         <input type="hidden" name="branch_id_new" value="{{ $branch_id_new ?? '' }}">
                         <input type="hidden" name="branch_id_saved" value="{{ $branch_id_saved ?? '' }}">
+                        {{-- <input type="hidden" name="default_branch_id" value="{{ $data['default_branch_id'] ?? '' }}"> --}}
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
