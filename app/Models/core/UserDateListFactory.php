@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
-	
+
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -160,8 +160,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
-					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -233,7 +233,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					':date' => Carbon::parse($date)->format('Y-m-d'),
+                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
 					);
 
 		$query = '
@@ -257,13 +257,13 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		if ( $date == '' OR $date <= 0 ) {
 			return FALSE;
-		}	
+		}
 
 		$uf = new UserFactory();
 
 		$ph = array(
 					':user_id' => $user_id,
-					':date' => Carbon::parse($date)->format('Y-m-d'),
+                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
 					);
 
 		$query = '
@@ -278,8 +278,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$this->rs = DB::select($query, $ph);
 
-                
-               
+
+
 		return $this;
 	}
 
@@ -306,8 +306,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
-					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -350,8 +350,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
-					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -492,8 +492,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':company_id' => $company_id,
-					':start_date' => Carbon::parse($start_date)->format('Y-m-d'),
-					':end_date' => Carbon::parse($end_date)->format('Y-m-d'),
+                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
+                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
 					);
 
 		$query = '
@@ -547,7 +547,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-					':date' => Carbon::parse($date)->format('Y-m-d'),
+                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
 					':deleted' => (int)$deleted
 					);
 
@@ -581,43 +581,44 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		return FALSE;
 	}
-        
-        
+
+
         function getTotalNopayTime($user_id,$absence_policy_id,$nopay_start_date,$nopay_end_date){
-            
+
               if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
-                
+
+
               if ( $absence_policy_id == '' ) {
 			return FALSE;
 		}
-                
+
               if ( $nopay_start_date == '' ) {
 			return FALSE;
 		}
-                
-                
+
+
                 $ph = array(
 					':user_id' => $user_id,
-                    ':absence_policy_id'=>$absence_policy_id,
-				);
-                
-                
+                                        ':absence_policy_id'=>$absence_policy_id,
+
+					);
+
+
                 $udtf= new UserDateTotalFactory();
-                
+
                 $query = "
 					SELECT sum(udt.total_time ) as total_nopay_time
-					FROM  ". $this->getTable() ." as a
-					inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
-					where a.user_id = :user_id
-					and udt.status_id = 30
-					and udt.type_id = 10
-					and udt.absence_policy_id = :absence_policy_id
-					and a.date_stamp between '".$nopay_start_date."' AND '".$nopay_end_date."'
-					and a.deleted = 0 
-					and udt.deleted = 0";
+FROM  ". $this->getTable() ." as a
+inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
+where a.user_id = :user_id
+and udt.status_id = 30
+and udt.type_id = 10
+and udt.absence_policy_id = :absence_policy_id
+and a.date_stamp between '".$nopay_start_date."' AND '".$nopay_end_date."'
+and a.deleted = 0
+and udt.deleted = 0";
 
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );
@@ -627,48 +628,48 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		return $this;
         }
 
-        
-        
-        
-        
-         
+
+
+
+
+
 function getTotalNopayTimeByPayperiods($user_id,$absence_policy_id,$pay_periods_id){
-            
+
               if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
-                
+
+
               if ( $absence_policy_id == '' ) {
 			return FALSE;
 		}
-                
+
               if ( $pay_periods_id == '' ) {
 			return FALSE;
 		}
-                
-                
+
+
                 $ph = array(
 					':user_id' => $user_id,
-					':absence_policy_id'=>$absence_policy_id,
-					':pay_period_id'=>$pay_periods_id,
-					
-				);
-                
-                
+                                        ':absence_policy_id'=>$absence_policy_id,
+                                        ':pay_period_id'=>$pay_periods_id,
+
+					);
+
+
                 $udtf= new UserDateTotalFactory();
-                
+
                 $query = "
 					SELECT sum(udt.total_time ) as total_nopay_time
-					FROM  ". $this->getTable() ." as a
-					inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
-					where a.user_id = :user_id
-					and udt.status_id = 30
-					and udt.type_id = 10
-					and udt.absence_policy_id = :absence_policy_id
-					and a.pay_period_id = :pay_period_id
-					and a.deleted = 0 
-					and udt.deleted = 0";
+FROM  ". $this->getTable() ." as a
+inner join ". $udtf->getTable() ." as udt on a.id = udt.user_date_id
+where a.user_id = :user_id
+and udt.status_id = 30
+and udt.type_id = 10
+and udt.absence_policy_id = :absence_policy_id
+and a.pay_period_id = :pay_period_id
+and a.deleted = 0
+and udt.deleted = 0";
 
 		//$query .= $this->getWhereSQL( $where );
 		//$query .= $this->getSortSQL( $order );

@@ -32,13 +32,13 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -61,8 +61,8 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 		$lf = new LogFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -70,8 +70,8 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 					from	'. $this->getTable() .' as a
 						LEFT JOIN  '. $lf->getTable() .' as lf on a.system_log_id = lf.id
 						LEFT JOIN  '. $uf->getTable() .' as uf on lf.user_id = uf.id
-					where	a.id = ?
-						AND uf.company_id = ?';
+					where	a.id = :id
+						AND uf.company_id = :company_id';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
@@ -100,8 +100,8 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 		$lf = new LogFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -109,8 +109,8 @@ class LogDetailListFactory extends LogDetailFactory implements IteratorAggregate
 					from	'. $this->getTable() .' as a
 						LEFT JOIN  '. $lf->getTable() .' as lf on a.system_log_id = lf.id
 						LEFT JOIN  '. $uf->getTable() .' as uf on lf.user_id = uf.id
-					where	a.system_log_id = ?
-						AND uf.company_id = ?';
+					where	a.system_log_id = :id
+						AND uf.company_id = :company_id';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 

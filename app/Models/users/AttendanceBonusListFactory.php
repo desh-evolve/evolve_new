@@ -8,7 +8,7 @@ use IteratorAggregate;
 
 class AttendanceBonusListFactory extends AttendanceBonusFactory implements IteratorAggregate {
     //put your code here
-	
+
     function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -48,7 +48,7 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 
 		return $this;
 	}
-        
+
     function getByCompanyId($id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
@@ -82,7 +82,7 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 		return $this;
 	}
 
-    
+
     function getByIdAndCompanyId($id, $company_id, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
@@ -111,8 +111,8 @@ class AttendanceBonusListFactory extends AttendanceBonusFactory implements Itera
 		return $this;
 	}
 
-        
-    
-        
-        
+
+
+
+
 }

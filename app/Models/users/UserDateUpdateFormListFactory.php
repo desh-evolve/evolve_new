@@ -74,9 +74,9 @@ class UserDateUpdateFormListFactory extends UserDateUpdateFormFactory implements
 	}
 
         /**
-         * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
+         * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * I COPIED THIS CODE FROM PATH :- evolvepayroll\classes\modules\users\UserWageListFactory.class.php
-         */        
+         */
         function getByIdAndCompanyId($id, $company_id, $order = NULL) {
 		if ( $id == '') {
 			return FALSE;
@@ -106,12 +106,12 @@ class UserDateUpdateFormListFactory extends UserDateUpdateFormFactory implements
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
-	}       
-        
+	}
+
         /**
-         * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
+         * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * I COPIED THIS CODE FROM PATH :- evolvepayroll\classes\modules\users\UserWageListFactory.class.php
-         */          
+         */
         function getByUserIdAndCompanyId($user_id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( empty($user_id) ) {
 			return FALSE;
@@ -152,10 +152,10 @@ class UserDateUpdateFormListFactory extends UserDateUpdateFormFactory implements
 		}
 
 		return $this;
-	}        
+	}
 
         /**
-         * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
+         * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          */
 	function getByBranchId($id, $where = NULL, $order = NULL) {
 		if ( $id == '') {
@@ -178,7 +178,7 @@ class UserDateUpdateFormListFactory extends UserDateUpdateFormFactory implements
 
 		return $this;
 	}
-        
+
 	function getByCompanyId($id, $where = NULL, $order = NULL) {
 		if ( $id == '') {
 			return FALSE;
@@ -199,7 +199,7 @@ class UserDateUpdateFormListFactory extends UserDateUpdateFormFactory implements
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
-	}        
+	}
 
 	function getCompanyAccountByCompanyId($id, $where = NULL, $order = NULL) {
 		if ( $id == '') {

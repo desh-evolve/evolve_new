@@ -32,13 +32,13 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,13 +54,13 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -112,35 +112,27 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		if (empty($id) || empty($type_id)) {
 			return FALSE;
 		}
-	
+
 		// Ensure $type_id is an array
 		if (!is_array($type_id)) {
 			$type_id = [$type_id];
 		}
-	
-		// Generate placeholders for the IN clause
-		$placeholders = implode(',', array_fill(0, count($type_id), '?'));
-	
-		// Prepare the query
+
+		$ph = array(
+					'id' => (int)$id,
+					//'type_id' => (int)$type_id,
+					);
+
 		$query = '
-			SELECT *
-			FROM ' . $this->getTable() . ' AS a
-			WHERE company_id = ?
-			AND type_id IN (' . $placeholders . ')
-			AND deleted = 0';
-	
-		// Add additional WHERE and ORDER BY clauses if provided
-		$query .= $this->getWhereSQL($where);
-		$query .= $this->getSortSQL($order);
-	
-		// Prepare parameters
-		$ph = array_merge([$id], $type_id);
-	
-		// Debugging: Output the query and parameters
-		
-	
-		// Execute the query
-		if ($limit === NULL) {
+					select 	*
+					from	'. $this->getTable() .' as a
+					where	company_id = ?
+						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
+						AND deleted = 0';
+		$query .= $this->getWhereSQL( $where );
+		$query .= $this->getSortSQL( $order );
+
+		if ($limit == NULL) {
 			$this->rs = DB::select($query, $ph);
 		} else {
 			// Handle pagination if needed
@@ -159,16 +151,16 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
 					where
-						a.company_id = ?
-						AND	a.id = ?
+						a.company_id = :company_id
+						AND	a.id = :id
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -178,10 +170,10 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 	}
 
 	function getByCompanyIdAndTypeIDArray($id, $type_id, $key_prefix = NULL, $name_prefix = NULL ) {
-	
+
 		$oflf = new OtherFieldListFactory();
 		$oflf->getByCompanyIdAndTypeID( $id, $type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL );
-	
+
 		if ( $oflf->getRecordCount() > 0 ) {
 			foreach($oflf->rs as $obj) {
 				$oflf->data = (array)$obj;
@@ -255,9 +247,9 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'created_date' => $date,
-					'updated_date' => $date,
+					':company_id' => $company_id,
+					':created_date' => $date,
+					':updated_date' => $date,
 					);
 
 		//INCLUDE Deleted rows in this query.
@@ -265,9 +257,9 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 					select 	*
 					from	'. $this->getTable() .'
 					where
-							company_id = ?
+							company_id = :company_id
 						AND
-							( created_date >= ? OR updated_date >= ? )
+							( created_date >= :created_date OR updated_date >= :updated_date )
 					LIMIT 1
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -319,7 +311,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -333,7 +325,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?';
+					where	a.company_id = :company_id';
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
 		}

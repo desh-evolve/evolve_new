@@ -30,13 +30,13 @@ class StationIncludeUserListFactory extends StationIncludeUserFactory implements
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,7 +54,7 @@ class StationIncludeUserListFactory extends StationIncludeUserFactory implements
 		$sf = new StationFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -62,7 +62,7 @@ class StationIncludeUserListFactory extends StationIncludeUserFactory implements
 					from	'. $this->getTable() .' as a,
 							'. $sf->getTable() .' as b
 					where	b.id = a.station_id
-						AND a.station_id = ?
+						AND a.station_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

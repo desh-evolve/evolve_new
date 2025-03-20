@@ -61,7 +61,7 @@ class UserFactory extends Factory {
 	protected $name_validator_regex = '/^[a-zA-Z -\.\'|\x{0080}-\x{FFFF}]{1,250}$/iu';
 	protected $address_validator_regex = '/^[a-zA-Z0-9-,_\/\.\'#\ |\x{0080}-\x{FFFF}]{1,250}$/iu';
 	protected $city_validator_regex = '/^[a-zA-Z0-9-,_\.\'#\ |\x{0080}-\x{FFFF}]{1,250}$/iu';
-	//ARSP EDIT--> ADD NEW CODE FOR VALIDATE THE NIC 
+	//ARSP EDIT--> ADD NEW CODE FOR VALIDATE THE NIC
         protected $nic_validator = '/^[0-9]{9,12}[0-9VvXx]$/';
 
 	function _getFactoryOptions( $name ) {
@@ -79,7 +79,7 @@ class UserFactory extends Factory {
 										20 => ('Terminated'),
 									);
 				break;
-                            
+
                         case 'title':
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
@@ -88,7 +88,7 @@ class UserFactory extends Factory {
 										20 => ('Mrs'),
 										30 => ('Miss'),
 										40 => ('Hon'),
-										
+
 									);
 				break;
                            case 'religion':
@@ -99,7 +99,7 @@ class UserFactory extends Factory {
 										20 => ('Christian'),
 										30 => ('Tamil'),
 										40 => ('Muslim'),
-										
+
 									);
 				break;
 			case 'sex':
@@ -143,7 +143,7 @@ class UserFactory extends Factory {
 
 										'-1130-address1' => ('Address 1'),
 										'-1140-address2' => ('Address 2'),
-										
+
     	/* ARSP ADD CODE---> */             '-1145-nic' => ('Nic'),
 
 										'-1150-city' => ('City'),
@@ -163,8 +163,8 @@ class UserFactory extends Factory {
 										'-1280-sin' => ('SIN/SSN'),
 										'-1290-note' => ('Note'),
                          /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1291-hire_note' => ('HireNote'),
-                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1292-termination_note' => ('TerminationNote'),                                    
-										
+                         /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/ '-1292-termination_note' => ('TerminationNote'),
+
 										'-1300-tag' => ('Tags'),
 										'-1400-hierarchy_control_display' => ('Hierarchy'),
 										'-2000-created_by' => ('Created By'),
@@ -200,9 +200,9 @@ class UserFactory extends Factory {
 								'postal_code'
 								);
 				break;
-                        /** 
+                        /**
                          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                         */    
+                         */
 			case 'month':
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
@@ -219,13 +219,13 @@ class UserFactory extends Factory {
 										10 => ('10'),
 										11 => ('11'),
 										12 => ('12'),
-                                    
-									);
-				break;  
 
-                       /** 
+									);
+				break;
+
+                       /**
                          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                         */    
+                         */
 			case 'bond_period':
 				$retval = array(
 										//Add System users (for APIs and reseller admin accounts)
@@ -239,9 +239,9 @@ class UserFactory extends Factory {
 										24 => ('24'),
 										30 => ('30'),
 										36 => ('36'),
-                                    
+
 									);
-				break; 				
+				break;
 
 		}
 
@@ -310,8 +310,8 @@ class UserFactory extends Factory {
 										'other_id5' => 'OtherID5',
 										'note' => 'Note',
                           /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/'hire_note' => 'HireNote',
-                          /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/'termination_note' => 'TerminationNote',                    
-										
+                          /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/'termination_note' => 'TerminationNote',
+
 										'password_reset_key' => 'PasswordResetKey',
 										'password_reset_date' => 'PasswordResetDate',
 										'tag' => 'Tag',
@@ -320,8 +320,8 @@ class UserFactory extends Factory {
  										);
 		return $variable_function_map;
 	}
-	
-	
+
+
 	//ARSP EDIT - > Add some code to remove already stored picture
     function cleanStoragePath( $user_id = NULL ) {
 		if ( $user_id == '' ) {
@@ -343,12 +343,12 @@ class UserFactory extends Factory {
 
 		return TRUE;
 	}
-	
+
 	//ARSP EDIT - > get user image storage path
 	function getStoragePath($user_id=null) {
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
-                        
+
 		}
 
 		if ( $user_id == '' ) {
@@ -356,13 +356,13 @@ class UserFactory extends Factory {
 		}
 
 		return Environment::getStorageBasePath().'user_image'.DIRECTORY_SEPARATOR.$user_id;
-                
+
 	}
-	
+
 	 //ARSP EDIT-> get user uploaded all files URL like--- >http://localhost/evolvepayroll/storage/user_file/ex.txt
      function getUserFilesUrl( ) {
-	 
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserFileStoragePathTest( $this->getId() ))) {
                     $x=0;
@@ -377,7 +377,7 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
 //                echo '<pre>';
-//                echo "ARSP-->"; 
+//                echo "ARSP-->";
 //                print_r($file_array);
 //                echo '<pre>';
 //                    print_r(glob($_SERVER['DOCUMENT_ROOT'].'/'.$file.'/*'));
@@ -409,11 +409,11 @@ class UserFactory extends Factory {
 //		return $logo_file_name;
                 return $file_array;
 	}
-	
-	
+
+
 	 //ARSP EDIT - > get original storage path like --> C:\xampp\htdocs\evolvepayroll\storage\user_file\1
      function getUserFileStoragePathTest( $user_id = NULL ) {
-	 
+
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
 		}
@@ -421,7 +421,7 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 
 		return Environment::getStorageBasePath() .'user_file'. '/'. $user_id;
@@ -430,8 +430,8 @@ class UserFactory extends Factory {
                 //return Environment::getUserFileStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
                 //return 'storage\User_file'. DIRECTORY_SEPARATOR . $user_id;
 	}
-	
-	
+
+
 	   //ARSP EDIT - > get user files storage path
        function getUserFileStoragePath( $user_id = NULL ) {
 		if ( $user_id == '' ) {
@@ -441,7 +441,7 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getUserFileStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 
 		//return Environment::getStorageBasePath() . DIRECTORY_SEPARATOR .'User_file'. DIRECTORY_SEPARATOR . $user_id;
@@ -449,16 +449,16 @@ class UserFactory extends Factory {
                 return Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
                 //return 'storage\User_file'. DIRECTORY_SEPARATOR . $user_id;
 	}
-	
-        
-        
-        
-        
+
+
+
+
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserIdCopyUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserIdCopyStoragePath( $this->getId() ))) {
                     $x=0;
@@ -467,19 +467,19 @@ class UserFactory extends Factory {
                 //echo $entry."</br>";
                     $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_id_copy'. '/' .$this->getId().'/'.$entry;
                     $x++;
-                        }       
+                        }
                     }
                 //print_r($file_array);
                 closedir($handle);
                 }
                 return $file_array;
             }
-            
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
         	function getUserIdCopyStoragePath( $user_id = NULL ) {
-                    
+
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
 		}
@@ -487,11 +487,11 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 		return Environment::getStorageBasePath() .'user_id_copy'. '/'. $user_id;
-                }    
-                
+                }
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
@@ -510,14 +510,14 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
                 return $file_array;
-                    
-                }                
-        
+
+                }
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserBirthCertificateUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserBirthCertificateStoragePath( $this->getId() ))) {
                     $x=0;
@@ -526,19 +526,19 @@ class UserFactory extends Factory {
                 //echo $entry."</br>";
                     $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_birth_certificate'. '/' .$this->getId().'/'.$entry;
                     $x++;
-                        }       
+                        }
                     }
                 //print_r($file_array);
                 closedir($handle);
                 }
                 return $file_array;
             }
-            
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
         	function getUserBirthCertificateStoragePath( $user_id = NULL ) {
-                    
+
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
 		}
@@ -546,11 +546,11 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 		return Environment::getStorageBasePath() .'user_birth_certificate'. '/'. $user_id;
-                }    
-                
+                }
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
@@ -569,15 +569,15 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
                 return $file_array;
-                    
-                }                  
-                
-                
+
+                }
+
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserGsLetterUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserGsLetterStoragePath( $this->getId() ))) {
                     $x=0;
@@ -586,19 +586,19 @@ class UserFactory extends Factory {
                 //echo $entry."</br>";
                     $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_gs_letter'. '/' .$this->getId().'/'.$entry;
                     $x++;
-                        }       
+                        }
                     }
                 //print_r($file_array);
                 closedir($handle);
                 }
                 return $file_array;
             }
-            
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
         	function getUserGsLetterStoragePath( $user_id = NULL ) {
-                    
+
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
 		}
@@ -606,11 +606,11 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 		return Environment::getStorageBasePath() .'user_gs_letter'. '/'. $user_id;
-                }    
-                
+                }
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
@@ -629,17 +629,17 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
                 return $file_array;
-                    
-                }                  
-                
-                
-                
-                
+
+                }
+
+
+
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserPoliceReportUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserPoliceReportStoragePath( $this->getId() ))) {
                     $x=0;
@@ -648,19 +648,19 @@ class UserFactory extends Factory {
                 //echo $entry."</br>";
                     $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_police_report'. '/' .$this->getId().'/'.$entry;
                     $x++;
-                        }       
+                        }
                     }
                 //print_r($file_array);
                 closedir($handle);
                 }
                 return $file_array;
             }
-            
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
         	function getUserPoliceReportStoragePath( $user_id = NULL ) {
-                    
+
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
 		}
@@ -668,11 +668,11 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 		return Environment::getStorageBasePath() .'user_police_report'. '/'. $user_id;
-                }    
-                
+                }
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
@@ -691,16 +691,16 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
                 return $file_array;
-                    
-                }   
-                
-        
-                
+
+                }
+
+
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserNdaUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserNdaUrlStoragePath( $this->getId() ))) {
                     $x=0;
@@ -709,19 +709,19 @@ class UserFactory extends Factory {
                 //echo $entry."</br>";
                     $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_nda'. '/' .$this->getId().'/'.$entry;
                     $x++;
-                        }       
+                        }
                     }
                 //print_r($file_array);
                 closedir($handle);
                 }
                 return $file_array;
             }
-            
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
         	function getUserNdaUrlStoragePath( $user_id = NULL ) {
-                    
+
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
 		}
@@ -729,11 +729,11 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 		return Environment::getStorageBasePath() .'user_nda'. '/'. $user_id;
-                }    
-                
+                }
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
@@ -752,15 +752,15 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
                 return $file_array;
-                    
-                }   
-                
-                
+
+                }
+
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getBondUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getBondUrlStoragePath( $this->getId() ))) {
                     $x=0;
@@ -769,19 +769,19 @@ class UserFactory extends Factory {
                 //echo $entry."</br>";
                     $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_bond'. '/' .$this->getId().'/'.$entry;
                     $x++;
-                        }       
+                        }
                     }
                 //print_r($file_array);
                 closedir($handle);
                 }
                 return $file_array;
             }
-            
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
         	function getBondUrlStoragePath( $user_id = NULL ) {
-                    
+
 		if ( $user_id == '' ) {
 			$user_id = $this->getId();
 		}
@@ -789,11 +789,11 @@ class UserFactory extends Factory {
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
-                
+
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 		return Environment::getStorageBasePath() .'user_bond'. '/'. $user_id;
-                }    
-                
+                }
+
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
@@ -812,13 +812,13 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
                 return $file_array;
-                    
-                } 
-                        
-        
-        
-        
-        
+
+                }
+
+
+
+
+
 		 //ARSP EDIT-> get user uploaded all files only file name
 	    function getFileName()
                 {
@@ -835,65 +835,65 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
                 return $file_array;
-                    
+
                 }
-				
+
 			                //FL EDIT --> ADD NEW CODE FOR GET PROBATION PERIOD 20160127
                 function getEmpBasisType()
                 {
                     if(isset($this->data['basis_of_employment'])){
                         return $this->data['basis_of_employment'];
                     }
-                    
+
                     return FALSE;
-                    
+
                 }
-                
+
               //FL EDIT --> ADD NEW CODE FOR GET PROBATION PERIOD 20160127
                 function SetEmpBasisType($probation)
                 {
                     $probation = trim($probation);
-                    
+
                     if($probation != ''){
                         $this->data['basis_of_employment'] = $probation;
-                        
+
                         return TRUE;
                     }
-                    
+
                     return FALSE;
-                
+
                 }
-                        
-					
-				
-				                //ARSP EDIT --> ADD NEW CODE FOR GET PROBATION PERIOD 
+
+
+
+				                //ARSP EDIT --> ADD NEW CODE FOR GET PROBATION PERIOD
                 function getProbation()
                 {
                     if(isset($this->data['probation'])){
                         return $this->data['probation'];
                     }
-                    
+
                     return FALSE;
-                    
+
                 }
-                
-                ////ARSP EDIT --> ADD NEW CODE FOR SET PROBATION PERIOD 
+
+                ////ARSP EDIT --> ADD NEW CODE FOR SET PROBATION PERIOD
                 function setProbation($probation)
                 {
                     $probation = trim($probation);
-                    
+
                     if($probation != ''){
                         $this->data['probation'] = $probation;
-                        
+
                         return TRUE;
                     }
-                    
+
                     return FALSE;
-                
+
                 }
-				
-	
-                
+
+
+
                 /*
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
@@ -902,91 +902,91 @@ class UserFactory extends Factory {
                     if(isset($this->data['basis_of_employment'])){
                         return $this->data['basis_of_employment'];
                     }
-                    
+
                     return FALSE;
-                    
+
                 }
-                
+
                 /*
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function setBasisOfEmployment($basis_of_employment)
                 {
                     $basis_of_employment = trim($basis_of_employment);
-                    
+
                     if($basis_of_employment != ''){
                         $this->data['basis_of_employment'] = $basis_of_employment;
-                        
+
                         return TRUE;
                     }
-                    
+
                     return FALSE;
-                
-                }                
-				
-				
-                //ARSP EDIT --> ADD NEW CODE FOR GET WARNING MESSAGES FOR IF PROBATION PERIOD IS EXCEED 
+
+                }
+
+
+                //ARSP EDIT --> ADD NEW CODE FOR GET WARNING MESSAGES FOR IF PROBATION PERIOD IS EXCEED
                 //WARNING WILL BE SHOW BEFOR THE END OF THE MONTH TO TILL CONFIRME ADMMIN
                 function getWarning($hdate, $probation)
-                {            
-                    $hire_date = date('d-m-Y',$hdate); 
+                {
+                    $hire_date = date('d-m-Y',$hdate);
                     $now_date = date('d-m-Y');
-                        
+
                     $end_date = new DateTime($hire_date );
                     $period = "+".($probation -1);
                     $end_date->modify($period.' month');// modify('+3 month')this function find the after the given time period of the date
                     //echo "Test";
-                    
+
                     $real_end_date = new DateTime($hire_date );
                     $real_period = "+".$probation;
                     $real_end_date->modify($real_period.' month');
-                    
-                    
-                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY 
+
+
+                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY
                     $end = new DateTime($now_date);
                     $warning ="";
                     if($start <=  $end )
                     {
                          $warning =  "WARNING: Confirmation Due on ".($real_end_date->format('d-m-Y')).".";
-                        return  $warning;  
-                        
+                        return  $warning;
+
                     }
                     else
                     {
-                         return  $warning;                        
-                    }        
-                         
+                         return  $warning;
+                    }
+
                 }
-                
-                
-                
+
+
+
                 /**
                  * ARSP NOTE --> I CHANGED THIS ORIGINAL CODE FOR THUNDER & NEON
                  */
-                //ARSP EDIT --> ADD NEW CODE FOR GET WARNING MESSAGES FOR IF PROBATION PERIOD IS EXCEED 
+                //ARSP EDIT --> ADD NEW CODE FOR GET WARNING MESSAGES FOR IF PROBATION PERIOD IS EXCEED
                 //WARNING WILL BE SHOW BEFOR THE END OF THE MONTH TO TILL CONFIRME ADMMIN
                 function getWarning1($hdate, $basis_of_employment_month, $basis_of_employment)
-                {            
-                    $hire_date = date('d-m-Y',$hdate); 
+                {
+                    $hire_date = date('d-m-Y',$hdate);
                     $now_date = date('d-m-Y');
-                    
+
 
                     $real_end_date = new DateTime($hire_date );
                     $real_period = "+".$basis_of_employment_month;
                     $real_end_date->modify($real_period.' month');
-                    
+
                     //echo "After the 3 months(real end date) =".$real_end_date->format('Y-m-d');
                     //echo "<p/>";
-                    
+
                     $end_date = new DateTime($real_end_date->format('d-m-Y'));
                     $period = "-45";//before the 45 days want to show the warning message
                     $end_date->modify($period.' day');// modify('+3 month')this function find the after the given time period of the date
-                    
+
                     //echo "Warning start date =".$end_date->format('Y-m-d');
-                    
-                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY 
+
+                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY
                     $end = new DateTime($now_date);
-                    
+
                     $basis_of_employment_option = "";
                     switch ($basis_of_employment) {
                         case 1:$basis_of_employment_option = "Contract";
@@ -996,7 +996,7 @@ class UserFactory extends Factory {
                         case 3:$basis_of_employment_option = "Permanent with Probation";
                             break;
                         case 5:$basis_of_employment_option = "Resign";
-                            break;                        
+                            break;
                         default:
                             break;
                     }
@@ -1004,33 +1004,33 @@ class UserFactory extends Factory {
                     if($start <=  $end )
                     {
                         $warning =  "WARNING(".$basis_of_employment_option."): Confirmation Due on ".($real_end_date->format('d-m-Y')).".";
-                        return  $warning;                       
+                        return  $warning;
                     }
                     else
                     {
-                         return  $warning;                        
-                    }        
-                         
-                }                  
-                
-                //ARSP EDIT --> ADD NEW CODE FOR GET PROBATION WARNING EMPLOYEES LIST  
+                         return  $warning;
+                    }
+
+                }
+
+                //ARSP EDIT --> ADD NEW CODE FOR GET PROBATION WARNING EMPLOYEES LIST
                 function getWarningEmployees($users)
-                {                    
-                    
+                {
+
                     foreach ($users as $u_obj) {
 
-                                                                                $hire_date = date('d-m-Y',$u_obj['hire_date']); 
+                                                                                $hire_date = date('d-m-Y',$u_obj['hire_date']);
                                                                                 $now_date = date('d-m-Y');
                                                                                 $end_date = new DateTime($hire_date );
                                                                                 $probation = $u_obj['probation'];
                                                                                 $period = "+".($probation -1);
                                                                                 $end_date->modify($period.' month');// modify('+3 month')this function find the after the given time period of the date
-                                                                                
+
                                                                                 $real_end_date = new DateTime($hire_date );
                                                                                 $real_period = "+".$probation;
                                                                                 $real_end_date->modify($real_period.' month');
 
-                                                                                $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY 
+                                                                                $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY
                                                                                 $end = new DateTime($now_date);
 
                                                                                 $warning ="";
@@ -1038,29 +1038,29 @@ class UserFactory extends Factory {
                                                                                 {
                                                                                     array_push($u_obj,($real_end_date->format('d-m-Y'))); // addd another index in to the same array
                                                                                     $warning_employee[] = $u_obj;
-                                                                                    
+
                                                                                     //$warning_employee[1] = $real_end_date->format('d-m-Y');
 
-                                                                                }    
-                    }            
-                    return $warning_employee;             
-                }				
-				
-				
-                //ARSP EDIT --> ADD NEW CODE FOR GET PROBATION WARNING EMPLOYEES LIST  
+                                                                                }
+                    }
+                    return $warning_employee;
+                }
+
+
+                //ARSP EDIT --> ADD NEW CODE FOR GET PROBATION WARNING EMPLOYEES LIST
                 function getWarningBasisOfEmployment($users)
-                {                    
-                    
+                {
+
                     foreach ($users as $u_obj) {
-                        
+
                         //print_r($u_obj);
                         //exit('This is Object Test');
                                                                                 if($u_obj['resign_date'] != '' && $u_obj['basis_of_employment'] == 5)
                                                                                 {
-                                                                                    $hire_date = date('d-m-Y',$u_obj['resign_date']); 
+                                                                                    $hire_date = date('d-m-Y',$u_obj['resign_date']);
                                                                                     $basis_of_employment_month = 3;
-                                                                                    
-                                                                                    
+
+
                                                                                     $now_date = date('d-m-Y');
 
                                                                                     //$basis_of_employment_month = $u_obj['month'];
@@ -1069,20 +1069,20 @@ class UserFactory extends Factory {
                                                                                     $real_period = "+".$basis_of_employment_month;
                                                                                     $real_end_date->modify($real_period.' month');
 
-                                                                                    $end_date = new DateTime($real_end_date->format('d-m-Y'));                                                                                
+                                                                                    $end_date = new DateTime($real_end_date->format('d-m-Y'));
                                                                                     $period = "-45";//before the 45 days want to show the warning message
                                                                                     $end_date->modify($period.' day');// modify('+3 month')this function find the after the given time period of the date
 
                                                                                     //$end_date = new DateTime($hire_date );
-                                                                                    //$probation = $u_obj['probation'];                                                                                                                                                                
+                                                                                    //$probation = $u_obj['probation'];
                                                                                     //$period = "+".($probation -1);
                                                                                     //$end_date->modify($period.' month');// modify('+3 month')this function find the after the given time period of the date
 
 
-                                                                                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY 
+                                                                                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY
                                                                                     $end = new DateTime($now_date);
 
-                                                                                    $basis_of_employment= $u_obj['basis_of_employment'];   
+                                                                                    $basis_of_employment= $u_obj['basis_of_employment'];
                                                                                     $basis_of_employment_option = "";
                                                                                     switch ($basis_of_employment) {
                                                                                         case 1:$basis_of_employment_option = "Contract";
@@ -1092,10 +1092,10 @@ class UserFactory extends Factory {
                                                                                         case 3:$basis_of_employment_option = "Permanent with Probation";
                                                                                             break;
                                                                                         case 5:$basis_of_employment_option = "Resign";
-                                                                                            break;                        
+                                                                                            break;
                                                                                         default:
                                                                                             break;
-                                                                                    }                                                                               
+                                                                                    }
 
                                                                                     $warning ="";
                                                                                     if($start <=  $end )
@@ -1106,16 +1106,16 @@ class UserFactory extends Factory {
 
                                                                                         //$warning_employee[1] = $real_end_date->format('d-m-Y');
 
-                                                                                    }                                                                                      
+                                                                                    }
                                                                                 }
-//                                                                                
+//
                                                                                 if($u_obj['basis_of_employment'] != 5)
                                                                                 {
-                                                                                    
-                                                                                    $hire_date = date('d-m-Y',$u_obj['hire_date']); 
-                                                                                    $basis_of_employment_month = $u_obj['month'];                                                                                   
-                                                                                    
-                                                                                    
+
+                                                                                    $hire_date = date('d-m-Y',$u_obj['hire_date']);
+                                                                                    $basis_of_employment_month = $u_obj['month'];
+
+
                                                                                     $now_date = date('d-m-Y');
 
                                                                                     //$basis_of_employment_month = $u_obj['month'];
@@ -1124,20 +1124,20 @@ class UserFactory extends Factory {
                                                                                     $real_period = "+".$basis_of_employment_month;
                                                                                     $real_end_date->modify($real_period.' month');
 
-                                                                                    $end_date = new DateTime($real_end_date->format('d-m-Y'));                                                                                
+                                                                                    $end_date = new DateTime($real_end_date->format('d-m-Y'));
                                                                                     $period = "-45";//before the 45 days want to show the warning message
                                                                                     $end_date->modify($period.' day');// modify('+3 month')this function find the after the given time period of the date
 
                                                                                     //$end_date = new DateTime($hire_date );
-                                                                                    //$probation = $u_obj['probation'];                                                                                                                                                                
+                                                                                    //$probation = $u_obj['probation'];
                                                                                     //$period = "+".($probation -1);
                                                                                     //$end_date->modify($period.' month');// modify('+3 month')this function find the after the given time period of the date
 
 
-                                                                                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY 
+                                                                                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY
                                                                                     $end = new DateTime($now_date);
 
-                                                                                    $basis_of_employment= $u_obj['basis_of_employment'];   
+                                                                                    $basis_of_employment= $u_obj['basis_of_employment'];
                                                                                     $basis_of_employment_option = "";
                                                                                     switch ($basis_of_employment) {
                                                                                         case 1:$basis_of_employment_option = "Contract";
@@ -1147,10 +1147,10 @@ class UserFactory extends Factory {
                                                                                         case 3:$basis_of_employment_option = "Permanent with Probation";
                                                                                             break;
                                                                                         case 5:$basis_of_employment_option = "Resign";
-                                                                                            break;                        
+                                                                                            break;
                                                                                         default:
                                                                                             break;
-                                                                                    }                                                                               
+                                                                                    }
 
                                                                                     $warning ="";
                                                                                     if($start <=  $end )
@@ -1161,52 +1161,52 @@ class UserFactory extends Factory {
 
                                                                                         //$warning_employee[1] = $real_end_date->format('d-m-Y');
 
-                                                                                    }                                                                                      
-                                                                                }                                                                                
-  
-                    }            
-                    return $warning_employee;             
-                }                 
-                                
-                
-				
-                //ARSP EDIT --> ADD NEW CODE FOR GET WARNING MESSAGES FOR IF PROBATION PERIOD IS EXCEED 
+                                                                                    }
+                                                                                }
+
+                    }
+                    return $warning_employee;
+                }
+
+
+
+                //ARSP EDIT --> ADD NEW CODE FOR GET WARNING MESSAGES FOR IF PROBATION PERIOD IS EXCEED
                 //WARNING WILL BE SHOW BEFOR THE END OF THE MONTH TO TILL CONFIRME ADMMIN
                 function getWarning2($hdate, $bond_period)
-                {            
-                    $hire_date = date('d-m-Y',$hdate); 
+                {
+                    $hire_date = date('d-m-Y',$hdate);
                     $now_date = date('d-m-Y');
-                        
+
                     $end_date = new DateTime($hire_date );
                     $period = "+".($bond_period -1);
                     $end_date->modify($period.' month');// modify('+3 month')this function find the after the given time period of the date
                     //echo "Test";
-                    
+
                     $real_end_date = new DateTime($hire_date );
                     $real_period = "+".$bond_period;
                     $real_end_date->modify($real_period.' month');
-                    
-                    
-                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY 
+
+
+                    $start = new DateTime($end_date->format('d-m-Y')); // DD-MM-YYYY
                     $end = new DateTime($now_date);
                     $warning ="";
                     if($start <=  $end )
                     {
                          $warning =  "WARNING(BOND): Confirmation Due on ".($real_end_date->format('d-m-Y')).".";
-                        return  $warning;  
-                        
+                        return  $warning;
+
                     }
                     else
                     {
-                         return  $warning;                        
-                    }        
-                         
-                }  
-				
+                         return  $warning;
+                    }
+
+                }
+
 
 				//ARSP EDIT-> get user Tempalte file URL
                 function getUserTemplateUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER    
+                // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserTemplateFileStoragePathTest( $this->getId() ))) {
                     $x=0;
@@ -1221,25 +1221,25 @@ class UserFactory extends Factory {
                 closedir($handle);
 }
            return $file_array;
-	}			
-				
-				
-				
+	}
+
+
+
 				//ARSP EDIT - > get user Tempalte file storage path
 				function getUserTemplateFileStoragePathTest( $user_id = NULL ) {
 			if ( $user_id == '' ) {
 				$user_id = $this->getId();
 			}
-	
+
 			if ( $user_id == '' ) {
 				return FALSE;
-			}         
-	
+			}
+
 			return Environment::getStorageBasePath() .'user_template_file'. '/'. $user_id;
 		}
-		
-		
-		
+
+
+
 					//ARSP EDIT --> ADD NEW CODE FOR GET USER TEMPLATE FILES NAME ONLY
 					function getTemplateName()
 					{
@@ -1256,37 +1256,37 @@ class UserFactory extends Factory {
 					closedir($handle);
 	}
 					return $file_array;
-						
-					}   
-		
-		
-					
+
+					}
+
+
+
 					//ARSP EDIT -> get User Template files storage path
 					function getUserTemplateFileStoragePath($user_id = NULL)
 					{
 			if ( $user_id == '' ) {
 				$user_id = $this->getId();
 			}
-	
+
 			if ( $user_id == '' ) {
 				return FALSE;
 			}
-					
+
 					//echo Environment::getUserFileStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
-	
+
 			//return Environment::getStorageBasePath() . DIRECTORY_SEPARATOR .'User_file'. DIRECTORY_SEPARATOR . $user_id;
 					//ARSP ADD NEW CODE HERE --> getUserFileStorageBasePath()
 					return Environment::getStorageBasePath().'user_template_file'. DIRECTORY_SEPARATOR .$user_id;
-					//return 'storage\User_file'. DIRECTORY_SEPARATOR . $user_id;   
-						
-						
-					}			
-					
-					
-					
-			
-		
-				
+					//return 'storage\User_file'. DIRECTORY_SEPARATOR . $user_id;
+
+
+					}
+
+
+
+
+
+
                 //ARSP EDIT --> ADD NEW CODE FOR GET EPF REGISTRATION NO
                 function getEpfRegistrationNo()
                 {
@@ -1294,31 +1294,31 @@ class UserFactory extends Factory {
 			return $this->data['epf_registration_no'];
 		}
 
-		return FALSE;                    
-                    
+		return FALSE;
+
                 }
-                
-                
+
+
                 // ARSP EDIT --> ADD CODE FOR setEpfRegistrationNo
                 function setEpfRegistrationNo($epf_registration_no) {
-                    
+
                     $epf_registration_no = trim($epf_registration_no);
-                        
+
                     if($epf_registration_no != '' OR $epf_registration_no == ''){
                         $this->data['epf_registration_no'] = $epf_registration_no;
-                        
+
                         return TRUE;
-                    }                    
-                    
-                    
+                    }
+
+
 
                         return FALSE;
 
                 }
-                
-                
-                
-                
+
+
+
+
                 //ARSP EDIT --> ADD NEW CODE FOR GET EPF REGISTRATION NO
                 function getEpfMembershipNo()
                 {
@@ -1326,30 +1326,30 @@ class UserFactory extends Factory {
 			return $this->data['epf_membership_no'];
 		}
 
-		return FALSE;                    
-                    
+		return FALSE;
+
                 }
-                
-                
+
+
                 // ARSP EDIT --> ADD CODE FOR setEpfMembershipNo
                 function setEpfMembershipNo($epf_membership_no) {
-                    
+
                     $epf_membership_no = trim($epf_membership_no);
-                    
+
                     if($epf_membership_no != '' OR $epf_membership_no == ''){
                         $this->data['epf_membership_no'] = $epf_membership_no;
-                        
+
                         return TRUE;
-                    }                    
-                    
-                    
+                    }
 
-                        return FALSE;   
 
-                }     	
-	
-	
-	
+
+                        return FALSE;
+
+                }
+
+
+
 
 	function getUserPreferenceObject() {
 		if ( is_object($this->user_preference_obj) ) {
@@ -1466,9 +1466,9 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /*
-         * ARSP --> I ADDED THIS CODE FOR THUNDER & NEON 
+         * ARSP --> I ADDED THIS CODE FOR THUNDER & NEON
          */
 	function getMonth() {
 		if ( isset($this->data['month']) ) {
@@ -1477,10 +1477,10 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /*
-         * ARSP --> I ADDED THIS CODE FOR THUNDER & NEON 
-         */        
+         * ARSP --> I ADDED THIS CODE FOR THUNDER & NEON
+         */
 	function setMonth($month) {
 		$month = trim($month);
 
@@ -1500,7 +1500,7 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
+	}
 
 	function getGroup() {
 		if ( isset($this->data['group_id']) ) {
@@ -1730,11 +1730,18 @@ class UserFactory extends Factory {
 
 	function isUniqueUserName($user_name) {
 		$ph = array(
-					'user_name' => trim(strtolower($user_name)),
+					':user_name' => trim(strtolower($user_name)),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where user_name = ? AND deleted=0';
-		$user_name_id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->getTable() .' where user_name = :user_name AND deleted=0';
+		$user_name_id = DB::select($query, $ph);
+
+        if ($user_name_id === FALSE ) {
+            $user_name_id = 0;
+        }else{
+            $user_name_id = current(get_object_vars($user_name_id[0]));
+        }
+
 		Debug::Arr($user_name_id,'Unique User Name: '. $user_name, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $user_name_id === FALSE ) {
@@ -1799,16 +1806,16 @@ class UserFactory extends Factory {
 		return $encrypted_password;
 	}
 	function checkPassword($password, $check_password_policy = TRUE ) {
-		
+
 		$config_vars = config('evolve');  // Load config directly from Laravel config
 		$password = html_entity_decode( $password );
-		
+
 		$this->data = (array)$this->rs[0];
-		
+
 		//Check if LDAP is enabled
 		$ldap_authentication_type_id = 0;
-		
-		if ( DEMO_MODE != TRUE AND function_exists('ldap_connect') AND !isset($config_vars['other']['enable_ldap']) 
+
+		if ( DEMO_MODE != TRUE AND function_exists('ldap_connect') AND !isset($config_vars['other']['enable_ldap'])
 			OR ( isset($config_vars['other']['enable_ldap']) AND $config_vars['other']['enable_ldap'] == TRUE ) ) {
 			//Check company object to make sure LDAP is enabled.
 			$c_obj = $this->getCompanyObject();
@@ -1839,7 +1846,7 @@ class UserFactory extends Factory {
 			Debug::Text('LDAP authentication disabled due to config or extension missing...', __FILE__, __LINE__, __METHOD__,10);
 		}
 		$password = $this->encryptPassword( trim(strtolower($password)) );
-		
+
 		//Don't check local TT passwords if LDAP Only authentication is enabled. Still accept override passwords though.
 		if ( $ldap_authentication_type_id != 2 AND $password == $this->getPassword() ) {
 			//If the passwords match, confirm that the password hasn't exceeded its maximum age.
@@ -1967,11 +1974,17 @@ class UserFactory extends Factory {
 
 	function isUniquePhoneId($phone_id) {
 		$ph = array(
-					'phone_id' => $phone_id,
+					':phone_id' => $phone_id,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where phone_id = ? and deleted = 0';
-		$phone_id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->getTable() .' where phone_id = :phone_id and deleted = 0';
+		$phone_id = DB::select($query, $ph);
+        if ($phone_id === FALSE ) {
+            $phone_id = 0;
+        }else{
+            $phone_id = current(get_object_vars($phone_id[0]));
+        }
+
 		Debug::Arr($phone_id,'Unique Phone ID:', __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $phone_id === FALSE ) {
@@ -2087,11 +2100,17 @@ class UserFactory extends Factory {
 	}
 	function isUniqueIButtonId($id) {
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where ibutton_id = ? and deleted = 0';
-		$ibutton_id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->getTable() .' where ibutton_id = :id and deleted = 0';
+		$ibutton_id = DB::select($query, $ph);
+        if ($ibutton_id === FALSE ) {
+            $ibutton_id = 0;
+        }else{
+            $ibutton_id = current(get_object_vars($ibutton_id[0]));
+        }
+
 		Debug::Arr($ibutton_id,'Unique iButton ID:', __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $ibutton_id === FALSE ) {
@@ -2379,11 +2398,11 @@ class UserFactory extends Factory {
 		}
 
 		$ph = array(
-					'manual_id' => $id,
-					'company_id' =>  $this->getCompany(),
+					':manual_id' => $id,
+					':company_id' =>  $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where employee_number = ? AND company_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where employee_number = :manual_id AND company_id = :company_id AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {
@@ -2426,12 +2445,12 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /**
          * ARSP NOTE -->
          * I HIDE THIS ORIGINAL CODE FOR THUNDER AND NEON AND ADDED NEW EMPLOYEE NUMBER CODE
-         * 
+         *
          */
         /*
 	function setEmployeeNumber($value) {
@@ -2463,14 +2482,14 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
         */
-        
-        
-        
+
+
+
         /**
          * ARSP NOTE-->
          * I ADDED THIS CODE FOR THUNDER AND NEON
          * IN HERE DO NOT CHECK THE isUniqueEmployeeNumber() BCZ setEmployeeNumberOnly() FUNCTION ALREADY CHECKED
-         */          
+         */
 	function setEmployeeNumber($value) {
 		//$value = $this->Validator->stripNonNumeric( trim($value) ); //ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON
                 $value = trim($value);
@@ -2488,8 +2507,8 @@ class UserFactory extends Factory {
 //														$this->isUniqueEmployeeNumber($value),
 //														('Employee number is already in use, please enter a different one'))
 //				)
-                        $value != '' 
-                        
+                        $value != ''
+
 												) {
 //			if ( $value != '' AND $value >= 0 ) {
 //				$value = (int)$value;
@@ -2501,22 +2520,22 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
-        
-        
+	}
+
+
+
         /**
          * ARSP NOTE-->
          * I ADDED THIS CODE FOR THUNDER AND NEON
-         */        
+         */
         function getEmployeeNumberOnly() {
 		if ( isset($this->data['employee_number_only']) AND $this->data['employee_number_only'] != '' ) {
 			return (int)$this->data['employee_number_only'];
 		}
 
 		return FALSE;
-	}   
-        
+	}
+
         /**
          * ARSP NOTE-->
          * I ADDED THIS CODE FOR THUNDER AND NEON
@@ -2548,15 +2567,15 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}     
- 
+	}
+
         /**
          * ARSP NOTE--> NOT USED
          * I ADDED THIS CODE FOR THUNDER AND NEON
          * I'M NOT USED THIS FUNCTION
-         */        
+         */
         function isUniqueEmployeeNumberOnly_OLDFUNCTION($id, $default_branch_id) {
-            
+
 
 		if ( $this->getCompany() == FALSE ) {
 			return FALSE;
@@ -2568,11 +2587,11 @@ class UserFactory extends Factory {
 
 
 		$ph = array(
-					'manual_id' => $id,
-					'company_id' =>  $this->getCompany(),                                        
+					':manual_id' => $id,
+					':company_id' =>  $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where employee_number_only = ? AND company_id = ?  AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id  AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {
@@ -2591,15 +2610,15 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	} 
-        
-        
+	}
+
+
         /**
          * ARSP NOTE--> I ADDED THIS FUNCTION & MODIFIED SOME FIELD FOR 2ND TIME
          * I ADDED THIS CODE FOR THUNDER AND NEON
-         */        
+         */
         function isUniqueEmployeeNumberOnly($id, $default_branch_id) {
-            
+
 
 		if ( $this->getCompany() == FALSE ) {
 			return FALSE;
@@ -2611,12 +2630,12 @@ class UserFactory extends Factory {
 
 
 		$ph = array(
-					'manual_id' => $id,
-					'company_id' =>  $this->getCompany(),
+					':manual_id' => $id,
+					':company_id' =>  $this->getCompany(),
                                         'default_branch_id' =>  $default_branch_id,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where employee_number_only = ? AND company_id = ?  AND default_branch_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id  AND default_branch_id = ? AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {
@@ -2635,24 +2654,24 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}     
-	
-	
-	
-	
+	}
+
+
+
+
 
         /**
          * ARSP NOTE-->
          * THIS ID IS FINGERPRINT MACHINE UNIQUE ID
-         */        
+         */
         function getPunchMachineUserID() {
 		if ( isset($this->data['punch_machine_user_id']) AND $this->data['punch_machine_user_id'] != '' ) {
 			return (int)$this->data['punch_machine_user_id'];
 		}
 
 		return FALSE;
-	}      
-	
+	}
+
 
         /**
          * ARSP NOTE-->
@@ -2686,14 +2705,14 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}           
-        
+	}
+
         /**
-         * ARSP NOTE--> 
+         * ARSP NOTE-->
          * THIS ID IS FINGERPRINT MACHINE UNIQUE ID
-         */        
+         */
         function isPunchMachineUserID($id) {
-            
+
 
 		if ( $this->getCompany() == FALSE ) {
 			return FALSE;
@@ -2705,11 +2724,11 @@ class UserFactory extends Factory {
 
 
 		$ph = array(
-					'punch_machine_user_id' => $id,
-					'company_id' =>  $this->getCompany(),                                        
+					':punch_machine_user_id' => $id,
+					':company_id' =>  $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where punch_machine_user_id = ? AND company_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where punch_machine_user_id = :punch_machine_user_id AND company_id = :company_id AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {
@@ -2728,8 +2747,8 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}  
-	
+	}
+
 
 	//
 	// MUST LEAVE RFID functions in until v3.0 of TimeTrex, so allow for upgrades.
@@ -2740,11 +2759,11 @@ class UserFactory extends Factory {
 		}
 
 		$ph = array(
-					'rf_id' => $id,
-					'company_id' =>  $this->getCompany(),
+					':rf_id' => $id,
+					':company_id' =>  $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where rf_id = ? AND company_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where rf_id = :rf_id AND company_id = :company_id AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {
@@ -2764,9 +2783,9 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-	
-	
-	
+
+
+
 	function checkRFID($id) {
 		$id = trim($id);
 
@@ -2862,8 +2881,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-	
-	
+
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDDR & NEON-
          */
@@ -2874,7 +2893,7 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /*
          * ARSP NOTE --> I ADDED THIS COD EFOR THUNDER & NEON
          */
@@ -2889,7 +2908,7 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}   	
+	}
 
 	function getDefaultBranch() {
 		if ( isset($this->data['default_branch_id']) ) {
@@ -2948,7 +2967,7 @@ class UserFactory extends Factory {
 	function getFullName($reverse = FALSE, $include_middle = TRUE ) {
 		return Misc::getFullName($this->getFirstName(), $this->getMiddleInitial(), $this->getLastName(), $reverse, $include_middle);
 	}
-        
+
         function getFullNamefield()
         {
             if ( isset($this->data['full_name']) ) {
@@ -2987,9 +3006,9 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
+
+
+
         function setFullNameField($full_name) {
 		$full_name = trim($full_name);
 
@@ -3000,15 +3019,15 @@ class UserFactory extends Factory {
 				 ) {
 
 			$this->data['full_name'] = $full_name;
-			
+
 
 			return TRUE;
 		}
 
 		return FALSE;
 	}
-        
-        
+
+
 	function getFirstNameMetaphone() {
 		if ( isset($this->data['first_name_metaphone']) ) {
 			return $this->data['first_name_metaphone'];
@@ -3032,7 +3051,7 @@ class UserFactory extends Factory {
 
         //FL ADDED ROSEN REQUIREMENTS 20160314
 	function getNameInitial() {
-            $fullname = ''; 
+            $fullname = '';
             if ( $this->getFirstName() != '' ) {
                 $fullname .= $this->getFirstName().' ';
             }
@@ -3042,27 +3061,27 @@ class UserFactory extends Factory {
             if ( $this->getLastName() != '' ) {
                 $fullname .= $this->getLastName();
             }
-            
+
              $name_arr = explode(' ', $fullname);
-             
+
             $name_initials = '';
             $i=0;
             if(!empty($name_arr)){
                 foreach ($name_arr as $nm){
                     $i++;
                     if($i == count($name_arr)){
-                        $name_initials .= $nm; 
+                        $name_initials .= $nm;
                     }else{
-                        $name_initials .= ucfirst($nm[0]).'. '; 
+                        $name_initials .= ucfirst($nm[0]).'. ';
                     }
                 }
             }else{
                 return FALSE;
             }
-                                                                                        
+
 		return $name_initials;
 	}
-        
+
 	function getMiddleInitial() {
 		if ( $this->getMiddleName() != '' ) {
 			$middle_name = $this->getMiddleName();
@@ -3078,9 +3097,9 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
 
-        
+
+
 	function setMiddleName($middle_name) {
 		$middle_name = trim($middle_name);
 
@@ -3139,7 +3158,7 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
       function getCallingName() {
 		if ( isset($this->data['calling_name']) ) {
 			return $this->data['calling_name'];
@@ -3147,8 +3166,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         function setCallingName($calling_name)
         {
             $calling_name = trim($calling_name);
@@ -3161,7 +3180,7 @@ class UserFactory extends Factory {
 													$calling_name,
 													('Second last name contains invalid characters'),
 													$this->name_validator_regex)
-					
+
 				)
 			) {
 
@@ -3171,13 +3190,13 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-            
+
         }
-        
-        
-        
-          
-             
+
+
+
+
+
       function getReligion() {
 		if ( isset($this->data['religion']) ) {
 			return $this->data['religion'];
@@ -3185,8 +3204,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         function setReligion($religion)
         {
             $religion = trim($religion);
@@ -3195,7 +3214,7 @@ class UserFactory extends Factory {
 				$this->Validator->inArrayKey(	'religion',
 											$religion,
 											('Invalid religion'),
-											$this->getOptions('religion') ) 
+											$this->getOptions('religion') )
 			) {
 
 			$this->data['religion'] = $religion;
@@ -3204,13 +3223,13 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-            
+
         }
-        
-        
-        
-        
-        
+
+
+
+
+
       function getNameWithInitials() {
 		if ( isset($this->data['name_with_initials']) ) {
 			return $this->data['name_with_initials'];
@@ -3218,8 +3237,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         function setNameWithInitials($name_with_initials)
         {
             $name_with_initials = trim($name_with_initials);
@@ -3232,7 +3251,7 @@ class UserFactory extends Factory {
 													$name_with_initials,
 													('Second last name contains invalid characters'),
 													$this->name_validator_regex)
-					
+
 				)
 			) {
 
@@ -3242,10 +3261,10 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-            
+
         }
-        
-        
+
+
 	function getLastNameMetaphone() {
 		if ( isset($this->data['last_name_metaphone']) ) {
 			return $this->data['last_name_metaphone'];
@@ -3324,13 +3343,13 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
 	function getNameTitle() {
 		if ( isset($this->data['user_name_title_id']) ) {
 			return $this->data['user_name_title_id'];
@@ -3353,9 +3372,9 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
+
+
+
 	function getMarital() {
 		if ( isset($this->data['marital_id']) ) {
 			return $this->data['marital_id'];
@@ -3446,10 +3465,10 @@ class UserFactory extends Factory {
 		return FALSE;
 
 	}
-	
-        
-        
-        
+
+
+
+
 	function getAddress3() {
 		if ( isset($this->data['address3']) ) {
 			return $this->data['address3'];
@@ -3482,7 +3501,7 @@ class UserFactory extends Factory {
 		return FALSE;
 
 	}
-	
+
 	// ARSP EDIT --> ADD CODE FOR NIC
         function getNic() {
 		if ( isset($this->data['nic']) ) {
@@ -3809,10 +3828,10 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-         */        
+         */
 	function setImmediateContactNo($phone) {
 		$phone = trim($phone);
 
@@ -3829,11 +3848,11 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-         */ 
+         */
 	function getImmediateContactPerson() {
 		if ( isset($this->data['immediate_contact_person']) ) {
 			return $this->data['immediate_contact_person'];
@@ -3841,10 +3860,10 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-         */     
+         */
 	function setImmediateContactPerson($name) {
 		$name = trim($name);
 
@@ -3873,11 +3892,11 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-         */ 
+         */
 	function getBondPeriod() {
 		if ( isset($this->data['bond_period']) ) {
 			return $this->data['bond_period'];
@@ -3885,10 +3904,10 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /*
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-         */     
+         */
 	function setBondPeriod($name) {
 		$name = trim($name);
 
@@ -3911,8 +3930,8 @@ class UserFactory extends Factory {
 
 
 		return FALSE;
-	}    
-        
+	}
+
 	function getFaxPhone() {
 		if ( isset($this->data['fax_phone']) ) {
 			return $this->data['fax_phone'];
@@ -3936,7 +3955,7 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 
-        
+
        function getPersonalEmail() {
 		if ( isset($this->data['personal_email']) ) {
 			return $this->data['personal_email'];
@@ -3944,8 +3963,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
 	function setPersonalEmail($personal_email) {
 		$personal_email = trim($personal_email);
 
@@ -3966,8 +3985,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
 	function getHomeEmail() {
 		if ( isset($this->data['home_email']) ) {
 			return $this->data['home_email'];
@@ -4027,9 +4046,9 @@ class UserFactory extends Factory {
 	function getAge() {
 		return round( TTDate::getYearDifference( $this->getBirthDate(), TTDate::getTime() ),1 );
 	}
-        
-        
-        
+
+
+
 	function getRetirementDate() {
 		if ( isset($this->data['retirement_date']) ) {
 			return $this->data['retirement_date'];
@@ -4050,10 +4069,10 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 
-        
-        
-        
-        
+
+
+
+
 
 	function getBirthDate() {
 		if ( isset($this->data['birth_date']) ) {
@@ -4126,8 +4145,8 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 
-        
-        
+
+
         function getConfiremedDate() {
 		if ( isset($this->data['confirmed_date']) ) {
 			return $this->data['confirmed_date'];
@@ -4135,10 +4154,10 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-       
+
         /**
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-         */        
+         */
 	function setConfiremedDate($epoch) {
 		if 	(	( $epoch == '' )
 				OR
@@ -4156,8 +4175,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         /**
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          */
@@ -4168,10 +4187,10 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-       
+
         /**
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-         */        
+         */
 	function setResignDate($epoch) {
 		if 	(	( $epoch == '' )
 				OR
@@ -4189,7 +4208,7 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
 	function getCurrency() {
 		if ( isset($this->data['currency_id']) ) {
 			return $this->data['currency_id'];
@@ -4420,8 +4439,8 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-	
-	
+
+
         /**
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDRER & NEON
          */
@@ -4431,10 +4450,10 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
+	}
         /**
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDRER & NEON
-         */        
+         */
 	function setHireNote($value) {
 		$value = trim($value);
 
@@ -4453,11 +4472,11 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}     
-        
-        
-        
-        
+	}
+
+
+
+
         function getOfficeMobile() {
 		if ( isset($this->data['office_mobile']) ) {
 			return $this->data['office_mobile'];
@@ -4482,20 +4501,20 @@ class UserFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /**
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDRER & NEON
-         */        
+         */
 	function getTerminationNote() {
 		if ( isset($this->data['termination_note']) ) {
 			return $this->data['termination_note'];
 		}
 
 		return FALSE;
-	}        
+	}
         /**
          * ARSP NOTE --> I ADDED THIS CODE FOR THUNDRER & NEON
-         */        
+         */
 	function setTerminationNote($value) {
 		$value = trim($value);
 
@@ -4514,7 +4533,7 @@ class UserFactory extends Factory {
 		}
 
 		return FALSE;
-	}  	
+	}
 
 	function checkPasswordResetKey($key) {
 		if ( $this->getPasswordResetDate() != ''
@@ -4673,7 +4692,7 @@ class UserFactory extends Factory {
 
         /**
          * ARSP NOTE --> I HIDE THIS ORIGINAL CODE FOR THUNDER & NEON
-         * 
+         *
          */
         /*
 	function Validate() {
@@ -4714,15 +4733,15 @@ class UserFactory extends Factory {
 		}
 																																												if ( $this->isNew() == TRUE ) { $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); } }
 		return TRUE;
-	}         
+	}
          */
-        
-        
- 
+
+
+
         /**
-         * ARSP NOTE --> 
+         * ARSP NOTE -->
          * I MODIFIED THIS ORIGINAL CODE FOR THUNDER & NEON
-         */        
+         */
         function Validate() {
 		//When doing a mass edit of employees, user name is never specified, so we need to avoid this validation issue.
 		if ( $this->getUserName() == '' ) {
@@ -4759,15 +4778,15 @@ class UserFactory extends Factory {
 											FALSE,
 											('Employee number must be specified for ACTIVE employees') );
 		}
-                
+
                 if ( $this->getDefaultBranch() == 0 AND $this->getStatus() == 10 ) {
 			$this->Validator->isTrue(		'default_branch',
 											FALSE,
 											('Default Branch must be specified for ACTIVE employees') );
-		}                                
+		}
 																																												if ( $this->isNew() == TRUE ) { $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); } }
 		return TRUE;
-	}     
+	}
 
 	function preSave() {
 		if ( $this->getDefaultBranch() == FALSE ) {

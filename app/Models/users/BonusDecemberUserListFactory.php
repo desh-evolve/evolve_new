@@ -7,7 +7,7 @@ use IteratorAggregate;
 
 class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements IteratorAggregate {
     //put your code here
-    
+
     	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -52,8 +52,8 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		if ( $user_id == '') {
 			return FALSE;
 		}
-                
-                
+
+
                 if ( $bonus_december_id == '') {
 			return FALSE;
 		}
@@ -77,7 +77,7 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		return $this;
 	}
 
-    
+
        function getByUserId($id, $where = NULL, $order = NULL) {
 		if ( $id == '') {
 			return FALSE;
@@ -101,12 +101,12 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 
 		return $this;
 	}
-        
-        
-        
+
+
+
       function getByBonusDecemberId($bonus_december_id, $where = NULL, $order = NULL) {
-		
-                
+
+
                 if ( $bonus_december_id == '') {
 			return FALSE;
 		}
@@ -128,5 +128,5 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		return $this;
 	}
 
-    
+
 }

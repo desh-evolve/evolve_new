@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 
+use Illuminate\Support\Facades\DB;
+
 class FastTree {
 
 	var $db = NULL;
@@ -61,12 +63,19 @@ class FastTree {
 
 	function getRootId() {
 		$ph = array(
-					'tree_id' => $this->tree_id,
+					':tree_id' => $this->tree_id,
 					);
 
 		// get all children of this node
-		$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = ? AND parent_id = -1';
-		$root_id = $this->db->GetOne($query, $ph);
+		$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = :tree_id AND parent_id = -1';
+		// $root_id = $this->db->GetOne($query, $ph);
+        $root_id = DB::select($query, $ph);
+
+        if ($root_id === FALSE ) {
+            $root_id = 0;
+        }else{
+            $root_id = current(get_object_vars($root_id[0]));
+        }
 
 		return $root_id;
 
@@ -81,8 +90,8 @@ class FastTree {
 		}
 
 		$ph = array(
-					'tree_id' => $this->getTree(),
-					'object_id' => $object_id,
+					':tree_id' => $this->getTree(),
+					':object_id' => $object_id,
 					);
 
 		// get all children of this node
@@ -90,11 +99,12 @@ class FastTree {
 					FROM '. $this->table .' a
 					LEFT JOIN '. $this->table .' b ON a.tree_id = b.tree_id AND a.left_id BETWEEN b.left_id AND b.right_id
 
-					WHERE a.tree_id = ?
-						AND a.object_id = ?
+					WHERE a.tree_id = :tree_id
+						AND a.object_id = :object_id
 					GROUP BY a.object_id, a.left_id, a.object_id, a.parent_id, a.right_id
 				';
-		$data = $this->db->GetRow($query, $ph);
+		// $data = $this->db->GetRow($query, $ph);
+        $data = DB::select($query, $ph);
 
 		if ( count($data) == 0 ) {
 			return FALSE;
@@ -147,8 +157,11 @@ class FastTree {
 	function rebuildTree( $object_id = FALSE ) {
 		Debug::Text(' Object ID: '. $object_id, __FILE__, __LINE__, __METHOD__,10);
 
-		$this->db->BeginTrans();
-		$this->db->SetTransactionMode( 'SERIALIZABLE' ); //Serialize rebuild tree transactions so concurrency issues don't corrupt the tree.
+		// $this->db->BeginTrans();
+		// $this->db->SetTransactionMode( 'SERIALIZABLE' ); //Serialize rebuild tree transactions so concurrency issues don't corrupt the tree.
+        DB::beginTransaction(); // Begin the transaction
+        DB::statement('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE'); // Set the isolation level to SERIALIZABLE
+
 
 		if ( $object_id === FALSE ) {
 			Debug::Text(' Object ID not specified, using root: ', __FILE__, __LINE__, __METHOD__,10);
@@ -169,13 +182,15 @@ class FastTree {
 
 		if ($rebuilt === FALSE) {
 			Debug::Text(' Error rebuilding tree: ', __FILE__, __LINE__, __METHOD__,10);
-			$this->db->RollBackTrans();
+			// $this->db->RollBackTrans();
+            DB::rollBack();
 			return FALSE;
 		}
 
         //$this->db->RollBackTrans();
 
-		$this->db->CommitTrans();
+		// $this->db->CommitTrans();
+        DB::commit();
 
 		$this->db->SetTransactionMode(''); //Restore default transaction mode.
 
@@ -188,12 +203,12 @@ class FastTree {
 		Debug::Text(' Object ID: '. $object_id .' - Left: '. $left_id, __FILE__, __LINE__, __METHOD__,10);
 
 		$ph = array(
-					'tree_id' => $this->getTree(),
-					'parent_id' => $object_id,
+					':tree_id' => $this->getTree(),
+					':parent_id' => $object_id,
 					);
 
 		// get all children of this node
-		$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = ? AND parent_id = ?';
+		$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = :tree_id AND parent_id = :parent_id';
 		$rs = DB::select($query, $ph);
 
 		if ( !is_object($rs) ) {
@@ -219,15 +234,15 @@ class FastTree {
 		}
 
 		$ph = array(
-					'left_id' => $left_id,
-					'right_id' => $right_id,
-					'tree_id' => $this->getTree(),
-					'object_id' => $object_id,
+					':left_id' => $left_id,
+					':right_id' => $right_id,
+					':tree_id' => $this->getTree(),
+					':object_id' => $object_id,
 					);
 
 		// we've got the left value, and now that we've processed
 		// the children of this node we also know the right value
-		$query  = 'UPDATE '. $this->table .' SET left_id = ?, right_id = ? WHERE tree_id = ? AND object_id = ?';
+		$query  = 'UPDATE '. $this->table .' SET left_id = :left_id, right_id = :right_id WHERE tree_id = :tree_id AND object_id = :object_id';
 		$rs = DB::select($query, $ph);
 
 		//Use this to help debug concurrency issues.
@@ -251,23 +266,23 @@ class FastTree {
 		}
 
 		$ph = array(
-					'tree_id' => $this->getTree(),
-					'object_id' => $object_id,
-					'object_id2' => $object_id,
+					':tree_id' => $this->getTree(),
+					':object_id' => $object_id,
+					':object_id2' => $object_id,
 					);
 
 		$query  = '
 				SELECT		b.object_id
 				FROM		'. $this->table .' as a
 				LEFT JOIN '. $this->table .' as b ON a.tree_id = b.tree_id AND a.left_id BETWEEN b.left_id AND b.right_id
-				WHERE		a.tree_id = ?
-					AND 	a.object_id = ?
+				WHERE		a.tree_id = :tree_id
+					AND 	a.object_id = :object_id
 					AND		b.object_id != 0
-					AND		b.object_id != ?
+					AND		b.object_id != :object_id2
 				ORDER BY	b.left_id desc
 				';
 
-		return $this->db->GetCol($query, $ph);
+		return DB::select($query, $ph);
 	}
 
 	function getChild( $object_id ) {
@@ -277,15 +292,23 @@ class FastTree {
 		}
 
 		$ph = array(
-					'tree_id' => $this->getTree(),
-					'object_id' => $object_id,
+					':tree_id' => $this->getTree(),
+					':object_id' => $object_id,
 					);
 
 		Debug::Text(' Getting Last Child of: '. $object_id , __FILE__, __LINE__, __METHOD__,10);
 		//Order by last child first.
 		//GetOne() automatically sets LIMIT 1;
-		$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = ? AND parent_id = ? ORDER BY left_id desc';
-		$child_id = $this->db->GetOne($query, $ph);
+		$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = :tree_id AND parent_id = :object_id ORDER BY left_id desc';
+		// $child_id = $this->db->GetOne($query, $ph);
+        $child_id = DB::select($query, $ph);
+
+        if ($child_id === FALSE ) {
+            $child_id = 0;
+        }else{
+            $child_id = current(get_object_vars($child_id[0]));
+        }
+
 		//var_dump($child_id);
 
 		return $child_id;
@@ -321,38 +344,40 @@ class FastTree {
 		switch (strtoupper($recurse)) {
 			case 'RECURSE':
 				$ph = array(
-							'tree_id' => $this->getTree(),
-							'left_id' => $node_data['left_id'],
-							'right_id' => $node_data['right_id'],
+							':tree_id' => $this->getTree(),
+							':left_id' => $node_data['left_id'],
+							':right_id' => $node_data['right_id'],
 							);
 
 				//Don't use >= <= (use > < ) - instead to not include the parent object.
 				//Make sure current node is not included in the result as well. Otherwise we are saying the current node
 				//is a child of itself.
 				$query .= '
-				WHERE		a.tree_id = ?
-					AND 	b.left_id > ?
-					AND		b.right_id <= ?';
+				WHERE		a.tree_id = :tree_id
+					AND 	b.left_id > :left_id
+					AND		b.right_id <= :right_id
+                    ';
 
 				//Exclude the parnet, but only when the passed object is forsure NULL!
 				if ( $original_object_id === NULL OR $original_object_id === FALSE ) {
-					$ph['object_id'] = $object_id;
+					$ph[':object_id'] = $object_id;
 
 					$query .= '
-					AND		a.object_id != ?
+					AND		a.object_id != :object_id
 					';
 				}
 
 				break;
 			default:
 				$ph = array(
-							'tree_id' => $this->getTree(),
-							'object_id' => $object_id,
+							':tree_id' => $this->getTree(),
+							':object_id' => $object_id,
 							);
 
 				$query .= '
-						WHERE a.tree_id = ?
-							AND a.parent_id = ?';
+						WHERE a.tree_id = :tree_id
+							AND a.parent_id = :object_id
+                        ';
 
 		}
 		$query .= '
@@ -443,14 +468,14 @@ class FastTree {
 			Debug::Text(' Inserting gaps: '. $this->spacer, __FILE__, __LINE__, __METHOD__,10);
 
 			$ph = array(
-						'tree_id' => $this->getTree(),
-						'right_id' => $node_data['right_id'],
+						':tree_id' => $this->getTree(),
+						':right_id' => $node_data['right_id'],
 						);
 
-			$query  = 'UPDATE '. $this->table .' SET right_id = right_id + 1000 WHERE tree_id = ? AND right_id >= ?';
+			$query  = 'UPDATE '. $this->table .' SET right_id = right_id + 1000 WHERE tree_id = :tree_id AND right_id >= :right_id';
 			DB::select($query, $ph);
 
-			$query  = 'UPDATE '. $this->table .' SET left_id = left_id + 1000 WHERE tree_id = ? AND left_id > ?';
+			$query  = 'UPDATE '. $this->table .' SET left_id = left_id + 1000 WHERE tree_id = :tree_id AND left_id > ?';
 			DB::select($query, $ph);
 
 			return TRUE;
@@ -484,27 +509,35 @@ class FastTree {
 			return FALSE;
 		}
 
-		$this->db->BeginTrans();
+		// $this->db->BeginTrans();
+        DB::beginTransaction();
 
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 		if ( $parent_id == -1 ) {
 			Debug::Text(' Parent is 0', __FILE__, __LINE__, __METHOD__,10);
 
 			$ph = array(
-						'tree_id' => $this->getTree(),
+						':tree_id' => $this->getTree(),
 						);
 
-			$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = ? AND parent_id = -1';
+			$query = 'SELECT object_id FROM '. $this->table .' WHERE tree_id = :tree_id AND parent_id = -1';
 			$rs = DB::select($query, $ph);
 
 			if ( !is_object($rs) ) {
 				Debug::Text(' Select failed', __FILE__, __LINE__, __METHOD__,10);
-				$this->db->RollBackTrans();
+				// $this->db->RollBackTrans();
+                DB::rollBack();
 				return FALSE;
 			}
 
 			if ( $rs->RowCount() > 0 ) {
 				Debug::Text(' A root node already exists', __FILE__, __LINE__, __METHOD__,10);
-				$this->db->RollBackTrans();
+				// $this->db->RollBackTrans();
+                DB::rollBack();
 				return FALSE;
 			}
 
@@ -512,11 +545,18 @@ class FastTree {
 
 			//Get max right_id, just incase other nodes exist in the tree.
 			$ph = array(
-						'tree_id' => $this->getTree(),
+						':tree_id' => $this->getTree(),
 						);
 
-			$query = 'SELECT max(right_id) as right_id FROM '. $this->table .' WHERE tree_id = ?';
-			$right_id = $this->db->GetOne($query, $ph) + 1000;
+			$query = 'SELECT max(right_id) as right_id FROM '. $this->table .' WHERE tree_id = :tree_id';
+			// $right_id = $this->db->GetOne($query, $ph) + 1000;
+            $right_id = DB::Select($query, $ph);
+            if ($right_id === FALSE ) {
+                    $right_id = 0;
+            }else{
+                $right_id = current(get_object_vars($right_id[0])) + 1000;
+            }
+
 		} else {
 			Debug::Text(' Parent IS NOT 0', __FILE__, __LINE__, __METHOD__,10);
 
@@ -537,27 +577,27 @@ class FastTree {
 				AND is_numeric( $left_id )
 				AND is_numeric( $right_id ) ) {
 			$ph = array(
-						'tree_id' => $this->getTree(),
-						'parent_id' => $parent_id,
-						'object_id' => $object_id,
-						'left_id' => $left_id,
-						'right_id' => $right_id,
+						':tree_id' => $this->getTree(),
+						':parent_id' => $parent_id,
+						':object_id' => $object_id,
+						':left_id' => $left_id,
+						':right_id' => $right_id,
 						);
 
 			Debug::Text(' Inserting Node... Left ID: '. $left_id .' Right ID: '. $right_id, __FILE__, __LINE__, __METHOD__,10);
-			$query = 'INSERT INTO '. $this->table .' (tree_id, parent_id, object_id, left_id, right_id) VALUES (?,?,?,?,?)';
-			$rs = DB::select($query, $ph);
+			$query = 'INSERT INTO '. $this->table .' (tree_id, parent_id, object_id, left_id, right_id) VALUES (:tree_id,:parent_id,:object_id,:left_id,:right_id)';
+			$rs = DB::insert($query, $ph);
 
 			if ( !is_object($rs) ) {
 				Debug::Text(' Error inserting node', __FILE__, __LINE__, __METHOD__,10);
-				$this->db->RollBackTrans();
+				// $this->db->RollBackTrans();
+                DB::rollBack();
 				return FALSE;
 			}
 
-			$this->db->CommitTrans();
-
+			// $this->db->CommitTrans();
+            DB::commit();
 			Debug::Text(' Returning True.', __FILE__, __LINE__, __METHOD__,10);
-
 			return TRUE;
 		}
 
@@ -610,7 +650,9 @@ class FastTree {
 		}
 
 		//Find out if this node has children
-		$this->db->BeginTrans();
+		// $this->db->BeginTrans();
+        DB::beginTransaction();
+
 
 		//This was the source of a bug that was causing the below recurse delete query
 		//to delete the root node of the tree. getAllChildren was returning FALSE and array_keys()
@@ -626,23 +668,25 @@ class FastTree {
 			Debug::Text(' No Children: ', __FILE__, __LINE__, __METHOD__,10);
 
 			$ph = array(
-						'tree_id' => $this->getTree(),
-						'object_id' => $object_id,
+						':tree_id' => $this->getTree(),
+						':object_id' => $object_id,
 						);
 
-			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = ? AND object_id = ?';
+			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = :tree_id AND object_id = :object_id';
 			DB::select($query, $ph);
 		} elseif ( strtolower($recurse) == 'recurse' ) {
 			Debug::Arr($children_ids, ' Recursing Delete - Current Object: '. $object_id .' Child IDs: ', __FILE__, __LINE__, __METHOD__,10);
 
 			$ph = array(
-						'tree_id' => $this->getTree(),
+						':tree_id' => $this->getTree(),
 						);
 
 			//Add current object_id to children for delete.
 			$children_ids[] = $object_id;
 
-			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = ? AND object_id in ('. $this->getListSQL( $children_ids, $ph ).')';
+            
+            $query = 'DELETE FROM '. $this->table .' WHERE tree_id = :tree_id AND object_id in'. implode(',', $children_ids );
+			// $query = 'DELETE FROM '. $this->table .' WHERE tree_id = :tree_id AND object_id in ('. $this->getListSQL( $children_ids, $ph ).')';
 			DB::select($query, $ph);
 
 		} else {
@@ -651,28 +695,29 @@ class FastTree {
 			$parent_id = $this->getParentId( $object_id );
 
 			$ph = array(
-						'tree_id' => $this->getTree(),
-						'object_id' => $object_id,
+						':tree_id' => $this->getTree(),
+						':object_id' => $object_id,
 						);
 
-			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = ? AND object_id = ?';
+			$query = 'DELETE FROM '. $this->table .' WHERE tree_id = :tree_id AND object_id = :object_id';
 			DB::select($query, $ph);
 
 			$ph = array(
-						'parent_id' => $parent_id,
-						'tree_id' => $this->getTree(),
-						'object_id' => $object_id,
+						':parent_id' => $parent_id,
+						':tree_id' => $this->getTree(),
+						':object_id' => $object_id,
 						);
 
 			$query = '	UPDATE '. $this->table .'
-						SET parent_id = ?
-						WHERE tree_id = ?
-							AND parent_id = ?';
+						SET parent_id = :parent_id
+						WHERE tree_id = :tree_id
+							AND parent_id = :object_id';
 			DB::select($query, $ph);
 
 		}
 
-		$this->db->CommitTrans();
+		// $this->db->CommitTrans();
+        DB::commit();
 
 		return TRUE;
 	}
@@ -698,25 +743,27 @@ class FastTree {
 			return FALSE;
 		}
 
-		$this->db->BeginTrans();
+		// $this->db->BeginTrans();
+        DB::beginTransaction();
 
 		$ph = array(
-					'parent_id' => $parent_id,
-					'tree_id' => $this->getTree(),
-					'object_id' => $object_id,
+					':parent_id' => $parent_id,
+					':tree_id' => $this->getTree(),
+					':object_id' => $object_id,
 					);
 
 		$query = '	UPDATE '. $this->table .'
-					SET parent_id = ?
-					WHERE tree_id = ?
-						AND object_id = ?';
+					SET parent_id = :parent_id
+					WHERE tree_id = :tree_id
+						AND object_id = :object_id';
 		DB::select($query, $ph);
 
 		//FIXME: rebuild tree starting from object_id and parent_id only perhaps?
 		//Might cut down on some work.
 		$this->rebuildTree();
 
-		$this->db->CommitTrans();
+		// $this->db->CommitTrans();
+        DB::commit();
 
 		return TRUE;
 
@@ -744,29 +791,31 @@ class FastTree {
 		if ( $this->getNode( $new_object_id ) === FALSE ) {
 			Debug::Text(' Editing object ' , __FILE__, __LINE__, __METHOD__,10);
 
-			$this->db->BeginTrans();
+			// $this->db->BeginTrans();
+            DB::beginTransaction();
 
 			$ph = array(
-						'new_object_id' => $new_object_id,
-						'tree_id' => $this->getTree(),
-						'object_id' => $object_id,
+						':new_object_id' => $new_object_id,
+						':tree_id' => $this->getTree(),
+						':object_id' => $object_id,
 						);
 
 			//Update parent IDs
 			$query = '	UPDATE '. $this->table .'
-						SET parent_id = ?
-						WHERE tree_id = ?
-							AND parent_id = ?';
+						SET parent_id = :new_object_id
+						WHERE tree_id = :tree_id
+							AND parent_id = :object_id';
 			DB::select($query, $ph);
 
 			//Update object ID
 			$query = '	UPDATE '. $this->table .'
-						SET object_id = ?
-						WHERE tree_id = ?
-							AND object_id = ?';
+						SET object_id = :new_object_id
+						WHERE tree_id = :tree_id
+							AND object_id = :object_id';
 			DB::select($query, $ph);
 
-			$this->db->CommitTrans();
+			// $this->db->CommitTrans();
+            DB::commit();
 
 			return TRUE;
 		} else {

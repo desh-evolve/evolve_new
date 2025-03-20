@@ -32,13 +32,13 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -57,19 +57,19 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 			return FALSE;
 		}
 
-		$uf = new UserFactory(); 
+		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 						LEFT JOIN  '. $uf->getTable() .' as b on a.user_id = b.id
-					where	a.id = ?
-						AND b.company_id = ?
+					where	a.id = :id
+						AND b.company_id = :company_id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -98,17 +98,17 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'table_name' => $table_name,
-					'action_id' => $action,
+					':user_id' => $user_id,
+					':table_name' => $table_name,
+					':action_id' => $action,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND table_name = ?
-						AND action_id = ?
+					where	user_id = :user_id
+						AND table_name = :table_name
+						AND action_id = :action_id
 					ORDER BY date desc
 					LIMIT 1
 					';
@@ -158,14 +158,14 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -181,12 +181,12 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 			$query  .=	' AND a.table_name in ('. $this->getListSQL($filter_data['log_table_name_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
-			$ph[] = $filter_data['start_date'];
-			$query  .=	' AND a.date >= ?';
+			$ph[':start_date'] = $filter_data['start_date'];
+			$query  .=	' AND a.date >= :start_date';
 		}
 		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
-			$ph[] = $filter_data['end_date'];
-			$query  .=	' AND a.date <= ?';
+			$ph[':end_date'] = $filter_data['end_date'];
+			$query  .=	' AND a.date <= :end_date';
 		}
 
 		$query .= 	'
@@ -220,8 +220,8 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 
 		$ph = array(
 					//'company_id' => $company_id,
-					'start_date' => $start_date,
-					'end_date' => $end_date,
+					':start_date' => $start_date,
+					':end_date' => $end_date,
 					);
 
 		$query = 'select 	m.*,
@@ -247,7 +247,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 															LEFT JOIN users as b ON a.user_id = b.id
 														where a.table_name = \'punch\'
 															AND ( a.description ILIKE \'Telephone Punch End%\' )
-															AND (a.date >= ? AND a.date < ? ) ';
+															AND (a.date >= :start_date AND a.date < :end_date ) ';
 
 															if ( $company_id != '' AND ( isset($company_id[0]) AND !in_array(-1, (array)$company_id) ) ) {
 																$query  .=	' AND company_id in ('. $this->getListSQL($company_id, $ph) .') ';
@@ -306,7 +306,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -317,7 +317,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as uf ON ( a.user_id = uf.id AND uf.deleted = 0 )
-					where	uf.company_id = ?
+					where	uf.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -359,8 +359,8 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		}
 
 		if ( isset($filter_data['description']) AND trim($filter_data['description']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['description']));
-			$query  .=	' AND lower(a.description) LIKE ?';
+			$ph[':description'] = '%' . strtolower(trim($filter_data['description'])) . '%';
+			$query  .=	' AND lower(a.description) LIKE :description';
 		}
 
 		$query .= 	'';

@@ -7,9 +7,9 @@ use IteratorAggregate;
 
 class UserEducationListFactory extends UserEducationFactory  implements IteratorAggregate {
     //put your code here
-    
-    
-    
+
+
+
     	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $order == NULL ) {
 			$order = array( 'name' => 'asc' );
@@ -34,17 +34,17 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 
 		return $this;
 	}
-        
-        
-        
-        
-        
+
+
+
+
+
         function getById($id) {
 		if ( $id == '') {
 			return FALSE;
 		}
 
-		
+
 			$ph = array(
 						':id' => $id,
 						);
@@ -57,14 +57,14 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 
 			$this->rs = DB::select($query, $ph);
 
-		
+
 
 		return $this;
 	}
-	
-        
-        
-          
+
+
+
+
       function getByUserIdAndCompanyId($user_id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $user_id == '') {
 			return FALSE;
@@ -83,7 +83,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 		}
 
 		$uf = new UserFactory();
-		
+
 
 		$ph = array(
 					':company_id' => $company_id,
@@ -93,7 +93,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 					select 	a.*
 					from	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
-					
+
 					where 	a.user_id = b.id
 						AND b.company_id = :company_id
 						AND a.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
@@ -110,5 +110,5 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 		return $this;
 	}
 
-        
+
 }

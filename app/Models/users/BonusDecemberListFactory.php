@@ -8,7 +8,7 @@ use IteratorAggregate;
 
 class BonusDecemberListFactory  extends  BonusDecemberFactory implements IteratorAggregate {
     //put your code here
-    
+
     function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -48,9 +48,9 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 
 		return $this;
 	}
-        
-    
-    
+
+
+
     function getByCompanyId($id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
@@ -84,7 +84,7 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		return $this;
 	}
 
-    
+
     function getByIdAndCompanyId($id, $company_id, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {
 			return FALSE;
@@ -114,8 +114,8 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 	}
 
 
-        
-        
+
+
         function getByCompanyIdArray($company_id) {
 
 		$bdlf = new BonusDecemberListFactory();
@@ -125,19 +125,19 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 
                 $start_date = new DateTime();
                 $end_date = new DateTime();
-                
+
 		foreach ($bdlf->rs as $bonus_december_obj) {
 			$bdlf->data = (array)$bonus_december_obj;
 			$bonus_december_obj = $bdlf;
-                    
+
             $start_date->setTimestamp($bonus_december_obj->getStartDate());
             $end_date->setTimestamp($bonus_december_obj->getEndDate());
-                    
+
 			$bonus_list[$bonus_december_obj->getID()] = $start_date->format('Y-m-d').' - '.$end_date->format('Y-m-d');
 		}
 
 		return $bonus_list;
 	}
-        
-        
+
+
 }

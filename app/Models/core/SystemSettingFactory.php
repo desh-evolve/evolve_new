@@ -8,10 +8,10 @@ class SystemSettingFactory extends Factory {
 	protected $pk_sequence_name = 'system_setting_id_seq'; //PK Sequence name
 	function isUniqueName($name) {
 		$ph = array(
-					'name' => $name,
+					':name' => $name,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where name = ?';
+		$query = 'select id from '. $this->getTable() .' where name = :name';
 		$name_id = DB::select($query, $ph);
 
 		if ($name_id === FALSE ) {

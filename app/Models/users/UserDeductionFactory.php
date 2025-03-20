@@ -96,7 +96,7 @@ class UserDeductionFactory extends Factory {
 		if ( is_object($this->company_deduction_obj) ) {
 			return $this->company_deduction_obj;
 		} else {
-			$cdlf = new CompanyDeductionListFactory(); 
+			$cdlf = new CompanyDeductionListFactory();
 			$this->company_deduction_obj = $cdlf->getById( $this->getCompanyDeduction() )->getCurrent();
 
 			return $this->company_deduction_obj;
@@ -107,7 +107,7 @@ class UserDeductionFactory extends Factory {
 		if ( is_object($this->pay_stub_entry_account_link_obj) ) {
 			return $this->pay_stub_entry_account_link_obj;
 		} else {
-			$pseallf = new PayStubEntryAccountLinkListFactory(); 
+			$pseallf = new PayStubEntryAccountLinkListFactory();
 			$pseallf->getByCompanyID( $this->getUserObject()->getCompany() );
 			if ( $pseallf->getRecordCount() > 0 ) {
 				$this->pay_stub_entry_account_link_obj = $pseallf->getCurrent();
@@ -144,11 +144,11 @@ class UserDeductionFactory extends Factory {
 
 	function isUniqueCompanyDeduction($deduction_id) {
 		$ph = array(
-					'user_id' => (int)$this->getUser(),
-					'deduction_id' => (int)$deduction_id,
+					':user_id' => (int)$this->getUser(),
+					':deduction_id' => (int)$deduction_id,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where user_id = ? AND company_deduction_id = ? AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where user_id = :user_id AND company_deduction_id = :deduction_id AND deleted=0';
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {

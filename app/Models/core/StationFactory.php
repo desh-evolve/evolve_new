@@ -8,6 +8,7 @@ use App\Models\Department\DepartmentListFactory;
 use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -262,7 +263,7 @@ class StationFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = new CompanyListFactory(); 
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -277,7 +278,7 @@ class StationFactory extends Factory {
 
 		$clf = new CompanyListFactory();
 		$rs = $clf->getByID($id);
-		
+
 		if ( $this->Validator->isResultSetWithRows(	'company', $rs, ('Company is invalid') ) ) {
 			$this->data['company_id'] = $id;
 			return TRUE;
@@ -675,7 +676,7 @@ class StationFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$lf_b = new UserGroupListFactory(); 
+			$lf_b = new UserGroupListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {
@@ -1294,7 +1295,7 @@ class StationFactory extends Factory {
 						'last_punch_date' => Carbon::parse( $last_punch_date )->toDateTimeString(),
 						'id' => $id,
 						);
-			$query = 'UPDATE '. $this->getTable() .' set last_poll_date = ?,last_punch_time_stamp = ? where id = ?';
+			$query = 'UPDATE '. $this->getTable() .' set last_poll_date = :last_poll_date ,last_punch_time_stamp = :last_punch_date where id = :id';
 			DB::select($query, $ph);
 
 			return TRUE;
@@ -1313,11 +1314,11 @@ class StationFactory extends Factory {
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
-						'last_push_date' => $last_push_date,
-						'id' => $id,
+						':last_push_date' => $last_push_date,
+						':id' => $id,
 						);
 
-			$query = 'UPDATE '. $this->getTable() .' set last_push_date = ? where id = ?';
+			$query = 'UPDATE '. $this->getTable() .' set last_push_date = :last_push_date where id = :id';
 			DB::select($query, $ph);
 
 			return TRUE;
@@ -1336,11 +1337,11 @@ class StationFactory extends Factory {
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
-						'last_partial_push_date' => $last_partial_push_date,
-						'id' => $id,
+						':last_partial_push_date' => $last_partial_push_date,
+						':id' => $id,
 						);
 
-			$query = 'UPDATE '. $this->getTable() .' set last_partial_push_date = ? where id = ?';
+			$query = 'UPDATE '. $this->getTable() .' set last_partial_push_date = :last_partial_push_date where id = :id';
 			DB::select($query, $ph);
 
 			return TRUE;
@@ -1692,10 +1693,10 @@ class StationFactory extends Factory {
 		$slf->getById( $id );
 		if ( $slf->getRecordCount() == 1 ) {
 			$ph = array(
-						'allowed_date' => TTDate::getTime(),
-						'id' => $id,
+						':allowed_date' => TTDate::getTime(),
+						':id' => $id,
 						);
-			$query = 'UPDATE '. $this->getTable() .' set allowed_date = ? where id = ?';
+			$query = 'UPDATE '. $this->getTable() .' set allowed_date = :allowed_date where id = :id';
 			DB::select($query, $ph);
 
 			TTLog::addEntry( $id, 200,  ('Access from station Allowed'), $user_id, $this->getTable() ); //Allow

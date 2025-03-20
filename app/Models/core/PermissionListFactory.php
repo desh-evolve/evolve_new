@@ -30,13 +30,13 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -56,8 +56,8 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'permission_control_id' => $permission_control_id,
+					':company_id' => $company_id,
+					':permission_control_id' => $permission_control_id,
 					);
 
 		$pcf = new PermissionControlFactory();
@@ -67,8 +67,8 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 					from	'. $this->getTable() .' as a,
 							'. $pcf->getTable() .' as b
 					where 	b.id = a.permission_control_id
-						AND b.company_id = ?
-						AND a.permission_control_id = ?
+						AND b.company_id = :company_id
+						AND a.permission_control_id = :permission_control_id
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -96,9 +96,9 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'permission_control_id' => $permission_control_id,
-					'section' => $section,
+					':company_id' => $company_id,
+					':permission_control_id' => $permission_control_id,
+					':section' => $section,
 					//'name' => $name, //Allow a list of names.
 					);
 
@@ -109,9 +109,9 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 					from	'. $this->getTable() .' as a,
 							'. $pcf->getTable() .' as b
 					where 	b.id = a.permission_control_id
-						AND b.company_id = ?
-						AND a.permission_control_id = ?
-						AND a.section = ?
+						AND b.company_id = :company_id
+						AND a.permission_control_id = :permission_control_id
+						AND a.section = :section
 						AND a.name in ('. $this->getListSQL($name, $ph) .')
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
@@ -132,8 +132,8 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$pcf = new PermissionControlFactory();
@@ -147,8 +147,8 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 							'. $puf->getTable() .' as c
 					where b.id = a.permission_control_id
 						AND b.id = c.permission_control_id
-						AND b.company_id = ?
-						AND	c.user_id = ?
+						AND b.company_id = :company_id
+						AND	c.user_id = :user_id
 						AND ( a.deleted = 0 AND b.deleted = 0 )
 				';
 
