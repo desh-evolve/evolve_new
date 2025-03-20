@@ -12,146 +12,131 @@ use App\Models\Core\URLBuilder;
 use App\Models\Company\BranchBankAccountFactory;
 use App\Models\Company\BranchBankAccountListFactory;
 use App\Models\Company\BranchListFactory;
+use App\Models\Core\FormVariables;
 use Illuminate\Support\Facades\View;
 
 class EditBankAccount extends Controller
 {
     protected $permission;
-    protected $company;
-    protected $userPrefs;
+    protected $currentUser;
+    protected $currentCompany;
     protected $branchBankAccountFactory;
     protected $branchBankAccountListFactory;
     protected $branchListFactory;
 
-    public function __construct(
-        BranchBankAccountFactory $branchBankAccountFactory,
-        BranchBankAccountListFactory $branchBankAccountListFactory,
-        BranchListFactory $branchListFactory
-    ) {
+    public function __construct() {
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->userPrefs = View::shared('current_user_prefs');
-        $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
-        $this->branchBankAccountFactory = $branchBankAccountFactory;
-        $this->branchBankAccountListFactory = $branchBankAccountListFactory;
-        $this->branchListFactory = $branchListFactory;
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+
+        extract	(FormVariables::GetVariables(
+                    array	(
+                            'action',
+                            'company_id',
+                            'bank_data',
+                            'data_saved',
+                            'branch_id_new',
+                            'id',
+                            'branch_id_saved'                                                                                           
+                            ) ) );
+
+
+        /*
+        if ( !$permission->Check('branch','enabled')  OR !( $permission->Check('branch','edit') OR $permission->Check('branch','edit_own') ) ) {
+            $permission->Redirect( FALSE ); //Redirect
+        }
+        */
     }
 
     public function index($id = null)
     {
-        $current_company = $this->company;
+        $viewData = [ 'title' => $id ? 'Edit Bank Account' : 'Add Bank Account'];
 
-        // // Permission check
-        // if (!$this->permission->Check('branch', 'enabled') ||
-        //     !($this->permission->Check('branch', 'edit') || $this->permission->Check('branch', 'edit_own'))) {
-        //     return $this->permission->Redirect(false);
-        // }
+        $balf = new BranchBankAccountListFactory();
+        $balf->getById($id);   
+        
+        foreach ($balf->rs as $bank_account) {
+            $balf->data = (array)$bank_account;
+            $bank_account = $balf;
+            //Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
 
-        $data = [];
-
-        if ($id) {
-            // Edit mode: Fetch existing bank account data
-            $balf = $this->branchBankAccountListFactory->getById($id);
-
-            $bank_account = $balf->rs ?? [];
-            if ($bank_account) {
-                foreach ($bank_account as $b_obj) {
-                    $data = [
-                        'id' => $b_obj->id,
-                        'default_branch_id' => $b_obj->default_branch_id,
-                        'institution' => $b_obj->institution,
-                        'transit' => $b_obj->transit,
-                        'account' => $b_obj->account,
-                        'bank_name' => $b_obj->bank_name,
-                        'bank_branch' => $b_obj->bank_branch,
-                        'company_id' => $b_obj->company_id,
-                        'created_date' => $b_obj->created_date,
-                        'created_by' => $b_obj->created_by,
-                        'updated_date' => $b_obj->updated_date,
-                        'updated_by' => $b_obj->updated_by,
-                        'deleted_date' => $b_obj->deleted_date,
-                        'deleted_by' => $b_obj->deleted_by,
-                    ];
-                }
-            }
-        } else {
-            // Add mode: Set default values
-            $data = [
-                'default_branch_id' => null,
-                'institution' => null,
-                'transit' => null,
-                'account' => null,
-                'bank_name' => null,
-                'bank_branch' => null,
-            ];
+            $bank_data = array(
+                'id' => $bank_account->getId(),
+                'default_branch_id' => $bank_account->getDefaultBranch(),
+                'country' => 1,
+                'institution' => $bank_account->getInstitution(),
+                'transit' => $bank_account->getTransit(),                                                          
+                //'account' => $bank_account->getSecureAccount(),//ARSP EDIT --> I Hide THIS CODE REASON- WE CANT SEE ORIGINAL ACCOUNT NUMBER
+                'account' => $bank_account->getAccount(),//ARSP EDIT --> I ADD NEW CODE SHOW ONLY ORIGINAL ACCOUNT NUMBER
+                'bank_name' => $bank_account->getBankName(),//ARSP EDIT --> I ADD NEW CODE FOR BANK NAME
+                'bank_branch' => $bank_account->getBankBranch(),//ARSP EDIT --> I ADD NEW CODE FOR BANK BRANCH NAME
+                'created_date' => $bank_account->getCreatedDate(),
+                'created_by' => $bank_account->getCreatedBy(),
+                'updated_date' => $bank_account->getUpdatedDate(),
+                'updated_by' => $bank_account->getUpdatedBy(),
+                'deleted_date' => $bank_account->getDeletedDate(),
+                'deleted_by' => $bank_account->getDeletedBy()
+            );
         }
 
-        // Fetch branch name for display
-        $company_branch_name = null;
-        if (!empty($data['default_branch_id'])) {
-            $blf = $this->branchListFactory->getById($data['default_branch_id']);
-            $company_branch_name = $blf->getCurrent()->getName();
+        $viewData['branch_id_saved'] = $bank_data['default_branch_id'];
+
+        //Add New
+        if($bank_data['default_branch_id'] != '' OR $bank_data['default_branch_id'] != NULL)
+        {
+            $blf = new BranchListFactory();
+            $company_branch_name = $blf->getById( $bank_data['default_branch_id'] )->getCurrent()->getName();            
+            $viewData['company_branch_name'] = $company_branch_name;           
         }
 
-        $viewData = [
-            'title' => $id ? 'Edit Bank Account' : 'Add Bank Account',
-            'data' => $data,
-            'company_branch_name' => $company_branch_name,
-        ];
+        //Edit Old
+        if(isset($branch_id_new))
+        {
+            $blf = new BranchListFactory();
+            $company_branch_name = $blf->getById( $branch_id_new )->getCurrent()->getName();       
+            $viewData['company_branch_name'] = $company_branch_name;                          
+        }   
+
+        $viewData['company_id'] = $this->currentCompany->getCurrent()->getId();
+        $viewData['user_id'] = $this->currentUser->getCurrent()->getId();
+        
+        $viewData['bank_data'] = $bank_data;    
+
         return view('branch.EditBankAccount', $viewData);
     }
 
     public function save(Request $request, $id = null)
     {
-        $current_company = $this->company;
-
-        // var_dump($current_company);
-        // // Permission check
-        // if (!$this->permission->Check('branch', 'enabled') ||
-        //     !($this->permission->Check('branch', 'edit') || $this->permission->Check('branch', 'edit_own'))) {
-        //     return $this->permission->Redirect(false);
-        // }
-
         $data = $request->all();
+        $baf = new BranchBankAccountFactory();
+        
         // var_dump($data['company_id']);
         Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
 
-        // $this->branchBankAccountFactory->setId($id ?? null); // Use $id if editing, otherwise null for add
-        // $this->branchBankAccountFactory->setDefaultBranch($data['default_branch_id'] ?? null);
-        // $this->branchBankAccountFactory->setInstitution($data['institution'] ?? null);
-        // $this->branchBankAccountFactory->setTransit($data['transit'] ?? null);
-        // $this->branchBankAccountFactory->setAccount($data['account'] ?? null);
-        // $this->branchBankAccountFactory->setBankName($data['bank_name'] ?? null);
-        // $this->branchBankAccountFactory->setBankBranch($data['bank_branch'] ?? null);
-        // $this->branchBankAccountFactory->setCompany($data['company_id'] ?? null);
+        $baf->setId($id);
+        $baf->setDefaultBranch($data['default_branch_id'] ?? '');
+        $baf->setInstitution('000');
+        $baf->setTransit($data['transit'] ?? '');
+        $baf->setAccount($data['account'] ?? '');
+        $baf->setBankName($data['bank_name'] ?? '');
+        $baf->setBankBranch($data['bank_branch'] ?? '');
+        $baf->setCompany($data['company_id'] ?? '');
 
-
-        $this->branchBankAccountFactory->setId($id ?? null); // Use $id if editing, otherwise null for add
-        // $this->branchBankAccountFactory->setCompany($current_company->getId());
-        $this->branchBankAccountFactory->setDefaultBranch($data['default_branch_id'] ?? '');
-        $this->branchBankAccountFactory->setInstitution('000');
-        $this->branchBankAccountFactory->setTransit($data['transit'] ?? '');
-        $this->branchBankAccountFactory->setAccount($data['account'] ?? '');
-        $this->branchBankAccountFactory->setBankName($data['bank_name'] ?? '');
-        $this->branchBankAccountFactory->setBankBranch($data['bank_branch'] ?? '');
-        $this->branchBankAccountFactory->setCompany($data['company_id'] ?? '');
-
-        // var_dump($data);
-
-        if ($this->branchBankAccountFactory->isValid()) {
-            $this->branchBankAccountFactory->Save();
-            return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Bank account  saved successfully.');
+        if ($baf->isValid()) {
+            $baf->Save();
+            return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Bank account saved successfully.');
         }else{
             var_dump('aaa');
         }
         
         // if (isset($data)) {
            
-        //     $this->branchBankAccountFactory->Save();
+        //     $baf->Save();
         //     return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Bank account saved successfully.');
         // } else {
             // If validation fails, return back with errors

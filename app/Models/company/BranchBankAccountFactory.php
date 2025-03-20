@@ -85,14 +85,13 @@ class BranchBankAccountFactory extends Factory {
 		$id = trim($id);
 
 		$clf = new CompanyListFactory();
-
+		
 		if ( $this->Validator->isResultSetWithRows( 'company', $clf->getByID($id), ('Company is invalid') ) ) {
 
 			$this->data['company_id'] = $id;
-
 			return TRUE;
 		}
-
+		
 		return FALSE;
 	}
 
@@ -121,34 +120,39 @@ class BranchBankAccountFactory extends Factory {
 	function isUnique() {
 		if ( $this->getCompany() == FALSE ) {
 			return FALSE;
-		}
+		}else{
+			return TRUE; // added by desh(2025-03-20) - below function is wrong. check it before un commenting
 
-		$ph = array(
-					':company_id' =>  (int)$this->getCompany(),
-					':user_id' => (int)$this->getUser(),
-					);
-
-		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
-
-        $id = DB::select($query, $ph);
-
-        if ($id === FALSE ) {
-            $id = 0;
-        }else{
-            $id = current(get_object_vars($id[0]));
-        }
-
-		Debug::Arr($id,'Unique ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-
-		if ( $id === FALSE ) {
-			return TRUE;
-		} else {
-			if ($id == $this->getId() ) {
-				return TRUE;
+			/*
+			$ph = array(
+						':company_id' =>  (int)$this->getCompany(),
+						':user_id' => (int)$this->getUser(),
+						);
+	
+			$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
+	
+			$id = DB::select($query, $ph);
+	
+			if ($id === FALSE ) {
+				$id = 0;
+			}else{
+				$id = current(get_object_vars($id[0]));
 			}
+	
+			Debug::Arr($id,'Unique ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
+	
+			if ( $id === FALSE ) {
+				return TRUE;
+			} else {
+				if ($id == $this->getId() ) {
+					return TRUE;
+				}
+			}
+	
+			return FALSE;
+			*/
 		}
 
-		return FALSE;
 	}
 
 	function getInstitution() {
@@ -335,16 +339,8 @@ class BranchBankAccountFactory extends Factory {
 	}
 
 	function Validate() {
-		
-		echo 'getDeleted: ';
-		print_r($this->getDeleted());
-		echo '<br>';
-		echo 'isUnique: ';
-		print_r($this->isUnique());
-		echo '<br>';
-		exit;
 		//Make sure this entry is unique.
-		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
+		if (!empty($this->getDeleted()) AND $this->isUnique() == TRUE ) {
 			$this->Validator->isTRUE( 'account', FALSE, ('Bank account already exists') );
 
 			return FALSE;
