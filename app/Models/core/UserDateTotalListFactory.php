@@ -208,7 +208,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					where	a.user_date_id = :user_date_id
 						AND
 							(
-								( a.override = ? AND a.status_id in ('.$this->getListSQL($status, $ph)) .') )
+								( a.override = :override AND a.status_id in ('.$this->getListSQL($status, $ph)) .') )
 								OR
 								( b.id IS NOT NULL AND ( a.user_date_id != b.user_date_id OR b.deleted = 1 ) )
 							)
@@ -936,8 +936,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':week_start_epoch' => Carbon::parse( $week_start_epoch )->format('Y-m-d'),
-					':epoch' =>  Carbon::parse( $epoch )->format('Y-m-d'),
+					':week_start_epoch' => $this->db->BindDate( $week_start_epoch ),
+					':epoch' =>  $this->db->BindDate( $epoch ),
 					);
 
 		//DO NOT Include paid absences. Only count regular time towards weekly overtime.
@@ -1037,8 +1037,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					':company_id' => $company_id,
 					':user_id' => $user_id,
 					':status_id' => $status,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		//Order by a.over_time_policy last so we never leave the ordering up to the database. This can cause
@@ -1101,8 +1101,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					':user_id' => $user_id,
 					//'status_id' => $status,
 					//'type' => $type,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -1158,8 +1158,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$ph = array(
 					':company_id' => $company_id,
 					':user_id' => $user_id,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		//						AND a.type_id != 40
@@ -1208,8 +1208,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -1257,8 +1257,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		$query = '
@@ -1311,8 +1311,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		//Include only paid absences.
@@ -1364,8 +1364,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					);
 
 		//Include only paid absences.
@@ -1427,8 +1427,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+					':start_date' => $this->db->BindDate( $start_date ),
+					':end_date' => $this->db->BindDate( $end_date ),
 					':day_of_week' => $day_of_week,
 					);
 

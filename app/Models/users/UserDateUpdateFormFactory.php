@@ -38,7 +38,7 @@ class UserDateUpdateFormFactory extends Factory {
 										//'-5010-transit' => ('Transit/Routing'),
 										//'-5020-account' => ('Account'),
 										//'-5030-institution' => ('Institution'),
-                                    
+
                                                                                 '-1290-note' => ('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
 										'-2000-created_by' => ('Created By'),
@@ -70,7 +70,7 @@ class UserDateUpdateFormFactory extends Factory {
         /**
          * ASRP NOTE --> I MODIFIED THIS CODE FOR THUNDER & NEON
          * BELOW DETAILS ARE DATABASE  TABLE FIELDS
-         */        
+         */
 	function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
                                                 'id' => 'ID',
@@ -82,37 +82,37 @@ class UserDateUpdateFormFactory extends Factory {
                                                 'epf_no' => 'EpfNo',
                                                 'full_name' => 'FullName',
                                                 'nic' => 'Nic',
-                                                'contact_mobile' => 'ContactMobile',                    
-                                                'contact_home' => 'ContactHome',                    
-                                                'passport_no' => 'ContactHome',                    
-                                                'passport_no' => 'ContactHome',                    
-                                                'driving_licence_no' => 'ContactHome',                    
-                                                'permenent_address' => 'ContactHome',                    
-                                                'present_address' => 'ContactHome',                    
-                                                'contact_person' => 'ContactHome',                    
-                                                'address_contact_person' => 'ContactHome',                    
-                                                'tel_contact_person' => 'ContactHome',                    
-                                                'spouse_name' => 'ContactHome',                    
-                                                'contact_spouse' => 'ContactHome',                    
+                                                'contact_mobile' => 'ContactMobile',
+                                                'contact_home' => 'ContactHome',
+                                                'passport_no' => 'ContactHome',
+                                                'passport_no' => 'ContactHome',
+                                                'driving_licence_no' => 'ContactHome',
+                                                'permenent_address' => 'ContactHome',
+                                                'present_address' => 'ContactHome',
+                                                'contact_person' => 'ContactHome',
+                                                'address_contact_person' => 'ContactHome',
+                                                'tel_contact_person' => 'ContactHome',
+                                                'spouse_name' => 'ContactHome',
+                                                'contact_spouse' => 'ContactHome',
 
                                                 'title_id' => 'Title',
                                                 'title' => FALSE,
                                                 'default_branch_id' => 'DefaultBranch',
                                                 'default_branch' => FALSE,
                                                 'default_department_id' => 'DefaultDepartment',
-                                                'default_department' => FALSE,                                                                               
+                                                'default_department' => FALSE,
                                                 );
 		return $variable_function_map;
 	}
-        
-        
-        
-    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON    
- 
+
+
+
+    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON
+
         /**
          * ASRP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * BELOW DETAILS ARE DATABASE  TABLE FIELDS
-         */          
+         */
 	function getNote() {
 		if ( isset($this->data['note']) ) {
 			return $this->data['note'];
@@ -120,11 +120,11 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /**
          * ASRP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * BELOW DETAILS ARE DATABASE  TABLE FIELDS
-         */          
+         */
 	function setNote($value) {
 		$value = trim($value);
 
@@ -143,24 +143,24 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */               
+         *
+         */
 	function getDefaultBranch() {
 		if ( isset($this->data['default_branch_id']) ) {
 			return $this->data['default_branch_id'];
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */        
+         *
+         */
 	function setDefaultBranch($id) {
 		$id = (int)trim($id);
 
@@ -179,13 +179,13 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}         
-        
-        
+	}
+
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */      
+         *
+         */
 	function getTitle() {
 		if ( isset($this->data['title_id']) ) {
 			return $this->data['title_id'];
@@ -193,11 +193,11 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */      
+         *
+         */
 	function setTitle($id) {
 		$id = (int)trim($id);
 
@@ -216,8 +216,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}     
-        
+	}
+
         //FL FUNCTION ADDED FOR NATIONAL INDUSTRIES 20160628
         function getYearDate() {
 		if ( isset($this->data['year_date']) ) {
@@ -226,7 +226,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setYearDate($value) {
 		$value = trim($value);
 
@@ -236,8 +236,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getEpfNo() {
 		if ( isset($this->data['epf_no']) ) {
 			return $this->data['epf_no'];
@@ -245,7 +245,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setEpfNo($value) {
 		$value = trim($value);
 
@@ -255,8 +255,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getFullName() {
 		if ( isset($this->data['full_name']) ) {
 			return $this->data['full_name'];
@@ -264,7 +264,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setFullName($value) {
 		$value = trim($value);
 
@@ -274,8 +274,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getNic() {
 		if ( isset($this->data['nic']) ) {
 			return $this->data['nic'];
@@ -283,7 +283,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setNic($value) {
 		$value = trim($value);
 
@@ -293,8 +293,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getContactMobile() {
 		if ( isset($this->data['contact_mobile']) ) {
 			return $this->data['contact_mobile'];
@@ -302,7 +302,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setContactMobile($value) {
 		$value = trim($value);
 
@@ -312,8 +312,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getContactHome() {
 		if ( isset($this->data['contact_home']) ) {
 			return $this->data['contact_home'];
@@ -321,7 +321,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setContactHome($value) {
 		$value = trim($value);
 
@@ -331,8 +331,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getPassportNo() {
 		if ( isset($this->data['passport_no']) ) {
 			return $this->data['passport_no'];
@@ -340,7 +340,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setPassportNo($value) {
 		$value = trim($value);
 
@@ -350,8 +350,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getDrivingLicenseNo() {
 		if ( isset($this->data['driving_licence_no']) ) {
 			return $this->data['driving_licence_no'];
@@ -359,7 +359,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setDrivingLicenceNo($value) {
 		$value = trim($value);
 
@@ -369,8 +369,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getPermenentAddress() {
 		if ( isset($this->data['permenent_address']) ) {
 			return $this->data['permenent_address'];
@@ -378,7 +378,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setPermenentAddress($value) {
 		$value = trim($value);
 
@@ -388,8 +388,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getPresentAddress() {
 		if ( isset($this->data['present_address']) ) {
 			return $this->data['present_address'];
@@ -397,7 +397,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setPresentAddress($value) {
 		$value = trim($value);
 
@@ -407,8 +407,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getContactPerson() {
 		if ( isset($this->data['contact_person']) ) {
 			return $this->data['contact_person'];
@@ -416,7 +416,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setContactPerson($value) {
 		$value = trim($value);
 
@@ -426,8 +426,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getAddressContactPerson() {
 		if ( isset($this->data['address_contact_person']) ) {
 			return $this->data['address_contact_person'];
@@ -435,7 +435,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setAddressContactPerson($value) {
 		$value = trim($value);
 
@@ -445,8 +445,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getTelContactPerson() {
 		if ( isset($this->data['tel_contact_person']) ) {
 			return $this->data['tel_contact_person'];
@@ -454,7 +454,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setTelContactPerson($value) {
 		$value = trim($value);
 
@@ -464,8 +464,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getMaritialStatus() {
 		if ( isset($this->data['maritial_status']) ) {
 			return $this->data['maritial_status'];
@@ -473,7 +473,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setMaritialStatus($value) {
 		$value = trim($value);
 
@@ -483,8 +483,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getSpouseName() {
 		if ( isset($this->data['spouse_name']) ) {
 			return $this->data['spouse_name'];
@@ -492,7 +492,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setSpouseName($value) {
 		$value = trim($value);
 
@@ -502,8 +502,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getContactSpouse() {
 		if ( isset($this->data['contact_spouse']) ) {
 			return $this->data['contact_spouse'];
@@ -511,7 +511,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setContactSpouse($value) {
 		$value = trim($value);
 
@@ -521,8 +521,8 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         function getChild($num) {
 		if ( isset($this->data['child'.$num]) ) {
 			return $this->data['child'.$num];
@@ -530,7 +530,7 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setChild($value,$num) {
 		$value = trim($value);
 
@@ -540,13 +540,13 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}      
+	}
         //END FL FUNCTION ADDED FOR NATIONAL INDUSTRIES 20160628
-        
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function getDefaultDepartment() {
 		if ( isset($this->data['default_department_id']) ) {
 			return $this->data['default_department_id'];
@@ -554,11 +554,11 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
 	/**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
         function setDefaultDepartment($id) {
 		$id = (int)trim($id);
 
@@ -577,12 +577,12 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function getFirstWorkedDate( $raw = FALSE ) {
 		if ( isset($this->data['first_worked_date']) ) {
 			if ( $raw === TRUE ) {
@@ -593,17 +593,17 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function setFirstWorkedDate($epoch) {
-            
+
             //echo 'This is setFirstWorkedDate = '.$epoch;
             //exit();
-            
+
 		//$epoch = TTDate::getBeginDayEpoch( trim($epoch) );
                 $epoch = trim($epoch);
 
@@ -617,7 +617,7 @@ class UserDateUpdateFormFactory extends Factory {
 			//$this->data['first_worked_date'] = $epoch;
 
 			//return TRUE;
-                    
+
 			if 	( $epoch > 0 ) {
 				$this->data['first_worked_date'] = $epoch;
 
@@ -626,17 +626,17 @@ class UserDateUpdateFormFactory extends Factory {
 				$this->Validator->isTRUE(		'first_worked_date',
 												FALSE,
 												('Incorrect first worked date'));
-			}                    
-                    
+			}
+
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function getLastWorkedDate( $raw = FALSE ) {
 		if ( isset($this->data['last_worked_date']) ) {
 			if ( $raw === TRUE ) {
@@ -648,11 +648,11 @@ class UserDateUpdateFormFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function setLastWorkedDate($epoch) {
                 $epoch = trim($epoch);
 
@@ -666,7 +666,7 @@ class UserDateUpdateFormFactory extends Factory {
 			//$this->data['first_worked_date'] = $epoch;
 
 			//return TRUE;
-                    
+
 			if 	( $epoch > 0 ) {
 				$this->data['last_worked_date'] = $epoch;
 
@@ -675,14 +675,14 @@ class UserDateUpdateFormFactory extends Factory {
 				$this->Validator->isTRUE(		'last_worked_date',
 												FALSE,
 												('Incorrect last worked date'));
-			}                    
-                    
+			}
+
 		}
 
 		return FALSE;
-	}          
+	}
 
-    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON      
+    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON
 
 	function getCompany() {
 		return $this->data['company_id'];
@@ -736,11 +736,11 @@ class UserDateUpdateFormFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' =>  (int)$this->getCompany(),
-					'user_id' => (int)$this->getUser(),
+					':company_id' =>  (int)$this->getCompany(),
+					':user_id' => (int)$this->getUser(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND user_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {
@@ -764,11 +764,11 @@ class UserDateUpdateFormFactory extends Factory {
 
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */         
+         *
+         */
 	function Validate() {
 		//Make sure this entry is unique.
-                
+
                 //ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON
 //		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
 //			$this->Validator->isTRUE(		'account',
@@ -777,40 +777,40 @@ class UserDateUpdateFormFactory extends Factory {
 //
 //			return FALSE;
 //		}
-                
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 //		if ( $this->getDefaultBranch() == 0 ) {
 //			$this->Validator->isTrue(		'default_branch',
 //											FALSE,
 //											('Default Branch must be specified') );
-//		} 
-//                
+//		}
+//
 //                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 //		if ( $this->getDefaultDepartment() == 0 ) {
 //			$this->Validator->isTrue(		'default_department',
 //											FALSE,
 //											('Default Department must be specified') );
-//		}   
-//                
+//		}
+//
 //                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 //		if ( $this->getTitle() == 0 ) {
 //			$this->Validator->isTrue(		'title',
 //											FALSE,
 //											('Employee Title must be specified') );
-//		}        
-                
+//		}
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getLastWorkedDate() != '' AND $this->getFirstWorkedDate() != '' AND $this->getLastWorkedDate() < $this->getFirstWorkedDate() ) {
 			$this->Validator->isTrue(		'last_worked_date',
 											FALSE,
 											('Conflicting last worked date'));
-		}                
+		}
 
 		return TRUE;
 	}
 
 	function preSave() {
-                //ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON            
+                //ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON
 //		if ( $this->getUser() == FALSE ) {
 //			Debug::Text('Clearing User value, because this is strictly a company record', __FILE__, __LINE__, __METHOD__,10);
 //			//$this->setUser( 0 ); //COMPANY record.
@@ -855,7 +855,7 @@ class UserDateUpdateFormFactory extends Factory {
 
         /**
          * ARSP NOTE --> I'M NOT MODIFIED THIS CODE.
-         */        
+         */
 	function getObjectAsArray( $include_columns = NULL ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {
@@ -884,7 +884,7 @@ class UserDateUpdateFormFactory extends Factory {
 
         /**
          * ARSP NOTE --> I'M NOT MODIFIED THIS CODE.
-         */          
+         */
 	function addLog( $log_action ) {
 		if ( $this->getUser() == '' ) {
 			$log_description = ('Company');

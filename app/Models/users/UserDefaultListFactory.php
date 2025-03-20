@@ -40,13 +40,13 @@ class UserDefaultListFactory extends UserDefaultFactory implements IteratorAggre
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from 	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			//$query .= $this->getSortSQL( $order );
 
@@ -75,15 +75,15 @@ class UserDefaultListFactory extends UserDefaultFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	id = ?
+					where	company_id = :company_id
+						AND	id = :id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order, $strict );
 
@@ -98,13 +98,13 @@ class UserDefaultListFactory extends UserDefaultFactory implements IteratorAggre
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 

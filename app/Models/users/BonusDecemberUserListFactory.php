@@ -7,7 +7,7 @@ use IteratorAggregate;
 
 class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements IteratorAggregate {
     //put your code here
-    
+
     	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
@@ -32,13 +32,13 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -52,22 +52,22 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		if ( $user_id == '') {
 			return FALSE;
 		}
-                
-                
+
+
                 if ( $bonus_december_id == '') {
 			return FALSE;
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-                                        'bonus_december_id' =>$bonus_december_id,
+					':user_id' => $user_id,
+                                        ':bonus_december_id' =>$bonus_december_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ? 
-                                                AND bonus_december_id = ? 
+					where	user_id = :user_id
+                                                AND bonus_december_id = :bonus_december_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -77,22 +77,22 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		return $this;
 	}
 
-    
+
        function getByUserId($id, $where = NULL, $order = NULL) {
 		if ( $id == '') {
 			return FALSE;
 		}
 
 		$ph = array(
-					'id' => $id,
-                                        'bonus_december_id' => $bonus_december_id,
+					':id' => $id,
+                                        ':bonus_december_id' => $bonus_december_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ? 
-                                                AND bonus_december_id = ? 
+					where	user_id = :id
+                                                AND bonus_december_id = :bonus_december_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -101,25 +101,25 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 
 		return $this;
 	}
-        
-        
-        
+
+
+
       function getByBonusDecemberId($bonus_december_id, $where = NULL, $order = NULL) {
-		
-                
+
+
                 if ( $bonus_december_id == '') {
 			return FALSE;
 		}
 
 		$ph = array(
-					
-                                        'bonus_december_id' =>$bonus_december_id,
+
+                                        ':bonus_december_id' =>$bonus_december_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	bonus_december_id = ? 
+					where	bonus_december_id = :bonus_december_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -129,5 +129,5 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		return $this;
 	}
 
-    
+
 }
