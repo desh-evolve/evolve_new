@@ -22,7 +22,7 @@ if ( !$permission->Check('punch','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Punch In / Out')); // See index.php
+$smarty->assign('title', __($title = 'Punch In / Out')); // See index.php
 
 /*
  * Get FORM variables

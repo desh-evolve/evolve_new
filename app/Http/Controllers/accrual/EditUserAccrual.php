@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\currency;
+namespace App\Http\Controllers\accrual;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accrual\AccrualFactory;
@@ -16,7 +16,7 @@ use App\Models\Policy\AccrualPolicyListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
-class CurrencyList extends Controller
+class EditUserAccrual extends Controller
 {
     protected $permission;
     protected $company;
@@ -53,7 +53,7 @@ class CurrencyList extends Controller
             ) 
         ) );
 
-        $viewData = [ 'title' => $id ? 'Edit Accrual' : 'Add Accrual'];
+        $viewData['title'] = $id ? 'Edit Accrual' : 'Add Accrual';
 
         if ( isset($id) ) { //edit
 

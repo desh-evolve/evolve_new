@@ -21,7 +21,7 @@ if ( !$permission->Check('punch','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Hour List')); // See index.php
+$smarty->assign('title', __($title = 'Hour List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*
@@ -188,7 +188,7 @@ switch ($action) {
 				if ( $udt_obj->getJobItem() != FALSE ) {
 					$job_item = $job_item_options[$udt_obj->getJobItem()];
 				} else {
-					$job_item = TTi18n::gettext('No Task');
+					$job_item = _('No Task');
 				}
 
 				$rows[] = array(

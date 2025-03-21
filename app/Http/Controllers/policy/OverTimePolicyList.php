@@ -19,7 +19,7 @@ if ( !$permission->Check('over_time_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Overtime Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Overtime Policy List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

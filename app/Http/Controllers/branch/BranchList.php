@@ -43,12 +43,6 @@ class BranchList extends Controller
         $current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
 
-        // // Permission check
-        // if (!$this->permission->Check('branch', 'enabled') || 
-        //     !($this->permission->Check('branch', 'view') || $this->permission->Check('branch', 'view_own'))) {
-        //     return $this->permission->Redirect(false);
-        // }
-
         extract(FormVariables::GetVariables([
             'action',
             'page',
@@ -98,6 +92,7 @@ class BranchList extends Controller
             'sort_order' => $sort_array['sort_order'] ?? '',
             'paging_data' => $pager->getPageVariables()
         ];
+
 
         return view('branch.BranchList', $data);
     }

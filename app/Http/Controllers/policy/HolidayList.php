@@ -17,7 +17,7 @@ if ( !$permission->Check('holiday_policy','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Holiday List')); // See index.php
+$smarty->assign('title', __($title = 'Holiday List')); // See index.php
 
 /*
  * Get FORM variables

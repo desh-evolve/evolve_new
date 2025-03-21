@@ -20,7 +20,7 @@ if ( !$permission->Check('schedule','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'My Schedule')); // See index.php
+$smarty->assign('title', __($title = 'My Schedule')); // See index.php
 //BreadCrumb::setCrumb($title);
 BreadCrumb::setCrumb($title, str_replace('ViewScheduleWeek.php', 'ViewSchedule.php', $_SERVER['REQUEST_URI']) );
 

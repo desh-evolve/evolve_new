@@ -20,7 +20,7 @@ if ( !$permission->Check('permission','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Permission Group')); // See index.php
+$smarty->assign('title', __($title = 'Edit Permission Group')); // See index.php
 
 /*
  * Get FORM variables
@@ -78,7 +78,7 @@ switch ($action) {
 			if ( $current_user_failed == TRUE ) {
 				$pcf->Validator->isTrue( 'user',
 										FALSE,
-										TTi18n::gettext('You can not unassign yourself from a permission group, assign yourself to a new group instead') );
+										_('You can not unassign yourself from a permission group, assign yourself to a new group instead') );
 			}
 		}
 
@@ -172,7 +172,7 @@ switch ($action) {
 
 		}
 
-		$section_groups = Misc::prependArray( array( -1 => TTi18n::gettext('-- None --')), $pf->getOptions('section_group') );
+		$section_groups = Misc::prependArray( array( -1 => _('-- None --')), $pf->getOptions('section_group') );
 		$section_group_map = $pf->getOptions('section_group_map');
 		$sections = $pf->getOptions('section');
 		$names = $pf->getOptions('name');
@@ -226,7 +226,7 @@ switch ($action) {
 		}
 
 		//var_dump($permission_data);
-		$preset_options = Misc::prependArray( array( -1 => TTi18n::gettext('--')), $pf->getOptions('preset') );
+		$preset_options = Misc::prependArray( array( -1 => _('--')), $pf->getOptions('preset') );
 
 
 		$data['level_options'] = $pcf->getOptions('level');

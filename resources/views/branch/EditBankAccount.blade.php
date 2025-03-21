@@ -48,7 +48,7 @@
                 <form method="POST" action="{{ isset($bank_data['id']) ? route('branch_bank.save', $bank_data['id']) : route('branch_bank.save') }}">
                     @csrf
 
-                        <div class="form-group">
+                        <div class="form-group d-none">
                             <label for="institution">Institution Number</label>
                             <input type="text" name="institution" id="institution" class="form-control" value="{{ $bank_data['institution'] ?? '' }}" size="3">
                         </div>

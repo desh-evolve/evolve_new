@@ -19,7 +19,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Detail Report')); // See index.php
+$smarty->assign('title', __($title = 'Employee Detail Report')); // See index.php
 
 
 /*
@@ -44,71 +44,71 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 												) );
 
 
-$columns = array(						'-1010-employee_number' => TTi18n::gettext('Employee #'),
-										'-1020-status' => TTi18n::gettext('Status'),
-										'-1030-user_name' => TTi18n::gettext('User Name'),
-										'-1040-phone_id' => TTi18n::gettext('Phone ID'),
-										'-1050-ibutton_id' => TTi18n::gettext('iButton'),
+$columns = array(						'-1010-employee_number' => _('Employee #'),
+										'-1020-status' => _('Status'),
+										'-1030-user_name' => _('User Name'),
+										'-1040-phone_id' => _('Phone ID'),
+										'-1050-ibutton_id' => _('iButton'),
 
-										'-1060-first_name' => TTi18n::gettext('First Name'),
-										'-1070-middle_name' => TTi18n::gettext('Middle Name'),
-										'-1080-last_name' => TTi18n::gettext('Last Name'),
-										'-1085-full_name' => TTi18n::gettext('Full Name'),
-                                                                                '-1087-calling_name' => TTi18n::gettext('Calling Name'),
+										'-1060-first_name' => _('First Name'),
+										'-1070-middle_name' => _('Middle Name'),
+										'-1080-last_name' => _('Last Name'),
+										'-1085-full_name' => _('Full Name'),
+                                                                                '-1087-calling_name' => _('Calling Name'),
 
-										'-1090-title' => TTi18n::gettext('Title'),
+										'-1090-title' => _('Title'),
 
-										'-1099-group' => TTi18n::gettext('Group'),
-										'-1100-default_branch' => TTi18n::gettext('Branch'),
-										'-1110-default_department' => TTi18n::gettext('Department'),
+										'-1099-group' => _('Group'),
+										'-1100-default_branch' => _('Branch'),
+										'-1110-default_department' => _('Department'),
 
-										'-1112-permission_control' => TTi18n::gettext('Permission Group'),
-										'-1115-policy_group' => TTi18n::gettext('Policy Group'),
-										'-1118-pay_period_schedule' => TTi18n::gettext('Pay Period Schedule'),
+										'-1112-permission_control' => _('Permission Group'),
+										'-1115-policy_group' => _('Policy Group'),
+										'-1118-pay_period_schedule' => _('Pay Period Schedule'),
 
-										'-1120-sex' => TTi18n::gettext('Sex'),
+										'-1120-sex' => _('Sex'),
 
-										'-1130-address1' => TTi18n::gettext('Address 1'),
-										'-1140-address2' => TTi18n::gettext('Address 2'),
+										'-1130-address1' => _('Address 1'),
+										'-1140-address2' => _('Address 2'),
 
-										'-1150-city' => TTi18n::gettext('City'),
-										'-1160-province' => TTi18n::gettext('Province/State'),
-										'-1170-country' => TTi18n::gettext('Country'),
-										'-1180-postal_code' => TTi18n::gettext('Postal Code'),
-										'-1190-work_phone' => TTi18n::gettext('Work Phone'),
-										'-1200-home_phone' => TTi18n::gettext('Home Phone'),
-										'-1210-mobile_phone' => TTi18n::gettext('Mobile Phone'),
-										'-1220-fax_phone' => TTi18n::gettext('Fax Phone'),
-										'-1230-home_email' => TTi18n::gettext('Home Email'),
-										'-1240-work_email' => TTi18n::gettext('Work Email'),
-										'-1250-birth_date' => TTi18n::gettext('Birth Date'),
-										'-1260-hire_date' => TTi18n::gettext('Appointment Date'),
-										'-1270-termination_date' => TTi18n::gettext('Termination Date'),
-										'-1280-sin' => TTi18n::gettext('SIN/SSN'),
+										'-1150-city' => _('City'),
+										'-1160-province' => _('Province/State'),
+										'-1170-country' => _('Country'),
+										'-1180-postal_code' => _('Postal Code'),
+										'-1190-work_phone' => _('Work Phone'),
+										'-1200-home_phone' => _('Home Phone'),
+										'-1210-mobile_phone' => _('Mobile Phone'),
+										'-1220-fax_phone' => _('Fax Phone'),
+										'-1230-home_email' => _('Home Email'),
+										'-1240-work_email' => _('Work Email'),
+										'-1250-birth_date' => _('Birth Date'),
+										'-1260-hire_date' => _('Appointment Date'),
+										'-1270-termination_date' => _('Termination Date'),
+										'-1280-sin' => _('SIN/SSN'),
 /*
-										'-1284-ibutton_id' => TTi18n::gettext('iButton'),
-										'-1285-finger_print_1' => TTi18n::gettext('Finger Print 1'),
-										'-1286-finger_print_2' => TTi18n::gettext('Finger Print 2'),
-										'-1287-finger_print_3' => TTi18n::gettext('Finger Print 3'),
-										'-1288-finger_print_4' => TTi18n::gettext('Finger Print 4'),
+										'-1284-ibutton_id' => _('iButton'),
+										'-1285-finger_print_1' => _('Finger Print 1'),
+										'-1286-finger_print_2' => _('Finger Print 2'),
+										'-1287-finger_print_3' => _('Finger Print 3'),
+										'-1288-finger_print_4' => _('Finger Print 4'),
 */
-										'-1289-note' => TTi18n::gettext('Note'),
+										'-1289-note' => _('Note'),
 
-										'-1290-institution' => TTi18n::gettext('Bank Institution'),
-										'-1300-transit' => TTi18n::gettext('Bank Transit/Routing'),
-										'-1310-account' => TTi18n::gettext('Bank Account'),
+										'-1290-institution' => _('Bank Institution'),
+										'-1300-transit' => _('Bank Transit/Routing'),
+										'-1310-account' => _('Bank Account'),
 
-										'-1319-currency' => TTi18n::gettext('Currency'),
-										'-1320-wage_type' => TTi18n::gettext('Wage Type'),
-										'-1330-wage' => TTi18n::gettext('Wage'),
-										'-1340-effective_date' => TTi18n::gettext('Wage Effective Date'),
+										'-1319-currency' => _('Currency'),
+										'-1320-wage_type' => _('Wage Type'),
+										'-1330-wage' => _('Wage'),
+										'-1340-effective_date' => _('Wage Effective Date'),
 
-										'-1500-language' => TTi18n::gettext('Language'),
-										'-1510-date_format' => TTi18n::gettext('Date Format'),
-										'-1520-time_format' => TTi18n::gettext('Time Format'),
-										'-1530-time_unit' => TTi18n::gettext('Time Units'),
-										'-1540-time_zone' => TTi18n::gettext('Time Zone'),
-										'-1550-items_per_page' => TTi18n::gettext('Rows Per page'),
+										'-1500-language' => _('Language'),
+										'-1510-date_format' => _('Date Format'),
+										'-1520-time_format' => _('Time Format'),
+										'-1530-time_unit' => _('Time Units'),
+										'-1540-time_zone' => _('Time Zone'),
+										'-1550-items_per_page' => _('Rows Per page'),
 										);
 
 //Get custom user fields
@@ -515,7 +515,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext('No Data To Export!') ."<br>\n";
+				echo _('No Data To Export!') ."<br>\n";
 			}
 		} else {
                     
@@ -581,7 +581,7 @@ switch ($action) {
 		}
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 

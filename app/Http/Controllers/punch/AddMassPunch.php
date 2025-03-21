@@ -24,7 +24,7 @@ if ( !$permission->Check('punch','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Mass Punch')); // See index.php
+$smarty->assign('title', __($title = 'Mass Punch')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*
@@ -132,7 +132,7 @@ switch ($action) {
 		$user_options = Misc::arrayDiffByKey( (array)$filter_user_id, $src_user_options );
 		$filter_user_options = Misc::arrayIntersectByKey( (array)$filter_user_id, $src_user_options );
 		
-		$prepend_array_option = array( 0 => '--', -1 => TTi18n::gettext('-- Default --') );
+		$prepend_array_option = array( 0 => '--', -1 => _('-- Default --') );
 
 		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );

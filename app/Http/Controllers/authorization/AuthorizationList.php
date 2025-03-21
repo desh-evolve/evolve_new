@@ -1,53 +1,80 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4206 $
- * $Id: AuthorizationList.php 4206 2011-02-02 00:53:35Z ipso $
- * $Date: 2011-02-01 16:53:35 -0800 (Tue, 01 Feb 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('authorization','enabled')
-		OR !( $permission->Check('authorization','view') ) ) {
+namespace App\Http\Controllers\authorization;
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualBalanceFactory;
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-//Debug::setVerbosity(11);
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyLevelListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Hierarchy\HierarchyObjectTypeListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Request\RequestListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Authorization List')); // See index.php
-BreadCrumb::setCrumb($title);
+class AuthorizationList extends Controller
+{
+    protected $permission;
+    protected $company;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												'selected_levels'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->userPrefs = View::shared('current_user_prefs');
+        $this->company = View::shared('current_company');
+        $this->permission = View::shared('permission');
 
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+        /*
+        if ( !$permission->Check('authorization','enabled')
+				OR !( $permission->Check('authorization','view') ) ) {
 
-	default:
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
+
+	public function index() {
+
+        $viewData['title'] = 'Authorization List';
+
+		extract	(FormVariables::GetVariables(
+			array	(
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+				'selected_levels'
+			) 
+		) );
+
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array(
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+
 		$sort_array = NULL;
 		if ( $sort_column != '' ) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
@@ -55,7 +82,7 @@ switch ($action) {
 
 		$ulf = new UserListFactory();
 		$hlf = new HierarchyListFactory();
-		$hllf = new HierarchyLevelListFactory();
+		$hllf = new HierarchyLevelListFactory(); 
 		$hotlf = new HierarchyObjectTypeListFactory();
 
 		if ( $permission->Check('request','authorize') ) {
@@ -75,9 +102,11 @@ switch ($action) {
 			//Debug::Arr( $selected_level_arr['request_punch'], 'Request Punch Selected Level Arr: ', __FILE__, __LINE__, __METHOD__,10);
 
 			if ( is_array($selected_level_arr['request_punch']) ) {
-				$rlf = new RequestListFactory();
+				$rlf = new RequestListFactory(); 
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_punch'], 10, 30, NULL, NULL, NULL, $sort_array ); //Missed Punch
-				foreach( $rlf as $r_obj) {
+				foreach( $rlf->rs as $r_obj) {
+					$rlf->data = (array)$r_obj;
+					$r_obj = $rlf;
 					//Grab authorizations for this object.
 					$requests['request_punch'][] = array(
 														'id' => $r_obj->getId(),
@@ -114,7 +143,9 @@ switch ($action) {
 			if ( is_array($selected_level_arr['request_punch_adjust']) ) {
 				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_punch_adjust'], 20, 30, NULL, NULL, NULL, $sort_array ); //Punch Adjust
-				foreach( $rlf as $r_obj) {
+				foreach( $rlf->rs as $r_obj) {
+					$rlf->data = (array)$r_obj;
+					$r_obj = $rlf;
 					//Grab authorizations for this object.
 					$requests['request_punch_adjust'][] = array(
 														'id' => $r_obj->getId(),
@@ -151,7 +182,9 @@ switch ($action) {
 			if ( is_array($selected_level_arr['request_absence']) ) {
 				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_absence'], 30, 30, NULL, NULL, NULL, $sort_array ); //Absence
-				foreach( $rlf as $r_obj) {
+				foreach( $rlf->rs as $r_obj) {
+					$rlf->data = (array)$r_obj;
+					$r_obj = $rlf;
 					//Grab authorizations for this object.
 					$requests['request_absence'][] = array(
 														'id' => $r_obj->getId(),
@@ -188,7 +221,9 @@ switch ($action) {
 			if ( is_array($selected_level_arr['request_schedule']) ) {
 				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_schedule'], 40, 30, NULL, NULL, NULL, $sort_array ); //Schedule
-				foreach( $rlf as $r_obj) {
+				foreach( $rlf->rs as $r_obj) {
+					$rlf->data = (array)$r_obj;
+					$r_obj = $rlf;
 					//Grab authorizations for this object.
 					$requests['request_schedule'][] = array(
 														'id' => $r_obj->getId(),
@@ -224,9 +259,11 @@ switch ($action) {
 			if ( is_array($selected_level_arr['request_other']) ) {
 				$rlf = new RequestListFactory();
 				$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_other'], 100, 30, NULL, NULL, NULL, $sort_array ); //Other
-				foreach( $rlf as $r_obj) {
+				foreach( $rlf->rs as $r_obj) {
+					$rlf->data = (array)$r_obj;
+					$r_obj = $rlf;
 					//Grab authorizations for this object.
-					$requests['request_other'][] = array(
+					$requests['request_other'][] = 	array(
 														'id' => $r_obj->getId(),
 														'user_date_id' => $r_obj->getId(),
 														'user_id' => $r_obj->getUserDateObject()->getUser(),
@@ -244,7 +281,7 @@ switch ($action) {
 			}
 
 			if ( isset($requests) ) {
-				$smarty->assign_by_ref('requests', $requests);
+				$viewData['requests'] = $requests;
 			}
 		}
 
@@ -269,33 +306,41 @@ switch ($action) {
 			if ( is_array($selected_level_arr['timesheet']) ) {
 				$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 				$pptsvlf->getByHierarchyLevelMapAndStatusAndNotAuthorized($selected_level_arr['timesheet'], 30, NULL, NULL, NULL, $sort_array );
-				foreach( $pptsvlf as $pptsv_obj) {
+				foreach( $pptsvlf->rs as $pptsv_obj) {
+					$pptsvlf->data = (array)$pptsv_obj;
+					$pptsv_obj = $pptsvlf;
 					//Grab authorizations for this object.
 					$timesheets[] = array(
-											'id' => $pptsv_obj->getId(),
-											'pay_period_id' => $pptsv_obj->getPayPeriod(),
-											'user_id' => $pptsv_obj->getUser(),
-											'user_full_name' => $pptsv_obj->getUserObject()->getFullName(),
-											'pay_period_start_date' => $pptsv_obj->getPayPeriodObject()->getStartDate(),
-											'pay_period_end_date' => $pptsv_obj->getPayPeriodObject()->getEndDate(),
-											'status_id' => $pptsv_obj->getStatus(),
-											'status' => Option::getByKey($pptsv_obj->getStatus(), $pptsvlf->getOptions('status') ),
-										);
+										'id' => $pptsv_obj->getId(),
+										'pay_period_id' => $pptsv_obj->getPayPeriod(),
+										'user_id' => $pptsv_obj->getUser(),
+										'user_full_name' => $pptsv_obj->getUserObject()->getFullName(),
+										'pay_period_start_date' => $pptsv_obj->getPayPeriodObject()->getStartDate(),
+										'pay_period_end_date' => $pptsv_obj->getPayPeriodObject()->getEndDate(),
+										'status_id' => $pptsv_obj->getStatus(),
+										'status' => Option::getByKey($pptsv_obj->getStatus(), $pptsvlf->getOptions('status') ),
+									);
 				}
-				$smarty->assign_by_ref('timesheets', $timesheets);
+				
+				$viewData['timesheets'] = $timesheets;
 			} else {
 				Debug::Text( 'No hierarchy information found...', __FILE__, __LINE__, __METHOD__,10);
 			}
 		}
 
-		$smarty->assign_by_ref('selected_levels', $selected_levels );
-		$smarty->assign_by_ref('selected_level_arr', $selected_level_arr);
-		$smarty->assign_by_ref('hierarchy_levels', $hierarchy_levels);
+		$viewData['selected_levels'] = $selected_levels ;
+		$viewData['selected_level_arr'] = $selected_level_arr;
+		$viewData['hierarchy_levels'] = $hierarchy_levels;
+		$viewData['sort_column'] = $sort_column ;
+		$viewData['sort_order'] = $sort_order ;
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+		return view('authorization/AuthorizationList', $viewData);
 
-		break;
+	}
+
+	public function submit(){
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+	}
 }
-$smarty->display('authorization/AuthorizationList.tpl');
+
 ?>

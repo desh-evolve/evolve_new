@@ -21,7 +21,7 @@ if ( !$permission->Check('roe','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Record Of Employment')); // See index.php
+$smarty->assign('title', __($title = 'Edit Record Of Employment')); // See index.php
 
 /*
  * Get FORM variables

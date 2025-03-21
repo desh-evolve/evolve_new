@@ -19,7 +19,7 @@ if ( !$permission->Check('user','enabled')
 
 //Debug::setVerbosity(11);
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee Group')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee Group')); // See index.php
 
 /*
  * Get FORM variables

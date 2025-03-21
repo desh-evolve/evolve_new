@@ -1,105 +1,85 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5457 $
- * $Id: UserWageList.php 5457 2011-11-04 20:49:58Z ipso $
- * $Date: 2011-11-04 13:49:58 -0700 (Fri, 04 Nov 2011) $
- */
 
+namespace App\Http\Controllers\kpi;
 
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use Illuminate\Http\Request;
 
-/*******************************************************************************
- * 
- * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
- * I COPIED SOME THIS CODE FROM PATH:- evolvepayroll\interface\users\UserWageList.php
- * THIS CODE ADDED BY ME
- * CREATE USERES KPI
- * 
- *******************************************************************************/
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserKpiListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use Illuminate\Support\Facades\View;
 
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+class KpiUserList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-if ( !$permission->Check('wage','enabled')
-		OR !( $permission->Check('wage','view') OR $permission->Check('wage','view_child') OR $permission->Check('wage','view_own') ) ) {
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-	$permission->Redirect( FALSE ); //Redirect
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-}
+        /*
+        if ( !$permission->Check('wage','enabled')
+				OR !( $permission->Check('wage','view') OR $permission->Check('wage','view_child') OR $permission->Check('wage','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee KPI List')); // See index.php
-BreadCrumb::setCrumb($title);
+    public function index() {
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'saved_search_id',
-												'ids',
-												'user_id'
-												) ) );
+        $viewData['title'] = 'Employee KPI List';
 
-$ulf = new UserListFactory();
-//$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
-//$user_data = $ulf->getCurrent();
-//$smarty->assign('title', $user_data->getFullName().'\'s Wage List' );
-
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'user_id' => $user_id,
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
-
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
-
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL(array('user_id' => $user_id, 'saved_search_id' => $saved_search_id ), 'EditUserKpiOld.php', FALSE) );
-
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'saved_search_id',
+				'ids',
+				'user_id'
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+		array (
+			'user_id' => $user_id,
+			'sort_column' => $sort_column,
+			'sort_order' => $sort_order,
+			'page' => $page
+			) 
+		);
+		
+		$ulf = new UserListFactory();
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
 
-		//$uwlf = new UserWageListFactory();
-                $uklf = new UserKpiListFactory();
-
-		if ( $ids != '' ) {
-			foreach ($ids as $id) {
-				$uklf->getByIdAndCompanyId($id, $current_company->getId() );
-				foreach ($uklf as $kpi) {
-					$kpi->setDeleted($delete);
-					$kpi->Save();
-				}
-			}
-		}
-
-		Redirect::Page( URLBuilder::getURL(array('user_id' => $user_id), 'KpiUserList.php') );
-
-		break;
-
-	default:
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 		$user_has_default_wage = FALSE;
 
@@ -119,7 +99,7 @@ switch ($action) {
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
 		//Select box options;
-		$blf = new BranchListFactory();
+		$blf = new BranchListFactory(); 
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
                 
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
@@ -143,7 +123,10 @@ switch ($action) {
 					OR ( $permission->Check('wage','view_own') AND $is_owner === TRUE )
 					OR ( $permission->Check('wage','view_child') AND $is_child === TRUE ) ) {
 
-				foreach ($uklf as $kpi) {
+				foreach ($uklf->rs as $kpi) {
+					$uklf->data = (array)$kpi;
+					$kpi = $uklf;
+
 					$kpi_history[] = array(
 										'id' => $kpi->getId(),
 										'user_id' => $kpi->getUser(),
@@ -171,8 +154,7 @@ switch ($action) {
 					//if ( $wage->getWageGroup() == 0 ) {
 					//	$user_has_default_wage = TRUE;
 					//}
-				}
-//                                print_r($wages);                         
+				}                    
          
 			}
 		}
@@ -195,19 +177,72 @@ switch ($action) {
 
 		$user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE );
 
-		$smarty->assign_by_ref('user_options', $user_options);
+		$viewData['user_options'] = $user_options;
+		$viewData['kpi_history'] = $kpi_history;
+		$viewData['user_id'] = $user_id;
+		//$viewData['user_has_default_wage'] = $user_has_default_wage;
+		$viewData['saved_search_id'] = $saved_search_id;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('kpi_history', $kpi_history);
-		$smarty->assign_by_ref('user_id', $user_id );
-		//$smarty->assign_by_ref('user_has_default_wage', $user_has_default_wage );
+        return view('kpi/KpiUserList', $viewData);
 
-		$smarty->assign_by_ref('saved_search_id', $saved_search_id );
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+    }
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+	public function add(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'saved_search_id',
+				'ids',
+				'user_id'
+			) 
+		) );
 
-		break;
+		Redirect::Page( URLBuilder::getURL(array('user_id' => $user_id, 'saved_search_id' => $saved_search_id ), 'EditUserKpiOld', FALSE) );
+	}
+
+	public function delete(){
+		$current_company = $this->currentCompany;
+		
+		$delete = TRUE;
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'saved_search_id',
+				'ids',
+				'user_id'
+			) 
+		) );
+
+		$uklf = new UserKpiListFactory();
+
+		if ( $ids != '' ) {
+			foreach ($ids as $id) {
+				$uklf->getByIdAndCompanyId($id, $current_company->getId() );
+				foreach ($uklf->rs as $kpi) {
+					$uklf->data = (array)$kpi;
+					$kpi = $uklf;
+
+					$kpi->setDeleted($delete);
+					$kpi->Save();
+				}
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL(array('user_id' => $user_id), 'KpiUserList') );
+	}
 }
-$smarty->display('kpi/KpiUserList.tpl');
+
+
+
+
 ?>

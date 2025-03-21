@@ -9,7 +9,7 @@
 require_once('../../includes/global.inc.php');
 require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Qualification')); // See index.php
+$smarty->assign('title', __($title = 'Edit Qualification')); // See index.php
 
 if ( !$permission->Check('user','enabled')
 		OR !( $permission->Check('user','edit') OR $permission->Check('user','edit_own') OR $permission->Check('user','edit_child') OR $permission->Check('user','add')) ) {

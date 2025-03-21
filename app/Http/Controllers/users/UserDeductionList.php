@@ -19,7 +19,7 @@ if ( !$permission->Check('user_tax_deduction','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Tax / Deduction List')); // See index.php
+$smarty->assign('title', __($title = 'Employee Tax / Deduction List')); // See index.php
 
 /*
  * Get FORM variables

@@ -19,7 +19,7 @@ if ( !$permission->Check('over_time_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Overtime Policy')); // See index.php
+$smarty->assign('title', __($title = 'Edit Overtime Policy')); // See index.php
 
 /*
  * Get FORM variables

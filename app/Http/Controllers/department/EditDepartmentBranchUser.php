@@ -1,109 +1,78 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditDepartmentBranchUser.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('department','enabled')
-		OR !( $permission->Check('department','assign') ) ) {
+namespace App\Http\Controllers\department;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentBranchListFactory;
+use App\Models\Department\DepartmentBranchUserFactory;
+use App\Models\Department\DepartmentBranchUserListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Department Employees')); // See index.php
+class EditDepartmentBranchUser extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'department_data'
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-												) ) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$dbuf = new DepartmentBranchUserFactory();
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		Debug::Text('Department ID: '. $department_data['id'] , __FILE__, __LINE__, __METHOD__,10);
-
-
-		$dbulf = new DepartmentBranchUserListFactory();
-
-		//Delete all mappings first?
-		$dblf = new DepartmentBranchListFactory();
-		$dblf->getByDepartmentId( $department_data['id'] );
-
-		foreach ($dblf as $department_branch) {
-			$dbulf->getByDepartmentBranchId( $department_branch->getId() );
-
-			foreach($dbulf as $department_branch_user) {
-				Debug::Text('Deleting Department Branch Mapping: '. $department_branch_user->getId() , __FILE__, __LINE__, __METHOD__,10);
-				$department_branch_user->Delete();
-			}
+        /*
+        if ( !$permission->Check('department','enabled')
+				OR !( $permission->Check('department','assign') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
+    }
 
-		$dbulf = new DepartmentBranchUserListFactory();
+    public function index() {
 
-		if ( isset($department_data['branch_data']) AND is_array($department_data['branch_data']) ) {
-			foreach($department_data['branch_data'] as $branch_id => $user_ids) {
-				Debug::Text('BranchID: '. $branch_id , __FILE__, __LINE__, __METHOD__,10);
-				Debug::Arr($user_ids, 'Branch User IDs: ', __FILE__, __LINE__, __METHOD__,10);
+        $viewData['title'] = 'Department Employees';
 
-				//Get DepartmentBranchId
-				$dblf->getByDepartmentIdAndBranchId($department_data['id'],$branch_id);
-				$department_branch_id = $dblf->getIterator()->current()->getId();
-
-				Debug::Text('DepartmentBranchID: '. $department_branch_id, __FILE__, __LINE__, __METHOD__,10);
-
-				foreach ($user_ids as $user_id) {
-					Debug::Text('Mapping User: '. $user_id .' To DepartmentBranchID: '. $department_branch_id, __FILE__, __LINE__, __METHOD__,10);
-					$dbuf->setDepartmentBranch($department_branch_id);
-					$dbuf->setUser($user_id);
-					if ( $dbuf->isValid() ) {
-						$dbuf->Save();
-					}
-
-				}
-			}
-		}
-
-		if ( $dbuf->isValid() ) {
-
-			Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
-
-			break;
-		}
-
-	default:
-		BreadCrumb::setCrumb($title);
+		extract	(FormVariables::GetVariables(
+			array(
+				'action',
+				'id',
+				'department_data'
+			) 
+		) );
 
 		$dlf = new DepartmentListFactory();
 
 		$dlf->GetByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($dlf as $department) {
+		foreach ($dlf->rs as $department) {
+			$dlf->data = (array)$department;
+			$department = $dlf;
 			//Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 			$branch_data = array();
 
-			$dblf = new DepartmentBranchListFactory();
+			$dblf = new DepartmentBranchListFactory(); 
 			$dblf->getByDepartmentId( $department->getId() );
-			foreach($dblf as $department_branch) {
+			foreach($dblf->rs as $department_branch) {
+				$dblf->data = (array)$department_branch;
+				$department_branch = $dblf;
+
 				$branch_id = $department_branch->getBranch();
 				Debug::Text('DepartmentBranchId: '. $branch_id , __FILE__, __LINE__, __METHOD__,10);
 
@@ -113,7 +82,10 @@ switch ($action) {
 					$dbulf->getByDepartmentBranchId( $department_branch->getId() );
 
 					$department_branch_user_ids = array();
-					foreach($dbulf as $department_branch_user) {
+					foreach($dbulf->rs as $department_branch_user) {
+						$dbulf->data = (array)$department_branch_user;
+						$department_branch_user = $dbulf;
+
 						$department_branch_user_ids[] = $department_branch_user->getUser();
 						Debug::Text('DepartmentBranchUser: '. $department_branch_user->getUser(), __FILE__, __LINE__, __METHOD__,10);
 					}
@@ -124,12 +96,12 @@ switch ($action) {
 
 				$blf = new BranchListFactory();
 				$blf->getById( $branch_id );
-				$branch = $blf->getIterator()->current();
-				$branch_data[$branch_id] = array(
-														'id' => $branch->getId(),
-														'name' => $branch->getName(),
-														'user_ids' => $department_branch_user_ids
-													);
+				$branch = $blf->getCurrent();
+				$branch_data[$branch_id] = array (
+					'id' => $branch->getId(),
+					'name' => $branch->getName(),
+					'user_ids' => $department_branch_user_ids
+				);
 			}
 
 			$department_data = array(
@@ -156,12 +128,76 @@ switch ($action) {
 		$department_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
 		//var_dump($te);
 
-		$smarty->assign_by_ref('department_data', $department_data);
+		$viewData['department_data'] = $department_data;
+		$viewData['dbuf'] = $dbuf;
 
-		break;
+        return view('department/EditDepartmentBranchUser', $viewData);
+
+    }
+
+	public function submit(Request $request){
+		
+		$department_data = $request->data;
+
+		$dbuf = new DepartmentBranchUserFactory();
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		Debug::Text('Department ID: '. $department_data['id'] , __FILE__, __LINE__, __METHOD__,10);
+
+
+		$dbulf = new DepartmentBranchUserListFactory();
+
+		//Delete all mappings first?
+		$dblf = new DepartmentBranchListFactory();
+		$dblf->getByDepartmentId( $department_data['id'] );
+
+		foreach ($dblf->rs as $department_branch) {
+			$dblf->data = (array)$department_branch;
+			$department_branch = $dblf;
+
+			$dbulf->getByDepartmentBranchId( $department_branch->getId() );
+
+			foreach($dbulf->rs as $department_branch_user) {
+				$dbulf->data = (array)$department_branch_user;
+				$department_branch_user = $dbulf;
+
+				Debug::Text('Deleting Department Branch Mapping: '. $department_branch_user->getId() , __FILE__, __LINE__, __METHOD__,10);
+				$department_branch_user->Delete();
+			}
+		}
+
+		$dbulf = new DepartmentBranchUserListFactory();
+
+		if ( isset($department_data['branch_data']) AND is_array($department_data['branch_data']) ) {
+			foreach($department_data['branch_data'] as $branch_id => $user_ids) {
+				Debug::Text('BranchID: '. $branch_id , __FILE__, __LINE__, __METHOD__,10);
+				Debug::Arr($user_ids, 'Branch User IDs: ', __FILE__, __LINE__, __METHOD__,10);
+
+				//Get DepartmentBranchId
+				$dblf->getByDepartmentIdAndBranchId($department_data['id'],$branch_id);
+				$department_branch_id = $dblf->getCurrent()->getId();
+
+				Debug::Text('DepartmentBranchID: '. $department_branch_id, __FILE__, __LINE__, __METHOD__,10);
+
+				foreach ($user_ids as $user_id) {
+					Debug::Text('Mapping User: '. $user_id .' To DepartmentBranchID: '. $department_branch_id, __FILE__, __LINE__, __METHOD__,10);
+					$dbuf->setDepartmentBranch($department_branch_id);
+					$dbuf->setUser($user_id);
+					if ( $dbuf->isValid() ) {
+						$dbuf->Save();
+					}
+
+				}
+			}
+		}
+
+		if ( $dbuf->isValid() ) {
+
+			Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
+
+		}
+	}
 }
 
-$smarty->assign_by_ref('dbuf', $dbuf);
 
-$smarty->display('department/EditDepartmentBranchUser.tpl');
 ?>

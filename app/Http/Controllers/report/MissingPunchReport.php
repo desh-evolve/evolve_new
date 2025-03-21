@@ -14,7 +14,7 @@ require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
 require_once(Environment::getBasePath() .'classes/php_excel/PHPExcel.php');
 
-$smarty->assign('title', TTi18n::gettext($title = 'Missing Punch Report')); // See index.php
+$smarty->assign('title', __($title = 'Missing Punch Report')); // See index.php
 
 //Debug::setVerbosity(11);
 /*
@@ -58,23 +58,23 @@ $static_columns = array(
     'default_branch' => 'Default Branch',
     'default_department' => 'Default Department',
 */
-    '-1000-date_stamp' => TTi18n::gettext('Date'),
+    '-1000-date_stamp' => _('Date'),
     '-1050-min_punch_time_stamp' => 'First In Punch',
     '-1060-max_punch_time_stamp' => 'Last Out Punch',
     );
 
 $columns = array(
 
-    '-1070-schedule_working' => TTi18n::gettext('Scheduled Time'),
-    '-1080-schedule_absence' => TTi18n::gettext('Scheduled Absence'),
-    '-1090-worked_time' => TTi18n::gettext('Worked Time'),
-    '-1100-actual_time' => TTi18n::gettext('Actual Time'),
-    '-1110-actual_time_diff' => TTi18n::gettext('Actual Time Difference'),
-    '-1120-actual_time_diff_wage' => TTi18n::gettext('Actual Time Difference Wage'),
-    '-1130-paid_time' => TTi18n::gettext('Paid Time'),
-    '-1140-regular_time' => TTi18n::gettext('Regular Time'),
-    '-1150-over_time' => TTi18n::gettext('Total Over Time'),
-    '-1160-absence_time' => TTi18n::gettext('Total Absence Time'),
+    '-1070-schedule_working' => _('Scheduled Time'),
+    '-1080-schedule_absence' => _('Scheduled Absence'),
+    '-1090-worked_time' => _('Worked Time'),
+    '-1100-actual_time' => _('Actual Time'),
+    '-1110-actual_time_diff' => _('Actual Time Difference'),
+    '-1120-actual_time_diff_wage' => _('Actual Time Difference Wage'),
+    '-1130-paid_time' => _('Paid Time'),
+    '-1140-regular_time' => _('Regular Time'),
+    '-1150-over_time' => _('Total Over Time'),
+    '-1160-absence_time' => _('Total Absence Time'),
     );
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -526,15 +526,15 @@ switch ($action) {
 						$rows[$i]['verified_time_sheet_date'] = FALSE;
 						if ( $verified_time_sheets !== NULL AND isset($verified_time_sheets[$user_id][$pay_period_id]) ) {
 							if ( $verified_time_sheets[$user_id][$pay_period_id]['status_id'] == 50 ) {
-								$rows[$i]['verified_time_sheet'] = TTi18n::gettext('Yes');
+								$rows[$i]['verified_time_sheet'] = _('Yes');
 								$rows[$i]['verified_time_sheet_date'] = $verified_time_sheets[$user_id][$pay_period_id]['created_date'];
 							} elseif ( $verified_time_sheets[$user_id][$pay_period_id]['status_id'] == 30 OR $verified_time_sheets[$user_id][$pay_period_id]['status_id'] == 45 ) {
-								$rows[$i]['verified_time_sheet'] = TTi18n::gettext('Pending');
+								$rows[$i]['verified_time_sheet'] = _('Pending');
 							} else {
-								$rows[$i]['verified_time_sheet'] = TTi18n::gettext('Declined');
+								$rows[$i]['verified_time_sheet'] = _('Declined');
 							}
 						} else {
-							$rows[$i]['verified_time_sheet'] = TTi18n::gettext('No');
+							$rows[$i]['verified_time_sheet'] = _('No');
 						}
 
 						$x=0;
@@ -662,7 +662,7 @@ switch ($action) {
                             }
                             
 			} else {
-				echo TTi18n::gettext("No Data To Export!") ."<br>\n";
+				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -740,7 +740,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'punch_branch_ids', 'punch_department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -815,8 +815,8 @@ switch ($action) {
                 $smarty->assign('hidden_elements',$hidden_elements); // See index.php
                 
                 //FL ADDED FOR EXPORT TYPE
-                $filter_data['export_type_options'] = Misc::prependArray( array(  'pdfMissingPunch' => TTi18n::gettext('Missing Punch Report'),'excelMissingPunch'=>TTi18n::gettext('Missing Punch Ecel')) );
-//              $filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => TTi18n::gettext('CSV (Excel)'), 'pdfOTDetails' => TTi18n::gettext('OT Daily Monthly Report'), 'pdfDailyLate' => TTi18n::gettext('Daily Attendance / Late'), 'pdfMonthlyDetailAttendance' => TTi18n::gettext('Monthly Attendance Report'), 'pdfMonthlyDetailLate' => TTi18n::gettext('Monthly Late Report')) );
+                $filter_data['export_type_options'] = Misc::prependArray( array(  'pdfMissingPunch' => _('Missing Punch Report'),'excelMissingPunch'=>_('Missing Punch Ecel')) );
+//              $filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => _('CSV (Excel)'), 'pdfOTDetails' => _('OT Daily Monthly Report'), 'pdfDailyLate' => _('Daily Attendance / Late'), 'pdfMonthlyDetailAttendance' => _('Monthly Attendance Report'), 'pdfMonthlyDetailLate' => _('Monthly Late Report')) );
 	
                 
 /*

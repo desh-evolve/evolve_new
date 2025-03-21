@@ -1,39 +1,55 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: ViewHierarchy.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('hierarchy','enabled')
-		OR !( $permission->Check('hierarchy','view') OR $permission->Check('hierarchy','view_own') ) ) {
+namespace App\Http\Controllers\hierarchy;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', TTi18n::gettext($title = 'View Hierarchy')); // See index.php
-BreadCrumb::setCrumb($title);
+class ViewHierarchy extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'hierarchy_id',
-												'id'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-switch ($action) {
-	default:
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
+
+        /*
+        if ( !$permission->Check('hierarchy','enabled')
+				OR !( $permission->Check('hierarchy','view') OR $permission->Check('hierarchy','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
+
+    public function index() {
+
+        $viewData['title'] = 'View Hierarchy';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'hierarchy_id',
+				'id'
+			) 
+		) );
+
 		if ( isset($id) ) {
 
 			$hlf = new HierarchyListFactory();
@@ -70,10 +86,13 @@ switch ($action) {
 				$i++;
 			} while ( is_array($parents) AND count($parents) > 0 AND $i < 100 );
 		}
+		
+		$viewData['parent_groups'] = $parent_groups;
 
-		$smarty->assign_by_ref('parent_groups', $parent_groups);
+        return view('hierarchy/ViewHierarchy', $viewData);
 
-		break;
+    }
 }
-$smarty->display('hierarchy/ViewHierarchy.tpl');
+
+
 ?>

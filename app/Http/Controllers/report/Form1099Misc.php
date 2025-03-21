@@ -18,7 +18,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Form 1099-Misc Report'));  // See index.php
+$smarty->assign('title', __($title = 'Form 1099-Misc Report'));  // See index.php
 
 /*
  * Get FORM variables
@@ -381,7 +381,7 @@ switch ($action) {
 				exit;
 			}
 		} else {
-			echo TTi18n::gettext('No Employees Match Your Criteria!'). "br>\n";
+			echo _('No Employees Match Your Criteria!'). "br>\n";
 		}
 		break;
 	case 'delete':
@@ -428,7 +428,7 @@ switch ($action) {
 		}
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );

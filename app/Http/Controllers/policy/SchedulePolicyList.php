@@ -19,7 +19,7 @@ if ( !$permission->Check('schedule_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Schedule Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Schedule Policy List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

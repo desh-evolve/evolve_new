@@ -15,7 +15,7 @@ if ( !$permission->Check('company','enabled')
 }
 
 
-$smarty->assign('title', TTi18n::gettext($title = 'Bonus List ')); // See index.php
+$smarty->assign('title', __($title = 'Bonus List ')); // See index.php
 BreadCrumb::setCrumb($title);
 
 extract	(FormVariables::GetVariables(

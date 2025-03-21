@@ -19,7 +19,7 @@ if ( !$permission->Check('round_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Rounding Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Rounding Policy List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

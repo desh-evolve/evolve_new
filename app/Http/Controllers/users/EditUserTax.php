@@ -22,7 +22,7 @@ if ( !$permission->Check('user_tax','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee Tax Options')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee Tax Options')); // See index.php
 
 /*
  * Get FORM variables

@@ -19,7 +19,7 @@ if ( !$permission->Check('break_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Break Policy')); // See index.php
+$smarty->assign('title', __($title = 'Edit Break Policy')); // See index.php
 
 /*
  * Get FORM variables

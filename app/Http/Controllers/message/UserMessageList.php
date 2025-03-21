@@ -19,7 +19,7 @@ if ( !$permission->Check('message','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Message List')); // See index.php
+$smarty->assign('title', __($title = 'Message List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

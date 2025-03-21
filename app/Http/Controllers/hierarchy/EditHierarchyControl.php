@@ -1,46 +1,207 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4919 $
- * $Id: EditHierarchyControl.php 4919 2011-07-03 23:01:01Z ipso $
- * $Date: 2011-07-03 16:01:01 -0700 (Sun, 03 Jul 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('hierarchy','enabled')
-		OR !( $permission->Check('hierarchy','edit') OR $permission->Check('hierarchy','edit_own') ) ) {
+namespace App\Http\Controllers\hierarchy;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyControlFactory;
+use App\Models\Hierarchy\HierarchyControlListFactory;
+use App\Models\Hierarchy\HierarchyLevelFactory;
+use App\Models\Hierarchy\HierarchyLevelListFactory;
+use App\Models\Hierarchy\HierarchyObjectTypeListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-//Debug::setVerbosity(11);
+class EditHierarchyControl extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Hierarchy List')); // See index.php
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'ids',
-												'hierarchy_control_id',
-												'hierarchy_control_data',
-												'hierarchy_level_data'
-												) ) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$hcf = new HierarchyControlFactory();
-$hlf = new HierarchyLevelFactory();
+        /*
+        if ( !$permission->Check('hierarchy','enabled')
+				OR !( $permission->Check('hierarchy','edit') OR $permission->Check('hierarchy','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
+    public function index() {
+
+        $viewData['title'] = 'Edit Hierarchy List';
+		$hcf = new HierarchyControlFactory(); 
+		$hlf = new HierarchyLevelFactory();
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'ids',
+				'hierarchy_control_id',
+				'hierarchy_control_data',
+				'hierarchy_level_data'
+			) 
+		) );
+
+		if ( isset($hierarchy_control_id) ) {
+
+			$hclf = new HierarchyControlListFactory();
+			$hclf->getByIdAndCompanyId($hierarchy_control_id, $current_company->getId() );
+
+			foreach ($hclf->rs as $hierarchy_control) {
+				$hclf->data = (array)$hierarchy_control;
+				$hierarchy_control = $hclf;
+
+				$hierarchy_control_data = array(
+					'id' => $hierarchy_control->getId(),
+					'name' => $hierarchy_control->getName(),
+					'description' => $hierarchy_control->getDescription(),
+					'object_type_ids' => $hierarchy_control->getObjectType(),
+					'user_ids' => $hierarchy_control->getUser(),
+					'created_date' => $hierarchy_control->getCreatedDate(),
+					'created_by' => $hierarchy_control->getCreatedBy(),
+					'updated_date' => $hierarchy_control->getUpdatedDate(),
+					'updated_by' => $hierarchy_control->getUpdatedBy(),
+					'deleted_date' => $hierarchy_control->getDeletedDate(),
+					'deleted_by' => $hierarchy_control->getDeletedBy()
+				);
+			}
+
+			$hllf = new HierarchyLevelListFactory(); 
+			$hllf->getByHierarchyControlId( $hierarchy_control_id );
+			if ( $hllf->getRecordCount() > 0 ) {
+				foreach( $hllf->rs as $hl_obj ) {
+					$hllf->data = (array)$hl_obj;
+					$hl_obj = $hllf;
+
+					$hierarchy_level_data[] = array(
+						'id' => $hl_obj->getId(),
+						'level' => $hl_obj->getLevel(),
+						'user_id' => $hl_obj->getUser(),
+					);
+				}
+			} else {
+				$hierarchy_level_data[-1] = array(
+					'id' => -1,
+					'level' => 1,
+				);
+			}
+		} elseif ( $action == 'add_level' ) {
+			Debug::Text('Adding Blank Level', __FILE__, __LINE__, __METHOD__,10);
+			if ( !isset($hierarchy_level_data) OR ( isset($hierarchy_level_data) AND !is_array( $hierarchy_level_data ) ) ) {
+				//If they delete all weeks and try to add a new one.
+				$hierarchy_level_data[0] = array(
+					'id' => -1,
+					'level' => 0,
+				);
+
+				$row_keys = array_keys($hierarchy_level_data);
+				sort($row_keys);
+
+				$next_blank_id = 0;
+				$lowest_id = 0;
+			} else {
+				$row_keys = array_keys($hierarchy_level_data);
+				sort($row_keys);
+
+				Debug::Text('Lowest ID: '. $row_keys[0], __FILE__, __LINE__, __METHOD__,10);
+				$lowest_id = $row_keys[0];
+				if ( $lowest_id < 0 ) {
+					$next_blank_id = $lowest_id-1;
+				} else {
+					$next_blank_id = -1;
+				}
+			}
+
+			Debug::Text('Next Blank ID: '. $next_blank_id, __FILE__, __LINE__, __METHOD__,10);
+
+			//Find next level
+			$last_new_level = $hierarchy_level_data[$row_keys[0]]['level'];
+			$last_saved_level = $hierarchy_level_data[array_pop($row_keys)]['level'];
+			Debug::Text('Last New level: '. $last_new_level .' Last Saved level: '. $last_saved_level, __FILE__, __LINE__, __METHOD__,10);
+			if ( $last_new_level > $last_saved_level) {
+				$last_level = $last_new_level;
+			} else {
+				$last_level = $last_saved_level;
+			}
+			Debug::Text('Last level: '. $last_level, __FILE__, __LINE__, __METHOD__,10);
+
+			$hierarchy_level_data[$next_blank_id] = array(
+							'id' => $next_blank_id,
+							'level' => $last_level+1,
+							);
+		} elseif ( $action != 'submit' AND $action != 'delete_level' ) {
+			//New hierarchy.
+
+			$hierarchy_level_data[-1] = array(
+											  'id' => -1,
+											  'level' => 1,
+											  );
+		}
+
+		$prepend_array_option = array( 0 => _('-- Please Choose --') );
+
+		$ulf = new UserListFactory();
+		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), FALSE, TRUE );
+
+		//Select box options;
+		$hotlf = new HierarchyObjectTypeListFactory();
+		$hierarchy_control_data['user_options'] = $user_options;
+		$hierarchy_control_data['level_user_options'] = Misc::prependArray( $prepend_array_option, $user_options);
+		$hierarchy_control_data['object_type_options'] = $hotlf->getOptions('object_type');
+
+		if ( isset($hierarchy_control_data['user_ids']) AND is_array($hierarchy_control_data['user_ids']) ) {
+			$tmp_user_options = $user_options;
+			foreach( $hierarchy_control_data['user_ids'] as $user_id ) {
+				if ( isset($tmp_user_options[$user_id]) ) {
+					$filter_user_options[$user_id] = $tmp_user_options[$user_id];
+				}
+			}
+			unset($user_id);
+		}
+
+		$viewData['filter_user_options'] = $filter_user_options;
+		$viewData['hierarchy_control_data'] = $hierarchy_control_data;
+		$viewData['hierarchy_level_data'] = $hierarchy_level_data;
+		$viewData['hcf'] = $hcf;
+		$viewData['hlf'] = $hlf;
+		
+        return view('hierarchy/EditHierarchyControl', $viewData);
+
+    }
+
+	public function submit(){
+		$hcf = new HierarchyControlFactory();
+		$hlf = new HierarchyLevelFactory();
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'ids',
+				'hierarchy_control_id',
+				'hierarchy_control_data',
+				'hierarchy_level_data'
+			) 
+		) );
+
 		//Debug::setVerbosity(11);
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
@@ -115,11 +276,21 @@ switch ($action) {
 			$hcf->CommitTransaction();
 
 			Redirect::Page( URLBuilder::getURL( array(), 'HierarchyControlList.php') );
-
-			break;
 		}
 		$hcf->FailTransaction();
-	case 'delete_level':
+	}
+
+	public function delete_level(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'ids',
+				'hierarchy_control_id',
+				'hierarchy_control_data',
+				'hierarchy_level_data'
+			) 
+		) );
+
 		if ( count($ids) > 0) {
 			foreach ($ids as $hl_id) {
 				if ( $hl_id > 0 ) {
@@ -128,7 +299,10 @@ switch ($action) {
 					$hllf = new HierarchyLevelListFactory();
 					$hllf->getById( $hl_id );
 					if ( $hllf->getRecordCount() == 1 ) {
-						foreach($hllf as $hl_obj ) {
+						foreach($hllf->rs as $hl_obj ) {
+							$hllf->data = (array)$hl_obj;
+							$hl_obj = $hllf;
+
 							$hl_obj->setDeleted( TRUE );
 							if ( $hl_obj->isValid() ) {
 								$hl_obj->Save();
@@ -141,128 +315,8 @@ switch ($action) {
 			}
 			unset($hl_id);
 		}
-	default:
-		if ( isset($hierarchy_control_id) ) {
-			BreadCrumb::setCrumb($title);
-
-			$hclf = new HierarchyControlListFactory();
-			$hclf->getByIdAndCompanyId($hierarchy_control_id, $current_company->getId() );
-
-			foreach ($hclf as $hierarchy_control) {
-				$hierarchy_control_data = array(
-									'id' => $hierarchy_control->getId(),
-									'name' => $hierarchy_control->getName(),
-									'description' => $hierarchy_control->getDescription(),
-									'object_type_ids' => $hierarchy_control->getObjectType(),
-									'user_ids' => $hierarchy_control->getUser(),
-									'created_date' => $hierarchy_control->getCreatedDate(),
-									'created_by' => $hierarchy_control->getCreatedBy(),
-									'updated_date' => $hierarchy_control->getUpdatedDate(),
-									'updated_by' => $hierarchy_control->getUpdatedBy(),
-									'deleted_date' => $hierarchy_control->getDeletedDate(),
-									'deleted_by' => $hierarchy_control->getDeletedBy()
-								);
-			}
-
-			$hllf = new HierarchyLevelListFactory();
-			$hllf->getByHierarchyControlId( $hierarchy_control_id );
-			if ( $hllf->getRecordCount() > 0 ) {
-				foreach( $hllf as $hl_obj ) {
-					$hierarchy_level_data[] = array(
-													'id' => $hl_obj->getId(),
-													'level' => $hl_obj->getLevel(),
-													'user_id' => $hl_obj->getUser(),
-													);
-				}
-			} else {
-				$hierarchy_level_data[-1] = array(
-												  'id' => -1,
-												  'level' => 1,
-												  );
-			}
-		} elseif ( $action == 'add_level' ) {
-			Debug::Text('Adding Blank Level', __FILE__, __LINE__, __METHOD__,10);
-			if ( !isset($hierarchy_level_data) OR ( isset($hierarchy_level_data) AND !is_array( $hierarchy_level_data ) ) ) {
-				//If they delete all weeks and try to add a new one.
-				$hierarchy_level_data[0] = array(
-								'id' => -1,
-								'level' => 0,
-								);
-
-				$row_keys = array_keys($hierarchy_level_data);
-				sort($row_keys);
-
-				$next_blank_id = 0;
-				$lowest_id = 0;
-			} else {
-				$row_keys = array_keys($hierarchy_level_data);
-				sort($row_keys);
-
-				Debug::Text('Lowest ID: '. $row_keys[0], __FILE__, __LINE__, __METHOD__,10);
-				$lowest_id = $row_keys[0];
-				if ( $lowest_id < 0 ) {
-					$next_blank_id = $lowest_id-1;
-				} else {
-					$next_blank_id = -1;
-				}
-			}
-
-			Debug::Text('Next Blank ID: '. $next_blank_id, __FILE__, __LINE__, __METHOD__,10);
-
-			//Find next level
-			$last_new_level = $hierarchy_level_data[$row_keys[0]]['level'];
-			$last_saved_level = $hierarchy_level_data[array_pop($row_keys)]['level'];
-			Debug::Text('Last New level: '. $last_new_level .' Last Saved level: '. $last_saved_level, __FILE__, __LINE__, __METHOD__,10);
-			if ( $last_new_level > $last_saved_level) {
-				$last_level = $last_new_level;
-			} else {
-				$last_level = $last_saved_level;
-			}
-			Debug::Text('Last level: '. $last_level, __FILE__, __LINE__, __METHOD__,10);
-
-			$hierarchy_level_data[$next_blank_id] = array(
-							'id' => $next_blank_id,
-							'level' => $last_level+1,
-							);
-		} elseif ( $action != 'submit' AND $action != 'delete_level' ) {
-			//New hierarchy.
-
-			$hierarchy_level_data[-1] = array(
-											  'id' => -1,
-											  'level' => 1,
-											  );
-		}
-
-		$prepend_array_option = array( 0 => TTi18n::gettext('-- Please Choose --') );
-
-		$ulf = new UserListFactory();
-		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), FALSE, TRUE );
-
-		//Select box options;
-		$hotlf = new HierarchyObjectTypeListFactory();
-		$hierarchy_control_data['user_options'] = $user_options;
-		$hierarchy_control_data['level_user_options'] = Misc::prependArray( $prepend_array_option, $user_options);
-		$hierarchy_control_data['object_type_options'] = $hotlf->getOptions('object_type');
-
-		if ( isset($hierarchy_control_data['user_ids']) AND is_array($hierarchy_control_data['user_ids']) ) {
-			$tmp_user_options = $user_options;
-			foreach( $hierarchy_control_data['user_ids'] as $user_id ) {
-				if ( isset($tmp_user_options[$user_id]) ) {
-					$filter_user_options[$user_id] = $tmp_user_options[$user_id];
-				}
-			}
-			unset($user_id);
-		}
-		$smarty->assign_by_ref('filter_user_options', $filter_user_options);
-
-		$smarty->assign_by_ref('hierarchy_control_data', $hierarchy_control_data);
-		$smarty->assign_by_ref('hierarchy_level_data', $hierarchy_level_data);
-
-		break;
+	}
 }
 
-$smarty->assign_by_ref('hcf', $hcf);
-$smarty->assign_by_ref('hlf', $hlf);
 
-$smarty->display('hierarchy/EditHierarchyControl.tpl');
 ?>

@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Punch Summary Report')); // See index.php
+$smarty->assign('title', __($title = 'Punch Summary Report')); // See index.php
 
 //User Wage cache array.
 function getUserWageObject( $user_wage_id, $user_id ) {
@@ -57,44 +57,44 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 													'filter_data' => $filter_data
 												) );
 
-$static_columns = array(			'-1000-full_name' => TTi18n::gettext('Full Name'),
-									'-1002-employee_number' => TTi18n::gettext('Employee #'),
-									'-1010-title' => TTi18n::gettext('Title'),
-									'-1020-province' => TTi18n::gettext('Province/State'),
-									'-1030-country' => TTi18n::gettext('Country'),
-									'-1039-group' => TTi18n::gettext('Group'),
-									'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-									'-1050-default_department' => TTi18n::gettext('Default Department'),
-									'-1090-date_stamp' => TTi18n::gettext('Date'),
-									'-1100-in_time_stamp' => TTi18n::gettext('In Punch'),
-									'-1101-in_type' => TTi18n::gettext('In Type'),
-									'-1110-out_time_stamp' => TTi18n::gettext('Out Punch'),
-									'-1111-out_type' => TTi18n::gettext('Out Type'),
-									'-1120-in_actual_time_stamp' => TTi18n::gettext('In (Actual)'),
-									'-1130-out_actual_time_stamp' => TTi18n::gettext('Out (Actual)'),
-									'-1160-branch' => TTi18n::gettext('Branch'),
-									'-1170-department' => TTi18n::gettext('Department'),
-									'-1171-in_station_type' => TTi18n::gettext('In Station Type'),
-									'-1172-in_station_station_id' => TTi18n::gettext('In Station ID'),
-									'-1173-in_station_source' => TTi18n::gettext('In Station Source'),
-									'-1174-in_station_description' => TTi18n::gettext('In Station Description'),
-									'-1175-out_station_type' => TTi18n::gettext('Out Station Type'),
-									'-1176-out_station_station_id' => TTi18n::gettext('Out Station ID'),
-									'-1177-out_station_source' => TTi18n::gettext('Out Station Source'),
-									'-1178-out_station_description' => TTi18n::gettext('Out Station Description'),
-									'-1220-note' => TTi18n::gettext('Note'),
-									'-1229-hourly_rate' => TTi18n::gettext('Hourly Rate'),
+$static_columns = array(			'-1000-full_name' => _('Full Name'),
+									'-1002-employee_number' => _('Employee #'),
+									'-1010-title' => _('Title'),
+									'-1020-province' => _('Province/State'),
+									'-1030-country' => _('Country'),
+									'-1039-group' => _('Group'),
+									'-1040-default_branch' => _('Default Branch'),
+									'-1050-default_department' => _('Default Department'),
+									'-1090-date_stamp' => _('Date'),
+									'-1100-in_time_stamp' => _('In Punch'),
+									'-1101-in_type' => _('In Type'),
+									'-1110-out_time_stamp' => _('Out Punch'),
+									'-1111-out_type' => _('Out Type'),
+									'-1120-in_actual_time_stamp' => _('In (Actual)'),
+									'-1130-out_actual_time_stamp' => _('Out (Actual)'),
+									'-1160-branch' => _('Branch'),
+									'-1170-department' => _('Department'),
+									'-1171-in_station_type' => _('In Station Type'),
+									'-1172-in_station_station_id' => _('In Station ID'),
+									'-1173-in_station_source' => _('In Station Source'),
+									'-1174-in_station_description' => _('In Station Description'),
+									'-1175-out_station_type' => _('Out Station Type'),
+									'-1176-out_station_station_id' => _('Out Station ID'),
+									'-1177-out_station_source' => _('Out Station Source'),
+									'-1178-out_station_description' => _('Out Station Description'),
+									'-1220-note' => _('Note'),
+									'-1229-hourly_rate' => _('Hourly Rate'),
 									);
 
 $professional_edition_static_columns = array(
-									'-1180-job' => TTi18n::gettext('Job'),
-									'-1181-job_manual_id' => TTi18n::gettext('Job Code'),
-									'-1181-job_description' => TTi18n::gettext('Job Description'),
-									'-1182-job_status' => TTi18n::gettext('Job Status'),
-									'-1183-job_branch' => TTi18n::gettext('Job Branch'),
-									'-1184-job_department' => TTi18n::gettext('Job Department'),
-									'-1185-job_group' => TTi18n::gettext('Job Group'),
-									'-1190-job_item' => TTi18n::gettext('Task'),
+									'-1180-job' => _('Job'),
+									'-1181-job_manual_id' => _('Job Code'),
+									'-1181-job_description' => _('Job Description'),
+									'-1182-job_status' => _('Job Status'),
+									'-1183-job_branch' => _('Job Branch'),
+									'-1184-job_department' => _('Job Department'),
+									'-1185-job_group' => _('Job Group'),
+									'-1190-job_item' => _('Task'),
 									);
 
 if ( $current_company->getProductEdition() == 20 ) {
@@ -110,17 +110,17 @@ if ( is_array($other_field_names) ) {
 }
 
 $columns = array(
-											'-1430-total_time' => TTi18n::gettext('Total Time'),
-											'-1440-total_time_wage' => TTi18n::gettext('Total Time Wage'),
-											'-1440-actual_total_time' => TTi18n::gettext('Actual Time'),
-											'-1450-actual_total_time_wage' => TTi18n::gettext('Actual Time Wage'),
-											'-1460-actual_total_time_diff' => TTi18n::gettext('Actual Time Difference'),
-											'-1470-actual_total_time_diff_wage' => TTi18n::gettext('Actual Time Difference Wage'),
+											'-1430-total_time' => _('Total Time'),
+											'-1440-total_time_wage' => _('Total Time Wage'),
+											'-1440-actual_total_time' => _('Actual Time'),
+											'-1450-actual_total_time_wage' => _('Actual Time Wage'),
+											'-1460-actual_total_time_diff' => _('Actual Time Difference'),
+											'-1470-actual_total_time_diff_wage' => _('Actual Time Difference Wage'),
 											);
 
 $professional_edition_columns = array(
-											'-1400-quantity' => TTi18n::gettext('Quantity'),
-											'-1410-bad_quantity' => TTi18n::gettext('Bad Quantity'),
+											'-1400-quantity' => _('Quantity'),
+											'-1410-bad_quantity' => _('Bad Quantity'),
 									);
 
 if ( $current_company->getProductEdition() == 20 ) {
@@ -424,7 +424,7 @@ switch ($action) {
 								//$rows[$x]['job'] = Option::getByKey($data_c['job_id'], $job_options, NULL );
 								$rows[$x]['job'] = $data_c['job_name'];
 							} else {
-								$rows[$x]['job'] = TTi18n::gettext('- No Job -');
+								$rows[$x]['job'] = _('- No Job -');
 							}
 							$rows[$x]['job_manual_id'] = $data_c['job_manual_id'];
 							$rows[$x]['job_description'] = $data_c['job_description'];
@@ -436,7 +436,7 @@ switch ($action) {
 							if ( isset($job_item_options[$data_c['job_item_id']]) ) {
 								$rows[$x]['job_item'] = $job_item_options[$data_c['job_item_id']];
 							} else {
-								$rows[$x]['job_item'] = TTi18n::gettext('- No Task -');
+								$rows[$x]['job_item'] = _('- No Task -');
 							}
 
 							$rows[$x]['quantity'] = $data_c['quantity'];
@@ -570,7 +570,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext('No Data To Export!') ."<br>\n";
+				echo _('No Data To Export!') ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -652,7 +652,7 @@ switch ($action) {
 
 		$ulf = new UserListFactory();
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -709,7 +709,7 @@ switch ($action) {
 
 			//Get include job list.
 			$jlf->getByCompanyId( $current_company->getId() );
-			$job_options = Misc::prependArray( array('0' => TTi18n::gettext('- No Job -') ), $jlf->getArrayByListFactory( $jlf, FALSE, TRUE ) );
+			$job_options = Misc::prependArray( array('0' => _('- No Job -') ), $jlf->getArrayByListFactory( $jlf, FALSE, TRUE ) );
 			$filter_data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
 			$filter_data['src_include_job_options'] = Misc::arrayDiffByKey( (array)$filter_data['include_job_ids'], $job_options );
@@ -730,7 +730,7 @@ switch ($action) {
 			//Get Job Items
 			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
-			$job_item_options = Misc::prependArray( array('-1' => TTi18n::gettext('-- All --'), '0' => TTi18n::gettext('- No Task -') ), $jilf->getArrayByListFactory( $jilf, FALSE, TRUE ) );
+			$job_item_options = Misc::prependArray( array('-1' => _('-- All --'), '0' => _('- No Task -') ), $jilf->getArrayByListFactory( $jilf, FALSE, TRUE ) );
 			$filter_data['src_job_item_options'] = Misc::arrayDiffByKey( (array)$filter_data['job_item_ids'], $job_item_options );
 			$filter_data['selected_job_item_options'] = Misc::arrayIntersectByKey( (array)$filter_data['job_item_ids'], $job_item_options );
 		}
@@ -753,7 +753,7 @@ switch ($action) {
 		unset($filter_data['sort_options']['effective_date']);
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => TTi18n::gettext('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

@@ -19,7 +19,7 @@ if ( !$permission->Check('pay_stub_amendment','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Recurring Pay Stub Amendment List')); // See index.php
+$smarty->assign('title', __($title = 'Recurring Pay Stub Amendment List')); // See index.php
 BreadCrumb::setCrumb($title);
 /*
  * Get FORM variables

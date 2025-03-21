@@ -16,7 +16,7 @@ if ( !$permission->Check('company','enabled')
 
 //Debug::setVerbosity( 11 );
 
-$smarty->assign('title', TTi18n::gettext($title = 'Bonus Calculation')); // See index.php
+$smarty->assign('title', __($title = 'Bonus Calculation')); // See index.php
 BreadCrumb::setCrumb($title);
 
 extract	(FormVariables::GetVariables(

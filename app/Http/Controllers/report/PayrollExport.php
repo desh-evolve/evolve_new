@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Payroll Export'));  // See index.php
+$smarty->assign('title', __($title = 'Payroll Export'));  // See index.php
 
 
 /*
@@ -38,7 +38,7 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 
 $static_columns = array();
 
-$columns = array(					'-0010-regular_time' => TTi18n::gettext('Regular Time'),
+$columns = array(					'-0010-regular_time' => _('Regular Time'),
 									);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -702,7 +702,7 @@ switch ($action) {
 				Misc::FileDownloadHeader( $file_name, 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext("No Data To Export!") ."<br>\n";
+				echo __("No Data To Export!") ."<br>\n";
 			}
 		}
 
@@ -757,7 +757,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -810,16 +810,16 @@ switch ($action) {
 		$filter_data['selected_pay_period_options'] = Misc::arrayIntersectByKey( (array)$filter_data['pay_period_ids'], $pay_period_options );
 
 		$filter_data['export_type_options'] = array(
-													0 => TTi18n::gettext('-- Please Choose --'),
-													'adp' => TTi18n::gettext('ADP'),
-													'paychex_preview' => TTi18n::gettext('Paychex Preview'),
-                                                    'paychex_online' => TTi18n::gettext('Paychex Online Payroll'),
-													'ceridian_insync' => TTi18n::gettext('Ceridian Insync'),
-													'millenium' => TTi18n::gettext('Millenium'),
-													'quickbooks' => TTi18n::gettext('QuickBooks Pro'),
-													'surepayroll' => TTi18n::gettext('SurePayroll'),
-													'csv' => TTi18n::gettext('Generic Excel/CSV'),
-													'other' => TTi18n::gettext('-- Other --'),
+													0 => _('-- Please Choose --'),
+													'adp' => _('ADP'),
+													'paychex_preview' => _('Paychex Preview'),
+                                                    'paychex_online' => _('Paychex Online Payroll'),
+													'ceridian_insync' => _('Ceridian Insync'),
+													'millenium' => _('Millenium'),
+													'quickbooks' => _('QuickBooks Pro'),
+													'surepayroll' => _('SurePayroll'),
+													'csv' => _('Generic Excel/CSV'),
+													'other' => _('-- Other --'),
 													);
 
 		$setup_data['src_column_options'] = $columns;
@@ -827,20 +827,20 @@ switch ($action) {
 		//
 		//ADP  specific columns
 		//
-		$setup_data['adp_hour_column_options'][0] = TTi18n::gettext('-- DO NOT EXPORT --');
-		$setup_data['adp_hour_column_options']['regular_time'] = TTi18n::gettext('Regular Time');
-		$setup_data['adp_hour_column_options']['overtime'] = TTi18n::gettext('Overtime');
+		$setup_data['adp_hour_column_options'][0] = _('-- DO NOT EXPORT --');
+		$setup_data['adp_hour_column_options']['regular_time'] = _('Regular Time');
+		$setup_data['adp_hour_column_options']['overtime'] = _('Overtime');
 		for ( $i=3; $i <= 4; $i++ ) {
-			$setup_data['adp_hour_column_options'][$i] = TTi18n::gettext('Hours') .' '. $i;
+			$setup_data['adp_hour_column_options'][$i] = _('Hours') .' '. $i;
 		}
 
 		//Quickbooks additional column mapping
 		$setup_data['quickbooks_proj_options'] = array(
-													0 => TTi18n::gettext('-- NONE --'),
-													'default_branch' => TTi18n::gettext('Default Branch'),
-													'default_department' => TTi18n::gettext('Default Department'),
-													'group' => TTi18n::gettext('Group'),
-													'title' => TTi18n::gettext('Title'),
+													0 => _('-- NONE --'),
+													'default_branch' => _('Default Branch'),
+													'default_department' => _('Default Department'),
+													'group' => _('Group'),
+													'title' => _('Title'),
 													);
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);

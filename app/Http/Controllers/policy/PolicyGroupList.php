@@ -19,7 +19,7 @@ if ( !$permission->Check('policy_group','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Policy Group List')); // See index.php
+$smarty->assign('title', __($title = 'Policy Group List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

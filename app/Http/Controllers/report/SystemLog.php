@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Audit Trail Report'));  // See index.php
+$smarty->assign('title', __($title = 'Audit Trail Report'));  // See index.php
 
 
 /*
@@ -39,12 +39,12 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 												) );
 
 $columns = $static_columns =  array(
-							'-1000-full_name' => TTi18n::gettext('Full Name'),
-							'-1010-date' => TTi18n::gettext('Date'),
-							'-1020-table_name' => TTi18n::gettext('Object'),
-							'-1030-action' => TTi18n::gettext('Action'),
-							'-1040-description' => TTi18n::gettext('Description'),
-							'-1050-function' => TTi18n::gettext('Functions'),
+							'-1000-full_name' => _('Full Name'),
+							'-1010-date' => _('Date'),
+							'-1020-table_name' => _('Object'),
+							'-1030-action' => _('Action'),
+							'-1040-description' => _('Description'),
+							'-1050-function' => _('Functions'),
 						);
 
 if ( isset($filter_data['start_date']) ) {
@@ -186,7 +186,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext("No Data To Export!") ."<br>\n";
+				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -257,7 +257,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'log_action_ids', 'log_table_name_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -321,7 +321,7 @@ switch ($action) {
 		$filter_data['sort_options'] = $columns;
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		//$filter_data['group_by_options'] = Misc::prependArray( array('0' => TTi18n::gettext('No Grouping')), $static_columns );
+		//$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

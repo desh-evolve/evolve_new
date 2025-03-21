@@ -19,7 +19,7 @@ if ( !$permission->Check('meal_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Meal Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Meal Policy List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

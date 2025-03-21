@@ -19,7 +19,7 @@ if ( !$permission->Check('accrual','view')
 }
 */
 
-$smarty->assign('title', TTi18n::gettext($title = 'Apply Employee Leaves')); // See index.php
+$smarty->assign('title', __($title = 'Apply Employee Leaves')); // See index.php
 
 /*
  * Get FORM variables
