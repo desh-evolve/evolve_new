@@ -8,6 +8,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 /*******************************************************************************
  * 
@@ -396,11 +397,11 @@ class UserJobFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' =>  (int)$this->getCompany(),
-					'user_id' => (int)$this->getUser(),
+					':company_id' =>  (int)$this->getCompany(),
+					':user_id' => (int)$this->getUser(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND user_id = ? AND deleted = 0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND user_id = :user_id AND deleted = 0';
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {

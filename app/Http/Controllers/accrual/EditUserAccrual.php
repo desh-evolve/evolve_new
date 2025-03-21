@@ -1,107 +1,95 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditUserAccrual.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('accrual','enabled')
-		OR !( $permission->Check('accrual','edit') OR $permission->Check('accrual','edit_own') OR $permission->Check('accrual','edit_child') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\currency;
 
-//Debug::setVerbosity( 11 );
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Accrual')); // See index.php
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'user_id',
-												'filter_user_id',
-												'accrual_policy_id',
-												'data'
-												) ) );
+class CurrencyList extends Controller
+{
+    protected $permission;
+    protected $company;
+    protected $userPrefs;
 
-if ( isset($data) ) {
-	$data['time_stamp'] = TTDate::parseDateTime($data['time_stamp']);
-	$data['amount'] = TTDate::parseTimeUnit( $data['amount'] );
-}
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$af = new AccrualFactory();
+        $this->userPrefs = View::shared('current_user_prefs');
+        $this->company = View::shared('current_company');
+        $this->permission = View::shared('permission');
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-            
-           // echo $data['amount'];
-            //exit();
+        /*
+        if ( !$permission->Check('accrual','enabled')
+                OR !( $permission->Check('accrual','edit') OR $permission->Check('accrual','edit_own') OR $permission->Check('accrual','edit_child') ) ) {
+            $permission->Redirect( FALSE ); //Redirect
+        }
+        */
+    }
 
-		$af->setId( $data['id'] );
-		$af->setUser( $data['user_id'] );
-		$af->setType( $data['type_id'] );
-		$af->setAccrualPolicyID( $data['accrual_policy_id'] );
-		$af->setAmount( $data['amount'] *8);
-		$af->setTimeStamp( $data['time_stamp'] );
-		$af->setEnableCalcBalance( TRUE );
+    public function index($id = null)
+    {
+        extract	(FormVariables::GetVariables( 
+            array	(
+                'action',
+                'id',
+                'user_id',
+                'filter_user_id',
+                'accrual_policy_id',
+                'data'
+            ) 
+        ) );
 
-		if ( $af->isValid() ) {
-			$af->Save();
+        $viewData = [ 'title' => $id ? 'Edit Accrual' : 'Add Accrual'];
 
-			Redirect::Page( URLBuilder::getURL( array('filter_user_id' => $data['user_id']) , 'UserAccrualBalanceList.php') );
-
-			break;
-		}
-
-	default:
-		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
+        if ( isset($id) ) { //edit
 
 			$alf = new AccrualListFactory();
 			$alf->getById($id);
 
-			foreach ($alf as $a_obj) {
-				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
+			foreach ($alf->rs as $a_obj) {
+                $alf->data = (array)$a_obj;
+                $a_obj = $alf;
 
 				$data = array(
-									'id' => $a_obj->getId(),
-									'user_id' => $a_obj->getUser(),
-									'accrual_policy_id' => $a_obj->getAccrualPolicyID(),
-									'type_id' => $a_obj->getType(),
-									'amount' => ($a_obj->getAmount()/8),
-									'time_stamp' => $a_obj->getTimeStamp(),
-									'user_date_total_id' => $a_obj->getUserDateTotalID(),
-									'created_date' => $a_obj->getCreatedDate(),
-									'created_by' => $a_obj->getCreatedBy(),
-									'updated_date' => $a_obj->getUpdatedDate(),
-									'updated_by' => $a_obj->getUpdatedBy(),
-									'deleted_date' => $a_obj->getDeletedDate(),
-									'deleted_by' => $a_obj->getDeletedBy()
-								);
+                    'id' => $a_obj->getId(),
+                    'user_id' => $a_obj->getUser(),
+                    'accrual_policy_id' => $a_obj->getAccrualPolicyID(),
+                    'type_id' => $a_obj->getType(),
+                    'amount' => ($a_obj->getAmount()/8),
+                    'time_stamp' => $a_obj->getTimeStamp(),
+                    'user_date_total_id' => $a_obj->getUserDateTotalID(),
+                    'created_date' => $a_obj->getCreatedDate(),
+                    'created_by' => $a_obj->getCreatedBy(),
+                    'updated_date' => $a_obj->getUpdatedDate(),
+                    'updated_by' => $a_obj->getUpdatedBy(),
+                    'deleted_date' => $a_obj->getDeletedDate(),
+                    'deleted_by' => $a_obj->getDeletedBy()
+                );
 			}
-		} elseif ( $action != 'submit' ) {
+		} else { //add
 			if ( $user_id == '' ) {
 				$user_id = $filter_user_id;
 			}
 			$data = array(
-						'user_id' => $user_id,
-						'accrual_policy_id' => $accrual_policy_id,
-						'amount' => 0,
-						'time_stamp' => TTDate::getTime()
-						);
+                'user_id' => $user_id,
+                'accrual_policy_id' => $accrual_policy_id,
+                'amount' => 0,
+                'time_stamp' => TTDate::getTime()
+			);
 		}
 
 		$aplf = new AccrualPolicyListFactory();
@@ -115,12 +103,30 @@ switch ($action) {
 		$data['user_options'] = $user_options;
 		$data['accrual_policy_options'] = $accrual_options;
 
-		$smarty->assign_by_ref('data', $data);
+        $viewData['data'] = $data;
 
-		break;
+        return view('accrual/EditUserAccrual', $viewData);
+    }
+    
+    public function save(Request $request, $id = null){
+        $data = $request->all();
+
+        $af = new AccrualFactory();
+
+        Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+            
+		$af->setId( $data['id'] );
+		$af->setUser( $data['user_id'] );
+		$af->setType( $data['type_id'] );
+		$af->setAccrualPolicyID( $data['accrual_policy_id'] );
+		$af->setAmount( $data['amount'] *8);
+		$af->setTimeStamp( $data['time_stamp'] );
+		$af->setEnableCalcBalance( TRUE );
+
+		if ( $af->isValid() ) {
+			$af->Save();
+            return redirect()->to(URLBuilder::getURL(null, '/accrual'))->with('success', 'Accrual saved successfully.');
+		}
+
+    }
 }
-
-$smarty->assign_by_ref('af', $af);
-
-$smarty->display('accrual/EditUserAccrual.tpl');
-?>

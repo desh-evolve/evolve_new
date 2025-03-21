@@ -30,13 +30,13 @@ class PolicyGroupUserListFactory extends PolicyGroupUserFactory implements Itera
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,7 +54,7 @@ class PolicyGroupUserListFactory extends PolicyGroupUserFactory implements Itera
 		$pgf = new PolicyGroupFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -62,7 +62,7 @@ class PolicyGroupUserListFactory extends PolicyGroupUserFactory implements Itera
 					from	'. $this->getTable() .' as a,
 							'. $pgf->getTable() .' as b
 					where	b.id = a.policy_group_id
-						AND a.policy_group_id = ?
+						AND a.policy_group_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -84,8 +84,8 @@ class PolicyGroupUserListFactory extends PolicyGroupUserFactory implements Itera
 		$pgf = new PolicyGroupFactory();
 
 		$ph = array(
-					'id' => $id,
-					'user_id' => $user_id,
+					':id' => $id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -93,8 +93,8 @@ class PolicyGroupUserListFactory extends PolicyGroupUserFactory implements Itera
 					from	'. $this->getTable() .' as a,
 							'. $pgf->getTable() .' as b
 					where	b.id = a.policy_group_id
-						AND a.policy_group_id = ?
-						AND a.user_id = ?
+						AND a.policy_group_id = :id
+						AND a.user_id = :user_id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

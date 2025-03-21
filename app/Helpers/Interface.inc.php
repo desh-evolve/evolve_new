@@ -90,7 +90,6 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 		} else {
 			$current_company = $clf->getByID( $current_user->getCompany() )->getCurrent();
 		}
-		
 		//Check to make sure the logged in user's information is all up to date.
 		//Make sure they also have permissions to edit information, otherwise don't redirect them.
 		if ( $current_user->isInformationComplete() == FALSE

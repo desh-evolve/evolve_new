@@ -7,6 +7,7 @@ use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTi18n;
+use Illuminate\Support\Facades\DB;
 
 class UserGenericDataFactory extends Factory {
 	protected $table = 'user_generic_data';

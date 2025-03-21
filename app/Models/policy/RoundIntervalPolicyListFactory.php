@@ -36,13 +36,13 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -65,15 +65,15 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND company_id = ?
+					where	id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -100,7 +100,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$hpf = new HolidayPolicyFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -110,7 +110,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 								( select count(*) from '. $hpf->getTable() .' as z where z.round_interval_policy_id = a.id and z.deleted = 0 )
 							) as assigned_policy_groups
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -170,7 +170,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -182,7 +182,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 					where 	a.policy_group_id = b.id
 						AND ( b.id = c.object_id AND b.company_id = c.company_id AND c.object_type_id = 130 )
 						AND c.map_id = d.id
-						AND a.user_id = ?
+						AND a.user_id = :user_id
 						AND d.punch_type_id in ( '. $this->getListSQL($punch_type_ids, $ph) .')
 						AND ( b.deleted = 0 AND d.deleted = 0 )
 						';
@@ -236,7 +236,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -250,7 +250,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -269,7 +269,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 			$query  .=	' AND a.round_type_id in ('. $this->getListSQL($filter_data['round_type_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
+			$ph[':name'] = strtolower(trim($filter_data['name']));
 			$query  .=	' AND lower(a.name) LIKE ?';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {

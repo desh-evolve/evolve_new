@@ -85,7 +85,7 @@ class BankAccountListFactory extends BankAccountFactory implements IteratorAggre
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id =:id
+					where	company_id = ?
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

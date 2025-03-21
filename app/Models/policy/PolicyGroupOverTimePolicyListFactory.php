@@ -30,13 +30,13 @@ class PolicyGroupOverTimePolicyListFactory extends PolicyGroupOverTimePolicyFact
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,7 +54,7 @@ class PolicyGroupOverTimePolicyListFactory extends PolicyGroupOverTimePolicyFact
 		$pgf = new PolicyGroupFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -62,7 +62,7 @@ class PolicyGroupOverTimePolicyListFactory extends PolicyGroupOverTimePolicyFact
 					from	'. $this->getTable() .' as a,
 							'. $pgf->getTable() .' as b
 					where	b.id = a.policy_group_id
-						AND a.policy_group_id = ?
+						AND a.policy_group_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

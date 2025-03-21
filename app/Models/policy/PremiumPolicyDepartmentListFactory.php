@@ -30,7 +30,7 @@ class PremiumPolicyDepartmentListFactory extends PremiumPolicyDepartmentFactory 
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -54,7 +54,7 @@ class PremiumPolicyDepartmentListFactory extends PremiumPolicyDepartmentFactory 
 		$ppf = new PremiumPolicyFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -62,7 +62,7 @@ class PremiumPolicyDepartmentListFactory extends PremiumPolicyDepartmentFactory 
 					from	'. $this->getTable() .' as a,
 							'. $ppf->getTable() .' as b
 					where	b.id = a.premium_policy_id
-						AND a.premium_policy_id = ?
+						AND a.premium_policy_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

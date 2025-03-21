@@ -33,13 +33,13 @@ class AccrualPolicyMilestoneListFactory extends AccrualPolicyMilestoneFactory im
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -55,7 +55,7 @@ class AccrualPolicyMilestoneListFactory extends AccrualPolicyMilestoneFactory im
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$apf = new AccrualPolicyFactory();
@@ -64,7 +64,7 @@ class AccrualPolicyMilestoneListFactory extends AccrualPolicyMilestoneFactory im
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					LEFT JOIN '. $apf->getTable() .' as b ON a.accrual_policy_id = b.id
-					where	a.id = ?
+					where	a.id = :id
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -87,13 +87,13 @@ class AccrualPolicyMilestoneListFactory extends AccrualPolicyMilestoneFactory im
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	accrual_policy_id = ?
+					where	accrual_policy_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -113,15 +113,15 @@ class AccrualPolicyMilestoneListFactory extends AccrualPolicyMilestoneFactory im
 		}
 
 		$ph = array(
-					'id' => $id,
-					'length_of_service_days' => $length_of_service_days,
+					':id' => $id,
+					':length_of_service_days' => $length_of_service_days,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	accrual_policy_id = ?
-						AND length_of_service_days <= ?
+					where	accrual_policy_id = :id
+						AND length_of_service_days <= :length_of_service_days
 						AND deleted = 0
 					ORDER BY length_of_service_days desc
 					LIMIT 1';
@@ -168,7 +168,7 @@ class AccrualPolicyMilestoneListFactory extends AccrualPolicyMilestoneFactory im
 		$apf = new AccrualPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -183,7 +183,7 @@ class AccrualPolicyMilestoneListFactory extends AccrualPolicyMilestoneFactory im
 						LEFT JOIN '. $apf->getTable() .' as b ON ( a.accrual_policy_id = b.id AND b.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

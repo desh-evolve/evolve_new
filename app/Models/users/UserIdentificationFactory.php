@@ -131,9 +131,9 @@ class UserIdentificationFactory extends Factory {
 
 	function isUniqueValue($user_id, $type_id, $value) {
 		$ph = array(
-					'user_id' => (int)$user_id,
-					'type_id' => (int)$type_id,
-					'value' => (string)$value,
+					':user_id' => (int)$user_id,
+					':type_id' => (int)$type_id,
+					':value' => (string)$value,
 					);
 
 		$uf = new UserFactory();
@@ -142,9 +142,9 @@ class UserIdentificationFactory extends Factory {
 					from '. $this->getTable() .' as a,
 						'. $uf->getTable() .' as b
 					where a.user_id = b.id
-						AND b.company_id = ( select z.company_id from '. $uf->getTable() .' as z where z.id = ? and z.deleted = 0 )
-						AND a.type_id = ?
-						AND a.value = ?
+						AND b.company_id = ( select z.company_id from '. $uf->getTable() .' as z where z.id = :user_id and z.deleted = 0 )
+						AND a.type_id = :type_id
+						AND a.value = :value
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$id = DB::select($query, $ph);
 

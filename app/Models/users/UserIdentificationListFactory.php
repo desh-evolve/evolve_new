@@ -34,13 +34,13 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -63,15 +63,15 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		}
 
 		$ph = array(
-					'type_id' => $type_id,
-					'value' => $value,
+					':type_id' => $type_id,
+					':value' => $value,
 					);
 
 		$query = '
 					select 	a.*
 					from 	'. $this->getTable() .' as a
-					where	a.type_id = ?
-						AND a.value = ?
+					where	a.type_id = :type_id
+						AND a.value = :value
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -88,7 +88,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -96,7 +96,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
+						AND	b.company_id = :id
 						AND ( a.deleted = 0  AND b.deleted = 0) ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -122,8 +122,8 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -131,8 +131,8 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
-						AND	a.id = ?
+						AND	b.company_id = :company_id
+						AND	a.id = :id
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -160,7 +160,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -168,7 +168,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
+						AND	b.company_id = :company_id
 						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
 						AND b.status_id = 10
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
@@ -202,7 +202,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -210,7 +210,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
+						AND	b.company_id = :company_id
 						AND b.status_id = 10
 						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
 				';
@@ -220,9 +220,9 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 
 			if ( isset($date) AND $date > 0 ) {
 				//Append the same date twice for created and updated.
-				$ph[] = (int)$date;
-				$ph[] = (int)$date;
-				$query  .=	' 	( a.created_date >= ? OR a.updated_date >= ? ) ';
+				$ph[':created_date'] = (int)$date;
+				$ph[':updated_date'] = (int)$date;
+				$query  .=	' 	( a.created_date >= :created_date OR a.updated_date >= :updated_date ) ';
 			}
 
 			//Valid USER IDs is an "OR", so if any IDs are specified they should *always* be included ,regardless of the $date variable.
@@ -261,9 +261,9 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'type_id' => $type_id,
-					'value' => $value,
+					':company_id' => $company_id,
+					':type_id' => $type_id,
+					':value' => $value,
 					);
 
 		$query = '
@@ -271,9 +271,9 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
-						AND	a.type_id = ?
-						AND a.value = ?
+						AND	b.company_id = :company_id
+						AND	a.type_id = :type_id
+						AND a.value = :value
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -288,13 +288,13 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -320,13 +320,13 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
@@ -350,17 +350,17 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'type_id' => $type_id,
-					'number' => $number,
+					':user_id' => $user_id,
+					':type_id' => $type_id,
+					':number' => $number,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND type_id = ?
-						AND number = ?
+					where	user_id = :user_id
+						AND type_id = :type_id
+						AND number = :number
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -389,10 +389,10 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
-					'type_id' => $type_id,
-					'number' => $number,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
+					':type_id' => $type_id,
+					':number' => $number,
 					);
 
 		$query = '
@@ -400,10 +400,10 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					from 	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND	b.company_id = ?
-						AND a.user_id = ?
-						AND a.type_id = ?
-						AND a.number = ?
+						AND	b.company_id = :company_id
+						AND a.user_id = :user_id
+						AND a.type_id = :type_id
+						AND a.number = :number
 						AND a.deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -426,17 +426,17 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'type_id' => $type_id,
-					'value' => $value,
+					':user_id' => $user_id,
+					':type_id' => $type_id,
+					':value' => $value,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND type_id = ?
-						AND value = ?
+					where	user_id = :user_id
+						AND type_id = :type_id
+						AND value = :value
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -455,18 +455,18 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'created_date' => $date,
-					'updated_date' => $date,
+					':user_id' => $user_id,
+					':created_date' => $date,
+					':updated_date' => $date,
 					);
 
 		//INCLUDE Deleted rows in this query.
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :user_id
 						AND
-							( created_date >= ? OR updated_date >= ? )
+							( created_date >= :created_date OR updated_date >= :updated_date )
 						';
 		$query .= $this->getSortSQL( $order );
 
@@ -491,9 +491,9 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'created_date' => $date,
-					'updated_date' => $date,
+					':company_id' => $company_id,
+					':created_date' => $date,
+					':updated_date' => $date,
 					);
 
 		//INCLUDE Deleted rows in this query.
@@ -501,9 +501,9 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					select 	*
 					from	'. $this->getTable() .' as a
 					LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 						AND
-							( a.created_date >= ? OR a.updated_date >= ? )
+							( a.created_date >= :created_date OR a.updated_date >= :updated_date )
 						';
 		$query .= $this->getSortSQL( $order );
 
@@ -534,8 +534,8 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -543,8 +543,8 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 					from	'. $uf->getTable() .' as a,
 							'. $this->getTable() .' as b
 					where	a.id = b.user_id
-						AND a.company_id = ?
-						AND	b.user_id = ?
+						AND a.company_id = :company_id
+						AND	b.user_id = :user_id
 						AND b.deleted = 0';
 		$query .= $this->getSortSQL( $order, $strict );
 
