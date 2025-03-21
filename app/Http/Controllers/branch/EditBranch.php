@@ -14,7 +14,7 @@ use App\Models\Company\BranchBankAccountListFactory;
 use App\Models\Company\BranchListFactory;
 use Illuminate\Support\Facades\View;
 
-class EditBankAccount extends Controller
+class EditBranch extends Controller
 {
     protected $permission;
     protected $company;
