@@ -98,7 +98,7 @@ class EditCurrency extends Controller
 
     public function save(Request $request, $id = null)
     {
-        
+
         $current_company = $this->company;
 
         /*
@@ -110,7 +110,7 @@ class EditCurrency extends Controller
 
         $data = $request->all();
         Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
-        
+
 
         $this->currencyFactory->setId($id ?? null); // Use $id if editing, otherwise null for add
         $this->currencyFactory->setCompany($current_company->getId());
@@ -122,7 +122,7 @@ class EditCurrency extends Controller
         $this->currencyFactory->setBase(isset($data['is_base']) && $data['is_base'] == 1);
         $this->currencyFactory->setDefault(isset($data['is_default']) && $data['is_default'] == 1);
         $this->currencyFactory->setRateModifyPercent($data['rate_modify_percent'] ?? '');
-        
+
         if ($this->currencyFactory->isValid()) {
             $this->currencyFactory->Save();
             return redirect()->to(URLBuilder::getURL(null, '/currency'))->with('success', 'Currency saved successfully.');
@@ -131,4 +131,4 @@ class EditCurrency extends Controller
         // If validation fails, return back with errors
         return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
     }
-}
+} 

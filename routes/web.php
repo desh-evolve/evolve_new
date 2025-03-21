@@ -7,6 +7,7 @@ use App\Http\Controllers\branch\BranchList;
 use App\Http\Controllers\branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
+use App\Http\Controllers\Company\EditCompanyNew;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\progressbar\ProgressBar;
@@ -79,3 +80,9 @@ Route::get('/progress_bar/generate_attendance_bonuses', [ProgressBar::class, 'ge
 // ===============================================================================================================================
 Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'index'])->name('users.user_generic_status_list');
 // ===============================================================================================================================
+
+
+// ===============================================================================================================================
+// Compnay Information
+// ===============================================================================================================================
+Route::get('/company/company_information', [EditCompanyNew::class, 'index'])->name('company.index');
