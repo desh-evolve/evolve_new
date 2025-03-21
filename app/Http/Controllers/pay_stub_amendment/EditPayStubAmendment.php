@@ -18,7 +18,7 @@ if ( !$permission->Check('pay_stub_amendment','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Pay Stub Amendment')); // See index.php
+$smarty->assign('title', __($title = 'Edit Pay Stub Amendment')); // See index.php
 
 /*
  * Get FORM variables

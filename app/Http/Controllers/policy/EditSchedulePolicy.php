@@ -19,7 +19,7 @@ if ( !$permission->Check('schedule_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Schedule Policy')); // See index.php
+$smarty->assign('title', __($title = 'Edit Schedule Policy')); // See index.php
 
 /*
  * Get FORM variables

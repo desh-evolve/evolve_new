@@ -1,50 +1,140 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditHierarchy.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity( 11 );
+namespace App\Http\Controllers\hierarchy;
 
-if ( !$permission->Check('hierarchy','enabled')
-		OR !( $permission->Check('hierarchy','edit') OR $permission->Check('hierarchy','edit_own') ) ) {
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-}
+class EditHierarchy extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Hierarchy')); // See index.php
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'hierarchy_id',
-												'id',
-												'old_id',
-												'user_data'
-												) ) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$ft = new FastTree($fast_tree_options);
-$ft->setTree( $hierarchy_id );
+        /*
+		if ( !$permission->Check('hierarchy','enabled')
+				OR !( $permission->Check('hierarchy','edit') OR $permission->Check('hierarchy','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
 
-$hf = new HierarchyFactory();
+    public function index() {
 
-$redirect=0;
+        $viewData['title'] = 'Edit Hierarchy';
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'hierarchy_id',
+				'id',
+				'old_id',
+				'user_data'
+			) 
+		) );
+
+		$ft = new FastTree($fast_tree_options);
+		$ft->setTree( $hierarchy_id );
+
+		$hf = new HierarchyFactory();
+
+		$redirect=0;
+
+		//BreadCrumb::setCrumb($title);
+		if ( isset($id) AND !isset($user_data['user_id']) ) {
+			$user_data['user_id'] = $id;
+		}
+
+		$hlf = new HierarchyListFactory();
+
+		//$nodes = $hlf->FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'TEXT', TRUE);
+		//$nodes = FastTree::FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'TEXT', TRUE);
+		$nodes = FastTree::FormatArray( $hlf->getByCompanyIdAndHierarchyControlId( $current_company->getId(), $hierarchy_id ), 'TEXT', TRUE);
+
+		foreach($nodes as $node) {
+			$parent_list_options[$node['id']] = $node['text'];
+		}
+
+		//Get include employee list.
+		$ulf = new UserListFactory();
+		$ulf->getByCompanyId( $current_company->getId() );
+		$raw_user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
+		//$raw_user_list_options = UserListFactory::getByCompanyIdArray( $current_company->getId() );
+
+		//Only allow them to select employees not already in the tree.
+		unset($parent_list_options[$id]); //If we're editing a single entry, include that user in the list.
+		$parent_list_keys = array_keys($parent_list_options);
+		$user_options = Misc::arrayDiffByKey( (array)$parent_list_keys, $raw_user_options );
+
+		$src_user_options = Misc::arrayDiffByKey( (array)$user_data['user_id'], $user_options );
+		$selected_user_options = Misc::arrayIntersectByKey( (array)$user_data['user_id'], $user_options );
+
+		//$viewData['user_list_options'] = $user_list_options;
+		$viewData['src_user_options'] = $src_user_options;
+		$viewData['selected_user_options'] = $selected_user_options;
+		$viewData['parent_list_options'] = $parent_list_options;
+
+		if ( isset($id) AND $id != '' AND $redirect == 0) {
+			Debug::Text(' ID: '. $id , __FILE__, __LINE__, __METHOD__,10);
+			$node = $hlf->getByHierarchyControlIdAndUserId( $hierarchy_id, $id);
+
+			$viewData['selected_node'] = $node;
+		} else {
+			$id = $user_data['user_id'][0];
+		}
+
+		$viewData['hierarchy_id'] = $hierarchy_id;
+		$viewData['id'] = $id;
+		$viewData['old_id'] = $id;
+		$viewData['hf'] = $hf;
+
+        return view('hierarchy/EditHierarchy', $viewData);
+
+    }
+
+	public function submit(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'hierarchy_id',
+				'id',
+				'old_id',
+				'user_data'
+			) 
+		) );
+
+		$ft = new FastTree($fast_tree_options);
+		$ft->setTree( $hierarchy_id );
+
+		$hf = new HierarchyFactory();
+
+		$redirect=0;
+
+
 		//Debug::setVerbosity( 11 );
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -80,64 +170,10 @@ switch ($action) {
 		}
 
 		if ( $redirect == 0 ) {
-			Redirect::Page( URLBuilder::getURL( array('hierarchy_id' => $hierarchy_id) , 'HierarchyList.php') );
-
-			break;
+			Redirect::Page( URLBuilder::getURL( array('hierarchy_id' => $hierarchy_id) , 'HierarchyList') );
 		}
-
-	default:
-		//BreadCrumb::setCrumb($title);
-		if ( isset($id) AND !isset($user_data['user_id']) ) {
-			$user_data['user_id'] = $id;
-		}
-
-		$hlf = new HierarchyListFactory();
-
-		//$nodes = $hlf->FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'TEXT', TRUE);
-		//$nodes = FastTree::FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'TEXT', TRUE);
-		$nodes = FastTree::FormatArray( $hlf->getByCompanyIdAndHierarchyControlId( $current_company->getId(), $hierarchy_id ), 'TEXT', TRUE);
-
-		foreach($nodes as $node) {
-			$parent_list_options[$node['id']] = $node['text'];
-		}
-
-		//Get include employee list.
-		$ulf = new UserListFactory();
-		$ulf->getByCompanyId( $current_company->getId() );
-		$raw_user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
-		//$raw_user_list_options = UserListFactory::getByCompanyIdArray( $current_company->getId() );
-
-		//Only allow them to select employees not already in the tree.
-		unset($parent_list_options[$id]); //If we're editing a single entry, include that user in the list.
-		$parent_list_keys = array_keys($parent_list_options);
-		$user_options = Misc::arrayDiffByKey( (array)$parent_list_keys, $raw_user_options );
-
-		$src_user_options = Misc::arrayDiffByKey( (array)$user_data['user_id'], $user_options );
-		$selected_user_options = Misc::arrayIntersectByKey( (array)$user_data['user_id'], $user_options );
-
-		//$smarty->assign_by_ref('user_list_options', $user_list_options);
-		$smarty->assign_by_ref('src_user_options', $src_user_options);
-		$smarty->assign_by_ref('selected_user_options', $selected_user_options);
-		$smarty->assign_by_ref('parent_list_options', $parent_list_options);
-
-
-		if ( isset($id) AND $id != '' AND $redirect == 0) {
-			Debug::Text(' ID: '. $id , __FILE__, __LINE__, __METHOD__,10);
-			$node = $hlf->getByHierarchyControlIdAndUserId( $hierarchy_id, $id);
-
-			$smarty->assign_by_ref('selected_node', $node );
-		} else {
-			$id = $user_data['user_id'][0];
-		}
-
-		break;
+	}
 }
 
-$smarty->assign_by_ref('hierarchy_id', $hierarchy_id);
-$smarty->assign_by_ref('id', $id);
-$smarty->assign_by_ref('old_id', $id);
 
-$smarty->assign_by_ref('hf', $hf);
-
-$smarty->display('hierarchy/EditHierarchy.tpl');
 ?>

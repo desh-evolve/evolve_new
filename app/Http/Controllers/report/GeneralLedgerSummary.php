@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'General Ledger Summary Report')); // See index.php
+$smarty->assign('title', __($title = 'General Ledger Summary Report')); // See index.php
 
 function replaceGLAccountVariables( $subject, $replace_arr = NULL) {
 	$search_arr = array(
@@ -51,12 +51,12 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 												) );
 
 $static_columns = array(
-											'-1000-full_name' => TTi18n::gettext('Full Name'),
-											'-1010-title' => TTi18n::gettext('Title'),
-											'-1020-province' => TTi18n::gettext('Province'),
-											'-1030-country' => TTi18n::gettext('Country'),
-											'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-											'-1050-default_department' => TTi18n::gettext('Default Department'),
+											'-1000-full_name' => _('Full Name'),
+											'-1010-title' => _('Title'),
+											'-1020-province' => _('Province'),
+											'-1030-country' => _('Country'),
+											'-1040-default_branch' => _('Default Branch'),
+											'-1050-default_department' => _('Default Department'),
 											);
 
 //$static_columns = array();
@@ -343,12 +343,12 @@ switch ($action) {
 									$comment = $row['full_name'];
 								} else {
 									if ( $row[$final_group_key] == '--' ) {
-										$source = TTi18n::gettext('TimeTrex');
+										$source = _('TimeTrex');
 									} else {
 										$source = $row[$final_group_key];
 									}
 									if ( $row[$final_group_key] == '--' ) {
-										$comment = TTi18n::gettext('Payroll');
+										$comment = _('Payroll');
 									} else {
 										$comment = $row[$final_group_key];
 									}
@@ -455,7 +455,7 @@ switch ($action) {
 					//Debug::Display();
 				}
 			} else {
-				echo TTi18n::gettext('No Data To Export!') ."<br>\n";
+				echo _('No Data To Export!') ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -527,7 +527,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'currency_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );
@@ -599,11 +599,11 @@ switch ($action) {
 		unset($filter_data['sort_options']['effective_date']);
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => TTi18n::gettext('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
 
 		$filter_data['export_type_options'] = array(
-													'csv' => TTi18n::gettext('CSV (Excel)'),
-													'simply' => TTi18n::gettext('Simply Accounting GL'),
+													'csv' => _('CSV (Excel)'),
+													'simply' => _('Simply Accounting GL'),
 													);
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);

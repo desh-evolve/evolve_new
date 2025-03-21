@@ -19,7 +19,7 @@ if ( !$permission->Check('holiday_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Recurring Holiday List')); // See index.php
+$smarty->assign('title', __($title = 'Recurring Holiday List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

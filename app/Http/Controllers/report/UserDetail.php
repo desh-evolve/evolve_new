@@ -19,7 +19,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Detail Report')); // See index.php
+$smarty->assign('title', __($title = 'Employee Detail Report')); // See index.php
 
 
 /*
@@ -45,22 +45,22 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 
 
 $columns = array(
-											'employee' => TTi18n::gettext('Employee Information'),
-											'wage' => TTi18n::gettext('Wage History'),
+											'employee' => _('Employee Information'),
+											'wage' => _('Wage History'),
 											//'schedule' => 'Schedule History',
-											'attendance' => TTi18n::gettext('Attendance History'),
-											'exception' => TTi18n::gettext('Exception History'),
+											'attendance' => _('Attendance History'),
+											'exception' => _('Exception History'),
 											//'accrual' => 'Accrual Balances',
 											);
 
 $static_columns = array(
-											'-1000-full_name' => TTi18n::gettext('Full Name'),
-											'-1010-title' => TTi18n::gettext('Title'),
-											'-1020-province' => TTi18n::gettext('Province/State'),
-											'-1030-country' => TTi18n::gettext('Country'),
-											'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-											'-1050-default_department' => TTi18n::gettext('Default Department'),
-											//'-1060-verified_time_sheet' => TTi18n::gettext('Verified TimeSheet'),
+											'-1000-full_name' => _('Full Name'),
+											'-1010-title' => _('Title'),
+											'-1020-province' => _('Province/State'),
+											'-1030-country' => _('Country'),
+											'-1040-default_branch' => _('Default Branch'),
+											'-1050-default_department' => _('Default Department'),
+											//'-1060-verified_time_sheet' => _('Verified TimeSheet'),
 											);
 
 //$columns = Misc::prependArray( $columns, $deduction_columns);
@@ -516,7 +516,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext("No Data To Export!") ."<br>\n";
+				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -570,7 +570,7 @@ switch ($action) {
 		}
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		if ( !isset($filter_data['include_user_ids']) ) {

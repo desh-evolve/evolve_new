@@ -127,10 +127,10 @@ switch ($action) {
 			if ( $pp_obj->getStatus() != 20 ) {
 				$udlf = new UserDateListFactory();
 				if ( $action == 'recalculate_company' ) {
-					TTLog::addEntry( $current_company->getId(), TTi18n::gettext('Notice'), TTi18n::gettext(' Recalculating Company TimeSheet'), $current_user->getId(), 'user_date_total' );
+					TTLog::addEntry( $current_company->getId(), _('Notice'), _(' Recalculating Company TimeSheet'), $current_user->getId(), 'user_date_total' );
 					$udlf->getByCompanyIdAndPayPeriodID( $current_company->getId(), $pay_period_ids );
 				} else {
-					TTLog::addEntry( $filter_user_id, TTi18n::gettext('Notice'), TTi18n::gettext(' Recalculating Employee TimeSheet'), $current_user->getId(), 'user_date_total' );
+					TTLog::addEntry( $filter_user_id, _('Notice'), _(' Recalculating Employee TimeSheet'), $current_user->getId(), 'user_date_total' );
 					$udlf->getByUserIdAndPayPeriodID( $filter_user_id, $pay_period_ids );
 				}
 
@@ -182,7 +182,7 @@ switch ($action) {
 			$pay_period_ids = array($pay_period_ids);
 		}
 
-		TTLog::addEntry( $current_company->getId(), TTi18n::gettext('Notice'), TTi18n::gettext('Recalculating Company Pay Stubs for Pay Periods:').' '. implode(',', $pay_period_ids) , $current_user->getId(), 'pay_stub' );
+		TTLog::addEntry( $current_company->getId(), _('Notice'), _('Recalculating Company Pay Stubs for Pay Periods:').' '. implode(',', $pay_period_ids) , $current_user->getId(), 'pay_stub' );
 
 		$init_progress_bar = TRUE;
 		foreach($pay_period_ids as $pay_period_id) {
@@ -582,7 +582,7 @@ switch ($action) {
 							$user_obj = $ulf->getCurrent();
 							$user_generic_status_label = $user_obj->getFullName(TRUE) .' @ '. TTDate::getDate('DATE', $start_time) .': '. TTDate::getDate('TIME', $start_time) .' - '. TTDate::getDate('TIME', $end_time);
 							if ( $conflicting_shifts == TRUE ) {
-								$user_generic_status_label .= ' - '. TTi18n::gettext('DELETED CONFLICTING SHIFT');
+								$user_generic_status_label .= ' - '. _('DELETED CONFLICTING SHIFT');
 							}
 						} else {
 							$user_obj = NULL;
@@ -834,7 +834,7 @@ switch ($action) {
 							$user_obj = $ulf->getCurrent();
 							$user_generic_status_label = $user_obj->getFullName(TRUE) .' @ '. TTDate::getDate('DATE', $start_time) .': '. TTDate::getDate('TIME', $start_time) .' - '. TTDate::getDate('TIME', $end_time);
 							if ( $conflicting_shifts == TRUE ) {
-								$user_generic_status_label .= ' - '. TTi18n::gettext('DELETED CONFLICTING SHIFT');
+								$user_generic_status_label .= ' - '. _('DELETED CONFLICTING SHIFT');
 							}
 						} else {
 							$user_obj = NULL;

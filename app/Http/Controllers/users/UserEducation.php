@@ -19,7 +19,7 @@ if ( !$permission->Check('accrual','enabled')
 
 //Debug::setVerbosity( 11 );
 
-$smarty->assign('title', TTi18n::gettext($title = 'Census Information')); // See index.php
+$smarty->assign('title', __($title = 'Census Information')); // See index.php
 BreadCrumb::setCrumb($title);
 /*
  * Get FORM variables

@@ -17,7 +17,7 @@ if ( !$permission->Check('leaves','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee Leaves')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee Leaves')); // See index.php
 
 /*
  * Get FORM variables
@@ -255,7 +255,7 @@ switch ($action) {
 }
 //Select box options;
                 $aplf = new AbsencePolicyListFactory();
-		$absence_policy_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
+		$absence_policy_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
         
 		$data['status_options'] = $aluf->getOptions('status');
 		$data['type_options'] = $aluf->getOptions('type');

@@ -19,7 +19,7 @@ if ( !$permission->Check('premium_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Premium Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Premium Policy List')); // See index.php
 
 /*
  * Get FORM variables

@@ -20,7 +20,7 @@ if ( !$permission->Check('user','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Search')); // See index.php
+$smarty->assign('title', __($title = 'Employee Search')); // See index.php
 
 /*
  * Get FORM variables

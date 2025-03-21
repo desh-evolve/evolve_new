@@ -54,7 +54,7 @@ if ( !$permission->Check('user','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee')); // See index.php
 
 /*
  * Get FORM variables
@@ -142,7 +142,7 @@ switch ($action) {
 				if ( isset($config_vars['other']['primary_company_id']) AND $config_vars['other']['primary_company_id'] != $ulf->getCurrent()->getCompany() ) {
 					$authentication->changeObject( $id );
 
-					TTLog::addEntry( $current_user->getID(), 'Login',  TTi18n::getText('Switch User').': '. TTi18n::getText('SourceIP').': '. $authentication->getIPAddress() .' '. TTi18n::getText('SessionID') .': '.$authentication->getSessionID() .' '.  TTi18n::getText('UserID').': '. $id, $current_user->getId(), 'authentication');
+					TTLog::addEntry( $current_user->getID(), 'Login',  _('Switch User').': '. _('SourceIP').': '. $authentication->getIPAddress() .' '. _('SessionID') .': '.$authentication->getSessionID() .' '.  _('UserID').': '. $id, $current_user->getId(), 'authentication');
 
 					Redirect::Page( URLBuilder::getURL( NULL, '../index.php') );
 				} else {
@@ -228,7 +228,7 @@ switch ($action) {
 				} else {
 					$uf->Validator->isTrue(	'password',
 											FALSE,
-											TTi18n::gettext('Passwords don\'t match') );
+											__('Passwords don\'t match') );
 				}
 			}
 

@@ -1,71 +1,137 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: CompanyDeductionList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('leaves','enabled')
-		OR !( $permission->Check('leaves','view') OR $permission->Check('leaves','view_own') ) ) {
+namespace App\Http\Controllers\leaves;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use App\Models\Company\CompanyDeductionFactory;
+use App\Models\Company\CompanyDeductionListFactory;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Leaves\AbsenceLeaveUserListFactory;
+use App\Models\Policy\AbsencePolicyListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Leave management')); // See index.php
+class AbsenceLeaveUserList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
-
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add_presets':
-		//Debug::setVerbosity(11);
-		CompanyDeductionFactory::addPresets( $current_company->getId() );
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'AbsenceLeaveUserList.php') );
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditAbsenceLeaveUser.php', FALSE) );
-
-		break;
-	case 'delete':
-	case 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+        /*
+        if ( !$permission->Check('leaves','enabled')
+				OR !( $permission->Check('leaves','view') OR $permission->Check('leaves','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
+    }
+
+    public function index() {
+
+        $viewData['title'] = 'Leave management';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
+		}
+
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
+		}
+
+		$cdlf = new AbsenceLeaveUserListFactory(); 
+                
+        $aplf = new AbsencePolicyListFactory();
+		$cdlf->getAll();
+
+		$pager = new Pager($cdlf);
+                
+		foreach ($cdlf->rs as $cd_obj) {
+			$cdlf->data = (array)$cd_obj;
+			$cd_obj = $cdlf;
+
+            $aplf->getById($cd_obj->getAbsencePolicyId());
+			$rows[] = array(
+				'id' => $cd_obj->getId(),
+				'status_id' => $cd_obj->getStatus(),
+				'status' => $cd_obj->getName(),
+				'type_id' => $cd_obj->getName(),
+				'type' => $aplf->getCurrent()->getName(),
+				'year' => $cd_obj->getLeaveDateYear(),
+				'calculation' => $cd_obj->getName(),
+				'calculation_order' => $cd_obj->getName(),
+				'name' => $cd_obj->getName(),
+				'deleted' => $cd_obj->getDeleted()
+			);
+		}
+
+		$viewData['rows'] = $rows;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
+
+        return view('leaves/AbsenceLeaveUserList', $viewData);
+    }
+
+	public function add_presets(){
+		$current_company = $this->currentCompany;
+		CompanyDeductionFactory::addPresets( $current_company->getId() ); 
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'AbsenceLeaveUserList') );
+	}
+
+	public function add(){
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditAbsenceLeaveUser', FALSE) );
+	}
+
+	public function delete(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+
+		$delete = TRUE;
 
 		$alulf = new AbsenceLeaveUserListFactory(); 
 		foreach ($ids as $id) {
@@ -78,10 +144,23 @@ switch ($action) {
 			}
 		}
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'AbsenceLeaveUserList.php') );
+		Redirect::Page( URLBuilder::getURL( NULL, 'AbsenceLeaveUserList') );
 
-		break;
-	case 'copy':
+	}
+
+	public function copy(){
+		$current_company = $this->currentCompany;
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+
 		$cdlf = new CompanyDeductionListFactory();
 
 		foreach ($ids as $id) {
@@ -106,51 +185,11 @@ switch ($action) {
 		}
 		unset($tmp_cd_obj, $cd_obj);
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'CompanyDeductionList.php') );
+		Redirect::Page( URLBuilder::getURL( NULL, 'CompanyDeductionList') );
 
-		break;
-	default:
-		BreadCrumb::setCrumb($title);
+	}
 
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-		}
-
-		$cdlf = new AbsenceLeaveUserListFactory();
-                
-                $aplf = new AbsencePolicyListFactory();
-		$cdlf->getAll();
-
-		$pager = new Pager($cdlf);
-                
-//		$status_options = $cdlf->getOptions('status');
-//		$type_options = $cdlf->getOptions('type');
-//		$calculation_options = $cdlf->getOptions('calculation');
-                
-		foreach ($cdlf as $cd_obj) {
-                        $aplf->getById($cd_obj->getAbsencePolicyId());
-			$rows[] = array(
-								'id' => $cd_obj->getId(),
-								'status_id' => $cd_obj->getStatus(),
-								'status' => $cd_obj->getName(),
-								'type_id' => $cd_obj->getName(),
-								'type' => $aplf->getCurrent()->getName(),
-								'year' => $cd_obj->getLeaveDateYear(),
-								'calculation' => $cd_obj->getName(),
-								'calculation_order' => $cd_obj->getName(),
-								'name' => $cd_obj->getName(),
-								'deleted' => $cd_obj->getDeleted()
-							);
-		}
-		$smarty->assign_by_ref('rows', $rows);
-
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		break;
 }
-$smarty->display('leaves/AbsenceLeaveUserList.tpl');
+
+
 ?>

@@ -1,87 +1,74 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: HierarchyControlList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('hierarchy','enabled')
-		OR !( $permission->Check('hierarchy','view') OR $permission->Check('hierarchy','view_own') ) ) {
+namespace App\Http\Controllers\hierarchy;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyControlListFactory;
+use App\Models\Hierarchy\HierarchyObjectTypeFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Hierarchy List')); // See index.php
-BreadCrumb::setCrumb($title);
+class HierarchyControlList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												'id'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+        /*
+        if ( !$permission->Check('hierarchy','enabled')
+				OR !( $permission->Check('hierarchy','view') OR $permission->Check('hierarchy','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
+
+    public function index() {
+
+        $viewData['title'] = 'Hierarchy List';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+				'id'
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
 
 
-//$ppslf = new PayPeriodScheduleFactory();
-
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL(NULL, 'EditHierarchyControl.php', FALSE) );
-
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
 
-		$hclf = new HierarchyControlListFactory();
-
-		foreach ($ids as $id) {
-			//$dsclf->GetByIdAndUserId($id, $current_user->getId() );
-			$hclf->GetById($id);
-			foreach ($hclf as $hierarchy_control) {
-				$hierarchy_control->setDeleted($delete);
-				$hierarchy_control->Save();
-			}
-		}
-
-		Redirect::Page( URLBuilder::getURL(NULL, 'HierarchyControlList.php') );
-
-		break;
-
-	default:
 		$hclf = new HierarchyControlListFactory();
 		$hclf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
@@ -90,7 +77,10 @@ switch ($action) {
 		$hotf = new HierarchyObjectTypeFactory();
 		$object_type_options = $hotf->getOptions('object_type');
 
-		foreach ($hclf as $hierarchy_control) {
+		foreach ($hclf->rs as $hierarchy_control) {
+			$hclf->data = (array)$hierarchy_control;
+			$hierarchy_control = $hclf;
+
 			$object_type_ids = $hierarchy_control->getObjectType();
 
 			$object_types = array();
@@ -106,19 +96,56 @@ switch ($action) {
 				'description' => $hierarchy_control->getDescription(),
 				'object_types' => $object_types,
 				'deleted' => $hierarchy_control->getDeleted()
-				);
+			);
 
 			unset($object_types);
 		}
 
-		$smarty->assign_by_ref('hierarchy_controls', $hierarchy_controls);
+		$viewData['hierarchy_controls'] = $hierarchy_controls;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+        return view('hierarchy/HierarchyControlList', $viewData);
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+    }
 
-		break;
+	public function add(){
+		Redirect::Page( URLBuilder::getURL(NULL, 'EditHierarchyControl.php', FALSE) );
+	}
+
+	public function delete(){
+		$delete = TRUE;
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+				'id'
+			) 
+		) );
+
+		$hclf = new HierarchyControlListFactory();
+
+		foreach ($ids as $id) {
+			//$dsclf->GetByIdAndUserId($id, $current_user->getId() );
+			$hclf->GetById($id);
+			foreach ($hclf->rs as $hierarchy_control) {
+				$hclf->data = (array)$hierarchy_control;
+				$hierarchy_control = $hclf;
+
+				$hierarchy_control->setDeleted($delete);
+				$hierarchy_control->Save();
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL(NULL, 'HierarchyControlList.php') );
+
+	}
 }
-$smarty->display('hierarchy/HierarchyControlList.tpl');
+
+
 ?>

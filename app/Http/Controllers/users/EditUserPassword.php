@@ -17,7 +17,7 @@ if ( !$permission->Check('user','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Change Web Password')); // See index.php
+$smarty->assign('title', __($title = 'Change Web Password')); // See index.php
 
 /*
  * Get FORM variables
@@ -53,13 +53,13 @@ switch ($action) {
 					Debug::Text('Password check failed!', __FILE__, __LINE__, __METHOD__,10);
 					$uf->Validator->isTrue(	'current_password',
 											FALSE,
-											TTi18n::gettext('Current password is incorrect') );
+											_('Current password is incorrect') );
 				}
 			} else {
 				Debug::Text('Current password not specified', __FILE__, __LINE__, __METHOD__,10);
 				$uf->Validator->isTrue(	'current_password',
 										FALSE,
-										TTi18n::gettext('Current password is incorrect') );
+										_('Current password is incorrect') );
 
 			}
 
@@ -71,19 +71,19 @@ switch ($action) {
 					} else {
 						$uf->Validator->isTrue(	'password',
 												FALSE,
-												TTi18n::gettext('Passwords don\'t match') );
+												__('Passwords don\'t match') );
 					}
 				} else {
 					$uf->Validator->isTrue(	'password',
 											FALSE,
-											TTi18n::gettext('Passwords don\'t match') );
+											__('Passwords don\'t match') );
 
 				}
 			}
 
 			if ( $uf->isValid() ) {
 				if ( DEMO_MODE == FALSE ) {
-					TTLog::addEntry( $uf->getId(), 20, TTi18n::getText('Password - Web'), NULL, $uf->getTable() );
+					TTLog::addEntry( $uf->getId(), 20, _('Password - Web'), NULL, $uf->getTable() );
 					$uf->Save();
 				}
 

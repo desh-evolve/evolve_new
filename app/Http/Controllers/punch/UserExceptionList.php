@@ -19,7 +19,7 @@ if ( !$permission->Check('punch','enabled')
 
 //Debug::setVerbosity( 11 );
 
-$smarty->assign('title', TTi18n::gettext($title = 'Exception List')); // See index.php
+$smarty->assign('title', __($title = 'Exception List')); // See index.php
 
 /*
  * Get FORM variables
@@ -37,13 +37,13 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 $columns = array(
-											'-1010-first_name' => TTi18n::gettext('First Name'),
-											'-1020-middle_name' => TTi18n::gettext('Middle Name'),
-											'-1030-last_name' => TTi18n::gettext('Last Name'),
-											'-1040-date_stamp' => TTi18n::gettext('Date'),
-											'-1050-severity' => TTi18n::gettext('Severity'),
-											'-1060-exception_policy_type' => TTi18n::gettext('Exception'),
-											'-1070-exception_policy_type_id' => TTi18n::gettext('Code'),
+											'-1010-first_name' => _('First Name'),
+											'-1020-middle_name' => _('Middle Name'),
+											'-1030-last_name' => _('Last Name'),
+											'-1040-date_stamp' => _('Date'),
+											'-1050-severity' => _('Severity'),
+											'-1060-exception_policy_type' => _('Exception'),
+											'-1070-exception_policy_type_id' => _('Code'),
 											);
 
 if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
@@ -199,7 +199,7 @@ switch ($action) {
 		
 		$smarty->assign_by_ref('rows', $rows);
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- Any --'));
+		$all_array_option = array('-1' => _('-- Any --'));
 
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array( 'permission_children_ids' => $filter_data['permission_children_ids'] ) );
 		$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

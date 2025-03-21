@@ -19,7 +19,7 @@ if ( !$permission->Check('schedule','enabled')
 
 //Debug::setVerbosity( 11 );
 
-$smarty->assign('title', TTi18n::gettext($title = 'Scheduled Shifts List')); // See index.php
+$smarty->assign('title', __($title = 'Scheduled Shifts List')); // See index.php
 
 /*
  * Get FORM variables
@@ -37,28 +37,28 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 $columns = array(
-									'-1000-first_name' => TTi18n::gettext('First Name'),
-									'-1002-last_name' => TTi18n::gettext('Last Name'),
-									'-1010-title' => TTi18n::gettext('Title'),
-									'-1039-group' => TTi18n::gettext('Group'),
-									'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-									'-1050-default_department' => TTi18n::gettext('Default Department'),
-									'-1160-branch_id' => TTi18n::gettext('Branch'),
-									'-1170-department_id' => TTi18n::gettext('Department'),
-									'-1202-status_id' => TTi18n::gettext('Status'),
-									'-1210-start_time' => TTi18n::gettext('Start Time'),
-									'-1220-end_time' => TTi18n::gettext('End Time'),
-									'-1230-total_time' => TTi18n::gettext('Total Time'),
+									'-1000-first_name' => _('First Name'),
+									'-1002-last_name' => _('Last Name'),
+									'-1010-title' => _('Title'),
+									'-1039-group' => _('Group'),
+									'-1040-default_branch' => _('Default Branch'),
+									'-1050-default_department' => _('Default Department'),
+									'-1160-branch_id' => _('Branch'),
+									'-1170-department_id' => _('Department'),
+									'-1202-status_id' => _('Status'),
+									'-1210-start_time' => _('Start Time'),
+									'-1220-end_time' => _('End Time'),
+									'-1230-total_time' => _('Total Time'),
 									);
 
 $professional_edition_columns = array(
 /*
-									'-1180-job' => TTi18n::gettext('Job'),
-									'-1182-job_status' => TTi18n::gettext('Job Status'),
-									'-1183-job_branch' => TTi18n::gettext('Job Branch'),
-									'-1184-job_department' => TTi18n::gettext('Job Department'),
-									'-1185-job_group' => TTi18n::gettext('Job Group'),
-									'-1190-job_item' => TTi18n::gettext('Task'),
+									'-1180-job' => _('Job'),
+									'-1182-job_status' => _('Job Status'),
+									'-1183-job_branch' => _('Job Branch'),
+									'-1184-job_department' => _('Job Department'),
+									'-1185-job_group' => _('Job Group'),
+									'-1190-job_item' => _('Task'),
 */
 									);
 
@@ -249,7 +249,7 @@ switch ($action) {
 		}
 		$smarty->assign_by_ref('rows', $rows);
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- Any --'));
+		$all_array_option = array('-1' => _('-- Any --'));
 
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

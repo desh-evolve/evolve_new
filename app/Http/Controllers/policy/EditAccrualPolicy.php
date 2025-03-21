@@ -17,7 +17,7 @@ if ( !$permission->Check('accrual_policy','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Accrual Policy')); // See index.php
+$smarty->assign('title', __($title = 'Edit Accrual Policy')); // See index.php
 
 /*
  * Get FORM variables

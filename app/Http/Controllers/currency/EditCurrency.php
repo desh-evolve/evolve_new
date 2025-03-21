@@ -21,23 +21,15 @@ class EditCurrency extends Controller
     protected $currencyFactory;
     protected $currencyListFactory;
 
-    public function __construct(CurrencyFactory $currencyFactory, CurrencyListFactory $currencyListFactory)
+    public function __construct()
     {
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->currencyFactory = $currencyFactory;
-        $this->currencyListFactory = $currencyListFactory;
-
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
-    }
-
-    public function index($id = null)
-    {
-        $current_company = $this->company;
 
         /*
         if (!$this->permission->Check('currency', 'enabled')
@@ -45,12 +37,18 @@ class EditCurrency extends Controller
             $this->permission->Redirect(FALSE); // Redirect
         }
         */
+    }
 
-        $data = [];
+    public function index($id = null)
+    {
+        $current_company = $this->company;
+
+        $cf = new CurrencyFactory();
 
         if ($id) {
             // Edit mode: Fetch existing currency data
-            $clf = $this->currencyListFactory->getByIdAndCompanyId($id, $current_company->getId());
+            $clf = new CurrencyListFactory();
+            $clf->getByIdAndCompanyId($id, $current_company->getId());
 
             $currency = $clf->rs ?? [];
             if ($currency) {
@@ -85,8 +83,8 @@ class EditCurrency extends Controller
         }
 
         // Select box options
-        $data['status_options'] = $this->currencyFactory->getOptions('status');
-        $data['iso_code_options'] = $this->currencyFactory->getISOCodesArray();
+        $data['status_options'] = $cf->getOptions('status');
+        $data['iso_code_options'] = $cf->getISOCodesArray();
 
         $viewData = [
             'title' => $id ? 'Edit Currency' : 'Add Currency',
@@ -98,7 +96,7 @@ class EditCurrency extends Controller
 
     public function save(Request $request, $id = null)
     {
-        
+
         $current_company = $this->company;
 
         /*
@@ -110,25 +108,27 @@ class EditCurrency extends Controller
 
         $data = $request->all();
         Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
-        
 
-        $this->currencyFactory->setId($id ?? null); // Use $id if editing, otherwise null for add
-        $this->currencyFactory->setCompany($current_company->getId());
-        $this->currencyFactory->setStatus($data['status_id'] ?? '');
-        $this->currencyFactory->setName($data['name'] ?? '');
-        $this->currencyFactory->setISOCode($data['iso_code'] ?? '');
-        $this->currencyFactory->setConversionRate($data['conversion_rate'] ?? '');
-        $this->currencyFactory->setAutoUpdate(isset($data['auto_update']) && $data['auto_update'] == 1);
-        $this->currencyFactory->setBase(isset($data['is_base']) && $data['is_base'] == 1);
-        $this->currencyFactory->setDefault(isset($data['is_default']) && $data['is_default'] == 1);
-        $this->currencyFactory->setRateModifyPercent($data['rate_modify_percent'] ?? '');
         
-        if ($this->currencyFactory->isValid()) {
-            $this->currencyFactory->Save();
+        $cf = new CurrencyFactory();
+
+        $cf->setId($id ?? null); // Use $id if editing, otherwise null for add
+        $cf->setCompany($current_company->getId());
+        $cf->setStatus($data['status_id'] ?? '');
+        $cf->setName($data['name'] ?? '');
+        $cf->setISOCode($data['iso_code'] ?? '');
+        $cf->setConversionRate($data['conversion_rate'] ?? '');
+        $cf->setAutoUpdate(isset($data['auto_update']) && $data['auto_update'] == 1);
+        $cf->setBase(isset($data['is_base']) && $data['is_base'] == 1);
+        $cf->setDefault(isset($data['is_default']) && $data['is_default'] == 1);
+        $cf->setRateModifyPercent($data['rate_modify_percent'] ?? '');
+        
+        if ($cf->isValid()) {
+            $cf->Save();
             return redirect()->to(URLBuilder::getURL(null, '/currency'))->with('success', 'Currency saved successfully.');
         }
 
         // If validation fails, return back with errors
         return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
     }
-}
+} 

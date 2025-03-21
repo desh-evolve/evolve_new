@@ -13,7 +13,7 @@ require_once(Environment::getBasePath() .'classes/swiftmailer/lib/swift_required
 
   global $config_vars;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Leaves Supervisor Aprooval'));
+$smarty->assign('title', __($title = 'Employee Leaves Supervisor Aprooval'));
 
 
 extract	(FormVariables::GetVariables(

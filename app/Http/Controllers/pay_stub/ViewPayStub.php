@@ -20,7 +20,7 @@ if ( !$permission->Check('pay_stub','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Pay Stub')); // See index.php
+$smarty->assign('title', __($title = 'Employee Pay Stub')); // See index.php
 BreadCrumb::setCrumb($title);
 /*
  * Get FORM variables
@@ -275,7 +275,7 @@ if ( isset($pay_stub_html) AND count($pay_stub_html) > 0 ) {
 	}
 	rmdir($dir);
 } else {
-	echo TTi18n::gettext("ERROR: No Items Selected!")."<br>\n";
+	echo __("ERROR: No Items Selected!")."<br>\n";
 }
 
 //Debug::Display();

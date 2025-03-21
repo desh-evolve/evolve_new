@@ -20,7 +20,7 @@ if ( !$permission->Check('schedule','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'My Schedule')); // See index.php
+$smarty->assign('title', __($title = 'My Schedule')); // See index.php
 
 /*
  * Get FORM variables
@@ -90,7 +90,7 @@ switch ($action) {
 
 		//print_r($output);
 		if ( $output == FALSE ) {
-			echo TTi18n::getText('No Schedule to print!')."<br>\n";
+			echo _('No Schedule to print!')."<br>\n";
 		} else {
 			if ( Debug::getVerbosity() < 11 ) {
 				Misc::FileDownloadHeader('schedule.pdf', 'application/pdf', strlen($output));
@@ -141,7 +141,7 @@ switch ($action) {
 		}
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		if ( !isset($filter_data['show_days']) OR ( isset($filter_data['show_days']) AND $filter_data['show_days'] == '' ) ) {
 			$filter_data['show_days'] = 4;
@@ -218,8 +218,8 @@ switch ($action) {
 		$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 		$filter_data['selected_user_title_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 
-		$filter_data['show_days_options'] = array( 1 => TTi18n::gettext('1 Week'), 2 => TTi18n::gettext('2 Weeks'), 3 => TTi18n::gettext('3 Weeks'), 4 => TTi18n::gettext('4 Weeks'), 5 => TTi18n::gettext('5 Weeks'), 6 => TTi18n::gettext('6 Weeks'), 7 => TTi18n::gettext('7 Weeks'), 8 => TTi18n::gettext('8 Weeks'), 9 => TTi18n::gettext('9 Weeks'), 10 => TTi18n::gettext('10 Weeks'), 11 => TTi18n::gettext('11 Weeks'), 12 => TTi18n::gettext('12 Weeks'));
-		$filter_data['view_type_options'] = array( 10 => TTi18n::gettext('Month'), 20 => TTi18n::gettext('Week'), 30 => TTi18n::gettext('Day') );
+		$filter_data['show_days_options'] = array( 1 => _('1 Week'), 2 => _('2 Weeks'), 3 => _('3 Weeks'), 4 => _('4 Weeks'), 5 => _('5 Weeks'), 6 => _('6 Weeks'), 7 => _('7 Weeks'), 8 => _('8 Weeks'), 9 => _('9 Weeks'), 10 => _('10 Weeks'), 11 => _('11 Weeks'), 12 => _('12 Weeks'));
+		$filter_data['view_type_options'] = array( 10 => _('Month'), 20 => _('Week'), 30 => _('Day') );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

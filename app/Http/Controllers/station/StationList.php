@@ -19,7 +19,7 @@ if ( !$permission->Check('station','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Station List')); // See index.php
+$smarty->assign('title', __($title = 'Station List')); // See index.php
 BreadCrumb::setCrumb($title);
 /*
  * Get FORM variables

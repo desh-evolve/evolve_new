@@ -19,7 +19,7 @@ if ( !$permission->Check('roe','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'ROE List')); // See index.php
+$smarty->assign('title', __($title = 'ROE List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*
@@ -62,7 +62,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) == 0 ) {
-			echo TTi18n::gettext("ERROR: No Items Selected!")."<br>\n";
+			echo __("ERROR: No Items Selected!")."<br>\n";
 			exit;
 		}
 
@@ -79,7 +79,7 @@ switch ($action) {
 					echo $output;
 					exit;
 				} else {
-					echo TTi18n::gettext("ERROR: ROE not available, it may be deleted!")."<br>\n";
+					echo __("ERROR: ROE not available, it may be deleted!")."<br>\n";
 					exit;
 				}
 			} else {
@@ -95,7 +95,7 @@ switch ($action) {
 					echo $output;
 					exit;
 				} else {
-					echo TTi18n::gettext("ERROR: ROE not available, it may be deleted!")."<br>\n";
+					echo __("ERROR: ROE not available, it may be deleted!")."<br>\n";
 					exit;
 				}
 			}

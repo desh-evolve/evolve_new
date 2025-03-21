@@ -13,7 +13,7 @@ require_once('../../includes/global.inc.php');
 require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
 
-$smarty->assign('title', TTi18n::gettext($title = 'Attendance Report')); // See index.php
+$smarty->assign('title', __($title = 'Attendance Report')); // See index.php
 
 
 /*
@@ -56,23 +56,23 @@ $static_columns = array(
 											'default_branch' => 'Default Branch',
 											'default_department' => 'Default Department',
 */
-											'-1000-date_stamp' => TTi18n::gettext('Date'),
+											'-1000-date_stamp' => _('Date'),
 											'-1050-min_punch_time_stamp' => 'First In Punch',
 											'-1060-max_punch_time_stamp' => 'Last Out Punch',
 											);
 
 $columns = array(
 
-											'-1070-schedule_working' => TTi18n::gettext('Scheduled Time'),
-											'-1080-schedule_absence' => TTi18n::gettext('Scheduled Absence'),
-											'-1090-worked_time' => TTi18n::gettext('Worked Time'),
-											'-1100-actual_time' => TTi18n::gettext('Actual Time'),
-											'-1110-actual_time_diff' => TTi18n::gettext('Actual Time Difference'),
-											'-1120-actual_time_diff_wage' => TTi18n::gettext('Actual Time Difference Wage'),
-											'-1130-paid_time' => TTi18n::gettext('Paid Time'),
-											'-1140-regular_time' => TTi18n::gettext('Regular Time'),
-											'-1150-over_time' => TTi18n::gettext('Total Over Time'),
-											'-1160-absence_time' => TTi18n::gettext('Total Absence Time'),
+											'-1070-schedule_working' => _('Scheduled Time'),
+											'-1080-schedule_absence' => _('Scheduled Absence'),
+											'-1090-worked_time' => _('Worked Time'),
+											'-1100-actual_time' => _('Actual Time'),
+											'-1110-actual_time_diff' => _('Actual Time Difference'),
+											'-1120-actual_time_diff_wage' => _('Actual Time Difference Wage'),
+											'-1130-paid_time' => _('Paid Time'),
+											'-1140-regular_time' => _('Regular Time'),
+											'-1150-over_time' => _('Total Over Time'),
+											'-1160-absence_time' => _('Total Absence Time'),
 											);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -523,15 +523,15 @@ switch ($action) {
 						$rows[$i]['verified_time_sheet_date'] = FALSE;
 						if ( $verified_time_sheets !== NULL AND isset($verified_time_sheets[$user_id][$pay_period_id]) ) {
 							if ( $verified_time_sheets[$user_id][$pay_period_id]['status_id'] == 50 ) {
-								$rows[$i]['verified_time_sheet'] = TTi18n::gettext('Yes');
+								$rows[$i]['verified_time_sheet'] = _('Yes');
 								$rows[$i]['verified_time_sheet_date'] = $verified_time_sheets[$user_id][$pay_period_id]['created_date'];
 							} elseif ( $verified_time_sheets[$user_id][$pay_period_id]['status_id'] == 30 OR $verified_time_sheets[$user_id][$pay_period_id]['status_id'] == 45 ) {
-								$rows[$i]['verified_time_sheet'] = TTi18n::gettext('Pending');
+								$rows[$i]['verified_time_sheet'] = _('Pending');
 							} else {
-								$rows[$i]['verified_time_sheet'] = TTi18n::gettext('Declined');
+								$rows[$i]['verified_time_sheet'] = _('Declined');
 							}
 						} else {
-							$rows[$i]['verified_time_sheet'] = TTi18n::gettext('No');
+							$rows[$i]['verified_time_sheet'] = _('No');
 						}
 
 						$x=0;
@@ -638,7 +638,7 @@ switch ($action) {
 					//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
 
 					$pdf->SetFont('','B',32);
-					$pdf->Cell(200,15, TTi18n::gettext('Employee TimeSheet') , $border, 0, 'C');
+					$pdf->Cell(200,15, _('Employee TimeSheet') , $border, 0, 'C');
 					$pdf->Ln();
 					$pdf->SetFont('','B',12);
 					$pdf->Cell(200,5, $current_company->getName() , $border, 0, 'C');
@@ -647,26 +647,26 @@ switch ($action) {
 					$pdf->Rect( $pdf->getX(), $pdf->getY()-2, 200, 19 );
 
 					$pdf->SetFont('','',12);
-					$pdf->Cell(30,5, TTi18n::gettext('Employee:') , $border, 0, 'R');
+					$pdf->Cell(30,5, _('Employee:') , $border, 0, 'R');
 					$pdf->SetFont('','B',12);
 					$pdf->Cell(70,5, $user_data['first_name'] .' '. $user_data['last_name'] .' (#'. $user_data['employee_number'] .')', $border, 0, 'L');
 
 					$pdf->SetFont('','',12);
-					$pdf->Cell(40,5, TTi18n::gettext('Pay Period:') , $border, 0, 'R');
+					$pdf->Cell(40,5, _('Pay Period:') , $border, 0, 'R');
 					$pdf->SetFont('','B',12);
 					$pdf->Cell(60,5, $user_data['pay_period'], $border, 0, 'L');
 					$pdf->Ln();
 
 					$pdf->SetFont('','',12);
-					$pdf->Cell(30,5, TTi18n::gettext('Title:') , $border, 0, 'R');
+					$pdf->Cell(30,5, _('Title:') , $border, 0, 'R');
 					$pdf->Cell(70,5, $user_data['title'], $border, 0, 'L');
-					$pdf->Cell(40,5, TTi18n::gettext('Branch:') , $border, 0, 'R');
+					$pdf->Cell(40,5, _('Branch:') , $border, 0, 'R');
 					$pdf->Cell(60,5, $user_data['default_branch'], $border, 0, 'L');
 					$pdf->Ln();
 
-					$pdf->Cell(30,5, TTi18n::gettext('Group:') , $border, 0, 'R');
+					$pdf->Cell(30,5, _('Group:') , $border, 0, 'R');
 					$pdf->Cell(70,5, $user_data['group'], $border, 0, 'L');
-					$pdf->Cell(40,5, TTi18n::gettext('Department:') , $border, 0, 'R');
+					$pdf->Cell(40,5, _('Department:') , $border, 0, 'R');
 					$pdf->Cell(60,5, $user_data['default_department'], $border, 0, 'L');
 					$pdf->Ln(5);
 
@@ -734,15 +734,15 @@ switch ($action) {
 								$pdf->SetFont('','B',10);
 								$pdf->setFillColor(220,220,220);
 								$pdf->MultiCell( $column_widths['line'], $line_h, '#' , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['date_stamp'], $line_h, TTi18n::gettext('Date') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['dow'], $line_h, TTi18n::gettext('DoW') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['min_punch_time_stamp'], $line_h, TTi18n::gettext('First In') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['max_punch_time_stamp'], $line_h, TTi18n::gettext('Last Out') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['worked_time'], $line_h, TTi18n::gettext('Worked Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['regular_time'], $line_h, TTi18n::gettext('Regular Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['over_time'], $line_h, TTi18n::gettext('Over Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['paid_time'], $line_h, TTi18n::gettext('Paid Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['absence_time'], $line_h, TTi18n::gettext('Absence Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['date_stamp'], $line_h, _('Date') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['dow'], $line_h, _('DoW') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['min_punch_time_stamp'], $line_h, _('First In') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['max_punch_time_stamp'], $line_h, _('Last Out') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['worked_time'], $line_h, _('Worked Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['regular_time'], $line_h, _('Regular Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['over_time'], $line_h, _('Over Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['paid_time'], $line_h, _('Paid Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['absence_time'], $line_h, _('Absence Time') , 1, 'C', 1, 0);
 								$pdf->Ln();
 							}
 
@@ -785,7 +785,7 @@ switch ($action) {
 								//Show Week Total.
 								$total_cell_width = $column_widths['line']+$column_widths['date_stamp']+$column_widths['dow']+$column_widths['min_punch_time_stamp']+$column_widths['max_punch_time_stamp'];
 								$pdf->SetFont('','B',10);
-								$pdf->Cell( $total_cell_width, 6, TTi18n::gettext('Week Total:').' ', 0, 0, 'R', 0);
+								$pdf->Cell( $total_cell_width, 6, _('Week Total:').' ', 0, 0, 'R', 0);
 								$pdf->Cell( $column_widths['worked_time'], 6, TTDate::getTimeUnit( $week_totals['worked_time'] ) , 0, 0, 'C', 0);
 								$pdf->Cell( $column_widths['regular_time'], 6, TTDate::getTimeUnit( $week_totals['regular_time'] ), 0, 0, 'C', 0);
 								$pdf->Cell( $column_widths['over_time'], 6, TTDate::getTimeUnit( $week_totals['over_time'] ), 0, 0, 'C', 0);
@@ -818,7 +818,7 @@ switch ($action) {
 						$total_cell_width = $column_widths['line']+$column_widths['date_stamp']+$column_widths['dow']+$column_widths['min_punch_time_stamp'];
 						$pdf->SetFont('','B',10);
 						$pdf->Cell( $total_cell_width, 6, '' , 0, 0, 'R', 0);
-						$pdf->Cell( $column_widths['max_punch_time_stamp'], 6, TTi18n::gettext('Overall Total:').' ', 'T', 0, 'R', 0);
+						$pdf->Cell( $column_widths['max_punch_time_stamp'], 6, _('Overall Total:').' ', 'T', 0, 'R', 0);
 						$pdf->Cell( $column_widths['worked_time'], 6, TTDate::getTimeUnit( $totals['worked_time'] ) , 'T', 0, 'C', 0);
 						$pdf->Cell( $column_widths['regular_time'], 6, TTDate::getTimeUnit( $totals['regular_time'] ), 'T', 0, 'C', 0);
 						$pdf->Cell( $column_widths['over_time'], 6, TTDate::getTimeUnit( $totals['over_time'] ), 'T', 0, 'C', 0);
@@ -833,13 +833,13 @@ switch ($action) {
 					$pdf->Ln();
 
 					//Signature lines
-					$pdf->MultiCell(200,5, TTi18n::gettext('By signing this timesheet I hereby certify that the above time accurately and fully reflects the time that').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '.TTi18n::gettext('worked during the designated period.'), $border, 'L');
+					$pdf->MultiCell(200,5, _('By signing this timesheet I hereby certify that the above time accurately and fully reflects the time that').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '._('worked during the designated period.'), $border, 'L');
 					$pdf->Ln(5);
 
 					$border = 0;
-					$pdf->Cell(40,5, TTi18n::gettext('Employee Signature:'), $border, 0, 'L');
+					$pdf->Cell(40,5, _('Employee Signature:'), $border, 0, 'L');
 					$pdf->Cell(60,5, '_____________________________' , $border, 0, 'C');
-					$pdf->Cell(40,5, TTi18n::gettext('Supervisor Signature:'), $border, 0, 'R');
+					$pdf->Cell(40,5, _('Supervisor Signature:'), $border, 0, 'R');
 					$pdf->Cell(60,5, '_____________________________' , $border, 0, 'C');
 
 					$pdf->Ln();
@@ -852,12 +852,12 @@ switch ($action) {
 
 					$pdf->Ln();
 					$pdf->Cell(140,5, '', $border, 0, 'R');
-					$pdf->Cell(60,5, TTi18n::gettext('(print name)'), $border, 0, 'C');
+					$pdf->Cell(60,5, _('(print name)'), $border, 0, 'C');
 
 					if ( $user_data['verified_time_sheet_date'] != FALSE ) {
 						$pdf->Ln();
 						$pdf->SetFont('','B',10);
-						$pdf->Cell(200,5, TTi18n::gettext('TimeSheet electronically signed by').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '. TTi18n::gettext('on') .' '. TTDate::getDate('DATE+TIME', $user_data['verified_time_sheet_date'] ), $border, 0, 'C');
+						$pdf->Cell(200,5, _('TimeSheet electronically signed by').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '. _('on') .' '. TTDate::getDate('DATE+TIME', $user_data['verified_time_sheet_date'] ), $border, 0, 'C');
 						$pdf->SetFont('','',10);
 					}
 
@@ -865,7 +865,7 @@ switch ($action) {
 					//Add generated date/time at the bottom.
 					$pdf->SetFont('','I',8);
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(245, $adjust_y) );
-					$pdf->Cell(200,5, TTi18n::gettext('Generated:') .' '. TTDate::getDate('DATE+TIME', $pdf_created_date ), $border, 0, 'C');
+					$pdf->Cell(200,5, _('Generated:') .' '. TTDate::getDate('DATE+TIME', $pdf_created_date ), $border, 0, 'C');
 				}
 
 				$output = $pdf->Output('','S');
@@ -877,7 +877,7 @@ switch ($action) {
 				exit;
 			} else {
 				//Debug::Display();
-				echo TTi18n::gettext('ERROR: Employee TimeSheet(s) not available!') . "<br>\n";
+				echo _('ERROR: Employee TimeSheet(s) not available!') . "<br>\n";
 				exit;
 			}
 
@@ -904,7 +904,7 @@ switch ($action) {
 					//$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(0, $adjust_y) );
 
 					$pdf->SetFont('','B',22);
-					$pdf->Cell(200,8, TTi18n::gettext('Detailed Employee TimeSheet') , $border, 0, 'C');
+					$pdf->Cell(200,8, _('Detailed Employee TimeSheet') , $border, 0, 'C');
 					$pdf->Ln();
 					$pdf->SetFont('','B',12);
 					$pdf->Cell(200,5, $current_company->getName() , $border, 0, 'C');
@@ -913,26 +913,26 @@ switch ($action) {
 					$pdf->Rect( $pdf->getX(), $pdf->getY()-1, 200, 14 );
 
 					$pdf->SetFont('','',10);
-					$pdf->Cell(30,4, TTi18n::gettext('Employee:') , $border, 0, 'R');
+					$pdf->Cell(30,4, _('Employee:') , $border, 0, 'R');
 					$pdf->SetFont('','B',10);
 					$pdf->Cell(70,4, $user_data['first_name'] .' '. $user_data['last_name'] .' (#'. $user_data['employee_number'] .')', $border, 0, 'L');
 
 					$pdf->SetFont('','',10);
-					$pdf->Cell(40,4, TTi18n::gettext('Pay Period:') , $border, 0, 'R');
+					$pdf->Cell(40,4, _('Pay Period:') , $border, 0, 'R');
 					$pdf->SetFont('','B',10);
 					$pdf->Cell(60,4, $user_data['pay_period'], $border, 0, 'L');
 					$pdf->Ln();
 
 					$pdf->SetFont('','',10);
-					$pdf->Cell(30,4, TTi18n::gettext('Title:') , $border, 0, 'R');
+					$pdf->Cell(30,4, _('Title:') , $border, 0, 'R');
 					$pdf->Cell(70,4, $user_data['title'], $border, 0, 'L');
-					$pdf->Cell(40,4, TTi18n::gettext('Branch:') , $border, 0, 'R');
+					$pdf->Cell(40,4, _('Branch:') , $border, 0, 'R');
 					$pdf->Cell(60,4, $user_data['default_branch'], $border, 0, 'L');
 					$pdf->Ln();
 
-					$pdf->Cell(30,4, TTi18n::gettext('Group:') , $border, 0, 'R');
+					$pdf->Cell(30,4, _('Group:') , $border, 0, 'R');
 					$pdf->Cell(70,4, $user_data['group'], $border, 0, 'L');
-					$pdf->Cell(40,4, TTi18n::gettext('Department:') , $border, 0, 'R');
+					$pdf->Cell(40,4, _('Department:') , $border, 0, 'R');
 					$pdf->Cell(60,4, $user_data['default_department'], $border, 0, 'L');
 					$pdf->Ln(3);
 
@@ -1002,15 +1002,15 @@ switch ($action) {
 								$pdf->SetFont('','B',10);
 								$pdf->setFillColor(220,220,220);
 								$pdf->MultiCell( $column_widths['line'], $line_h, '#' , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['date_stamp'], $line_h, TTi18n::gettext('Date') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['dow'], $line_h, TTi18n::gettext('DoW') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['in_punch_time_stamp'], $line_h, TTi18n::gettext('In') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['out_punch_time_stamp'], $line_h, TTi18n::gettext('Out') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['worked_time'], $line_h, TTi18n::gettext('Worked Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['paid_time'], $line_h, TTi18n::gettext('Paid Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['regular_time'], $line_h, TTi18n::gettext('Regular Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['over_time'], $line_h, TTi18n::gettext('Over Time') , 1, 'C', 1, 0);
-								$pdf->MultiCell( $column_widths['absence_time'], $line_h, TTi18n::gettext('Absence Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['date_stamp'], $line_h, _('Date') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['dow'], $line_h, _('DoW') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['in_punch_time_stamp'], $line_h, _('In') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['out_punch_time_stamp'], $line_h, _('Out') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['worked_time'], $line_h, _('Worked Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['paid_time'], $line_h, _('Paid Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['regular_time'], $line_h, _('Regular Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['over_time'], $line_h, _('Over Time') , 1, 'C', 1, 0);
+								$pdf->MultiCell( $column_widths['absence_time'], $line_h, _('Absence Time') , 1, 'C', 1, 0);
 								$pdf->Ln();
 							}
 
@@ -1158,7 +1158,7 @@ switch ($action) {
 								//Show Week Total.
 								$total_cell_width = $column_widths['line']+$column_widths['date_stamp']+$column_widths['dow']+$column_widths['in_punch_time_stamp']+$column_widths['out_punch_time_stamp'];
 								$pdf->SetFont('','B',9);
-								$pdf->Cell( $total_cell_width, 6, TTi18n::gettext('Week Total:').' ', 0, 0, 'R', 0);
+								$pdf->Cell( $total_cell_width, 6, _('Week Total:').' ', 0, 0, 'R', 0);
 								$pdf->Cell( $column_widths['worked_time'], 6, TTDate::getTimeUnit( $week_totals['worked_time'] ) , 0, 0, 'C', 0);
 								$pdf->Cell( $column_widths['paid_time'], 6,  TTDate::getTimeUnit( $week_totals['paid_time'] ), 0, 0, 'C', 0);
 								$pdf->Cell( $column_widths['regular_time'], 6, TTDate::getTimeUnit( $week_totals['regular_time'] ), 0, 0, 'C', 0);
@@ -1191,7 +1191,7 @@ switch ($action) {
 						$total_cell_width = $column_widths['line']+$column_widths['date_stamp']+$column_widths['dow']+$column_widths['in_punch_time_stamp'];
 						$pdf->SetFont('','B',9);
 						$pdf->Cell( $total_cell_width, 6, '' , 0, 0, 'R', 0);
-						$pdf->Cell( $column_widths['out_punch_time_stamp'], 6, TTi18n::gettext('Overall Total:').' ', 'T', 0, 'R', 0);
+						$pdf->Cell( $column_widths['out_punch_time_stamp'], 6, _('Overall Total:').' ', 'T', 0, 'R', 0);
 						$pdf->Cell( $column_widths['worked_time'], 6, TTDate::getTimeUnit( $totals['worked_time'] ) , 'T', 0, 'C', 0);
 						$pdf->Cell( $column_widths['paid_time'], 6,  TTDate::getTimeUnit( $totals['paid_time'] ), 'T', 0, 'C', 0);
 						$pdf->Cell( $column_widths['regular_time'], 6, TTDate::getTimeUnit( $totals['regular_time'] ), 'T', 0, 'C', 0);
@@ -1206,13 +1206,13 @@ switch ($action) {
 					$pdf->Ln();
 
 					//Signature lines
-					$pdf->MultiCell(200,5, TTi18n::gettext('By signing this timesheet I hereby certify that the above time accurately and fully reflects the time that').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '.TTi18n::gettext('worked during the designated period.'), $border, 'L');
+					$pdf->MultiCell(200,5, _('By signing this timesheet I hereby certify that the above time accurately and fully reflects the time that').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '._('worked during the designated period.'), $border, 'L');
 					$pdf->Ln(5);
 
 					$border = 0;
-					$pdf->Cell(40,5, TTi18n::gettext('Employee Signature:'), $border, 0, 'L');
+					$pdf->Cell(40,5, _('Employee Signature:'), $border, 0, 'L');
 					$pdf->Cell(60,5, '_____________________________' , $border, 0, 'C');
-					$pdf->Cell(40,5, TTi18n::gettext('Supervisor Signature:'), $border, 0, 'R');
+					$pdf->Cell(40,5, _('Supervisor Signature:'), $border, 0, 'R');
 					$pdf->Cell(60,5, '_____________________________' , $border, 0, 'C');
 
 					$pdf->Ln();
@@ -1225,12 +1225,12 @@ switch ($action) {
 
 					$pdf->Ln();
 					$pdf->Cell(140,5, '', $border, 0, 'R');
-					$pdf->Cell(60,5, TTi18n::gettext('(print name)'), $border, 0, 'C');
+					$pdf->Cell(60,5, _('(print name)'), $border, 0, 'C');
 
 					if ( $user_data['verified_time_sheet_date'] != FALSE ) {
 						$pdf->Ln();
 						$pdf->SetFont('','B',10);
-						$pdf->Cell(200,5, TTi18n::gettext('TimeSheet electronically signed by').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '. TTi18n::gettext('on') .' '. TTDate::getDate('DATE+TIME', $user_data['verified_time_sheet_date'] ), $border, 0, 'C');
+						$pdf->Cell(200,5, _('TimeSheet electronically signed by').' '. $user_data['first_name'] .' '. $user_data['last_name'] .' '. _('on') .' '. TTDate::getDate('DATE+TIME', $user_data['verified_time_sheet_date'] ), $border, 0, 'C');
 						$pdf->SetFont('','',10);
 					}
 
@@ -1238,7 +1238,7 @@ switch ($action) {
 					//Add generated date/time at the bottom.
 					$pdf->SetFont('','I',8);
 					$pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(245, $adjust_y) );
-					$pdf->Cell(200,5, TTi18n::gettext('Generated:') .' '. TTDate::getDate('DATE+TIME', $pdf_created_date ), $border, 0, 'C');
+					$pdf->Cell(200,5, _('Generated:') .' '. TTDate::getDate('DATE+TIME', $pdf_created_date ), $border, 0, 'C');
 				}
 
 				$output = $pdf->Output('','S');
@@ -1250,7 +1250,7 @@ switch ($action) {
 				exit;
 			} else {
 				//Debug::Display();
-				echo TTi18n::gettext('ERROR: Employee TimeSheet(s) not available!') . "<br>\n";
+				echo _('ERROR: Employee TimeSheet(s) not available!') . "<br>\n";
 				exit;
 			}
 		} elseif ( $action == 'export' ) {
@@ -1260,17 +1260,17 @@ switch ($action) {
                             if( $filter_data['export_type'] == 'csv'){
 				//Add the basic identifing columns.
 				$export_filter_columns = array(
-												'first_name' => TTi18n::gettext('First Name'),
-												'last_name' => TTi18n::gettext('Last Name'),
-												'full_name' => TTi18n::gettext('Full Name'),
-												'employee_number' => TTi18n::gettext('Employee #'),
-												'province' => TTi18n::gettext('Province/State'),
-												'country' => TTi18n::gettext('Country'),
-												'group' => TTi18n::gettext('Group'),
-												'title' => TTi18n::gettext('Title'),
-												'default_branch' => TTi18n::gettext('Default Branch'),
-												'default_department' => TTi18n::gettext('Default Department'),
- 												'pay_period' => TTi18n::gettext('Pay Period'),
+												'first_name' => _('First Name'),
+												'last_name' => _('Last Name'),
+												'full_name' => _('Full Name'),
+												'employee_number' => _('Employee #'),
+												'province' => _('Province/State'),
+												'country' => _('Country'),
+												'group' => _('Group'),
+												'title' => _('Title'),
+												'default_branch' => _('Default Branch'),
+												'default_department' => _('Default Department'),
+ 												'pay_period' => _('Pay Period'),
 											);
 
 				$filter_columns = Misc::prependArray( $export_filter_columns, $filter_columns );
@@ -1333,7 +1333,7 @@ switch ($action) {
                                             Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
                                             echo $data;
                                     } else {
-                                            echo TTi18n::gettext('No Data To Export!') ."<br>\n";
+                                            echo _('No Data To Export!') ."<br>\n";
                                     }
                             }
                             
@@ -1381,7 +1381,7 @@ switch ($action) {
                             }
                             
 			} else {
-				echo TTi18n::gettext("No Data To Export!") ."<br>\n";
+				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -1459,7 +1459,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'punch_branch_ids', 'punch_department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -1528,8 +1528,8 @@ switch ($action) {
 		unset($filter_data['sort_options']['effective_date']);
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
                 
-                //FL ADDED FOR EXPORT TYPE  Misc::prependArray( array( 'csv' => TTi18n::gettext('CSV (Excel)'), 'pdfOTDetails' => TTi18n::gettext('OT Daily Monthly Report'), 'pdfDailyLate' => TTi18n::gettext('Daily Attendance / Late'), 'pdfMonthlyDetailAttendance' => TTi18n::gettext('Monthly Attendance Report'), 'pdfMonthlyDetailLate' => TTi18n::gettext('Monthly Late Report')) );
-                $filter_data['export_type_options'] = Misc::prependArray( array( 'mothlyTimesheet' => TTi18n::gettext('Employee Time Sheet (PDF)') , 'csv_format' => TTi18n::gettext('CSV (Excel)')) );
+                //FL ADDED FOR EXPORT TYPE  Misc::prependArray( array( 'csv' => _('CSV (Excel)'), 'pdfOTDetails' => _('OT Daily Monthly Report'), 'pdfDailyLate' => _('Daily Attendance / Late'), 'pdfMonthlyDetailAttendance' => _('Monthly Attendance Report'), 'pdfMonthlyDetailLate' => _('Monthly Late Report')) );
+                $filter_data['export_type_options'] = Misc::prependArray( array( 'mothlyTimesheet' => _('Employee Time Sheet (PDF)') , 'csv_format' => _('CSV (Excel)')) );
 
                 
                 //FL ADDED FOR HIDE BUTTON

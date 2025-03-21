@@ -98,7 +98,7 @@ class BranchBankAccountList extends Controller
 		View::share('company_branch_name', $company_branch_name);
 
 		$data = [
-			'title' => TTi18n::gettext('Bank Account List'),
+			'title' => _('Bank Account List'),
 			'bankAccounts' => $bankAccounts,
 			'branch_id_new' => $id,
 			'sort_column' => $sort_column,

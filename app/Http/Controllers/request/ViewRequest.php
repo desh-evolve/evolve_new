@@ -21,7 +21,7 @@ if ( !$permission->Check('request','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'View Request')); // See index.php
+$smarty->assign('title', __($title = 'View Request')); // See index.php
 
 /*
  * Get FORM variables

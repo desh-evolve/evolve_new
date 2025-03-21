@@ -1,77 +1,68 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 1919 $
- * $Id: UserTitleList.php 1919 2008-06-13 18:17:17Z ipso $
- * $Date: 2008-06-13 11:17:17 -0700 (Fri, 13 Jun 2008) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('wage','enabled')
-		OR !( $permission->Check('wage','view') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\company;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Wage Group List')); // See index.php
-BreadCrumb::setCrumb($title);
+use App\Http\Controllers\Controller;
+use App\Models\Company\WageGroupListFactory;
+use Illuminate\Http\Request;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids'
-												) ) );
+use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use Illuminate\Support\Facades\View;
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+class WageGroupList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-		Redirect::Page( URLBuilder::getURL(NULL, 'EditWageGroup.php') );
-
-		break;
-	case 'delete':
-	case 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+        /*
+        if ( !$permission->Check('wage','enabled')
+				OR !( $permission->Check('wage','view') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$wglf = new WageGroupListFactory();
-		foreach ($ids as $id) {
-			$wglf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($wglf as $wg_obj) {
-				$wg_obj->setDeleted($delete);
-				if ( $wg_obj->isValid() == TRUE ) {
-					$wg_obj->Save();
-				}
-			}
-		}
+        */
+    }
 
-		Redirect::Page( URLBuilder::getURL(NULL, 'WageGroupList.php') );
+    public function index() {
+		$current_company = $this->currentCompany;
+        $viewData['title'] = 'Wage Group List';
 
-		break;
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids'
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
 
-	default:
 		$sort_array = NULL;
 		if ( $sort_column != '' ) {
 			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
@@ -83,22 +74,62 @@ switch ($action) {
 		$pager = new Pager($wglf);
 
 		foreach ($wglf as $group_obj) {
+			$wglf->data = (array)$group_obj;
+			$group_obj = $wglf;
 
-			$groups[] = array(
-								'id' => $group_obj->getId(),
-								'name' => $group_obj->getName(),
-								'deleted' => $group_obj->getDeleted()
-							);
+			$groups[] = array (
+				'id' => $group_obj->getId(),
+				'name' => $group_obj->getName(),
+				'deleted' => $group_obj->getDeleted()
+			);
 
 		}
-		$smarty->assign_by_ref('groups', $groups);
+		
+		$viewData['groups'] = $groups;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+        return view('accrual/ViewUserAccrualList', $viewData);
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+    }
 
-		break;
+	public function add(){
+		Redirect::Page( URLBuilder::getURL(NULL, 'EditWageGroup.php') );
+	}
+
+	public function delete(){
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids'
+			) 
+		) );
+
+		$current_company = $this->currentCompany;
+		$delete = TRUE;
+
+		$wglf = new WageGroupListFactory();
+		foreach ($ids as $id) {
+			$wglf->getByIdAndCompanyId($id, $current_company->getId() );
+			foreach ($wglf->rs as $wg_obj) {
+				$wglf->data = (array)$wg_obj;
+				$wg_obj = $wglf;
+
+				$wg_obj->setDeleted($delete);
+				if ( $wg_obj->isValid() == TRUE ) {
+					$wg_obj->Save();
+				}
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL(NULL, 'WageGroupList.php') );
+
+	}
 }
-$smarty->display('company/WageGroupList.tpl');
+
 ?>

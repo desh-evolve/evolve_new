@@ -30,13 +30,13 @@ class HierarchyShareListFactory extends HierarchyShareFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -52,13 +52,13 @@ class HierarchyShareListFactory extends HierarchyShareFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	hierarchy_control_id = ?
+					where	hierarchy_control_id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -78,15 +78,15 @@ class HierarchyShareListFactory extends HierarchyShareFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
-					'user_id' => $user_id,
+					':id' => $id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	hierarchy_control_id = ?
-						AND user_id = ?
+					where	hierarchy_control_id = :id
+						AND user_id = :user_id
 						';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );

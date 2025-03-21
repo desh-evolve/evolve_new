@@ -15,6 +15,7 @@ use App\Models\Punch\PunchListFactory;
 use App\Models\Users\UserDefaultListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceFactory;
+use Illuminate\Support\Facades\DB;
 
 class PayPeriodScheduleFactory extends Factory {
 	protected $table = 'pay_period_schedule';
@@ -258,12 +259,18 @@ class PayPeriodScheduleFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':name' => $name,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND name = ? AND deleted=0';
-		$pay_period_schedule_id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND name = :name AND deleted=0';
+		$pay_period_schedule_id = DB::select($query, $ph);
+        if ($pay_period_schedule_id === FALSE ) {
+            $pay_period_schedule_id = 0;
+        }else{
+            $pay_period_schedule_id = current(get_object_vars($pay_period_schedule_id[0]));
+        }
+
 		Debug::Arr($pay_period_schedule_id,'Unique Pay Period Schedule ID: '. $pay_period_schedule_id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $pay_period_schedule_id === FALSE ) {
@@ -885,7 +892,7 @@ class PayPeriodScheduleFactory extends Factory {
 		$user_ids = $this->getUser();
 
 		if ( count($user_ids) > 0 ) {
-			$hlf = new HolidayListFactory(); 
+			$hlf = new HolidayListFactory();
 			$hlf->getByPolicyGroupUserIdAndStartDateAndEndDate( $user_ids, $epoch-(86400*14), $epoch+(86400*2) );
 			if ( $hlf->getRecordCount() > 0 ) {
 				foreach( $hlf->rs as $h_obj ) {
@@ -1383,14 +1390,14 @@ class PayPeriodScheduleFactory extends Factory {
 		}
 
 		if ( $maximum_shift_time === NULL ) {
-			$maximum_shift_time = $this->getMaximumShiftTime(); 
+			$maximum_shift_time = $this->getMaximumShiftTime();
 			//echo '<br>maximum_shift_time....'.date('H:i:s', $maximum_shift_time); echo '<br>';
 		}
 
 		//Debug::text('User Date ID: '. $user_date_id .' User ID: '. $user_id .' TimeStamp: '. TTDate::getDate('DATE+TIME', $epoch), __FILE__, __LINE__, __METHOD__, 10);
 		$new_shift_trigger_time = $this->getNewDayTriggerTime();
 
-		$plf = new PunchListFactory(); 
+		$plf = new PunchListFactory();
 		if ( $user_date_id != '' ) {
 			$plf->getByUserDateId( $user_date_id );
 		} else {
@@ -1699,7 +1706,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		if ( $this->getDeleted() == TRUE ) {
 			//Remove from User Defaults.
-			$udlf = new UserDefaultListFactory(); 
+			$udlf = new UserDefaultListFactory();
 			$udlf->getByCompanyId( $this->getCompany() );
 			if ( $udlf->getRecordCount() > 0 ) {
 				foreach( $udlf->rs as $udf_obj ) {

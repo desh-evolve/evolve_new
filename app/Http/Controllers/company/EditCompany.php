@@ -8,7 +8,7 @@
  * $Revision: 5290 $
  * $Id: EditCompany.php 5290 2011-10-06 21:54:39Z ipso $
  * $Date: 2011-10-06 14:54:39 -0700 (Thu, 06 Oct 2011) $
- */
+ */ 
 require_once('../../includes/global.inc.php');
 require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
@@ -18,7 +18,7 @@ if ( !$permission->Check('company','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Company')); // See index.php
+$smarty->assign('title', __($title = 'Edit Company')); // See index.php
 
 /*
  * Get FORM variables

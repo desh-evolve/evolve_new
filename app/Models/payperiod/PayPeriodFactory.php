@@ -241,19 +241,19 @@ class PayPeriodFactory extends Factory {
 		}
 
 		$ph = array(
-					'pay_period_schedule_id' => (int)$this->getPayPeriodSchedule(),
-					'start_date' => Carbon::parse($epoch)->toDateTimeString(),
-					'end_date' => Carbon::parse($epoch)->toDateTimeString(),
-					'id' => (int)$id,
+					':pay_period_schedule_id' => (int)$this->getPayPeriodSchedule(),
+					':start_date' => Carbon::parse($epoch)->toDateTimeString(),
+					':end_date' => Carbon::parse($epoch)->toDateTimeString(),
+					':id' => (int)$id,
 					);
 
 		//Used to have LIMIT 1 at the end, but GetOne() should do that for us.
 		$query = 'select id from '. $this->getTable() .'
-					where	pay_period_schedule_id = ?
-						AND start_date <= ?
-						AND end_date >= ?
+					where	pay_period_schedule_id = :pay_period_schedule_id
+						AND start_date <= :start_date
+						AND end_date >= :end_date
 						AND deleted=0
-						AND id != ?
+						AND id != :id
 					';
 		$id = DB::select($query, $ph);
 
@@ -463,7 +463,7 @@ class PayPeriodFactory extends Factory {
 
 		$this->StartTransaction();
 
-		$pslf = new PayStubListFactory(); 
+		$pslf = new PayStubListFactory();
 		$pslf->getByPayPeriodId( $this->getId() );
 		foreach($pslf->rs as $pay_stub) {
 			$pslf->data = (array)$pay_stub;
@@ -550,7 +550,7 @@ class PayPeriodFactory extends Factory {
 			}
 		}
 
-		$ulf = new UserListFactory(); 
+		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'tainted_by',
 													$ulf->getByID($id),
@@ -565,7 +565,7 @@ class PayPeriodFactory extends Factory {
 		return FALSE;
 	}
 
-        
+
     function getIsHrProcess() {
 		if ( isset($this->data['is_hr_process']) ) {
 			return $this->data['is_hr_process'];
@@ -573,14 +573,14 @@ class PayPeriodFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
     function setIsHrProcess($hrProcess= NULL) {
-                        
+
            $hrProcess = (int)trim($hrProcess);
-           
+
 		if ( isset($hrProcess) ) {
-                    
+
 			$this->data['is_hr_process'] = $hrProcess;
 
 			return TRUE;
@@ -588,8 +588,8 @@ class PayPeriodFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
 	function getTimeSheetVerifyType() {
 		if ( is_object( $this->getPayPeriodScheduleObject() ) ) {
 			return $this->getPayPeriodScheduleObject()->getTimeSheetVerifyType();
@@ -650,7 +650,7 @@ class PayPeriodFactory extends Factory {
 
 		if ( is_object( $pps_obj ) ) {
 			//Get all users assigned to this pp schedule
-			$udlf = new UserDateListFactory(); 
+			$udlf = new UserDateListFactory();
 			$udlf->getByUserIdAndStartDateAndEndDateAndEmptyPayPeriod( $pps_obj->getUser(), $this->getStartDate(), $this->getEndDate() );
 			Debug::text(' Pay Period ID: '. $this->getId() .' Pay Period orphaned User Date Rows: '. $udlf->getRecordCount() .' Start Date: '. TTDate::getDate('DATE+TIME', $this->getStartDate() ) .' End Date: '. TTDate::getDate('DATE+TIME', $this->getEndDate() ), __FILE__, __LINE__, __METHOD__,10);
 			if ( $udlf->getRecordCount() > 0 ) {
@@ -753,7 +753,7 @@ class PayPeriodFactory extends Factory {
 						'exceptions_critical' => 0,
 						);
 
-		$elf = new ExceptionListFactory(); 
+		$elf = new ExceptionListFactory();
 		$elf->getSumExceptionsByPayPeriodIdAndBeforeDate( $this->getID(), $this->getEndDate() );
 		if ( $elf->getRecordCount() > 0 ) {
 			//Debug::Text(' Found Exceptions: '. $elf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
@@ -782,7 +782,7 @@ class PayPeriodFactory extends Factory {
 
 	function getTotalPunches() {
 		//Count how many punches are in this pay period.
-		$plf = new PunchListFactory(); 
+		$plf = new PunchListFactory();
 		$retval = $plf->getByPayPeriodId( $this->getID() )->getRecordCount();
 		Debug::Text(' Total Punches: '. $retval, __FILE__, __LINE__, __METHOD__,10);
 		return $retval;
@@ -819,7 +819,7 @@ class PayPeriodFactory extends Factory {
 
 	function getPayStubAmendments() {
 		//Get PS Amendments.
-		$psalf = new PayStubAmendmentListFactory(); 
+		$psalf = new PayStubAmendmentListFactory();
 		$psalf->getByCompanyIdAndAuthorizedAndStartDateAndEndDate( $this->getCompany(), TRUE, $this->getStartDate(), $this->getEndDate() );
 		$total_ps_amendments = 0;
 		if ( is_object($psalf) ) {

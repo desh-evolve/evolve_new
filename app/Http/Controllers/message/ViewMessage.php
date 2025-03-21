@@ -20,7 +20,7 @@ if ( !$permission->Check('message','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'View Message') ); // See index.php
+$smarty->assign('title', __($title = 'View Message') ); // See index.php
 
 /*
  * Get FORM variables

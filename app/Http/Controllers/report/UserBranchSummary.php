@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Branch Summary')); // See index.php
+$smarty->assign('title', __($title = 'Branch Summary')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

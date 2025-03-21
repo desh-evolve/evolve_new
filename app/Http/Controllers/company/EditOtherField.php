@@ -1,40 +1,104 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditOtherField.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('other_field','enabled')
-		OR !( $permission->Check('other_field','edit') OR $permission->Check('other_field','edit_own') ) ) {
+namespace App\Http\Controllers\company;
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Other Field')); // See index.php
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\OtherFieldFactory;
+use App\Models\Core\OtherFieldListFactory;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data'
-												) ) );
+class EditOtherField extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$off = new OtherFieldFactory();
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
+
+        /*
+        if ( !$permission->Check('other_field','enabled')
+				OR !( $permission->Check('other_field','edit') OR $permission->Check('other_field','edit_own') ) ) {
+
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
+
+    public function index($id = null) {
+
+        $viewData['title'] = 'Edit Other Field';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data'
+			) 
+		) );
+
+		if ( isset($id) ) {
+
+			$oflf = new OtherFieldListFactory();
+
+			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
+			$oflf->getById($id);
+
+			foreach ($oflf->rs as $obj) {
+				$oflf->data = (array)$obj;
+				$obj = $oflf;
+
+				$data = array(
+					'id' => $obj->getId(),
+					'company_id' => $obj->getCompany(),
+					'type_id' => $obj->getType(),
+					'other_id1' => $obj->getOtherID1(),
+					'other_id2' => $obj->getOtherID2(),
+					'other_id3' => $obj->getOtherID3(),
+					'other_id4' => $obj->getOtherID4(),
+					'other_id5' => $obj->getOtherID5(),
+					'created_date' => $obj->getCreatedDate(),
+					'created_by' => $obj->getCreatedBy(),
+					'updated_date' => $obj->getUpdatedDate(),
+					'updated_by' => $obj->getUpdatedBy(),
+					'deleted_date' => $obj->getDeletedDate(),
+					'deleted_by' => $obj->getDeletedBy()
+				);
+			}
+		}
+		//Select box options;
+		//$jif = new JobItemFactory();
+		$data['type_options'] = $off->getOptions('type');
+
+		$viewData['data'] = $data;
+		$viewData['off'] = $off;
+
+        return view('company/EditOtherField', $viewData);
+
+    }
+
+	public function submit(Request $request){
+		$current_company = $this->currentCompany;
+		$data = $request->data;
+
+		$off = new OtherFieldFactory();
+
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		$off->setId( $data['id'] );
@@ -48,49 +112,9 @@ switch ($action) {
 
 		if ( $off->isValid() ) {
 			$off->Save();
-
 			Redirect::Page( URLBuilder::getURL( array('type_id' => $data['type_id']), 'OtherFieldList.php') );
-
-			break;
 		}
-	default:
-		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
-
-			$oflf = new OtherFieldListFactory();
-
-			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
-			$oflf->getById($id);
-
-			foreach ($oflf as $obj) {
-				$data = array(
-									'id' => $obj->getId(),
-									'company_id' => $obj->getCompany(),
-									'type_id' => $obj->getType(),
-									'other_id1' => $obj->getOtherID1(),
-									'other_id2' => $obj->getOtherID2(),
-									'other_id3' => $obj->getOtherID3(),
-									'other_id4' => $obj->getOtherID4(),
-									'other_id5' => $obj->getOtherID5(),
-									'created_date' => $obj->getCreatedDate(),
-									'created_by' => $obj->getCreatedBy(),
-									'updated_date' => $obj->getUpdatedDate(),
-									'updated_by' => $obj->getUpdatedBy(),
-									'deleted_date' => $obj->getDeletedDate(),
-									'deleted_by' => $obj->getDeletedBy()
-								);
-			}
-		}
-		//Select box options;
-		//$jif = new JobItemFactory();
-		$data['type_options'] = $off->getOptions('type');
-
-		$smarty->assign_by_ref('data', $data);
-
-		break;
+	}
 }
 
-$smarty->assign_by_ref('off', $off);
-
-$smarty->display('company/EditOtherField.tpl');
 ?>

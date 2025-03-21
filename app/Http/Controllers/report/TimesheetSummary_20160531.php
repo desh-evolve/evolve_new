@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'TimeSheet Summary Report'));  // See index.php
+$smarty->assign('title', __($title = 'TimeSheet Summary Report'));  // See index.php
 
 
 /*
@@ -38,29 +38,29 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 //													'sort_order' => $sort_order,
 												) );
 
-$static_columns = array(			'-1000-full_name' => TTi18n::gettext('Full Name'),
-									'-1002-employee_number' => TTi18n::gettext('Employee #'),
-									'-1005-status' => TTi18n::gettext('Status'),
-									'-1010-title' => TTi18n::gettext('Title'),
-									'-1020-province' => TTi18n::gettext('Province/State'),
-									'-1030-country' => TTi18n::gettext('Country'),
-									'-1039-group' => TTi18n::gettext('Group'),
-									'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-									'-1050-default_department' => TTi18n::gettext('Default Department'),
-									'-1060-verified_time_sheet' => TTi18n::gettext('Verified TimeSheet'),
-									'-1062-pending_request' => TTi18n::gettext('Pending Requests'),
-									'-1065-pay_period' => TTi18n::gettext('Pay Period')
+$static_columns = array(			'-1000-full_name' => _('Full Name'),
+									'-1002-employee_number' => _('Employee #'),
+									'-1005-status' => _('Status'),
+									'-1010-title' => _('Title'),
+									'-1020-province' => _('Province/State'),
+									'-1030-country' => _('Country'),
+									'-1039-group' => _('Group'),
+									'-1040-default_branch' => _('Default Branch'),
+									'-1050-default_department' => _('Default Department'),
+									'-1060-verified_time_sheet' => _('Verified TimeSheet'),
+									'-1062-pending_request' => _('Pending Requests'),
+									'-1065-pay_period' => _('Pay Period')
 									);
 
-$columns = array(					'-1070-schedule_working' => TTi18n::gettext('Scheduled Time'),
-									'-1080-schedule_absence' => TTi18n::gettext('Scheduled Absence'),
-									'-1085-worked_days' => TTi18n::gettext('Worked Days'),
-									'-1090-worked_time' => TTi18n::gettext('Worked Time'),
-									'-1100-actual_time' => TTi18n::gettext('Actual Time'),
-									'-1110-actual_time_diff' => TTi18n::gettext('Actual Time Difference'),
-									'-1120-actual_time_diff_wage' => TTi18n::gettext('Actual Time Difference Wage'),
-									'-1130-paid_time' => TTi18n::gettext('Paid Time'),
-									'-1140-regular_time' => TTi18n::gettext('Regular Time'),
+$columns = array(					'-1070-schedule_working' => _('Scheduled Time'),
+									'-1080-schedule_absence' => _('Scheduled Absence'),
+									'-1085-worked_days' => _('Worked Days'),
+									'-1090-worked_time' => _('Worked Time'),
+									'-1100-actual_time' => _('Actual Time'),
+									'-1110-actual_time_diff' => _('Actual Time Difference'),
+									'-1120-actual_time_diff_wage' => _('Actual Time Difference Wage'),
+									'-1130-paid_time' => _('Paid Time'),
+									'-1140-regular_time' => _('Regular Time'),
 									);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -421,14 +421,14 @@ switch ($action) {
 
 						if ( $verified_time_sheets !== NULL AND isset($verified_time_sheets[$user_id][$pay_period_id]) ) {
 							if ( $verified_time_sheets[$user_id][$pay_period_id] == 50 ) {
-								$rows[$x]['verified_time_sheet'] = TTi18n::gettext('Yes');
+								$rows[$x]['verified_time_sheet'] = _('Yes');
 							} elseif ( $verified_time_sheets[$user_id][$pay_period_id] == 30 OR $verified_time_sheets[$user_id][$pay_period_id] == 45 ) {
-								$rows[$x]['verified_time_sheet'] = TTi18n::gettext('Pending');
+								$rows[$x]['verified_time_sheet'] = _('Pending');
 							} else {
-								$rows[$x]['verified_time_sheet'] = TTi18n::gettext('Declined');
+								$rows[$x]['verified_time_sheet'] = _('Declined');
 							}
 						} else {
-							$rows[$x]['verified_time_sheet'] = TTi18n::gettext('No');
+							$rows[$x]['verified_time_sheet'] = _('No');
 						}
 
 						if ( isset($pending_requests[$pay_period_id]) ) {
@@ -525,7 +525,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext("No Data To Export!") ."<br>\n";
+				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -592,7 +592,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'punch_branch_ids', 'punch_department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -662,7 +662,7 @@ switch ($action) {
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
 		/***/
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => TTi18n::gettext('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
 		/***/
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);

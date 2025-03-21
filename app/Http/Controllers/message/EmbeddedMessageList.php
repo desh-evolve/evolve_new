@@ -19,7 +19,7 @@ if ( !$permission->Check('message','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Message List') ); // See index.php
+$smarty->assign('title', __($title = 'Message List') ); // See index.php
 //BreadCrumb::setCrumb($title);
 
 /*
@@ -136,7 +136,7 @@ switch ($action) {
 
 					if ( $i == 0 ) {
 						$parent_id = $message->getId();
-						$default_subject = TTi18n::gettext('Re:').' '.$message->getSubject();
+						$default_subject = _('Re:').' '.$message->getSubject();
 					}
 
 					$i++;

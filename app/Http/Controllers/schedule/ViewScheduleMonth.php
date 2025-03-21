@@ -19,7 +19,7 @@ if ( !$permission->Check('schedule','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'My Schedule')); // See index.php
+$smarty->assign('title', __($title = 'My Schedule')); // See index.php
 BreadCrumb::setCrumb($title, str_replace('ViewScheduleMonth.php', 'ViewSchedule.php', $_SERVER['REQUEST_URI']) );
 
 /*
@@ -138,7 +138,7 @@ switch (strtolower($do)) {
 		//Get column headers, taking in to account start_day_of_week.
 		$x=0;
 		foreach( $calendar_array as $tmp_calendar_day ) {
-			$calendar_column_headers[] = TTi18n::gettext(date('l', $tmp_calendar_day['epoch']));
+			$calendar_column_headers[] = __(date('l', $tmp_calendar_day['epoch']));
 
 			if ( $x == 6 ) {
 				break;

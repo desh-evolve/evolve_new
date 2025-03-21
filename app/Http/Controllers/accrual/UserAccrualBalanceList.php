@@ -1,60 +1,79 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: UserAccrualBalanceList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('accrual','enabled')
-		OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\accrual;
 
-//Debug::setVerbosity( 11 );
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Accrual Balance List')); // See index.php
-BreadCrumb::setCrumb($title);
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'filter_user_id',
-												'ids',
-												) ) );
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'filter_user_id' => $filter_user_id,
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+class UserAccrualBalanceList extends Controller
+{
+    protected $permission;
+    protected $company;
+    protected $userPrefs;
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+        $this->userPrefs = View::shared('current_user_prefs');
+        $this->company = View::shared('current_company');
+        $this->permission = View::shared('permission');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserAccrual.php') );
-		break;
-	default:
+        /*
+        if ( !$permission->Check('accrual','enabled')
+				OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+    }
+
+	public function index()
+    {
+
+        $viewData['title'] = 'Accrual Balance List';
+
+		extract	(FormVariables::GetVariables(
+			array	(
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'filter_user_id',
+				'ids',
+			) 
+		) );
+
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array(
+				'filter_user_id' => $filter_user_id,
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
+		}
+
 		$ablf = new AccrualBalanceListFactory();
 		$ulf = new UserListFactory();
 
@@ -84,22 +103,21 @@ switch ($action) {
 			$accrual_policy_options = $aplf->getByCompanyIDArray( $current_company->getId() );
 
 			foreach ($ablf as $ab_obj) {
-                            
-                           $balance= $ab_obj->getBalance();
-                           $balance_temp = (float)$balance;
-                           $balance_temp1 = $balance_temp / 31500;
-                           
+				$balance= $ab_obj->getBalance();
+				$balance_temp = (float)$balance;
+				$balance_temp1 = $balance_temp / 31500;
+				
 				$accruals[] = array(
-									'id' => $ab_obj->getId(),
-									'user_id' => $ab_obj->getUser(),
-									'accrual_policy_id' => $ab_obj->getAccrualPolicyId(),
-									'accrual_policy' => $accrual_policy_options[$ab_obj->getAccrualPolicyId()],
-									'balance' => ($ab_obj->getBalance()/8),
-									'deleted' => $ab_obj->getDeleted()
-								);
+					'id' => $ab_obj->getId(),
+					'user_id' => $ab_obj->getUser(),
+					'accrual_policy_id' => $ab_obj->getAccrualPolicyId(),
+					'accrual_policy' => $accrual_policy_options[$ab_obj->getAccrualPolicyId()],
+					'balance' => ($ab_obj->getBalance()/8),
+					'deleted' => $ab_obj->getDeleted()
+				);
 			}
 
-			$smarty->assign_by_ref('accruals', $accruals);
+			$viewData['accruals'] = $accruals;
 
 			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
@@ -115,19 +133,24 @@ switch ($action) {
 
 			$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			$user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
-			$smarty->assign_by_ref('user_options', $user_options);
 
-			$smarty->assign_by_ref('filter_user_id', $filter_user_id);
-			$smarty->assign('is_owner', $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getId() ) );
-			$smarty->assign('is_child', $permission->isChild( $user_obj->getId(), $permission_children_ids ) );
-
-			$smarty->assign_by_ref('sort_column', $sort_column );
-			$smarty->assign_by_ref('sort_order', $sort_order );
-
-			$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+			$viewData['user_options'] = $user_options;
+			$viewData['filter_user_id'] = $filter_user_id;
+			$viewData['is_owner'] = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getId() );
+			$viewData['is_child'] = $permission->isChild( $user_obj->getId(), $permission_children_ids );
+			$viewData['sort_column'] = $sort_column;
+			$viewData['sort_order'] = $sort_order;
+			$viewData['paging_data'] = $pager->getPageVariables();
 		}
 
-		break;
+		return view('accrual/UserAccrualBalanceList', $viewData);
+
+	}
+
+	public function add(){
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserAccrual') );
+	}
+
 }
-$smarty->display('accrual/UserAccrualBalanceList.tpl');
+
 ?>

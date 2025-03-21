@@ -36,20 +36,21 @@ class CurrencyList extends Controller
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
+
+        /*
+        if (!$this->permission->Check('currency', 'enabled') || 
+            !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
+            return $this->permission->Redirect(false);
+        }
+        */
     }
 
     public function index()
     {
-        // var_dump('a');
         $current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
 
-        //if (!$this->permission->Check('currency', 'enabled') || 
-        //    !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
-        //    return $this->permission->Redirect(false);
-        //}
-
-        //$smarty->assign('title', ('Currency List'));
+        $viewData['title'] = 'Currency List';
 
         extract(FormVariables::GetVariables([
             'action',
@@ -97,7 +98,7 @@ class CurrencyList extends Controller
             ];
         }
 
-        $data = [
+        $viewData = [
             'title' => 'Currency List',
             'currencies' => $currencies,
             'base_currency' => $base_currency,
@@ -106,7 +107,7 @@ class CurrencyList extends Controller
             'paging_data' => $pager->getPageVariables()
         ];
 
-        return view('currency.CurrencyList', $data);
+        return view('currency.CurrencyList', $viewData);
     }
 
     public function update_rates(){

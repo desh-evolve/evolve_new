@@ -23,7 +23,7 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 			$this->rs = DB::select($query);
 		} else {
 			$this->rs = DB::select($query);
-		} 
+		}
 		return $this;
 	}
 
@@ -35,13 +35,13 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -54,45 +54,45 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		return $this;
 	}
 
-	function getByUserDateId($id, $where = NULL, $order = NULL) { 
+	function getByUserDateId($id, $where = NULL, $order = NULL) {
 		if ( $id == '') {
 			return FALSE;
 		}
- 
+
 		$ph = array(
-                                'user_date_id' => $id
+                                ':user_date_id' => $id
                                 );
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_date_id = ? 
+					where	user_date_id = :user_date_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order ); 
+		$query .= $this->getSortSQL( $order );
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
 
-	function getAbsencePolicyByUserDateId($id, $where = NULL, $order = NULL) { 
+	function getAbsencePolicyByUserDateId($id, $where = NULL, $order = NULL) {
 		if ( $id == '') {
 			return FALSE;
 		}
- 
+
 		$ph = array(
-                'user_date_id' => $id
+                ':user_date_id' => $id
                 );
 
         $apf = new AbsencePolicyFactory();
 		$query = ' select 	a.*, b.name absence_name
 					from	'. $this->getTable() .' a
-                    LEFT JOIN '.$apf->getTable().' b 
+                    LEFT JOIN '.$apf->getTable().' b
                     ON b.id = a.absence_policy_id
-					where	a.user_date_id = ? 
+					where	a.user_date_id = :user_date_id
 					AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order ); 
+		$query .= $this->getSortSQL( $order );
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
@@ -108,15 +108,15 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
-						AND company_id = ?
+					where	id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -139,13 +139,13 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		}
 
 		$ph = array(
-					'absence_leave_user_id' => $id,
+					':absence_leave_user_id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.absence_leave_user_id = ?
+					where	a.absence_leave_user_id = :absence_leave_user_id
 							AND deleted = 0 ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -166,14 +166,14 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		}
 
 		$ph = array(
-					'absence_leave_user_id' => $id,
-					'user_id' => $user_id,
+					':absence_leave_user_id' => $id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.absence_leave_user_id = ? ';
+					where	a.absence_leave_user_id = :absence_leave_user_id ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
@@ -192,22 +192,22 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		}
 
 		$ph = array(
-					'absence_policy_id' => $id,
-					'user_id' => $user_id,
+					':absence_policy_id' => $id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.absence_policy_id = ? 
-                                         AND a.user_id = ?';
+					where	a.absence_policy_id = :absence_policy_id
+                                         AND a.user_id = :user_id';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = DB::select($query, $ph); 
+		$this->rs = DB::select($query, $ph);
 
 	}
-        
+
     function getByAbsencePolicyIdAndUserIdUserDateId($absence_p_id, $user_id, $user_date_id, $where = NULL, $order = NULL) {
 		if ( $absence_p_id == '') {
 			return FALSE;
@@ -221,27 +221,27 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		}
 
 		$ph = array(
-                'absence_policy_id' => $absence_p_id,
-                'user_id' => $user_id,
-                'user_date_id' => $user_date_id,
+                ':absence_policy_id' => $absence_p_id,
+                ':user_id' => $user_id,
+                ':user_date_id' => $user_date_id,
                 );
 
                 $udf = new UserDateFactory();
                 $udtf = new UserDateTotalFactory();
-                
-		$query = 'SELECT alur . * 
+
+		$query = 'SELECT alur . *
                             FROM  '. $udtf->getTable() .' udt
                             RIGHT JOIN '.$udf->getTable().' ud ON ud.id = udt.user_date_id
                             RIGHT JOIN '.$this->getTable().' alur ON alur.user_date_id = ud.id
-                            WHERE udt.absence_policy_id = ?
-                            AND ud.user_id = ?
+                            WHERE udt.absence_policy_id = :absence_policy_id
+                            AND ud.user_id = :user_id
                             AND udt.deleted =  0
-                            AND alur.user_date_id =  ?';
-                
+                            AND alur.user_date_id =  :user_date_id';
+
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = DB::select($query, $ph); 
+		$this->rs = DB::select($query, $ph);
 
 	}
 
@@ -259,25 +259,25 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		}
 
 		$ph = array(
-                'absence_policy_id' => $absence_p_id,
-                'user_id' => $user_id,
-                'user_date_id' => $user_date_id,
+                ':absence_policy_id' => $absence_p_id,
+                ':user_id' => $user_id,
+                ':user_date_id' => $user_date_id,
                 );
 
-                
-		$query = 'SELECT alur . * 
-                            FROM  '.$this->getTable().' alur 
-                            WHERE alur.absence_policy_id = ?
-                            AND alur.user_id = ?
+
+		$query = 'SELECT alur . *
+                            FROM  '.$this->getTable().' alur
+                            WHERE alur.absence_policy_id = :absence_policy_id
+                            AND alur.user_id = :user_id
                             AND alur.deleted =  0
-                            AND alur.user_date_id =  ?';
-                
+                            AND alur.user_date_id =  :user_date_id';
+
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = DB::select($query, $ph); 
-                
-           
+		$this->rs = DB::select($query, $ph);
+
+
 
 	}
 
@@ -295,25 +295,25 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		}
 
 		$ph = array(
-                            'absence_policy_id' => $id,
-                            'user_id' => $user_id
+                            ':absence_policy_id' => $id,
+                            ':user_id' => $user_id
                             );
 
                 $udf = new UserDateFactory();
                 $udtf = new UserDateTotalFactory();
-                
-		$query = 'SELECT alur . * 
+
+		$query = 'SELECT alur . *
                             FROM  '. $udtf->getTable() .' udt
                             RIGHT JOIN '. $udf->getTable() .' ud ON ud.id = udt.user_date_id
                             RIGHT JOIN '. $this->getTable() .' alur ON alur.user_date_id = ud.id
-                            WHERE udt.absence_policy_id = ?
-                            AND ud.user_id = ?
+                            WHERE udt.absence_policy_id = :absence_policy_id
+                            AND ud.user_id = :user_id
                             AND alur.deleted = 0
-                            AND udt.deleted = 0 ';  
+                            AND udt.deleted = 0 ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
 
-		$this->rs = DB::select($query, $ph); 
+		$this->rs = DB::select($query, $ph);
 
 	}
 
@@ -358,7 +358,7 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		$apf = new AccrualPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -374,7 +374,7 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 						LEFT JOIN '. $apf->getTable() .' as apf ON ( a.accrual_policy_id = apf.id AND apf.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -396,8 +396,8 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 			$query  .=	' AND a.accrual_policy_id in ('. $this->getListSQL($filter_data['accrual_policy_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = '%' . strtolower(trim($filter_data['name'])) . '%';
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';
@@ -421,7 +421,7 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 		return $this;
 	}
 
-        
+
         //result for dropdown FL ADDED 20160718
 	function getAllByIdArray( $include_blank = TRUE) {
 
@@ -444,8 +444,8 @@ class AbsenceLeaveUserEntryRecordListFactory extends AbsenceLeaveUserEntryRecord
 
 		return FALSE;
 	}
-        
-       
+
+
 
 }
 ?>

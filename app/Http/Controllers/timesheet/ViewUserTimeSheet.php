@@ -48,7 +48,7 @@ function TimeSheetFormatArrayByDate($input_arr, $type_arr, $calendar_array, $nam
 				unset($input_arr[$cal_arr['epoch']][$type_id]);
 
 				if ( $total_arr[$name_key] == '' ) {
-					$total_rows[$x]['name'] = TTi18n::gettext('N/A');
+					$total_rows[$x]['name'] = _('N/A');
 				} else {
 					$total_rows[$x]['name'] = $total_arr[$name_key];
 				}
@@ -80,7 +80,7 @@ function TimeSheetFormatArrayByDate($input_arr, $type_arr, $calendar_array, $nam
 	return $total_rows;
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'My Timesheet')); // See index.php
+$smarty->assign('title', __($title = 'My Timesheet')); // See index.php
 
 
 /*
@@ -349,7 +349,7 @@ switch ($action) {
 			}
 		}
 
-		TTLog::addEntry( $filter_data['user_id'], 'Notice', TTi18n::gettext('Calculating Employee Pay Stub for Pay Period:').' '. $pay_period_id, $current_user->getID(), 'pay_stub' );
+		TTLog::addEntry( $filter_data['user_id'], 'Notice', _('Calculating Employee Pay Stub for Pay Period:').' '. $pay_period_id, $current_user->getID(), 'pay_stub' );
 
 		//FIXME: Make sure user isn't already in-active! Otherwise pay stub won't generate.
 		Debug::Text('Calculating Pay Stub...', __FILE__, __LINE__, __METHOD__,10);
@@ -371,7 +371,7 @@ switch ($action) {
 	case 'calculate_adjustment':
 		//Debug::setVerbosity(11);
 
-		TTLog::addEntry( $filter_data['user_id'], 'Notice', TTi18n::gettext('Calculating Employee Pay Stub Adjustment for Pay Period:').' '. $pay_period_id, $current_user->getID(), 'pay_stub' );
+		TTLog::addEntry( $filter_data['user_id'], 'Notice', _('Calculating Employee Pay Stub Adjustment for Pay Period:').' '. $pay_period_id, $current_user->getID(), 'pay_stub' );
 
 		//FIXME: Make sure user isn't already in-active! Otherwise pay stub won't generate.
 		Debug::Text('Calculating Pay Stub...', __FILE__, __LINE__, __METHOD__,10);
@@ -462,9 +462,9 @@ switch ($action) {
 
 						if ( $tmp_date_break_totals[$user_date_stamp][$punch_obj->getType()]['total_time'] > 0 ) {
 							if (  $punch_obj->getType() == 20 ) {
-								$break_name = TTi18n::gettext('Lunch Time');
+								$break_name = _('Lunch Time');
 							} else {
-								$break_name = TTi18n::gettext('Break Time');
+								$break_name = _('Break Time');
 							}
 
 							$date_break_totals[$user_date_stamp][$punch_obj->getType()] = array(
@@ -505,10 +505,10 @@ switch ($action) {
 		while ( $stop == FALSE ) {
 			if ($x % 2 == 0) {
 				$status = 10; //In
-				$status_name = TTi18n::gettext('In');
+				$status_name = _('In');
 			} else {
 				$status = 20; //Out
-				$status_name = TTi18n::gettext('Out');
+				$status_name = _('Out');
 			}
 
 			//Debug::text('----------------------------------------', __FILE__, __LINE__, __METHOD__,10);
@@ -654,7 +654,7 @@ switch ($action) {
 				if ( $udt_obj->getMealPolicyID() !== FALSE AND isset($meal_policy_options[$udt_obj->getmealPolicyID()]) ) {
 					$meal_policy = $meal_policy_options[$udt_obj->getmealPolicyID()];
 				} else {
-					$meal_policy = TTi18n::gettext('No Meal Policy');
+					$meal_policy = _('No Meal Policy');
 				}
 
 				$date_meal_totals[$user_date_stamp][] = array(
@@ -711,7 +711,7 @@ switch ($action) {
 				if ( $udt_obj->getBreakPolicyID() !== FALSE AND isset($break_policy_options[$udt_obj->getBreakPolicyID()]) ) {
 					$break_policy = $break_policy_options[$udt_obj->getBreakPolicyID()];
 				} else {
-					$break_policy = TTi18n::gettext('No Break Policy');
+					$break_policy = _('No Break Policy');
 				}
 
 				$date_break_policy_totals[$user_date_stamp][] = array(
@@ -787,7 +787,7 @@ switch ($action) {
 												'date_stamp' => $start_date,
 												'type_and_policy_id' => 100,
 												'total_time' => 0,
-												'name' => TTi18n::gettext('Total Time'),
+												'name' => _('Total Time'),
 												'tmp_override' => FALSE
 												);
 			$date_total_type_ids[100] = NULL;
@@ -850,25 +850,25 @@ switch ($action) {
 				if ( $udt_obj->getBranch() != 0 AND isset($branch_options[$udt_obj->getBranch()]) ) {
 					$branch = $branch_options[$udt_obj->getBranch()];
 				} else {
-					$branch = TTi18n::gettext('No Branch');
+					$branch = _('No Branch');
 				}
 
 				if ( $udt_obj->getDepartment() != 0 AND isset($department_options[$udt_obj->getDepartment()]) ) {
 					$department = $department_options[$udt_obj->getDepartment()];
 				} else {
-					$department = TTi18n::gettext('No Department');
+					$department = _('No Department');
 				}
 
 				if ( $udt_obj->getJob() != FALSE AND isset($job_options[$udt_obj->getJob()]) ) {
 					$job = $job_options[$udt_obj->getJob()];
 				} else {
-					$job = TTi18n::gettext('No Job');
+					$job = _('No Job');
 				}
 
 				if ( $udt_obj->getJobItem() != FALSE AND isset($job_item_options[$udt_obj->getJobItem()]) ) {
 					$job_item = $job_item_options[$udt_obj->getJobItem()];
 				} else {
-					$job_item = TTi18n::gettext('No Task');
+					$job_item = _('No Task');
 				}
 
 				$date_worked_totals[$user_date_stamp][] = array(
@@ -1012,7 +1012,7 @@ switch ($action) {
 				if ( $udt_obj->getPremiumPolicyID() !== FALSE AND isset($premium_policy_options[$udt_obj->getPremiumPolicyID()]) ) {
 					$premium_policy = $premium_policy_options[$udt_obj->getPremiumPolicyID()];
 				} else {
-					$premium_policy = TTi18n::gettext('No Policy');
+					$premium_policy = _('No Policy');
 				}
 
 				$date_premium_totals[$user_date_stamp][] = array(
@@ -1079,7 +1079,7 @@ switch ($action) {
 				if ( $udt_obj->getAbsencePolicyID() !== FALSE ) {
 					$absence_policy = $absence_policy_options[$udt_obj->getAbsencePolicyID()];
 				} else {
-					$absence_policy = TTi18n::gettext('No Policy');
+					$absence_policy = _('No Policy');
 				}
 				/*              
 				if ( $udt_obj->getBranch() !== FALSE ) {
@@ -1344,12 +1344,12 @@ switch ($action) {
 				Debug::text('Type ID: '. $udt_obj->getColumn('type_id') .' OverTime Policy ID: '. $udt_obj->getColumn('over_time_policy_id') .' Total Time: '. $udt_obj->getColumn('total_time'), __FILE__, __LINE__, __METHOD__,10);
 
 				if ( $udt_obj->getColumn('type_id') == 20 ) {
-					$name = TTi18n::gettext('Regular Time');
+					$name = _('Regular Time');
 				} else {
 					if ( isset($over_time_policy_options[$udt_obj->getColumn('over_time_policy_id')]) ) {
 						$name = $over_time_policy_options[$udt_obj->getColumn('over_time_policy_id')];
 					} else {
-						$name = TTi18n::gettext('N/A');
+						$name = _('N/A');
 					}
 				}
 
@@ -1426,23 +1426,23 @@ switch ($action) {
 		$smarty->assign_by_ref('is_assigned_pay_period_schedule', $is_assigned_pay_period_schedule);
 
 		$action_options = array(
-							'0' => TTi18n::gettext('-- Select Action --'),
-							'recalculate_employee' => 	TTi18n::gettext('Recalculate Employee'),
-							'recalculate_company' => 	TTi18n::gettext('Recalculate Company') );
+							'0' => _('-- Select Action --'),
+							'recalculate_employee' => 	_('Recalculate Employee'),
+							'recalculate_company' => 	_('Recalculate Company') );
 
 		if ( $permission->Check('pay_period_schedule','enabled') AND ( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
-			$action_options['recalculate_mid_pay'] = TTi18n::gettext('Recalculate Mid Pay');
-                        $action_options['recalculate_pay_stub'] = TTi18n::gettext('Recalculate FInal Pay');
+			$action_options['recalculate_mid_pay'] = _('Recalculate Mid Pay');
+                        $action_options['recalculate_pay_stub'] = _('Recalculate FInal Pay');
 		}
 
 		if ( isset($pay_period_obj) AND is_object($pay_period_obj) AND $pay_period_obj->getStatus() == 30 ) {
 			//Add a spacer so its less likely for someone to accidently hit "Recalc Pay Stub"
 			//instead of calculate adjustment.
 			$action_options['-1'] = '---';
-			$action_options['calculate_adjustment']  = TTi18n::gettext('Calculate PS Adjustment');
+			$action_options['calculate_adjustment']  = _('Calculate PS Adjustment');
 		}
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 		$smarty->assign_by_ref('group_options', Misc::prependArray( $all_array_option, $group_options ) );
 		$smarty->assign_by_ref('branch_options', Misc::prependArray( $all_array_option, $branch_options ) );
 		$smarty->assign_by_ref('department_options', Misc::prependArray( $all_array_option, $department_options ) );

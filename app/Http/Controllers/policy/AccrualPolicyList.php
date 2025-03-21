@@ -17,7 +17,7 @@ if ( !$permission->Check('accrual_policy','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Accrual Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Accrual Policy List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

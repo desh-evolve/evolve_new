@@ -1,63 +1,66 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 1246 $
- * $Id: EditUserTitle.php 1246 2007-09-14 23:47:42Z ipso $
- * $Date: 2007-09-14 16:47:42 -0700 (Fri, 14 Sep 2007) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('wage','enabled')
-		OR !( $permission->Check('wage','edit') ) ) {
+namespace App\Http\Controllers\company;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use App\Models\Company\WageGroupFactory;
+use App\Models\Company\WageGroupListFactory;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title',  TTi18n::gettext($title = 'Edit Wage Group')); // See index.php
+class EditWageGroup extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'group_data'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$wgf = new WageGroupFactory();
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$wgf->setId($group_data['id']);
-		$wgf->setCompany( $current_company->getId() );
-		$wgf->setName($group_data['name']);
-
-		if ( $wgf->isValid() ) {
-			$wgf->Save();
-
-			Redirect::Page( URLBuilder::getURL(NULL, 'WageGroupList.php') );
-
-			break;
+        /*
+        if ( !$permission->Check('wage','enabled')
+				OR !( $permission->Check('wage','edit') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
-	default:
+        */
+    }
+
+    public function index($id = null) {
+
+        $viewData['title'] = 'Edit Wage Group';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'group_data'
+			) 
+		) );
+
 		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
 
 			$wglf = new WageGroupListFactory();
 
 			$wglf->GetByIdAndCompanyId($id, $current_company->getId() );
 
-			foreach ($wglf as $group_obj) {
+			foreach ($wglf->rs as $group_obj) {
+				$wglf->data = (array)$group_obj;
+				$group_obj = $wglf;
 				//Debug::Arr($title_obj,'Title Object', __FILE__, __LINE__, __METHOD__,10);
 
 				$group_data = array(
@@ -74,11 +77,29 @@ switch ($action) {
 		}
 
 		$smarty->assign_by_ref('group_data', $group_data);
+		$smarty->assign_by_ref('wgf', $wgf);
 
-		break;
+        return view('company/EditWageGroup', $viewData);
+
+    }
+
+	public function submit(Request $request){
+		$current_company = $this->currentCompany;
+		$group_data = $request->data;
+
+		$wgf = new WageGroupFactory();
+
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$wgf->setId($group_data['id']);
+		$wgf->setCompany( $current_company->getId() );
+		$wgf->setName($group_data['name']);
+
+		if ( $wgf->isValid() ) {
+			$wgf->Save();
+			Redirect::Page( URLBuilder::getURL(NULL, 'WageGroupList') );
+		}
+	}
 }
 
-$smarty->assign_by_ref('wgf', $wgf);
-
-$smarty->display('company/EditWageGroup.tpl');
 ?>

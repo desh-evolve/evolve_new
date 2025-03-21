@@ -21,7 +21,7 @@ if ( !$permission->Check('punch','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'View TimeSheet Verification')); // See index.php
+$smarty->assign('title', __($title = 'View TimeSheet Verification')); // See index.php
 
 /*
  * Get FORM variables

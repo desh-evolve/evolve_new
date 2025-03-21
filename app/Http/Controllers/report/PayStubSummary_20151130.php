@@ -16,7 +16,7 @@ if ( !$permission->Check('report','enabled')
 		OR !$permission->Check('report','view_pay_stub_summary') ) {
 	$permission->Redirect( FALSE ); //Redirect
 }
-$smarty->assign('title', TTi18n::gettext($title = 'Pay Stub Summary Report'));  // See index.php
+$smarty->assign('title', __($title = 'Pay Stub Summary Report'));  // See index.php
 
 
 /*
@@ -37,36 +37,36 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 												) );
 
 $static_columns = array(
-							'-0800-epf_membership_no' => TTi18n::gettext('EPF  #'),
-							'-0801-full_name' => TTi18n::gettext('Full Name'),
-							'-0802-basic_for_epf' => TTi18n::gettext('Basic for EPF'),
-							'-0900-first_name' => TTi18n::gettext('First Name'),
-							'-0901-middle_name' => TTi18n::gettext('Middle Name'),
-							'-0902-middle_initial' => TTi18n::gettext('Middle Initial'),
-							'-0903-last_name' => TTi18n::gettext('Last Name'),
-							'-1000-full_name' => TTi18n::gettext('Full Name'),
-							'-1002-employee_number' => TTi18n::gettext('Employee #'),
-							'-1010-title' => TTi18n::gettext('Title'),
-							'-1020-province' => TTi18n::gettext('Province/State'),
-							'-1030-country' => TTi18n::gettext('Country'),
-							'-1039-group' => TTi18n::gettext('Group'),
-							'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-							'-1050-default_department' => TTi18n::gettext('Default Department'),
-							'-1060-sin' => TTi18n::gettext('SIN/SSN'),
-							'-1065-birth_date' => TTi18n::gettext('Birth Date'),
-							'-1070-hire_date' => TTi18n::gettext('Hire Date'),
-							'-1080-since_hire_date' => TTi18n::gettext('Since Hired'),
-							'-1085-termination_date' => TTi18n::gettext('Termination Date'),
-							'-1086-institution' => TTi18n::gettext('Bank Institution'),
-							'-1087-transit' => TTi18n::gettext('Bank Transit/Routing'),
-							'-1089-account' => TTi18n::gettext('Bank Account'),
-							'-1090-pay_period' => TTi18n::gettext('Pay Period'),
-							'-1100-pay_stub_start_date' => TTi18n::gettext('Start Date'),
-							'-1110-pay_stub_end_date' => TTi18n::gettext('End Date'),
-							'-1120-pay_stub_transaction_date' => TTi18n::gettext('Transaction Date'),
-							'-1130-currency' => TTi18n::gettext('Currency'),
-							'-1131-current_currency' => TTi18n::gettext('Current Currency'),
-							'-1132-epf_20_persent' => TTi18n::gettext('E.P.F - 20%'),
+							'-0800-epf_membership_no' => _('EPF  #'),
+							'-0801-full_name' => _('Full Name'),
+							'-0802-basic_for_epf' => _('Basic for EPF'),
+							'-0900-first_name' => _('First Name'),
+							'-0901-middle_name' => _('Middle Name'),
+							'-0902-middle_initial' => _('Middle Initial'),
+							'-0903-last_name' => _('Last Name'),
+							'-1000-full_name' => _('Full Name'),
+							'-1002-employee_number' => _('Employee #'),
+							'-1010-title' => _('Title'),
+							'-1020-province' => _('Province/State'),
+							'-1030-country' => _('Country'),
+							'-1039-group' => _('Group'),
+							'-1040-default_branch' => _('Default Branch'),
+							'-1050-default_department' => _('Default Department'),
+							'-1060-sin' => _('SIN/SSN'),
+							'-1065-birth_date' => _('Birth Date'),
+							'-1070-hire_date' => _('Hire Date'),
+							'-1080-since_hire_date' => _('Since Hired'),
+							'-1085-termination_date' => _('Termination Date'),
+							'-1086-institution' => _('Bank Institution'),
+							'-1087-transit' => _('Bank Transit/Routing'),
+							'-1089-account' => _('Bank Account'),
+							'-1090-pay_period' => _('Pay Period'),
+							'-1100-pay_stub_start_date' => _('Start Date'),
+							'-1110-pay_stub_end_date' => _('End Date'),
+							'-1120-pay_stub_transaction_date' => _('Transaction Date'),
+							'-1130-currency' => _('Currency'),
+							'-1131-current_currency' => _('Current Currency'),
+							'-1132-epf_20_persent' => _('E.P.F - 20%'),
 							);
 
 $psealf = new PayStubEntryAccountListFactory();
@@ -290,12 +290,12 @@ switch ($action) {
 							if ( $output != FALSE ) {
 								echo $output;
 							} else {
-								echo TTi18n::gettext('No data to export.') ."<br>\n";
+								echo _('No data to export.') ."<br>\n";
 							}
 							exit;
 						}
 					} else {
-						echo TTi18n::gettext('No data to export or export format is invalid.') ."<br>\n";
+						echo _('No data to export or export format is invalid.') ."<br>\n";
 						exit;
 					}
 				} else {
@@ -519,7 +519,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext('No Data To Export!') ."<br>\n";
+				echo _('No Data To Export!') ."<br>\n";
 			}
 		}
 		
@@ -565,7 +565,7 @@ switch ($action) {
                                     exit;                           
                                 }                        
                         }else {
-                                echo TTi18n::gettext('No PDF Data To Export!') ."<br>\n";                                    
+                                echo _('No PDF Data To Export!') ."<br>\n";                                    
                                 }
                 }		
 				
@@ -611,7 +611,7 @@ switch ($action) {
                                     exit;                           
                                 }                        
                         }else {
-                                echo TTi18n::gettext('No PDF Data To Export!') ."<br>\n";                                    
+                                echo _('No PDF Data To Export!') ."<br>\n";                                    
                                 }
                 }
 				
@@ -670,10 +670,10 @@ switch ($action) {
                                     exit;                           
                                 }                        
                         }else {
-                                echo TTi18n::gettext('Please Select at Least One Employee.') ."<br>\n";                                    
+                                echo _('Please Select at Least One Employee.') ."<br>\n";                                    
                                 }
                     }else{
-                                echo TTi18n::gettext('Pleasae Select at Least One Pay Period.') ."<br>\n";                                    
+                                echo _('Pleasae Select at Least One Pay Period.') ."<br>\n";                                    
                                 }
                 }  				
 									
@@ -768,7 +768,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'currency_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -837,12 +837,12 @@ switch ($action) {
 		$filter_data['sort_options'] = $columns;
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => TTi18n::gettext('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
 
 		$psf = new PayStubFactory();
-		//ARSP EDIT --> ADD Some New code('pdf' => TTi18n::gettext('PDF (PDF)')) ) for new 'pdf' dropdown list from export type  
-		$filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => TTi18n::gettext('CSV (Excel)'), 'pdfp' => TTi18n::gettext('PDF (PORTRAIT)'), 'pdfl' => TTi18n::gettext('PDF (LANDSCAPE)'), 'formc' => TTi18n::gettext('Form C (PDF)'), 'payslip3' => TTi18n::gettext('3 Payslip/Page (PDF)'), 'payslip4' => TTi18n::gettext('4 Payslip/Page (Landscape PDF)')), Misc::trimSortPrefix( $psf->getOptions('export_type') ) );
-		//$filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => TTi18n::gettext('CSV (Excel)') ), Misc::trimSortPrefix( $psf->getOptions('export_type') ) );
+		//ARSP EDIT --> ADD Some New code('pdf' => _('PDF (PDF)')) ) for new 'pdf' dropdown list from export type  
+		$filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => _('CSV (Excel)'), 'pdfp' => _('PDF (PORTRAIT)'), 'pdfl' => _('PDF (LANDSCAPE)'), 'formc' => _('Form C (PDF)'), 'payslip3' => _('3 Payslip/Page (PDF)'), 'payslip4' => _('4 Payslip/Page (Landscape PDF)')), Misc::trimSortPrefix( $psf->getOptions('export_type') ) );
+		//$filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => _('CSV (Excel)') ), Misc::trimSortPrefix( $psf->getOptions('export_type') ) );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

@@ -32,13 +32,13 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -60,7 +60,7 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -68,7 +68,7 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					WHERE
-							b.company_id = ?
+							b.company_id = :company_id
 							AND a.message_control_id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
@@ -93,8 +93,8 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -102,8 +102,8 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					WHERE
-							b.company_id = ?
-							AND a.user_id = ?
+							b.company_id = :company_id
+							AND a.user_id = :user_id
 							AND a.id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
@@ -128,8 +128,8 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -137,8 +137,8 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					WHERE
-							b.company_id = ?
-							AND a.user_id = ?
+							b.company_id = :company_id
+							AND a.user_id = :user_id
 							AND a.message_sender_id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';
@@ -167,9 +167,9 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
-					'user_id' => $user_id,
-					'status_id' => $status_id,
+					':company_id' => $company_id,
+					':user_id' => $user_id,
+					':status_id' => $status_id,
 					);
 
 		$query = '
@@ -177,9 +177,9 @@ class MessageRecipientListFactory extends MessageRecipientFactory implements Ite
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 					WHERE
-							b.company_id = ?
-							AND a.user_id = ?
-							AND a.status_id = ?
+							b.company_id = :company_id
+							AND a.user_id = :user_id
+							AND a.status_id = :status_id
 							AND a.message_sender_id in ('. $this->getListSQL($id, $ph) .')
 							AND a.deleted = 0
 					';

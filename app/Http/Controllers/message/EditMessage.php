@@ -19,7 +19,7 @@ if ( !$permission->Check('message','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'New Message')); // See index.php
+$smarty->assign('title', __($title = 'New Message')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*
@@ -68,7 +68,7 @@ switch ($action) {
 		} else {
 			$mcf->Validator->isTrue(	'to',
 									FALSE,
-									TTi18n::gettext('Please select at least one recipient') );
+									_('Please select at least one recipient') );
 		}
 	default:
 		if ( $permission->Check('message','send_to_any') ) {

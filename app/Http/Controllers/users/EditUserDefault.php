@@ -21,7 +21,7 @@ if ( !$permission->Check('user','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'New Hire Defaults')); // See index.php
+$smarty->assign('title', __($title = 'New Hire Defaults')); // See index.php
 
 /*
  * Get FORM variables

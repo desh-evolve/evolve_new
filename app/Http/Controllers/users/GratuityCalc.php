@@ -17,7 +17,7 @@ if ( !$permission->Check('company','enabled')
 }
 
 
-$smarty->assign('title', TTi18n::gettext($title = 'Gratuity Calculation')); // See index.php
+$smarty->assign('title', __($title = 'Gratuity Calculation')); // See index.php
 BreadCrumb::setCrumb($title);
 
 extract	(FormVariables::GetVariables(

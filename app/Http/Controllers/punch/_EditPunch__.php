@@ -24,7 +24,7 @@ if ( !$permission->Check('punch','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Punch')); // See index.php
+$smarty->assign('title', __($title = 'Edit Punch')); // See index.php
 
 /*
  * Get FORM variables

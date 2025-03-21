@@ -37,13 +37,13 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -66,13 +66,13 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id 
+					':id' => $id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ? 
+					where	id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -100,35 +100,35 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		}
 
 		$ph = array(
-					'user_id' => $user_id, 
-					//'leave_date_year' => $dates, 
-                    'absence_policy_id' => $absence_policy_id, 
+					':user_id' => $user_id,
+					//'leave_date_year' => $dates,
+                    ':absence_policy_id' => $absence_policy_id,
 
 					);
 
         $aluef = new AbsenceLeaveUserEntryFactory();
-                
+
 		$query = '
-                            SELECT ale.user_id, al.* 
+                            SELECT ale.user_id, al.*
                             FROM  '. $this->getTable() .' al
-                            LEFT JOIN '. $aluef->getTable() .' ale 
+                            LEFT JOIN '. $aluef->getTable() .' ale
                             ON ale.absence_leave_user_id = al.id
-                            WHERE ale.user_id = ?';
+                            WHERE ale.user_id = :user_id';
 
 		if ( isset($filter_data['leave_date_year']) AND isset($filter_data['leave_date_year'][0]) AND !in_array(-1, (array)$filter_data['leave_date_year']) ) {
 					$query  .=	' AND  al.leave_date_year in ('. $this->getListSQL($filter_data['leave_date_year'], $ph) .') ';
 		}
 
-        $query .=   ' AND  al.absence_policy_id = ?
+        $query .=   ' AND  al.absence_policy_id = :absence_policy_id
                     AND  al.deleted = 0';
 
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = DB::select($query, $ph); 
-                
-            
-                
+		$this->rs = DB::select($query, $ph);
+
+
+
 		return $this;
 	}
 
@@ -145,13 +145,13 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
-					where	a.company_id = ?
+					where	a.company_id = :id
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
@@ -200,7 +200,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		$apf = new AccrualPolicyFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -216,7 +216,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 						LEFT JOIN '. $apf->getTable() .' as apf ON ( a.accrual_policy_id = apf.id AND apf.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
@@ -238,8 +238,8 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 			$query  .=	' AND a.accrual_policy_id in ('. $this->getListSQL($filter_data['accrual_policy_id'], $ph) .') ';
 		}
 		if ( isset($filter_data['name']) AND trim($filter_data['name']) != '' ) {
-			$ph[] = strtolower(trim($filter_data['name']));
-			$query  .=	' AND lower(a.name) LIKE ?';
+			$ph[':name'] = '%' . strtolower(trim($filter_data['name'])) . '%';
+			$query  .=	' AND lower(a.name) LIKE :name';
 		}
 		if ( isset($filter_data['created_by']) AND isset($filter_data['created_by'][0]) AND !in_array(-1, (array)$filter_data['created_by']) ) {
 			$query  .=	' AND a.created_by in ('. $this->getListSQL($filter_data['created_by'], $ph) .') ';
@@ -284,12 +284,12 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 
 		return FALSE;
 	}
-        
+
         function getAllLeaveYear($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					WHERE deleted = 0 
+					WHERE deleted = 0
                                         GROUP BY leave_date_year';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -303,7 +303,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 
 		return $this;
 	}
-        
+
         function getArrayByListFactory($lf, $include_blank = TRUE, $include_disabled = TRUE ) {
 		if ( !is_object($lf) ) {
 			return FALSE;
@@ -311,7 +311,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 
 		if ( $include_blank == TRUE ) {
 			$list[0] = '--';
-		} 
+		}
 
 		foreach ($lf->rs as $obj) {
 			$lf->data = (array)$obj;
@@ -333,7 +333,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 
 		return FALSE;
 	}
-         
+
 
 }
 ?>

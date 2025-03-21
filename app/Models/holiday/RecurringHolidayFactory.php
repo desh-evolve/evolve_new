@@ -233,11 +233,11 @@ class RecurringHolidayFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany() ,
-					'name' => $name,
+					':company_id' => $this->getCompany() ,
+					':name' => $name,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND name = ? AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND name = :name AND deleted=0';
 		$name_id = DB::select($query, $ph);
 
 		if ($name_id === FALSE ) {

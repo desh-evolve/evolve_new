@@ -21,7 +21,7 @@ if ( !$permission->Check('pay_stub_amendment','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Recurring Pay Stub Amendment')); // See index.php
+$smarty->assign('title', __($title = 'Edit Recurring Pay Stub Amendment')); // See index.php
 
 /*
  * Get FORM variables
@@ -210,7 +210,7 @@ switch ($action) {
 		$smarty->assign_by_ref('pay_stub_amendment_data', $pay_stub_amendment_data);
 
 		$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
-		$user_options = Misc::prependArray( array( -1 => TTi18n::gettext('-- ALL --')), $user_options );
+		$user_options = Misc::prependArray( array( -1 => _('-- ALL --')), $user_options );
 		$pay_stub_amendment_data['user_options'] = $user_options;
 
 		if ( isset($pay_stub_amendment_data['user_ids']) AND is_array($pay_stub_amendment_data['user_ids']) ) {

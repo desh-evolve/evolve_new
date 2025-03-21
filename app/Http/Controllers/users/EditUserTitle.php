@@ -19,7 +19,7 @@ if ( !$permission->Check('user','enabled')
 
 }
 
-$smarty->assign('title',  TTi18n::gettext($title = 'Edit Employee Title')); // See index.php
+$smarty->assign('title',  __($title = 'Edit Employee Title')); // See index.php
 
 /*
  * Get FORM variables

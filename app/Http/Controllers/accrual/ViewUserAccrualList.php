@@ -1,110 +1,91 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: ViewUserAccrualList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('accrual','enabled')
-		OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\accrual;
 
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualBalanceFactory;
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Accrual List')); // See index.php
-BreadCrumb::setCrumb($title);
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'user_id',
-												'accrual_policy_id',
-												'ids',
-												) ) );
+class ViewUserAccrualList extends Controller
+{
+    protected $permission;
+    protected $company;
+    protected $userPrefs;
 
-if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child')) {
-	$user_id = $user_id;
-} else {
-	$user_id = $current_user->getId();
-}
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'user_id' => $user_id,
-													'accrual_policy_id' => $accrual_policy_id,
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->userPrefs = View::shared('current_user_prefs');
+        $this->company = View::shared('current_company');
+        $this->permission = View::shared('permission');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
-
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserAccrual.php') );
-
-		break;
-	case 'delete':
-	case 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
+        /*
+        if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child')) {
+			$user_id = $user_id;
 		} else {
-			$delete = FALSE;
+			$user_id = $current_user->getId();
+		}
+        */
+    }
+
+	public function index() {
+
+        $viewData['title'] = 'Accrual List';
+
+		extract	(FormVariables::GetVariables(
+			array	(
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'user_id',
+				'accrual_policy_id',
+				'ids',
+			) 
+		) );
+
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array(
+				'user_id' => $user_id,
+				'accrual_policy_id' => $accrual_policy_id,
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
 
-		$alf = new AccrualListFactory();
-
-		$alf->StartTransaction();
-		foreach ($ids as $id) {
-
-			$alf->getById( $id );
-			foreach ($alf as $a_obj) {
-				//Allow user to delete AccrualPolicy entries, but not Banked/Used entries.
-				if ( $a_obj->getUserDateTotalID() == FALSE ) {
-					$a_obj->setEnableCalcBalance(FALSE);
-					$a_obj->setDeleted($delete);
-					if ( $a_obj->isValid() ) {
-						$a_obj->Save();
-					}
-				}
-			}
-		}
-
-		AccrualBalanceFactory::calcBalance( $user_id, $accrual_policy_id );
-
-		$alf->CommitTransaction();
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'ViewUserAccrualList.php') );
-
-		break;
-
-	default:
 		$alf = new AccrualListFactory();
 		$alf->getByCompanyIdAndUserIdAndAccrualPolicyID( $current_company->getId(), $user_id, $accrual_policy_id, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
 
 		$pager = new Pager($alf);
 
-		foreach ($alf as $a_obj) {
+		foreach ($alf->rs as $a_obj) {
+			$alf->data = (array)$a_obj;
+			$a_obj = $alf;
 
 			$date_stamp = $a_obj->getColumn('date_stamp');
 			if ( $date_stamp != '' ) {
@@ -127,7 +108,7 @@ switch ($action) {
 			
 
 		}
-		$smarty->assign_by_ref('accruals', $accruals);
+		$viewData['accruals'] = $accruals;
 
 		$ulf = new UserListFactory();
 		$user_obj = $ulf->getById( $user_id )->getCurrent();
@@ -135,17 +116,64 @@ switch ($action) {
 		$aplf = new AccrualPolicyListFactory();
 		$accrual_policy_obj = $aplf->getById( $accrual_policy_id )->getCurrent();
 
-		$smarty->assign_by_ref('user_id', $user_id);
-		$smarty->assign_by_ref('user_full_name', $user_obj->getFullName() );
-		$smarty->assign_by_ref('accrual_policy_id', $accrual_policy_id);
-		$smarty->assign_by_ref('accrual_policy', $accrual_policy_obj->getName() );
+		$viewData['user_id'] = $user_id;
+		$viewData['user_full_name'] = $user_obj->getFullName();
+		$viewData['accrual_policy_id'] = $accrual_policy_id;
+		$viewData['accrual_policy'] = $accrual_policy_obj->getName();
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+		return view('accrual/ViewUserAccrualList', $viewData);
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+	}
 
-		break;
+	public function add(){
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserAccrual') );
+	}
+
+	public function delete(){
+
+
+		extract	(FormVariables::GetVariables(
+			array	(
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'user_id',
+				'accrual_policy_id',
+				'ids',
+			) 
+		) );
+
+		$alf = new AccrualListFactory();
+
+		$alf->StartTransaction();
+		foreach ($ids as $id) {
+
+			$alf->getById( $id );
+			foreach ($alf->rs as $a_obj) {
+				$alf->data = (array)$a_obj;
+				$a_obj = $alf;
+				//Allow user to delete AccrualPolicy entries, but not Banked/Used entries.
+				if ( $a_obj->getUserDateTotalID() == FALSE ) {
+					$a_obj->setEnableCalcBalance(FALSE);
+					$a_obj->setDeleted(true);
+					if ( $a_obj->isValid() ) {
+						$a_obj->Save();
+					}
+				}
+			}
+		}
+
+		AccrualBalanceFactory::calcBalance( $user_id, $accrual_policy_id );
+
+		$alf->CommitTransaction();
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'ViewUserAccrualList') );
+	}
+
 }
-$smarty->display('accrual/ViewUserAccrualList.tpl');
+
 ?>

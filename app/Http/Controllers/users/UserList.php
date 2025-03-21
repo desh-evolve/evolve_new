@@ -19,7 +19,7 @@ if ( !$permission->Check('user','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee List')); // See index.php
+$smarty->assign('title', __($title = 'Employee List')); // See index.php
 
 /*
  * Get FORM variables
@@ -38,43 +38,43 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 $columns = array(
-											'-1010-employee_number' => TTi18n::gettext('Employee #'),
-											'-1020-status' => TTi18n::gettext('Status'),
-											'-1030-user_name' => TTi18n::gettext('User Name'),
-											'-1040-phone_id' => TTi18n::gettext('Phone ID'),
-											'-1050-ibutton_id' => TTi18n::gettext('iButton'),
+											'-1010-employee_number' => _('Employee #'),
+											'-1020-status' => _('Status'),
+											'-1030-user_name' => _('User Name'),
+											'-1040-phone_id' => _('Phone ID'),
+											'-1050-ibutton_id' => _('iButton'),
 
-											'-1060-first_name' => TTi18n::gettext('First Name'),
-											'-1070-middle_name' => TTi18n::gettext('Middle Name'),
-											'-1080-last_name' => TTi18n::gettext('Last Name'),
+											'-1060-first_name' => _('First Name'),
+											'-1070-middle_name' => _('Middle Name'),
+											'-1080-last_name' => _('Last Name'),
 
-											'-1085-nic' => TTi18n::gettext('NIC'),
+											'-1085-nic' => _('NIC'),
 
-											'-1090-title' => TTi18n::gettext('Title'),
+											'-1090-title' => _('Title'),
 
-											'-1099-user_group' => TTi18n::gettext('Group'),
-											'-1100-default_branch' => TTi18n::gettext('Branch'),
-											'-1110-default_department' => TTi18n::gettext('Department'),
+											'-1099-user_group' => _('Group'),
+											'-1100-default_branch' => _('Branch'),
+											'-1110-default_department' => _('Department'),
 
-											'-1120-sex' => TTi18n::gettext('Sex'),
+											'-1120-sex' => _('Sex'),
 
-											'-1130-address1' => TTi18n::gettext('Address 1'),
-											'-1140-address2' => TTi18n::gettext('Address 2'),
+											'-1130-address1' => _('Address 1'),
+											'-1140-address2' => _('Address 2'),
 
-											'-1150-city' => TTi18n::gettext('City'),
-											'-1160-province' => TTi18n::gettext('Province/State'),
-											'-1170-country' => TTi18n::gettext('Country'),
-											'-1180-postal_code' => TTi18n::gettext('Postal Code'),
-											'-1190-work_phone' => TTi18n::gettext('Work Phone'),
-											'-1200-home_phone' => TTi18n::gettext('Home Phone'),
-											'-1210-mobile_phone' => TTi18n::gettext('Mobile Phone'),
-											'-1220-fax_phone' => TTi18n::gettext('Fax Phone'),
-											'-1230-home_email' => TTi18n::gettext('Home Email'),
-											'-1240-work_email' => TTi18n::gettext('Work Email'),
-											'-1250-birth_date' => TTi18n::gettext('Birth Date'),
-											'-1260-hire_date' => TTi18n::gettext('Appointment Date'),
-											'-1270-termination_date' => TTi18n::gettext('Termination Date'),
-											'-1280-sin' => TTi18n::gettext('SIN/SSN'),
+											'-1150-city' => _('City'),
+											'-1160-province' => _('Province/State'),
+											'-1170-country' => _('Country'),
+											'-1180-postal_code' => _('Postal Code'),
+											'-1190-work_phone' => _('Work Phone'),
+											'-1200-home_phone' => _('Home Phone'),
+											'-1210-mobile_phone' => _('Mobile Phone'),
+											'-1220-fax_phone' => _('Fax Phone'),
+											'-1230-home_email' => _('Home Email'),
+											'-1240-work_email' => _('Work Email'),
+											'-1250-birth_date' => _('Birth Date'),
+											'-1260-hire_date' => _('Appointment Date'),
+											'-1270-termination_date' => _('Termination Date'),
+											'-1280-sin' => _('SIN/SSN'),
 											);
 
 if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
@@ -295,7 +295,7 @@ switch ($action) {
 
 		}
 		//echo "<pre>"; print_r($lname);
-		$all_array_option = array('-1' => TTi18n::gettext('-- Any --'));
+		$all_array_option = array('-1' => _('-- Any --'));
 
 
 		//Select box options;

@@ -19,7 +19,7 @@ if ( !$permission->Check('pay_period_schedule','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Pay Period')); // See index.php
+$smarty->assign('title', __($title = 'Edit Pay Period')); // See index.php
 
 /*
  * Get FORM variables
