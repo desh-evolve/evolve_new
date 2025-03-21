@@ -19,7 +19,7 @@ if ( !$permission->Check('schedule','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'My Schedule')); // See index.php
+$smarty->assign('title', __($title = 'My Schedule')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

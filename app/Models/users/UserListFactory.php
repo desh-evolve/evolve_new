@@ -945,7 +945,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				return $this;
 			}
 
-			function getByCompanyIdArray($company_id, $include_blank = TRUE, $include_disabled = TRUE, $last_name_first = TRUE ) {
+			static function getByCompanyIdArray($company_id, $include_blank = TRUE, $include_disabled = TRUE, $last_name_first = TRUE ) {
 
 				$ulf = new UserListFactory();
 				$ulf->getByCompanyId($company_id);
@@ -1019,7 +1019,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 
 
 
-			function getArrayByListFactory($lf, $include_blank = TRUE, $include_disabled = TRUE ) {
+			static function getArrayByListFactory($lf, $include_blank = TRUE, $include_disabled = TRUE ) {
 				if ( !is_object($lf) ) {
 					return FALSE;
 				}

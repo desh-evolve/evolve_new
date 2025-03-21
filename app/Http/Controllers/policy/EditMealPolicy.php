@@ -19,7 +19,7 @@ if ( !$permission->Check('meal_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Meal Policy')); // See index.php
+$smarty->assign('title', __($title = 'Edit Meal Policy')); // See index.php
 
 /*
  * Get FORM variables

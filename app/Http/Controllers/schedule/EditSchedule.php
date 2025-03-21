@@ -20,7 +20,7 @@ if ( !$permission->Check('schedule','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Schedule')); // See index.php
+$smarty->assign('title', __($title = 'Edit Schedule')); // See index.php
 
 /*
  * Get FORM variables

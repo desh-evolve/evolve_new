@@ -21,7 +21,7 @@ if ( !$permission->Check('exception_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Exception Policy')); // See index.php
+$smarty->assign('title', __($title = 'Edit Exception Policy')); // See index.php
 
 /*
  * Get FORM variables

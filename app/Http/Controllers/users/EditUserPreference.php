@@ -17,7 +17,7 @@ if ( !$permission->Check('user_preference','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Preferences')); // See index.php
+$smarty->assign('title', __($title = 'Employee Preferences')); // See index.php
 
 /*
  * Get FORM variables

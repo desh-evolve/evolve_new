@@ -1,52 +1,95 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: HierarchyList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-//$_COOKIE['SessionID'] = '07bc520b3e90835ab586f0c585c4dd8f';
-//$_SERVER['REMOTE_ADDR'] = '192.168.1.100';
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('hierarchy','enabled')
-		OR !( $permission->Check('hierarchy','view') OR $permission->Check('hierarchy','view_own') ) ) {
+namespace App\Http\Controllers\hierarchy;
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', TTi18n::gettext($title = 'Hierarchy Tree')); // See index.php
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use Illuminate\Support\Facades\View;
 
+class HierarchyList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'hierarchy_id',
-												'ids'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-		Redirect::Page( URLBuilder::getURL( array('hierarchy_id' => $hierarchy_id) , 'EditHierarchy.php') );
-
-		break;
-	case 'delete':
-	case 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+        /*
+        if ( !$permission->Check('hierarchy','enabled')
+				OR !( $permission->Check('hierarchy','view') OR $permission->Check('hierarchy','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
+    }
+
+    public function index() {
+
+        $viewData['title'] = 'Hierarchy Tree';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'hierarchy_id',
+				'ids'
+			) 
+		) );
+
+
+		$hlf = new HierarchyListFactory();
+		//$nodes = $hlf->FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
+		//$nodes = FastTree::FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
+		$nodes = FastTree::FormatArray( $hlf->getByCompanyIdAndHierarchyControlId( $current_company->getId(), $hierarchy_id ), 'HTML' );
+
+
+		//For some reason smarty prints out a blank row if nodes is false.
+		if ( $nodes !== FALSE ) {
+			$viewData['users'] = $nodes;
+		}
+
+		$viewData['hierarchy_id'] = $hierarchy_id;
+
+        return view('hierarchy/HierarchyList', $viewData);
+
+    }
+
+	public function add(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'hierarchy_id',
+				'ids'
+			) 
+		) );
+
+		Redirect::Page( URLBuilder::getURL( array('hierarchy_id' => $hierarchy_id) , 'EditHierarchy') );
+	}
+
+	public function delete(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'hierarchy_id',
+				'ids'
+			) 
+		) );
 
 		foreach ($ids as $id) {
 			Debug::Text(' Deleting ID: '. $id , __FILE__, __LINE__, __METHOD__,10);
@@ -63,27 +106,9 @@ switch ($action) {
 		}
 		unset($hf);
 
-		Redirect::Page( URLBuilder::getURL( array('hierarchy_id' => $hierarchy_id) , 'HierarchyList.php') );
+		Redirect::Page( URLBuilder::getURL( array('hierarchy_id' => $hierarchy_id) , 'HierarchyList') );
 
-		break;
-
-	default:
-		BreadCrumb::setCrumb($title);
-
-		$hlf = new HierarchyListFactory();
-		//$nodes = $hlf->FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
-		//$nodes = FastTree::FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
-		$nodes = FastTree::FormatArray( $hlf->getByCompanyIdAndHierarchyControlId( $current_company->getId(), $hierarchy_id ), 'HTML' );
-
-
-		//For some reason smarty prints out a blank row if nodes is false.
-		if ( $nodes !== FALSE ) {
-			$smarty->assign_by_ref('users', $nodes);
-		}
-
-		break;
+	}
 }
-$smarty->assign_by_ref('hierarchy_id', $hierarchy_id);
 
-$smarty->display('hierarchy/HierarchyList.tpl');
 ?>

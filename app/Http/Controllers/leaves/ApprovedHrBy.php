@@ -12,7 +12,7 @@ require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
 
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Leaves Supervisor Aprooval'));
+$smarty->assign('title', __($title = 'Employee Leaves Supervisor Aprooval'));
 
 
 extract	(FormVariables::GetVariables(

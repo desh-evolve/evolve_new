@@ -21,7 +21,7 @@ if ( !$permission->Check('pay_period_schedule','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Pay Period List')); // See index.php
+$smarty->assign('title', __($title = 'Pay Period List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

@@ -60,7 +60,7 @@ if ( !$permission->Check('wage','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Job History')); // See index.php
+$smarty->assign('title', __($title = 'Employee Job History')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

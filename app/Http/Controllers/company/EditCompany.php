@@ -18,7 +18,7 @@ if ( !$permission->Check('company','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Company')); // See index.php
+$smarty->assign('title', __($title = 'Edit Company')); // See index.php
 
 /*
  * Get FORM variables

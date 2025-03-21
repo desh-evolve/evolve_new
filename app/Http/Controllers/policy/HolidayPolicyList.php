@@ -19,7 +19,7 @@ if ( !$permission->Check('holiday_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Holiday Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Holiday Policy List')); // See index.php
 
 /*
  * Get FORM variables

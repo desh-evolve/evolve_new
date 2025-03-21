@@ -161,7 +161,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 	}
 
 
-	function getAllArray() {
+	static function getAllArray() {
 		$clf = new CompanyListFactory();
 		$clf->getAll();
 

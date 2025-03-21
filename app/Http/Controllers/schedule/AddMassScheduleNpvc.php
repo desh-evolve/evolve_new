@@ -24,7 +24,7 @@ if ( !$permission->Check('schedule','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Mass Schedule')); // See index.php
+$smarty->assign('title', __($title = 'Mass Schedule')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*
@@ -101,7 +101,7 @@ switch ($action) {
 
 //		if ( TTDate::getDayDifference( $data['start_date_stamp'], $data['end_date_stamp']) > 31 ) {
 //			Debug::Text('Date Range Exceeds 31 days, truncating', __FILE__, __LINE__, __METHOD__,10);
-//			$sf->Validator->isTrue('date_stamp', FALSE, TTi18n::getText('Date range exceeds the maximum of 31 days') );
+//			$sf->Validator->isTrue('date_stamp', FALSE, _('Date range exceeds the maximum of 31 days') );
 //		}
                 //echo '<pre>'; print_r($data);         die;
 
@@ -180,13 +180,13 @@ switch ($action) {
                 //echo '<pre>';print_r($shifts_array);die;
 
                 if ( !( isset($filter_user_id) AND is_array($filter_user_id) AND count($filter_user_id) > 0 )  ) {
-                            $sf->Validator->isTrue('user_id', FALSE, TTi18n::getText('Please select at least one employee') );
+                            $sf->Validator->isTrue('user_id', FALSE, _('Please select at least one employee') );
                     }
                     foreach($data_shifts['start_date'] as $date_key=>$start_date){
     //                    echo '----'.$start_date;
                         if ( !( $start_date != '' AND $data_shifts['end_date'][$date_key] != ''
                                     AND $start_date <= $data_shifts['end_date'][$date_key] ) ) {
-                            $sf->Validator->isTrue('date_stamp', FALSE, TTi18n::getText('Start or End dates are invalid') );
+                            $sf->Validator->isTrue('date_stamp', FALSE, _('Start or End dates are invalid') );
                         }
                     }
 
@@ -235,7 +235,7 @@ switch ($action) {
 		$user_options = Misc::arrayDiffByKey( (array)$filter_user_id, $src_user_options );
 		$filter_user_options = Misc::arrayIntersectByKey( (array)$filter_user_id, $src_user_options );
 
-		$prepend_array_option = array( 0 => '--', -1 => TTi18n::gettext('-- Default --') );
+		$prepend_array_option = array( 0 => '--', -1 => _('-- Default --') );
 
 		$splf = new SchedulePolicyListFactory();
 		$schedule_policy_options = $splf->getByCompanyIdArray( $current_company->getId() );

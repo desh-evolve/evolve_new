@@ -17,7 +17,7 @@ if ( !$permission->Check('recurring_schedule_template','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Recurring Schedule Template List')); // See index.php
+$smarty->assign('title', __($title = 'Recurring Schedule Template List')); // See index.php
 BreadCrumb::setCrumb($title);
 /*
  * Get FORM variables

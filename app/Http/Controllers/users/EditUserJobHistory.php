@@ -61,7 +61,7 @@ if ( !$permission->Check('wage','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee Job History')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee Job History')); // See index.php
 
 /*
  * Get FORM variables
@@ -222,8 +222,8 @@ switch ($action) {
                 
 		//Get pay period boundary dates for this user.
 		//Include user hire date in the list.
-		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = TTi18n::gettext('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
-		$pay_period_boundary_dates = Misc::prependArray( array(-1 => TTi18n::gettext('(Choose Date)')), $pay_period_boundary_dates);
+		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = _('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
+		$pay_period_boundary_dates = Misc::prependArray( array(-1 => _('(Choose Date)')), $pay_period_boundary_dates);
 
 		$smarty->assign_by_ref('user_data', $user_data);
 		$smarty->assign_by_ref('job_history_data', $job_history_data);

@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Pay Stub Summary')); // See index.php
+$smarty->assign('title', __($title = 'Employee Pay Stub Summary')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

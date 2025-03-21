@@ -19,7 +19,7 @@ if ( !$permission->Check('pay_stub_account','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Pay Stub Account Links')); // See index.php
+$smarty->assign('title', __($title = 'Edit Pay Stub Account Links')); // See index.php
 
 /*
  * Get FORM variables

@@ -31,7 +31,6 @@ class EditBankAccount extends Controller
         require_once($basePath . '/app/Helpers/Interface.inc.php');
 
         $this->permission = View::shared('permission');
-
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
 

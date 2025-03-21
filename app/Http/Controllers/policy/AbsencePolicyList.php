@@ -19,7 +19,7 @@ if ( !$permission->Check('absence_policy','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Absence Policy List')); // See index.php
+$smarty->assign('title', __($title = 'Absence Policy List')); // See index.php
 BreadCrumb::setCrumb($title);
 
 /*

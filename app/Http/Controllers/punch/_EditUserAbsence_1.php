@@ -21,7 +21,7 @@ if ( !$permission->Check('absence','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Absence')); // See index.php
+$smarty->assign('title', __($title = 'Edit Absence')); // See index.php
 
 /*
  * Get FORM variables
@@ -227,7 +227,7 @@ switch ($action) {
 		}
 
 		$aplf = new AbsencePolicyListFactory();
-		$absence_policy_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
+		$absence_policy_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
 
 		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );

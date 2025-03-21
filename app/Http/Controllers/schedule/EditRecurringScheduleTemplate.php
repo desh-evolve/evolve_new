@@ -20,7 +20,7 @@ if ( !$permission->Check('recurring_schedule_template','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Recurring Schedule Template')); // See index.php
+$smarty->assign('title', __($title = 'Edit Recurring Schedule Template')); // See index.php
 
 /*
  * Get FORM variables
@@ -370,7 +370,7 @@ switch ($action) {
 							);
 		}
 
-		$prepend_array_option = array( 0 => '--', -1 => TTi18n::gettext('-- Default --') );
+		$prepend_array_option = array( 0 => '--', -1 => _('-- Default --') );
 
 		//Select box options;
 		$splf = new SchedulePolicyListFactory();

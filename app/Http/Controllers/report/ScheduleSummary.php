@@ -17,7 +17,7 @@ if ( !$permission->Check('report','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Schedule Summary Report')); // See index.php
+$smarty->assign('title', __($title = 'Schedule Summary Report')); // See index.php
 
 //User Wage cache array.
 function getUserWageObject( $user_wage_id, $user_id ) {
@@ -57,33 +57,33 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 													'filter_data' => $filter_data
 												) );
 
-$static_columns = array(			'-1000-full_name' => TTi18n::gettext('Full Name'),
-									'-1002-employee_number' => TTi18n::gettext('Employee #'),
-									'-1010-title' => TTi18n::gettext('Title'),
-									'-1020-province' => TTi18n::gettext('Province/State'),
-									'-1030-country' => TTi18n::gettext('Country'),
-									'-1039-group' => TTi18n::gettext('Group'),
-									'-1040-default_branch' => TTi18n::gettext('Default Branch'),
-									'-1050-default_department' => TTi18n::gettext('Default Department'),
-									'-1060-branch' => TTi18n::gettext('Branch'),
-									'-1070-department' => TTi18n::gettext('Department'),
-									'-1090-hourly_rate' => TTi18n::gettext('Hourly Rate'),
-									'-1200-date_stamp' => TTi18n::gettext('Date'),
-									'-1205-type' => TTi18n::gettext('Type'),
-									'-1210-status' => TTi18n::gettext('Status'),
-									'-1220-absence_policy' => TTi18n::gettext('Absence Policy'),
-									'-1230-start_time' => TTi18n::gettext('Start Time'),
-									'-1240-end_time' => TTi18n::gettext('End Time'),
+$static_columns = array(			'-1000-full_name' => _('Full Name'),
+									'-1002-employee_number' => _('Employee #'),
+									'-1010-title' => _('Title'),
+									'-1020-province' => _('Province/State'),
+									'-1030-country' => _('Country'),
+									'-1039-group' => _('Group'),
+									'-1040-default_branch' => _('Default Branch'),
+									'-1050-default_department' => _('Default Department'),
+									'-1060-branch' => _('Branch'),
+									'-1070-department' => _('Department'),
+									'-1090-hourly_rate' => _('Hourly Rate'),
+									'-1200-date_stamp' => _('Date'),
+									'-1205-type' => _('Type'),
+									'-1210-status' => _('Status'),
+									'-1220-absence_policy' => _('Absence Policy'),
+									'-1230-start_time' => _('Start Time'),
+									'-1240-end_time' => _('End Time'),
 									);
 
 $professional_edition_static_columns = array(
-									'-1180-job' => TTi18n::gettext('Job'),
-									'-1181-job_manual_id' => TTi18n::gettext('Job Code'),
-									'-1182-job_status' => TTi18n::gettext('Job Status'),
-									'-1183-job_branch' => TTi18n::gettext('Job Branch'),
-									'-1184-job_department' => TTi18n::gettext('Job Department'),
-									'-1185-job_group' => TTi18n::gettext('Job Group'),
-									'-1190-job_item' => TTi18n::gettext('Task'),
+									'-1180-job' => _('Job'),
+									'-1181-job_manual_id' => _('Job Code'),
+									'-1182-job_status' => _('Job Status'),
+									'-1183-job_branch' => _('Job Branch'),
+									'-1184-job_department' => _('Job Department'),
+									'-1185-job_group' => _('Job Group'),
+									'-1190-job_item' => _('Task'),
 									);
 
 if ( $current_company->getProductEdition() == 20 ) {
@@ -99,8 +99,8 @@ if ( is_array($other_field_names) ) {
 }
 
 $columns = array(
-											'-1430-total_time' => TTi18n::gettext('Total Time'),
-											'-1440-total_time_wage' => TTi18n::gettext('Total Time Wage'),
+											'-1430-total_time' => _('Total Time'),
+											'-1440-total_time_wage' => _('Total Time Wage'),
 											);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -327,7 +327,7 @@ switch ($action) {
 								//$rows[$x]['job'] = Option::getByKey($data_c['job_id'], $job_options, NULL );
 								$rows[$x]['job'] = $data_c['job_name'];
 							} else {
-								$rows[$x]['job'] = TTi18n::gettext('- No Job -');
+								$rows[$x]['job'] = _('- No Job -');
 							}
 							$rows[$x]['job_manual_id'] = $data_c['job_manual_id'];
 							$rows[$x]['job_status'] = Option::getByKey($data_c['job_status_id'], $job_status_options, NULL );
@@ -338,7 +338,7 @@ switch ($action) {
 							if ( isset($job_item_options[$data_c['job_item_id']]) ) {
 								$rows[$x]['job_item'] = $job_item_options[$data_c['job_item_id']];
 							} else {
-								$rows[$x]['job_item'] = TTi18n::gettext('- No Task -');
+								$rows[$x]['job_item'] = _('- No Task -');
 							}
 
 							$rows[$x]['type'] = Option::getByKey($data_c['type_id'], $schedule_type_options, NULL );
@@ -446,7 +446,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo TTi18n::gettext('No Data To Export!') ."<br>\n";
+				echo _('No Data To Export!') ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -526,7 +526,7 @@ switch ($action) {
 		$ulf = new UserListFactory();
 		$slf = new ScheduleListFactory();
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- All --'));
+		$all_array_option = array('-1' => _('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -588,7 +588,7 @@ switch ($action) {
 
 			//Get include job list.
 			$jlf->getByCompanyId( $current_company->getId() );
-			$job_options = Misc::prependArray( array('0' => TTi18n::gettext('- No Job -') ), $jlf->getArrayByListFactory( $jlf, FALSE, TRUE ) );
+			$job_options = Misc::prependArray( array('0' => _('- No Job -') ), $jlf->getArrayByListFactory( $jlf, FALSE, TRUE ) );
 			$filter_data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
 			$filter_data['src_include_job_options'] = Misc::arrayDiffByKey( (array)$filter_data['include_job_ids'], $job_options );
@@ -609,7 +609,7 @@ switch ($action) {
 			//Get Job Items
 			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
-			$job_item_options = Misc::prependArray( array('-1' => TTi18n::gettext('-- All --'), '0' => TTi18n::gettext('- No Task -') ), $jilf->getArrayByListFactory( $jilf, FALSE, TRUE ) );
+			$job_item_options = Misc::prependArray( array('-1' => _('-- All --'), '0' => _('- No Task -') ), $jilf->getArrayByListFactory( $jilf, FALSE, TRUE ) );
 			$filter_data['src_job_item_options'] = Misc::arrayDiffByKey( (array)$filter_data['job_item_ids'], $job_item_options );
 			$filter_data['selected_job_item_options'] = Misc::arrayIntersectByKey( (array)$filter_data['job_item_ids'], $job_item_options );
 		}
@@ -632,7 +632,7 @@ switch ($action) {
 		unset($filter_data['sort_options']['effective_date']);
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => TTi18n::gettext('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

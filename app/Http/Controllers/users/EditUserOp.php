@@ -17,7 +17,7 @@ if ( !$permission->Check('user_tax_deduction','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee OP /OT Hours')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee OP /OT Hours')); // See index.php
 
 /*
  * Get FORM variables

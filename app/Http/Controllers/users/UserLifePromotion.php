@@ -19,7 +19,7 @@ if ( !$permission->Check('user','enabled')
 
 //Debug::setVerbosity( 11 );
 
-$smarty->assign('title', TTi18n::gettext($title = 'Employee Promotions')); // See index.php
+$smarty->assign('title', __($title = 'Employee Promotions')); // See index.php
 BreadCrumb::setCrumb($title);
 /*
  * Get FORM variables

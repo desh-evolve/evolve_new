@@ -19,7 +19,7 @@ if ( !$permission->Check('recurring_schedule','enabled')
 
 //Debug::setVerbosity(11);
 
-$smarty->assign('title', TTi18n::gettext($title = 'Recurring Schedule List')); // See index.php
+$smarty->assign('title', __($title = 'Recurring Schedule List')); // See index.php
 
 /*
  * Get FORM variables
@@ -38,13 +38,13 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 $columns = array(
-											'-1010-first_name' => TTi18n::gettext('First Name'),
-											'-1020-middle_name' => TTi18n::gettext('Middle Name'),
-											'-1030-last_name' => TTi18n::gettext('Last Name'),
-											'-1040-name' => TTi18n::gettext('Name'),
-											'-1050-description' => TTi18n::gettext('Description'),
-											'-1070-start_date' => TTi18n::gettext('Start Date'),
-											'-1080-end_date' => TTi18n::gettext('End Date'),
+											'-1010-first_name' => _('First Name'),
+											'-1020-middle_name' => _('Middle Name'),
+											'-1030-last_name' => _('Last Name'),
+											'-1040-name' => _('Name'),
+											'-1050-description' => _('Description'),
+											'-1070-start_date' => _('Start Date'),
+											'-1080-end_date' => _('End Date'),
 											);
 
 if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
@@ -224,7 +224,7 @@ switch ($action) {
 
 		}
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- Any --'));
+		$all_array_option = array('-1' => _('-- Any --'));
 
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

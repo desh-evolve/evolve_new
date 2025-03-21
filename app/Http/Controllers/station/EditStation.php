@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use App\Models\Core\StationFactory;
+
 /*
  * $Revision: 4104 $
  * $Id: EditStation.php 4104 2011-01-04 19:04:05Z ipso $
@@ -19,7 +22,7 @@ if ( !$permission->Check('station','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Station')); // See index.php
+$smarty->assign('title', __($title = 'Edit Station')); // See index.php
 
 /*
  * Get FORM variables
@@ -173,55 +176,55 @@ switch ($action) {
 				switch ( $data['time_clock_command'] ) {
 					case 'test_connection':
 						if ( $tc->testConnection() == TRUE ) {
-							$result_str = TTi18n::gettext('Connection Succeeded!');
+							$result_str = _('Connection Succeeded!');
 						} else {
-							$result_str = TTi18n::gettext('Connection Failed!');
+							$result_str = _('Connection Failed!');
 						}
 						break;
 					case 'set_date':
 						TTDate::setTimeZone( $data['time_zone_id'], $s_obj->getTimeZone() );
 
 						if ( $tc->setDate( time() ) == TRUE ) {
-							$result_str = TTi18n::gettext('Date Successfully Set To: '). TTDate::getDate('DATE+TIME', time() );
+							$result_str = _('Date Successfully Set To: '). TTDate::getDate('DATE+TIME', time() );
 						} else {
-							$result_str = TTi18n::gettext('Setting Date Failed!');
+							$result_str = _('Setting Date Failed!');
 						}
 						break;
 					case 'download':
 						if ( isset($s_obj) AND $tc->Poll( $current_company, $s_obj) == TRUE ) {
-							$result_str = TTi18n::gettext('Download Data Succeeded!');
+							$result_str = _('Download Data Succeeded!');
 							if ( $s_obj->isValid() ) {
 								$s_obj->Save(FALSE);
 							}
 						} else {
-							$result_str = TTi18n::gettext('Download Data Failed!');
+							$result_str = _('Download Data Failed!');
 						}
 						break;
 					case 'upload':
 						if ( isset($s_obj) AND $tc->Push( $current_company, $s_obj) == TRUE ) {
-							$result_str = TTi18n::gettext('Upload Data Succeeded!');
+							$result_str = _('Upload Data Succeeded!');
 							if ( $s_obj->isValid() ) {
 								$s_obj->Save(FALSE);
 							}
 						} else {
-							$result_str = TTi18n::gettext('Upload Data Failed!');
+							$result_str = _('Upload Data Failed!');
 						}
 						break;
 					case 'update_config':
 						if ( isset($s_obj) AND $tc->setModeFlag( $s_obj->getModeFlag() ) == TRUE ) {
-							$result_str = TTi18n::gettext('Update Configuration Succeeded');
+							$result_str = _('Update Configuration Succeeded');
 						} else {
-							$result_str = TTi18n::gettext('Update Configuration Failed');
+							$result_str = _('Update Configuration Failed');
 						}
 						break;
 					case 'delete_data':
 						if ( isset($s_obj) AND $tc->DeleteAllData( $s_obj ) == TRUE ) {
-							$result_str = TTi18n::gettext('Delete Data Succeeded!');
+							$result_str = _('Delete Data Succeeded!');
 							if ( $s_obj->isValid() ) {
 								$s_obj->Save(FALSE);
 							}
 						} else {
-							$result_str = TTi18n::gettext('Delete Data Failed!');
+							$result_str = _('Delete Data Failed!');
 						}
 						break;
 					case 'reset_last_punch_time_stamp':
@@ -238,18 +241,18 @@ switch ($action) {
 						break;
 					case 'restart':
 						$tc->restart();
-						$result_str = TTi18n::gettext('Restart Succeeded!');
+						$result_str = _('Restart Succeeded!');
 						break;
 					case 'firmware':
 						if ( $tc->setFirmware() == TRUE ) {
-							$result_str = TTi18n::gettext('Firmware Update Succeeded!');
+							$result_str = _('Firmware Update Succeeded!');
 						} else {
-							$result_str = TTi18n::gettext('Firmware Update Failed!');
+							$result_str = _('Firmware Update Failed!');
 						}
 						break;
 				}
 
-				TTLog::addEntry( $s_obj->getId(), 500,  TTi18n::getText('TimeClock Manual Command').': '. ucwords( str_replace('_', ' ', $data['time_clock_command'] ) ) .' '.TTi18n::getText('Result').': '. $result_str, NULL, $s_obj->getTable() );
+				TTLog::addEntry( $s_obj->getId(), 500,  _('TimeClock Manual Command').': '. ucwords( str_replace('_', ' ', $data['time_clock_command'] ) ) .' '._('Result').': '. $result_str, NULL, $s_obj->getTable() );
 
 				if ( isset($s_obj) ) {
 					$data['last_poll_date'] = $s_obj->getLastPollDate();
@@ -257,7 +260,7 @@ switch ($action) {
 				}
 				unset($s_obj, $slf);
 			} catch ( Exception $e ) {
-				$result_str = TTi18n::gettext('Connection Failed!');
+				$result_str = _('Connection Failed!');
 			}
 
 			$smarty->assign_by_ref('time_clock_command_result', $result_str);

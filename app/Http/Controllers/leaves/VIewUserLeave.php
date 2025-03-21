@@ -19,7 +19,7 @@ if ( !$permission->Check('accrual','view')
 }
 */
 
-$smarty->assign('title', TTi18n::gettext($title = 'Apply Employee Leaves')); // See index.php
+$smarty->assign('title', __($title = 'Apply Employee Leaves')); // See index.php
 
 /*
  * Get FORM variables
@@ -55,7 +55,7 @@ $leave_options = array();
 foreach($aplf as $apf){
     $leave_options[$apf->getId()]=$apf->getName();
 }
-$leave_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $leave_options );
+$leave_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $leave_options );
 $data['leave_options'] = $leave_options;
         
         
@@ -84,7 +84,7 @@ $leaves =$lrf->getLeaveDates();
  }
 
 
-$user_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $user_options );
+$user_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $user_options );
 $data['users_cover_options'] = $user_options;
 //$data['users_cover_options'] = $ulf;
 $data['name'] =$lrf->getUserObject()->getFullName();
@@ -92,7 +92,7 @@ $data['title'] = $lrf->getDesignationObject()->getName();
 $data['leave_type'] = $lrf->getAccuralPolicyObject()->getId();
 
 $method_options = $lrf->getOptions('leave_method');
-$method_options = Misc::prependArray( array( 0 => TTi18n::gettext('-- Please Choose --') ), $method_options );
+$method_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $method_options );
 
 $data['method_options'] = $method_options;
 $data['method_type'] = $lrf->getLeaveMethod();

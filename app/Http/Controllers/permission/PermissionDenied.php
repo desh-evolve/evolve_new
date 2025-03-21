@@ -12,7 +12,7 @@
 require_once('../../includes/global.inc.php');
 require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-$title = TTi18n::gettext('Permission Denied');
+$title = _('Permission Denied');
 
 /*
  * Get FORM variables

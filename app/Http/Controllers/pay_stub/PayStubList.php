@@ -20,7 +20,7 @@ if ( !$permission->Check('pay_stub','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Pay Stub List')); // See index.php
+$smarty->assign('title', __($title = 'Pay Stub List')); // See index.php
 /*
  * Get FORM variables
  */
@@ -42,13 +42,13 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 $columns = array(
-											'-1010-first_name' => TTi18n::gettext('First Name'),
-											'-1020-middle_name' => TTi18n::gettext('Middle Name'),
-											'-1030-last_name' => TTi18n::gettext('Last Name'),
-											'-1040-status' => TTi18n::gettext('Status'),
-											'-1070-start_date' => TTi18n::gettext('Start Date'),
-											'-1080-end_date' => TTi18n::gettext('End Date'),
-											'-1090-transaction_date' => TTi18n::gettext('Transaction Date'),
+											'-1010-first_name' => _('First Name'),
+											'-1020-middle_name' => _('Middle Name'),
+											'-1030-last_name' => _('Last Name'),
+											'-1040-status' => _('Status'),
+											'-1070-start_date' => _('Start Date'),
+											'-1080-end_date' => _('End Date'),
+											'-1090-transaction_date' => _('Transaction Date'),
 											);
 
 if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
@@ -106,7 +106,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) == 0 ) {
-			echo TTi18n::gettext("ERROR: No Items Selected!")."<br>\n";
+			echo __("ERROR: No Items Selected!")."<br>\n";
 			exit;
 		}
 
@@ -151,7 +151,7 @@ switch ($action) {
 					Debug::Display();
 				}
 			} else {
-				echo TTi18n::gettext("ERROR: No Data to Export!")."<br>\n";
+				echo __("ERROR: No Data to Export!")."<br>\n";
 				exit;
 			}
 		}
@@ -164,7 +164,7 @@ switch ($action) {
 		}
 
 		if ( count(array($ids)) == 0 ) {
-			echo TTi18n::gettext("ERROR: No Items Selected!")."<br>\n";
+			echo __("ERROR: No Items Selected!")."<br>\n";
 			exit;
 		}
 
@@ -192,7 +192,7 @@ switch ($action) {
 				Debug::writeToLog();
 				exit;
 			} else {
-				echo TTi18n::gettext("ERROR: Pay stub not available, you may not have permissions to view this pay stub or it may be deleted!")."<br>\n";
+				echo __("ERROR: Pay stub not available, you may not have permissions to view this pay stub or it may be deleted!")."<br>\n";
 				exit;
 			}
 		}
@@ -209,7 +209,7 @@ switch ($action) {
 		}
 
 		if ( count($ids) == 0 ) {
-			echo TTi18n::gettext("ERROR: No Items Selected!")."<br>\n";
+			echo __("ERROR: No Items Selected!")."<br>\n";
 			exit;
 		}
 
@@ -241,7 +241,7 @@ switch ($action) {
 		Debug::Text('bAction: Mark Paid!', __FILE__, __LINE__, __METHOD__,10);
 
 		if ( count(array($ids)) == 0 ) {
-			echo TTi18n::gettext("ERROR: No Items Selected!")."<br>\n";
+			echo __("ERROR: No Items Selected!")."<br>\n";
 			exit;
 		}
 
@@ -272,7 +272,7 @@ switch ($action) {
 		Debug::Text('bAction: Mark UnPaid!', __FILE__, __LINE__, __METHOD__,10);
 
 		if ( count(array($ids)) == 0 ) {
-			echo TTi18n::gettext("ERROR: No Items Selected!")."<br>\n";
+			echo __("ERROR: No Items Selected!")."<br>\n";
 			exit;
 		}
 
@@ -405,7 +405,7 @@ switch ($action) {
 
 		$export_type_options = Misc::trimSortPrefix( $pslf->getOptions('export_type') );
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- Any --'));
+		$all_array_option = array('-1' => _('-- Any --'));
 
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

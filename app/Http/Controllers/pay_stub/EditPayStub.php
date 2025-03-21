@@ -21,7 +21,7 @@ if ( !$permission->Check('pay_stub','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee Pay Stub')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee Pay Stub')); // See index.php
 BreadCrumb::setCrumb($title);
 /*
  * Get FORM variables
@@ -191,7 +191,7 @@ switch ( $action ) {
 													'tmp_type' => $type,
 													'type' => $pay_stub_entry_account_obj->getType(),
 													'name' => $pay_stub_entry_account_obj->getName(),
-													'display_name' => TTi18n::gettext($pay_stub_entry_account_obj->getName()),
+													'display_name' => __($pay_stub_entry_account_obj->getName()),
 													'rate' => $pay_stub_entry->getRate(),
 													'units' => $pay_stub_entry->getUnits(),
 													'ytd_units' => $pay_stub_entry->getYTDUnits(),

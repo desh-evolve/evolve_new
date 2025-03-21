@@ -23,7 +23,7 @@ if ( !$permission->Check('request','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Request')); // See index.php
+$smarty->assign('title', __($title = 'Edit Request')); // See index.php
 
 /*
  * Get FORM variables

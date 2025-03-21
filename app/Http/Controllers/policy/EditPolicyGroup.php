@@ -17,7 +17,7 @@ if ( !$permission->Check('policy_group','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Policy Group')); // See index.php
+$smarty->assign('title', __($title = 'Edit Policy Group')); // See index.php
 
 /*
  * Get FORM variables
@@ -142,7 +142,7 @@ switch ($action) {
 			}
 		}
 
-		$none_array_option = array('0' => TTi18n::gettext('-- None --') );
+		$none_array_option = array('0' => _('-- None --') );
 
 		$ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), FALSE, TRUE );

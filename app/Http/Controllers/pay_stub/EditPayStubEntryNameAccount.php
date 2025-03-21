@@ -19,7 +19,7 @@ if ( !$permission->Check('pay_stub','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'General Ledger Accounts')); // See index.php
+$smarty->assign('title', __($title = 'General Ledger Accounts')); // See index.php
 
 /*
  * Get FORM variables

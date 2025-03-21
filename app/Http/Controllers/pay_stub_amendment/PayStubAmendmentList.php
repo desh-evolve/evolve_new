@@ -19,7 +19,7 @@ if ( !$permission->Check('pay_stub_amendment','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Pay Stub Amendment List')); // See index.php
+$smarty->assign('title', __($title = 'Pay Stub Amendment List')); // See index.php
 
 BreadCrumb::setCrumb($title);
 /*
@@ -40,18 +40,18 @@ extract	(FormVariables::GetVariables(
 												) ) );
 
 $columns = array(
-											'-1010-first_name' => TTi18n::gettext('First Name'),
-											'-1020-middle_name' => TTi18n::gettext('Middle Name'),
-											'-1030-last_name' => TTi18n::gettext('Last Name'),
-											'-1040-status' => TTi18n::gettext('Status'),
-											'-1050-type' => TTi18n::gettext('Type'),
-											'-1060-pay_stub_account_name' => TTi18n::gettext('Account'),
-											'-1070-effective_date' => TTi18n::gettext('Effective Date'),
-											'-1080-amount' => TTi18n::gettext('Amount'),
-											'-1090-rate' => TTi18n::gettext('Rate'),
-											'-1100-units' => TTi18n::gettext('Units'),
-											'-1110-description' => TTi18n::gettext('Description'),
-											'-1120-ytd_adjustment' => TTi18n::gettext('YTD'),
+											'-1010-first_name' => _('First Name'),
+											'-1020-middle_name' => _('Middle Name'),
+											'-1030-last_name' => _('Last Name'),
+											'-1040-status' => _('Status'),
+											'-1050-type' => _('Type'),
+											'-1060-pay_stub_account_name' => _('Account'),
+											'-1070-effective_date' => _('Effective Date'),
+											'-1080-amount' => _('Amount'),
+											'-1090-rate' => _('Rate'),
+											'-1100-units' => _('Units'),
+											'-1110-description' => _('Description'),
+											'-1120-ytd_adjustment' => _('YTD'),
 											);
 
 if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
@@ -240,7 +240,7 @@ switch ($action) {
 
 		}
 
-		$all_array_option = array('-1' => TTi18n::gettext('-- Any --'));
+		$all_array_option = array('-1' => _('-- Any --'));
 
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 		$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

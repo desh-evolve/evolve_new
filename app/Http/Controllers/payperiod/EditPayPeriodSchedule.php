@@ -19,7 +19,7 @@ if ( !$permission->Check('pay_period_schedule','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Pay Period Schedule')); // See index.php
+$smarty->assign('title', __($title = 'Edit Pay Period Schedule')); // See index.php
 
 /*
  * Get FORM variables
@@ -216,7 +216,7 @@ switch ($action) {
 		$pay_period_schedule_data['day_of_week_options'] = TTDate::getDayOfWeekArray();
 		$pay_period_schedule_data['transaction_date_options'] = Misc::prependArray( array( 0 => '0' ), TTDate::getDayOfMonthArray() );
 		$pay_period_schedule_data['day_of_month_options'] = TTDate::getDayOfMonthArray();
-		$pay_period_schedule_data['day_of_month_options'][-1] = TTi18n::gettext('- Last Day Of Month -');
+		$pay_period_schedule_data['day_of_month_options'][-1] = _('- Last Day Of Month -');
 
 		$pay_period_schedule_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE);
 

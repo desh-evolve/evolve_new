@@ -19,7 +19,7 @@ if ( !$permission->Check('wage','enabled')
 	$permission->Redirect( FALSE ); //Redirect
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Employee Wage')); // See index.php
+$smarty->assign('title', __($title = 'Edit Employee Wage')); // See index.php
 
 /*
  * Get FORM variables
@@ -180,8 +180,8 @@ switch ($action) {
 
 		//Get pay period boundary dates for this user.
 		//Include user hire date in the list.
-		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = TTi18n::gettext('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
-		$pay_period_boundary_dates = Misc::prependArray( array(-1 => TTi18n::gettext('(Choose Date)')), $pay_period_boundary_dates);
+		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = _('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
+		$pay_period_boundary_dates = Misc::prependArray( array(-1 => _('(Choose Date)')), $pay_period_boundary_dates);
 
 		$ppslf = new PayPeriodScheduleListFactory();
 		$ppslf->getByUserId( $user_id );
@@ -204,7 +204,7 @@ switch ($action) {
 
 			$uwf->Validator->isTrue(		'employee',
 											FALSE,
-											TTi18n::getText('Employee is not currently assigned to a pay period schedule.').' <a href="'.URLBuilder::getURL( NULL, '../payperiod/PayPeriodScheduleList.php').'">'. TTi18n::getText('Click here</a> to assign') );
+											_('Employee is not currently assigned to a pay period schedule.').' <a href="'.URLBuilder::getURL( NULL, '../payperiod/PayPeriodScheduleList.php').'">'. _('Click here</a> to assign') );
 		}
 
 		$smarty->assign_by_ref('user_data', $user_data);

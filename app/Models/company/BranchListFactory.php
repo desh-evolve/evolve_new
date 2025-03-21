@@ -348,7 +348,7 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		return $this;
 	}
 
-	function getByCompanyIdArray($company_id, $include_blank = TRUE, $include_disabled = TRUE ) {
+	static function getByCompanyIdArray($company_id, $include_blank = TRUE, $include_disabled = TRUE ) {
 
 		$blf = new BranchListFactory();
 		$blf->getByCompanyId($company_id);

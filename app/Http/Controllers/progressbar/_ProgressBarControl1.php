@@ -39,7 +39,7 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Recalculating Company TimeSheet...');
+		$comment = _('Recalculating Company TimeSheet...');
 
 		break;
 	case 'recalculate_employee':
@@ -51,7 +51,7 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Recalculating Employee TimeSheet...');
+		$comment = _('Recalculating Employee TimeSheet...');
 
 		break;
 	case 'generate_paystubs':
@@ -63,7 +63,7 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Generating Pay Stubs...');
+		$comment = _('Generating Pay Stubs...');
 
 		//$smarty->assign_by_ref('action', $action);
 		//$smarty->assign_by_ref('pay_period_ids', $pay_period_ids);
@@ -78,7 +78,7 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Recalculating Pay Stub Year To Date (YTD) amounts...');
+		$comment = _('Recalculating Pay Stub Year To Date (YTD) amounts...');
 
 		break;
 	case 'recalculate_accrual_policy':
@@ -92,7 +92,7 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Recalculating Accrual Policy...');
+		$comment = _('Recalculating Accrual Policy...');
 
 		break;
 	case 'add_mass_punch':
@@ -106,7 +106,7 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Adding Punches...');
+		$comment = _('Adding Punches...');
 
 		break;
 	case 'add_mass_schedule':
@@ -120,7 +120,7 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Adding Schedule Shifts...');
+		$comment = _('Adding Schedule Shifts...');
 
 		break;
 	case 'add_mass_schedule_npvc':
@@ -135,11 +135,11 @@ switch ($action) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$comment = TTi18n::gettext('Adding Schedule Shifts...');
+		$comment = _('Adding Schedule Shifts...');
 
 		break;
 	default:
-		$comment = TTi18n::gettext('Test Progress Bar...');
+		$comment = _('Test Progress Bar...');
 		//$smarty->assign_by_ref('user_data', $user_data);
 
 		break;

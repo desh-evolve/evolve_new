@@ -19,7 +19,7 @@ if ( !$permission->Check('station','enabled')
 
 }
 
-$smarty->assign('title', TTi18n::gettext($title = 'Edit Station')); // See index.php
+$smarty->assign('title', __($title = 'Edit Station')); // See index.php
 
 /*
  * Get FORM variables
@@ -82,7 +82,7 @@ switch ($action) {
 				}
 				$station_data = array(
 									'id' => $station->getId(),
-									'status' => TTi18n::gettext($station->getStatus()),
+									'status' => __($station->getStatus()),
 									'type' => $station->getType(),
 									'station' => $station->getStation(),
 									'source' => $station->getSource(),
@@ -103,7 +103,7 @@ switch ($action) {
 		$station_data['type_options'] = $sf->getOptions('type');
 
 		$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
-		$user_options = Misc::prependArray( array( -1 => TTi18n::gettext('-- ALL --')), $user_options );
+		$user_options = Misc::prependArray( array( -1 => _('-- ALL --')), $user_options );
 		$station_data['user_options'] = $user_options;
 
 		$smarty->assign_by_ref('station_data', $station_data);
