@@ -1306,7 +1306,7 @@ class Factory {
 				// Return the ID of the newly created record
 				$retval = $insert_id;
 				$log_action = 10; // 'Add'
-				echo 'check error: ';
+				// echo 'check error: ';
 			} else {
 				Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
 

@@ -421,10 +421,8 @@ class BranchFactory extends Factory
 		// }
 
 		if (empty($id)) { // Check if $id is NULL, FALSE, 0, or an empty value
-			var_dump($id, 'ID is not available');
 			return TRUE;
 		} else {
-			var_dump($id, 'ID is available');
 			if ($id == $this->getId()) {
 				return TRUE;
 			}

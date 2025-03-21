@@ -77,9 +77,8 @@
                         <label for="manual_id">Code</label>
                         <input type="text" name="manual_id" id="manual_id" class="form-control"
                             value="{{ $data['manual_id'] ?? $data['next_available_manual_id'] }}">
-                        @if ($data['next_available_manual_id'] != '')
-                            <small class="form-text text-muted">Next available code:
-                                {{ $data['next_available_manual_id'] }}</small>
+                            @if (!empty($data['manual_id']))
+                            <small class="form-text text-muted">Next available code: {{ $data['manual_id'] }}</small>
                         @endif
                     </div>
 
@@ -103,18 +102,23 @@
 
                     <div class="form-group">
                         <label for="country">Country</label>
-                        <select name="country" id="country" class="form-select" onchange="showProvince()">
-
-                            @foreach ($data['data']['country_options'] ?? [] as $value => $label)
-                                <option value="{{ $value }}"
-                                    {{ isset($data['data']['country']) && $data['data']['country'] == $value ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
+                        <select name="country" id="country" class="form-select">
+                            @foreach ($data['country_options'] as $value => $label)
+                                <option value="{{ $value }}" {{ isset($data['country']) && $data['country'] == $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="province">Province / State</label>
+                        <select name="province" id="province" class="form-select">
+                            @foreach ($data['province_options'] as $value => $label)
+                                <option value="{{ $value }}" {{ isset($data['province']) && $data['province'] == $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <div class="form-group">
+
+                    {{-- <div class="form-group">
                         <label for="province">Province / State</label>
                         <select name="province" id="province" class="form-select">
                             @foreach ($data['data']['province_options'] ?? [] as $value => $label)
@@ -125,7 +129,7 @@
                             @endforeach
                         </select>
                         <input type="hidden" id="selected_province" value="{{ $data['province'] ?? '' }}">
-                    </div>
+                    </div> --}}
 
                     <div class="form-group">
                         <label for="postal_code">Postal / ZIP Code</label>

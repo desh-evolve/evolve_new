@@ -55,79 +55,78 @@ class EditBankAccount extends Controller
         */
     }
 
-    // public function index($id = null)
-    // {
-    //     dd($id);
-    //     $viewData = ['title' => $id ? 'Edit Bank Account' : 'Add Bank Account'];
-    //     if ($id) {
-    //         $balf = new BranchBankAccountListFactory();
-    //         $balf->getById($id);
+    public function index(Request $request,$id = null)
+    {
+        $viewData = ['title' => $id ? 'Edit Bank Account' : 'Add Bank Account'];
+        if ($id) {
+            $balf = new BranchBankAccountListFactory();
+            $balf->getById($id);
 
-    //         foreach ($balf->rs as $bank_account) {
-    //             $balf->data = (array)$bank_account;
-    //             $bank_account = $balf;
-    //             //Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
+            foreach ($balf->rs as $bank_account) {
+                $balf->data = (array)$bank_account;
+                $bank_account = $balf;
+                //Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
 
-    //             $bank_data = array(
-    //                 'id' => $bank_account->getId(),
-    //                 'default_branch_id' => $bank_account->getDefaultBranch(),
-    //                 'country' => 1,
-    //                 'institution' => $bank_account->getInstitution(),
-    //                 'transit' => $bank_account->getTransit(),
-    //                 //'account' => $bank_account->getSecureAccount(),//ARSP EDIT --> I Hide THIS CODE REASON- WE CANT SEE ORIGINAL ACCOUNT NUMBER
-    //                 'account' => $bank_account->getAccount(), //ARSP EDIT --> I ADD NEW CODE SHOW ONLY ORIGINAL ACCOUNT NUMBER
-    //                 'bank_name' => $bank_account->getBankName(), //ARSP EDIT --> I ADD NEW CODE FOR BANK NAME
-    //                 'bank_branch' => $bank_account->getBankBranch(), //ARSP EDIT --> I ADD NEW CODE FOR BANK BRANCH NAME
-    //                 'created_date' => $bank_account->getCreatedDate(),
-    //                 'created_by' => $bank_account->getCreatedBy(),
-    //                 'updated_date' => $bank_account->getUpdatedDate(),
-    //                 'updated_by' => $bank_account->getUpdatedBy(),
-    //                 'deleted_date' => $bank_account->getDeletedDate(),
-    //                 'deleted_by' => $bank_account->getDeletedBy()
-    //             );
-    //         }
+                $bank_data = array(
+                    'id' => $bank_account->getId(),
+                    'default_branch_id' => $bank_account->getDefaultBranch(),
+                    'country' => 1,
+                    'institution' => $bank_account->getInstitution(),
+                    'transit' => $bank_account->getTransit(),
+                    //'account' => $bank_account->getSecureAccount(),//ARSP EDIT --> I Hide THIS CODE REASON- WE CANT SEE ORIGINAL ACCOUNT NUMBER
+                    'account' => $bank_account->getAccount(), //ARSP EDIT --> I ADD NEW CODE SHOW ONLY ORIGINAL ACCOUNT NUMBER
+                    'bank_name' => $bank_account->getBankName(), //ARSP EDIT --> I ADD NEW CODE FOR BANK NAME
+                    'bank_branch' => $bank_account->getBankBranch(), //ARSP EDIT --> I ADD NEW CODE FOR BANK BRANCH NAME
+                    'created_date' => $bank_account->getCreatedDate(),
+                    'created_by' => $bank_account->getCreatedBy(),
+                    'updated_date' => $bank_account->getUpdatedDate(),
+                    'updated_by' => $bank_account->getUpdatedBy(),
+                    'deleted_date' => $bank_account->getDeletedDate(),
+                    'deleted_by' => $bank_account->getDeletedBy()
+                );
+            }
 
-    //         $viewData['branch_id_saved'] = $bank_data['default_branch_id'];
+            $viewData['branch_id_saved'] = $bank_data['default_branch_id'];
 
-    //         //Add New
-    //         if ($bank_data['default_branch_id'] != '' or $bank_data['default_branch_id'] != NULL) {
-    //             $blf = new BranchListFactory();
-    //             $company_branch_name = $blf->getById($bank_data['default_branch_id'])->getCurrent()->getName();
-    //             $viewData['company_branch_name'] = $company_branch_name;
-    //         }
-    //     } else {
-    //         // Add mode: Set default values
-    //         $bank_data = [
-    //             'default_branch_id' => null,
-    //             'institution' => null,
-    //             'transit' => null,
-    //             'account' => null,
-    //             'bank_name' => null,
-    //             'bank_branch' => null,
-    //         ];
+            //Add New
+            if ($bank_data['default_branch_id'] != '' or $bank_data['default_branch_id'] != NULL) {
+                $blf = new BranchListFactory();
+                $company_branch_name = $blf->getById($bank_data['default_branch_id'])->getCurrent()->getName();
+                $viewData['company_branch_name'] = $company_branch_name;
+            }
+        } else {
+            // Add mode: Set default values
+            $bank_data = [
+                'default_branch_id' => $request->branch_id,
+                'institution' => null,
+                'transit' => null,
+                'account' => null,
+                'bank_name' => null,
+                'bank_branch' => null,
+            ];
             
-    //     }
-    //     //Edit Old
-    //     if (isset($branch_id_new)) {
-    //         $blf = new BranchListFactory();
-    //         $company_branch_name = $blf->getById($branch_id_new)->getCurrent()->getName();
-    //         $viewData['company_branch_name'] = $company_branch_name;
-    //     }
+        }
+        //Edit Old
+        if (isset($branch_id_new)) {
+            $blf = new BranchListFactory();
+            $company_branch_name = $blf->getById($branch_id_new)->getCurrent()->getName();
+            $viewData['company_branch_name'] = $company_branch_name;
+        }
 
-    //     $viewData['company_id'] = $this->currentCompany->getCurrent()->getId();
-    //     $viewData['user_id'] = $this->currentUser->getCurrent()->getId();
+        $viewData['company_id'] = $this->currentCompany->getCurrent()->getId();
+        $viewData['user_id'] = $this->currentUser->getCurrent()->getId();
 
-    //     $viewData['bank_data'] = $bank_data;
+        $viewData['bank_data'] = $bank_data;
 
-    //     return view('branch.EditBankAccount', $viewData);
-    // }
+        return view('branch.EditBankAccount', $viewData);
+    }
 
     public function save(Request $request, $id = null)
     {
+        // dd($request->all());
         $data = $request->all();
         $baf = new BranchBankAccountFactory();
 
-        // var_dump($data['company_id']);
         Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
 
         $baf->setId($id);
@@ -143,16 +142,9 @@ class EditBankAccount extends Controller
             $baf->Save();
             return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Bank account saved successfully.');
         } else {
-            var_dump('aaa');
+            return redirect()->back()->withErrors(['error' => 'Invalid bank account data.'])->withInput();
         }
 
-        // if (isset($data)) {
-
-        //     $baf->Save();
-        //     return redirect()->to(URLBuilder::getURL(null, '/branch'))->with('success', 'Bank account saved successfully.');
-        // } else {
-        // If validation fails, return back with errors
-        // return redirect()->back()->withErrors(['error' => 'Invalid bank account data.'])->withInput();
-        // }
+        
     }
 }

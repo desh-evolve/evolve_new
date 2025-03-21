@@ -3,8 +3,8 @@
 use App\Http\Controllers\payperiod\ClosePayPeriod;
 use App\Http\Controllers\currency\CurrencyList;
 use App\Http\Controllers\currency\EditCurrency;
-use App\Http\Controllers\branch\BranchList;
-use App\Http\Controllers\branch\EditBranch;
+use App\Http\Controllers\Branch\BranchList;
+use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
 use App\Http\Controllers\Dashboard;
@@ -35,15 +35,15 @@ Route::delete('/currency/delete/{id}', [CurrencyList::class, 'delete'])->name('c
 Route::get('/branch', [BranchList::class, 'index'])->name('branch.index');
 
 Route::get('/branch/add/{id?}', [EditBranch::class, 'index'])->name('branch.add');
+
 Route::post('/branch/save/{id?}', [EditBranch::class, 'save'])->name('branch.save');
 Route::delete('/branch/delete/{id}', [BranchList::class, 'delete'])->name('branch.delete');
 
 // ==================== branch bank account =====================================================================================
 Route::get('/branch_bank/{id?}', [BranchBankAccountList::class, 'index'])->name('branch_bank.index');
 
-// Route::get('/branch_bank/add/{id?}', [EditBankAccount::class, 'index'])->name('branch_bank.add');
+Route::get('/branch_bank_account/add/{id?}', [EditBankAccount::class, 'index'])->name('branch_bank_account.add');
 Route::get('/branch_bank/add/{id?}', [EditBankAccount::class, 'index'])->name('branch_bank.add');
-
 Route::post('/branch_bank/save/{id?}', [EditBankAccount::class, 'save'])->name('branch_bank.save');
 Route::delete('/branch_bank/delete/{id}', [EditBankAccount::class, 'delete'])->name('branch_bank.delete');
 
