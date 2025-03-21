@@ -130,7 +130,7 @@ class BranchFactory extends Factory
 
 		$clf = new CompanyListFactory();
 
-		if ( $id == 0 or $this->Validator->isResultSetWithRows( 'company', $clf->getByID($id), ('Company is invalid') ) ) {
+		if ($id == 0 or $this->Validator->isResultSetWithRows('company', $clf->getByID($id), ('Company is invalid'))) {
 			$this->data['company_id'] = $id;
 
 			return TRUE;
@@ -156,7 +156,7 @@ class BranchFactory extends Factory
 			$status = $key;
 		}
 
-		if ($this->Validator->inArrayKey( 'status', $status, ('Incorrect Status'), $this->getOptions('status') )) {
+		if ($this->Validator->inArrayKey('status', $status, ('Incorrect Status'), $this->getOptions('status'))) {
 
 			$this->data['status_id'] = $status;
 
@@ -242,11 +242,11 @@ class BranchFactory extends Factory
 		$value = trim($value);
 
 		if (
-			$this->Validator->isNumeric( 'manual_id', $value, ('Code is invalid') )
+			$this->Validator->isNumeric('manual_id', $value, ('Code is invalid'))
 			and
-			$this->Validator->isLength( 'manual_id', $value, ('Code has too many digits'), 0, 10 )
+			$this->Validator->isLength('manual_id', $value, ('Code has too many digits'), 0, 10)
 			and
-			$this->Validator->isTrue( 'manual_id', $this->isUniqueManualID($value), ('Code is already in use, please enter a different one') )
+			$this->Validator->isTrue('manual_id', $this->isUniqueManualID($value), ('Code is already in use, please enter a different one'))
 		) {
 
 			$this->data['manual_id'] = $value;
@@ -410,7 +410,7 @@ class BranchFactory extends Factory
 			}
 		}
 		Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
-		
+
 		// if ($id === FALSE) {
 		// 	var_dump($id,'333');
 		// 	return TRUE;
@@ -490,7 +490,8 @@ class BranchFactory extends Factory
 		$query = 'select id from ' . $this->getTable() . ' where etf_no = :etf_no AND company_id = :company_id AND deleted=0';
 		// $id = $this->db->GetOne($query, $ph);
 		$id = DB::select($query, $ph);
-
+		// var_dump($this->getCompany());
+		// var_dump($query);
 		if (empty($id)) {
 			$id = 0;
 		} else {
@@ -696,6 +697,7 @@ class BranchFactory extends Factory
 		// $name_id = $this->db->GetOne($query, $ph);
 		$name_id = DB::select($query, $ph);
 
+		// dd($name_id);
 		if (empty($name_id)) {
 			$name_id = 0;
 		} else {
@@ -704,9 +706,11 @@ class BranchFactory extends Factory
 
 		Debug::Arr($name_id, 'Unique Name: ' . $name, __FILE__, __LINE__, __METHOD__, 10);
 
-		if ($name_id === FALSE) {
+		if (empty($name_id)) {
+			
 			return TRUE;
 		} else {
+			
 			if ($name_id == $this->getId()) {
 				return TRUE;
 			}
@@ -728,9 +732,9 @@ class BranchFactory extends Factory
 		$name = trim($name);
 
 		if (
-			$this->Validator->isLength( 'name', $name, ('Name is too short or too long'), 2, 100 )
+			$this->Validator->isLength('name', $name, ('Name is too short or too long'), 2, 100)
 			and
-			$this->Validator->isTrue( 'name', $this->isUniqueName($name), ('Branch name already exists') )
+			$this->Validator->isTrue('name', $this->isUniqueName($name), ('Branch name already exists'))
 
 		) {
 
@@ -778,9 +782,9 @@ class BranchFactory extends Factory
 		if (
 			$address1 != NULL
 			and
-			($this->Validator->isRegEx( 'address1', $address1, ('Address1 contains invalid characters'), $this->address_validator_regex )
-			and
-			$this->Validator->isLength( 'address1', $address1, ('Address1 is too short or too long'), 2, 250 ))
+			($this->Validator->isRegEx('address1', $address1, ('Address1 contains invalid characters'), $this->address_validator_regex)
+				and
+				$this->Validator->isLength('address1', $address1, ('Address1 is too short or too long'), 2, 250))
 		) {
 
 			$this->data['address1'] = $address1;
@@ -805,11 +809,11 @@ class BranchFactory extends Factory
 
 		if (
 			$address2 != NULL
-			and ( 
-				$this->Validator->isRegEx( 'address2', $address2, ('Address2 contains invalid characters'), $this->address_validator_regex )
+			and (
+				$this->Validator->isRegEx('address2', $address2, ('Address2 contains invalid characters'), $this->address_validator_regex)
 				and
-				$this->Validator->isLength( 'address2', $address2, ('Address2 is too short or too long'), 2, 250 )
-				)
+				$this->Validator->isLength('address2', $address2, ('Address2 is too short or too long'), 2, 250)
+			)
 		) {
 
 			$this->data['address2'] = $address2;
@@ -833,9 +837,9 @@ class BranchFactory extends Factory
 		$city = trim($city);
 
 		if (
-			$this->Validator->isRegEx( 'city', $city, ('City contains invalid characters'), $this->city_validator_regex )
+			$this->Validator->isRegEx('city', $city, ('City contains invalid characters'), $this->city_validator_regex)
 			and
-			$this->Validator->isLength( 'city', $city, ('City name is too short or too long'), 2, 250 )
+			$this->Validator->isLength('city', $city, ('City name is too short or too long'), 2, 250)
 		) {
 
 			$this->data['city'] = $city;
@@ -873,7 +877,7 @@ class BranchFactory extends Factory
 		if (
 			$this->getCountry() == FALSE
 			or
-			$this->Validator->inArrayKey( 'province', $province, ('Invalid Province'), $options )
+			$this->Validator->inArrayKey('province', $province, ('Invalid Province'), $options)
 		) {
 
 			$this->data['province'] = $province;
@@ -898,7 +902,7 @@ class BranchFactory extends Factory
 
 		$cf = new CompanyFactory();
 
-		if ($this->Validator->inArrayKey( 'country', $country, ('Invalid Country'), $cf->getOptions('country') )) {
+		if ($this->Validator->inArrayKey('country', $country, ('Invalid Country'), $cf->getOptions('country'))) {
 
 			$this->data['country'] = $country;
 
@@ -929,7 +933,8 @@ class BranchFactory extends Factory
 					$postal_code,
 					('Postal/ZIP Code contains invalid characters, invalid format, or does not match Province/State'),
 					$this->getCountry(),
-					$this->getProvince() )
+					$this->getProvince()
+				)
 				and
 				$this->Validator->isLength(
 					'postal_code',

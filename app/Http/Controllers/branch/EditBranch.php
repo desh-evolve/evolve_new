@@ -231,14 +231,6 @@ class EditBranch extends Controller
     {
         $current_company = $this->company;
 
-        // // Permission check
-        // if (
-        //     !$this->permission->Check('branch', 'enabled') ||
-        //     !($this->permission->Check('branch', 'edit') || $this->permission->Check('branch', 'edit_own'))
-        // ) {
-        //     return $this->permission->Redirect(false);
-        // }
-
         // Validate input
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -293,7 +285,8 @@ class EditBranch extends Controller
         if ($bf->isValid()) {
             $bf->Save();
             return redirect()->route('branch.index')->with('success', 'Branch saved successfully.');
-        } else {
+        } 
+        else {
             // // If validation fails, return back with errors
             return redirect()->back()->withErrors(['error' => 'Invalid branch data.'])->withInput();
         }
