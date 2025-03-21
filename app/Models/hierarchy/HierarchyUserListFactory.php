@@ -30,13 +30,13 @@ class HierarchyUserListFactory extends HierarchyUserFactory implements IteratorA
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -54,7 +54,7 @@ class HierarchyUserListFactory extends HierarchyUserFactory implements IteratorA
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
@@ -62,7 +62,7 @@ class HierarchyUserListFactory extends HierarchyUserFactory implements IteratorA
 					from	'. $this->getTable() .' as a,
 							'. $hcf->getTable() .' as b
 					where	a.hierarchy_control_id = b.id
-						AND a.hierarchy_control_id = ?
+						AND a.hierarchy_control_id = :id
 						AND b.deleted = 0
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -85,8 +85,8 @@ class HierarchyUserListFactory extends HierarchyUserFactory implements IteratorA
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'id' => $id,
-					'user_id' => $user_id,
+					':id' => $id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -94,8 +94,8 @@ class HierarchyUserListFactory extends HierarchyUserFactory implements IteratorA
 					from	'. $this->getTable() .' as a,
 							'. $hcf->getTable() .' as b
 					where	b.id = a.hierarchy_control_id
-						AND a.hierarchy_control_id = ?
-						AND a.user_id = ?
+						AND a.hierarchy_control_id = :id
+						AND a.user_id = :user_id
 						AND b.deleted = 0
 					';
 		$query .= $this->getWhereSQL( $where );

@@ -11,6 +11,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentFactory extends Factory {
 	protected $table = 'department';
@@ -132,11 +133,11 @@ class DepartmentFactory extends Factory {
 		}
 
 		$ph = array(
-					'manual_id' => $id,
-					'company_id' =>  $this->getCompany(),
+					':manual_id' => $id,
+					':company_id' =>  $this->getCompany(),
 					);
 
-		$query = 'select id from '. $this->getTable() .' where manual_id = ? AND company_id = ? AND deleted=0';
+		$query = 'select id from '. $this->getTable() .' where manual_id = :manual_id AND company_id = :company_id AND deleted=0';
 		$id = DB::select($query, $ph);
 
 		if ($id === FALSE ) {
@@ -220,13 +221,13 @@ class DepartmentFactory extends Factory {
 		}
 
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':name' => $name,
 					);
 
 		$query = 'select id from '. $this->table .'
-					where company_id = ?
-						AND name = ?
+					where company_id = :company_id
+						AND name = :name
 						AND deleted = 0';
 		$name_id = DB::select($query, $ph);
 

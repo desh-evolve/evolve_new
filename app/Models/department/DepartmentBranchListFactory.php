@@ -31,13 +31,13 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 				';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -53,13 +53,13 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	branch_id = ?
+					where	branch_id = :id
 				';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -79,15 +79,15 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 		}
 
 		$ph = array(
-					'branch_id' => $branch_id,
-					'id' => $id,
+					':branch_id' => $branch_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	branch_id = ?
-						AND	id = ?
+					where	branch_id = :branch_id
+						AND	id = :id
 					';
 		$query .= $this->getSortSQL( $order );
 
@@ -102,13 +102,13 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	department_id = ?
+					where	department_id = :id
 				';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -128,15 +128,15 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 		}
 
 		$ph = array(
-					'department_id' => $department_id,
-					'id' => $id,
+					':department_id' => $department_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	department_id = ?
-						AND	id = ?
+					where	department_id = :department_id
+						AND	id = :id
 					';
 		$query .= $this->getSortSQL( $order );
 
@@ -155,15 +155,15 @@ class DepartmentBranchListFactory extends DepartmentBranchFactory implements Ite
 		}
 
 		$ph = array(
-					'department_id' => $department_id,
-					'branch_id' => $branch_id,
+					':department_id' => $department_id,
+					':branch_id' => $branch_id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	department_id = ?
-						AND	branch_id = ?
+					where	department_id = :department_id
+						AND	branch_id = :branch_id
 					';
 		$query .= $this->getSortSQL( $order );
 

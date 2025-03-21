@@ -59,7 +59,7 @@ class ROEListFactory extends ROEFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id
+					':company_id' => $company_id
 					);
 
 		$query = '
@@ -67,7 +67,7 @@ class ROEListFactory extends ROEFactory implements IteratorAggregate {
 					from	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
 					where	a.user_id = b.id
-						AND b.company_id = ?
+						AND b.company_id = :company_id
 						AND a.id in ('. $this->getListSQL($id, $ph) .')
 						AND a.deleted = 0 AND b.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
@@ -84,13 +84,13 @@ class ROEListFactory extends ROEFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -121,13 +121,13 @@ class ROEListFactory extends ROEFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
+					where	user_id = :id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -156,17 +156,17 @@ class ROEListFactory extends ROEFactory implements IteratorAggregate {
 
 
 		$ph = array(
-					'id' => $id,
-					'start_date' => $start_date,
-					'end_date' => $end_date,
+					':id' => $id,
+					':start_date' => $start_date,
+					':end_date' => $end_date,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	user_id = ?
-						AND last_date >= ?
-						AND last_date <= ?
+					where	user_id = :id
+						AND last_date >= :start_date
+						AND last_date <= :end_date
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -194,11 +194,11 @@ class ROEListFactory extends ROEFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'user_id' => $user_id,
-					'start_date' => $start_date,
-					'end_date' => $end_date,
-					'created_date' => $date,
-					'updated_date' => $date,
+					':user_id' => $user_id,
+					':start_date' => $start_date,
+					':end_date' => $end_date,
+					':created_date' => $date,
+					':updated_date' => $date,
 					);
 
 		//INCLUDE Deleted rows in this query.
@@ -206,11 +206,11 @@ class ROEListFactory extends ROEFactory implements IteratorAggregate {
 					select 	*
 					from	'. $this->getTable() .'
 					where
-							user_id = ?
-						AND last_date >= ?
-						AND last_date <= ?
+							user_id = :user_id
+						AND last_date >= :start_date
+						AND last_date <= :end_date
 						AND
-							( created_date >= ? OR updated_date >= ? )
+							( created_date >= :created_date OR updated_date >= :updated_date )
 					LIMIT 1
 					';
 		$query .= $this->getWhereSQL( $where );

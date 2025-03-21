@@ -4,6 +4,7 @@ namespace App\Models\Hierarchy;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
 
 class HierarchyUserFactory extends Factory {
 	protected $table = 'hierarchy_user';
@@ -70,9 +71,9 @@ class HierarchyUserFactory extends Factory {
 		$hotf = new HierarchyObjectTypeFactory();
 
 		$ph = array(
-					'hierarchy_control_id' => $this->getHierarchyControl(),
-					'id' => $id,
-					'exclude_id' => $exclude_id,
+					':hierarchy_control_id' => $this->getHierarchyControl(),
+					':id' => $id,
+					':exclude_id' => $exclude_id,
 					);
 
 		//$query = 'select a.id from '. $this->getTable() .' as a, '. $pglf->getTable() .' as b where a.hierarchy_control_id = b.id AND a.user_id = ? AND b.deleted=0';
@@ -84,9 +85,9 @@ class HierarchyUserFactory extends Factory {
 					WHERE a.object_type_id in (
 							select object_type_id
 							from hierarchy_object_type
-							where hierarchy_control_id = ? )
-					AND b.user_id = ?
-					AND a.hierarchy_control_id != ?
+							where hierarchy_control_id = :hierarchy_control_id )
+					AND b.user_id = :id
+					AND a.hierarchy_control_id != :exclude_id
 					AND c.deleted = 0
 				';
 		//Debug::Arr($ph,'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);

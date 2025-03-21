@@ -35,13 +35,13 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 						AND deleted = 0
 				';
 		$query .= $this->getWhereSQL( $where );
@@ -64,16 +64,16 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id
+					':id' => $id,
+					':company_id' => $company_id
 					);
 
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
 					LEFT JOIN '. $hcf->getTable() .' as b ON a.hierarchy_control_id = b.id
-					where	a.id = ?
-						AND b.company_id = ?
+					where	a.id = :id
+						AND b.company_id = :company_id
 						AND a.deleted = 0
 				';
 		$query .= $this->getWhereSQL( $where );
@@ -96,13 +96,13 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	hierarchy_control_id = ?
+					where	hierarchy_control_id = :id
 						AND deleted = 0
 				';
 		$query .= $this->getWhereSQL( $where );
@@ -125,15 +125,15 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
-					'user_id' => $user_id
+					':id' => $id,
+					':user_id' => $user_id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	hierarchy_control_id = ?
-						AND user_id = ?
+					where	hierarchy_control_id = :id
+						AND user_id = :user_id
 						AND deleted = 0
 				';
 		$query .= $this->getWhereSQL( $where );
@@ -156,17 +156,17 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => (int)$id,
-					'user_id' => (int)$user_id,
-					'exclude_id' => (int)$exclude_id
+					':id' => (int)$id,
+					':user_id' => (int)$user_id,
+					':exclude_id' => (int)$exclude_id
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	hierarchy_control_id = ?
-						AND user_id = ?
-						AND id != ?
+					where	hierarchy_control_id = :id
+						AND user_id = :user_id
+						AND id != :exclude_id
 						AND deleted = 0
 				';
 		$query .= $this->getWhereSQL( $where );
@@ -187,20 +187,20 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		}
 
 		$ph = array(
-					'id' => $id,
-					'idb' => $id,
-					'user_id' => $user_id,
+					':id' => $id,
+					':idb' => $id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
 					select 	distinct(level)
 					from	'. $this->getTable() .'
-					where	hierarchy_control_id = ?
+					where	hierarchy_control_id = :id
 						AND level >= (
 										select 	level
 										from	'. $this->getTable() .'
-										where	hierarchy_control_id = ?
-											AND user_id = ?
+										where	hierarchy_control_id = :idb
+											AND user_id = :user_id
 											AND deleted = 0
 										LIMIT 1
 									 )
@@ -208,7 +208,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 					ORDER BY level ASC
 				';
 
-		$retarr = $this->db->GetCol($query, $ph);
+        $retarr = DB::select($query, $ph);
 
 		return $retarr;
 
@@ -228,7 +228,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		$query = '
@@ -239,7 +239,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 								select 	a.hierarchy_control_id,a.level
 								from	'. $this->getTable() .' as a
 									LEFT JOIN '. $hotf->getTable() .' as b ON a.hierarchy_control_id = b.hierarchy_control_id
-								where a.user_id = ?
+								where a.user_id = :user_id
 									AND b.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 									AND a.deleted = 0
 					) as z
@@ -283,7 +283,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					);
 
 		//Include object_type_ids for each hierarchy_control_id, because we need to do additional filtering by hierarchy_control_id, level, object_type_ids
@@ -298,7 +298,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 								select 	a.hierarchy_control_id,a.level,b.object_type_id
 								from	'. $this->getTable() .' as a
 									LEFT JOIN '. $hotf->getTable() .' as b ON a.hierarchy_control_id = b.hierarchy_control_id
-								where a.user_id = ?
+								where a.user_id = :user_id
 									AND b.object_type_id in ('. $this->getListSQL($object_type_id, $ph) .')
 									AND a.deleted = 0
 					) as z
@@ -386,7 +386,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$hcf = new HierarchyControlFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -401,7 +401,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 						LEFT JOIN '. $hcf->getTable() .' as b ON ( a.hierarchy_control_id = b.id AND b.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	b.company_id = ?
+					where	b.company_id = :company_id
 					';
 
 		if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {

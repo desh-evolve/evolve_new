@@ -96,7 +96,7 @@ class EditCurrency extends Controller
 
     public function save(Request $request, $id = null)
     {
-        
+
         $current_company = $this->company;
 
         /*
@@ -108,6 +108,7 @@ class EditCurrency extends Controller
 
         $data = $request->all();
         Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
+
         
         $cf = new CurrencyFactory();
 
@@ -130,4 +131,4 @@ class EditCurrency extends Controller
         // If validation fails, return back with errors
         return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
     }
-}
+} 

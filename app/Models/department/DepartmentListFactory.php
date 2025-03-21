@@ -37,13 +37,13 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		$this->rs = $this->getCache($id);
 		if ( $this->rs === FALSE ) {
 			$ph = array(
-						'id' => $id,
+						':id' => $id,
 						);
 
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
-						where	id = ?
+						where	id = :id
 							AND deleted = 0';
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
@@ -84,13 +84,13 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	company_id = ?
+					where	company_id = :id
 					AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -113,15 +113,15 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'status_id' => $status_id,
+					':company_id' => $company_id,
+					':status_id' => $status_id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	status_id = ?
+					where	company_id = :company_id
+						AND	status_id = :status_id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -139,15 +139,15 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'id' => $id,
+					':company_id' => $company_id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from 	'. $this->getTable() .'
-					where	company_id = ?
-						AND	id = ?
+					where	company_id = :company_id
+						AND	id = :id
 						AND deleted = 0';
 		$query .= $this->getSortSQL( $order );
 
@@ -166,15 +166,15 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => $id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	manual_id = ?
-						AND company_id = ?
+					where	manual_id = :id
+						AND company_id = :company_id
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -190,17 +190,17 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => $id,
-					'id2' => $id,
+					':id' => $id,
+					':id2' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND id = ( select id
 									from '. $this->getTable() .'
-									where company_id = ?
+									where company_id = :id2
 										AND manual_id IS NOT NULL
 										AND deleted = 0
 									ORDER BY manual_id DESC
@@ -265,9 +265,9 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'company_id' => $company_id,
-					'created_date' => $date,
-					'updated_date' => $date
+					':company_id' => $company_id,
+					':created_date' => $date,
+					':updated_date' => $date
 					);
 
 		//INCLUDE Deleted rows in this query.
@@ -275,9 +275,9 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 					select 	*
 					from	'. $this->getTable() .'
 					where
-							company_id = ?
+							company_id = :company_id
 						AND
-							( created_date >= ? OR updated_date >= ? )
+							( created_date >= :created_date OR updated_date >= :updated_date )
 					LIMIT 1
 					';
 		$query .= $this->getWhereSQL( $where );
@@ -332,7 +332,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -346,7 +346,7 @@ class DepartmentListFactory extends DepartmentFactory implements IteratorAggrega
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as y ON ( a.created_by = y.id AND y.deleted = 0 )
 						LEFT JOIN '. $uf->getTable() .' as z ON ( a.updated_by = z.id AND z.deleted = 0 )
-					where	a.company_id = ?
+					where	a.company_id = :company_id
 					';
 
 		$query .= ( isset($filter_data['permission_children_ids']) ) ? $this->getWhereClauseSQL( 'a.created_by', $filter_data['permission_children_ids'], 'numeric_list', $ph ) : NULL;

@@ -9,6 +9,7 @@ use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 
 class HierarchyControlFactory extends Factory {
 	protected $table = 'hierarchy_control';
@@ -104,12 +105,18 @@ class HierarchyControlFactory extends Factory {
 
 	function isUniqueName($name) {
 		$ph = array(
-					'company_id' => $this->getCompany(),
-					'name' => $name,
+					':company_id' => $this->getCompany(),
+					':name' => $name,
 					);
 
-		$query = 'select id from '. $this->getTable() .' where company_id = ? AND name = ? AND deleted = 0';
-		$hierarchy_control_id = $this->db->GetOne($query, $ph);
+		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND name = :name AND deleted = 0';
+		$hierarchy_control_id = DB::select($query, $ph);
+        if ($hierarchy_control_id === FALSE ) {
+            $hierarchy_control_id = 0;
+        }else{
+            $hierarchy_control_id = current(get_object_vars($hierarchy_control_id[0]));
+        }
+
 		Debug::Arr($hierarchy_control_id,'Unique Hierarchy Control ID: '. $hierarchy_control_id, __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $hierarchy_control_id === FALSE ) {

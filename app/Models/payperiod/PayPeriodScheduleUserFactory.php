@@ -52,10 +52,10 @@ class PayPeriodScheduleUserFactory extends Factory {
 		$ppslf = new PayPeriodScheduleListFactory();
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
-		$query = 'select a.id from '. $this->getTable() .' as a, '. $ppslf->getTable() .' as b where a.pay_period_schedule_id = b.id AND a.user_id = ? AND b.deleted=0';
+		$query = 'select a.id from '. $this->getTable() .' as a, '. $ppslf->getTable() .' as b where a.pay_period_schedule_id = b.id AND a.user_id = :id AND b.deleted=0';
 		$user_id = DB::select($query, $ph);
 
 		if ($user_id === FALSE ) {

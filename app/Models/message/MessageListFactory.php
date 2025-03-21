@@ -36,13 +36,13 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'id' => $id,
+					':id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	id = ?
+					where	id = :id
 					AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
@@ -56,11 +56,11 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		if ( $company_id == '') {
 			return FALSE;
 		}
-		
+
 		$uf = new UserFactory();
 
 		$ph = array(
-					'company_id' => $company_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -68,7 +68,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 					FROM '. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.created_by = b.id
 					WHERE
-							b.company_id = ? AND a.deleted = 0
+							b.company_id = :company_id AND a.deleted = 0
 					';
 
 		$query .= $this->getWhereSQL( $where );
@@ -102,9 +102,9 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'user_id' => $user_id,
-					'company_id' => $company_id,
+					':id' => $id,
+					':user_id' => $user_id,
+					':company_id' => $company_id,
 					);
 
 		$query = '
@@ -113,9 +113,9 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 						LEFT JOIN '. $uf->getTable() .' as b ON a.created_by = b.id
 					WHERE
 							a.object_type_id in (5,50)
-							AND a.id = ?
-							AND a.created_by = ?
-							AND b.company_id = ?
+							AND a.id = :id
+							AND a.created_by = :user_id
+							AND b.company_id = :company_id
 							AND a.deleted = 0
 					';
 		$this->rs = DB::select($query, $ph);
@@ -134,9 +134,9 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-					'id' => $id,
-					'id2' => $id,
-					'id3' => $id,
+					':id' => $id,
+					':id2' => $id,
+					':id3' => $id,
 					);
 
 		$query = '
@@ -144,9 +144,9 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 					FROM '. $this->getTable() .' as a
 					WHERE
 							a.object_type_id in (5,50)
-							AND ( a.id = ?
-									OR a.parent_id = ( select z.parent_id from '. $this->getTable() .' as z where z.id = ? AND z.parent_id != 0 )
-									OR a.id = ( select z.parent_id from '. $this->getTable() .' as z where z.id = ? )
+							AND ( a.id = :id
+									OR a.parent_id = ( select z.parent_id from '. $this->getTable() .' as z where z.id = :id2 AND z.parent_id != 0 )
+									OR a.id = ( select z.parent_id from '. $this->getTable() .' as z where z.id = :id3 )
 								)
 							AND a.deleted = 0
 					';
@@ -170,12 +170,12 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		$unread_messages = $this->getCache($user_id);
 		if ( $unread_messages === FALSE ) {
 			$ph = array(
-						'user_id' => $user_id,
-						'id' => $user_id,
-						'created_by1' => $user_id,
-						'created_by2' => $user_id,
-						'created_by3' => $user_id,
-						'created_by4' => $user_id,
+						':user_id' => $user_id,
+						':id' => $user_id,
+						':created_by1' => $user_id,
+						':created_by2' => $user_id,
+						':created_by3' => $user_id,
+						':created_by4' => $user_id,
 						);
 
 			$query = '
@@ -192,13 +192,13 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 								AND
 								(
 									(
-										c.user_id = ?
-										OR d.id = ?
-										OR e.user_id = ?
-										OR a.parent_id in ( select parent_id FROM '. $this->getTable() .' WHERE created_by = ? AND parent_id != 0 )
-										OR a.parent_id in ( select id FROM '. $this->getTable() .' WHERE created_by = ? AND parent_id = 0 )
+										c.user_id = :user_id
+										OR d.id = :id
+										OR e.user_id = :created_by1
+										OR a.parent_id in ( select parent_id FROM '. $this->getTable() .' WHERE created_by = :created_by2 AND parent_id != 0 )
+										OR a.parent_id in ( select id FROM '. $this->getTable() .' WHERE created_by = :created_by3 AND parent_id = 0 )
 									)
-									AND a.created_by != ?
+									AND a.created_by != :created_by4
 								)
 
 							AND ( a.deleted = 0 AND f.deleted = 0
@@ -210,7 +210,12 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 							)
 
 						';
-			$unread_messages = (int)$this->db->GetOne($query, $ph);
+			$unread_messages = DB::select($query, $ph);
+            if ($unread_messages === FALSE ) {
+                $unread_messages = 0;
+            }else{
+                $unread_messages = (int) current(get_object_vars($unread_messages[0]));
+            }
 
 			$this->saveCache($unread_messages,$user_id);
 		}
@@ -240,7 +245,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		$pptsvf = new PayPeriodTimeSheetVerifyFactory();
 
 		$ph = array(
-					'user_id' => $user_id,
+					':user_id' => $user_id,
 					//'id' => $user_id,
 					);
 
@@ -287,7 +292,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 
 								(
 									(
-										c.user_id = ?
+										c.user_id = :user_id
 										'. $folder_sent_query .'
 										'. $folder_inbox_query_a .'
 										'. $folder_inbox_query_ab .'
@@ -329,18 +334,18 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'object_type' => $object_type,
-					'object_id' => $object_id,
-					'id' => $id,
-					'parent_id' => $id,
+					':object_type' => $object_type,
+					':object_id' => $object_id,
+					':id' => $id,
+					':parent_id' => $id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	object_type_id = ?
-						AND object_id = ?
-						AND ( id = ? OR parent_id = ? )
+					where	object_type_id = :object_type
+						AND object_id = :object_id
+						AND ( id = :id OR parent_id = :parent_id )
 						AND deleted = 0
 					ORDER BY id';
 		$query .= $this->getWhereSQL( $where );
@@ -357,15 +362,15 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		}
 
 		$ph = array(
-					'object_type' => $object_type,
-					'object_id' => $object_id,
+					':object_type' => $object_type,
+					':object_id' => $object_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .'
-					where	object_type_id = ?
-						AND object_id = ?
+					where	object_type_id = :object_type
+						AND object_id = :object_id
 						AND deleted = 0
 					ORDER BY id';
 		$query .= $this->getWhereSQL( $where );
