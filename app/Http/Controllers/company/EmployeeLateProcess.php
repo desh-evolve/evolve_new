@@ -43,15 +43,15 @@ class EmployeeLateProcess extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
+    }
+
+    public function index() {
 
         /*
         if ( !$permission->Check('user','employee_excel_upload') ) {
             $permission->Redirect( FALSE ); //Redirect
         }
         */
-    }
-
-    public function index() {
 
         $viewData['title'] = 'Employee Late Process';
 

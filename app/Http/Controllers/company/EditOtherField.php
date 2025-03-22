@@ -32,16 +32,16 @@ class EditOtherField extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-        /*
+    }
+
+    public function index($id = null) {
+		/*
         if ( !$permission->Check('other_field','enabled')
 				OR !( $permission->Check('other_field','edit') OR $permission->Check('other_field','edit_own') ) ) {
 
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index($id = null) {
 
         $viewData['title'] = 'Edit Other Field';
 

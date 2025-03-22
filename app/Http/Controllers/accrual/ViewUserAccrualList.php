@@ -38,16 +38,17 @@ class ViewUserAccrualList extends Controller
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
-        /*
+        
+    }
+
+	public function index() {
+		/*
         if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child')) {
 			$user_id = $user_id;
 		} else {
 			$user_id = $current_user->getId();
 		}
         */
-    }
-
-	public function index() {
 
         $viewData['title'] = 'Accrual List';
 

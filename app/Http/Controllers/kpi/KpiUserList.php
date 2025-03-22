@@ -39,16 +39,16 @@ class KpiUserList extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
+    }
+	
+    public function index() {
 
-        /*
-        if ( !$permission->Check('wage','enabled')
+		/*
+		if ( !$permission->Check('wage','enabled')
 				OR !( $permission->Check('wage','view') OR $permission->Check('wage','view_child') OR $permission->Check('wage','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
-        */
-    }
-
-    public function index() {
+		*/
 
         $viewData['title'] = 'Employee KPI List';
 

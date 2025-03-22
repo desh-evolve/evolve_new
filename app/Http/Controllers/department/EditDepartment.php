@@ -34,16 +34,17 @@ class EditDepartment extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index($id = null) {
+
         /*
         if ( !$permission->Check('department','enabled')
 				OR !( $permission->Check('department','view') OR $permission->Check('department','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index($id = null) {
-
+		
         $viewData['title'] = $id ? 'Edit Department' : 'Add Department';
 
 

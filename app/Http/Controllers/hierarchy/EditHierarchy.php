@@ -35,16 +35,17 @@ class EditHierarchy extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index() {
+
         /*
 		if ( !$permission->Check('hierarchy','enabled')
 				OR !( $permission->Check('hierarchy','edit') OR $permission->Check('hierarchy','edit_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index() {
-
+		
         $viewData['title'] = 'Edit Hierarchy';
 
 		extract	(FormVariables::GetVariables(

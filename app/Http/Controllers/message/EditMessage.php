@@ -1,76 +1,76 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4206 $
- * $Id: EditMessage.php 4206 2011-02-02 00:53:35Z ipso $
- * $Date: 2011-02-01 16:53:35 -0800 (Tue, 01 Feb 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\message;
 
-if ( !$permission->Check('message','enabled')
-		OR !( $permission->Check('message','edit') OR $permission->Check('message','edit_own') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualBalanceFactory;
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', __($title = 'New Message')); // See index.php
-BreadCrumb::setCrumb($title);
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Message\MessageControlFactory;
+use App\Models\Message\MessageRecipientFactory;
+use App\Models\Message\MessageSenderFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'filter_user_id',
-												'data',
-												) ) );
+class EditMessage extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$mcf = new MessageControlFactory();
-$mrf = new MessageRecipientFactory();
-$msf = new MessageSenderFactory();
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit_message':
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-		$redirect = TRUE;
-		//Make sure the only array entry isn't 0 => 0;
-		if ( is_array($filter_user_id) AND count($filter_user_id) > 0 AND ( isset($filter_user_id[0]) AND $filter_user_id[0] != 0 ) ) {
-			$mcf->StartTransaction();
+    }
 
-			$mcf = new MessageControlFactory();
-			$mcf->setFromUserId( $current_user->getId() );
-			$mcf->setToUserId( $filter_user_id );
-			$mcf->setObjectType( 5 );
-			$mcf->setObject( $current_user->getId() );
-			$mcf->setParent( 0 );
-			$mcf->setSubject( $data['subject'] );
-			$mcf->setBody( $data['body'] );
-
-			if ( $mcf->isValid() ) {
-				$mcf->Save();
-
-				$mcf->CommitTransaction();
-				Redirect::Page( URLBuilder::getURL( NULL, 'UserMessageList.php') );
-				break;
-			}
-			$mcf->FailTransaction();
-		} else {
-			$mcf->Validator->isTrue(	'to',
-									FALSE,
-									_('Please select at least one recipient') );
+    public function index() {
+		
+        /*
+        if ( !$permission->Check('message','enabled')
+				OR !( $permission->Check('message','edit') OR $permission->Check('message','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
-	default:
+        */
+		
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'filter_user_id',
+				'data',
+			) 
+		) );
+		
+		$mcf = new MessageControlFactory();
+		$mrf = new MessageRecipientFactory();
+		$msf = new MessageSenderFactory();
+
+        $viewData['title'] = 'New Message';
+
+
 		if ( $permission->Check('message','send_to_any') ) {
 			$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE);
 			$data['user_options'] = Misc::arrayDiffByKey( (array)$filter_user_id, $user_options );
@@ -103,14 +103,58 @@ switch ($action) {
 		}
 
 
-		$smarty->assign_by_ref('data', $data);
-		$smarty->assign_by_ref('filter_user_options', $filter_user_options);
-		$smarty->assign_by_ref('filter_user_id', $filter_user_id);
+		$viewData['data'] = $data;
+		$viewData['filter_user_options'] = $filter_user_options;
+		$viewData['filter_user_id'] = $filter_user_id;
+		$viewData['mcf'] = $mcf;
 
-		break;
+        return view('message/EditMessage', $viewData);
+
+    }
+
+	public function submit_message(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'filter_user_id',
+				'data',
+			) 
+		) );
+
+		$mcf = new MessageControlFactory();
+		
+		//Debug::setVerbosity(11);
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$redirect = TRUE;
+		//Make sure the only array entry isn't 0 => 0;
+		if ( is_array($filter_user_id) AND count($filter_user_id) > 0 AND ( isset($filter_user_id[0]) AND $filter_user_id[0] != 0 ) ) {
+			$mcf->StartTransaction();
+
+			$mcf = new MessageControlFactory();
+			$mcf->setFromUserId( $current_user->getId() );
+			$mcf->setToUserId( $filter_user_id );
+			$mcf->setObjectType( 5 );
+			$mcf->setObject( $current_user->getId() );
+			$mcf->setParent( 0 );
+			$mcf->setSubject( $data['subject'] );
+			$mcf->setBody( $data['body'] );
+
+			if ( $mcf->isValid() ) {
+				$mcf->Save();
+
+				$mcf->CommitTransaction();
+				Redirect::Page( URLBuilder::getURL( NULL, 'UserMessageList.php') );
+			}
+			$mcf->FailTransaction();
+		} else {
+			$mcf->Validator->isTrue(	'to',
+									FALSE,
+									_('Please select at least one recipient') );
+		}
+	}
 }
 
-$smarty->assign_by_ref('mcf', $mcf);
 
-$smarty->display('message/EditMessage.tpl');
 ?>

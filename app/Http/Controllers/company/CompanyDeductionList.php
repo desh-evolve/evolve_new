@@ -30,16 +30,18 @@ class CompanyDeductionList extends Controller
         $this->permission = View::shared('permission');
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
-        /*
+        
+    }
+
+    public function index() {
+
+		/*
         if ( !$permission->Check('company_tax_deduction','enabled')
 				OR !( $permission->Check('company_tax_deduction','view') OR $permission->Check('company_tax_deduction','view_own') ) ) {
 
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index() {
 
         $viewData['title'] = 'Tax / Deduction List';
 

@@ -1,107 +1,78 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditPayStubAmendment.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('pay_stub_amendment','enabled')
-		OR !( $permission->Check('pay_stub_amendment','edit') OR $permission->Check('pay_stub_amendment','edit_own') ) ) {
+namespace App\Http\Controllers\pay_stub;
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualBalanceFactory;
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', __($title = 'Edit Pay Stub Amendment')); // See index.php
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'user_id',
-												'pay_stub_amendment_data'
-												) ) );
-if ( isset($pay_stub_amendment_data) ) {
-	if ( $pay_stub_amendment_data['effective_date'] != '' ) {
-		$pay_stub_amendment_data['effective_date'] = TTDate::parseDateTime($pay_stub_amendment_data['effective_date']);
-	}
-}
+class CurrencyList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$psaf = new PayStubAmendmentFactory();
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		//Debug::setVerbosity( 11 );
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-		$psaf->StartTransaction();
+    }
 
-		$fail_transaction = FALSE;
-		foreach( $pay_stub_amendment_data['filter_user_id'] as $user_id ) {
-			$psaf->setId($pay_stub_amendment_data['id']);
-			$psaf->setUser( $user_id );
-			$psaf->setPayStubEntryNameId($pay_stub_amendment_data['pay_stub_entry_name_id']);
-			$psaf->setStatus($pay_stub_amendment_data['status_id']);
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_stub_amendment','enabled')
+				OR !( $permission->Check('pay_stub_amendment','edit') OR $permission->Check('pay_stub_amendment','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
 
-			$psaf->setType( $pay_stub_amendment_data['type_id'] );
+        $viewData['title'] = 'Accrual List';
 
-			if ( $pay_stub_amendment_data['type_id'] == 10 ) {
-				$psaf->setRate($pay_stub_amendment_data['rate']);
-				$psaf->setUnits($pay_stub_amendment_data['units']);
-				if ( isset($pay_stub_amendment_data['amount']) ) {
-					$psaf->setAmount($pay_stub_amendment_data['amount']);
-				}
-			} else {
-				$psaf->setPercentAmount( $pay_stub_amendment_data['percent_amount'] );
-				$psaf->setPercentAmountEntryNameId( $pay_stub_amendment_data['percent_amount_entry_name_id'] );
-			}
-
-			if ( isset($pay_stub_amendment_data['ytd_adjustment']) ) {
-				$psaf->setYTDAdjustment(TRUE);
-			} else {
-				$psaf->setYTDAdjustment(FALSE);
-			}
-
-			$psaf->setDescription($pay_stub_amendment_data['description']);
-
-			$psaf->setEffectiveDate( $pay_stub_amendment_data['effective_date'] );
-
-			//Authorize them all for now.
-			$psaf->setAuthorized(TRUE);
-
-			if ( $psaf->isValid() ) {
-				if ( $psaf->Save() === FALSE ) {
-					$fail_transaction = TRUE;
-					break;
-				}
-			} else {
-				$fail_transaction = TRUE;
-				break;
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'user_id',
+				'pay_stub_amendment_data'
+			) 
+		) );
+		
+		if ( isset($pay_stub_amendment_data) ) {
+			if ( $pay_stub_amendment_data['effective_date'] != '' ) {
+				$pay_stub_amendment_data['effective_date'] = TTDate::parseDateTime($pay_stub_amendment_data['effective_date']);
 			}
 		}
-
-		if ( $fail_transaction == FALSE ) {
-			//$pf->FailTransaction();
-			$psaf->CommitTransaction();
-
-			Redirect::Page( URLBuilder::getURL( array('user_id' => $user_id), 'PayStubAmendmentList.php') );
-			break;
-		} else {
-			$psaf->FailTransaction();
-		}
-	default:
-		BreadCrumb::setCrumb($title);
+		
+		$psaf = new PayStubAmendmentFactory();
 
 		if ( isset($id) ) {
 			$psalf = new PayStubAmendmentListFactory();
@@ -172,14 +143,14 @@ switch ($action) {
 
 		$status_options = Option::getByArray( $status_options_filter, $psaf->getOptions('status') );
 		$pay_stub_amendment_data['status_options'] = $status_options;
-
-		$pseallf = new PayStubEntryAccountLinkListFactory();
+ 
+		$pseallf = new PayStubEntryAccountLinkListFactory(); 
 		$pseallf->getByCompanyId( $current_company->getId() );
 		if ( $pseallf->getRecordCount() > 0 ) {
 			$net_pay_psea_id = $pseallf->getCurrent()->getTotalNetPay();
 		}
 
-		$psealf = new PayStubEntryAccountListFactory();
+		$psealf = new PayStubEntryAccountListFactory(); 
 		$pay_stub_amendment_data['pay_stub_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50,60,65) );
 		$pay_stub_amendment_data['percent_amount_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50,60,65) );
 		if ( isset($net_pay_psea_id) ) {
@@ -194,17 +165,85 @@ switch ($action) {
 
 		$smarty->assign_by_ref('pay_stub_amendment_data', $pay_stub_amendment_data);
 
-/*
-		$ulf = new UserListFactory();
-		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
-		$user_data = $ulf->getCurrent();
+		/*
+				$ulf = new UserListFactory();
+				$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
+				$user_data = $ulf->getCurrent();
 
-		$smarty->assign_by_ref('user_data', $user_data);
-*/
-		break;
+				$smarty->assign_by_ref('user_data', $user_data);
+		*/
+
+		$smarty->assign_by_ref('psaf', $psaf);
+
+		$smarty->display('pay_stub_amendment/EditPayStubAmendment.tpl');
+
+        return view('accrual/ViewUserAccrualList', $viewData);
+
+    }
+
+	public function submit(){
+		$psaf = new PayStubAmendmentFactory();
+
+		//Debug::setVerbosity( 11 );
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$psaf->StartTransaction();
+
+		$fail_transaction = FALSE;
+		foreach( $pay_stub_amendment_data['filter_user_id'] as $user_id ) {
+			$psaf->setId($pay_stub_amendment_data['id']);
+			$psaf->setUser( $user_id );
+			$psaf->setPayStubEntryNameId($pay_stub_amendment_data['pay_stub_entry_name_id']);
+			$psaf->setStatus($pay_stub_amendment_data['status_id']);
+
+			$psaf->setType( $pay_stub_amendment_data['type_id'] );
+
+			if ( $pay_stub_amendment_data['type_id'] == 10 ) {
+				$psaf->setRate($pay_stub_amendment_data['rate']);
+				$psaf->setUnits($pay_stub_amendment_data['units']);
+				if ( isset($pay_stub_amendment_data['amount']) ) {
+					$psaf->setAmount($pay_stub_amendment_data['amount']);
+				}
+			} else {
+				$psaf->setPercentAmount( $pay_stub_amendment_data['percent_amount'] );
+				$psaf->setPercentAmountEntryNameId( $pay_stub_amendment_data['percent_amount_entry_name_id'] );
+			}
+
+			if ( isset($pay_stub_amendment_data['ytd_adjustment']) ) {
+				$psaf->setYTDAdjustment(TRUE);
+			} else {
+				$psaf->setYTDAdjustment(FALSE);
+			}
+
+			$psaf->setDescription($pay_stub_amendment_data['description']);
+
+			$psaf->setEffectiveDate( $pay_stub_amendment_data['effective_date'] );
+
+			//Authorize them all for now.
+			$psaf->setAuthorized(TRUE);
+
+			if ( $psaf->isValid() ) {
+				if ( $psaf->Save() === FALSE ) {
+					$fail_transaction = TRUE;
+					break;
+				}
+			} else {
+				$fail_transaction = TRUE;
+				break;
+			}
+		}
+
+		if ( $fail_transaction == FALSE ) {
+			//$pf->FailTransaction();
+			$psaf->CommitTransaction();
+
+			Redirect::Page( URLBuilder::getURL( array('user_id' => $user_id), 'PayStubAmendmentList.php') );
+		} else {
+			$psaf->FailTransaction();
+		}
+	}
 }
 
-$smarty->assign_by_ref('psaf', $psaf);
 
-$smarty->display('pay_stub_amendment/EditPayStubAmendment.tpl');
+
 ?>

@@ -32,16 +32,18 @@ class WageGroupList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-        /*
+
+    }
+
+    public function index() {
+		/*
         if ( !$permission->Check('wage','enabled')
 				OR !( $permission->Check('wage','view') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
 
         */
-    }
 
-    public function index() {
 		$current_company = $this->currentCompany;
         $viewData['title'] = 'Wage Group List';
 

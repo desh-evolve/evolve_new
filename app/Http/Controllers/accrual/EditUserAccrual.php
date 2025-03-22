@@ -32,16 +32,16 @@ class EditUserAccrual extends Controller
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
+    }
+
+    public function index($id = null) {
         /*
         if ( !$permission->Check('accrual','enabled')
                 OR !( $permission->Check('accrual','edit') OR $permission->Check('accrual','edit_own') OR $permission->Check('accrual','edit_child') ) ) {
             $permission->Redirect( FALSE ); //Redirect
         }
         */
-    }
-
-    public function index($id = null)
-    {
+        
         extract	(FormVariables::GetVariables( 
             array	(
                 'action',

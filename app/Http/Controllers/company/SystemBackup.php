@@ -28,16 +28,17 @@ class SystemBackup extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+
+    }
+
+    public function index() {
         /*
         if ( !$permission->Check('company','enabled')
                 OR !( $permission->Check('wage','view') ) ) {
             $permission->Redirect( FALSE ); //Redirect
         }
         */
-    }
-
-    public function index() {
-
+        
         $viewData['title'] = 'System Backup';
 
         extract	(FormVariables::GetVariables(

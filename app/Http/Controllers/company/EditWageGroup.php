@@ -32,15 +32,16 @@ class EditWageGroup extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-        /*
+       
+    }
+
+    public function index($id = null) {
+ 		/*
         if ( !$permission->Check('wage','enabled')
 				OR !( $permission->Check('wage','edit') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index($id = null) {
 
         $viewData['title'] = 'Edit Wage Group';
 

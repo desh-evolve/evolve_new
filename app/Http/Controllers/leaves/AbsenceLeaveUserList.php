@@ -34,16 +34,16 @@ class AbsenceLeaveUserList extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
+    }
+	
+    public function index() {
 
-        /*
-        if ( !$permission->Check('leaves','enabled')
+		/*
+		if ( !$permission->Check('leaves','enabled')
 				OR !( $permission->Check('leaves','view') OR $permission->Check('leaves','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
-        */
-    }
-
-    public function index() {
+		*/
 
         $viewData['title'] = 'Leave management';
 

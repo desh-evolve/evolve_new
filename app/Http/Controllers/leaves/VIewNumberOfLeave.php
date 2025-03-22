@@ -1,112 +1,117 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5459 $
- * $Id: EditCompanyDeduction.php 5459 2011-11-04 21:40:55Z ipso $
- * $Date: 2011-11-04 14:40:55 -0700 (Fri, 04 Nov 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-/*
-if ( !$permission->Check('accrual','view')
-		OR (  $permission->Check('accrual','view_own') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
-*/
+namespace App\Http\Controllers\leaves;
 
-$smarty->assign('title', __($title = 'Apply Employee Leaves')); // See index.php
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data',
-                                                                                                'filter_data'
-												) ) );
+use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
+use App\Models\Leaves\LeaveRequestListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use Illuminate\Support\Facades\View;
 
+class VIewNumberOfLeave extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$header_leave = array();
-$total_asign_leave = array();
-$total_taken_leave = array();
-$total_balance_leave = array();
+    }
 
-$alf = new AccrualListFactory();
+    public function index() {
 
-$lrlf = new LeaveRequestListFactory();
-$lrlf->getById($id);
-
-if($lrlf->getRecordCount() >0){
-
-    $arf = $lrlf->getCurrent();
-    
-   
-    
-$aplf = new AccrualPolicyListFactory();
-$aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
+      /*
+      if ( !$permission->Check('accrual','view')
+          OR (  $permission->Check('accrual','view_own') ) ) {
+        $permission->Redirect( FALSE ); //Redirect
+      } 
+      */
+      
+      $viewData['title'] = 'Apply Employee Leaves';
 
 
+      extract	(FormVariables::GetVariables(
+          array	(
+            'action',
+            'id',
+            'data',
+            'filter_data'
+          ) 
+      ) );
+      
+      $header_leave = array();
+      $total_asign_leave = array();
+      $total_taken_leave = array();
+      $total_balance_leave = array();
+      
+      $alf = new AccrualListFactory();
+      
+      $lrlf = new LeaveRequestListFactory();
 
-foreach($aplf as $apf){
- 
-    $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($current_company->getId(),$arf->getUser(),$apf->getId(),30);
-    
-    
-    $header_leave[]['name']=$apf->getName();
+      $lrlf->getById($id);
+      
+        if($lrlf->getRecordCount() >0){
+      
+          $arf = $lrlf->getCurrent();
+          
+          $aplf = new AccrualPolicyListFactory();
+          $aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
+          
+          foreach($aplf->rs as $apf){
+            $aplf->data = (array)$apf;
+            $apf = $aplf;
+          
+              $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($current_company->getId(),$arf->getUser(),$apf->getId(),30);
+              
+              $header_leave[]['name']=$apf->getName();
+                      
+              if($alf->getRecordCount() > 0) {
+                $af= $alf->getCurrent();
+                $total_asign_leave[]['asign'] =  $af->getAmount()/28800;
+              } else {
+                  $total_asign_leave[]['asign'] = 0;
+              }
+          
+              $ttotal =  $alf->getSumByUserIdAndAccrualPolicyId($arf->getUser(),$apf->getId());
             
-    if($alf->getRecordCount() > 0)
-    {
-       $af= $alf->getCurrent();
-       $total_asign_leave[]['asign'] =  $af->getAmount()/28800;
-    }
-    else{
-        $total_asign_leave[]['asign'] = 0;
-    }
+              if($alf->getRecordCount() > 0) {
+                $af= $alf->getCurrent();
+                $total_taken_leave[]['taken'] =   ($af->getAmount()/28800)-($ttotal/28800);
+                $total_balance_leave[]['balance'] = ($ttotal/28800);
+              } else {
+                  $total_taken_leave[]['taken'] = 0;
+                  $total_balance_leave[]['balance'] = 0;
+              }
+              
+          } 
+      
+        }
+      
+        $viewData['total_asign_leave'] = $total_asign_leave;
+        $viewData['total_taken_leave'] = $total_taken_leave;
+        $viewData['total_balance_leave'] = $total_balance_leave;
+        $viewData['header_leave'] = $header_leave;
+        $viewData['data'] = $data;
+        $viewData['user'] = $current_user;
 
+        return view('leaves/VIewNumberOfLeave', $viewData);
 
-    
-  $ttotal =  $alf->getSumByUserIdAndAccrualPolicyId($arf->getUser(),$apf->getId());
-  
-     
-    if($alf->getRecordCount() > 0)
-    {
-       $af= $alf->getCurrent();
-       $total_taken_leave[]['taken'] =   ($af->getAmount()/28800)-($ttotal/28800);
-       $total_balance_leave[]['balance'] = ($ttotal/28800);
     }
-    else{
-        $total_taken_leave[]['taken'] = 0;
-         $total_balance_leave[]['balance'] = 0;
-    }
-   //  print_r($ttotal);
-  // print_r('rr');
-    
 }
 
-}
-//print_r($total_taken_leave);
-//print_r($total_balance_leave);
-
-//$data['no_days'] = '';
-$smarty->assign_by_ref('total_asign_leave', $total_asign_leave);
-$smarty->assign_by_ref('total_taken_leave', $total_taken_leave);
-$smarty->assign_by_ref('total_balance_leave', $total_balance_leave);
-$smarty->assign_by_ref('header_leave', $header_leave);
-
-$smarty->assign_by_ref('data', $data);
-$smarty->assign_by_ref('user', $current_user);
-
-//$current_user->getId()
-
-$smarty->display('leaves/VIewNumberOfLeave.tpl');
 
 ?>

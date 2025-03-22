@@ -32,16 +32,17 @@ class HierarchyControlList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index() {
+
         /*
         if ( !$permission->Check('hierarchy','enabled')
 				OR !( $permission->Check('hierarchy','view') OR $permission->Check('hierarchy','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index() {
-
+		
         $viewData['title'] = 'Hierarchy List';
 
 		extract	(FormVariables::GetVariables(

@@ -36,16 +36,17 @@ class EditDepartmentBranchUser extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index() {
+
         /*
         if ( !$permission->Check('department','enabled')
 				OR !( $permission->Check('department','assign') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index() {
-
+		
         $viewData['title'] = 'Department Employees';
 
 		extract	(FormVariables::GetVariables(

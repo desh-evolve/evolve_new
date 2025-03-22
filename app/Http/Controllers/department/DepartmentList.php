@@ -32,16 +32,17 @@ class DepartmentList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index() {
+
         /*
         if ( !$permission->Check('department','enabled')
 				OR !( $permission->Check('department','view') OR $permission->Check('department','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index() {
-
+		
         $viewData['title'] = 'Department List';
 
 		extract	(FormVariables::GetVariables(

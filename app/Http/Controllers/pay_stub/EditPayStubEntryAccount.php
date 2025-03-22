@@ -1,66 +1,60 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditPayStubEntryAccount.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('pay_stub_account','enabled')
-		OR !( $permission->Check('pay_stub_account','edit') OR $permission->Check('pay_stub_account','edit_own') ) ) {
+namespace App\Http\Controllers\pay_stub;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\PayStub\PayStubEntryAccountFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Edit Pay Stub Account')); // See index.php
+class EditPayStubEntryAccount extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$pseaf = new PayStubEntryAccountFactory();
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-		//Debug::setVerbosity(11);
+    }
 
-		$pseaf->setId( $data['id'] );
-		$pseaf->setCompany( $current_company->getId() );
-		$pseaf->setStatus( $data['status_id'] );
-		$pseaf->setType( $data['type_id'] );
-		$pseaf->setName( $data['name'] );
-		$pseaf->setOrder( $data['order'] );
-		$pseaf->setAccrual( $data['accrual_id'] );
-		$pseaf->setDebitAccount( $data['debit_account'] );
-		$pseaf->setCreditAccount( $data['credit_account'] );
-
-		if ( $pseaf->isValid() ) {
-			$pseaf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'PayStubEntryAccountList.php') );
-
-			break;
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_stub_account','enabled')
+				OR !( $permission->Check('pay_stub_account','edit') OR $permission->Check('pay_stub_account','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-	default:
+        $viewData['title'] = 'Edit Pay Stub Account';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data'
+			) 
+		) );
+		
+		$pseaf = new PayStubEntryAccountFactory();
+
 		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
 
 			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getById($id);
@@ -97,10 +91,39 @@ switch ($action) {
 
 		$smarty->assign_by_ref('data', $data);
 
-		break;
+
+		$smarty->assign_by_ref('pseaf', $pseaf);
+
+		$smarty->display('pay_stub/EditPayStubEntryAccount.tpl');
+
+        return view('accrual/ViewUserAccrualList', $viewData);
+
+    }
+
+	public function submit(){
+		$pseaf = new PayStubEntryAccountFactory();
+
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+		//Debug::setVerbosity(11);
+
+		$pseaf->setId( $data['id'] );
+		$pseaf->setCompany( $current_company->getId() );
+		$pseaf->setStatus( $data['status_id'] );
+		$pseaf->setType( $data['type_id'] );
+		$pseaf->setName( $data['name'] );
+		$pseaf->setOrder( $data['order'] );
+		$pseaf->setAccrual( $data['accrual_id'] );
+		$pseaf->setDebitAccount( $data['debit_account'] );
+		$pseaf->setCreditAccount( $data['credit_account'] );
+
+		if ( $pseaf->isValid() ) {
+			$pseaf->Save();
+
+			Redirect::Page( URLBuilder::getURL( NULL, 'PayStubEntryAccountList.php') );
+
+		}
+
+	}
 }
 
-$smarty->assign_by_ref('pseaf', $pseaf);
-
-$smarty->display('pay_stub/EditPayStubEntryAccount.tpl');
 ?>

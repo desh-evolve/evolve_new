@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\leaves;
+namespace App\Http\Controllers\pay_stub;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accrual\AccrualBalanceFactory;
@@ -41,6 +41,9 @@ class CurrencyList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index() {
         /*
         if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child')) {
             $user_id = $user_id;
@@ -48,9 +51,6 @@ class CurrencyList extends Controller
             $user_id = $current_user->getId();
         }
         */
-    }
-
-    public function index() {
 
         $viewData['title'] = 'Accrual List';
 

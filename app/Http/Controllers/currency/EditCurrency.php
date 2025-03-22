@@ -31,16 +31,18 @@ class EditCurrency extends Controller
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
+    }
+
+    public function index($id = null)
+    {
+        
         /*
         if (!$this->permission->Check('currency', 'enabled')
             || !($this->permission->Check('currency', 'edit') || $this->permission->Check('currency', 'edit_own'))) {
             $this->permission->Redirect(FALSE); // Redirect
         }
         */
-    }
-
-    public function index($id = null)
-    {
+        
         $current_company = $this->company;
 
         $cf = new CurrencyFactory();

@@ -1,88 +1,81 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: UserMessageList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\message;
 
-if ( !$permission->Check('message','enabled')
-		OR !( $permission->Check('message','view') OR $permission->Check('message','view_own') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use App\Models\Accrual\AccrualBalanceFactory;
+use App\Models\Accrual\AccrualBalanceListFactory;
+use App\Models\Accrual\AccrualFactory;
+use App\Models\Accrual\AccrualListFactory;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', __($title = 'Message List')); // See index.php
-BreadCrumb::setCrumb($title);
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Message\MessageControlListFactory;
+use App\Models\Message\MessageFactory;
+use App\Models\Message\MessageRecipientListFactory;
+use App\Models\Message\MessageSenderListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'filter_folder_id',
-												'ids',
-												) ) );
+class CurrencyList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$mcf = new MessageFactory();
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'new_message':
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditMessage.php', FALSE) );
-		break;
-	case 'delete':
-	case 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+        
+    }
+
+    public function index() {
+		/*
+        if ( !$permission->Check('message','enabled')
+				OR !( $permission->Check('message','view') OR $permission->Check('message','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		if ( is_array($ids) AND count($ids) > 0 AND ( $permission->Check('message','delete') OR $permission->Check('message','delete_own') ) ) {
-			$mcf->StartTransaction();
+        $viewData['title'] = 'Message List';
 
-			Debug::text('Filter Folder ID: '. $filter_folder_id, __FILE__, __LINE__, __METHOD__,9);
-			if ( $filter_folder_id == 10 ) { //Inbox
-				$mrlf = new MessageRecipientListFactory();
-				$mrlf->getByCompanyIdAndUserIdAndMessageSenderId( $current_company->getId(), $current_user->getId(), $ids );
-				foreach ($mrlf as $m_obj) {
-					$m_obj->setDeleted($delete);
-					$m_obj->Save();
-				}
-			} else { //Sent
-				$mslf = new MessageSenderListFactory();
-				$mslf->getByCompanyIdAndUserIdAndId( $current_company->getId(), $current_user->getId(), $ids );
-				foreach ($mslf as $m_obj) {
-					$m_obj->setDeleted($delete);
-					$m_obj->Save();
-				}
-			}
-			//$mcf->FailTransaction();
-			$mcf->CommitTransaction();
-
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'filter_folder_id',
+				'ids',
+			) 
+		) );
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
+		
+		$mcf = new MessageFactory();		
 
-		Redirect::Page( URLBuilder::getURL( array('filter_folder_id' => $filter_folder_id ), 'UserMessageList.php') );
-
-		break;
-	default:
 		$mclf = new MessageControlListFactory();
 
 		$folder_options = $mclf->getOptions('folder');
@@ -102,7 +95,10 @@ switch ($action) {
 		if ( $mclf->getRecordCount() > 0 ) {
 			$object_name_options = $mclf->getOptions('object_name');
 
-			foreach ($mclf as $message) {
+			foreach ($mclf->rs as $message) {
+				$mclf->data = (array)$message;
+				$message = $mclf;
+
 				//Get user info
 				$user_id = NULL;
 				$user_full_name = NULL;
@@ -139,21 +135,87 @@ switch ($action) {
 			}
 		}
 
-		$smarty->assign_by_ref('messages', $messages);
-		$smarty->assign_by_ref('require_ack', $require_ack);
-		$smarty->assign_by_ref('show_ack_column', $show_ack_column);
+		
+		$viewData['messages'] = $messages;
+		$viewData['require_ack'] = $require_ack;
+		$viewData['show_ack_column'] = $show_ack_column;
+		
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+		$viewData['paging_data'] = $pager->getPageVariables();
+		
+		$viewData['mf'] = $mf;
+		$viewData['folder_options'] = $folder_options;
+		$viewData['filter_folder_id'] = $filter_folder_id;
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+        return view('message/UserMessageList', $viewData);
 
-		break;
+    }
+
+	public function new_message(){
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditMessage.php', FALSE) );
+	}
+
+	public function delete(){
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'filter_folder_id',
+				'ids',
+			) 
+		) );
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
+		}
+		
+		$mcf = new MessageFactory();
+
+		
+		if ( strtolower($action) == 'delete' ) {
+			$delete = TRUE;
+		} else {
+			$delete = FALSE;
+		}
+
+		if ( is_array($ids) AND count($ids) > 0 AND ( $permission->Check('message','delete') OR $permission->Check('message','delete_own') ) ) {
+			$mcf->StartTransaction();
+
+			Debug::text('Filter Folder ID: '. $filter_folder_id, __FILE__, __LINE__, __METHOD__,9);
+			if ( $filter_folder_id == 10 ) { //Inbox
+				$mrlf = new MessageRecipientListFactory();
+				$mrlf->getByCompanyIdAndUserIdAndMessageSenderId( $current_company->getId(), $current_user->getId(), $ids );
+				foreach ($mrlf->rs as $m_obj) {
+					$mrlf->data = (array)$m_obj;
+					$m_obj = $mrlf;
+					$m_obj->setDeleted($delete);
+					$m_obj->Save();
+				}
+			} else { //Sent
+				$mslf = new MessageSenderListFactory();
+				$mslf->getByCompanyIdAndUserIdAndId( $current_company->getId(), $current_user->getId(), $ids );
+				foreach ($mslf->rs as $m_obj) {
+					$mrlf->data = (array)$m_obj;
+					$m_obj = $mrlf;
+					$m_obj->setDeleted($delete);
+					$m_obj->Save();
+				}
+			}
+			//$mcf->FailTransaction();
+			$mcf->CommitTransaction();
+
+		}
+
+		Redirect::Page( URLBuilder::getURL( array('filter_folder_id' => $filter_folder_id ), 'UserMessageList.php') );
+	}
 }
 
-$smarty->assign_by_ref('mf', $mf);
-$smarty->assign_by_ref('folder_options', $folder_options );
-$smarty->assign_by_ref('filter_folder_id', $filter_folder_id );
 
-$smarty->display('message/UserMessageList.tpl');
+
+
 ?>

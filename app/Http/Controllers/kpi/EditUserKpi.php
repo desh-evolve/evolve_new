@@ -38,16 +38,17 @@ class EditUserKpi extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index() {
+
         /*
         if ( !$permission->Check('wage','enabled')
                 OR !( $permission->Check('wage','edit') OR $permission->Check('wage','edit_child') OR $permission->Check('wage','edit_own') OR $permission->Check('wage','add') ) ) {
             $permission->Redirect( FALSE ); //Redirect
         }
         */
-    }
-
-    public function index() {
-
+        
         $viewData['title'] = 'Edit Key Performance Indicator';
 
         extract	(FormVariables::GetVariables(

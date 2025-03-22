@@ -37,14 +37,14 @@ class EmployeeCsvUpload extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-        /*
+    }
+
+    public function index($id = null) {
+ 		/*
         if ( !$permission->Check('user','employee_excel_upload') ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index($id = null) {
 
 		$cf = new CompanyFactory();
 

@@ -1,66 +1,121 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: PayStubEntryAccountList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('pay_stub_account','enabled')
-		OR !( $permission->Check('pay_stub_account','view') OR $permission->Check('pay_stub_account','view_own') ) ) {
+namespace App\Http\Controllers\pay_stub;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\PayStub\PayStubEntryAccountFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Pay Stub Account List')); // See index.php
+class PayStubEntryAccountList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+    }
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_stub_account','enabled')
+				OR !( $permission->Check('pay_stub_account','view') OR $permission->Check('pay_stub_account','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add_presets':
+        $viewData['title'] = 'Pay Stub Account List';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
+		}
+
+		$psealf = new PayStubEntryAccountListFactory();
+		$psealf->getByCompanyId( $current_company->getId() );
+
+		$pager = new Pager($psealf);
+
+		$status_options = $psealf->getOptions('status');
+		$type_options = $psealf->getOptions('type');
+
+		foreach ($psealf as $psea_obj) {
+
+			$rows[] = array(
+				'id' => $psea_obj->getId(),
+				'status_id' => $psea_obj->getStatus(),
+				'status' => $status_options[$psea_obj->getStatus()],
+				'type_id' => $psea_obj->getType(),
+				'type' => $type_options[$psea_obj->getType()],
+				'name' => $psea_obj->getName(),
+				'ps_order' => $psea_obj->getOrder(),
+				'debit_account' => $psea_obj->getDebitAccount(),
+				'credit_account' => $psea_obj->getCreditAccount(),
+				'deleted' => $psea_obj->getDeleted()
+			);
+
+		}
+		$smarty->assign_by_ref('rows', $rows);
+
+		$smarty->assign_by_ref('sort_column', $sort_column );
+		$smarty->assign_by_ref('sort_order', $sort_order );
+
+		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+
+		$smarty->display('pay_stub/PayStubEntryAccountList.tpl');
+
+        return view('accrual/ViewUserAccrualList', $viewData);
+
+    }
+
+	public function add_presets(){
 		//Debug::setVerbosity(11);
 		PayStubEntryAccountFactory::addPresets( $current_company->getId() );
-
+		
 		Redirect::Page( URLBuilder::getURL( NULL, 'PayStubEntryAccountList.php') );
-	case 'add':
+	}
 
+	public function add(){
 		Redirect::Page( URLBuilder::getURL( NULL, 'EditPayStubEntryAccount.php', FALSE) );
+	}
 
-		break;
-	case 'delete':
-	case 'undelete':
+	public function delete(){
 		if ( strtolower($action) == 'delete' ) {
 			$delete = TRUE;
 		} else {
@@ -81,42 +136,8 @@ switch ($action) {
 
 		Redirect::Page( URLBuilder::getURL( NULL, 'PayStubEntryAccountList.php') );
 
-		break;
-	default:
-		BreadCrumb::setCrumb($title);
+	}
 
-		$psealf = new PayStubEntryAccountListFactory();
-		$psealf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($psealf);
-
-		$status_options = $psealf->getOptions('status');
-		$type_options = $psealf->getOptions('type');
-
-		foreach ($psealf as $psea_obj) {
-
-			$rows[] = array(
-								'id' => $psea_obj->getId(),
-								'status_id' => $psea_obj->getStatus(),
-								'status' => $status_options[$psea_obj->getStatus()],
-								'type_id' => $psea_obj->getType(),
-								'type' => $type_options[$psea_obj->getType()],
-								'name' => $psea_obj->getName(),
-								'ps_order' => $psea_obj->getOrder(),
-								'debit_account' => $psea_obj->getDebitAccount(),
-								'credit_account' => $psea_obj->getCreditAccount(),
-								'deleted' => $psea_obj->getDeleted()
-							);
-
-		}
-		$smarty->assign_by_ref('rows', $rows);
-
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		break;
 }
-$smarty->display('pay_stub/PayStubEntryAccountList.tpl');
+
 ?>

@@ -1,313 +1,134 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5457 $
- * $Id: PayStubList.php 5457 2011-11-04 20:49:58Z ipso $
- * $Date: 2011-11-04 13:49:58 -0700 (Fri, 04 Nov 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\pay_stub;
 
-if ( !$permission->Check('pay_stub','enabled')
-		OR !( $permission->Check('pay_stub','view') OR $permission->Check('pay_stub','view_own') OR $permission->Check('pay_stub','view_child') ) ) {
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use Illuminate\Http\Request;
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Pay Stub List')); // See index.php
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'form',
-												'page',
-												'filter_data',
-												'sort_column',
-												'sort_order',
-												'saved_search_id',
-												'filter_user_id',
-												'filter_pay_period_id',
-												'hide_employer_rows',
-												'export_type',
-												'id',
-												'ids',
-												) ) );
+class PayStubList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$columns = array(
-											'-1010-first_name' => _('First Name'),
-											'-1020-middle_name' => _('Middle Name'),
-											'-1030-last_name' => _('Last Name'),
-											'-1040-status' => _('Status'),
-											'-1070-start_date' => _('Start Date'),
-											'-1080-end_date' => _('End Date'),
-											'-1090-transaction_date' => _('Transaction Date'),
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
+
+    }
+
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_stub','enabled')
+				OR !( $permission->Check('pay_stub','view') OR $permission->Check('pay_stub','view_own') OR $permission->Check('pay_stub','view_child') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+
+        $viewData['title'] = 'Pay Stub List';
+
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'form',
+				'page',
+				'filter_data',
+				'sort_column',
+				'sort_order',
+				'saved_search_id',
+				'filter_user_id',
+				'filter_pay_period_id',
+				'hide_employer_rows',
+				'export_type',
+				'id',
+				'ids',
+			) 
+		) );
+		
+		$columns = array(
+			'-1010-first_name' => _('First Name'),
+			'-1020-middle_name' => _('Middle Name'),
+			'-1030-last_name' => _('Last Name'),
+			'-1040-status' => _('Status'),
+			'-1070-start_date' => _('Start Date'),
+			'-1080-end_date' => _('End Date'),
+			'-1090-transaction_date' => _('Transaction Date'),
+		);
+		
+		if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
+			//Default columns.
+			if ( $permission->Check('pay_stub','view') == TRUE OR $permission->Check('pay_stub','view_child')) {
+				$filter_data['columns'] = array(
+											'-1010-first_name',
+											'-1030-last_name',
+											'-1040-status',
+											'-1070-start_date',
+											'-1080-end_date',
+											'-1090-transaction_date',
 											);
-
-if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
-	//Default columns.
-	if ( $permission->Check('pay_stub','view') == TRUE OR $permission->Check('pay_stub','view_child')) {
-		$filter_data['columns'] = array(
-									'-1010-first_name',
-									'-1030-last_name',
-									'-1040-status',
-									'-1070-start_date',
-									'-1080-end_date',
-									'-1090-transaction_date',
-									);
-	} else {
-		$filter_data['columns'] = array(
-									'-1040-status',
-									'-1070-start_date',
-									'-1080-end_date',
-									'-1090-transaction_date',
-									);
-	}
-	if ( $sort_column == '' ) {
-		$sort_column = $filter_data['sort_column'] = 'transaction_date';
-		$sort_order = $filter_data['sort_order'] = 'desc';
-	}
-}
-
-$ugdlf = new UserGenericDataListFactory();
-$ugdf = new UserGenericDataFactory();
-$pplf = new PayPeriodListFactory();
-
-//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = new HierarchyListFactory();
-$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
-Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
-
-Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
-//Handle different actions for different forms.
-
-$action = Misc::findSubmitButton();
-if ( isset($form) AND $form != '' ) {
-	$action = strtolower($form.'_'.$action);
-} else {
-	$action = strtolower($action);
-}
-Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-switch ($action) {
-	case 'export':
-		//Debug::setVerbosity(11);
-		Debug::Text('aAction: View!', __FILE__, __LINE__, __METHOD__,10);
-		if ( isset($id) AND !isset($ids) ) {
-			$ids = array($id);
-		}
-
-		if ( count($ids) == 0 ) {
-			echo __("ERROR: No Items Selected!")."<br>\n";
-			exit;
-		}
-
-		if ( count($ids) > 0 ) {
-			$pslf = new PayStubListFactory();
-			if ( $permission->Check('pay_stub','view_child') ) {
-				$filter_data['permission_children_ids'] = $permission_children_ids;
-			}
-			if ( $permission->Check('pay_stub','view') == FALSE AND $permission->Check('pay_stub','view_own') == TRUE ) {
-				$filter_data['permission_children_ids'][] = $current_user->getId();
-			}
-			$filter_data['id'] = $ids;
-
-			$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
-
-			$output = $pslf->exportPayStub( $pslf, $export_type );
-			if ( $output !== FALSE ) {
-				if ( Debug::getVerbosity() < 11 ) {
-					if ( stristr( $export_type, 'cheque') ) {
-						Misc::FileDownloadHeader('checks_'. str_replace(array('/',',',' '), '_', TTDate::getDate('DATE', time() ) ) .'.pdf', 'application/pdf', strlen($output));
-					} else {
-						//Include file creation number in the exported file name, so the user knows what it is without opening the file,
-						//and can generate multiple files if they need to match a specific number.
-						$ugdlf = new UserGenericDataListFactory();
-						$ugdlf->getByCompanyIdAndScriptAndDefault( $current_company->getId(), 'PayStubFactory', TRUE );
-						if ( $ugdlf->getRecordCount() > 0 ) {
-							$ugd_obj = $ugdlf->getCurrent();
-							$setup_data = $ugd_obj->getData();
-						}
-
-						if ( isset($setup_data) ) {
-							$file_creation_number = $setup_data['file_creation_number']++;
-						} else {
-							$file_creation_number = 0;
-						}
-						Misc::FileDownloadHeader('eft_'. $file_creation_number .'_'. str_replace(array('/',',',' '), '_', TTDate::getDate('DATE', time() ) ) .'.txt', 'application/text', strlen($output));
-					}
-					echo $output;
-					//Debug::Display();
-					exit;
-				} else {
-					Debug::Display();
-				}
 			} else {
-				echo __("ERROR: No Data to Export!")."<br>\n";
-				exit;
+				$filter_data['columns'] = array(
+											'-1040-status',
+											'-1070-start_date',
+											'-1080-end_date',
+											'-1090-transaction_date',
+											);
+			}
+			if ( $sort_column == '' ) {
+				$sort_column = $filter_data['sort_column'] = 'transaction_date';
+				$sort_order = $filter_data['sort_order'] = 'desc';
 			}
 		}
-		break;
-	case 'view':
-		//Debug::setVerbosity(11);
-		Debug::Text('aAction: View!', __FILE__, __LINE__, __METHOD__,10);
-		if ( isset($id) AND !isset($ids) ) {
-			$ids = array($id);
-		}
-
-		if ( count(array($ids)) == 0 ) {
-			echo __("ERROR: No Items Selected!")."<br>\n";
-			exit;
-		}
-
-		if ( count($ids) > 0 ) {
-			$pslf = new PayStubListFactory();
-
-			if ( $permission->Check('pay_stub','view') == FALSE ) {
-				if ( $permission->Check('pay_stub','view_child') ) {
-					$filter_data['permission_children_ids'] = $permission_children_ids;
-				}
-				if ( $permission->Check('pay_stub','view_own') == TRUE ) {
-					$hide_employer_rows = TRUE;
-					$filter_data['permission_children_ids'][] = $current_user->getId();
-				}
-			}
-
-			$filter_data['id'] = $ids;
-
-			$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
-                        $output = $pslf->getDetailedAquaPayStub( $pslf, (bool)$hide_employer_rows );
-
-			if ( $output !== FALSE AND Debug::getVerbosity() < 11 ) {
-				Misc::FileDownloadHeader('pay_stub.pdf', 'application/pdf', strlen($output));
-				echo $output;
-				Debug::writeToLog();
-				exit;
-			} else {
-				echo __("ERROR: Pay stub not available, you may not have permissions to view this pay stub or it may be deleted!")."<br>\n";
-				exit;
-			}
-		}
-
-		break;
-	case 'delete':
-	case 'undelete':
-		//Debug::setVerbosity(11);
-		Debug::Text('bAction: Delete!', __FILE__, __LINE__, __METHOD__,10);
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
+		
+		$ugdlf = new UserGenericDataListFactory();
+		$ugdf = new UserGenericDataFactory();
+		$pplf = new PayPeriodListFactory();
+		
+		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
+		$hlf = new HierarchyListFactory();
+		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
+		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
+		
+		Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
+		//Handle different actions for different forms.
+		
+		$action = Misc::findSubmitButton();
+		if ( isset($form) AND $form != '' ) {
+			$action = strtolower($form.'_'.$action);
 		} else {
-			$delete = FALSE;
+			$action = strtolower($action);
 		}
-
-		if ( count($ids) == 0 ) {
-			echo __("ERROR: No Items Selected!")."<br>\n";
-			exit;
-		}
-
-		$pslf = new PayStubListFactory();
-
-		if ( is_array( $ids ) AND count($ids) > 0 ) {
-			foreach ($ids as $id) {
-				$pslf->getByCompanyIdAndId($current_company->getId(),$id);
-				foreach ($pslf as $pay_stub_obj) {
-					//Only delete pay stubs in OPEN/Post Adjustment pay periods.
-					//Also allow deleting pay stubs attached to a pay period that has been deleted.
-					//Make sure pay stub is NOT marked PAID before deleting.
-					if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) )
-							AND $pay_stub_obj->getStatus() != 40 ) { //Closed/Paid
-						$pay_stub_obj->setDeleted($delete);
-						$pay_stub_obj->Save();
-					} else {
-						Debug::Text('Not deleting pay stub: '. $pay_stub_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
-					}
-				}
-			}
-		}
-
-		Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
-
-		break;
-	case 'mark_paid':
-		//Debug::setVerbosity(11);
-		Debug::Text('bAction: Mark Paid!', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( count(array($ids)) == 0 ) {
-			echo __("ERROR: No Items Selected!")."<br>\n";
-			exit;
-		}
-
-		$pslf = new PayStubListFactory();
-
-		if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
-			if ( is_array( $ids ) AND count($ids) > 0 ) {
-				foreach ($ids as $id) {
-					$pslf->getById($id);
-					foreach ($pslf as $pay_stub_obj) {
-						//Only delete NEW pay stubs.!
-						if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) ) //Open/Adjustment
-								AND ( $pay_stub_obj->getStatus() == 10 OR $pay_stub_obj->getStatus() == 25 ) ) {
-							$pay_stub_obj->setStatus( 40 ); //Paid
-							$pay_stub_obj->Save();
-						}
-					}
-				}
-			}
-		}
-
-		//Redirect::Page( URLBuilder::getURL(NULL, 'PayStubList.php') );
-		Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
-
-		break;
-	case 'mark_unpaid':
-		//Debug::setVerbosity(11);
-		Debug::Text('bAction: Mark UnPaid!', __FILE__, __LINE__, __METHOD__,10);
-
-		if ( count(array($ids)) == 0 ) {
-			echo __("ERROR: No Items Selected!")."<br>\n";
-			exit;
-		}
-
-		$pslf = new PayStubListFactory();
-
-		if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
-			if ( is_array( $ids ) AND count($ids) > 0 ) {
-				foreach ($ids as $id) {
-					$pslf->getById($id);
-					foreach ($pslf as $pay_stub_obj) {
-						//Only delete pay stubs in OPEN/Post Adjustment pay periods.
-						if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) ) //Open/Adjustment
-								AND $pay_stub_obj->getStatus() == 40 ) { //Paid/Closed
-							$pay_stub_obj->setStatus( 25 ); //Open
-							$pay_stub_obj->Save();
-						}
-					}
-				}
-			}
-		}
-
-		//Redirect::Page( URLBuilder::getURL(NULL, 'PayStubList.php') );
-		Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
-
-		break;
-	case 'search_form_delete':
-	case 'search_form_update':
-	case 'search_form_save':
-	case 'search_form_clear':
-	case 'search_form_search':
-		Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
-
-		$saved_search_id = UserGenericDataFactory::searchFormDataHandler( $action, $filter_data, URLBuilder::getURL(NULL, 'PayStubList.php') );
-	default:
-		BreadCrumb::setCrumb($title);
 
 		extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, $sort_column ) );
 		Debug::Text('Sort Column: '. $sort_column, __FILE__, __LINE__, __METHOD__,10);
@@ -444,7 +265,225 @@ switch ($action) {
 
 		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
 
-		break;
+		$smarty->display('pay_stub/PayStubList.tpl');
+
+        return view('accrual/ViewUserAccrualList', $viewData);
+
+    }
+
+	public function export(){
+		//Debug::setVerbosity(11);
+		Debug::Text('aAction: View!', __FILE__, __LINE__, __METHOD__,10);
+		if ( isset($id) AND !isset($ids) ) {
+			$ids = array($id);
+		}
+
+		if ( count($ids) == 0 ) {
+			echo __("ERROR: No Items Selected!")."<br>\n";
+			exit;
+		}
+
+		if ( count($ids) > 0 ) {
+			$pslf = new PayStubListFactory();
+			if ( $permission->Check('pay_stub','view_child') ) {
+				$filter_data['permission_children_ids'] = $permission_children_ids;
+			}
+			if ( $permission->Check('pay_stub','view') == FALSE AND $permission->Check('pay_stub','view_own') == TRUE ) {
+				$filter_data['permission_children_ids'][] = $current_user->getId();
+			}
+			$filter_data['id'] = $ids;
+
+			$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
+
+			$output = $pslf->exportPayStub( $pslf, $export_type );
+			if ( $output !== FALSE ) {
+				if ( Debug::getVerbosity() < 11 ) {
+					if ( stristr( $export_type, 'cheque') ) {
+						Misc::FileDownloadHeader('checks_'. str_replace(array('/',',',' '), '_', TTDate::getDate('DATE', time() ) ) .'.pdf', 'application/pdf', strlen($output));
+					} else {
+						//Include file creation number in the exported file name, so the user knows what it is without opening the file,
+						//and can generate multiple files if they need to match a specific number.
+						$ugdlf = new UserGenericDataListFactory();
+						$ugdlf->getByCompanyIdAndScriptAndDefault( $current_company->getId(), 'PayStubFactory', TRUE );
+						if ( $ugdlf->getRecordCount() > 0 ) {
+							$ugd_obj = $ugdlf->getCurrent();
+							$setup_data = $ugd_obj->getData();
+						}
+
+						if ( isset($setup_data) ) {
+							$file_creation_number = $setup_data['file_creation_number']++;
+						} else {
+							$file_creation_number = 0;
+						}
+						Misc::FileDownloadHeader('eft_'. $file_creation_number .'_'. str_replace(array('/',',',' '), '_', TTDate::getDate('DATE', time() ) ) .'.txt', 'application/text', strlen($output));
+					}
+					echo $output;
+					//Debug::Display();
+					exit;
+				} else {
+					Debug::Display();
+				}
+			} else {
+				echo __("ERROR: No Data to Export!")."<br>\n";
+				exit;
+			}
+		}
+	}
+
+	public function view(){
+		//Debug::setVerbosity(11);
+		Debug::Text('aAction: View!', __FILE__, __LINE__, __METHOD__,10);
+		if ( isset($id) AND !isset($ids) ) {
+			$ids = array($id);
+		}
+
+		if ( count(array($ids)) == 0 ) {
+			echo __("ERROR: No Items Selected!")."<br>\n";
+			exit;
+		}
+
+		if ( count($ids) > 0 ) {
+			$pslf = new PayStubListFactory();
+
+			if ( $permission->Check('pay_stub','view') == FALSE ) {
+				if ( $permission->Check('pay_stub','view_child') ) {
+					$filter_data['permission_children_ids'] = $permission_children_ids;
+				}
+				if ( $permission->Check('pay_stub','view_own') == TRUE ) {
+					$hide_employer_rows = TRUE;
+					$filter_data['permission_children_ids'][] = $current_user->getId();
+				}
+			}
+
+			$filter_data['id'] = $ids;
+
+			$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
+						$output = $pslf->getDetailedAquaPayStub( $pslf, (bool)$hide_employer_rows );
+
+			if ( $output !== FALSE AND Debug::getVerbosity() < 11 ) {
+				Misc::FileDownloadHeader('pay_stub.pdf', 'application/pdf', strlen($output));
+				echo $output;
+				Debug::writeToLog();
+				exit;
+			} else {
+				echo __("ERROR: Pay stub not available, you may not have permissions to view this pay stub or it may be deleted!")."<br>\n";
+				exit;
+			}
+		}
+	}
+
+	public function delete(){
+		//Debug::setVerbosity(11);
+		Debug::Text('bAction: Delete!', __FILE__, __LINE__, __METHOD__,10);
+		if ( strtolower($action) == 'delete' ) {
+			$delete = TRUE;
+		} else {
+			$delete = FALSE;
+		}
+
+		if ( count($ids) == 0 ) {
+			echo __("ERROR: No Items Selected!")."<br>\n";
+			exit;
+		}
+
+		$pslf = new PayStubListFactory();
+
+		if ( is_array( $ids ) AND count($ids) > 0 ) {
+			foreach ($ids as $id) {
+				$pslf->getByCompanyIdAndId($current_company->getId(),$id);
+				foreach ($pslf as $pay_stub_obj) {
+					//Only delete pay stubs in OPEN/Post Adjustment pay periods.
+					//Also allow deleting pay stubs attached to a pay period that has been deleted.
+					//Make sure pay stub is NOT marked PAID before deleting.
+					if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) )
+							AND $pay_stub_obj->getStatus() != 40 ) { //Closed/Paid
+						$pay_stub_obj->setDeleted($delete);
+						$pay_stub_obj->Save();
+					} else {
+						Debug::Text('Not deleting pay stub: '. $pay_stub_obj->getId(), __FILE__, __LINE__, __METHOD__,10);
+					}
+				}
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
+
+	}
+
+	public function mark_paid(){
+		//Debug::setVerbosity(11);
+		Debug::Text('bAction: Mark Paid!', __FILE__, __LINE__, __METHOD__,10);
+
+		if ( count(array($ids)) == 0 ) {
+			echo __("ERROR: No Items Selected!")."<br>\n";
+			exit;
+		}
+
+		$pslf = new PayStubListFactory();
+
+		if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
+			if ( is_array( $ids ) AND count($ids) > 0 ) {
+				foreach ($ids as $id) {
+					$pslf->getById($id);
+					foreach ($pslf as $pay_stub_obj) {
+						//Only delete NEW pay stubs.!
+						if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) ) //Open/Adjustment
+								AND ( $pay_stub_obj->getStatus() == 10 OR $pay_stub_obj->getStatus() == 25 ) ) {
+							$pay_stub_obj->setStatus( 40 ); //Paid
+							$pay_stub_obj->Save();
+						}
+					}
+				}
+			}
+		}
+
+		//Redirect::Page( URLBuilder::getURL(NULL, 'PayStubList.php') );
+		Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
+
+	}
+
+	public function mark_unpaid(){
+		//Debug::setVerbosity(11);
+		Debug::Text('bAction: Mark UnPaid!', __FILE__, __LINE__, __METHOD__,10);
+
+		if ( count(array($ids)) == 0 ) {
+			echo __("ERROR: No Items Selected!")."<br>\n";
+			exit;
+		}
+
+		$pslf = new PayStubListFactory();
+
+		if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
+			if ( is_array( $ids ) AND count($ids) > 0 ) {
+				foreach ($ids as $id) {
+					$pslf->getById($id);
+					foreach ($pslf as $pay_stub_obj) {
+						//Only delete pay stubs in OPEN/Post Adjustment pay periods.
+						if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) ) //Open/Adjustment
+								AND $pay_stub_obj->getStatus() == 40 ) { //Paid/Closed
+							$pay_stub_obj->setStatus( 25 ); //Open
+							$pay_stub_obj->Save();
+						}
+					}
+				}
+			}
+		}
+
+		//Redirect::Page( URLBuilder::getURL(NULL, 'PayStubList.php') );
+		Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
+
+	}
+
+	public function search(){
+		Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
+
+		$saved_search_id = UserGenericDataFactory::searchFormDataHandler( $action, $filter_data, URLBuilder::getURL(NULL, 'PayStubList.php') );
+	}
+
+
 }
-$smarty->display('pay_stub/PayStubList.tpl');
+
+
+
+
 ?>
