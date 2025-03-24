@@ -109,10 +109,10 @@ class AccrualPolicyList extends Controller
     }
 
 	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditAccrualPolicy.php', FALSE) );
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditAccrualPolicy', FALSE) );
 	}
 
-	public function delete(){
+	public function delete($ids){
 		$current_company = $this->currentCompany;
 		$delete = TRUE;
 		$aplf = new AccrualPolicyListFactory();
@@ -135,7 +135,7 @@ class AccrualPolicyList extends Controller
 			$aplf->CommitTransaction();
 		}
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'AccrualPolicyList.php') );
+		Redirect::Page( URLBuilder::getURL( NULL, 'AccrualPolicyList') );
 
 	}
 

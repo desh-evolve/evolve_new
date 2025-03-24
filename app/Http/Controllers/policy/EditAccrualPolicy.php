@@ -41,7 +41,7 @@ class EditAccrualPolicy extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
         if ( !$permission->Check('accrual_policy','enabled')
 				OR !( $permission->Check('accrual_policy','edit') OR $permission->Check('accrual_policy','edit_own') ) ) {
@@ -49,7 +49,8 @@ class EditAccrualPolicy extends Controller
 		}
         */
 
-        $viewData['title'] = 'Edit Accrual Policy';
+		$viewData['title'] = isset($id) ? 'Edit Accrual Policy' : 'Add Accrual Policy';
+		$current_company = $this->currentCompany;
 
 		extract	(FormVariables::GetVariables(
 			array (
@@ -224,13 +225,11 @@ class EditAccrualPolicy extends Controller
 		$data['day_of_week_options'] = TTDate::getDayOfWeekArray();
 		$data['length_of_service_unit_options'] = $apmf->getOptions('length_of_service_unit');
 
-		$smarty->assign_by_ref('data', $data);
-		$smarty->assign_by_ref('apf', $apf);
-		$smarty->assign_by_ref('apmf', $apmf);
-		
-		$smarty->display('policy/EditAccrualPolicy.tpl');
+		$viewData['data'] = $data;
+		$viewData['apf'] = $apf;
+		$viewData['apmf'] = $apmf;
 
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('policy/EditAccrualPolicy', $viewData);
 
     }
 
@@ -261,7 +260,7 @@ class EditAccrualPolicy extends Controller
 			unset($apm_id);
 		}
 
-		Redirect::Page( URLBuilder::getURL( array('id' => $data['id']), 'EditAccrualPolicy.php') );
+		Redirect::Page( URLBuilder::getURL( array('id' => $data['id']), 'EditAccrualPolicy') );
 
 	}
 
@@ -347,11 +346,11 @@ class EditAccrualPolicy extends Controller
 
 					if ( isset($data['recalculate_start_date']) AND isset($data['recalculate_end_date'])
 							AND $data['recalculate_start_date'] < $data['recalculate_end_date']) {
-						Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_accrual_policy', 'data' => array('accrual_policy_id' => $ap_id, 'start_date' => $data['recalculate_start_date'], 'end_date' => $data['recalculate_end_date']), 'next_page' => urlencode( URLBuilder::getURL( NULL, '../policy/AccrualPolicyList.php') ) ), '../progress_bar/ProgressBarControl.php'), FALSE );
+						Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_accrual_policy', 'data' => array('accrual_policy_id' => $ap_id, 'start_date' => $data['recalculate_start_date'], 'end_date' => $data['recalculate_end_date']), 'next_page' => urlencode( URLBuilder::getURL( NULL, '../policy/AccrualPolicyList') ) ), '../progress_bar/ProgressBarControl'), FALSE );
 					}
 				}
 
-				Redirect::Page( URLBuilder::getURL( NULL, 'AccrualPolicyList.php') );
+				Redirect::Page( URLBuilder::getURL( NULL, 'AccrualPolicyList') );
 			}
 
 		}

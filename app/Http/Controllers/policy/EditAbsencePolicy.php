@@ -42,7 +42,7 @@ class EditAbsencePolicy extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
         if ( !$permission->Check('absence_policy','enabled')
 				OR !( $permission->Check('absence_policy','edit') OR $permission->Check('absence_policy','edit_own') ) ) {
@@ -50,7 +50,8 @@ class EditAbsencePolicy extends Controller
 		}
         */
 
-        $viewData['title'] = 'Edit Absence Policy';
+		$viewData['title'] = isset($id) ? 'Edit Absence Policy' : 'Add Absence Policy';
+		$current_company = $this->currentCompany;
 
 		extract	(FormVariables::GetVariables(
 			array (
@@ -110,13 +111,10 @@ class EditAbsencePolicy extends Controller
 		$data['accrual_options'] = $accrual_options;
 		$data['pay_stub_entry_options'] = $pay_stub_entry_options;
 
-		$smarty->assign_by_ref('data', $data);
-
-
-		$smarty->assign_by_ref('apf', $apf);
-
-		$smarty->display('policy/EditAbsencePolicy.tpl');
-        return view('accrual/ViewUserAccrualList', $viewData);
+		$viewData['data'] = $data;
+		$viewData['apf'] = $apf;
+		
+        return view('policy/EditAbsencePolicy', $viewData);
 
     }
 
@@ -140,7 +138,7 @@ class EditAbsencePolicy extends Controller
 		if ( $apf->isValid() ) {
 			$apf->Save();
 
-			Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList.php') );
+			Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList') );
 		}
 
 	}

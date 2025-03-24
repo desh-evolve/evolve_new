@@ -1,88 +1,83 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditMealPolicy.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('meal_policy','enabled')
-		OR !( $permission->Check('meal_policy','edit') OR $permission->Check('meal_policy','edit_own') ) ) {
+namespace App\Http\Controllers\policy;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Policy\MealPolicyFactory;
+use App\Models\Policy\MealPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Edit Meal Policy')); // See index.php
+class EditMealPolicy extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-if ( isset($data['trigger_time'] ) ) {
-	$data['trigger_time'] = TTDate::parseTimeUnit($data['trigger_time']);
-	$data['amount'] = TTDate::parseTimeUnit($data['amount']);
-	$data['start_window'] = TTDate::parseTimeUnit($data['start_window']);
-	$data['window_length'] = TTDate::parseTimeUnit($data['window_length']);
-	$data['minimum_punch_time'] = TTDate::parseTimeUnit($data['minimum_punch_time']);
-	$data['maximum_punch_time'] = TTDate::parseTimeUnit($data['maximum_punch_time']);
-}
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$mpf = new MealPolicyFactory();
+    }
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$mpf->setId( $data['id'] );
-		$mpf->setCompany( $current_company->getId() );
-		$mpf->setName( $data['name'] );
-		$mpf->setType( $data['type_id'] );
-		$mpf->setTriggerTime( $data['trigger_time'] );
-		$mpf->setAmount( $data['amount'] );
-
-		$mpf->setAutoDetectType( $data['auto_detect_type_id'] );
-		$mpf->setStartWindow( $data['start_window'] );
-		$mpf->setWindowLength( $data['window_length'] );
-		$mpf->setMinimumPunchTime( $data['minimum_punch_time'] );
-		$mpf->setMaximumPunchTime( $data['maximum_punch_time'] );
-
-		if ( isset($data['include_lunch_punch_time']) ) {
-			$mpf->setIncludeLunchPunchTime( TRUE );
-		} else {
-			$mpf->setIncludeLunchPunchTime( FALSE );
+    public function index($id = null) {
+        /*
+        if ( !$permission->Check('meal_policy','enabled')
+				OR !( $permission->Check('meal_policy','edit') OR $permission->Check('meal_policy','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		if ( $mpf->isValid() ) {
-			$mpf->Save();
+		$viewData['title'] = isset($id) ? 'Edit Meal Policy' : 'Add Meal Policy';
 
-			Redirect::Page( URLBuilder::getURL( NULL, 'MealPolicyList.php') );
+		$current_company = $this->currentCompany;
 
-			break;
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data'
+			) 
+		) );
+		
+		if ( isset($data['trigger_time'] ) ) {
+			$data['trigger_time'] = TTDate::parseTimeUnit($data['trigger_time']);
+			$data['amount'] = TTDate::parseTimeUnit($data['amount']);
+			$data['start_window'] = TTDate::parseTimeUnit($data['start_window']);
+			$data['window_length'] = TTDate::parseTimeUnit($data['window_length']);
+			$data['minimum_punch_time'] = TTDate::parseTimeUnit($data['minimum_punch_time']);
+			$data['maximum_punch_time'] = TTDate::parseTimeUnit($data['maximum_punch_time']);
 		}
+		
+		$mpf = new MealPolicyFactory();
 
-	default:
 		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
 
 			$mplf = new MealPolicyListFactory();
 			$mplf->getByIdAndCompanyID( $id, $current_company->getID() );
 
-			foreach ($mplf as $mp_obj) {
+			foreach ($mplf->rs as $mp_obj) {
+				$mplf->data = (array)$mp_obj;
+				$mp_obj = $mplf;
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				$data = array(
@@ -121,12 +116,47 @@ switch ($action) {
 		$data['type_options'] = $mpf->getOptions('type');
 		$data['auto_detect_type_options'] = $mpf->getOptions('auto_detect_type');
 
-		$smarty->assign_by_ref('data', $data);
+		$viewData['data'] = $data;
+		$viewData['mpf'] = $mpf;
 
-		break;
+        return view('policy/EditMealPolicy', $viewData);
+
+    }
+
+	public function submit(Request $request){
+		
+		$mpf = new MealPolicyFactory();
+		$data = $request->data;
+		$current_company = $this->currentCompany;
+
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$mpf->setId( $data['id'] );
+		$mpf->setCompany( $current_company->getId() );
+		$mpf->setName( $data['name'] );
+		$mpf->setType( $data['type_id'] );
+		$mpf->setTriggerTime( $data['trigger_time'] );
+		$mpf->setAmount( $data['amount'] );
+
+		$mpf->setAutoDetectType( $data['auto_detect_type_id'] );
+		$mpf->setStartWindow( $data['start_window'] );
+		$mpf->setWindowLength( $data['window_length'] );
+		$mpf->setMinimumPunchTime( $data['minimum_punch_time'] );
+		$mpf->setMaximumPunchTime( $data['maximum_punch_time'] );
+
+		if ( isset($data['include_lunch_punch_time']) ) {
+			$mpf->setIncludeLunchPunchTime( TRUE );
+		} else {
+			$mpf->setIncludeLunchPunchTime( FALSE );
+		}
+
+		if ( $mpf->isValid() ) {
+			$mpf->Save();
+
+			Redirect::Page( URLBuilder::getURL( NULL, 'MealPolicyList') );
+
+		}
+	}
 }
 
-$smarty->assign_by_ref('mpf', $mpf);
-
-$smarty->display('policy/EditMealPolicy.tpl');
 ?>

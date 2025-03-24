@@ -39,7 +39,7 @@ class EditBreakPolicy extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
         if ( !$permission->Check('break_policy','enabled')
 				OR !( $permission->Check('break_policy','edit') OR $permission->Check('break_policy','edit_own') ) ) {
@@ -47,8 +47,9 @@ class EditBreakPolicy extends Controller
 		}
         */
 
-        $viewData['title'] = 'Edit Break Policy';
-
+		$viewData['title'] = isset($id) ? 'Edit Break Policy' : 'Add Break Policy';
+		$current_company = $this->currentCompany;
+		
 		extract	(FormVariables::GetVariables(
 			array (
 				'action',
@@ -158,7 +159,7 @@ class EditBreakPolicy extends Controller
 		if ( $bpf->isValid() ) {
 			$bpf->Save();
 
-			Redirect::Page( URLBuilder::getURL( NULL, 'BreakPolicyList.php') );
+			Redirect::Page( URLBuilder::getURL( NULL, 'BreakPolicyList') );
 		}
 	}
 }

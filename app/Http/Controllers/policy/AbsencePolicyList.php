@@ -101,10 +101,10 @@ class AbsencePolicyList extends Controller
     }
 
 	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditAbsencePolicy.php', FALSE) );
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditAbsencePolicy', FALSE) );
 	}
 
-	public function delete(){
+	public function delete( $ids ){
 
 		$current_company = $this->currentCompany;
 		
@@ -124,7 +124,7 @@ class AbsencePolicyList extends Controller
 			}
 		}
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList.php') );
+		Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList') );
 
 	}
 

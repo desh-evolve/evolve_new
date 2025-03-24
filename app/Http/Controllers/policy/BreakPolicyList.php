@@ -110,7 +110,7 @@ class BreakPolicyList extends Controller
     }
 
 	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditBreakPolicy.php', FALSE) );
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditBreakPolicy', FALSE) );
 	}
 
 	public function delete(){
@@ -133,7 +133,7 @@ class BreakPolicyList extends Controller
 			}
 		}
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'BreakPolicyList.php') );
+		Redirect::Page( URLBuilder::getURL( NULL, 'BreakPolicyList') );
 
 	}
 
