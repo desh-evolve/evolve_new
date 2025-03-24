@@ -8,6 +8,10 @@ use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
 use App\Http\Controllers\Company\EditCompanyNew;
+use App\Http\Controllers\company\WageGroupList;
+use App\Http\Controllers\company\EditWageGroup;
+
+
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\progressbar\ProgressBar;
@@ -48,7 +52,12 @@ Route::get('/branch_bank/add/{id?}', [EditBankAccount::class, 'index'])->name('b
 Route::post('/branch_bank/save/{id?}', [EditBankAccount::class, 'save'])->name('branch_bank.save');
 Route::delete('/branch_bank/delete/{id}', [EditBankAccount::class, 'delete'])->name('branch_bank.delete');
 
+// ==================== wage group =====================================================================================
+Route::get('/wage_group', [WageGroupList::class, 'index'])->name('wage_group.index');
 
+Route::get('/wage_group/add/{id?}', [EditWageGroup::class, 'index'])->name('wage_group.add');
+Route::post('/wage_group/save/{id?}', [EditWageGroup::class, 'save'])->name('wage_group.save');
+Route::delete('/wage_group/delete/{id}', [WageGroupList::class, 'delete'])->name('wage_group.delete');
 
 
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');

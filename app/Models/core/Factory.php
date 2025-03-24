@@ -1257,7 +1257,6 @@ class Factory {
 			Debug::text('Calling Validate()' , __FILE__, __LINE__, __METHOD__,10);
 			$this->Validate();
 		}
-
         return $this->Validator->isValid();
 	}
 

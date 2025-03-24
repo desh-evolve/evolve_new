@@ -16,90 +16,93 @@ use Illuminate\Support\Facades\View;
 
 class EditWageGroup extends Controller
 {
-    protected $permission;
-    protected $currentUser;
-    protected $currentCompany;
-    protected $userPrefs;
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
 
-    public function __construct()
-    {
-        $basePath = Environment::getBasePath();
-        require_once($basePath . '/app/Helpers/global.inc.php');
-        require_once($basePath . '/app/Helpers/Interface.inc.php');
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->permission = View::shared('permission');
-        $this->currentUser = View::shared('current_user');
-        $this->currentCompany = View::shared('current_company');
-        $this->userPrefs = View::shared('current_user_prefs');
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
 
-        /*
+		/*
         if ( !$permission->Check('wage','enabled')
 				OR !( $permission->Check('wage','edit') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
+	}
 
-    public function index($id = null) {
+	public function index($id = null)
+	{
 
-        $viewData['title'] = 'Edit Wage Group';
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'group_data'
-			) 
-		) );
-
-		if ( isset($id) ) {
+		$current_company = $this->currentCompany;
+		if (isset($id)) {
 
 			$wglf = new WageGroupListFactory();
 
-			$wglf->GetByIdAndCompanyId($id, $current_company->getId() );
+			$wglf->GetByIdAndCompanyId($id, $current_company->getId());
+			$wage_group = $wglf->rs ?? [];
+			if ($wage_group) {
+				foreach ($wage_group as $g_obj) {
+					//Debug::Arr($title_obj,'Title Object', __FILE__, __LINE__, __METHOD__,10);
 
-			foreach ($wglf->rs as $group_obj) {
-				$wglf->data = (array)$group_obj;
-				$group_obj = $wglf;
-				//Debug::Arr($title_obj,'Title Object', __FILE__, __LINE__, __METHOD__,10);
-
-				$group_data = array(
-									'id' => $group_obj->getId(),
-									'name' => $group_obj->getName(),
-									'created_date' => $group_obj->getCreatedDate(),
-									'created_by' => $group_obj->getCreatedBy(),
-									'updated_date' => $group_obj->getUpdatedDate(),
-									'updated_by' => $group_obj->getUpdatedBy(),
-									'deleted_date' => $group_obj->getDeletedDate(),
-									'deleted_by' => $group_obj->getDeletedBy()
-								);
+					$data = array(
+						'id' => $g_obj->id,
+						'name' => $g_obj->name,
+						'created_date' => $g_obj->created_date,
+						'created_by' => $g_obj->created_by,
+						'updated_date' => $g_obj->updated_date,
+						'updated_by' => $g_obj->updated_by,
+						'deleted_date' => $g_obj->deleted_date,
+						'deleted_by' => $g_obj->deleted_by
+					);
+				}
 			}
+		} else {
+			$data = array(
+				'name' => ''
+			);
 		}
 
-		$smarty->assign_by_ref('group_data', $group_data);
-		$smarty->assign_by_ref('wgf', $wgf);
+		$viewData = [
+            'title' => $id ? 'Edit Wage Group' : 'Add Wage Group',
+            'data' => $data,
+        ];
 
-        return view('company/EditWageGroup', $viewData);
+		return view('company/EditWageGroup', $viewData);
+	}
 
-    }
-
-	public function submit(Request $request){
+	public function save(Request $request, $id = null)
+	{
 		$current_company = $this->currentCompany;
-		$group_data = $request->data;
+		// $group_data = $request->data;
+
+		$data = $request->all();
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
 
 		$wgf = new WageGroupFactory();
 
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
+		$wgf->setId($id ?? null);
+		$wgf->setCompany($current_company->getId());
+		$wgf->setName($data['name'] ?? '');
 
-		$wgf->setId($group_data['id']);
-		$wgf->setCompany( $current_company->getId() );
-		$wgf->setName($group_data['name']);
-
-		if ( $wgf->isValid() ) {
+		if ($wgf->isValid()) {
+		// 	dd('sss');
 			$wgf->Save();
-			Redirect::Page( URLBuilder::getURL(NULL, 'WageGroupList') );
+			return redirect()->to(URLBuilder::getURL(null, '/wage_group'))->with('success', 'Wage Group saved successfully.');
 		}
+		// else{
+		// 	dd('ccc');
+		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
+		// }
 	}
 }
-
-?>
