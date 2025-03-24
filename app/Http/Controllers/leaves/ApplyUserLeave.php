@@ -46,16 +46,17 @@ class ApplyUserLeave extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+    }
+
+    public function index() {
+
         /*
         if ( !$permission->Check('accrual','view')
                 OR (  $permission->Check('accrual','view_own') ) ) {
             $permission->Redirect( FALSE ); //Redirect
         }
         */
-    }
-
-    public function index() {
-
+        
         $viewData['title'] = 'Apply Employee Leaves';
 
         extract	(FormVariables::GetVariables(

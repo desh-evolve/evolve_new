@@ -43,16 +43,16 @@ class AuthorizationList extends Controller
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
-        /*
+    }
+
+	public function index() {
+		/*
         if ( !$permission->Check('authorization','enabled')
 				OR !( $permission->Check('authorization','view') ) ) {
 
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-	public function index() {
 
         $viewData['title'] = 'Authorization List';
 

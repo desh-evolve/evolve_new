@@ -1,148 +1,82 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditPermissionControl.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity( 11 );
+namespace App\Http\Controllers\permission;
 
-if ( !$permission->Check('permission','enabled')
-		OR !( $permission->Check('permission','edit') OR $permission->Check('permission','edit_own') ) ) {
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\PermissionControlFactory;
+use App\Models\Core\PermissionControlListFactory;
+use App\Models\Core\PermissionFactory;
+use App\Models\Core\PermissionListFactory;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Edit Permission Group')); // See index.php
+class EditPermissionControl extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data',
-												'group_id',
-												'old_data',
-												'src_user_id',
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$pcf = new PermissionControlFactory();
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
-	case 'apply_preset':
-		//Debug::setVerbosity( 11 );
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+    }
 
-		$pf = new PermissionFactory();
-		$pcf->StartTransaction();
-
-		$pcf->setId( $data['id'] );
-		$pcf->setCompany( $current_company->getId() );
-
-		$pcf->setName($data['name']);
-		$pcf->setDescription($data['description']);
-		$pcf->setLevel($data['level']);
-
-		//Check to make sure the currently logged in user is NEVER in the unassigned
-		//user list. This prevents an administrator from accidently un-assigning themselves
-		//from a group and losing all permissions.
-		if ( in_array( $current_user->getId(), (array)$src_user_id) ) {
-			//Check to see if current user is assigned to another permission group.
-			$current_user_failed = FALSE;
-
-			$pclf = new PermissionControlListFactory();
-			$pclf->getByCompanyIdAndUserId( $current_company->getId(), $current_user->getId() );
-			if ( $pclf->getRecordCount() == 0 ) {
-				$current_user_failed = TRUE;
-			} else {
-				foreach( $pclf as $pc_obj ) {
-					if ( $pc_obj->getId() == $data['id'] ) {
-						$current_user_failed = TRUE;
-					}
-				}
-
-			}
-			unset($pclf, $pc_obj);
-
-			if ( $current_user_failed == TRUE ) {
-				$pcf->Validator->isTrue( 'user',
-										FALSE,
-										_('You can not unassign yourself from a permission group, assign yourself to a new group instead') );
-			}
+    public function index() {
+        /*
+        if ( !$permission->Check('permission','enabled')
+				OR !( $permission->Check('permission','edit') OR $permission->Check('permission','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		if ( $pcf->isValid() ) {
-			$pcf_id = $pcf->Save(FALSE);
+        $viewData['title'] = 'Edit Permission Group';
 
-			Debug::Text('aPermission Control ID: '. $pcf_id , __FILE__, __LINE__, __METHOD__,10);
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data',
+				'group_id',
+				'old_data',
+				'src_user_id',
+			) 
+		) );
+		
+		$pcf = new PermissionControlFactory();
 
-			if ( $pcf_id === TRUE ) {
-				$pcf_id = $data['id'];
-			}
-
-			if ( DEMO_MODE == FALSE ) {
-				if ( isset($data['user_ids']) ){
-					$pcf->setUser( $data['user_ids'] );
-				} else {
-					$pcf->setUser( array() );
-				}
-
-				//Don't Delete all previous permissions, do that in the Permission class.
-				if ( isset($data['permissions']) AND is_array($data['permissions']) AND count($data['permissions']) > 0 ) {
-					$pcf->setPermission( $data['permissions'], $old_data['permissions']);
-				}
-			}
-
-			if ( $pcf->isValid() ) {
-				$pcf->Save(TRUE);
-
-				if ( DEMO_MODE == FALSE ) {
-					if ( $action == 'apply_preset' ) {
-						Debug::Text('Attempting to apply preset...', __FILE__, __LINE__, __METHOD__,10);
-
-						if ( !isset($data['preset_flags']) ) {
-							$data['preset_flags'] = array();
-						}
-
-						if ( $pcf_id != '' AND isset($data['preset']) ) {
-							Debug::Text('Applying Preset!', __FILE__, __LINE__, __METHOD__,10);
-							$pf = new PermissionFactory();
-							$pf->applyPreset($pcf_id, $data['preset'], $data['preset_flags']);
-						}
-					}
-				}
-				//$pcf->FailTransaction();
-				$pcf->CommitTransaction();
-				Redirect::Page( URLBuilder::getURL( array(), 'PermissionControlList.php') );
-
-				break;
-			}
-		}
-
-		$pcf->FailTransaction();
-	default:
 		$pf = new PermissionFactory();
 		$plf = new PermissionListFactory();
 
 		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
 
 			$pclf = new PermissionControlListFactory();
 
 			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
 
-			foreach ($pclf as $pc_obj) {
+			foreach ($pclf->rs as $pc_obj) {
+				$pclf->data = (array)$pc_obj;
+				$pc_obj = $pclf;
+
 				$data = array(
 									'id' => $pc_obj->getId(),
 									'name' => $pc_obj->getName(),
@@ -162,8 +96,13 @@ switch ($action) {
 			$plf->getByCompanyIdAndPermissionControlId( $current_company->getId(), $id );
 			if ( $plf->getRecordCount() > 0 ) {
 				Debug::Text('Found Current Permissions!', __FILE__, __LINE__, __METHOD__,10);
-				foreach($plf as $p_obj) {
-					foreach($plf as $p_obj) {
+				foreach($plf->rs as $p_obj) {
+					$plf->data = (array)$p_obj;
+					$p_obj = $plf;
+
+					foreach($plf->rs as $p_obj) {
+						$plf->data = (array)$p_obj;
+						$p_obj = $plf;
 						$current_permissions[$p_obj->getSection()][$p_obj->getName()] = $p_obj;
 					}
 				}
@@ -242,23 +181,124 @@ switch ($action) {
 			}
 			unset($user_id);
 		}
-		$smarty->assign_by_ref('filter_user_options', $filter_user_options);
 
-		$smarty->assign_by_ref('data', $data);
+		$viewData['filter_user_options'] = $filter_user_options ;
+		$viewData['data'] = $data ;
 
-		$smarty->assign_by_ref('preset_options', $preset_options );
-		$smarty->assign_by_ref('section_group_options', $section_groups );
-		$smarty->assign_by_ref('user_options', $user_options);
-		$smarty->assign_by_ref('permission_data', $permission_data);
-		$smarty->assign_by_ref('ignore_permissions', $ignore_permissions);
-		$smarty->assign_by_ref('id', $id);
-		$smarty->assign_by_ref('group_id', $group_id);
-		$smarty->assign_by_ref('product_edition', $current_company->getProductEdition() );
+		$viewData['preset_options'] = $preset_options ;
+		$viewData['section_group_options'] = $section_groups ;
+		$viewData['user_options'] = $user_options;
+		$viewData['permission_data'] = $permission_data;
+		$viewData['ignore_permissions'] = $ignore_permissions;
+		$viewData['id'] = $id;
+		$viewData['group_id'] = $group_id;
+		$viewData['product_edition'] = $current_company->getProductEdition();
 
-		break;
+		$viewData['pcf'] = $pcf;
+        return view('permission/EditPermissionControl', $viewData);
+
+    }
+
+	public function apply_preset(Request $request){
+		$pcf = new PermissionControlFactory();
+
+		$data = $request->data;
+		$current_company = $this->currentCompany;
+
+		//Debug::setVerbosity( 11 );
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$pf = new PermissionFactory();
+		$pcf->StartTransaction();
+
+		$pcf->setId( $data['id'] );
+		$pcf->setCompany( $current_company->getId() );
+
+		$pcf->setName($data['name']);
+		$pcf->setDescription($data['description']);
+		$pcf->setLevel($data['level']);
+
+		//Check to make sure the currently logged in user is NEVER in the unassigned
+		//user list. This prevents an administrator from accidently un-assigning themselves
+		//from a group and losing all permissions.
+		if ( in_array( $current_user->getId(), (array)$src_user_id) ) {
+			//Check to see if current user is assigned to another permission group.
+			$current_user_failed = FALSE;
+
+			$pclf = new PermissionControlListFactory();
+			$pclf->getByCompanyIdAndUserId( $current_company->getId(), $current_user->getId() );
+			if ( $pclf->getRecordCount() == 0 ) {
+				$current_user_failed = TRUE;
+			} else {
+				foreach( $pclf->rs as $pc_obj ) {
+					$pclf->data = (array)$pc_obj;
+					$pc_obj = $pclf;
+
+					if ( $pc_obj->getId() == $data['id'] ) {
+						$current_user_failed = TRUE;
+					}
+				}
+
+			}
+			unset($pclf, $pc_obj);
+
+			if ( $current_user_failed == TRUE ) {
+				$pcf->Validator->isTrue( 'user',
+										FALSE,
+										_('You can not unassign yourself from a permission group, assign yourself to a new group instead') );
+			}
+		}
+
+		if ( $pcf->isValid() ) {
+			$pcf_id = $pcf->Save(FALSE);
+
+			Debug::Text('aPermission Control ID: '. $pcf_id , __FILE__, __LINE__, __METHOD__,10);
+
+			if ( $pcf_id === TRUE ) {
+				$pcf_id = $data['id'];
+			}
+
+			if ( DEMO_MODE == FALSE ) {
+				if ( isset($data['user_ids']) ){
+					$pcf->setUser( $data['user_ids'] );
+				} else {
+					$pcf->setUser( array() );
+				}
+
+				//Don't Delete all previous permissions, do that in the Permission class.
+				if ( isset($data['permissions']) AND is_array($data['permissions']) AND count($data['permissions']) > 0 ) {
+					$pcf->setPermission( $data['permissions'], $old_data['permissions']);
+				}
+			}
+
+			if ( $pcf->isValid() ) {
+				$pcf->Save(TRUE);
+
+				if ( DEMO_MODE == FALSE ) {
+					if ( $action == 'apply_preset' ) {
+						Debug::Text('Attempting to apply preset...', __FILE__, __LINE__, __METHOD__,10);
+
+						if ( !isset($data['preset_flags']) ) {
+							$data['preset_flags'] = array();
+						}
+
+						if ( $pcf_id != '' AND isset($data['preset']) ) {
+							Debug::Text('Applying Preset!', __FILE__, __LINE__, __METHOD__,10);
+							$pf = new PermissionFactory();
+							$pf->applyPreset($pcf_id, $data['preset'], $data['preset_flags']);
+						}
+					}
+				}
+				//$pcf->FailTransaction();
+				$pcf->CommitTransaction();
+				Redirect::Page( URLBuilder::getURL( array(), 'PermissionControlList.php') );
+			}
+		}
+
+		$pcf->FailTransaction();
+	}
+
 }
 
-$smarty->assign_by_ref('pcf', $pcf);
 
-$smarty->display('permission/EditPermissionControl.tpl');
 ?>

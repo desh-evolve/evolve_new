@@ -37,16 +37,17 @@ class CurrencyList extends Controller
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
+
+    }
+
+    public function index() {
         /*
         if (!$this->permission->Check('currency', 'enabled') || 
             !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
             return $this->permission->Redirect(false);
         }
         */
-    }
 
-    public function index()
-    {
         $current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
 

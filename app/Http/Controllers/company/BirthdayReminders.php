@@ -30,18 +30,17 @@ class BirthdayReminders extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
 
-        /*
+    }
+
+
+    public function index() {
+		/*
         if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child')) {
             $user_id = $user_id;
         } else {
             $user_id = $current_user->getId();
         }
         */
-    }
-
-
-    public function index() {
-
 
         $viewData['title'] = 'Todays Birthday';
 

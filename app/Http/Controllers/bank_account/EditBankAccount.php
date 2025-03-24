@@ -41,7 +41,10 @@ class EditBankAccount extends Controller
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
-        /*
+    }
+
+	public function index() {
+		/*
         
 			if ( isset($company_id) AND $company_id != '' ) {
 				if ( !$permission->Check('company','enabled')
@@ -56,9 +59,6 @@ class EditBankAccount extends Controller
 			}
 
         */
-    }
-
-	public function index() {
 
 		$viewData['title'] = 'Bank Account';
 

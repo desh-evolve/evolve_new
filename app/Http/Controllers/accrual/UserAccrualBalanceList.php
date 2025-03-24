@@ -36,17 +36,18 @@ class UserAccrualBalanceList extends Controller
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
 
-        /*
+        
+    }
+
+	public function index()
+    {
+		/*
         if ( !$permission->Check('accrual','enabled')
 				OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-	public function index()
-    {
-
+		
         $viewData['title'] = 'Accrual Balance List';
 
 		extract	(FormVariables::GetVariables(

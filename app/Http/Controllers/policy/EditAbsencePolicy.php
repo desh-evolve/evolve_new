@@ -1,94 +1,98 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4953 $
- * $Id: EditAbsencePolicy.php 4953 2011-07-08 17:57:55Z ipso $
- * $Date: 2011-07-08 10:57:55 -0700 (Fri, 08 Jul 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('absence_policy','enabled')
-		OR !( $permission->Check('absence_policy','edit') OR $permission->Check('absence_policy','edit_own') ) ) {
+namespace App\Http\Controllers\policy;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use App\Models\Company\WageGroupListFactory;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\Policy\AbsencePolicyFactory;
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Edit Absence Policy')); // See index.php
+class EditAbsencePolicy extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data'
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$apf = new AbsencePolicyFactory();
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+    }
 
-		$apf->setId( $data['id'] );
-		$apf->setCompany( $current_company->getId() );
-		$apf->setName( $data['name'] );
-		$apf->setType( $data['type_id'] );
-		$apf->setRate( $data['rate'] );
-		$apf->setWageGroup( $data['wage_group_id'] );
-		$apf->setAccrualRate( $data['accrual_rate'] );
-		$apf->setAccrualPolicyID( $data['accrual_policy_id'] );
-		$apf->setPayStubEntryAccountID( $data['pay_stub_entry_account_id'] );
-
-		if ( $apf->isValid() ) {
-			$apf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList.php') );
-
-			break;
+    public function index() {
+        /*
+        if ( !$permission->Check('absence_policy','enabled')
+				OR !( $permission->Check('absence_policy','edit') OR $permission->Check('absence_policy','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-	default:
+        $viewData['title'] = 'Edit Absence Policy';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data'
+			) 
+		) );
+		
+		$apf = new AbsencePolicyFactory();
+
 		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
-
 			$aplf = new AbsencePolicyListFactory();
 			$aplf->getByIdAndCompanyID( $id, $current_company->getId() );
 
-			foreach ($aplf as $ap_obj) {
+			foreach ($aplf->rs as $ap_obj) {
+				$aplf->data = (array)$ap_obj;
+				$ap_obj = $aplf;
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
-				$data = array(
-									'id' => $ap_obj->getId(),
-									'name' => $ap_obj->getName(),
-									'type_id' => $ap_obj->getType(),
-									'rate' => Misc::removeTrailingZeros( $ap_obj->getRate() ),
-									'wage_group_id' => $ap_obj->getWageGroup(),
-									'accrual_rate' => Misc::removeTrailingZeros( $ap_obj->getAccrualRate() ),
-									'pay_stub_entry_account_id' => $ap_obj->getPayStubEntryAccountID(),
-									'accrual_policy_id' => $ap_obj->getAccrualPolicyID(),
-									'created_date' => $ap_obj->getCreatedDate(),
-									'created_by' => $ap_obj->getCreatedBy(),
-									'updated_date' => $ap_obj->getUpdatedDate(),
-									'updated_by' => $ap_obj->getUpdatedBy(),
-									'deleted_date' => $ap_obj->getDeletedDate(),
-									'deleted_by' => $ap_obj->getDeletedBy()
-								);
+				$data = array (
+					'id' => $ap_obj->getId(),
+					'name' => $ap_obj->getName(),
+					'type_id' => $ap_obj->getType(),
+					'rate' => Misc::removeTrailingZeros( $ap_obj->getRate() ),
+					'wage_group_id' => $ap_obj->getWageGroup(),
+					'accrual_rate' => Misc::removeTrailingZeros( $ap_obj->getAccrualRate() ),
+					'pay_stub_entry_account_id' => $ap_obj->getPayStubEntryAccountID(),
+					'accrual_policy_id' => $ap_obj->getAccrualPolicyID(),
+					'created_date' => $ap_obj->getCreatedDate(),
+					'created_by' => $ap_obj->getCreatedBy(),
+					'updated_date' => $ap_obj->getUpdatedDate(),
+					'updated_by' => $ap_obj->getUpdatedBy(),
+					'deleted_date' => $ap_obj->getDeletedDate(),
+					'deleted_by' => $ap_obj->getDeletedBy()
+				);
 			}
 		} else {
 			$data = array(
-						  'rate' => '1.00',
-						  'accrual_rate' => '1.00',
-						  );
+				'rate' => '1.00',
+				'accrual_rate' => '1.00',
+			);
 
 		}
 
@@ -108,10 +112,38 @@ switch ($action) {
 
 		$smarty->assign_by_ref('data', $data);
 
-		break;
+
+		$smarty->assign_by_ref('apf', $apf);
+
+		$smarty->display('policy/EditAbsencePolicy.tpl');
+        return view('accrual/ViewUserAccrualList', $viewData);
+
+    }
+
+	public function submit(Request $request){
+		$current_company = $this->currentCompany;
+		$data = $request->data;
+		$apf = new AbsencePolicyFactory();
+
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$apf->setId( $data['id'] );
+		$apf->setCompany( $current_company->getId() );
+		$apf->setName( $data['name'] );
+		$apf->setType( $data['type_id'] );
+		$apf->setRate( $data['rate'] );
+		$apf->setWageGroup( $data['wage_group_id'] );
+		$apf->setAccrualRate( $data['accrual_rate'] );
+		$apf->setAccrualPolicyID( $data['accrual_policy_id'] );
+		$apf->setPayStubEntryAccountID( $data['pay_stub_entry_account_id'] );
+
+		if ( $apf->isValid() ) {
+			$apf->Save();
+
+			Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList.php') );
+		}
+
+	}
 }
 
-$smarty->assign_by_ref('apf', $apf);
-
-$smarty->display('policy/EditAbsencePolicy.tpl');
 ?>

@@ -1,114 +1,133 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: PayPeriodScheduleList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('pay_period_schedule','enabled')
-		OR !( $permission->Check('pay_period_schedule','view') OR $permission->Check('pay_period_schedule','view_own') ) ) {
+namespace App\Http\Controllers\payperiod;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Pay Period Schedule List')); // See index.php
-BreadCrumb::setCrumb($title);
+class CurrencyList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
+    }
 
-
-//$ppslf = new PayPeriodScheduleFactory();
-
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL(NULL, 'EditPayPeriodSchedule.php', FALSE) );
-
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_period_schedule','enabled')
+				OR !( $permission->Check('pay_period_schedule','view') OR $permission->Check('pay_period_schedule','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		$ppslf = new PayPeriodScheduleListFactory();
+        $viewData['title'] = 'Pay Period Schedule List';
 
-		foreach ($ids as $id) {
-			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($ppslf as $pay_period_schedule) {
-				$pay_period_schedule->setDeleted($delete);
-				$pay_period_schedule->Save();
-			}
-		}
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);		
 
-		Redirect::Page( URLBuilder::getURL(NULL, 'PayPeriodScheduleList.php') );
-
-		break;
-
-	default:
 		$ppslf = new PayPeriodScheduleListFactory();
 
 		$ppslf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, array($sort_column => $sort_order) );
 
 		$pager = new Pager($ppslf);
 
-		foreach ($ppslf as $pay_period_schedule) {
+		foreach ($ppslf->rs as $pay_period_schedule) {
+			$ppslf->data = (array)$pay_period_schedule;
+			$pay_period_schedule = $ppslf;
 
 			$pay_period_schedules[] = array(
-											'id' => $pay_period_schedule->getId(),
-											'company_id' => $pay_period_schedule->getCompany(),
-											'name' => $pay_period_schedule->getName(),
-											'description' => $pay_period_schedule->getDescription(),
-											'type' => Option::getByKey($pay_period_schedule->getType(), $pay_period_schedule->getOptions('type') ),
-											/*
-											'anchor_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getAnchorDate() ),
-											'primary_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getPrimaryDate() ),
-											'primary_transaction_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getPrimaryTransactionDate() ),
-											'secondary_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getSecondaryDate() ),
-											'secondary_transaction_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getSecondaryTransactionDate() ),
-											*/
-											'deleted' => $pay_period_schedule->getDeleted()
-											);
+				'id' => $pay_period_schedule->getId(),
+				'company_id' => $pay_period_schedule->getCompany(),
+				'name' => $pay_period_schedule->getName(),
+				'description' => $pay_period_schedule->getDescription(),
+				'type' => Option::getByKey($pay_period_schedule->getType(), $pay_period_schedule->getOptions('type') ),
+				/*
+				'anchor_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getAnchorDate() ),
+				'primary_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getPrimaryDate() ),
+				'primary_transaction_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getPrimaryTransactionDate() ),
+				'secondary_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getSecondaryDate() ),
+				'secondary_transaction_date' => TTDate::getDate( 'DATE', $pay_period_schedule->getSecondaryTransactionDate() ),
+				*/
+				'deleted' => $pay_period_schedule->getDeleted()
+			);
 
 		}
-		$smarty->assign_by_ref('pay_period_schedules', $pay_period_schedules);
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+		$viewData['pay_period_schedules'] = $pay_period_schedules;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+        return view('payperiod/PayPeriodScheduleList', $viewData);
 
-		break;
+    }
+
+	public function add(){
+		Redirect::Page( URLBuilder::getURL(NULL, 'EditPayPeriodSchedule.php', FALSE) );
+	}
+
+	public function delete(){
+		$current_company = $this->currentCompany;
+
+		$delete = TRUE;
+
+		$ppslf = new PayPeriodScheduleListFactory();
+
+		foreach ($ids as $id) {
+			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
+			foreach ($ppslf->rs as $pay_period_schedule) {
+				$ppslf->data = (array)$pay_period_schedule;
+				$pay_period_schedule = $ppslf;
+				
+				$pay_period_schedule->setDeleted($delete);
+				$pay_period_schedule->Save();
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL(NULL, 'PayPeriodScheduleList.php') );
+	}
 }
-$smarty->display('payperiod/PayPeriodScheduleList.tpl');
+
+
 ?>

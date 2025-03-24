@@ -38,16 +38,16 @@ class EditCompanyDeduction extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
+    }
 
-        /*
+    public function index() {
+
+		/*
         if ( !$permission->Check('company_tax_deduction','enabled')
 				OR !( $permission->Check('company_tax_deduction','edit') OR $permission->Check('company_tax_deduction','edit_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index() {
 
         $viewData['title'] = 'Edit Tax / Deduction';
 

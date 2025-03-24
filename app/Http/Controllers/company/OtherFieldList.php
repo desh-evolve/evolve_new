@@ -32,16 +32,17 @@ class OtherFieldList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
+
+    }
+
+    public function index() {
         /*
         if ( !$permission->Check('other_field','enabled')
 				OR !( $permission->Check('other_field','view') OR $permission->Check('other_field','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-    }
-
-    public function index() {
-
+		
         $viewData['title'] = 'Other Field List';
 
 		extract	(FormVariables::GetVariables(

@@ -1,123 +1,102 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5387 $
- * $Id: ViewPayPeriod.php 5387 2011-10-25 16:23:28Z ipso $
- * $Date: 2011-10-25 09:23:28 -0700 (Tue, 25 Oct 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
-//require_once(Environment::getBasePath() .'classes/class.progressbar.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\payperiod;
 
-if ( !$permission->Check('pay_period_schedule','enabled')
-		OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\ExceptionListFactory;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\PayPeriod\PayPeriodFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Request\RequestListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-}
+class ViewPayPeriod extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$smarty->assign('title', __($title = 'View Pay Period')); // See index.php
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'pay_period_id',
-												'status_id'
-												) ) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$ppf = new PayPeriodFactory();
+    }
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
-		$pplf = new PayPeriodListFactory();
-		$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
-		foreach ($pplf as $pay_period_obj) {
-			$pay_period_obj->setStatus( $status_id );
-			$pay_period_obj->save();
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_period_schedule','enabled')
+				OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
+        $viewData['title'] = 'View Pay Period';
 
-		break;
-	case 'generate_paystubs':
-		Debug::Text('Generate Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'pay_period_id',
+				'status_id'
+			) 
+		) );
+		
+		$ppf = new PayPeriodFactory(); 
 
-		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paystubs', 'pay_period_ids' => $pay_period_id, 'next_page' => URLBuilder::getURL( array('filter_pay_period_id' => $pay_period_id ), '../pay_stub/PayStubList.php') ), '../progress_bar/ProgressBarControl.php') );
-
-		break;
-        case 'generate_midpay':
-		Debug::Text('Generate Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
-
-		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paymiddle', 'pay_period_ids' => $pay_period_id, 'next_page' => URLBuilder::getURL( array('filter_pay_period_id' => $pay_period_id ), '../pay_stub/PayStubList.php') ), '../progress_bar/ProgressBarControl.php') );
-
-		break;
-	case 'import':
-		//Imports already created shifts in to this pay period, from another pay period.
-		//Get all users assigned to this pay period schedule.
-		$pplf = new PayPeriodListFactory();
-		$pay_period_obj = $pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() )->getCurrent();
-
-		$pay_period_obj->importData();
-
-		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
-
-		break;
-	case 'delete_data':
-		//Deletes all data assigned to this pay period.
-		//Get all users assigned to this pay period schedule.
-		$pplf = new PayPeriodListFactory();
-		$pay_period_obj = $pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() )->getCurrent();
-
-		$pay_period_obj->deleteData();
-
-		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
-
-		break;
-	default:
 		if ( isset($pay_period_id) ) {
-			BreadCrumb::setCrumb($title);
 
 			$status_options = $ppf->getOptions('status');
 
 			$pplf = new PayPeriodListFactory();
 			$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
 
-			foreach ($pplf as $pay_period_obj) {
+			foreach ($pplf->rs as $pay_period_obj) {
+				$pplf->data = (array)$pay_period_obj;
+				$pay_period_obj = $pplf;
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				$pay_period_data = array(
-													'id' => $pay_period_obj->getId(),
-													'company_id' => $pay_period_obj->getCompany(),
-													'pay_period_schedule_id' => $pay_period_obj->getPayPeriodSchedule(),
-													'pay_period_schedule_type' => $pay_period_obj->getPayPeriodScheduleObject()->getType(),
-													'status_id' => $pay_period_obj->getStatus(),
-													'status' => $status_options[$pay_period_obj->getStatus()],
-													'start_date' => $pay_period_obj->getStartDate(),
-													'end_date' => $pay_period_obj->getEndDate(),
-													'transaction_date' => $pay_period_obj->getTransactionDate(),
-													'is_primary' => $pay_period_obj->getPrimary(),
+					'id' => $pay_period_obj->getId(),
+					'company_id' => $pay_period_obj->getCompany(),
+					'pay_period_schedule_id' => $pay_period_obj->getPayPeriodSchedule(),
+					'pay_period_schedule_type' => $pay_period_obj->getPayPeriodScheduleObject()->getType(),
+					'status_id' => $pay_period_obj->getStatus(),
+					'status' => $status_options[$pay_period_obj->getStatus()],
+					'start_date' => $pay_period_obj->getStartDate(),
+					'end_date' => $pay_period_obj->getEndDate(),
+					'transaction_date' => $pay_period_obj->getTransactionDate(),
+					'is_primary' => $pay_period_obj->getPrimary(),
 
-													'deleted' => $pay_period_obj->getDeleted(),
-													'tainted' => $pay_period_obj->getTainted(),
-													'tainted_date' => $pay_period_obj->getTaintedDate(),
-													'tainted_by' => $pay_period_obj->getTaintedBy(),
-													'created_date' => $pay_period_obj->getCreatedDate(),
-													'created_by' => $pay_period_obj->getCreatedBy(),
-													'updated_date' => $pay_period_obj->getUpdatedDate(),
-													'updated_by' => $pay_period_obj->getUpdatedBy(),
-													'deleted_date' => $pay_period_obj->getDeletedDate(),
-													'deleted_by' => $pay_period_obj->getDeletedBy()
-												);
+					'deleted' => $pay_period_obj->getDeleted(),
+					'tainted' => $pay_period_obj->getTainted(),
+					'tainted_date' => $pay_period_obj->getTaintedDate(),
+					'tainted_by' => $pay_period_obj->getTaintedBy(),
+					'created_date' => $pay_period_obj->getCreatedDate(),
+					'created_by' => $pay_period_obj->getCreatedBy(),
+					'updated_date' => $pay_period_obj->getUpdatedDate(),
+					'updated_by' => $pay_period_obj->getUpdatedBy(),
+					'deleted_date' => $pay_period_obj->getDeletedDate(),
+					'deleted_by' => $pay_period_obj->getDeletedBy()
+				);
 			}
 			Debug::Text('Current Pay Period Status: '. $pay_period_obj->getStatus(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -140,7 +119,7 @@ switch ($action) {
 
 			$smarty->assign_by_ref('status_options', $status_options);
 
-			$elf = new ExceptionListFactory();
+			$elf = new ExceptionListFactory(); 
 			$elf->getSumExceptionsByPayPeriodIdAndBeforeDate($pay_period_obj->getId(), $pay_period_obj->getEndDate() );
 			$exceptions = array(
 								'low' => 0,
@@ -150,7 +129,10 @@ switch ($action) {
 								);
 			if ( $elf->getRecordCount() > 0 ) {
 				Debug::Text(' Found Exceptions: '. $elf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-				foreach($elf as $e_obj ) {
+				foreach($elf->rs as $e_obj ) {
+					$elf->data = (array)$e_obj;
+					$e_obj = $elf;
+
 					if ( $e_obj->getColumn('severity_id') == 10 ) {
 						$exceptions['low'] = $e_obj->getColumn('count');
 					}
@@ -183,16 +165,64 @@ switch ($action) {
 			$pay_period_data['total_punches'] = $plf->getByPayPeriodId( $pay_period_id )->getRecordCount();
 			Debug::Text(' Total Punches: '. $pay_period_data['total_punches'], __FILE__, __LINE__, __METHOD__,10);
 		}
-		//var_dump($pay_period_data);
 
-		$smarty->assign_by_ref('exceptions', $exceptions);
-		$smarty->assign_by_ref('pay_period_data', $pay_period_data);
-		$smarty->assign_by_ref('current_epoch', TTDate::getTime() );
+		$viewData['exceptions'] = $exceptions;
+		$viewData['pay_period_data'] = $pay_period_data;
+		$viewData['current_epoch'] = TTDate::getTime();
+		$viewData['ppf'] = $ppf;
+        return view('payperiod/ViewPayPeriod', $viewData);
 
-		break;
+    }
+
+	public function submit(){
+		$pplf = new PayPeriodListFactory();
+		$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
+		foreach ($pplf->rs as $pay_period_obj) {
+			$pplf->data = (array)$pay_period_obj;
+			$pay_period_obj = $pplf;
+
+			$pay_period_obj->setStatus( $status_id );
+			$pay_period_obj->save();
+		}
+
+		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
+
+	}
+
+	public function generate_paystubs(){
+		Debug::Text('Generate Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
+
+		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paystubs', 'pay_period_ids' => $pay_period_id, 'next_page' => URLBuilder::getURL( array('filter_pay_period_id' => $pay_period_id ), '../pay_stub/PayStubList.php') ), '../progress_bar/ProgressBarControl.php') );
+	}
+
+	public function generate_midpay(){
+		Debug::Text('Generate Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
+
+		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paymiddle', 'pay_period_ids' => $pay_period_id, 'next_page' => URLBuilder::getURL( array('filter_pay_period_id' => $pay_period_id ), '../pay_stub/PayStubList.php') ), '../progress_bar/ProgressBarControl.php') );
+	}
+
+	public function import(){
+		//Imports already created shifts in to this pay period, from another pay period.
+		//Get all users assigned to this pay period schedule.
+		$pplf = new PayPeriodListFactory();
+		$pay_period_obj = $pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() )->getCurrent();
+
+		$pay_period_obj->importData();
+
+		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
+	}
+
+	public function delete_data(){
+		//Deletes all data assigned to this pay period.
+		//Get all users assigned to this pay period schedule.
+		$pplf = new PayPeriodListFactory();
+		$pay_period_obj = $pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() )->getCurrent();
+
+		$pay_period_obj->deleteData();
+
+		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
+	}
+
 }
 
-$smarty->assign_by_ref('ppf', $ppf);
-
-$smarty->display('payperiod/ViewPayPeriod.tpl');
 ?>

@@ -1,117 +1,85 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: PermissionControlList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('permission','enabled')
-		OR !( $permission->Check('permission','edit') OR $permission->Check('permission','edit_own') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\permission;
 
-//Debug::setVerbosity(11);
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', __($title = 'Permission Group List')); // See index.php
-BreadCrumb::setCrumb($title);
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\PermissionControlListFactory;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												) ) );
+class PermissionControlList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+    }
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
+    public function index() {
+        /*
+        if ( !$permission->Check('permission','enabled')
+				OR !( $permission->Check('permission','edit') OR $permission->Check('permission','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditPermissionControl.php', FALSE) );
+        $viewData['title'] = 'Permission Group List';
 
-		break;
-	case 'copy':
-		$pclf = new PermissionControlListFactory();
-
-		$pclf->StartTransaction();
-
-		foreach ($ids as $id) {
-			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($pclf as $pc_obj) {
-				$permission_arr = $pc_obj->getPermission();
-
-				$pc_obj->setId(FALSE);
-				$pc_obj->setName( Misc::generateCopyName( $pc_obj->getName() ) );
-				if ( $pc_obj->isValid() ) {
-					$pc_obj->Save(FALSE);
-					$pc_obj->setPermission( $permission_arr );
-				}
-				unset($pc_obj, $permission_arr);
-
-			}
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
 
-		$pclf->CommitTransaction();
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'PermissionControlList.php') );
-
-		break;
-	case 'delete':
-	case 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
-		}
-
-		$pclf = new PermissionControlListFactory();
-
-		foreach ($ids as $id) {
-			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($pclf as $pc_obj) {
-				$pc_obj->setDeleted($delete);
-				if ( $pc_obj->isValid() ) {
-					$pc_obj->Save();
-				}
-			}
-		}
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'PermissionControlList.php') );
-
-		break;
-
-	default:
 		$pclf = new PermissionControlListFactory();
 		$pclf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
 		$pager = new Pager($pclf);
 
-		foreach ($pclf as $pc_obj) {
+		foreach ($pclf->rs as $pc_obj) {
+			$pclf->data = (array)$pc_obj;
+			$pc_obj = $pclf;
+
 			$rows[] = array(
 								'id' => $pc_obj->getId(),
 								'name' => $pc_obj->getColumn('name'),
@@ -129,7 +97,73 @@ switch ($action) {
 
 		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
 
-		break;
+
+		$smarty->display('permission/PermissionControlList.tpl');
+        return view('accrual/ViewUserAccrualList', $viewData);
+
+    }
+
+	public function add(){
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditPermissionControl.php', FALSE) );
+	}
+
+	public function copy(){
+		$pclf = new PermissionControlListFactory();
+
+		$pclf->StartTransaction();
+
+		foreach ($ids as $id) {
+			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
+			foreach ($pclf->rs as $pc_obj) {
+				$pclf->data = (array)$pc_obj;
+				$pc_obj = $pclf;
+
+				$permission_arr = $pc_obj->getPermission();
+
+				$pc_obj->setId(FALSE);
+				$pc_obj->setName( Misc::generateCopyName( $pc_obj->getName() ) );
+				if ( $pc_obj->isValid() ) {
+					$pc_obj->Save(FALSE);
+					$pc_obj->setPermission( $permission_arr );
+				}
+				unset($pc_obj, $permission_arr);
+
+			}
+		}
+
+		$pclf->CommitTransaction();
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'PermissionControlList.php') );
+
+	}
+
+	public function delete(){
+		if ( strtolower($action) == 'delete' ) {
+			$delete = TRUE;
+		} else {
+			$delete = FALSE;
+		}
+
+		$pclf = new PermissionControlListFactory();
+
+		foreach ($ids as $id) {
+			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
+			foreach ($pclf->rs as $pc_obj) {
+				$pclf->data = (array)$pc_obj;
+				$pc_obj = $pclf;
+
+				$pc_obj->setDeleted($delete);
+				if ( $pc_obj->isValid() ) {
+					$pc_obj->Save();
+				}
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'PermissionControlList.php') );
+
+	}
+
 }
-$smarty->display('permission/PermissionControlList.tpl');
+
+
 ?>
