@@ -1,12 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\pay_stub;
+namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use App\Models\Accrual\AccrualBalanceFactory;
-use App\Models\Accrual\AccrualBalanceListFactory;
-use App\Models\Accrual\AccrualFactory;
-use App\Models\Accrual\AccrualListFactory;
 use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
@@ -18,8 +14,6 @@ use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
-use App\Models\Hierarchy\HierarchyListFactory;
-use App\Models\Policy\AccrualPolicyListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 

@@ -210,18 +210,15 @@ class EditPayStub extends Controller
         $culf->getByCompanyId( $current_company->getId() );
 		$data['currency_options'] = $culf->getArrayByListFactory( $culf, FALSE, TRUE );
 
-		//var_dump($data);
-		$smarty->assign_by_ref('data', $data);
-		$smarty->assign_by_ref('pay_stub_id', $id);
-		$smarty->assign_by_ref('filter_pay_period_id', $filter_pay_period_id);
-		$smarty->assign_by_ref('modified_entry', $modified_entry);
+		$viewData['data'] = $data;
+		$viewData['pay_stub_id'] = $id;
+		$viewData['filter_pay_period_id'] = $filter_pay_period_id;
+		$viewData['modified_entry'] = $modified_entry;
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
 
-		$smarty->assign_by_ref('psf', $psf);
-
-		$smarty->display('pay_stub/EditPayStub.tpl');
+		$viewData['psf'] = $psf;
 
         return view('pay_stub/EditPayStub', $viewData);
 
