@@ -41,64 +41,6 @@ class WageGroupList extends Controller
         */
 	}
 
-	// public function index()
-	// {
-	// 	$current_company = $this->currentCompany;
-	// 	$current_user_prefs = $this->userPrefs;
-	// 	$viewData['title'] = 'Wage Group List';
-
-	// 	extract(FormVariables::GetVariables(
-	// 		array(
-	// 			'action',
-	// 			'page',
-	// 			'sort_column',
-	// 			'sort_order',
-	// 			'ids'
-	// 		)
-	// 	));
-
-	// 	URLBuilder::setURL(
-	// 		$_SERVER['SCRIPT_NAME'],
-	// 		array(
-	// 			'sort_column' => $sort_column,
-	// 			'sort_order' => $sort_order,
-	// 			'page' => $page
-	// 		)
-	// 	);
-
-	// 	$sort_array = NULL;
-	// 	if ($sort_column != '') {
-	// 		$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-	// 	}
-
-	// 	$wglf = new WageGroupListFactory();
-	// 	// dd($current_company->getId());
-	// 	// dd($current_user_prefs->getItemsPerPage());
-	// 	$wglf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
-
-	// 	dd($wglf);
-	// 	$pager = new Pager($wglf);
-
-	// 	foreach ($wglf->rs as $group_obj) {
-	// 		$wglf->data = (array)$group_obj;
-	// 		$group_obj = $wglf;
-
-	// 		$groups[] = array(
-	// 			'id' => $group_obj->getId(),
-	// 			'name' => $group_obj->getName(),
-	// 			'deleted' => $group_obj->getDeleted()
-	// 		);
-	// 	}
-
-	// 	$viewData['groups'] = $groups;
-	// 	$viewData['sort_column'] = $sort_column;
-	// 	$viewData['sort_order'] = $sort_order;
-	// 	$viewData['paging_data'] = $pager->getPageVariables();
-
-
-	// 	return view('company.WageGroupList', $viewData);
-	// }
-
 	public function index()
 {
     $current_company = $this->currentCompany;
