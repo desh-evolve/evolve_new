@@ -107,26 +107,3 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 // Compnay Information
 // ===============================================================================================================================
 Route::get('/company/company_information', [EditCompanyNew::class, 'index'])->name('company.index');
-
-
-// ===============================================================================================================================
-// Policies 
-// ===============================================================================================================================
-
-Route::get('/policy/policy_groups', [PolicyGroupList::class, 'index'])->name('policy.policy_groups');
-Route::get('/policy/policy_groups/add/{id?}', [EditPolicyGroup::class, 'index'])->name('policy.policy_groups.add');
-Route::get('/policy/policy_groups/submit/{id?}', [EditPolicyGroup::class, 'submit'])->name('policy.policy_groups.submit');
-Route::get('/policy/policy_groups/delete/{id}', [PolicyGroupList::class, 'delete'])->name('policy.policy_groups.delete');
-
-Route::get('/policy/schedule_policies', [SchedulePolicyList::class, 'index'])->name('policy.schedule_policies');
-Route::get('/policy/rounding_policies', [RoundIntervalPolicyList::class, 'index'])->name('policy.rounding_policies');
-Route::get('/policy/meal_policies', [MealPolicyList::class, 'index'])->name('policy.meal_policies');
-Route::get('/policy/break_policies', [BreakPolicyList::class, 'index'])->name('policy.break_policies');
-Route::get('/policy/accrual_policies', [AccrualPolicyList::class, 'index'])->name('policy.accrual_policies');
-Route::get('/policy/overtime_policies', [OverTimePolicyList::class, 'index'])->name('policy.overtime_policies');
-Route::get('/policy/premium_policies', [PremiumPolicyList::class, 'index'])->name('policy.premium_policies');
-Route::get('/policy/absence_policies', [AbsencePolicyList::class, 'index'])->name('policy.absence_policies');
-Route::get('/policy/exception_policies', [ExceptionPolicyControlList::class, 'index'])->name('policy.exception_policies');
-Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->name('policy.holiday_policies');
-
-// ===============================================================================================================================
