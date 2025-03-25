@@ -60,8 +60,8 @@
                                 <x-general.multiselect-php 
                                     title="Employees" 
                                     :data="$data['user_options']" 
-                                    :selected="[]" 
-                                    name="data[user_ids][]"
+                                    :selected="!empty($data['user_ids']) ? array_values($data['user_ids']) : []" 
+                                    :name="'data[user_ids][]'"
                                     id="userSelector"
                                 />
                             </div>
@@ -72,12 +72,13 @@
                                 id="over_time_policy_ids" 
                                 class="form-select" 
                                 name="data[over_time_policy_ids][]" 
+                                values="[1, 2]"
                                 multiple
                             >
                                 @foreach ($data['over_time_policy_options'] as $id => $name )
                                     <option 
                                         value="{{$id}}"
-                                        @if(isset($data['selected']['over_time_policy_ids']) && in_array($id, $data['selected']['over_time_policy_ids']))
+                                        @if(!empty($data['over_time_policy_ids']) && in_array($id, $data['over_time_policy_ids']))
                                             selected
                                         @endif
                                     >{{$name}}</option>
@@ -93,7 +94,12 @@
                                 multiple
                             >
                                 @foreach ($data['round_interval_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option 
+                                        value="{{$id}}"
+                                        @if(!empty($data['round_interval_policy_ids']) && in_array($id, $data['round_interval_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -106,7 +112,12 @@
                                 multiple
                             >
                                 @foreach ($data['meal_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option
+                                        value="{{$id}}"
+                                        @if(!empty($data['meal_policy_ids']) && in_array($id, $data['meal_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -119,7 +130,12 @@
                                 multiple
                             >
                                 @foreach ($data['break_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option
+                                        value="{{$id}}"
+                                        @if(!empty($data['break_policy_ids']) && in_array($id, $data['break_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -132,7 +148,12 @@
                                 multiple
                             >
                                 @foreach ($data['accrual_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['accrual_policy_ids']) && in_array($id, $data['accrual_policy_ids']))
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -145,7 +166,12 @@
                                 multiple
                             >
                                 @foreach ($data['premium_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['premium_policy_ids']) && in_array($id, $data['premium_policy_ids']))
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -158,7 +184,12 @@
                                 multiple
                             >
                                 @foreach ($data['holiday_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['holiday_policy_ids']) && in_array($id, $data['holiday_policy_ids']))
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -170,7 +201,12 @@
                                 name="data[exception_policy_control_id]" 
                             >
                                 @foreach ($data['exception_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['exception_policy_control_id']) && $id == $data['exception_policy_control_id'])
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -179,7 +215,7 @@
                             <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
                         </div>
             
-                        <input type="hidden" name="data[id]" value="{$data['id']}">
+                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) && $data['id']}}">
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}

@@ -36,7 +36,7 @@
                                 <td> {{ $policy['name'] }} </td>
                                 <td>
                                     <a class="btn btn-secondary btn-sm" href="{{ route('policy.policy_groups.add', ['id' => $policy['id']]) }}">Edit</a>
-                                    <a class="btn btn-danger btn-sm" href="{{ route('policy.policy_groups.delete', ['id' => $policy['id']]) }}">Delete</a>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/policy_groups/delete/{{ $policy['id'] }}', 'Policy Group', this)">Delete</button>
                                 </td>
                             </tr>
                         @endforeach

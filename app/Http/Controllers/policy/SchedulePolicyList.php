@@ -3,21 +3,14 @@
 namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
-use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
-use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\AbsencePolicyListFactory;
 use App\Models\Policy\MealPolicyListFactory;
 use App\Models\Policy\SchedulePolicyListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class SchedulePolicyList extends Controller
@@ -51,23 +44,8 @@ class SchedulePolicyList extends Controller
         $viewData['title'] = 'Schedule Policy List';
 		$current_company = $this->currentCompany;
 
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}		
-
 		$splf = new SchedulePolicyListFactory();
 		$splf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($splf);
 
 		$aplf = new AbsencePolicyListFactory();
 		$absence_options = $aplf->getByCompanyIDArray( $current_company->getId(), TRUE );
@@ -93,33 +71,34 @@ class SchedulePolicyList extends Controller
 		}
 		
 		$viewData['policies'] = $policies;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
 		
         return view('policy/SchedulePolicyList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditSchedulePolicy', FALSE) );
-	}
+	public function delete( $id ){
+		if (empty($id)) {
+            return response()->json(['error' => 'No Schedule Policy Selected.'], 400);
+        }
 
-	public function delete(){
 		$current_company = $this->currentCompany;
 		$delete = TRUE;
 
 		$splf = new SchedulePolicyListFactory();
+		$splf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$splf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($splf->rs as $sp_obj) {
-				$splf->data = (array)$sp_obj;
-				$sp_obj = $splf;
+		foreach ($splf->rs as $sp_obj) {
+			$splf->data = (array)$sp_obj;
+			$sp_obj = $splf;
 
-				$sp_obj->setDeleted($delete);
-				if ( $sp_obj->isValid() ) {
-					$sp_obj->Save();
+			$sp_obj->setDeleted($delete);
+			if ( $sp_obj->isValid() ) {
+				$res = $sp_obj->Save();
+
+				if($res){
+					return response()->json(['success' => 'Schedule Policy Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Schedule Policy Deleted Failed.']);
 				}
 			}
 		}

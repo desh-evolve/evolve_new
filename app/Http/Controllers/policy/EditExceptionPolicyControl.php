@@ -141,7 +141,7 @@ class EditExceptionPolicyControl extends Controller
 									'deleted_by' => $epc_obj->getDeletedBy()
 								);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			//Populate default values.
 			$exceptions = $epf->getExceptionTypeDefaultValues( NULL, $current_company->getProductEdition() );
 

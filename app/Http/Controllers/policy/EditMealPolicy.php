@@ -92,7 +92,7 @@ class EditMealPolicy extends Controller
 									'deleted_by' => $mp_obj->getDeletedBy()
 								);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$data = array(
 						'trigger_time' => 3600 * 5,
 						'amount' => 3600,

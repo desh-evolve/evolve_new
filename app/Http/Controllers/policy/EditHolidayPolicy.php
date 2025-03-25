@@ -113,7 +113,7 @@ class EditHolidayPolicy extends Controller
 					'deleted_by' => $hp_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			//Defaults
 			$data = array(
 				'default_schedule_status_id' => 20,

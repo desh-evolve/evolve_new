@@ -84,7 +84,7 @@ class EditRoundIntervalPolicy extends Controller
 					'deleted_by' => $rip_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$data = array(
 							'interval' => 900,
 							'grace' => 0

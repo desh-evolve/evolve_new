@@ -152,24 +152,24 @@ class EditPolicyGroup extends Controller
 
     }
 
-	public function submit(Request $request){
+	public function submit($id = null, Request $request){
 		$pgf = new PolicyGroupFactory();
-		$data = $request->data;
 		$current_company = $this->currentCompany;
-
+		$data = $request->data;
+		
+		//print_r($data);exit;
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		//Debug::setVerbosity(11);
 
 		$pgf->StartTransaction();
 
-		$pgf->setId( $data['id'] );
+		$pgf->setId( $id );
 		$pgf->setCompany( $current_company->getId() );
 		$pgf->setName( $data['name'] );
 		$pgf->setExceptionPolicyControlID( $data['exception_policy_control_id'] );
 
 		if ( $pgf->isValid() ) {
-			$pgf->Save(FALSE);
 
 			if ( isset($data['user_ids'] ) ) {
 				$pgf->setUser( $data['user_ids'] );

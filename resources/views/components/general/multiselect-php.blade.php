@@ -2,7 +2,8 @@
     'title' => 'Items',
     'data' => [],
     'selected' => [],
-    'onSelectionChange' => ''
+    'onSelectionChange' => '',
+    'name' => 'selected_ids'
 ])
 
 <div {{ $attributes->merge(['class' => 'multi-selector-container']) }}>
@@ -14,9 +15,9 @@
         <div class="select-box col-md-5">
             <label class="form-label">Unselected</label>
             <select class="form-select unselected-list" multiple size="5">
-                @foreach($data as $id => $name)
+                @foreach($data as $id => $label)
                     @unless(in_array($id, $selected))
-                        <option value="{{ $id }}">{{ $name }}</option>
+                        <option value="{{ $id }}">{{ $label }}</option>
                     @endunless
                 @endforeach
             </select>
@@ -33,10 +34,10 @@
         </div>
         <div class="select-box col-md-5">
             <label class="form-label">Selected</label>
-            <select class="form-select selected-list" multiple size="5">
-                @foreach($data as $id => $name)
+            <select class="form-select selected-list" multiple size="5" name="{{ $name }}">
+                @foreach($data as $id => $label)
                     @if(in_array($id, $selected))
-                        <option value="{{ $id }}">{{ $name }}</option>
+                        <option value="{{ $id }}" selected>{{ $label }}</option>
                     @endif
                 @endforeach
             </select>

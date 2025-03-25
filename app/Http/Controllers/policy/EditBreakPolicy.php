@@ -92,7 +92,7 @@ class EditBreakPolicy extends Controller
 					'deleted_by' => $mp_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$data = array (
 				'trigger_time' => 3600 * 1,
 				'amount' => 60 * 15,

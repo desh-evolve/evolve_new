@@ -86,7 +86,7 @@ class EditSchedulePolicy extends Controller
 					'deleted_by' => $sp_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$data = array(
 				'start_stop_window' => 3600
 			);

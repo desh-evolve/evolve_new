@@ -53,6 +53,7 @@ class PolicyGroupUserFactory extends Factory {
 		}
 	}
 	function isUniqueUser($id) {
+		
 		$pglf = new PolicyGroupListFactory();
 
 		$ph = array(
@@ -62,7 +63,7 @@ class PolicyGroupUserFactory extends Factory {
 		$query = 'select a.id from '. $this->getTable() .' as a, '. $pglf->getTable() .' as b where a.policy_group_id = b.id AND a.user_id = :id AND b.deleted=0';
 		$user_id = DB::select($query, $ph);
 
-		if ($user_id === FALSE ) {
+		if (empty($user_id) && $user_id == FALSE ) {
             $user_id = 0;
         }else{
             $user_id = current(get_object_vars($user_id[0]));
