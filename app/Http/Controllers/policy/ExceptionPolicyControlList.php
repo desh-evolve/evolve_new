@@ -1,92 +1,87 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: ExceptionPolicyControlList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('exception_policy','enabled')
-		OR !( $permission->Check('exception_policy','view') OR $permission->Check('exception_policy','view_own') ) ) {
+namespace App\Http\Controllers\policy;
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-//Debug::setVerbosity(11);
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Policy\ExceptionPolicyControlListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Exception Policy List')); // See index.php
-BreadCrumb::setCrumb($title);
+class ExceptionPolicyControlList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+    }
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditExceptionPolicyControl.php', FALSE) );
-
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+    public function index() {
+        /*
+        if ( !$permission->Check('exception_policy','enabled')
+				OR !( $permission->Check('exception_policy','view') OR $permission->Check('exception_policy','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		$epclf = new ExceptionPolicyControlListFactory();
-
-		foreach ($ids as $id) {
-			$epclf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($epclf as $epc_obj) {
-				$epc_obj->setDeleted($delete);
-				if ( $epc_obj->isValid() ) {
-					$epc_obj->Save();
-				}
-			}
+        $viewData['title'] = 'Exception Policy List';
+		$current_company = $this->currentCompany;
+		
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
+		
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'ExceptionPolicyControlList.php') );
-
-		break;
-
-	default:
 		$epclf = new ExceptionPolicyControlListFactory();
 		$epclf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($epclf);
 
 		$show_no_policy_group_notice = FALSE;
-		foreach ($epclf as $epc_obj) {
+		foreach ($epclf->rs as $epc_obj) {
+			$epclf->data = (array)$epc_obj;
+			$epc_obj = $epclf;
 			if ( (int)$epc_obj->getColumn('assigned_policy_groups') == 0 ) {
 				$show_no_policy_group_notice = TRUE;
 			}
@@ -99,16 +94,47 @@ switch ($action) {
 							);
 
 		}
-		$smarty->assign_by_ref('policies', $policies);
 
-		$smarty->assign_by_ref('show_no_policy_group_notice', $show_no_policy_group_notice );
+		$viewData['policies'] = $policies;
+		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
+		
+        return view('policy/ExceptionPolicyControlList', $viewData);
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+    }
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+	public function add(){
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditExceptionPolicyControl', FALSE) );
+	}
 
-		break;
+	public function delete(){
+		$current_company = $this->currentCompany;
+
+		$delete = TRUE;
+
+		$epclf = new ExceptionPolicyControlListFactory();
+
+		foreach ($ids as $id) {
+			$epclf->getByIdAndCompanyId($id, $current_company->getId() );
+			foreach ($epclf->rs as $epc_obj) {
+				$epclf->data = (array)$epc_obj;
+				$epc_obj = $epclf;
+				
+				$epc_obj->setDeleted($delete);
+				if ( $epc_obj->isValid() ) {
+					$epc_obj->Save();
+				}
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'ExceptionPolicyControlList') );
+
+	}
 }
-$smarty->display('policy/ExceptionPolicyControlList.tpl');
+
+
+
+
 ?>

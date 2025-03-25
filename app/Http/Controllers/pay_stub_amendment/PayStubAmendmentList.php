@@ -1,135 +1,130 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: PayStubAmendmentList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\pay_stub_amendment;
 
-if ( !$permission->Check('pay_stub_amendment','enabled')
-		OR !( $permission->Check('pay_stub_amendment','view') OR $permission->Check('pay_stub_amendment','view_child') OR $permission->Check('pay_stub_amendment','view_own') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', __($title = 'Pay Stub Amendment List')); // See index.php
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
+use App\Models\PayStubAmendment\RecurringPayStubAmendmentListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use Illuminate\Support\Facades\View;
 
-BreadCrumb::setCrumb($title);
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'form',
-												'page',
-												'filter_data',
-												'sort_column',
-												'sort_order',
-												'saved_search_id',
-												'filter_user_id',
-												'recurring_ps_amendment_id',
-												'ids',
-												) ) );
+class CurrencyList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$columns = array(
-											'-1010-first_name' => _('First Name'),
-											'-1020-middle_name' => _('Middle Name'),
-											'-1030-last_name' => _('Last Name'),
-											'-1040-status' => _('Status'),
-											'-1050-type' => _('Type'),
-											'-1060-pay_stub_account_name' => _('Account'),
-											'-1070-effective_date' => _('Effective Date'),
-											'-1080-amount' => _('Amount'),
-											'-1090-rate' => _('Rate'),
-											'-1100-units' => _('Units'),
-											'-1110-description' => _('Description'),
-											'-1120-ytd_adjustment' => _('YTD'),
-											);
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
-	//Default columns.
-	$filter_data['columns'] = array(
-								'-1010-first_name',
-								'-1030-last_name',
-								'-1040-status',
-								'-1060-pay_stub_account_name',
-								'-1070-effective_date',
-								'-1080-amount',
-								'-1110-description',
-								);
-	if ( $sort_column == '' ) {
-		$sort_column = $filter_data['sort_column'] = 'effective_date';
-		$sort_order = $filter_data['sort_order'] = 'desc';
-	}
-}
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$ugdlf = new UserGenericDataListFactory();
-$ugdf = new UserGenericDataFactory();
-$pplf = new PayPeriodListFactory();
+    }
 
-//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-$hlf = new HierarchyListFactory();
-$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
-Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
-
-Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
-//Handle different actions for different forms.
-$action = Misc::findSubmitButton();
-if ( isset($form) AND $form != '' ) {
-	$action = strtolower($form.'_'.$action);
-} else {
-	$action = strtolower($action);
-}
-Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
-
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL( array('user_id' => $filter_user_id), 'EditPayStubAmendment.php', FALSE) );
-
-		break;
-	case 'delete':
-	case 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_stub_amendment','enabled')
+				OR !( $permission->Check('pay_stub_amendment','view') OR $permission->Check('pay_stub_amendment','view_child') OR $permission->Check('pay_stub_amendment','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		$psalf = new PayStubAmendmentListFactory();
+        $viewData['title'] = 'Pay Stub Amendment List';
 
-		foreach ($ids as $id) {
-			$psalf->getById( $id );
-			foreach ($psalf as $pay_stub_amendment) {
-				//Only delete PS amendments NOT in the paid status.
-				if ( $pay_stub_amendment->getStatus() != 55 ) {
-					$pay_stub_amendment->setDeleted($delete);
-					$pay_stub_amendment->Save();
-				}
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'form',
+				'page',
+				'filter_data',
+				'sort_column',
+				'sort_order',
+				'saved_search_id',
+				'filter_user_id',
+				'recurring_ps_amendment_id',
+				'ids',
+			) 
+		) );
+
+		$columns = array(
+			'-1010-first_name' => _('First Name'),
+			'-1020-middle_name' => _('Middle Name'),
+			'-1030-last_name' => _('Last Name'),
+			'-1040-status' => _('Status'),
+			'-1050-type' => _('Type'),
+			'-1060-pay_stub_account_name' => _('Account'),
+			'-1070-effective_date' => _('Effective Date'),
+			'-1080-amount' => _('Amount'),
+			'-1090-rate' => _('Rate'),
+			'-1100-units' => _('Units'),
+			'-1110-description' => _('Description'),
+			'-1120-ytd_adjustment' => _('YTD'),
+		);
+
+		if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
+			//Default columns.
+			$filter_data['columns'] = array(
+				'-1010-first_name',
+				'-1030-last_name',
+				'-1040-status',
+				'-1060-pay_stub_account_name',
+				'-1070-effective_date',
+				'-1080-amount',
+				'-1110-description',
+			);
+			if ( $sort_column == '' ) {
+				$sort_column = $filter_data['sort_column'] = 'effective_date';
+				$sort_order = $filter_data['sort_order'] = 'desc';
 			}
 		}
-		unset($pay_stub_amendment);
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'PayStubAmendmentList.php', TRUE) );
+		$ugdlf = new UserGenericDataListFactory(); 
+		$ugdf = new UserGenericDataFactory();
+		$pplf = new PayPeriodListFactory();
 
-		break;
-	case 'search_form_delete':
-	case 'search_form_update':
-	case 'search_form_save':
-	case 'search_form_clear':
-	case 'search_form_search':
-		Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
+		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
+		$hlf = new HierarchyListFactory();
+		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
+		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
-		$saved_search_id = UserGenericDataFactory::searchFormDataHandler( $action, $filter_data, URLBuilder::getURL(NULL, 'PayStubAmendmentList.php') );
-	default:
+		Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
+		//Handle different actions for different forms.
+		$action = Misc::findSubmitButton();
+		if ( isset($form) AND $form != '' ) {
+			$action = strtolower($form.'_'.$action);
+		} else {
+			$action = strtolower($action);
+		}
+
+
 		extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, $sort_column ) );
 		Debug::Text('Sort Column: '. $sort_column, __FILE__, __LINE__, __METHOD__,10);
 		Debug::Text('Saved Search ID: '. $saved_search_id, __FILE__, __LINE__, __METHOD__,10);
@@ -155,7 +150,7 @@ switch ($action) {
 														) );
 
 		$ulf = new UserListFactory();
-		$psalf = new PayStubAmendmentListFactory();
+		$psalf = new PayStubAmendmentListFactory(); 
 
 		if ( $permission->Check('pay_stub_amendment','view') == FALSE ) {
 			if ( $permission->Check('pay_stub_amendment','view_child') ) {
@@ -181,14 +176,14 @@ switch ($action) {
 
 		$pager = new Pager($psalf);
 
-		$psealf = new PayStubEntryAccountListFactory();
+		$psealf = new PayStubEntryAccountListFactory(); 
 		$pay_stub_entry_name_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50,60,65) );
 
 		//Get pay periods
 		$pplf->getByCompanyId( $current_company->getId() );
 		$pay_period_options = $pplf->getArrayByListFactory( $pplf, FALSE, TRUE );
 
-		$utlf = new UserTitleListFactory();
+		$utlf = new UserTitleListFactory(); 
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
@@ -269,18 +264,57 @@ switch ($action) {
 		}
 		unset($column_key);
 
-		$smarty->assign_by_ref('pay_stub_amendments', $pay_stub_amendments);
-		$smarty->assign_by_ref('filter_data', $filter_data);
-		$smarty->assign_by_ref('columns', $filter_columns );
-		$smarty->assign('total_columns', count($filter_columns)+3 );
+		$viewData['pay_stub_amendments'] = $pay_stub_amendments;
+		$viewData['filter_data'] = $filter_data;
+		$viewData['columns'] = $filter_columns;
+		$viewData['total_columns'] = count($filter_columns)+3;
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-		$smarty->assign_by_ref('saved_search_id', $saved_search_id );
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['saved_search_id'] = $saved_search_id;
+		
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+        return view('pay_stub_amendment/PayStubAmendmentList', $viewData);
 
-		break;
+    }
+
+	public function add(){
+		Redirect::Page( URLBuilder::getURL( array('user_id' => $filter_user_id), 'EditPayStubAmendment.php', FALSE) );
+	}
+
+	public function delete(){
+		if ( strtolower($action) == 'delete' ) {
+			$delete = TRUE;
+		} else {
+			$delete = FALSE;
+		}
+
+		$psalf = new PayStubAmendmentListFactory();
+
+		foreach ($ids as $id) {
+			$psalf->getById( $id );
+			foreach ($psalf as $pay_stub_amendment) {
+				//Only delete PS amendments NOT in the paid status.
+				if ( $pay_stub_amendment->getStatus() != 55 ) {
+					$pay_stub_amendment->setDeleted($delete);
+					$pay_stub_amendment->Save();
+				}
+			}
+		}
+		unset($pay_stub_amendment);
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'PayStubAmendmentList.php', TRUE) );
+	}
+
+	public function search(){
+		Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
+
+		$saved_search_id = UserGenericDataFactory::searchFormDataHandler( $action, $filter_data, URLBuilder::getURL(NULL, 'PayStubAmendmentList.php') );
+	}
+
 }
-$smarty->display('pay_stub_amendment/PayStubAmendmentList.tpl');
+
+
+
 ?>

@@ -1,88 +1,86 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: PolicyGroupList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('policy_group','enabled')
-		OR !( $permission->Check('policy_group','view') OR $permission->Check('policy_group','view_own') ) ) {
+namespace App\Http\Controllers\policy;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Policy\PolicyGroupListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Policy Group List')); // See index.php
-BreadCrumb::setCrumb($title);
+class PolicyGroupList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+    }
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditPolicyGroup.php', FALSE) );
-
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+    public function index() {
+        /*
+        if ( !$permission->Check('policy_group','enabled')
+				OR !( $permission->Check('policy_group','view') OR $permission->Check('policy_group','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		$pglf = new PolicyGroupListFactory();
+        $viewData['title'] = 'Policy Group List';
 
-		foreach ($ids as $id) {
-			$pglf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($pglf as $pg_obj) {
-				$pg_obj->setDeleted($delete);
-				$pg_obj->Save();
-			}
+		$current_company = $this->currentCompany;
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'PolicyGroupList.php') );
-
-		break;
-
-	default:
+		
 		$pglf = new PolicyGroupListFactory();
 		$pglf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($pglf);
 
-		foreach ($pglf as $pg_obj) {
+		foreach ($pglf->rs as $pg_obj) {
+			$pglf->data = (array)$pg_obj;
+			$pg_obj = $pglf;
 
 			$policies[] = array(
 								'id' => $pg_obj->getId(),
@@ -91,14 +89,41 @@ switch ($action) {
 							);
 
 		}
-		$smarty->assign_by_ref('policies', $policies);
+		
+		$viewData['policies'] = $policies;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+        return view('policy/PolicyGroupList', $viewData);
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+    }
 
-		break;
+	public function delete(){
+		$current_company = $this->currentCompany;
+		$delete = TRUE;
+
+		$pglf = new PolicyGroupListFactory();
+
+		foreach ($ids as $id) {
+			$pglf->getByIdAndCompanyId($id, $current_company->getId() );
+			foreach ($pglf->rs as $pg_obj) {
+				$pglf->data = (array)$pg_obj;
+				$pg_obj = $pglf;
+
+				$pg_obj->setDeleted($delete);
+				$pg_obj->Save();
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'PolicyGroupList') );
+
+	}
 }
-$smarty->display('policy/PolicyGroupList.tpl');
+
+
+
+
+
+
 ?>

@@ -1,83 +1,79 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: RoundIntervalPolicyList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('round_policy','enabled')
-		OR !( $permission->Check('round_policy','view') OR $permission->Check('round_policy','view_own') ) ) {
+namespace App\Http\Controllers\policy;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Policy\RoundIntervalPolicyFactory;
+use App\Models\Policy\RoundIntervalPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Rounding Policy List')); // See index.php
-BreadCrumb::setCrumb($title);
+class RoundIntervalPolicyList extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids',
-												) ) );
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+    }
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditRoundIntervalPolicy.php', FALSE) );
-
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+    public function index() {
+        /*
+        if ( !$permission->Check('round_policy','enabled')
+				OR !( $permission->Check('round_policy','view') OR $permission->Check('round_policy','view_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		$riplf = new RoundIntervalPolicyListFactory();
+        $viewData['title'] = 'Rounding Policy List';
+		$current_company = $this->currentCompany;
 
-		foreach ($ids as $id) {
-			$riplf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($riplf as $rip_obj) {
-				$rip_obj->setDeleted($delete);
-				$rip_obj->Save();
-			}
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'ids',
+			) 
+		) );
+		
+		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+			array (
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			) 
+		);
+		
+		$sort_array = NULL;
+		if ( $sort_column != '' ) {
+			$sort_array = array($sort_column => $sort_order);
 		}
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'RoundIntervalPolicyList.php') );
-
-		break;
-
-	default:
-		$riplf = new RoundIntervalPolicyListFactory();
+		
+		$riplf = new RoundIntervalPolicyListFactory(); 
 		$riplf->getByCompanyId( $current_company->getId() );
 
 		$pager = new Pager($riplf);
@@ -85,32 +81,60 @@ switch ($action) {
 		$punch_type_options = $riplf->getOptions('punch_type');
 
  		$show_no_policy_group_notice = FALSE;
-		foreach ($riplf as $rip_obj) {
+		foreach ($riplf->rs as $rip_obj) {
+			$riplf->data = (array)$rip_obj;
+			$rip_obj = $riplf;
+
 			if ( (int)$rip_obj->getColumn('assigned_policy_groups') == 0 ) {
 				$show_no_policy_group_notice = TRUE;
 			}
 
 			$policies[] = array(
-								'id' => $rip_obj->getId(),
-								'name' => $rip_obj->getName(),
-								'punch_type_id' => $rip_obj->getPunchType(),
-								'punch_type' => $punch_type_options[$rip_obj->getPunchType()],
-								'interval' => $rip_obj->getInterval(),
-								'assigned_policy_groups' => (int)$rip_obj->getColumn('assigned_policy_groups'),
-								'deleted' => $rip_obj->getDeleted()
-							);
+				'id' => $rip_obj->getId(),
+				'name' => $rip_obj->getName(),
+				'punch_type_id' => $rip_obj->getPunchType(),
+				'punch_type' => $punch_type_options[$rip_obj->getPunchType()],
+				'interval' => $rip_obj->getInterval(),
+				'assigned_policy_groups' => (int)$rip_obj->getColumn('assigned_policy_groups'),
+				'deleted' => $rip_obj->getDeleted()
+			);
 
 		}
-		$smarty->assign_by_ref('policies', $policies);
+		
+		$viewData['policies'] = $policies;
+		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('show_no_policy_group_notice', $show_no_policy_group_notice );
+        return view('policy/RoundIntervalPolicyList', $viewData);
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+    }
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+	public function add(){
+		Redirect::Page( URLBuilder::getURL( NULL, 'EditRoundIntervalPolicy', FALSE) );
+	}
 
-		break;
+	public function delete(){
+		$current_company = $this->currentCompany;
+		$delete = TRUE;
+
+		$riplf = new RoundIntervalPolicyListFactory();
+
+		foreach ($ids as $id) {
+			$riplf->getByIdAndCompanyId($id, $current_company->getId() );
+			foreach ($riplf->rs as $rip_obj) {
+				$riplf->data = (array)$rip_obj;
+				$rip_obj = $riplf;
+
+				$rip_obj->setDeleted($delete);
+				$rip_obj->Save();
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'RoundIntervalPolicyList') );
+
+	}
 }
-$smarty->display('policy/RoundIntervalPolicyList.tpl');
+
 ?>

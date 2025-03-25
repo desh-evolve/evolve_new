@@ -1,61 +1,197 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5178 $
- * $Id: EditPayPeriodSchedule.php 5178 2011-08-30 21:13:34Z ipso $
- * $Date: 2011-08-30 14:13:34 -0700 (Tue, 30 Aug 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('pay_period_schedule','enabled')
-		OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
+namespace App\Http\Controllers\payperiod;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\PayPeriod\PayPeriodScheduleFactory;
+use App\Models\PayPeriod\PayPeriodScheduleListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Edit Pay Period Schedule')); // See index.php
+class EditPayPeriodSchedule extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'user_id',
-												'pay_period_schedule_data'
-												) ) );
-//var_dump($pay_period_schedule_data);
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-if ( isset($pay_period_schedule_data) ) {
-	if ( isset($pay_period_schedule_data['anchor_date']) ) {
-		$pay_period_schedule_data['anchor_date'] = TTDate::parseDateTime( $pay_period_schedule_data['anchor_date'] );
-	}
-	if ( isset($pay_period_schedule_data['day_start_time'] ) ) {
-		$pay_period_schedule_data['day_start_time'] = TTDate::parseTimeUnit( $pay_period_schedule_data['day_start_time'] );
-	}
-	if ( isset($pay_period_schedule_data['new_day_trigger_time']) ) {
-		$pay_period_schedule_data['new_day_trigger_time'] = TTDate::parseTimeUnit( $pay_period_schedule_data['new_day_trigger_time'] );
-	}
-	if ( isset($pay_period_schedule_data['maximum_shift_time']) ) {
-		$pay_period_schedule_data['maximum_shift_time'] = TTDate::parseTimeUnit( $pay_period_schedule_data['maximum_shift_time'] );
-	}
-}
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-//var_dump($pay_period_schedule_data);
-$ppsf = new PayPeriodScheduleFactory();
+    }
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		//Debug::setVerbosity(11);
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_period_schedule','enabled')
+				OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
+
+        $viewData['title'] = 'Edit Pay Period Schedule';
+
+		
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'user_id',
+				'pay_period_schedule_data'
+			) 
+		) );
+
+		if ( isset($pay_period_schedule_data) ) {
+			if ( isset($pay_period_schedule_data['anchor_date']) ) {
+				$pay_period_schedule_data['anchor_date'] = TTDate::parseDateTime( $pay_period_schedule_data['anchor_date'] );
+			}
+			if ( isset($pay_period_schedule_data['day_start_time'] ) ) {
+				$pay_period_schedule_data['day_start_time'] = TTDate::parseTimeUnit( $pay_period_schedule_data['day_start_time'] );
+			}
+			if ( isset($pay_period_schedule_data['new_day_trigger_time']) ) {
+				$pay_period_schedule_data['new_day_trigger_time'] = TTDate::parseTimeUnit( $pay_period_schedule_data['new_day_trigger_time'] );
+			}
+			if ( isset($pay_period_schedule_data['maximum_shift_time']) ) {
+				$pay_period_schedule_data['maximum_shift_time'] = TTDate::parseTimeUnit( $pay_period_schedule_data['maximum_shift_time'] );
+			}
+		}
+
+		//var_dump($pay_period_schedule_data);
+		$ppsf = new PayPeriodScheduleFactory(); 
+
+
+		if ( isset($id) ) {
+
+			$ppslf = new PayPeriodScheduleListFactory();
+
+			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
+
+			foreach ($ppslf->rs as $pay_period_schedule) {
+				$ppslf->data = (array)$pay_period_schedule;
+				$pay_period_schedule = $ppslf;
+				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
+
+				$pay_period_schedule_data = array(
+					'id' => $pay_period_schedule->getId(),
+					'company_id' => $pay_period_schedule->getCompany(),
+					'name' => $pay_period_schedule->getName(),
+					'description' => $pay_period_schedule->getDescription(),
+					'type' => $pay_period_schedule->getType(),
+					'start_week_day_id' => $pay_period_schedule->getStartWeekDay(),
+					'start_day_of_week' => $pay_period_schedule->getStartDayOfWeek(),
+					'transaction_date' => $pay_period_schedule->getTransactionDate(),
+
+					'primary_day_of_month' => $pay_period_schedule->getPrimaryDayOfMonth(),
+					'secondary_day_of_month' => $pay_period_schedule->getSecondaryDayOfMonth(),
+
+					'primary_transaction_day_of_month' => $pay_period_schedule->getPrimaryTransactionDayOfMonth(),
+					'secondary_transaction_day_of_month' => $pay_period_schedule->getSecondaryTransactionDayOfMonth(),
+
+					'transaction_date_bd' => $pay_period_schedule->getTransactionDateBusinessDay(),
+
+					'anchor_date' => $pay_period_schedule->getAnchorDate(),
+
+					'annual_pay_periods' => $pay_period_schedule->getAnnualPayPeriods(),
+
+					'day_start_time' => $pay_period_schedule->getDayStartTime(),
+					'time_zone' => $pay_period_schedule->getTimeZone(),
+					'new_day_trigger_time' => $pay_period_schedule->getNewDayTriggerTime(),
+					'maximum_shift_time' => $pay_period_schedule->getMaximumShiftTime(),
+					'shift_assigned_day_id' => $pay_period_schedule->getShiftAssignedDay(),
+
+					'timesheet_verify_type_id' => $pay_period_schedule->getTimeSheetVerifyType(),
+					'timesheet_verify_before_end_date' => $pay_period_schedule->getTimeSheetVerifyBeforeEndDate(),
+					'timesheet_verify_before_transaction_date' => $pay_period_schedule->getTimeSheetVerifyBeforeTransactionDate(),
+					'timesheet_verify_notice_before_transaction_date' => $pay_period_schedule->getTimeSheetVerifyNoticeBeforeTransactionDate(),
+					'timesheet_verify_notice_email' => $pay_period_schedule->getTimeSheetVerifyNoticeEmail(),
+
+					'user_ids' => $pay_period_schedule->getUser(),
+
+					'deleted' => $pay_period_schedule->getDeleted(),
+					'created_date' => $pay_period_schedule->getCreatedDate(),
+					'created_by' => $pay_period_schedule->getCreatedBy(),
+					'updated_date' => $pay_period_schedule->getUpdatedDate(),
+					'updated_by' => $pay_period_schedule->getUpdatedBy(),
+					'deleted_date' => $pay_period_schedule->getDeletedDate(),
+					'deleted_by' => $pay_period_schedule->getDeletedBy()
+				);
+			}
+		} elseif ( $action != 'submit' ) {
+
+			$pay_period_schedule_data = array(
+				'anchor_date' => TTDate::getBeginMonthEpoch( time() ),
+				'day_start_time' => 0,
+				'new_day_trigger_time' => (3600*4),
+				'maximum_shift_time' => (3600*16),
+				'time_zone' => $current_user_prefs->getTimeZone(),
+				'type' => 20,
+				'timesheet_verify_type_id' => 10, //Disabled
+				'timesheet_verify_before_end_date' => 0,
+				'timesheet_verify_before_transaction_date' => 0,
+				'annual_pay_periods' => 0
+			);
+		}
+		//Select box options;
+		$pay_period_schedule_data['type_options'] = $ppsf->getOptions('type');
+		$pay_period_schedule_data['start_week_day_options'] = $ppsf->getOptions('start_week_day');
+		$pay_period_schedule_data['shift_assigned_day_options'] = $ppsf->getOptions('shift_assigned_day');
+		$pay_period_schedule_data['timesheet_verify_type_options'] = $ppsf->getOptions('timesheet_verify_type');
+		$pay_period_schedule_data['time_zone_options'] = $ppsf->getTimeZoneOptions();
+		$pay_period_schedule_data['transaction_date_bd_options'] = $ppsf->getOptions('transaction_date_business_day');
+		$pay_period_schedule_data['day_of_week_options'] = TTDate::getDayOfWeekArray();
+		$pay_period_schedule_data['transaction_date_options'] = Misc::prependArray( array( 0 => '0' ), TTDate::getDayOfMonthArray() );
+		$pay_period_schedule_data['day_of_month_options'] = TTDate::getDayOfMonthArray();
+		$pay_period_schedule_data['day_of_month_options'][-1] = _('- Last Day Of Month -');
+
+		$pay_period_schedule_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE);
+
+		if ( isset($pay_period_schedule_data['user_ids']) AND is_array($pay_period_schedule_data['user_ids']) ) {
+			$tmp_user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
+			foreach( $pay_period_schedule_data['user_ids'] as $user_id ) {
+				if ( isset($tmp_user_options[$user_id]) ) {
+					$filter_user_options[$user_id] = $tmp_user_options[$user_id];
+				}
+			}
+			unset($user_id);
+		}
+		$smarty->assign_by_ref('filter_user_options', $filter_user_options);
+
+		$smarty->assign_by_ref('pay_period_schedule_data', $pay_period_schedule_data);
+
+		$smarty->assign_by_ref('ppsf', $ppsf);
+
+		$viewData['filter_user_options'] = $filter_user_options;
+		$viewData['pay_period_schedule_data'] = $pay_period_schedule_data;
+		$viewData['ppsf'] = $ppsf;
+
+        return view('payperiod/EditPayPeriodSchedule', $viewData);
+
+    }
+
+	public function submit(Request $request){
+		$ppsf = new PayPeriodScheduleFactory();
+
+		$pay_period_schedule_data = $request->data;
+		$current_company = $this->currentCompany;
+
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		$ppsf->StartTransaction();
@@ -128,115 +264,11 @@ switch ($action) {
 
 				$ppsf->CommitTransaction();
 				Redirect::Page( URLBuilder::getURL( NULL, 'PayPeriodScheduleList.php') );
-
-				break;
 			}
 		}
 
 		$ppsf->FailTransaction();
-
-	default:
-		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
-
-			$ppslf = new PayPeriodScheduleListFactory();
-
-			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
-
-			foreach ($ppslf as $pay_period_schedule) {
-				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
-
-				$pay_period_schedule_data = array(
-													'id' => $pay_period_schedule->getId(),
-													'company_id' => $pay_period_schedule->getCompany(),
-													'name' => $pay_period_schedule->getName(),
-													'description' => $pay_period_schedule->getDescription(),
-													'type' => $pay_period_schedule->getType(),
-													'start_week_day_id' => $pay_period_schedule->getStartWeekDay(),
-													'start_day_of_week' => $pay_period_schedule->getStartDayOfWeek(),
-													'transaction_date' => $pay_period_schedule->getTransactionDate(),
-
-													'primary_day_of_month' => $pay_period_schedule->getPrimaryDayOfMonth(),
-													'secondary_day_of_month' => $pay_period_schedule->getSecondaryDayOfMonth(),
-
-													'primary_transaction_day_of_month' => $pay_period_schedule->getPrimaryTransactionDayOfMonth(),
-													'secondary_transaction_day_of_month' => $pay_period_schedule->getSecondaryTransactionDayOfMonth(),
-
-													'transaction_date_bd' => $pay_period_schedule->getTransactionDateBusinessDay(),
-
-													'anchor_date' => $pay_period_schedule->getAnchorDate(),
-
-													'annual_pay_periods' => $pay_period_schedule->getAnnualPayPeriods(),
-
-													'day_start_time' => $pay_period_schedule->getDayStartTime(),
-													'time_zone' => $pay_period_schedule->getTimeZone(),
-													'new_day_trigger_time' => $pay_period_schedule->getNewDayTriggerTime(),
-													'maximum_shift_time' => $pay_period_schedule->getMaximumShiftTime(),
-													'shift_assigned_day_id' => $pay_period_schedule->getShiftAssignedDay(),
-
-													'timesheet_verify_type_id' => $pay_period_schedule->getTimeSheetVerifyType(),
-													'timesheet_verify_before_end_date' => $pay_period_schedule->getTimeSheetVerifyBeforeEndDate(),
-													'timesheet_verify_before_transaction_date' => $pay_period_schedule->getTimeSheetVerifyBeforeTransactionDate(),
-													'timesheet_verify_notice_before_transaction_date' => $pay_period_schedule->getTimeSheetVerifyNoticeBeforeTransactionDate(),
-													'timesheet_verify_notice_email' => $pay_period_schedule->getTimeSheetVerifyNoticeEmail(),
-
-													'user_ids' => $pay_period_schedule->getUser(),
-
-													'deleted' => $pay_period_schedule->getDeleted(),
-													'created_date' => $pay_period_schedule->getCreatedDate(),
-													'created_by' => $pay_period_schedule->getCreatedBy(),
-													'updated_date' => $pay_period_schedule->getUpdatedDate(),
-													'updated_by' => $pay_period_schedule->getUpdatedBy(),
-													'deleted_date' => $pay_period_schedule->getDeletedDate(),
-													'deleted_by' => $pay_period_schedule->getDeletedBy()
-												);
-			}
-		} elseif ( $action != 'submit' ) {
-
-			$pay_period_schedule_data = array(
-											'anchor_date' => TTDate::getBeginMonthEpoch( time() ),
-											'day_start_time' => 0,
-											'new_day_trigger_time' => (3600*4),
-											'maximum_shift_time' => (3600*16),
-											'time_zone' => $current_user_prefs->getTimeZone(),
-											'type' => 20,
-											'timesheet_verify_type_id' => 10, //Disabled
-											'timesheet_verify_before_end_date' => 0,
-											'timesheet_verify_before_transaction_date' => 0,
-											'annual_pay_periods' => 0
-											);
-		}
-		//Select box options;
-		$pay_period_schedule_data['type_options'] = $ppsf->getOptions('type');
-		$pay_period_schedule_data['start_week_day_options'] = $ppsf->getOptions('start_week_day');
-		$pay_period_schedule_data['shift_assigned_day_options'] = $ppsf->getOptions('shift_assigned_day');
-		$pay_period_schedule_data['timesheet_verify_type_options'] = $ppsf->getOptions('timesheet_verify_type');
-		$pay_period_schedule_data['time_zone_options'] = $ppsf->getTimeZoneOptions();
-		$pay_period_schedule_data['transaction_date_bd_options'] = $ppsf->getOptions('transaction_date_business_day');
-		$pay_period_schedule_data['day_of_week_options'] = TTDate::getDayOfWeekArray();
-		$pay_period_schedule_data['transaction_date_options'] = Misc::prependArray( array( 0 => '0' ), TTDate::getDayOfMonthArray() );
-		$pay_period_schedule_data['day_of_month_options'] = TTDate::getDayOfMonthArray();
-		$pay_period_schedule_data['day_of_month_options'][-1] = _('- Last Day Of Month -');
-
-		$pay_period_schedule_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE);
-
-		if ( isset($pay_period_schedule_data['user_ids']) AND is_array($pay_period_schedule_data['user_ids']) ) {
-			$tmp_user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
-			foreach( $pay_period_schedule_data['user_ids'] as $user_id ) {
-				if ( isset($tmp_user_options[$user_id]) ) {
-					$filter_user_options[$user_id] = $tmp_user_options[$user_id];
-				}
-			}
-			unset($user_id);
-		}
-		$smarty->assign_by_ref('filter_user_options', $filter_user_options);
-
-		$smarty->assign_by_ref('pay_period_schedule_data', $pay_period_schedule_data);
-
-		break;
+	}
 }
 
-$smarty->assign_by_ref('ppsf', $ppsf);
-
-$smarty->display('payperiod/EditPayPeriodSchedule.tpl');
 ?>

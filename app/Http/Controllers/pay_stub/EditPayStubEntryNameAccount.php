@@ -57,7 +57,9 @@ class EditPayStubEntryNameAccount extends Controller
 			$psenalf = new PayStubEntryNameAccountListFactory();
 			$psenalf->getByCompanyId( $current_company->getId() );
 
-			foreach ($psenalf as $name_account_obj) {
+			foreach ($psenalf->rs as $name_account_obj) {
+				$psenalf->data = (array)$name_account_obj;
+				$name_account_obj = $psenalf;
 				//Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				$name_account_data[$name_account_obj->getPayStubEntryNameId()] = array(
@@ -81,7 +83,10 @@ class EditPayStubEntryNameAccount extends Controller
 			$type_options  = $psenlf->getOptions('type');
 
 			$i=0;
-			foreach($psenlf as $entry_name_obj) {
+			foreach($psenlf->rs as $entry_name_obj) {
+				$psenlf->data = (array)$entry_name_obj;
+				$entry_name_obj = $psenlf;
+
 				$display_type = FALSE;
 				if ( $i == 0 ) {
 					$display_type = TRUE;
@@ -106,14 +111,10 @@ class EditPayStubEntryNameAccount extends Controller
 
 		}
 
-		$smarty->assign_by_ref('name_account_data', $data);
+		$viewData['name_account_data'] = $data;
+		$viewData['psenalf'] = $psenalf;
 
-		$smarty->assign_by_ref('psenalf', $psenalf);
-		//$smarty->assign_by_ref('current_time', TTDate::getDate('TIME') );
-		
-		$smarty->display('pay_stub/EditPayStubEntryNameAccount.tpl');
-
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('pay_stub/EditPayStubEntryNameAccount', $viewData);
 
     }
 

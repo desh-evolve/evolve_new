@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\pay_stub;
+namespace App\Http\Controllers\pay_stub_amendment;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accrual\AccrualBalanceFactory;
@@ -27,7 +27,7 @@ use App\Models\Policy\AccrualPolicyListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
-class CurrencyList extends Controller
+class EditPayStubAmendment extends Controller
 {
     protected $permission;
     protected $currentUser;
@@ -163,26 +163,17 @@ class CurrencyList extends Controller
 		$pay_stub_amendment_data['filter_user_options'] = $filter_user_options;
 		$pay_stub_amendment_data['type_options'] = $psaf->getOptions('type');
 
-		$smarty->assign_by_ref('pay_stub_amendment_data', $pay_stub_amendment_data);
+		$viewData['pay_stub_amendment_data'] = $pay_stub_amendment_data;
+		$viewData['psaf'] = $psaf;
 
-		/*
-				$ulf = new UserListFactory();
-				$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
-				$user_data = $ulf->getCurrent();
-
-				$smarty->assign_by_ref('user_data', $user_data);
-		*/
-
-		$smarty->assign_by_ref('psaf', $psaf);
-
-		$smarty->display('pay_stub_amendment/EditPayStubAmendment.tpl');
-
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('pay_stub_amendment/EditPayStubAmendment', $viewData);
 
     }
 
-	public function submit(){
+	public function submit(Request $request){
 		$psaf = new PayStubAmendmentFactory();
+
+		$pay_stub_amendment_data = $request->data;
 
 		//Debug::setVerbosity( 11 );
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);

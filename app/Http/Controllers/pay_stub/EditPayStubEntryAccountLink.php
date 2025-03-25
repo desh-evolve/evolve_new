@@ -116,15 +116,11 @@ class EditPayStubEntryAccountLink extends Controller
 		$data['accrual_account_options'] = $psealf_tmp->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(50) );
 		$data['other_account_options'] = $psealf_tmp->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(60,65) );
 
-		//var_dump($data);
-		$smarty->assign_by_ref('data', $data);
-		$smarty->assign_by_ref('data_saved', $data_saved);
+		$viewData['data'] = $data;
+		$viewData['data_saved'] = $data_saved;
+		$viewData['psealf'] = $psealf;
 
-		$smarty->assign_by_ref('psealf', $psealf);
-
-		$smarty->display('pay_stub/EditPayStubEntryAccountLink.tpl');
-
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('pay_stub/EditPayStubEntryAccountLink', $viewData);
 
     }
 

@@ -59,7 +59,10 @@ class EditPayStubEntryAccount extends Controller
 			$psealf = new PayStubEntryAccountListFactory();
 			$psealf->getById($id);
 
-			foreach ($psealf as $psea_obj) {
+			foreach ($psealf->rs as $psea_obj) {
+				$psealf->data = (array)$psea_obj;
+				$psea_obj = $psealf;
+
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				$data = array(
@@ -89,14 +92,10 @@ class EditPayStubEntryAccount extends Controller
 		$psealf = new PayStubEntryAccountListFactory();
 		$data['accrual_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(50), TRUE );
 
-		$smarty->assign_by_ref('data', $data);
+		$viewData['data'] = $data;
+		$viewData['pseaf'] = $pseaf;
 
-
-		$smarty->assign_by_ref('pseaf', $pseaf);
-
-		$smarty->display('pay_stub/EditPayStubEntryAccount.tpl');
-
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('pay_stub/EditPayStubEntryAccount', $viewData);
 
     }
 

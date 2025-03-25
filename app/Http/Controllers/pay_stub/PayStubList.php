@@ -198,7 +198,10 @@ class PayStubList extends Controller
 		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
-		foreach ($pslf as $pay_stub) {
+		foreach ($pslf->rs as $pay_stub) {
+			$pslf->data = (array)$pay_stub;
+			$pay_stub = $pslf;
+
 			//Get pay period info
 			$user_obj = $ulf->getById( $pay_stub->getUser() )->getCurrent();
 
@@ -253,21 +256,19 @@ class PayStubList extends Controller
 		}
 		unset($column_key);
 
-		$smarty->assign_by_ref('pay_stubs', $pay_stubs);
-		$smarty->assign_by_ref('export_type_options', $export_type_options );
-		$smarty->assign_by_ref('filter_data', $filter_data);
-		$smarty->assign_by_ref('columns', $filter_columns );
-		$smarty->assign('total_columns', count($filter_columns)+3 );
+		$viewData['pay_stubs'] = $pay_stubs;
+		$viewData['export_type_options'] = $export_type_options;
+		$viewData['filter_data'] = $filter_data;
+		$viewData['columns'] = $filter_columns;
+		$viewData['total_columns'] = count($filter_columns)+3;
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-		$smarty->assign_by_ref('saved_search_id', $saved_search_id );
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['saved_search_id'] = $saved_search_id;
+		
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		$smarty->display('pay_stub/PayStubList.tpl');
-
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('pay_stub/PayStubList', $viewData);
 
     }
 
@@ -391,7 +392,10 @@ class PayStubList extends Controller
 		if ( is_array( $ids ) AND count($ids) > 0 ) {
 			foreach ($ids as $id) {
 				$pslf->getByCompanyIdAndId($current_company->getId(),$id);
-				foreach ($pslf as $pay_stub_obj) {
+				foreach ($pslf->rs as $pay_stub_obj) {
+					$pslf->data = (array)$pay_stub_obj;
+					$pay_stub_obj = $pslf;
+
 					//Only delete pay stubs in OPEN/Post Adjustment pay periods.
 					//Also allow deleting pay stubs attached to a pay period that has been deleted.
 					//Make sure pay stub is NOT marked PAID before deleting.
@@ -425,7 +429,10 @@ class PayStubList extends Controller
 			if ( is_array( $ids ) AND count($ids) > 0 ) {
 				foreach ($ids as $id) {
 					$pslf->getById($id);
-					foreach ($pslf as $pay_stub_obj) {
+					foreach ($pslf->rs as $pay_stub_obj) {
+						$pslf->data = (array)$pay_stub_obj;
+						$pay_stub_obj = $pslf;
+
 						//Only delete NEW pay stubs.!
 						if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) ) //Open/Adjustment
 								AND ( $pay_stub_obj->getStatus() == 10 OR $pay_stub_obj->getStatus() == 25 ) ) {
@@ -457,7 +464,10 @@ class PayStubList extends Controller
 			if ( is_array( $ids ) AND count($ids) > 0 ) {
 				foreach ($ids as $id) {
 					$pslf->getById($id);
-					foreach ($pslf as $pay_stub_obj) {
+					foreach ($pslf->rs as $pay_stub_obj) {
+						$pslf->data = (array)$pay_stub_obj;
+						$pay_stub_obj = $pslf;
+
 						//Only delete pay stubs in OPEN/Post Adjustment pay periods.
 						if ( ( $pay_stub_obj->getPayPeriodObject() == FALSE OR ( is_object( $pay_stub_obj->getPayPeriodObject() ) AND $pay_stub_obj->getPayPeriodObject()->getStatus() != 20 ) ) //Open/Adjustment
 								AND $pay_stub_obj->getStatus() == 40 ) { //Paid/Closed

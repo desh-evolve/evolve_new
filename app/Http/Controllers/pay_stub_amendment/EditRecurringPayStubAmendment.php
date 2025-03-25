@@ -1,118 +1,75 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditRecurringPayStubAmendment.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\pay_stub_amendment;
 
-if ( !$permission->Check('pay_stub_amendment','enabled')
-		OR !( $permission->Check('pay_stub_amendment','edit') OR $permission->Check('pay_stub_amendment','edit_own') ) ) {
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStubAmendment\RecurringPayStubAmendmentFactory;
+use App\Models\PayStubAmendment\RecurringPayStubAmendmentListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-}
+class EditRecurringPayStubAmendment extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$smarty->assign('title', __($title = 'Edit Recurring Pay Stub Amendment')); // See index.php
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'user_id',
-												'pay_stub_amendment_data'
-												) ) );
-if ( isset($pay_stub_amendment_data) ) {
-	if ( $pay_stub_amendment_data['start_date'] != '' ) {
-		$pay_stub_amendment_data['start_date'] = TTDate::parseDateTime($pay_stub_amendment_data['start_date']);
-	}
-	if ( $pay_stub_amendment_data['end_date'] != '' ) {
-		$pay_stub_amendment_data['end_date'] = TTDate::parseDateTime($pay_stub_amendment_data['end_date']);
-	}
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-}
+    }
 
-$rpsaf = new RecurringPayStubAmendmentFactory();
-
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'recalculate':
-		//Debug::setVerbosity(11);
-		$rpsalf = new RecurringPayStubAmendmentListFactory();
-		$rpsalf->getById( $pay_stub_amendment_data['id'] );
-		if ( $rpsalf->getRecordCount() > 0 ) {
-			$rpsa_obj = $rpsalf->getCurrent();
-			$rpsa_obj->createPayStubAmendments();
+    public function index() {
+        /*
+        if ( !$permission->Check('pay_stub_amendment','enabled')
+				OR !( $permission->Check('pay_stub_amendment','edit') OR $permission->Check('pay_stub_amendment','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
+        */
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'RecurringPayStubAmendmentList.php') );
+        $viewData['title'] = 'Edit Recurring Pay Stub Amendment';
 
-		break;
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$rpsaf->setId($pay_stub_amendment_data['id']);
-		$rpsaf->setCompany( $current_company->getId() );
-
-		$rpsaf->setStatus( $pay_stub_amendment_data['status_id'] );
-
-		$rpsaf->setName( $pay_stub_amendment_data['name'] );
-		$rpsaf->setDescription( $pay_stub_amendment_data['description'] );
-
-		$rpsaf->setStartDate( $pay_stub_amendment_data['start_date'] );
-		if ( $pay_stub_amendment_data['end_date'] != '' ) {
-			$rpsaf->setEndDate( $pay_stub_amendment_data['end_date'] );
-		}
-		$rpsaf->setFrequency( $pay_stub_amendment_data['frequency_id'] );
-
-		$rpsaf->setPayStubEntryNameId($pay_stub_amendment_data['pay_stub_entry_name_id']);
-
-		$rpsaf->setType( $pay_stub_amendment_data['type_id'] );
-
-		if ( $pay_stub_amendment_data['type_id'] == 10 ) {
-			Debug::Text('Fixed Amount!', __FILE__, __LINE__, __METHOD__,10);
-			$rpsaf->setRate($pay_stub_amendment_data['rate']);
-			$rpsaf->setUnits($pay_stub_amendment_data['units']);
-			if ( isset($pay_stub_amendment_data['amount']) ) {
-				$rpsaf->setAmount($pay_stub_amendment_data['amount']);
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'user_id',
+				'pay_stub_amendment_data'
+			) 
+		) );
+		
+		if ( isset($pay_stub_amendment_data) ) {
+			if ( $pay_stub_amendment_data['start_date'] != '' ) {
+				$pay_stub_amendment_data['start_date'] = TTDate::parseDateTime($pay_stub_amendment_data['start_date']);
 			}
-		} else {
-			Debug::Text('Percent Amount!', __FILE__, __LINE__, __METHOD__,10);
-			$rpsaf->setPercentAmount($pay_stub_amendment_data['percent_amount']);
-			$rpsaf->setPercentAmountEntryNameID($pay_stub_amendment_data['percent_amount_entry_name_id']);
-		}
-
-		$rpsaf->setPayStubAmendmentDescription($pay_stub_amendment_data['ps_amendment_description']);
-
-		if ( $rpsaf->isValid() ) {
-			$rpsaf->Save(FALSE);
-
-			if ( isset($pay_stub_amendment_data['user_ids']) ) {
-				$rpsaf->setUser( $pay_stub_amendment_data['user_ids'] );
-			} else {
-				$rpsaf->setUser( array() );
+			if ( $pay_stub_amendment_data['end_date'] != '' ) {
+				$pay_stub_amendment_data['end_date'] = TTDate::parseDateTime($pay_stub_amendment_data['end_date']);
 			}
-
-			$rpsaf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'RecurringPayStubAmendmentList.php') );
-
-			break;
+		
 		}
-	default:
-		BreadCrumb::setCrumb($title);
+		
+		$rpsaf = new RecurringPayStubAmendmentFactory();
 
 		if ( isset($id) ) {
 			$rpsalf = new RecurringPayStubAmendmentListFactory();
@@ -207,7 +164,7 @@ switch ($action) {
 			unset($pay_stub_amendment_data['percent_amount_entry_name_options'][$net_pay_psea_id]);
 		}
 
-		$smarty->assign_by_ref('pay_stub_amendment_data', $pay_stub_amendment_data);
+		$viewData['pay_stub_amendment_data'] = $pay_stub_amendment_data;
 
 		$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
 		$user_options = Misc::prependArray( array( -1 => _('-- ALL --')), $user_options );
@@ -222,12 +179,85 @@ switch ($action) {
 			}
 			unset($user_id);
 		}
-		$smarty->assign_by_ref('filter_user_options', $filter_user_options);
 
-		break;
+		$viewData['filter_user_options'] = $filter_user_options;
+		$viewData['rpsaf'] = $rpsaf;
+
+        return view('pay_stub_amendment/EditRecurringPayStubAmendment', $viewData);
+
+    }
+
+	public function recalculate($pay_stub_amendment_id){
+		
+		//Debug::setVerbosity(11);
+		$rpsalf = new RecurringPayStubAmendmentListFactory();
+		$rpsalf->getById( $pay_stub_amendment_id );
+		if ( $rpsalf->getRecordCount() > 0 ) {
+			$rpsa_obj = $rpsalf->getCurrent();
+			$rpsa_obj->createPayStubAmendments();
+		}
+
+		Redirect::Page( URLBuilder::getURL( NULL, 'RecurringPayStubAmendmentList.php') );
+	}
+
+	public function submit(Request $request){
+		$rpsaf = new RecurringPayStubAmendmentFactory();
+
+		$pay_stub_amendment_data = $request->data;
+		$current_company = $this->currentCompany;
+
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$rpsaf->setId($pay_stub_amendment_data['id']);
+		$rpsaf->setCompany( $current_company->getId() );
+
+		$rpsaf->setStatus( $pay_stub_amendment_data['status_id'] );
+
+		$rpsaf->setName( $pay_stub_amendment_data['name'] );
+		$rpsaf->setDescription( $pay_stub_amendment_data['description'] );
+
+		$rpsaf->setStartDate( $pay_stub_amendment_data['start_date'] );
+		if ( $pay_stub_amendment_data['end_date'] != '' ) {
+			$rpsaf->setEndDate( $pay_stub_amendment_data['end_date'] );
+		}
+		$rpsaf->setFrequency( $pay_stub_amendment_data['frequency_id'] );
+
+		$rpsaf->setPayStubEntryNameId($pay_stub_amendment_data['pay_stub_entry_name_id']);
+
+		$rpsaf->setType( $pay_stub_amendment_data['type_id'] );
+
+		if ( $pay_stub_amendment_data['type_id'] == 10 ) {
+			Debug::Text('Fixed Amount!', __FILE__, __LINE__, __METHOD__,10);
+			$rpsaf->setRate($pay_stub_amendment_data['rate']);
+			$rpsaf->setUnits($pay_stub_amendment_data['units']);
+			if ( isset($pay_stub_amendment_data['amount']) ) {
+				$rpsaf->setAmount($pay_stub_amendment_data['amount']);
+			}
+		} else {
+			Debug::Text('Percent Amount!', __FILE__, __LINE__, __METHOD__,10);
+			$rpsaf->setPercentAmount($pay_stub_amendment_data['percent_amount']);
+			$rpsaf->setPercentAmountEntryNameID($pay_stub_amendment_data['percent_amount_entry_name_id']);
+		}
+
+		$rpsaf->setPayStubAmendmentDescription($pay_stub_amendment_data['ps_amendment_description']);
+
+		if ( $rpsaf->isValid() ) {
+			$rpsaf->Save(FALSE);
+
+			if ( isset($pay_stub_amendment_data['user_ids']) ) {
+				$rpsaf->setUser( $pay_stub_amendment_data['user_ids'] );
+			} else {
+				$rpsaf->setUser( array() );
+			}
+
+			$rpsaf->Save();
+
+			Redirect::Page( URLBuilder::getURL( NULL, 'RecurringPayStubAmendmentList.php') );
+
+		}
+	}
+
 }
 
-$smarty->assign_by_ref('rpsaf', $rpsaf);
 
-$smarty->display('pay_stub_amendment/EditRecurringPayStubAmendment.tpl');
 ?>

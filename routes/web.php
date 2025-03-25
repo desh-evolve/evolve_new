@@ -8,8 +8,24 @@ use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
 use App\Http\Controllers\Company\EditCompanyNew;
+use App\Http\Controllers\company\WageGroupList;
+use App\Http\Controllers\company\EditWageGroup;
+
+
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\policy\AbsencePolicyList;
+use App\Http\Controllers\policy\AccrualPolicyList;
+use App\Http\Controllers\policy\BreakPolicyList;
+use App\Http\Controllers\policy\EditPolicyGroup;
+use App\Http\Controllers\policy\ExceptionPolicyControlList;
+use App\Http\Controllers\policy\HolidayPolicyList;
+use App\Http\Controllers\policy\MealPolicyList;
+use App\Http\Controllers\policy\OverTimePolicyList;
+use App\Http\Controllers\policy\PolicyGroupList;
+use App\Http\Controllers\policy\PremiumPolicyList;
+use App\Http\Controllers\policy\RoundIntervalPolicyList;
+use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
 use App\Http\Controllers\users\UserGenericStatusList;
 use Illuminate\Support\Facades\Route;
@@ -48,7 +64,12 @@ Route::get('/branch_bank/add/{id?}', [EditBankAccount::class, 'index'])->name('b
 Route::post('/branch_bank/save/{id?}', [EditBankAccount::class, 'save'])->name('branch_bank.save');
 Route::delete('/branch_bank/delete/{id}', [EditBankAccount::class, 'delete'])->name('branch_bank.delete');
 
+// ==================== wage group =====================================================================================
+Route::get('/wage_group', [WageGroupList::class, 'index'])->name('wage_group.index');
 
+Route::get('/wage_group/add/{id?}', [EditWageGroup::class, 'index'])->name('wage_group.add');
+Route::post('/wage_group/save/{id?}', [EditWageGroup::class, 'save'])->name('wage_group.save');
+Route::delete('/wage_group/delete/{id}', [WageGroupList::class, 'delete'])->name('wage_group.delete');
 
 
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
@@ -85,7 +106,4 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 // ===============================================================================================================================
 // Compnay Information
 // ===============================================================================================================================
-Route::get('/company', [EditCompanyNew::class, 'index'])->name('company.index');
-
-Route::get('/company/add/{id?}', [EditCompanyNew::class, 'index'])->name('company.add');
-Route::post('/company/save/{id?}', [EditCompanyNew::class, 'save'])->name('company.save');
+Route::get('/company/company_information', [EditCompanyNew::class, 'index'])->name('company.index');

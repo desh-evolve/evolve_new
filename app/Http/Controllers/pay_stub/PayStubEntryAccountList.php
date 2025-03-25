@@ -75,7 +75,9 @@ class PayStubEntryAccountList extends Controller
 		$status_options = $psealf->getOptions('status');
 		$type_options = $psealf->getOptions('type');
 
-		foreach ($psealf as $psea_obj) {
+		foreach ($psealf->rs as $psea_obj) {
+			$psealf->data = (array)$psea_obj;
+			$psea_obj = $psealf;
 
 			$rows[] = array(
 				'id' => $psea_obj->getId(),
@@ -91,16 +93,13 @@ class PayStubEntryAccountList extends Controller
 			);
 
 		}
-		$smarty->assign_by_ref('rows', $rows);
+		
+		$viewData['rows'] = $rows;
+		$viewData['sort_column'] = $sort_column;
+		$viewData['sort_order'] = $sort_order;
+		$viewData['paging_data'] = $pager->getPageVariables();
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		$smarty->display('pay_stub/PayStubEntryAccountList.tpl');
-
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('pay_stub/PayStubEntryAccountList', $viewData);
 
     }
 
@@ -126,7 +125,10 @@ class PayStubEntryAccountList extends Controller
 
 		foreach ($ids as $id) {
 			$psealf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($psealf as $psea_obj) {
+			foreach ($psealf->rs as $psea_obj) {
+				$psealf->data = (array)$psea_obj;
+				$psea_obj = $psealf;
+
 				$psea_obj->setDeleted($delete);
 				if ( $psea_obj->isValid() ) {
 					$psea_obj->Save();

@@ -1,75 +1,78 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditHoliday.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity( 11 );
+namespace App\Http\Controllers\policy;
 
-if ( !$permission->Check('holiday_policy','enabled')
-		OR !( $permission->Check('holiday_policy','edit') OR $permission->Check('holiday_policy','edit_own') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-$smarty->assign('title', __($title = 'Edit Holiday')); // See index.php
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Holiday\HolidayFactory;
+use App\Models\Holiday\HolidayListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'holiday_policy_id',
-												'id',
-												'data'
-												) ) );
+class EditHoliday extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-if ( isset($data['date_stamp'] ) ) {
-	$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
-}
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$hf = new HolidayFactory();
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+    }
 
-		$hf->setId( $data['id'] );
-		if ( isset($data['holiday_policy_id'] ) ) {
-			$hf->setHolidayPolicyId( $data['holiday_policy_id'] );
+    public function index($id = null) {
+        /*
+		if ( !$permission->Check('holiday_policy','enabled')
+				OR !( $permission->Check('holiday_policy','edit') OR $permission->Check('holiday_policy','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
-		//Set datestamp first.
-		$hf->setDateStamp( $data['date_stamp'] );
-		$hf->setName( $data['name'] );
+        */
 
+		$viewData['title'] = isset($id) ? 'Edit Holiday' : 'Add Holiday';
 
-		if ( $hf->isValid() ) {
-			$hf->Save();
-
-			Redirect::Page( URLBuilder::getURL( array('id' => $data['holiday_policy_id']), 'HolidayList.php') );
-
-			break;
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'holiday_policy_id',
+				'id',
+				'data'
+			) 
+		) );
+		
+		if ( isset($data['date_stamp'] ) ) {
+			$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 		}
+		
+		$hf = new HolidayFactory(); 
 
-	default:
 		if ( isset($id) AND $id != '' ) {
-			BreadCrumb::setCrumb($title);
 
 			$hlf = new HolidayListFactory();
 			$hlf->getByIdAndHolidayPolicyID( $id, $holiday_policy_id );
 			if ( $hlf->getRecordCount() > 0 ) {
-				foreach ($hlf as $h_obj) {
+				foreach ($hlf->rs as $h_obj) {
+					$hlf->data = (array)$h_obj;
+					$h_obj = $hlf;
+
 					//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 					$data = array(
@@ -94,13 +97,37 @@ switch ($action) {
 						);
 		}
 
-		$smarty->assign_by_ref('holiday_policy_id', $holiday_policy_id);
-		$smarty->assign_by_ref('data', $data);
+		$viewData['holiday_policy_id'] = $holiday_policy_id;
+		$viewData['data'] = $data;
+		$viewData['hf'] = $hf;
 
-		break;
+        return view('policy/EditHoliday', $viewData);
+
+    }
+
+	public function submit(Request $request){
+		$data = $request->data;
+		$hf = new HolidayFactory();
+
+		//Debug::setVerbosity(11);
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$hf->setId( $data['id'] );
+		if ( isset($data['holiday_policy_id'] ) ) {
+			$hf->setHolidayPolicyId( $data['holiday_policy_id'] );
+		}
+		//Set datestamp first.
+		$hf->setDateStamp( $data['date_stamp'] );
+		$hf->setName( $data['name'] );
+
+
+		if ( $hf->isValid() ) {
+			$hf->Save();
+
+			Redirect::Page( URLBuilder::getURL( array('id' => $data['holiday_policy_id']), 'HolidayList') );
+		}
+	}
 }
 
-$smarty->assign_by_ref('hf', $hf);
 
-$smarty->display('policy/EditHoliday.tpl');
 ?>

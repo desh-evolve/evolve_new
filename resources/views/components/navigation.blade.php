@@ -123,24 +123,74 @@
                     </li>
 
                     <!-- Policies -->
+                    @php
+                        $checkPolicylNav = request()->routeIs('policy.*');
+                    @endphp
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#policy" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false">
-                            <i class="ri-bar-chart-line"></i> <span>Policies</span>
+                        <a 
+                            class="nav-link menu-link {{ $checkPolicylNav ? 'active' : '' }}" href="#policy"
+                            data-bs-toggle="collapse" role="button"
+                            aria-expanded="{{ $checkPolicylNav ? 'true' : 'false' }}"
+                            aria-controls="policy">
+                            <i class="ri-file-list-line"></i> <span>Policies</span>
                         </a>
                         <div class="collapse menu-dropdown" id="policy">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item"><a href="#" class="nav-link">Policy Groups</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Schedule Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Rounding Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Meal Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Break Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Accrual Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Overtime Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Premium Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Absence Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Exception Policies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Holiday Policies</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.policy_groups') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.policy_groups') ? 'active' : '' }}">Policy Groups
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.schedule_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.schedule_policies') ? 'active' : '' }}">Schedule Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.rounding_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.rounding_policies') ? 'active' : '' }}">Rounding Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.meal_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.meal_policies') ? 'active' : '' }}">Meal Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.break_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.break_policies') ? 'active' : '' }}">Break Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.accrual_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.accrual_policies') ? 'active' : '' }}">Accrual Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.overtime_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.overtime_policies') ? 'active' : '' }}">Overtime Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.premium_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.premium_policies') ? 'active' : '' }}">Premium Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.absence_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.absence_policies') ? 'active' : '' }}">Absence Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.exception_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.exception_policies') ? 'active' : '' }}">Exception Policies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('policy.holiday_policies') }}" 
+                                        class="nav-link {{ request()->routeIs('policy.holiday_policies') ? 'active' : '' }}">Holiday Policies
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>

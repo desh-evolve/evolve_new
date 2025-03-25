@@ -1,128 +1,99 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditExceptionPolicyControl.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\policy;
 
-if ( !$permission->Check('exception_policy','enabled')
-		OR !( $permission->Check('exception_policy','edit') OR $permission->Check('exception_policy','edit_own') ) ) {
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Option;
+use App\Models\Core\Misc;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Policy\ExceptionPolicyControlFactory;
+use App\Models\Policy\ExceptionPolicyControlListFactory;
+use App\Models\Policy\ExceptionPolicyFactory;
+use App\Models\Policy\ExceptionPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-}
+class EditExceptionPolicyControl extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$smarty->assign('title', __($title = 'Edit Exception Policy')); // See index.php
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data'
-												) ) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-if ( isset($data['exceptions'])) {
-	foreach( $data['exceptions'] as $code => $exception ) {
+    }
 
-		if ( isset($exception['grace']) AND $exception['grace'] != '') {
-			Debug::Text('Grace: '. $exception['grace'] , __FILE__, __LINE__, __METHOD__,10);
-			$data['exceptions'][$code]['grace'] = TTDate::parseTimeUnit( $exception['grace'] );
-		}
-		if ( isset($exception['watch_window']) AND $exception['watch_window'] != '') {
-			$data['exceptions'][$code]['watch_window'] = TTDate::parseTimeUnit( $exception['watch_window'] );
-		}
-	}
-}
+    public function index($id = null) {
+        /*
+        if ( !$permission->Check('exception_policy','enabled')
+				OR !( $permission->Check('exception_policy','edit') OR $permission->Check('exception_policy','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		} 
+        */
 
-$epf = new ExceptionPolicyFactory();
-$epcf = new ExceptionPolicyControlFactory();
+		$viewData['title'] = isset($id) ? 'Edit Exception Policy' : 'Add Exception Policy';
+		$current_company = $this->currentCompany;
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$epcf->setId( $data['id'] );
-		$epcf->setCompany( $current_company->getId() );
-		$epcf->setName( $data['name'] );
-
-		if ( $epcf->isValid() ) {
-			$epc_id = $epcf->Save();
-
-			Debug::Text('aException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
-
-			if ( $epc_id === TRUE ) {
-				$epc_id = $data['id'];
-			}
-
-			Debug::Text('bException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
-
-			if ( count($data['exceptions']) > 0 ) {
-				foreach ($data['exceptions'] as $code => $exception_data) {
-					Debug::Text('Looping Code: '. $code .' ID: '. $exception_data['id'], __FILE__, __LINE__, __METHOD__,10);
-
-					if ( $exception_data['id'] != '' AND $exception_data['id'] > 0 ) {
-						$epf->setId( $exception_data['id'] );
-					}
-					$epf->setExceptionPolicyControl( $epc_id );
-					if ( isset($exception_data['active'])  ) {
-						$epf->setActive( TRUE );
-					} else {
-						$epf->setActive( FALSE );
-					}
-					$epf->setType( $code );
-					$epf->setSeverity( $exception_data['severity_id'] );
-					$epf->setEmailNotification( $exception_data['email_notification_id'] );
-					if ( isset($exception_data['demerit']) AND $exception_data['demerit'] != '') {
-						$epf->setDemerit( $exception_data['demerit'] );
-					}
-					if ( isset($exception_data['grace']) AND $exception_data['grace'] != '' ) {
-						$epf->setGrace( $exception_data['grace'] );
-					}
-					if ( isset($exception_data['watch_window']) AND $exception_data['watch_window'] != '' ) {
-						$epf->setWatchWindow( $exception_data['watch_window'] );
-					}
-					if ( $epf->isValid() ) {
-						$epf->Save();
-					}
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data'
+			) 
+		) );
+		
+		if ( isset($data['exceptions'])) {
+			foreach( $data['exceptions'] as $code => $exception ) {
+		
+				if ( isset($exception['grace']) AND $exception['grace'] != '') {
+					Debug::Text('Grace: '. $exception['grace'] , __FILE__, __LINE__, __METHOD__,10);
+					$data['exceptions'][$code]['grace'] = TTDate::parseTimeUnit( $exception['grace'] );
+				}
+				if ( isset($exception['watch_window']) AND $exception['watch_window'] != '') {
+					$data['exceptions'][$code]['watch_window'] = TTDate::parseTimeUnit( $exception['watch_window'] );
 				}
 			}
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'ExceptionPolicyControlList.php') );
-
-			break;
 		}
+		
+		$epf = new ExceptionPolicyFactory();
+		$epcf = new ExceptionPolicyControlFactory();
 
-	default:
 		$type_options = $epf->getTypeOptions( $current_company->getProductEdition() );
 
 		if ( isset($id) AND $id != '' ) {
-			BreadCrumb::setCrumb($title);
-
 			$epclf = new ExceptionPolicyControlListFactory();
 			$epclf->getByIdAndCompanyID( $id, $current_company->getID() );
 
-			foreach ($epclf as $epc_obj) {
+			foreach ($epclf->rs as $epc_obj) {
+				$epclf->data = (array)$epc_obj;
+				$epc_obj = $epclf;
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				$eplf = new ExceptionPolicyListFactory();
 				$eplf->getByExceptionPolicyControlID( $id );
 				if ( $eplf->getRecordCount() > 0 ) {
-					foreach( $eplf as $ep_obj ) {
+					foreach( $eplf->rs as $ep_obj ) {
+						$eplf->data = (array)$ep_obj;
+						$ep_obj = $eplf;
+						
 						if ( isset($type_options[$ep_obj->getType()]) ) {
 							$ep_objs[$ep_obj->getType()] = $ep_obj;
 						} else {
@@ -189,14 +160,74 @@ switch ($action) {
 		//Select box options;
 		$data['severity_options'] = $epf->getOptions('severity');
 		$data['email_notification_options'] = $epf->getOptions('email_notification');
+		
+		$viewData['data'] = $data;
+		$viewData['epf'] = $epf;
+		$viewData['epcf'] = $epcf;
+        return view('policy/EditExceptionPolicyControl', $viewData);
 
-		$smarty->assign_by_ref('data', $data);
+    }
 
-		break;
+	public function submit(Request $request){
+		$epf = new ExceptionPolicyFactory();
+		$epcf = new ExceptionPolicyControlFactory();
+
+		$data = $request->data;
+		$current_company = $this->currentCompany;
+
+		//Debug::setVerbosity(11);
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$epcf->setId( $data['id'] );
+		$epcf->setCompany( $current_company->getId() );
+		$epcf->setName( $data['name'] );
+
+		if ( $epcf->isValid() ) {
+			$epc_id = $epcf->Save();
+
+			Debug::Text('aException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
+
+			if ( $epc_id === TRUE ) {
+				$epc_id = $data['id'];
+			}
+
+			Debug::Text('bException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
+
+			if ( count($data['exceptions']) > 0 ) {
+				foreach ($data['exceptions'] as $code => $exception_data) {
+					Debug::Text('Looping Code: '. $code .' ID: '. $exception_data['id'], __FILE__, __LINE__, __METHOD__,10);
+
+					if ( $exception_data['id'] != '' AND $exception_data['id'] > 0 ) {
+						$epf->setId( $exception_data['id'] );
+					}
+					$epf->setExceptionPolicyControl( $epc_id );
+					if ( isset($exception_data['active'])  ) {
+						$epf->setActive( TRUE );
+					} else {
+						$epf->setActive( FALSE );
+					}
+					$epf->setType( $code );
+					$epf->setSeverity( $exception_data['severity_id'] );
+					$epf->setEmailNotification( $exception_data['email_notification_id'] );
+					if ( isset($exception_data['demerit']) AND $exception_data['demerit'] != '') {
+						$epf->setDemerit( $exception_data['demerit'] );
+					}
+					if ( isset($exception_data['grace']) AND $exception_data['grace'] != '' ) {
+						$epf->setGrace( $exception_data['grace'] );
+					}
+					if ( isset($exception_data['watch_window']) AND $exception_data['watch_window'] != '' ) {
+						$epf->setWatchWindow( $exception_data['watch_window'] );
+					}
+					if ( $epf->isValid() ) {
+						$epf->Save();
+					}
+				}
+			}
+
+			Redirect::Page( URLBuilder::getURL( NULL, 'ExceptionPolicyControlList') );
+		}
+
+	}
 }
 
-$smarty->assign_by_ref('epf', $epf);
-$smarty->assign_by_ref('epcf', $epcf);
-
-$smarty->display('policy/EditExceptionPolicyControl.tpl');
 ?>
