@@ -4,11 +4,15 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
+
 /*
  * $Revision: 5290 $
  * $Id: EditCompany.php 5290 2011-10-06 21:54:39Z ipso $
  * $Date: 2011-10-06 14:54:39 -0700 (Thu, 06 Oct 2011) $
- */ 
+ */
 require_once('../../includes/global.inc.php');
 require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
@@ -224,4 +228,5 @@ switch ($action) {
 $smarty->assign_by_ref('cf', $cf);
 
 $smarty->display('company/EditCompany.tpl');
+
 ?>
