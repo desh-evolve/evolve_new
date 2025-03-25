@@ -1,44 +1,164 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
+
+namespace App\Http\Controllers\company;
+
+use App\Http\Controllers\Controller;
+use App\Models\Company\CompanyFactory;
+use App\Models\Company\CompanyListFactory;
+use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
+use App\Models\Core\Debug;
 use App\Models\Core\FormVariables;
+use App\Models\Core\OtherFieldListFactory;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
-/*
- * $Revision: 5290 $
- * $Id: EditCompany.php 5290 2011-10-06 21:54:39Z ipso $
- * $Date: 2011-10-06 14:54:39 -0700 (Thu, 06 Oct 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+class EditCompany extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-if ( !$permission->Check('company','enabled')
-		OR !( $permission->Check('company','edit') OR $permission->Check('company','edit_own') ) ) {
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-	$permission->Redirect( FALSE ); //Redirect
-}
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
+    }
 
-$smarty->assign('title', __($title = 'Edit Company')); // See index.php
+    public function index($id) {
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'company_data'
-												) ) );
+		/*
+        if ( !$permission->Check('company','enabled')
+				OR !( $permission->Check('company','edit') OR $permission->Check('company','edit_own') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+        */
 
-$cf = new CompanyFactory();
+        $viewData['title'] = 'Edit Company';
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'submit':
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'company_data'
+			) 
+		) );
+		
+		$cf = new CompanyFactory();
+
+		if ( isset($id) ) {
+
+			$clf = new CompanyListFactory();
+
+			if ( $permission->Check('company','edit') ) {
+				$clf->GetByID($id);
+			} else {
+				$id = $current_company->getId();
+				$clf->GetByID( $id );
+			}
+
+			foreach ($clf->rs as $company) {
+				$clf->data = (array)$company;
+				$company = $clf;
+				//Debug::Arr($company,'Company', __FILE__, __LINE__, __METHOD__,10);
+
+				$company_data = array(
+									'id' => $company->getId(),
+									'parent' => $company->getParent(),
+									'status' => $company->getStatus(),
+									'product_edition' => $company->getProductEdition(),
+									'name' => $company->getName(),
+									'short_name' => $company->getShortName(),
+									'industry_id' => $company->getIndustry(),
+									'business_number' => $company->getBusinessNumber(),
+									'originator_id' => $company->getOriginatorID(),
+									'data_center_id' => $company->getDataCenterID(),
+									'address1' => $company->getAddress1(),
+									'address2' => $company->getAddress2(),
+									'city' => $company->getCity(),
+									'province' => $company->getProvince(),
+									'country' => $company->getCountry(),
+									'postal_code' => $company->getPostalCode(),
+									'work_phone' => $company->getWorkPhone(),
+									'fax_phone' => $company->getFaxPhone(),
+									'epf_number' => $company->getEpfNo(),//FL ADDED 20160122 for EPF e Return
+									'admin_contact' => $company->getAdminContact(),
+									'billing_contact' => $company->getBillingContact(),
+									'support_contact' => $company->getSupportContact(),
+									'logo_file_name' => $company->getLogoFileName( NULL, FALSE ),
+									'enable_second_last_name' => $company->getEnableSecondLastName(),
+									'other_id1' => $company->getOtherID1(),
+									'other_id2' => $company->getOtherID2(),
+									'other_id3' => $company->getOtherID3(),
+									'other_id4' => $company->getOtherID4(),
+									'other_id5' => $company->getOtherID5(),
+									'ldap_authentication_type_id' => $company->getLDAPAuthenticationType(),
+									'ldap_host' => $company->getLDAPHost(),
+									'ldap_port' => $company->getLDAPPort(),
+									'ldap_bind_user_name' => $company->getLDAPBindUserName(),
+									'ldap_bind_password' => $company->getLDAPBindPassword(),
+									'ldap_base_dn' => $company->getLDAPBaseDN(),
+									'ldap_bind_attribute' => $company->getLDAPBindAttribute(),
+									'ldap_user_filter' => $company->getLDAPUserFilter(),
+									'ldap_login_attribute' => $company->getLDAPLoginAttribute(),
+
+									'created_date' => $company->getCreatedDate(),
+									'created_by' => $company->getCreatedBy(),
+									'updated_date' => $company->getUpdatedDate(),
+									'updated_by' => $company->getUpdatedBy(),
+									'deleted_date' => $company->getDeletedDate(),
+									'deleted_by' => $company->getDeletedBy(),
+								);
+			}
+		} elseif ( $action != 'submit' ) {
+			$company_data = array(
+								  'parent' => $current_company->getId(),
+								  );
+		}
+
+		//Select box options;
+		$company_data['status_options'] = $cf->getOptions('status');
+		$company_data['country_options'] = $cf->getOptions('country');
+		$company_data['industry_options'] = $cf->getOptions('industry');
+
+		//Company list.
+		$company_data['company_list_options'] = CompanyListFactory::getAllArray();
+		$company_data['product_edition_options'] = $cf->getOptions('product_edition');
+
+		//Get other field names
+		$oflf = new OtherFieldListFactory();
+		$company_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getID(), 2 );
+
+		$company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type');
+
+		if (!isset($id) AND isset($company_data['id']) ) {
+			$id = $company_data['id'];
+		}
+		$company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id);
+
+
+		$viewData['company_data'] = $company_data;
+		$viewData['cf'] = $cf;
+
+		return view('company/EditCompany', $viewData);
+	}
+
+	public function submit(Request $request){
+		$cf = new CompanyFactory();
+		$company_data = $request->data;
+		$current_company = $this->currentCompany;
+		$permission = $this->permission;
+
 		//Debug::setVerbosity( 11 );
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		$cf->StartTransaction();
@@ -126,107 +246,10 @@ switch ($action) {
 			} else {
 				Redirect::Page( URLBuilder::getURL(NULL, '../index.php') );
 			}
-
-			break;
 		}
 		$cf->FailTransaction();
-	default:
-		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
+	}
 
-			$clf = new CompanyListFactory();
-
-			if ( $permission->Check('company','edit') ) {
-				$clf->GetByID($id);
-			} else {
-				$id = $current_company->getId();
-				$clf->GetByID( $id );
-			}
-
-			foreach ($clf as $company) {
-				//Debug::Arr($company,'Company', __FILE__, __LINE__, __METHOD__,10);
-
-				$company_data = array(
-									'id' => $company->getId(),
-									'parent' => $company->getParent(),
-									'status' => $company->getStatus(),
-									'product_edition' => $company->getProductEdition(),
-									'name' => $company->getName(),
-									'short_name' => $company->getShortName(),
-									'industry_id' => $company->getIndustry(),
-									'business_number' => $company->getBusinessNumber(),
-									'originator_id' => $company->getOriginatorID(),
-									'data_center_id' => $company->getDataCenterID(),
-									'address1' => $company->getAddress1(),
-									'address2' => $company->getAddress2(),
-									'city' => $company->getCity(),
-									'province' => $company->getProvince(),
-									'country' => $company->getCountry(),
-									'postal_code' => $company->getPostalCode(),
-									'work_phone' => $company->getWorkPhone(),
-									'fax_phone' => $company->getFaxPhone(),
-									'epf_number' => $company->getEpfNo(),//FL ADDED 20160122 for EPF e Return
-									'admin_contact' => $company->getAdminContact(),
-									'billing_contact' => $company->getBillingContact(),
-									'support_contact' => $company->getSupportContact(),
-									'logo_file_name' => $company->getLogoFileName( NULL, FALSE ),
-									'enable_second_last_name' => $company->getEnableSecondLastName(),
-									'other_id1' => $company->getOtherID1(),
-									'other_id2' => $company->getOtherID2(),
-									'other_id3' => $company->getOtherID3(),
-									'other_id4' => $company->getOtherID4(),
-									'other_id5' => $company->getOtherID5(),
-									'ldap_authentication_type_id' => $company->getLDAPAuthenticationType(),
-									'ldap_host' => $company->getLDAPHost(),
-									'ldap_port' => $company->getLDAPPort(),
-									'ldap_bind_user_name' => $company->getLDAPBindUserName(),
-									'ldap_bind_password' => $company->getLDAPBindPassword(),
-									'ldap_base_dn' => $company->getLDAPBaseDN(),
-									'ldap_bind_attribute' => $company->getLDAPBindAttribute(),
-									'ldap_user_filter' => $company->getLDAPUserFilter(),
-									'ldap_login_attribute' => $company->getLDAPLoginAttribute(),
-
-									'created_date' => $company->getCreatedDate(),
-									'created_by' => $company->getCreatedBy(),
-									'updated_date' => $company->getUpdatedDate(),
-									'updated_by' => $company->getUpdatedBy(),
-									'deleted_date' => $company->getDeletedDate(),
-									'deleted_by' => $company->getDeletedBy(),
-								);
-			}
-		} elseif ( $action != 'submit' ) {
-			$company_data = array(
-								  'parent' => $current_company->getId(),
-								  );
-		}
-
-		//Select box options;
-		$company_data['status_options'] = $cf->getOptions('status');
-		$company_data['country_options'] = $cf->getOptions('country');
-		$company_data['industry_options'] = $cf->getOptions('industry');
-
-		//Company list.
-		$company_data['company_list_options'] = CompanyListFactory::getAllArray();
-		$company_data['product_edition_options'] = $cf->getOptions('product_edition');
-
-		//Get other field names
-		$oflf = new OtherFieldListFactory();
-		$company_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getID(), 2 );
-
-		$company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type');
-
-		if (!isset($id) AND isset($company_data['id']) ) {
-			$id = $company_data['id'];
-		}
-		$company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id);
-
-		$smarty->assign_by_ref('company_data', $company_data);
-
-		break;
 }
-
-$smarty->assign_by_ref('cf', $cf);
-
-$smarty->display('company/EditCompany.tpl');
 
 ?>
