@@ -47,15 +47,6 @@ class EditDepartment extends Controller
 		
         $viewData['title'] = $id ? 'Edit Department' : 'Add Department';
 
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'department_data'
-			) 
-		) );
-
 		if ( isset($id) ) {
 
 			$dlf = new DepartmentListFactory();

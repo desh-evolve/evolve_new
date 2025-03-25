@@ -54,22 +54,13 @@ class EditPolicyGroup extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-
+		
         $viewData['title'] = isset($id) ? 'Edit Policy Group' : 'Add Policy Group';
 		$current_company = $this->currentCompany;
-		
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
 		
 		$pgf = new PolicyGroupFactory(); 
 
 		if ( isset($id) ) {
-
 			$pglf = new PolicyGroupListFactory();
 			$pglf->getByIdAndCompanyID( $id, $current_company->getID() );
 
@@ -155,7 +146,7 @@ class EditPolicyGroup extends Controller
 		$viewData['data'] = $data;
 		$viewData['pgf'] = $pgf;
 
-		//print_r($data['over_time_policy_options']);exit;
+		//print_r($data);exit;
 
         return view('policy/EditPolicyGroup', $viewData);
 

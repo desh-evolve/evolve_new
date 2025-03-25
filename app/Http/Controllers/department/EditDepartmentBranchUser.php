@@ -49,14 +49,6 @@ class EditDepartmentBranchUser extends Controller
 		
         $viewData['title'] = 'Department Employees';
 
-		extract	(FormVariables::GetVariables(
-			array(
-				'action',
-				'id',
-				'department_data'
-			) 
-		) );
-
 		$dlf = new DepartmentListFactory();
 
 		$dlf->GetByIdAndCompanyId($id, $current_company->getId() );

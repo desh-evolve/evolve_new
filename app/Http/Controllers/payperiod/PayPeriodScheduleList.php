@@ -48,16 +48,6 @@ class CurrencyList extends Controller
 
         $viewData['title'] = 'Pay Period Schedule List';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array (
 				'sort_column' => $sort_column,

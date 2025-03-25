@@ -43,16 +43,6 @@ class VIewNumberOfLeave extends Controller
       
       $viewData['title'] = 'Apply Employee Leaves';
 
-
-      extract	(FormVariables::GetVariables(
-          array	(
-            'action',
-            'id',
-            'data',
-            'filter_data'
-          ) 
-      ) );
-      
       $header_leave = array();
       $total_asign_leave = array();
       $total_taken_leave = array();

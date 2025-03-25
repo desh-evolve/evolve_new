@@ -49,15 +49,7 @@ class EditBreakPolicy extends Controller
 
 		$viewData['title'] = isset($id) ? 'Edit Break Policy' : 'Add Break Policy';
 		$current_company = $this->currentCompany;
-		
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
+
 		if ( isset($data['trigger_time'] ) ) {
 			$data['trigger_time'] = TTDate::parseTimeUnit($data['trigger_time']);
 			$data['amount'] = TTDate::parseTimeUnit($data['amount']);

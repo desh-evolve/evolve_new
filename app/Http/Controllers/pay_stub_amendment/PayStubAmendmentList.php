@@ -59,21 +59,6 @@ class CurrencyList extends Controller
 
         $viewData['title'] = 'Pay Stub Amendment List';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'form',
-				'page',
-				'filter_data',
-				'sort_column',
-				'sort_order',
-				'saved_search_id',
-				'filter_user_id',
-				'recurring_ps_amendment_id',
-				'ids',
-			) 
-		) );
-
 		$columns = array(
 			'-1010-first_name' => _('First Name'),
 			'-1020-middle_name' => _('Middle Name'),
@@ -124,8 +109,6 @@ class CurrencyList extends Controller
 			$action = strtolower($action);
 		}
 
-
-		extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, $sort_column ) );
 		Debug::Text('Sort Column: '. $sort_column, __FILE__, __LINE__, __METHOD__,10);
 		Debug::Text('Saved Search ID: '. $saved_search_id, __FILE__, __LINE__, __METHOD__,10);
 

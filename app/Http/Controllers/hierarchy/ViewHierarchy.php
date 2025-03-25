@@ -43,14 +43,6 @@ class ViewHierarchy extends Controller
 		
         $viewData['title'] = 'View Hierarchy';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'hierarchy_id',
-				'id'
-			) 
-		) );
-
 		if ( isset($id) ) {
 
 			$hlf = new HierarchyListFactory();

@@ -44,17 +44,6 @@ class HierarchyControlList extends Controller
         */
 		
         $viewData['title'] = 'Hierarchy List';
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'id'
-			) 
-		) );
 		
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array (
@@ -117,17 +106,6 @@ class HierarchyControlList extends Controller
 
 	public function delete(){
 		$delete = TRUE;
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'id'
-			) 
-		) );
 
 		$hclf = new HierarchyControlListFactory();
 

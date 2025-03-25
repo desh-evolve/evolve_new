@@ -51,17 +51,6 @@ class EditUserKpi extends Controller
         
         $viewData['title'] = 'Edit Key Performance Indicator';
 
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'user_id',
-                'saved_search_id',
-                'kpi_data'
-            ) 
-        ) );
-
-
         //ARSP NOTE --> I MODIFIED THIS CODE FOR THUNDER & NEON KPI
         if ( isset($kpi_data) ) {
             if ( $kpi_data['review_date'] != '' ) {
@@ -300,16 +289,6 @@ class EditUserKpi extends Controller
     public function submit(){
         $current_company = $this->currentCompany;
         $permission = $this->permission;
-
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'user_id',
-                'saved_search_id',
-                'kpi_data'
-            ) 
-        ) );
 
         //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
         $hlf = new HierarchyListFactory();

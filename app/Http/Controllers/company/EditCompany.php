@@ -46,14 +46,6 @@ class EditCompany extends Controller
 
         $viewData['title'] = 'Edit Company';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'company_data'
-			) 
-		) );
-		
 		$cf = new CompanyFactory();
 
 		if ( isset($id) ) {

@@ -55,14 +55,6 @@ class EditHolidayPolicy extends Controller
 
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['minimum_time'] ) ) {
 			$data['minimum_time'] = TTDate::parseTimeUnit($data['minimum_time']);
 		}

@@ -7,6 +7,7 @@ use App\Http\Controllers\Branch\BranchList;
 use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
+use App\Http\Controllers\company\EditCompany;
 use App\Http\Controllers\Company\EditCompanyNew;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
@@ -116,9 +117,7 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 // ===============================================================================================================================
 // Compnay Information
 // ===============================================================================================================================
-Route::get('/company/company_information', [EditCompanyNew::class, 'index'])->name('company.index');
-<<<<<<< Updated upstream
-=======
+Route::get('/company/company_information', [EditCompany::class, 'index'])->name('company.index');
 
 
 // ===============================================================================================================================
@@ -182,4 +181,3 @@ Route::delete('/policy/holiday_policies/delete/{id}', [HolidayPolicyList::class,
 
 
 // ===============================================================================================================================
->>>>>>> Stashed changes

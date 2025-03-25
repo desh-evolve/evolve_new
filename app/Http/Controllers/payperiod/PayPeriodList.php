@@ -49,18 +49,6 @@ class PayPeriodList extends Controller
 
         $viewData['title'] = 'Pay Period List';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'id',
-				'projected_pay_periods',
-			) 
-		) );
-		
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array (
 				'id' => $id,

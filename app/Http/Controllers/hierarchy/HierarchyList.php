@@ -45,15 +45,6 @@ class HierarchyList extends Controller
 		
         $viewData['title'] = 'Hierarchy Tree';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'hierarchy_id',
-				'ids'
-			) 
-		) );
-
-
 		$hlf = new HierarchyListFactory();
 		//$nodes = $hlf->FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
 		//$nodes = FastTree::FormatArray( $hlf->getByHierarchyControlId( $hierarchy_id ), 'HTML' );
@@ -72,25 +63,11 @@ class HierarchyList extends Controller
     }
 
 	public function add(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'hierarchy_id',
-				'ids'
-			) 
-		) );
 
 		Redirect::Page( URLBuilder::getURL( array('hierarchy_id' => $hierarchy_id) , 'EditHierarchy') );
 	}
 
 	public function delete(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'hierarchy_id',
-				'ids'
-			) 
-		) );
 
 		foreach ($ids as $id) {
 			Debug::Text(' Deleting ID: '. $id , __FILE__, __LINE__, __METHOD__,10);

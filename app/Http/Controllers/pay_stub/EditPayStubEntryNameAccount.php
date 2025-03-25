@@ -42,14 +42,6 @@ class EditPayStubEntryNameAccount extends Controller
 
         $viewData['title'] = 'General Ledger Accounts';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'name_account_data'
-			) 
-		) );
-		
 		$psenalf = new PayStubEntryNameAccountListFactory(); 
 
 		if ( !isset($action) ) {

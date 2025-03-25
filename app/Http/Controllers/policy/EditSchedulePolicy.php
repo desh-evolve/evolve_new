@@ -54,14 +54,6 @@ class EditSchedulePolicy extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Schedule Policy' : 'Add Schedule Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['start_stop_window'] ) ) {
 			$data['start_stop_window'] = TTDate::parseTimeUnit($data['start_stop_window']);
 		}

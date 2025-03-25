@@ -75,7 +75,12 @@
                                 multiple
                             >
                                 @foreach ($data['over_time_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option 
+                                        value="{{$id}}"
+                                        @if(isset($data['selected']['over_time_policy_ids']) && in_array($id, $data['selected']['over_time_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>

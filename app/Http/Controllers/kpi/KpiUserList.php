@@ -51,18 +51,6 @@ class KpiUserList extends Controller
 		*/
 
         $viewData['title'] = 'Employee KPI List';
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'saved_search_id',
-				'ids',
-				'user_id'
-			) 
-		) );
 		
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 		array (
@@ -162,7 +150,6 @@ class KpiUserList extends Controller
 		$ulf = new UserListFactory();
 
 		$filter_data = NULL;
-		extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, NULL ) );
 
 		if ( $permission->Check('wage','view') == FALSE ) {
 			if ( $permission->Check('wage','view_child') ) {
@@ -191,17 +178,6 @@ class KpiUserList extends Controller
     }
 
 	public function add(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'saved_search_id',
-				'ids',
-				'user_id'
-			) 
-		) );
 
 		Redirect::Page( URLBuilder::getURL(array('user_id' => $user_id, 'saved_search_id' => $saved_search_id ), 'EditUserKpiOld', FALSE) );
 	}
@@ -210,19 +186,7 @@ class KpiUserList extends Controller
 		$current_company = $this->currentCompany;
 		
 		$delete = TRUE;
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'saved_search_id',
-				'ids',
-				'user_id'
-			) 
-		) );
-
+		
 		$uklf = new UserKpiListFactory();
 
 		if ( $ids != '' ) {

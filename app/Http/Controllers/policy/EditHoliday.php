@@ -49,15 +49,6 @@ class EditHoliday extends Controller
 
 		$viewData['title'] = isset($id) ? 'Edit Holiday' : 'Add Holiday';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'holiday_policy_id',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['date_stamp'] ) ) {
 			$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 		}

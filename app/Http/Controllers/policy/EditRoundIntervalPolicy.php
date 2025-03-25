@@ -50,14 +50,6 @@ class EditRoundIntervalPolicy extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Rounding Policy' : 'Add Rounding Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['interval'] ) ) {
 			$data['interval'] = TTDate::parseTimeUnit($data['interval']);
 			$data['grace'] = TTDate::parseTimeUnit($data['grace']);

@@ -48,16 +48,6 @@ class EditHierarchy extends Controller
 		
         $viewData['title'] = 'Edit Hierarchy';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'hierarchy_id',
-				'id',
-				'old_id',
-				'user_data'
-			) 
-		) );
-
 		$ft = new FastTree($fast_tree_options);
 		$ft->setTree( $hierarchy_id );
 
@@ -118,15 +108,6 @@ class EditHierarchy extends Controller
     }
 
 	public function submit(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'hierarchy_id',
-				'id',
-				'old_id',
-				'user_data'
-			) 
-		) );
 
 		$ft = new FastTree($fast_tree_options);
 		$ft->setTree( $hierarchy_id );

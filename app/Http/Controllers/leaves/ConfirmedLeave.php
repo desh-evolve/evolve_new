@@ -47,17 +47,6 @@ class ConfirmedLeave extends Controller
     public function index() {
 
         $viewData['title'] = 'Confiremed Leave';
-
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data',
-				'filter_data'
-			)
-		) );
-		
 		
 		if(!isset($filter_data)){
 		   $filter_data = array();
@@ -218,16 +207,7 @@ class ConfirmedLeave extends Controller
 
 	public function search(){
 		$current_user = $this->currentUser;
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data',
-				'filter_data'
-			)
-		) );
-
+		
 		$msg = "";
 		$lrlf = new LeaveRequestListFactory();
 

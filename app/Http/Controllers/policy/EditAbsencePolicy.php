@@ -53,14 +53,6 @@ class EditAbsencePolicy extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Absence Policy' : 'Add Absence Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		$apf = new AbsencePolicyFactory();
 
 		if ( isset($id) ) {

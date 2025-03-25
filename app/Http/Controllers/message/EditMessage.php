@@ -55,15 +55,6 @@ class EditMessage extends Controller
 		}
         */
 		
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'filter_user_id',
-				'data',
-			) 
-		) );
-		
 		$mcf = new MessageControlFactory();
 		$mrf = new MessageRecipientFactory();
 		$msf = new MessageSenderFactory();
@@ -113,15 +104,6 @@ class EditMessage extends Controller
     }
 
 	public function submit_message(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'filter_user_id',
-				'data',
-			) 
-		) );
-
 		$mcf = new MessageControlFactory();
 		
 		//Debug::setVerbosity(11);

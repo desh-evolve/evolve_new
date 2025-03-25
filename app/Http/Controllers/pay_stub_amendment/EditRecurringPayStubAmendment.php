@@ -50,15 +50,6 @@ class EditRecurringPayStubAmendment extends Controller
 
         $viewData['title'] = 'Edit Recurring Pay Stub Amendment';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'user_id',
-				'pay_stub_amendment_data'
-			) 
-		) );
-		
 		if ( isset($pay_stub_amendment_data) ) {
 			if ( $pay_stub_amendment_data['start_date'] != '' ) {
 				$pay_stub_amendment_data['start_date'] = TTDate::parseDateTime($pay_stub_amendment_data['start_date']);
