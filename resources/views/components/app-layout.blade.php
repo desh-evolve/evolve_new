@@ -76,7 +76,9 @@
             .select2-container {
                 /* z-index: 9999; */
             }
-
+            .form-group {
+                margin-top: 1rem;
+            }
         </style>
     </head>
     <body>
@@ -307,5 +309,6 @@
         @include('components.common');
         @include('components.calculations');
         @include('components.general.multiselect');
+        @stack('scripts')
     </body>
 </html>

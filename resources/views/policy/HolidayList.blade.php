@@ -24,7 +24,25 @@
                    
                     {{-- --------------------------------------------------------------------------- --}}
                     
-                    
+                    <table class="table table-striped table-bordered">
+                        <thead class="bg-primary text-white">
+                            <th>#</th>
+                            <th>Date </th>
+                            <th>Holiday</th>
+                            <th>Functions</th>
+                        </thead>
+                        @foreach ($rows as $index => $row)
+                            <tr>
+                                <td>{{ $index + 1 }} </td>
+                                <td>{{ $row['date_stamp'] }}</td>
+                                <td>{{ $row['name'] }}</td>
+                                <td>
+                                    <a class="btn btn-secondary btn-sm" href="{{ route('policy.absence_policies.add', ['id' => $row['id']]) }}">Edit</a>
+                                    <a class="btn btn-danger btn-sm" href="{{ route('policy.absence_policies.delete', ['id' => $row['id']]) }}">Delete</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
 
                     {{-- --------------------------------------------------------------------------- --}}
                     

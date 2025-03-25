@@ -24,7 +24,23 @@
                    
                     {{-- --------------------------------------------------------------------------- --}}
                     
-                    
+                    <table class="table table-striped table-bordered">
+                        <thead class="bg-primary text-white">
+                            <th>#</th>
+                            <th>Name </th>
+                            <th>Functions</th>
+                        </thead>
+                        @foreach ($policies as $index => $policy)
+                            <tr>
+                                <td>{{ $index + 1 }} </td>
+                                <td>{{ $policy['name'] }}</td>
+                                <td>
+                                    <a class="btn btn-secondary btn-sm" href="{{ route('policy.absence_policies.add', ['id' => $policy['id']]) }}">Edit</a>
+                                    <a class="btn btn-danger btn-sm" href="{{ route('policy.absence_policies.delete', ['id' => $policy['id']]) }}">Delete</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
 
                     {{-- --------------------------------------------------------------------------- --}}
                     

@@ -57,7 +57,7 @@ class EditPolicyGroup extends Controller
 
         $viewData['title'] = isset($id) ? 'Edit Policy Group' : 'Add Policy Group';
 		$current_company = $this->currentCompany;
-
+		
 		extract	(FormVariables::GetVariables(
 			array (
 				'action',
@@ -154,6 +154,9 @@ class EditPolicyGroup extends Controller
 		//$viewData['filter_user_options'] = $filter_user_options;
 		$viewData['data'] = $data;
 		$viewData['pgf'] = $pgf;
+
+		//print_r($data['over_time_policy_options']);exit;
+
         return view('policy/EditPolicyGroup', $viewData);
 
     }
@@ -229,7 +232,7 @@ class EditPolicyGroup extends Controller
 				$pgf->Save();
 				$pgf->CommitTransaction();
 
-				Redirect::Page( URLBuilder::getURL( NULL, 'PolicyGroupList') );
+				Redirect::Page( URLBuilder::getURL( NULL, '/policy/policy_groups') );
 			}
 
 
