@@ -48,7 +48,7 @@
                                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteDepartment({{ $department['id'] }})">
                                             {{ __('Delete') }}
                                         </button>
-										  <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('branch_bank.index', ['id' => $department['id'] ?? '']) }}'">
+										  <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('department_branch_user.index', ['id' => $department['id'] ?? '']) }}'">
                                             {{ __('Employee') }}
                                         </button>
                                     </td>

@@ -113,47 +113,6 @@ class EditDepartment extends Controller
 
     }
 
-	// public function submit(Request $request){
-	// 	$current_company = $this->currentCompany;
-	// 	$department_data = $request->data;
-	// 	dd($department_data);
-
-	// 	Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-	// 	$df = new DepartmentFactory();
-
-	// 	$df->setId($department_data['id']);
-	// 	$df->setCompany( $current_company->getId() );
-	// 	$df->setStatus($department_data['status']);
-	// 	$df->setName($department_data['name']);
-	// 	$df->setManualId($department_data['manual_id']);
-
-	// 	if ( isset($department_data['other_id1']) ) {
-	// 		$df->setOtherID1( $department_data['other_id1'] );
-	// 	}
-	// 	if ( isset($department_data['other_id2']) ) {
-	// 		$df->setOtherID2( $department_data['other_id2'] );
-	// 	}
-	// 	if ( isset($department_data['other_id3']) ) {
-	// 		$df->setOtherID3( $department_data['other_id3'] );
-	// 	}
-	// 	if ( isset($department_data['other_id4']) ) {
-	// 		$df->setOtherID4( $department_data['other_id4'] );
-	// 	}
-	// 	if ( isset($department_data['other_id5']) ) {
-	// 		$df->setOtherID5( $department_data['other_id5'] );
-	// 	}
-
-	// 	if ( $df->isValid() ) {
-	// 		$df->Save(FALSE);
-
-	// 		if ( isset($department_data['branch_list']) ){
-	// 			$df->setBranch( $department_data['branch_list'] );
-	// 			$df->Save(TRUE);
-	// 		}
-
-	// 		Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
-	// 	}
-	// }
 
 	public function submit(Request $request , $id = null) {
 		$current_company = $this->currentCompany;
