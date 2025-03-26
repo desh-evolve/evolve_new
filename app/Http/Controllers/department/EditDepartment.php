@@ -38,6 +38,8 @@ class EditDepartment extends Controller
 
     public function index($id = null) {
 
+		$current_company = $this->currentCompany;
+        $current_user_prefs = $this->userPrefs;
         /*
         if ( !$permission->Check('department','enabled')
 				OR !( $permission->Check('department','view') OR $permission->Check('department','view_own') ) ) {
@@ -46,15 +48,6 @@ class EditDepartment extends Controller
         */
 		
         $viewData['title'] = $id ? 'Edit Department' : 'Add Department';
-
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'department_data'
-			) 
-		) );
 
 		if ( isset($id) ) {
 
@@ -66,9 +59,9 @@ class EditDepartment extends Controller
 				$dlf->data = (array)$department;
 				$department = $dlf;
 
-				Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
+				// Debug::Arr($department,'Department', __FILE__, __LINE__, __METHOD__,10);
 
-				$department_data = array (
+				$department_data = [
 					'id' => $department->getId(),
 					'company_name' => $current_company->getName(),
 					'status' => $department->getStatus(),
@@ -86,16 +79,16 @@ class EditDepartment extends Controller
 					'updated_by' => $department->getUpdatedBy(),
 					'deleted_date' => $department->getDeletedDate(),
 					'deleted_by' => $department->getDeletedBy()
-				);
+				];
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$next_available_manual_id = DepartmentListFactory::getNextAvailableManualId( $current_company->getId() );
 
 			$department_data = array(
 							'next_available_manual_id' => $next_available_manual_id,
 							);
 		}
-
+		$df = new DepartmentFactory();
 		//Select box options;
 		$department_data['status_options'] = $df->getOptions('status');
 		$blf = new BranchListFactory(); 
@@ -103,59 +96,102 @@ class EditDepartment extends Controller
 		$department_data['branch_list_options'] = $blf->getArrayByListFactory( $blf, FALSE);
 
 		//Get other field names
-		$oflf = new OtherFieldListFactory(); 
-		$department_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getID(), 5 );
-
-		$smarty->assign_by_ref('department_data', $department_data);
-
+		$oflf = new OtherFieldListFactory();
+		$department_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getId(), 15 );
 		
-		$smarty->assign_by_ref('df', $df);
 
-		$smarty->display('department/EditDepartment.tpl');
+		$viewData = [
+			'title' => $id ? 'Edit Department' : 'Add Department',
+            'data' => $department_data,
+            // 'base_currency' => $base_currency,
+            'sort_column' => $sort_array['sort_column'] ?? '',
+            'sort_order' => $sort_array['sort_order'] ?? '',
+            // 'paging_data' => $pager->getPageVariables()
+        ];
 
-        return view('accrual/ViewUserAccrualList', $viewData);
+		return view('department.EditDepartment', $viewData);
 
     }
 
-	public function submit(Request $request){
-		$current_company = $this->currentCompany();
-		$department_data = $request->data;
+	// public function submit(Request $request){
+	// 	$current_company = $this->currentCompany;
+	// 	$department_data = $request->data;
+	// 	dd($department_data);
 
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+	// 	Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+	// 	$df = new DepartmentFactory();
+
+	// 	$df->setId($department_data['id']);
+	// 	$df->setCompany( $current_company->getId() );
+	// 	$df->setStatus($department_data['status']);
+	// 	$df->setName($department_data['name']);
+	// 	$df->setManualId($department_data['manual_id']);
+
+	// 	if ( isset($department_data['other_id1']) ) {
+	// 		$df->setOtherID1( $department_data['other_id1'] );
+	// 	}
+	// 	if ( isset($department_data['other_id2']) ) {
+	// 		$df->setOtherID2( $department_data['other_id2'] );
+	// 	}
+	// 	if ( isset($department_data['other_id3']) ) {
+	// 		$df->setOtherID3( $department_data['other_id3'] );
+	// 	}
+	// 	if ( isset($department_data['other_id4']) ) {
+	// 		$df->setOtherID4( $department_data['other_id4'] );
+	// 	}
+	// 	if ( isset($department_data['other_id5']) ) {
+	// 		$df->setOtherID5( $department_data['other_id5'] );
+	// 	}
+
+	// 	if ( $df->isValid() ) {
+	// 		$df->Save(FALSE);
+
+	// 		if ( isset($department_data['branch_list']) ){
+	// 			$df->setBranch( $department_data['branch_list'] );
+	// 			$df->Save(TRUE);
+	// 		}
+
+	// 		Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
+	// 	}
+	// }
+
+	public function submit(Request $request , $id = null) {
+		$current_company = $this->currentCompany;
+		
+		// Get all data from the 'data' array
+		$department_data = $request->input('data'); // Use input() instead of direct property access
+		// dd($department_data); // Should now show your complete data array
+		
 		$df = new DepartmentFactory();
-
-		$df->setId($department_data['id']);
-		$df->setCompany( $current_company->getId() );
+		$df->setId($id ?? null);
+		$df->setCompany($current_company->getId());
 		$df->setStatus($department_data['status']);
-		$df->setName($department_data['name']);
+		$df->setName($department_data['name'] ?? '');
 		$df->setManualId($department_data['manual_id']);
-
-		if ( isset($department_data['other_id1']) ) {
-			$df->setOtherID1( $department_data['other_id1'] );
+	
+		// Set other IDs (1-5)
+		for ($i = 1; $i <= 5; $i++) {
+			$field = 'other_id'.$i;
+			if (isset($department_data[$field])) {
+				$setter = 'setOtherID'.$i;
+				$df->$setter($department_data[$field]);
+			}
 		}
-		if ( isset($department_data['other_id2']) ) {
-			$df->setOtherID2( $department_data['other_id2'] );
-		}
-		if ( isset($department_data['other_id3']) ) {
-			$df->setOtherID3( $department_data['other_id3'] );
-		}
-		if ( isset($department_data['other_id4']) ) {
-			$df->setOtherID4( $department_data['other_id4'] );
-		}
-		if ( isset($department_data['other_id5']) ) {
-			$df->setOtherID5( $department_data['other_id5'] );
-		}
-
-		if ( $df->isValid() ) {
+	
+		if ($df->isValid()) {
 			$df->Save(FALSE);
-
-			if ( isset($department_data['branch_list']) ){
-				$df->setBranch( $department_data['branch_list'] );
+			
+			if (isset($department_data['branch_list'])) {
+				$df->setBranch($department_data['branch_list']);
 				$df->Save(TRUE);
 			}
-
-			Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
+			return redirect()->to(URLBuilder::getURL(null, '/department'))->with('success', 'Department saved successfully.');
+        
+			// return redirect()->route('departments.index'); // Use Laravel's redirect
 		}
+		
+		// Handle validation errors
+		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 	}
 }
 
