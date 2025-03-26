@@ -13,6 +13,7 @@ use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
 use App\Http\Controllers\department\DepartmentList;
 use App\Http\Controllers\department\EditDepartment;
+use App\Http\Controllers\department\EditDepartmentBranchUser;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
@@ -89,6 +90,9 @@ Route::get('/department', [DepartmentList::class, 'index'])->name('department.in
 Route::get('/department/add/{id?}', [EditDepartment::class, 'index'])->name('department.add');
 Route::post('/department/save/{id?}', [EditDepartment::class, 'submit'])->name('department.save');
 Route::delete('/department/delete/{id}', [DepartmentList::class, 'delete'])->name('department.delete');
+
+Route::get('/department_branch_user/{id?}', [EditDepartmentBranchUser::class, 'index'])->name('department_branch_user.index');
+Route::post('/department_branch_user/save/{id?}', [EditDepartmentBranchUser::class, 'submit'])->name('department_branch_user.save');
 
 
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
