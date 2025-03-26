@@ -55,15 +55,6 @@ class EmployeeLateProcess extends Controller
 
         $viewData['title'] = 'Employee Late Process';
 
-        extract	(FormVariables::GetVariables(
-            array	(
-                'action',
-                'id',
-                'company_data',
-                'pay_period_ids'
-            ) 
-        ) );
-
         $pplf->getByCompanyIdAndStatusForHrProcess($current_company->getId(), 10);
 
         $data = array();

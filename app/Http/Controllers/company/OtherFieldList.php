@@ -45,17 +45,6 @@ class OtherFieldList extends Controller
 		
         $viewData['title'] = 'Other Field List';
 
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'type_id'
-			) 
-		) );
-
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array(
 				'type_id' => $type_id,
@@ -111,31 +100,11 @@ class OtherFieldList extends Controller
     }
 
 	public function add(){
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'type_id'
-			) 
-		) );
 
 		Redirect::Page( URLBuilder::getURL(array('type_id' => $type_id), 'EditOtherField', FALSE) );
 	}
 
 	public function delete(){
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'type_id'
-			) 
-		) );
 
 		$delete = TRUE;
 

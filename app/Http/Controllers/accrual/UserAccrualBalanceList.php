@@ -50,17 +50,6 @@ class UserAccrualBalanceList extends Controller
 		
         $viewData['title'] = 'Accrual Balance List';
 
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'filter_user_id',
-				'ids',
-			) 
-		) );
-
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array(
 				'filter_user_id' => $filter_user_id,

@@ -55,14 +55,6 @@ class EditPremiumPolicy extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Premium Policy' : 'Add Premium Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data)) {
 			if ( $data['start_date'] != '' ) {
 				$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );

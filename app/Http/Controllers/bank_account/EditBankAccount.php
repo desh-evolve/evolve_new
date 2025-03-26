@@ -62,16 +62,6 @@ class EditBankAccount extends Controller
 
 		$viewData['title'] = 'Bank Account';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'user_id',
-				'company_id',
-				'bank_data',
-				'data_saved',
-			) 
-		) );
-
 		$baf = new BankAccountFactory();
 
 		$balf = new BankAccountListFactory();
@@ -147,15 +137,6 @@ class EditBankAccount extends Controller
 	}
 
 	public function delete(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'user_id',
-				'company_id',
-				'bank_data',
-				'data_saved',
-			) 
-		) );
 
 		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
 		Debug::Text('User ID: '. $bank_data['user_id'] .' Company ID: '. $bank_data['company_id'], __FILE__, __LINE__, __METHOD__,10);
@@ -190,15 +171,6 @@ class EditBankAccount extends Controller
 	}
 
 	public function submit(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'user_id',
-				'company_id',
-				'bank_data',
-				'data_saved',
-			) 
-		) );
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		Debug::Text('User ID: '. $bank_data['user_id'] .' Company ID: '. $bank_data['company_id'], __FILE__, __LINE__, __METHOD__,10);

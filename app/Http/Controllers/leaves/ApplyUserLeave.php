@@ -59,15 +59,6 @@ class ApplyUserLeave extends Controller
         
         $viewData['title'] = 'Apply Employee Leaves';
 
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data',
-                'filter_data'
-            ) 
-        ) );
-
         if ( isset($data)) {
             if ( $data['start_date'] != '' ) {
                 //$data['leave_start_date'] = TTDate::parseDateTime( $data['leave_start_date'] );
@@ -243,14 +234,6 @@ class ApplyUserLeave extends Controller
     }
 
     public function submit(){
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data',
-                'filter_data'
-            ) 
-        ) );
 
         Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::setVerbosity(11);

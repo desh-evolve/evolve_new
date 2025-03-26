@@ -54,14 +54,6 @@ class EditOverTimePolicy extends Controller
 
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['trigger_time'] ) ) {
 			$data['trigger_time'] = TTDate::parseTimeUnit($data['trigger_time']);
 		}
@@ -102,7 +94,7 @@ class EditOverTimePolicy extends Controller
 					'deleted_by' => $otp_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit') {
+		} else {
 			$data = array( 'trigger_time' => 0,'max_time' => 0, 'rate' => '1.00', 'accrual_rate' => '1.00' );
 		}
 

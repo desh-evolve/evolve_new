@@ -51,14 +51,6 @@ class EditMealPolicy extends Controller
 
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['trigger_time'] ) ) {
 			$data['trigger_time'] = TTDate::parseTimeUnit($data['trigger_time']);
 			$data['amount'] = TTDate::parseTimeUnit($data['amount']);
@@ -100,7 +92,7 @@ class EditMealPolicy extends Controller
 									'deleted_by' => $mp_obj->getDeletedBy()
 								);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$data = array(
 						'trigger_time' => 3600 * 5,
 						'amount' => 3600,

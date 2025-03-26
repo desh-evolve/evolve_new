@@ -3,21 +3,12 @@
 namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
-use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
-use App\Models\Core\Sort;
-use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Holiday\RecurringHolidayFactory;
 use App\Models\Holiday\RecurringHolidayListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class RecurringHolidayList extends Controller
@@ -51,35 +42,8 @@ class RecurringHolidayList extends Controller
         $viewData['title'] = 'Recurring Holiday List';
 		$current_company = $this->currentCompany;
 
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
-
 		$rhlf = new RecurringHolidayListFactory();
 		$rhlf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-
-
-		$pager = new Pager($rhlf);
 
 		//$type_options = $aplf->getOptions('type');
 
@@ -94,17 +58,8 @@ class RecurringHolidayList extends Controller
 				'deleted' => $rh_obj->getDeleted()
 			);
 		}
-		
-		//Special sorting since next_date is calculated outside of the DB.
-		if ( $sort_column == 'next_date' ) {
-			Debug::Text('Sort By Date!', __FILE__, __LINE__, __METHOD__,10);
-			$rows = Sort::Multisort($rows, $sort_column, NULL, $sort_order);
-		}
 
 		$viewData['rows'] = $rows;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
 
         return view('policy/RecurringHolidayList', $viewData);
 
@@ -116,25 +71,29 @@ class RecurringHolidayList extends Controller
 		Redirect::Page( URLBuilder::getURL( NULL, 'RecurringHolidayList') );
 	}
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditRecurringHoliday', FALSE) );
-	}
+	public function delete($id){
+		if (empty($id)) {
+            return response()->json(['error' => 'No Recurring Holiday Selected.'], 400);
+        }
 
-	public function delete(){
 		$current_company = $this->currentCompany;
 		$delete = TRUE;
 
 		$rhlf = new RecurringHolidayListFactory();
+		$rhlf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$rhlf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($rhlf->rs as $rh_obj) {
-				$rhlf->data = (array)$rh_obj;
-				$rh_obj = $rhlf;
+		foreach ($rhlf->rs as $rh_obj) {
+			$rhlf->data = (array)$rh_obj;
+			$rh_obj = $rhlf;
 
-				$rh_obj->setDeleted($delete);
-				if ( $rh_obj->isValid() ) {
-					$rh_obj->Save();
+			$rh_obj->setDeleted($delete);
+			if ( $rh_obj->isValid() ) {
+				$res = $rh_obj->Save();
+
+				if($res){
+					return response()->json(['success' => 'Recurring Holiday Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Recurring Holiday Deleted Failed.']);
 				}
 			}
 		}

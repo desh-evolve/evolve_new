@@ -3,19 +3,11 @@
 namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
-use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
-use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\AbsencePolicyListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class AbsencePolicyList extends Controller
@@ -47,34 +39,10 @@ class AbsencePolicyList extends Controller
         */
 
         $viewData['title'] = 'Absence Policy List';
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
+		$current_company = $this->currentCompany;
 
 		$aplf = new AbsencePolicyListFactory();
 		$aplf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($aplf);
 
 		$type_options = $aplf->getOptions('type');
 
@@ -83,43 +51,44 @@ class AbsencePolicyList extends Controller
 			$ap_obj = $aplf;
 
 			$policies[] = array(
-								'id' => $ap_obj->getId(),
-								'name' => $ap_obj->getName(),
-								'type_id' => $ap_obj->getType(),
-								'type' => $type_options[$ap_obj->getType()],
-								'deleted' => $ap_obj->getDeleted()
-							);
+				'id' => $ap_obj->getId(),
+				'name' => $ap_obj->getName(),
+				'type_id' => $ap_obj->getType(),
+				'type' => $type_options[$ap_obj->getType()],
+				'deleted' => $ap_obj->getDeleted()
+			);
 
 		}
 
 		$viewData['policies'] = $policies;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
+		
         return view('policy/AbsencePolicyList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditAbsencePolicy', FALSE) );
-	}
-
-	public function delete( $ids ){
+	public function delete( $id ){
+		if (empty($id)) {
+            return response()->json(['error' => 'No Absence Policy Selected.'], 400);
+        }
 
 		$current_company = $this->currentCompany;
+		$delete = TRUE;
 		
 		$aplf = new AbsencePolicyListFactory();
-		$delete = TRUE;
+		$aplf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$aplf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($aplf->rs as $ap_obj) {
-				$aplf->data = (array)$ap_obj;
-				$ap_obj = $aplf;
+		foreach ($aplf->rs as $ap_obj) {
+			$aplf->data = (array)$ap_obj;
+			$ap_obj = $aplf;
 
-				$ap_obj->setDeleted($delete);
-				if ( $ap_obj->isValid() ) {
-					$ap_obj->Save();
+			$ap_obj->setDeleted($delete);
+			if ( $ap_obj->isValid() ) {
+				$res = $ap_obj->Save();
+
+				if($res){
+					return response()->json(['success' => 'Absence Policy Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Absence Policy Deleted Failed.']);
 				}
 			}
 		}

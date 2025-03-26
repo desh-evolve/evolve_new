@@ -1303,7 +1303,7 @@ class Factory {
 				$this->setId($insert_id);
 				
 				// Return the ID of the newly created record
-				$retval = $insert_id;
+				$retval = (int)$insert_id;
 				$log_action = 10; // 'Add'
 				// echo 'check error: ';
 			} else {
@@ -1351,13 +1351,13 @@ class Factory {
 
 		if ( $this->getId() !== FALSE ) {
 			$ph = array(
-						'id' => $this->getId(),
+						':id' => $this->getId(),
 						);
 
-			$query = 'DELETE FROM '. $this->getTable() .' WHERE id = ?';
+			$query = 'DELETE FROM '. $this->getTable() .' WHERE id = :id';
 
 			try {
-				DB::select($query, $ph);
+				DB::delete($query, $ph);
 
 				if ( method_exists($this,'addLog') ) {
 					//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other

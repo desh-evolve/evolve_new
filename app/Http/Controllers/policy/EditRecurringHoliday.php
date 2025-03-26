@@ -50,14 +50,6 @@ class EditRecurringHoliday extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Recurring Holiday' : 'Add Recurring Holiday';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		$rhf = new RecurringHolidayFactory();
 
 		if ( isset($id) ) {

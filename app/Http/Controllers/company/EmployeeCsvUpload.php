@@ -50,14 +50,6 @@ class EmployeeCsvUpload extends Controller
 
         $viewData['title'] = 'Employee CSV Upload';
 
-		extract	(FormVariables::GetVariables(
-			array(
-				'action',
-				'id',
-				'company_data'
-			) 
-		) );
-
 			if ( isset($id) ) {
 	
 				$clf = new CompanyListFactory();
@@ -156,14 +148,6 @@ class EmployeeCsvUpload extends Controller
     }
 
 	public function submit(Request $request){
-
-		extract	(FormVariables::GetVariables(
-			array(
-				'action',
-				'id',
-				'company_data'
-			) 
-		) );
 
 		$permission = $this->permission;
 		$current_company = $this->currentCompany;

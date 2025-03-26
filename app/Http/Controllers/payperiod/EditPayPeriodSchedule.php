@@ -49,16 +49,6 @@ class EditPayPeriodSchedule extends Controller
 
         $viewData['title'] = 'Edit Pay Period Schedule';
 
-		
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'user_id',
-				'pay_period_schedule_data'
-			) 
-		) );
-
 		if ( isset($pay_period_schedule_data) ) {
 			if ( isset($pay_period_schedule_data['anchor_date']) ) {
 				$pay_period_schedule_data['anchor_date'] = TTDate::parseDateTime( $pay_period_schedule_data['anchor_date'] );

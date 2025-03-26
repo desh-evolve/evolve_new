@@ -47,22 +47,6 @@ class EmbeddedMessageList extends Controller
         $viewData['title'] = 'Message List';
 		$mcf = new MessageControlFactory();
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'object_type_id',
-				'object_id',
-				'object_user_id',
-				'parent_id',
-				'message_data',
-				'template',
-				'close'
-			) 
-		) );
-
 		if ( isset($object_type_id) AND isset($object_id) ) {
 			$mclf = new MessageControlListFactory();
 			$mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject( $current_user->getCompany(), $current_user->getId(), $object_type_id, $object_id );
@@ -144,22 +128,6 @@ class EmbeddedMessageList extends Controller
 
 	public function submit_message(){
 		$mcf = new MessageControlFactory();
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'object_type_id',
-				'object_id',
-				'object_user_id',
-				'parent_id',
-				'message_data',
-				'template',
-				'close'
-			) 
-		) );
 
 		/*
 		if ( !$permission->Check('message','enabled')

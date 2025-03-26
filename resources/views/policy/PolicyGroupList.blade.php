@@ -24,32 +24,24 @@
                    
                     {{-- --------------------------------------------------------------------------- --}}
                     
-                    <div class="row">
-                        <table class="table table-bordered">
-                            <thead class="bg-primary text-white">
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Functions</th>
-                            </thead>
-                            @foreach ($policies as $index => $policy)
-                                @php
-                                    $rowClass = ($policy['deleted'] == true) ? 'tblDataDeleted' : (($index % 2 == 0) ? 'tblDataWhite' : 'tblDataGrey');
-                                @endphp
-                                <tr class="{{ $rowClass }}">
-                                    <td>
-                                        {{ $index + 1 }}
-                                    </td>
-                                    <td>
-                                        {{ $policy['name'] }}
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('policy.policy_groups.add', ['id' => $policy['id']]) }}">Edit</a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                    <table class="table table-striped table-bordered">
+                        <thead class="bg-primary text-white">
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Functions</th>
+                        </thead>
+                        @foreach ($policies as $index => $policy)
+                            <tr>
+                                <td> {{ $index + 1 }} </td>
+                                <td> {{ $policy['name'] }} </td>
+                                <td>
+                                    <a class="btn btn-secondary btn-sm" href="{{ route('policy.policy_groups.add', ['id' => $policy['id']]) }}">Edit</a>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/policy_groups/delete/{{ $policy['id'] }}', 'Policy Group', this)">Delete</button>
+                                </td>
+                            </tr>
+                        @endforeach
 
-                        </table>
-                    </div>
+                    </table>
 
                     {{-- --------------------------------------------------------------------------- --}}
                     

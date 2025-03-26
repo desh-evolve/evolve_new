@@ -55,14 +55,6 @@ class EditHolidayPolicy extends Controller
 
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['minimum_time'] ) ) {
 			$data['minimum_time'] = TTDate::parseTimeUnit($data['minimum_time']);
 		}
@@ -121,7 +113,7 @@ class EditHolidayPolicy extends Controller
 					'deleted_by' => $hp_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			//Defaults
 			$data = array(
 				'default_schedule_status_id' => 20,

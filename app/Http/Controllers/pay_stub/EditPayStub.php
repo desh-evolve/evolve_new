@@ -52,20 +52,6 @@ class EditPayStub extends Controller
 
         $viewData['title'] = 'Edit Employee Pay Stub';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'data',
-				'id',
-				'filter_pay_period_id',
-				'modified_entry',
-			) 
-		) );
-		
-		
 		if ( isset($data) ) {
 			$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );
 			$data['end_date'] = TTDate::parseDateTime( $data['end_date'] );

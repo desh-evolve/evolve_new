@@ -26,7 +26,7 @@
 
 <script>
 
-async function commonDeleteFunction(itemId = null, deleteUrl, itemName, $row = null) {
+async function commonDeleteFunction(deleteUrl, itemName = 'Item', button) {
     return new Promise((resolve) => {
         // Show confirmation modal
         $('#delete_item_name').text(itemName);
@@ -36,7 +36,7 @@ async function commonDeleteFunction(itemId = null, deleteUrl, itemName, $row = n
         $('#delete-confirm').off('click').on('click', async function () {
             try {
                 // Send DELETE request using Fetch API
-                const response = await fetch(`${deleteUrl}${itemId ? '/' + itemId : ''}`, {
+                const response = await fetch(`${deleteUrl}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -52,8 +52,8 @@ async function commonDeleteFunction(itemId = null, deleteUrl, itemName, $row = n
                 let icon = response.ok ? 'success' : 'warning';
                 let msg = response.ok ? res.message || `${itemName} deleted successfully!` : res.message || `Failed to delete ${itemName}`;
                 commonAlert(icon, msg);
-                if (response.ok && $row) {
-                    $row.remove();
+                if (response.ok) {
+                    $(button).closest('tr').remove();
                 }
 
                 resolve(response.ok); // Resolve the promise with the response status
@@ -72,7 +72,6 @@ async function commonDeleteFunction(itemId = null, deleteUrl, itemName, $row = n
         });
     });
 }
-
 
 //desh(2024-10-18)
 async function commonFetchData(url) {

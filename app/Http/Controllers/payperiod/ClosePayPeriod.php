@@ -61,18 +61,6 @@ class ClosePayPeriod extends Controller
 		$viewData = [];
 
 		$viewData['title'] = 'End of Pay Period';
-		
-		/* Get FORM variables */
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'pay_period_ids',
-				'pay_stub_pay_period_ids'
-			)
-		) );
 
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array(

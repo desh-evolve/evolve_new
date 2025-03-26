@@ -41,17 +41,6 @@ class EditUserAccrual extends Controller
             $permission->Redirect( FALSE ); //Redirect
         }
         */
-        
-        extract	(FormVariables::GetVariables( 
-            array	(
-                'action',
-                'id',
-                'user_id',
-                'filter_user_id',
-                'accrual_policy_id',
-                'data'
-            ) 
-        ) );
 
         $viewData['title'] = $id ? 'Edit Accrual' : 'Add Accrual';
 

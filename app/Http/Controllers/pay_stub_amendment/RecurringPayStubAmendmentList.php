@@ -49,17 +49,6 @@ class RecurringPayStubAmendmentList extends Controller
 
         $viewData['title'] = 'Recurring Pay Stub Amendment List';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'user_id'
-			) 
-		) );
-		
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array (
 				'sort_column' => $sort_column,

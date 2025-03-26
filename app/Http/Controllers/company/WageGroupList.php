@@ -47,17 +47,6 @@ class WageGroupList extends Controller
     $current_user_prefs = $this->userPrefs;
     $viewData['title'] = 'Wage Group List';
 
-    // Extract query parameters
-    extract(FormVariables::GetVariables(
-        array(
-            'action',
-            'page',
-            'sort_column',
-            'sort_order',
-            'ids'
-        )
-    ));
-
     // Set URL parameters for pagination and sorting
     URLBuilder::setURL(
         $_SERVER['SCRIPT_NAME'],

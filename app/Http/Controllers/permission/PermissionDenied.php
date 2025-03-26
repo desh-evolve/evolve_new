@@ -48,15 +48,6 @@ class PermissionDenied extends Controller
 
         $viewData['title'] = 'Permission Denied';
 
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-
         return view('permission/PermissionDenied', $viewData);
 
     }

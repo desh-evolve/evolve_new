@@ -45,15 +45,6 @@ class EditPayStubEntryAccountLink extends Controller
 
         $viewData['title'] = 'Edit Pay Stub Account Links';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data',
-				'data_saved'
-			) 
-		) );
-		
 		$psealf = new PayStubEntryAccountLinkFactory(); 
 
 		$pseallf = new PayStubEntryAccountLinkListFactory();

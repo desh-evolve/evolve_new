@@ -49,15 +49,7 @@ class EditBreakPolicy extends Controller
 
 		$viewData['title'] = isset($id) ? 'Edit Break Policy' : 'Add Break Policy';
 		$current_company = $this->currentCompany;
-		
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
+
 		if ( isset($data['trigger_time'] ) ) {
 			$data['trigger_time'] = TTDate::parseTimeUnit($data['trigger_time']);
 			$data['amount'] = TTDate::parseTimeUnit($data['amount']);
@@ -100,7 +92,7 @@ class EditBreakPolicy extends Controller
 					'deleted_by' => $mp_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$data = array (
 				'trigger_time' => 3600 * 1,
 				'amount' => 60 * 15,

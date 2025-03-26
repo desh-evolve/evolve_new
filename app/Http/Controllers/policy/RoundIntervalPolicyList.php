@@ -3,20 +3,11 @@
 namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
-use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
-use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
-use App\Models\Policy\RoundIntervalPolicyFactory;
 use App\Models\Policy\RoundIntervalPolicyListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class RoundIntervalPolicyList extends Controller
@@ -49,34 +40,9 @@ class RoundIntervalPolicyList extends Controller
 
         $viewData['title'] = 'Rounding Policy List';
 		$current_company = $this->currentCompany;
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
 		
 		$riplf = new RoundIntervalPolicyListFactory(); 
 		$riplf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($riplf);
 
 		$punch_type_options = $riplf->getOptions('punch_type');
 
@@ -103,32 +69,33 @@ class RoundIntervalPolicyList extends Controller
 		
 		$viewData['policies'] = $policies;
 		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
 
         return view('policy/RoundIntervalPolicyList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditRoundIntervalPolicy', FALSE) );
-	}
+	public function delete( $id ){
+		if (empty($id)) {
+            return response()->json(['error' => 'No Round Interval Policy Selected.'], 400);
+        }
 
-	public function delete(){
 		$current_company = $this->currentCompany;
 		$delete = TRUE;
 
 		$riplf = new RoundIntervalPolicyListFactory();
+		$riplf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$riplf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($riplf->rs as $rip_obj) {
-				$riplf->data = (array)$rip_obj;
-				$rip_obj = $riplf;
+		foreach ($riplf->rs as $rip_obj) {
+			$riplf->data = (array)$rip_obj;
+			$rip_obj = $riplf;
 
-				$rip_obj->setDeleted($delete);
-				$rip_obj->Save();
+			$rip_obj->setDeleted($delete);
+			$res = $rip_obj->Save();
+
+			if($res){
+				return response()->json(['success' => 'Round Interval Policy Deleted Successfully.']);
+			}else{
+				return response()->json(['error' => 'Round Interval Policy Deleted Failed.']);
 			}
 		}
 

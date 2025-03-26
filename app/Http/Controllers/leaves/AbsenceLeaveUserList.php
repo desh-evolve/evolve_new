@@ -47,16 +47,6 @@ class AbsenceLeaveUserList extends Controller
 
         $viewData['title'] = 'Leave management';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array (
 				'sort_column' => $sort_column,
@@ -121,15 +111,6 @@ class AbsenceLeaveUserList extends Controller
 	}
 
 	public function delete(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
 
 		$delete = TRUE;
 
@@ -150,16 +131,6 @@ class AbsenceLeaveUserList extends Controller
 
 	public function copy(){
 		$current_company = $this->currentCompany;
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
 
 		$cdlf = new CompanyDeductionListFactory();
 
