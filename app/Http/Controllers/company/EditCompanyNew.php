@@ -105,6 +105,11 @@ class EditCompanyNew extends Controller
         //     'ldap_login_attribute' => null,
         // ];
 
+        if(empty($id)){
+            $current_company = $this->currentCompany;
+            $id = $current_company->getId();
+        }
+
         $company_data = [];
 
         extract(FormVariables::GetVariables([
@@ -116,6 +121,8 @@ class EditCompanyNew extends Controller
 
         if (isset($id)) {
 
+
+            $cf = new CompanyFactory();
 
             $clf = new CompanyListFactory();
             $clf->GetByID($id);
@@ -175,22 +182,35 @@ class EditCompanyNew extends Controller
             $company_data['status_options'] = $cf->getOptions('status');
             $company_data['country_options'] = $cf->getOptions('country');
             $company_data['industry_options'] = $cf->getOptions('industry');
+            $company_data['province_options'] = $cf->getOptions('province');
 
             //Company list.
             $company_data['company_list_options'] = CompanyListFactory::getAllArray();
             $company_data['product_edition_options'] = $cf->getOptions('product_edition');
 
+            //Get other field names
+            $oflf = new OtherFieldListFactory();
+            $company_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getID(), 2 );
+
+            $company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type');
+
+            if (!isset($id) AND isset($company_data['id']) ) {
+                $id = $company_data['id'];
+            }
+            $company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id);
 
 
         } else {
             // Load default dropdown options even if no company exists
             $clf = new CompanyListFactory();
+            $cf = new CompanyFactory();
             $company_data['status_options'] = $clf->getOptions('status');
             $company_data['country_options'] = $clf->getOptions('country');
             $company_data['industry_options'] = $clf->getOptions('industry');
             $company_data['company_list_options'] = CompanyListFactory::getAllArray();
             $company_data['product_edition_options'] = $clf->getOptions('product_edition');
-           
+            $company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id);
+            $company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type');
         }
 
         $viewData = [
@@ -198,7 +218,7 @@ class EditCompanyNew extends Controller
             'company_data' => $company_data,
         ];
 
-        return view('company_new.EditCompany', $viewData);
+        return view('company.EditCompany', $viewData);
     }
 
 

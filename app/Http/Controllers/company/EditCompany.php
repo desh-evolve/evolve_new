@@ -35,7 +35,7 @@ class EditCompany extends Controller
         $this->userPrefs = View::shared('current_user_prefs');
     }
 
-    public function index($id) {
+    public function index($id = null) {
 
 		/*
         if ( !$permission->Check('company','enabled')
@@ -44,16 +44,17 @@ class EditCompany extends Controller
 		}
         */
 
+        if(empty($id)){
+            $current_company = $this->currentCompany;
+            $id = $current_company->getId();
+        }
+
+        $action = null;
+        $current_company = $this->currentCompany;
+        $permission = $this->permission;
         $viewData['title'] = 'Edit Company';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'company_data'
-			) 
-		) );
-		
+
 		$cf = new CompanyFactory();
 
 		if ( isset($id) ) {
@@ -124,7 +125,7 @@ class EditCompany extends Controller
 			$company_data = array(
 								  'parent' => $current_company->getId(),
 								  );
-		}
+
 
 		//Select box options;
 		$company_data['status_options'] = $cf->getOptions('status');
@@ -133,7 +134,7 @@ class EditCompany extends Controller
 
 		//Company list.
 		$company_data['company_list_options'] = CompanyListFactory::getAllArray();
-		$company_data['product_edition_options'] = $cf->getOptions('product_edition');
+		$company_data['product_edition_options'] = $cf->getOptions('product_edition') ?? [];
 
 		//Get other field names
 		$oflf = new OtherFieldListFactory();
@@ -147,13 +148,28 @@ class EditCompany extends Controller
 		$company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id);
 
 
+    } else {
+        // Load default dropdown options even if no company exists
+        $clf = new CompanyListFactory();
+        $cf = new CompanyFactory();
+        $company_data['status_options'] = $cf->getOptions('status');
+        $company_data['country_options'] = $cf->getOptions('country');
+        $company_data['industry_options'] = $cf->getOptions('industry');
+        $company_data['company_list_options'] = CompanyListFactory::getAllArray();
+        $company_data['product_edition_options'] = $cf->getOptions('product_edition');
+        $company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id);
+        $company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type');
+    }
+
 		$viewData['company_data'] = $company_data;
 		$viewData['cf'] = $cf;
 
 		return view('company/EditCompany', $viewData);
 	}
 
-	public function submit(Request $request){
+
+	public function submit(Request $request)
+    {
 		$cf = new CompanyFactory();
 		$company_data = $request->data;
 		$current_company = $this->currentCompany;

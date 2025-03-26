@@ -127,72 +127,72 @@
                         $checkPolicylNav = request()->routeIs('policy.*');
                     @endphp
                     <li class="nav-item">
-                        <a 
+                        <a
                             class="nav-link menu-link {{ $checkPolicylNav ? 'active' : '' }}" href="#policy"
                             data-bs-toggle="collapse" role="button"
                             aria-expanded="{{ $checkPolicylNav ? 'true' : 'false' }}"
                             aria-controls="policy">
                             <i class="ri-file-list-line"></i> <span>Policies</span>
                         </a>
-                        <div class="collapse menu-dropdown" id="policy">
+                        {{-- <div class="collapse menu-dropdown" id="policy">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.policy_groups') }}" 
+                                    <a href="{{ route('policy.policy_groups') }}"
                                         class="nav-link {{ request()->routeIs('policy.policy_groups') ? 'active' : '' }}">Policy Groups
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.schedule_policies') }}" 
+                                    <a href="{{ route('policy.schedule_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.schedule_policies') ? 'active' : '' }}">Schedule Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.rounding_policies') }}" 
+                                    <a href="{{ route('policy.rounding_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.rounding_policies') ? 'active' : '' }}">Rounding Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.meal_policies') }}" 
+                                    <a href="{{ route('policy.meal_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.meal_policies') ? 'active' : '' }}">Meal Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.break_policies') }}" 
+                                    <a href="{{ route('policy.break_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.break_policies') ? 'active' : '' }}">Break Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.accrual_policies') }}" 
+                                    <a href="{{ route('policy.accrual_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.accrual_policies') ? 'active' : '' }}">Accrual Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.overtime_policies') }}" 
+                                    <a href="{{ route('policy.overtime_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.overtime_policies') ? 'active' : '' }}">Overtime Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.premium_policies') }}" 
+                                    <a href="{{ route('policy.premium_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.premium_policies') ? 'active' : '' }}">Premium Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.absence_policies') }}" 
+                                    <a href="{{ route('policy.absence_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.absence_policies') ? 'active' : '' }}">Absence Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.exception_policies') }}" 
+                                    <a href="{{ route('policy.exception_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.exception_policies') ? 'active' : '' }}">Exception Policies
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('policy.holiday_policies') }}" 
+                                    <a href="{{ route('policy.holiday_policies') }}"
                                         class="nav-link {{ request()->routeIs('policy.holiday_policies') ? 'active' : '' }}">Holiday Policies
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </li>
 
                     <!-- Payroll -->
@@ -200,7 +200,7 @@
                         $checkPayrollNav = request()->routeIs('payroll.*');
                     @endphp
                     <li class="nav-item">
-                        <a 
+                        <a
                             class="nav-link menu-link {{ $checkPayrollNav ? 'active' : '' }}" href="#payroll"
                             data-bs-toggle="collapse" role="button"
                             aria-expanded="{{ $checkPayrollNav ? 'true' : 'false' }}"
@@ -210,7 +210,7 @@
                         <div class="collapse menu-dropdown" id="payroll">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href="{{ route('payroll.payroll_processing') }}" 
+                                    <a href="{{ route('payroll.payroll_processing') }}"
                                         class="nav-link {{ request()->routeIs('payroll.payroll_processing') ? 'active' : '' }}">End of Pay Period
                                     </a>
                                 </li>

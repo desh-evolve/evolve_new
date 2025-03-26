@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
-                        <h4 class="mb-0 title-form">Edit Company Details</h4>
+                        <h4 class="mb-0 title-form">{{ $title }}</h4>
                     </div>
                 </div>
 
@@ -30,7 +30,7 @@
                     @endif
 
                     <form method="POST"
-                        action="{{ isset($company_data['id']) ? route('company.save', ['id' => $company_data['id']]) : route('company.save') }}"
+                        action="{{ isset($company_data['id']) ? route('company.save', $company_data['id']) : route('company.save') }}"
                         id="company_form" enctype="multipart/form-data">
                         @csrf
 
@@ -40,12 +40,14 @@
                                 <label for="product_edition_id" class="form-label req mb-1 col-md-3">Product Edition</label>
                                 <div class="col-md-9">
                                     <select class="form-select w-50" id="product_edition_id" name="product_edition_id">
-                                        @foreach ($company_data['product_edition_options'] as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ isset($company_data['product_edition']) && $company_data['product_edition'] == $value ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
+                                        @if(isset($company_data['product_edition_options']) && is_array($company_data['product_edition_options']))
+                                            @foreach ($company_data['product_edition_options'] as $value => $label)
+                                                <option value="{{ $value }}"
+                                                    {{ isset($company_data['product_edition']) && $company_data['product_edition'] == $value ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -68,12 +70,14 @@
                                 <label for="industry_id" class="form-label req mb-1 col-md-3">Industry</label>
                                 <div class="col-md-9">
                                     <select class="form-select w-50" id="industry_id">
-                                        @foreach ($company_data['industry_options'] as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ isset($company_data['industry']) && $company_data['industry'] == $value ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
+                                        @if(isset($company_data['industry_options']) && is_array($company_data['industry_options']))
+                                            @foreach ($company_data['industry_options'] as $value => $label)
+                                                <option value="{{ $value }}"
+                                                    {{ isset($company_data['industry']) && $company_data['industry'] == $value ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -102,28 +106,27 @@
                             <div class="row mb-3">
                                 <label for="country" class="form-label req mb-1 col-md-3">Country</label>
                                 <div class="col-md-9">
-                                    <select class="form-select w-50" id="country">
-                                        @foreach ($company_data['country_options'] as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ isset($company_data['country']) && $company_data['country'] == $value ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
+                                    <select class="form-select w-50" id="country" onchange="showProvince()">
+                                        @if(isset($company_data['country_options']) && is_array($company_data['country_options']))
+                                            @foreach ($company_data['country_options'] as $value => $label)
+                                                <option value="{{ $value }}"
+                                                    {{ isset($company_data['country']) && $company_data['country'] == $value ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
+
+                            <div class="row mb-3" onClick="showHelpEntry('province')">
                                 <label for="province" class="form-label req mb-1 col-md-3">Province/State</label>
                                 <div class="col-md-9">
-                                    <select class="form-select w-50" id="province">
-                                        @foreach ($company_data['province'] as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ isset($company_data['province']) && $company_data['province'] == $value ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
+                                    <select id="province" name="company_data[province]">
+
                                     </select>
+                                    <input type="hidden" id="selected_province" value="{{ $company_data['province'] ?? '' }}">
                                 </div>
                             </div>
 
@@ -166,7 +169,14 @@
                                 <label for="admin_contact" class="form-label req mb-1 col-md-3">Administrative Contact</label>
                                 <div class="col-md-9">
                                     <select class="form-select w-50" id="admin_contact">
-                                        <option value="">Select Contact</option>
+                                        @if(isset($company_data['user_list_options']) && is_array($company_data['user_list_options']))
+                                            @foreach ($company_data['user_list_options'] as $value => $label)
+                                                <option value="{{ $value }}"
+                                                    {{ isset($company_data['admin_contact']) && $company_data['admin_contact'] == $value ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -174,8 +184,15 @@
                             <div class="row mb-3">
                                 <label for="billing_contact" class="form-label req mb-1 col-md-3">Billing Contact</label>
                                 <div class="col-md-9">
-                                    <select class="form-select w-50" id="billing_contact">
-                                        <option value="">Select Contact</option>
+                                    <select class="form-select w-50" id="billing_contact" name="company_data[billing_contact]">
+                                        @if(isset($company_data['user_list_options']) && is_array($company_data['user_list_options']))
+                                            @foreach ($company_data['user_list_options'] as $value => $label)
+                                                <option value="{{ $value }}"
+                                                    {{ (isset($company_data['billing_contact']) && $company_data['billing_contact'] == $value) ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -184,7 +201,14 @@
                                 <label for="support_contact" class="form-label req mb-1 col-md-3">Primary Support Contact</label>
                                 <div class="col-md-9">
                                     <select class="form-select w-50" id="support_contact">
-                                        <option value="">Select Contact</option>
+                                        @if(isset($company_data['user_list_options']) && is_array($company_data['user_list_options']))
+                                            @foreach ($company_data['user_list_options'] as $value => $label)
+                                                <option value="{{ $value }}"
+                                                    {{ (isset($company_data['support_contact']) && $company_data['support_contact'] == $value) ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -192,35 +216,35 @@
                             <div class="row mb-3">
                                 <label for="other_id1" class="form-label mb-1 col-md-3">111</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="other_id1" placeholder="Enter" value="">
+                                    <input type="text" class="form-control w-50" id="other_id1" placeholder="Enter" value="{{ $company_data['other_id1'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label for="other_id2" class="form-label mb-1 col-md-3">222</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="other_id2" placeholder="Enter" value="">
+                                    <input type="text" class="form-control w-50" id="other_id2" placeholder="Enter" value="{{ $company_data['other_id2'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label for="other_id3" class="form-label mb-1 col-md-3">333</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="other_id3" placeholder="Enter" value="">
+                                    <input type="text" class="form-control w-50" id="other_id3" placeholder="Enter" value="{{ $company_data['other_id3'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label for="other_id4" class="form-label mb-1 col-md-3">444</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="other_id4" placeholder="Enter" value="">
+                                    <input type="text" class="form-control w-50" id="other_id4" placeholder="Enter" value="{{ $company_data['other_id4'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label for="other_id5" class="form-label mb-1 col-md-3">555</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="other_id5" placeholder="Enter" value="">
+                                    <input type="text" class="form-control w-50" id="other_id5" placeholder="Enter" value="{{ $company_data['other_id5'] ?? '' }}">
                                 </div>
                             </div>
 
@@ -236,14 +260,14 @@
                                 <div class="row mb-3">
                                     <label for="originator_id" class="form-label req mb-1 col-md-3">Originator ID / Immediate Origin</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control w-50" id="originator_id" placeholder="Enter Originator ID" value="">
+                                        <input type="text" class="form-control w-50" id="originator_id" placeholder="Enter Originator ID" value="{{ $company_data['originator_id'] ?? '' }}">
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <label for="data_center_id" class="form-label req mb-1 col-md-3">Data Center / Immediate Destination</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control w-50" id="data_center_id" placeholder="Enter Data Center" value="">
+                                        <input type="text" class="form-control w-50" id="data_center_id" placeholder="Enter Data Center" value="{{ $company_data['data_center_id'] ?? '' }}">
                                     </div>
                                 </div>
 
@@ -271,7 +295,7 @@
                                 <div class="row mb-3">
                                     <label for="enable_second_last_name" class="form-label req mb-1 col-md-3">Enable Second Surname</label>
                                     <div class="col-md-9">
-                                        <input type="checkbox" class="form-check-input" id="enable_second_last_name">
+                                        <input type="checkbox" class="form-check-input" id="enable_second_last_name" value="1" {{ isset($company_data['enable_second_last_name']) && $company_data['enable_second_last_name'] ? 'checked' : '' }}>
                                     </div>
                                 </div>
 
@@ -290,9 +314,14 @@
                                     <label for="ldap_authentication_type_id" class="form-label mb-1 col-md-3">LDAP Authentication</label>
                                     <div class="col-md-9">
                                         <select class="form-select w-50" id="ldap_authentication_type_id">
-                                            <option value="">Disabled</option>
-                                            <option value="">Disabled</option>
-                                            <option value="">Disabled</option>
+                                            @if(isset($company_data['ldap_authentication_type_options']) && is_array($company_data['ldap_authentication_type_options']))
+                                                @foreach ($company_data['ldap_authentication_type_options'] as $value => $label)
+                                                    <option value="{{ $value }}"
+                                                        {{ (isset($company_data['ldap_authentication_type']) && $company_data['ldap_authentication_type'] == $value) ? 'selected' : '' }}>
+                                                        {{ $label }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
@@ -312,4 +341,31 @@
     </div>
 
 
+    <script>
+
+        var loading = false;
+        var hwCallback = {
+                getProvinceOptions: function(result) {
+                    if ( result != false ) {
+                        province_obj = document.getElementById('province');
+                        selected_province = document.getElementById('selected_province').value;
+
+                        populateSelectBox( province_obj, result, selected_province);
+                    }
+                    loading = false;
+                }
+            }
+
+        var remoteHW = new AJAX_Server(hwCallback);
+
+        function showProvince() {
+            country = document.getElementById('country').value;
+            remoteHW.getProvinceOptions( country );
+        }
+
+    </script>
+
 </x-app-layout>
+
+
+

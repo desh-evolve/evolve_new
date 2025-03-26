@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
 use IteratorAggregate;
 
 class UserListFactory extends UserFactory implements IteratorAggregate {
-	
+
 	function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $order == NULL ) {
 			$order = array( 'company_id' => 'asc', 'status_id' => '= 10 desc', 'last_name' => 'asc' );
@@ -117,7 +117,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		if ( $id == '') {
 			return FALSE;
 		}
-		
+
 		$this->rs = $this->getCache($id);
 		if ( empty($this->rs)) {
 			$ph = array(
@@ -135,13 +135,13 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		}
 		return $this;
 	}
-	
 
-        /* 
+
+        /*
          * ARSP EDIT -->
          * THIS CODE ADDED BY ME
-         * THIS CODE USE FOR IF IMPORT USER DEDUCTION /EARNINGS  CSV FORMAT THAT TIME CHECK THE EXISTING EMPLOYEE NUMBER          
-         */        
+         * THIS CODE USE FOR IF IMPORT USER DEDUCTION /EARNINGS  CSV FORMAT THAT TIME CHECK THE EXISTING EMPLOYEE NUMBER
+         */
 	function getByEmployeeNumber($emp_no) {
 		if ( $emp_no == '') {
 			return FALSE;
@@ -160,13 +160,13 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
-	}     	
-	
-	
-        /* 
+	}
+
+
+        /*
          * ARSP NOTE  --> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */        
+         *
+         */
 	function getAllJobSkillsUniqueOptions() {
 
 		//		$query = '
@@ -174,31 +174,31 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		//					from	'. $this->getTable() .'
 		//					where   job_skills != null
 		//						AND deleted = 0';
-		//                
+		//
 		//		$this->rs = DB::select($query);
 		//                echo "ARSP --------------------------------------<br/>";
 		//                print_r($this);
 		//                echo "<pre>";
 		//                print_r($this);
 		//                echo "<pre>";
-					
+
 				$ulf = new UserListFactory();
 				$ulf->getAll();
-					
+
 				foreach ($ulf->rs as $user) {
 					$ulf->data = (array)$user;
 					$user = $ulf;
-							
+
 					if($user->getJobSkills() != '' OR $user->getJobSkills() != NULL) {
-						
+
 						// split the phrase by any number of commas or space characters,
 						// which include " ", \r, \t, \n and \f
 						$keywords = preg_split("/[\s,]+/", $user->getJobSkills());
-						
+
 						$array[] = $keywords;
 					}
 				}
-								
+
 						//$final = array();
 						foreach ($array as $value)
 						{
@@ -209,19 +209,19 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						}
 		//                print_r($final);
 		//                exit();
-						
+
 						$result = array_unique($final);
 		//                print_r($result);
 		//                exit();
 
-						
 
-						
+
+
 		//                print_r($result);
 		//                exit();
 				return $result;
-			}         
-				
+			}
+
 
 			function getByIdAndCompanyId($id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 				if ( $id == '') {
@@ -369,7 +369,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				}
 
 				$key = Option::getByValue($status, $this->getOptions('status') );
-				
+
 				if ($key !== FALSE) {
 					$status = $key;
 				}
@@ -446,7 +446,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				return $this;
 			}
 		*/
-				
+
 			function getByCompanyIdandBirthday($company_id,$birth_date=Null) {
 				if ( $company_id == '') {
 					return FALSE;
@@ -478,11 +478,11 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				$this->rs = DB::select($query, $ph);
 
 				return $this;
-			}     	
-			
-				
-				
-				
+			}
+
+
+
+
 			function getByIdAndStatus($id, $status, $where = NULL, $order = NULL) {
 				if ( $id == '') {
 					return FALSE;
@@ -840,16 +840,16 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				return $this;
 			}
 
-				
-				
-						
+
+
+
 			function getByMachineId($id) {
 				if ( $id == '') {
 					return FALSE;
 				}
 
-				
-				
+
+
 					$ph = array(
 								':punch_machine_user_id' => $id,
 								);
@@ -862,16 +862,16 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 
 					$this->rs = DB::select($query, $ph);
 
-					
-				
+
+
 
 				return $this;
 			}
-			
-				
-				
-				
-				
+
+
+
+
+
 			function getByCompanyId($company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 				if ( $company_id == '') {
 					return FALSE;
@@ -949,7 +949,6 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 
 				$ulf = new UserListFactory();
 				$ulf->getByCompanyId($company_id);
-
 				if ( $include_blank == TRUE ) {
 					$user_list[0] = '--';
 				}
@@ -999,7 +998,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 
 					if ( $include_disabled == TRUE OR ( $include_disabled == FALSE AND $user->getStatus() == 10 ) ) {
 						$user_list[$user->getID()] = $status.$user->getEpfMembershipNo().' - '.$user->getFullName($last_name_first);
-						
+
 						//$epfnos[] = $user->getEpfMembershipNo();
 
 					}
@@ -1026,7 +1025,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 
 				if ( $include_blank == TRUE ) {
 					$list[0] = '--';
-				
+
 				}
 				foreach ($lf->rs as $obj) {
 					$lf->data = (array)$obj;
@@ -1109,7 +1108,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 							':updated_date' => $date,
 							':uif_created_date' => $date,
 							);
-							
+
 				$uif = new UserIdentificationFactory();
 
 				//INCLUDE Deleted rows in this query.
@@ -1215,8 +1214,8 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				$this->rs = DB::select($query, $ph);
 
 				return $this;
-			} 
-				
+			}
+
 				/**
 				 * ARSP NOTE-->
 				 * I ADDED THIS CODE FOR THUNDER AND NEON
@@ -1237,7 +1236,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				$query = '
 							select 	*
 							from	'. $this->getTable() .' as a
-							where	default_branch_id = :id                                                
+							where	default_branch_id = :id
 								AND id = ( select id
 											from '. $this->getTable() .'
 											where default_branch_id = :id2
@@ -1256,8 +1255,8 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				$this->rs = DB::select($query, $ph);
 
 				return $this;
-			}           
-				
+			}
+
 				function getSearchByArrayCriteria( $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
 				if ( !is_array($order) ) {
 					//Use Filter Data ordering if its set.
@@ -1441,7 +1440,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			}
 
 			function getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
-					
+
 				//  echo '<pre>'; print_r($filter_data); echo '<pre>';  die;
 				if ( $company_id == '') {
 					return FALSE;
@@ -1539,7 +1538,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								LEFT JOIN '. $ugf->getTable() .' as d ON a.group_id = d.id
 								LEFT JOIN '. $utf->getTable() .' as e ON a.title_id = e.id
 							where	a.company_id = :company_id ';
-						
+
 				//     $query  .=	' AND a.basis_of_employment in ('. $this->getListSQL($filter_data['basis_of_employment'][0], $ph) .') ';
 				if ( isset($filter_data['permission_children_ids']) AND isset($filter_data['permission_children_ids'][0]) AND !in_array(-1, (array)$filter_data['permission_children_ids']) ) {
 					$query  .=	' AND a.id in ('. $this->getListSQL($filter_data['permission_children_ids'], $ph) .') ';
@@ -1615,7 +1614,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$ph[':sin'] = trim($filter_data['sin']);
 					$query  .=	' AND a.sin LIKE :sin';
 				}
-						
+
 
 				$query .= 	'
 								AND a.deleted = 0
@@ -1633,7 +1632,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				return $this;
 			}
 
-				
+
 				function getSearchByCompanyIdAndArrayCriteriaForOT( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
 				if ( $company_id == '') {
 					return FALSE;
@@ -1799,7 +1798,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$query  .=	' AND a.sin LIKE :sin';
 				}
 
-				$query .= 	'   AND a.group_id in (4,6)    
+				$query .= 	'   AND a.group_id in (4,6)
 								AND a.deleted = 0
 							';
 				$query .= $this->getWhereSQL( $where );
@@ -1815,7 +1814,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				return $this;
 			}
 
-				
+
 				function getSearchByCompanyIdAndArrayCriteriaForOP( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
 				if ( $company_id == '') {
 					return FALSE;
@@ -1981,7 +1980,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$query  .=	' AND a.sin LIKE :sin';
 				}
 
-				$query .= 	'  AND a.group_id = 3  
+				$query .= 	'  AND a.group_id = 3
 								AND a.deleted = 0
 							';
 				$query .= $this->getWhereSQL( $where );
@@ -1997,7 +1996,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				return $this;
 			}
 
-				
+
 			function getSearchByCompanyIdAndBranchIdAndDepartmentIdAndStatusId($company_id, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
 				if ( $company_id == '') {
 					return FALSE;
@@ -2092,12 +2091,12 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			}
 
 				/**
-				*ARSP NOTE --> THIS CODE ADDED BY ME FOR THUNDER & NEON 
-				*/        
+				*ARSP NOTE --> THIS CODE ADDED BY ME FOR THUNDER & NEON
+				*/
 			function getSearchByJobSkills($job_skill) {
-					
+
 						$job_skill = '%'.$job_skill.'%';
-					
+
 				if ( $job_skill == '') {
 					return FALSE;
 				}
@@ -2118,7 +2117,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				$query = '
 							select 	*
 							from 	'. $this->getTable() .'
-							where	job_skills LIKE  :job_skills                                      
+							where	job_skills LIKE  :job_skills
 							';
 
 				$query .= 	'
@@ -2132,8 +2131,8 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						//var_dump($this);
 
 				return $this;
-			}	
-			
+			}
+
 			function getSearchByCompanyIdAndUserIDAndGroupIdAndSubGroupsAndBranchIdAndDepartmentIdAndStatusId($company_id, $user_id, $group_id, $include_sub_groups, $branch_id, $department_id, $status_id = NULL, $order = NULL) {
 				if ( $company_id == '') {
 					return FALSE;
@@ -2559,19 +2558,19 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 
 		return $this;
 	}
-   
-        
+
+
         function getTerminationByPayperiod($payperiod_id,$order = NULL){
-            
+
             if ( $payperiod_id == '') {
 			return FALSE;
 		}
-            
+
                 $ph = array(
 					':pay_period_id' => $payperiod_id,
 					);
-                
-                
+
+
                 $query = 'select a.id,a.termination_date from users as a
                             inner join user_date as ud on ud.user_id = a.id
                             inner join pay_period as pp on pp.id = ud.pay_period_id
@@ -2580,12 +2579,12 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
                             and a.termination_date between unix_timestamp(pp.start_date) and unix_timestamp(pp.end_date)
                             and a.deleted = 0 and ud.deleted = 0 and pp.deleted=0
                             group by a.id,a.termination_date';
-                
-                
+
+
                 $query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-		
+
 		return $this;
         }
 }

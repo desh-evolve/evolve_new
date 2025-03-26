@@ -112,18 +112,18 @@ class WageGroupList extends Controller
         if (empty($id)) {
             return response()->json(['error' => 'No wage group selected.'], 400);
         }
-        
+
         $wglf = new WageGroupListFactory();
         $wage_group = $wglf->getByIdAndCompanyId($id, $current_company->getId());
-        
+
         foreach ($wage_group->rs as $w_obj) {
             $wage_group->data = (array)$w_obj; // added bcz currency data is null and it gives an error
-            
+
             $wage_group->setDeleted(true); // Set deleted flag to true
 
             if ($wage_group->isValid()) {
                 $res = $wage_group->Save();
-                
+
                 if($res){
                     return response()->json(['success' => 'Wage Group deleted successfully.']);
                 }else{
@@ -131,6 +131,6 @@ class WageGroupList extends Controller
                 }
             }
         }
-        
+
     }
 }
