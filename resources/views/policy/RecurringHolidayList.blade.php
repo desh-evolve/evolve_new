@@ -1,6 +1,6 @@
 <x-app-layout :title="'Input Example'">
 
-    <div class="row">
+    <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">

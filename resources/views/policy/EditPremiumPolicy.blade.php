@@ -1,6 +1,6 @@
 <x-app-layout :title="'Input Example'">
 
-    <div class="row">
+    <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
@@ -24,7 +24,40 @@
                    
                     {{-- --------------------------------------------------------------------------- --}}
                     
-                    
+                    <form method="POST"
+                        action="{{ isset($data['id']) ? route('policy.premium_policies.submit', $data['id']) : route('policy.premium_policies.submit') }}">
+                        @csrf
+
+                        @if (!$spf->Validator->isValid())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    <li>Error list</li>
+                                </ul>
+                            </div>
+                        @endif
+                        
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                name="data[name]" 
+                                value="{{ $data['name'] ?? '' }}"
+                                placeholder="Enter Schedule Policy Name"
+                            >
+                        </div>
+
+
+
+
+
+                        
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit">
+                        </div>
+            
+                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) && $data['id']}}">
+                    </form>
 
                     {{-- --------------------------------------------------------------------------- --}}
                     

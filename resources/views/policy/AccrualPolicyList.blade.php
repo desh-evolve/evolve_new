@@ -1,6 +1,6 @@
 <x-app-layout :title="'Input Example'">
 
-    <div class="row">
+    <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
@@ -25,6 +25,17 @@
                     {{-- --------------------------------------------------------------------------- --}}
                     
                     <table class="table table-striped table-bordered">
+                        @if ($show_no_policy_group_notice == TRUE)
+                            <tr class="tblDataWarning">
+                                <td colspan="4" align="center">
+                                    <br>
+                                    <b>Policies highlighted in yellow may not be active yet because they are not assigned to a <a href="/policy/policy_groups">Policy Group</a>. </b>
+                                    <br>
+                                    <br>
+                                </td>
+                            </tr>
+                        @endif
+                        
                         <thead class="bg-primary text-white">
                             <th>#</th>
                             <th>Name </th>
@@ -32,7 +43,10 @@
                             <th>Functions</th>
                         </thead>
                         @foreach ($policies as $index => $policy)
-                            <tr>
+                            @php
+                                $row_class = ($policy['assigned_policy_groups'] == 0) ? 'bg-warning text-white' : '';
+                            @endphp
+                            <tr class="{{ $row_class }}">
                                 <td>{{ $index + 1 }} </td>
                                 <td>{{ $policy['name'] }}</td>
                                 <td>{{ $policy['type'] }}</td>

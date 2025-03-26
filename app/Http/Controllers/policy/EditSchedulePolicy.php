@@ -113,6 +113,7 @@ class EditSchedulePolicy extends Controller
 
 		$viewData['data'] = $data;
 		$viewData['spf'] = $spf;
+
         return view('policy/EditSchedulePolicy', $viewData);
 
     }
