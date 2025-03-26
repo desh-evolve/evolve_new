@@ -23,13 +23,11 @@
                 <div class="card-body">
                    
                     {{-- --------------------------------------------------------------------------- --}}
-                    
-                    @if ($errors->any())
+
+                    @if (!$pgf->Validator->isValid())
                         <div class="alert alert-danger">
                             <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <li>Error list</li>
                             </ul>
                         </div>
                     @endif
@@ -72,7 +70,6 @@
                                 id="over_time_policy_ids" 
                                 class="form-select" 
                                 name="data[over_time_policy_ids][]" 
-                                values="[1, 2]"
                                 multiple
                             >
                                 @foreach ($data['over_time_policy_options'] as $id => $name )
@@ -212,7 +209,7 @@
                         </div>
             
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
+                            <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit">
                         </div>
             
                         <input type="hidden" name="data[id]" value="{{!empty($data['id']) && $data['id']}}">

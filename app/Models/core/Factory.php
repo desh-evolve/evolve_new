@@ -24,7 +24,7 @@ class Factory {
 
 	protected $db;
     protected $cache;
-    protected $Validator;
+    public $Validator;
 
 	protected $currentUser;
 	protected $profiler;
@@ -932,6 +932,7 @@ class Factory {
 		return $retval;
 	}
 
+	/* //original code - commented by desh(2025-03-26)
 	protected function getWhereSQL($array, $append_where = FALSE) {
 		//Make this a multi-dimensional array, the first entry
 		//is the WHERE clauses with '?' for placeholders, the second is
@@ -939,13 +940,12 @@ class Factory {
 		if (is_array($array) ) {
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-
 			foreach ($array as $orig_column => $expression) {
 				$orig_column = trim($orig_column);
 				$column = $this->parseColumnName( $orig_column );
 
 				$expression = trim($expression);
-
+				
 				if ( in_array($column, $fields) ) {
 					$sql_chunks[] = $orig_column.' '.$expression;
 				}
@@ -964,6 +964,36 @@ class Factory {
 
 		return FALSE;
 	}
+	*/
+
+	protected function getWhereSQL($array, $append_where = false) {
+		if (!is_array($array) || empty($array)) {
+			return ''; // Return empty string if input is not a valid array
+		}
+	
+		$sql_chunks = [];
+	
+		foreach ($array as $column => $value) {
+			$column = trim($column);
+			$value = trim($value);
+	
+			// Ensure proper SQL escaping (use prepared statements in real-world applications)
+			if (is_numeric($value)) {
+				$sql_chunks[] = "`$column` $value"; // No quotes for numeric values
+			} else {
+				$sql_chunks[] = "`$column` " . addslashes($value); // No quotes around values
+			}
+		}
+	
+		$sql = implode(' AND ', $sql_chunks);
+	
+		if ($append_where) {
+			return ' WHERE ' . $sql;
+		} else {
+			return ' AND ' . $sql;
+		}
+	}
+		
 
 	protected function getColumnsFromAliases( $columns, $aliases ) {
 		// Columns is the original column array.
