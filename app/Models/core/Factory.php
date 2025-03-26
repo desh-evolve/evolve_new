@@ -1487,6 +1487,24 @@ class Factory {
 	public function getConfigVars(){
 		return $this->configVars;
 	}
+
+	static function convertToSeconds($time) {
+		// Validate the format of the time (hh:mm)
+		if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time)) {
+			throw new Exception("Invalid time format. Expected hh:mm (e.g., 05:00).");
+		}
+		
+		list($hours, $minutes) = explode(':', $time);
+		return ($hours * 3600) + ($minutes * 60);
+	}
+
+	static function convertToHoursAndMinutes($seconds) {
+		$hours = floor($seconds / 3600);  // Get the total hours
+		$minutes = floor(($seconds % 3600) / 60);  // Get the remaining minutes
+	
+		return sprintf("%02d:%02d", $hours, $minutes);  // Return in hh:mm format
+	}
+	
 	//===========================================================================
 	
 }

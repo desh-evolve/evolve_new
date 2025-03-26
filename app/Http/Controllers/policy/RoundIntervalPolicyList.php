@@ -5,6 +5,7 @@ namespace App\Http\Controllers\policy;
 use App\Http\Controllers\Controller;
 
 use App\Models\Core\Environment;
+use App\Models\Core\Factory;
 use App\Models\Core\Redirect;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\RoundIntervalPolicyListFactory;
@@ -60,7 +61,7 @@ class RoundIntervalPolicyList extends Controller
 				'name' => $rip_obj->getName(),
 				'punch_type_id' => $rip_obj->getPunchType(),
 				'punch_type' => $punch_type_options[$rip_obj->getPunchType()],
-				'interval' => $rip_obj->getInterval(),
+				'interval' => Factory::convertToHoursAndMinutes($rip_obj->getInterval()),
 				'assigned_policy_groups' => (int)$rip_obj->getColumn('assigned_policy_groups'),
 				'deleted' => $rip_obj->getDeleted()
 			);

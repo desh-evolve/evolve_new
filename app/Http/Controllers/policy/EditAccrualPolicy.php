@@ -86,7 +86,7 @@ class EditAccrualPolicy extends Controller
 		
 		$apf = new AccrualPolicyFactory();
 		$apmf = new AccrualPolicyMilestoneFactory();
-
+		$action = '';
 		if ( isset($id) ) {
 
 			$aplf = new AccrualPolicyListFactory();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\policy;
 use App\Http\Controllers\Controller;
 
 use App\Models\Core\Environment;
+use App\Models\Core\Factory;
 use App\Models\Core\Option;
 use App\Models\Core\Redirect;
 use App\Models\Core\URLBuilder;
@@ -64,7 +65,7 @@ class SchedulePolicyList extends Controller
 				'meal_policy' => Option::getByKey($sp_obj->getMealPolicyID(), $meal_options ),
 				'absence_policy_id' => $sp_obj->getAbsencePolicyID(),
 				'absence_policy' => Option::getByKey($sp_obj->getAbsencePolicyID(), $absence_options ),
-				'start_stop_window' => $sp_obj->getStartStopWindow(),
+				'start_stop_window' => Factory::convertToHoursAndMinutes($sp_obj->getStartStopWindow()),
 				'deleted' => $sp_obj->getDeleted()
 			);
 

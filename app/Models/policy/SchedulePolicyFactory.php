@@ -3,6 +3,7 @@
 namespace App\Models\Policy;
 
 use App\Models\Company\CompanyGenericMapFactory;
+use App\Models\Company\CompanyGenericMapListFactory;
 use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
@@ -214,7 +215,7 @@ class SchedulePolicyFactory extends Factory {
 	}
 
 	function getBreakPolicy() {
-		return CompanyGenericMapFactory::getArrayByCompanyIDAndObjectTypeIDAndObjectID( $this->getCompany(), 165, $this->getID() );
+		return CompanyGenericMapListFactory::getArrayByCompanyIDAndObjectTypeIDAndObjectID( $this->getCompany(), 165, $this->getID() );
 	}
 	function setBreakPolicy($ids) {
 		Debug::text('Setting Break Policy IDs : ', __FILE__, __LINE__, __METHOD__, 10);

@@ -1,7 +1,7 @@
 <x-app-layout :title="'Input Example'">
 
     <div class="d-flex justify-content-center">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
@@ -112,7 +112,7 @@
                                 @foreach ($data['over_time_options'] as $id => $name )
                                     <option 
                                         value="{{$id}}"
-                                        @if(!empty($data['over_time_policy_id']) && in_array($id, $data['over_time_policy_id']))
+                                        @if(!empty($data['over_time_policy_id']) && $id == $data['over_time_policy_id'])
                                             selected
                                         @endif
                                     >{{$name}}</option>

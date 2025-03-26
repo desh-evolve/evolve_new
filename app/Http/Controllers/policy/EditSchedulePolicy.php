@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
+use App\Models\Core\Factory;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
 use App\Models\Core\Misc;
@@ -22,6 +23,8 @@ use App\Models\Policy\SchedulePolicyFactory;
 use App\Models\Policy\SchedulePolicyListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
+
+use function Laravel\Prompts\alert;
 
 class EditSchedulePolicy extends Controller
 {
@@ -118,20 +121,25 @@ class EditSchedulePolicy extends Controller
 
     }
 
-	public function submit(Request $request){
+	public function submit($id = null, Request $request){
 		$spf = new SchedulePolicyFactory();
 		$data = $request->data;
 		$current_company = $this->currentCompany;
+
+		if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $data['start_stop_window'])) {
+			dd("Invalid time format. Expected HH:MM (e.g., 05:00).");
+		}
 		
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-		$spf->setId( $data['id'] );
+		$spf->setId( $id );
 		$spf->setCompany( $current_company->getId() );
 		$spf->setName( $data['name'] );
 		$spf->setMealPolicyID( $data['meal_policy_id'] );
 		$spf->setOverTimePolicyID( $data['over_time_policy_id'] );
 		$spf->setAbsencePolicyID( $data['absence_policy_id'] );
-		$spf->setStartStopWindow( $data['start_stop_window'] );
+
+		$spf->setStartStopWindow( Factory::convertToSeconds($data['start_stop_window']) );
 
 		if ( $spf->isValid() ) {
 			$spf->Save(FALSE);
@@ -142,7 +150,8 @@ class EditSchedulePolicy extends Controller
 				$spf->setBreakPolicy( array() );
 			}
 
-			Redirect::Page( URLBuilder::getURL( NULL, 'SchedulePolicyList') );
+			return redirect(URLBuilder::getURL(NULL, '/policy/schedule_policies'));
+
 		}
 	}
 }

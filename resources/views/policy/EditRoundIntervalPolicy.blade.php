@@ -1,7 +1,7 @@
 <x-app-layout :title="'Input Example'">
 
     <div class="d-flex justify-content-center">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
@@ -35,64 +35,95 @@
                                 </ul>
                             </div>
                         @endif
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                name="data[name]" 
+                                value="{{ $data['name'] ?? '' }}"
+                                placeholder="Enter Schedule Policy Name"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="type_id">Punch Type</label>
+                            <select 
+                                id="type_id" 
+                                class="form-select" 
+                                name="data[punch_type_id]" 
+                            >
+                                @foreach ($data['punch_type_options'] as $id => $name )
+                                    <option 
+                                        value="{{$id}}"
+                                        @if(!empty($data['punch_type_id']) && $id == $data['punch_type_id'])
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     
-                        <tr onClick="showHelpEntry('name')">
-                            <td class="{isvalid object="ripf" label="name" value="cellLeftEditTable"}">
-                                {t}Name:{/t}
-                            </td>
-                            <td class="cellRightEditTable">
-                                <input type="text" name="data[name]" value="{$data.name}">
-                            </td>
-                        </tr>
-        
-                        <tr onClick="showHelpEntry('punch_type')">
-                            <td class="{isvalid object="ripf" label="punch_type" value="cellLeftEditTable"}">
-                                {t}Punch Type:{/t}
-                            </td>
-                            <td class="cellRightEditTable">
-                                <select id="type_id" name="data[punch_type_id]">
-                                    {html_options options=$data.punch_type_options selected=$data.punch_type_id}
-                                </select>
-                            </td>
-                        </tr>
-        
-                        <tr onClick="showHelpEntry('round_type')">
-                            <td class="{isvalid object="ripf" label="round_type" value="cellLeftEditTable"}">
-                                {t}Round Type:{/t}
-                            </td>
-                            <td class="cellRightEditTable">
-                                <select id="round_type_id" name="data[round_type_id]">
-                                    {html_options options=$data.round_type_options selected=$data.round_type_id}
-                                </select>
-                            </td>
-                        </tr>
-        
-                        <tr onClick="showHelpEntry('interval')">
-                            <td class="{isvalid object="ripf" label="interval" value="cellLeftEditTable"}">
-                                {t}Interval:{/t}
-                            </td>
-                            <td class="cellRightEditTable">
-                                <input type="text" size="6" name="data[interval]" value="{gettimeunit value=$data.interval}"> {$current_user_prefs->getTimeUnitFormatExample()}
-                            </td>
-                        </tr>
-        
-                        <tr onClick="showHelpEntry('grace')">
-                            <td class="{isvalid object="ripf" label="grace" value="cellLeftEditTable"}">
-                                {t}Grace Period:{/t}
-                            </td>
-                            <td class="cellRightEditTable">
-                                <input type="text" size="6" name="data[grace]" value="{gettimeunit value=$data.grace}"> {$current_user_prefs->getTimeUnitFormatExample()}
-                            </td>
-                        </tr>
-        
-                        <tr onClick="showHelpEntry('strict')">
-                            <td class="{isvalid object="ripf" label="strict" value="cellLeftEditTable"}">
-                                {t}Strict Schedule:{/t}
-                            </td>
-                            <td class="cellRightEditTable">
-                                <input type="checkbox" class="checkbox" name="data[strict]" value="1"{if $data.strict == TRUE}checked{/if}>  ({t}Employee can't work more than scheduled time{/t})
-                            </td>
-                        </tr>
+                        <div class="form-group">
+                            <label for="round_type_id">Round Type</label>
+                            <select 
+                                id="round_type_id" 
+                                class="form-select" 
+                                name="data[round_type_id]" 
+                            >
+                                @foreach ($data['round_type_options'] as $id => $name )
+                                    <option 
+                                        value="{{$id}}"
+                                        @if(!empty($data['round_type_id']) && $id == $data['round_type_id'])
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="interval">Interval (format hh:mm (eg => 2:15))</label>
+                            <input 
+                                type="text" 
+                                size="6"
+                                class="form-control" 
+                                name="data[interval]" 
+                                value="{{ gmdate('H:i', $data['interval'] ?? '00:15') }}"
+                                placeholder="format hh:mm (eg => 02:15)"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="grace">Grace Period (format hh:mm (eg => 2:15))</label>
+                            <input 
+                                type="text" 
+                                size="6"
+                                class="form-control" 
+                                name="data[grace]" 
+                                value="{{ gmdate('H:i', $data['grace'] ?? '00:00') }}"
+                                placeholder="format hh:mm (eg => 02:15)"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="strict">Strict Schedule</label>
+                            <input 
+                                type="checkbox" 
+                                class="checkbox" 
+                                id="strict" 
+                                name="data[strict]" 
+                                value="1" {{ ( !empty($data['strict']) && $data['strict'] == TRUE) && 'checked' }}>
+                            Employee can't work more than scheduled time
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit">
+                        </div>
+            
+                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) && $data['id']}}">
+
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}
