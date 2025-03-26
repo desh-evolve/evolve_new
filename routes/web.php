@@ -11,7 +11,8 @@ use App\Http\Controllers\company\EditCompany;
 use App\Http\Controllers\Company\EditCompanyNew;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
-
+use App\Http\Controllers\department\DepartmentList;
+use App\Http\Controllers\department\EditDepartment;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
@@ -81,6 +82,13 @@ Route::get('/wage_group', [WageGroupList::class, 'index'])->name('wage_group.ind
 Route::get('/wage_group/add/{id?}', [EditWageGroup::class, 'index'])->name('wage_group.add');
 Route::post('/wage_group/save/{id?}', [EditWageGroup::class, 'save'])->name('wage_group.save');
 Route::delete('/wage_group/delete/{id}', [WageGroupList::class, 'delete'])->name('wage_group.delete');
+
+// ==================== Department =====================================================================================
+Route::get('/department', [DepartmentList::class, 'index'])->name('department.index');
+
+Route::get('/department/add/{id?}', [EditDepartment::class, 'index'])->name('department.add');
+Route::post('/department/save/{id?}', [EditDepartment::class, 'submit'])->name('department.save');
+Route::delete('/department/delete/{id}', [DepartmentList::class, 'delete'])->name('department.delete');
 
 
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');

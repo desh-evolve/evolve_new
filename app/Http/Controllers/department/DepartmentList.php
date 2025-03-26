@@ -16,55 +16,44 @@ use Illuminate\Support\Facades\View;
 
 class DepartmentList extends Controller
 {
-    protected $permission;
-    protected $currentUser;
-    protected $currentCompany;
-    protected $userPrefs;
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
 
-    public function __construct()
-    {
-        $basePath = Environment::getBasePath();
-        require_once($basePath . '/app/Helpers/global.inc.php');
-        require_once($basePath . '/app/Helpers/Interface.inc.php');
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->permission = View::shared('permission');
-        $this->currentUser = View::shared('current_user');
-        $this->currentCompany = View::shared('current_company');
-        $this->userPrefs = View::shared('current_user_prefs');
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
 
-    }
+	public function index()
+	{
 
-    public function index() {
-
-        /*
+		$current_company = $this->currentCompany;
+		$current_user_prefs = $this->userPrefs;
+		/*
         if ( !$permission->Check('department','enabled')
 				OR !( $permission->Check('department','view') OR $permission->Check('department','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-		
-        $viewData['title'] = 'Department List';
-		
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
 
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-		}
+		$viewData['title'] = 'Department List';
 
 		$dlf = new DepartmentListFactory();
-		$dlf->GetByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
+		$dlf->GetByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage());
 
 		$pager = new Pager($dlf);
 
 		$departments = array();
-		if ( $dlf->getRecordCount() > 0 ) {
+		if ($dlf->getRecordCount() > 0) {
 			foreach ($dlf->rs as $department) {
 				$dlf->data = (array)$department;
 				$department = $dlf;
@@ -79,51 +68,47 @@ class DepartmentList extends Controller
 			}
 		}
 
-		$smarty->assign_by_ref('departments', $departments);
+		$viewData = [
+			'title' => 'Department List',
+			'departments' => $departments,
+			// 'base_currency' => $base_currency,
+			'sort_column' => $sort_array['sort_column'] ?? '',
+			'sort_order' => $sort_array['sort_order'] ?? '',
+			'paging_data' => $pager->getPageVariables()
+		];
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-        return view('department/DepartmentList', $viewData);
-
-    }
-
-	public function add(){
-		Redirect::Page( URLBuilder::getURL(NULL, 'EditDepartment.php') );
+		return view('department/DepartmentList', $viewData);
 	}
 
-	public function delete(){
-		$current_company = $this->currentCompany;
-		$delete = TRUE;
+	public function add()
+	{
+		Redirect::Page(URLBuilder::getURL(NULL, 'EditDepartment.php'));
+	}
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids'
-			) 
-		) );
+	public function delete($id)
+	{
+		$current_company = $this->currentCompany;
+
+		if (empty($id)) {
+			return response()->json(['error' => 'No department selected.'], 400);
+		}
 
 		$dlf = new DepartmentListFactory();
 
-		foreach ($ids as $id) {
-			$dlf->GetByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($dlf->rs as $department) {
-				$dlf->data = (array)$department;
-				$department = $dlf;
+		$dlf->GetByIdAndCompanyId($id, $current_company->getId());
+		foreach ($dlf->rs as $department) {
+			$dlf->data = (array)$department;
+			$department = $dlf;
 
-				$department->setDeleted($delete);
-				$department->Save();
+			$department->setDeleted(TRUE);
+			$res = $department->Save();
+
+
+			if ($res) {
+				return response()->json(['success' => 'Department deleted successfully.']);
+			} else {
+				return response()->json(['error' => 'Department deleted failed.']);
 			}
 		}
-
-		Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
-
 	}
 }
-
-?>
