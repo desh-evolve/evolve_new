@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
+use App\Models\Core\Factory;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
 use App\Models\Core\Misc;
@@ -79,8 +80,8 @@ class EditOverTimePolicy extends Controller
 					'name' => $otp_obj->getName(),
 					'type_id' => $otp_obj->getType(),
 					//'level' => $otp_obj->getLevel(),
-					'trigger_time' => $otp_obj->getTriggerTime(),
-														'max_time' => $otp_obj->getMaxTime(),
+					'trigger_time' => Factory::convertToHoursAndMinutes($otp_obj->getTriggerTime()),
+					'max_time' => Factory::convertToHoursAndMinutes($otp_obj->getMaxTime()),
 					'rate' => Misc::removeTrailingZeros( $otp_obj->getRate() ),
 					'wage_group_id' => $otp_obj->getWageGroup(),
 					'accrual_rate' => Misc::removeTrailingZeros( $otp_obj->getAccrualRate() ),
@@ -95,7 +96,12 @@ class EditOverTimePolicy extends Controller
 				);
 			}
 		} else {
-			$data = array( 'trigger_time' => 0,'max_time' => 0, 'rate' => '1.00', 'accrual_rate' => '1.00' );
+			$data = array( 
+				'trigger_time' => Factory::convertToHoursAndMinutes(0),
+				'max_time' => Factory::convertToHoursAndMinutes(0), 
+				'rate' => '1.00', 
+				'accrual_rate' => '1.00' 
+			);
 		}
 
 		$aplf = new AccrualPolicyListFactory();
@@ -131,8 +137,8 @@ class EditOverTimePolicy extends Controller
 		$otpf->setName( $data['name'] );
 		$otpf->setType( $data['type_id'] );
 		//$otpf->setLevel( $data['level'] );
-		$otpf->setTriggerTime( $data['trigger_time'] );
-                $otpf->setMaxTime( $data['max_time'] );
+		$otpf->setTriggerTime( Factory::convertToSeconds($data['trigger_time']) );
+        $otpf->setMaxTime( Factory::convertToSeconds($data['max_time']) );
 		$otpf->setRate( $data['rate'] );
 		$otpf->setWageGroup( $data['wage_group_id'] );
 		$otpf->setAccrualPolicyId( $data['accrual_policy_id'] );
@@ -141,8 +147,7 @@ class EditOverTimePolicy extends Controller
 
 		if ( $otpf->isValid() ) {
 			$otpf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'OverTimePolicyList') );
+			return redirect(URLBuilder::getURL( NULL, '/policy/overtime_policies'));
 		}
 	}
 }

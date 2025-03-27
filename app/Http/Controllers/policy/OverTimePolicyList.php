@@ -5,6 +5,7 @@ namespace App\Http\Controllers\policy;
 use App\Http\Controllers\Controller;
 
 use App\Models\Core\Environment;
+use App\Models\Core\Factory;
 use App\Models\Core\Redirect;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\OverTimePolicyListFactory;
@@ -56,14 +57,14 @@ class OverTimePolicyList extends Controller
 			}
 
 			$policies[] = array(
-								'id' => $otp_obj->getId(),
-								'name' => $otp_obj->getName(),
-								'type_id' => $otp_obj->getType(),
-								'type' => $type_options[$otp_obj->getType()],
-								'trigger_time' => $otp_obj->getTriggerTime(),
-								'assigned_policy_groups' => (int)$otp_obj->getColumn('assigned_policy_groups'),
-								'deleted' => $otp_obj->getDeleted()
-							);
+				'id' => $otp_obj->getId(),
+				'name' => $otp_obj->getName(),
+				'type_id' => $otp_obj->getType(),
+				'type' => $type_options[$otp_obj->getType()],
+				'trigger_time' => Factory::convertToHoursAndMinutes($otp_obj->getTriggerTime()),
+				'assigned_policy_groups' => (int)$otp_obj->getColumn('assigned_policy_groups'),
+				'deleted' => $otp_obj->getDeleted()
+			);
 
 		}
 

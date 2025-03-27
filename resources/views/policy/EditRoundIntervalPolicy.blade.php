@@ -122,7 +122,7 @@
                             <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit">
                         </div>
             
-                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) && $data['id']}}">
+                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) ? $data['id'] : ''}}">
 
                     </form>
 

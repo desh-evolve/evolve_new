@@ -1,7 +1,7 @@
 <x-app-layout :title="'Input Example'">
 
     <div class="d-flex justify-content-center">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
@@ -25,10 +25,10 @@
                     {{-- --------------------------------------------------------------------------- --}}
                     
                     <form method="POST"
-                        action="{{ isset($data['id']) ? route('policy.holiday.submit', $data['id']) : route('policy.holiday.submit') }}">
+                        action="{{ isset($data['id']) ? route('policy.holidays.submit', $data['id']) : route('policy.holidays.submit') }}">
                         @csrf
 
-                        @if (!$spf->Validator->isValid())
+                        @if (!$hf->Validator->isValid())
                             <div class="alert alert-danger">
                                 <ul>
                                     <li>Error list</li>
@@ -47,16 +47,22 @@
                             >
                         </div>
 
-
-
-
-
+                        <div class="form-group">
+                            <label for="date_stamp">Date</label>
+                            <input 
+                                type="date" 
+                                class="form-control" 
+                                name="data[date_stamp]" 
+                                value="{{ $data['date_stamp'] ?? date('Y-m-d') }}"
+                            >
+                        </div>
                         
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit">
                         </div>
             
-                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) && $data['id']}}">
+                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) ? $data['id'] : ''}}">
+		                <input type="hidden" name="data[holiday_policy_id]" value="{{!empty($data['holiday_policy_id']) ? $data['holiday_policy_id'] : ''}}">
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}

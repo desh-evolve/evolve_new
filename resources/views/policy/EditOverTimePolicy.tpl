@@ -55,7 +55,7 @@ function showAccrualRate() {
 						<input type="text" size="8" name="data[trigger_time]" value="{gettimeunit value=$data.trigger_time}"> {$current_user_prefs->getTimeUnitFormatExample()}
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('max_time')">
+                <tr onClick="showHelpEntry('max_time')">
 					<td class="{isvalid object="otpf" label="max_time" value="cellLeftEditTable"}">
 						{t}Max Time:{/t}
 					</td>

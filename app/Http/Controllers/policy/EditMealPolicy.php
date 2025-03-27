@@ -7,16 +7,11 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
-use App\Models\Core\Redirect;
+use App\Models\Core\Factory;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\MealPolicyFactory;
 use App\Models\Policy\MealPolicyListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class EditMealPolicy extends Controller
@@ -72,36 +67,37 @@ class EditMealPolicy extends Controller
 				$mp_obj = $mplf;
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
-				$data = array(
-									'id' => $mp_obj->getId(),
-									'name' => $mp_obj->getName(),
-									'type_id' => $mp_obj->getType(),
-									'trigger_time' => $mp_obj->getTriggerTime(),
-									'amount' => $mp_obj->getAmount(),
-									'auto_detect_type_id' => $mp_obj->getAutoDetectType(),
-									'start_window' => $mp_obj->getStartWindow(),
-									'window_length' => $mp_obj->getWindowLength(),
-									'minimum_punch_time' => $mp_obj->getMinimumPunchTime(),
-									'maximum_punch_time' => $mp_obj->getMaximumPunchTime(),
-									'include_lunch_punch_time' => $mp_obj->getIncludeLunchPunchTime(),
-									'created_date' => $mp_obj->getCreatedDate(),
-									'created_by' => $mp_obj->getCreatedBy(),
-									'updated_date' => $mp_obj->getUpdatedDate(),
-									'updated_by' => $mp_obj->getUpdatedBy(),
-									'deleted_date' => $mp_obj->getDeletedDate(),
-									'deleted_by' => $mp_obj->getDeletedBy()
-								);
+				$data = array (
+					'id' => $mp_obj->getId(),
+					'name' => $mp_obj->getName(),
+					'type_id' => $mp_obj->getType(),
+					'trigger_time' => Factory::convertToHoursAndMinutes($mp_obj->getTriggerTime()),
+					'amount' => Factory::convertToHoursAndMinutes($mp_obj->getAmount()),
+					'auto_detect_type_id' => $mp_obj->getAutoDetectType(),
+					'start_window' => Factory::convertToHoursAndMinutes($mp_obj->getStartWindow()),
+					'window_length' => Factory::convertToHoursAndMinutes($mp_obj->getWindowLength()),
+					'minimum_punch_time' => Factory::convertToHoursAndMinutes($mp_obj->getMinimumPunchTime()),
+					'maximum_punch_time' => Factory::convertToHoursAndMinutes($mp_obj->getMaximumPunchTime()),
+					'include_lunch_punch_time' => $mp_obj->getIncludeLunchPunchTime(),
+					'created_date' => $mp_obj->getCreatedDate(),
+					'created_by' => $mp_obj->getCreatedBy(),
+					'updated_date' => $mp_obj->getUpdatedDate(),
+					'updated_by' => $mp_obj->getUpdatedBy(),
+					'deleted_date' => $mp_obj->getDeletedDate(),
+					'deleted_by' => $mp_obj->getDeletedBy()
+				);
 			}
 		} else {
-			$data = array(
-						'trigger_time' => 3600 * 5,
-						'amount' => 3600,
-						'auto_detect_type_id' => 10,
-						'start_window' => 3600*4,
-						'window_length' => 3600*2,
-						'minimum_punch_time' => 60*30,
-						'maximum_punch_time' => 60*60,
-						);
+			$data = array (
+				'type_id' => 10,
+				'auto_detect_type_id' => 10,
+				'trigger_time' => Factory::convertToHoursAndMinutes(3600 * 5),
+				'amount' => Factory::convertToHoursAndMinutes(3600),
+				'start_window' => Factory::convertToHoursAndMinutes(3600*4),
+				'window_length' => Factory::convertToHoursAndMinutes(3600*2),
+				'minimum_punch_time' => Factory::convertToHoursAndMinutes(60*30),
+				'maximum_punch_time' => Factory::convertToHoursAndMinutes(60*60),
+			);
 		}
 
 		//Select box options;
@@ -127,14 +123,14 @@ class EditMealPolicy extends Controller
 		$mpf->setCompany( $current_company->getId() );
 		$mpf->setName( $data['name'] );
 		$mpf->setType( $data['type_id'] );
-		$mpf->setTriggerTime( $data['trigger_time'] );
-		$mpf->setAmount( $data['amount'] );
+		$mpf->setTriggerTime( Factory::convertToSeconds($data['trigger_time']) );
+		$mpf->setAmount( Factory::convertToSeconds($data['amount']) );
 
 		$mpf->setAutoDetectType( $data['auto_detect_type_id'] );
-		$mpf->setStartWindow( $data['start_window'] );
-		$mpf->setWindowLength( $data['window_length'] );
-		$mpf->setMinimumPunchTime( $data['minimum_punch_time'] );
-		$mpf->setMaximumPunchTime( $data['maximum_punch_time'] );
+		$mpf->setStartWindow( Factory::convertToSeconds($data['start_window']) );
+		$mpf->setWindowLength( Factory::convertToSeconds($data['window_length']) );
+		$mpf->setMinimumPunchTime( Factory::convertToSeconds($data['minimum_punch_time']) );
+		$mpf->setMaximumPunchTime( Factory::convertToSeconds($data['maximum_punch_time']) );
 
 		if ( isset($data['include_lunch_punch_time']) ) {
 			$mpf->setIncludeLunchPunchTime( TRUE );
@@ -144,9 +140,7 @@ class EditMealPolicy extends Controller
 
 		if ( $mpf->isValid() ) {
 			$mpf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'MealPolicyList') );
-
+			return redirect( URLBuilder::getURL( NULL, '/policy/meal_policies'));
 		}
 	}
 }

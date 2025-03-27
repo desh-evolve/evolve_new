@@ -56,20 +56,20 @@ class HolidayPolicyList extends Controller
 			}
 
 			$policies[] = array(
-								'id' => $hp_obj->getId(),
-								'name' => $hp_obj->getName(),
-								'type_id' => $hp_obj->getType(),
-								'type' => $type_options[$hp_obj->getType()],
-								'assigned_policy_groups' => (int)$hp_obj->getColumn('assigned_policy_groups'),
-								'deleted' => $hp_obj->getDeleted()
-							);
+				'id' => $hp_obj->getId(),
+				'name' => $hp_obj->getName(),
+				'type_id' => $hp_obj->getType(),
+				'type' => $type_options[$hp_obj->getType()],
+				'assigned_policy_groups' => (int)$hp_obj->getColumn('assigned_policy_groups'),
+				'deleted' => $hp_obj->getDeleted()
+			);
 
 		}
 
 		$viewData['policies'] = $policies;
 		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
 
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('policy/HolidayPolicyList', $viewData);
 
     }
 

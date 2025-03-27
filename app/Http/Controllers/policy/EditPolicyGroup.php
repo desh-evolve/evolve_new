@@ -152,7 +152,7 @@ class EditPolicyGroup extends Controller
 
     }
 
-	public function submit($id = null, Request $request){
+	public function submit(Request $request){
 		$pgf = new PolicyGroupFactory();
 		$current_company = $this->currentCompany;
 		$data = $request->data;
@@ -164,7 +164,7 @@ class EditPolicyGroup extends Controller
 
 		$pgf->StartTransaction();
 
-		$pgf->setId( $id );
+		$pgf->setId( $data['id'] );
 		$pgf->setCompany( $current_company->getId() );
 		$pgf->setName( $data['name'] );
 		$pgf->setExceptionPolicyControlID( $data['exception_policy_control_id'] );

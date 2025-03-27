@@ -24,6 +24,7 @@ use App\Http\Controllers\policy\EditAbsencePolicy;
 use App\Http\Controllers\policy\EditAccrualPolicy;
 use App\Http\Controllers\policy\EditBreakPolicy;
 use App\Http\Controllers\policy\EditExceptionPolicyControl;
+use App\Http\Controllers\policy\EditHoliday;
 use App\Http\Controllers\policy\EditHolidayPolicy;
 use App\Http\Controllers\policy\EditMealPolicy;
 use App\Http\Controllers\policy\EditOverTimePolicy;
@@ -32,6 +33,7 @@ use App\Http\Controllers\policy\EditPremiumPolicy;
 use App\Http\Controllers\policy\EditRoundIntervalPolicy;
 use App\Http\Controllers\policy\EditSchedulePolicy;
 use App\Http\Controllers\policy\ExceptionPolicyControlList;
+use App\Http\Controllers\policy\HolidayList;
 use App\Http\Controllers\policy\HolidayPolicyList;
 use App\Http\Controllers\policy\MealPolicyList;
 use App\Http\Controllers\policy\OverTimePolicyList;
@@ -190,6 +192,11 @@ Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->nam
 Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'index'])->name('policy.holiday_policies.add');
 Route::post('/policy/holiday_policies/submit/{id?}', [EditHolidayPolicy::class, 'submit'])->name('policy.holiday_policies.submit');
 Route::delete('/policy/holiday_policies/delete/{id}', [HolidayPolicyList::class, 'delete'])->name('policy.holiday_policies.delete');
+
+Route::get('/policy/holidays/{id}', [HolidayList::class, 'index'])->name('policy.holidays');
+Route::get('/policy/holidays/add/{holiday_policy_id}/{id?}', [EditHoliday::class, 'index'])->name('policy.holidays.add');
+Route::post('/policy/holidays/submit/{id?}', [EditHoliday::class, 'submit'])->name('policy.holidays.submit');
+Route::delete('/policy/holidays/delete/{id}', [HolidayList::class, 'delete'])->name('policy.holidays.delete');
 
 
 // ===============================================================================================================================

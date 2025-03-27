@@ -679,7 +679,7 @@ class HolidayPolicyFactory extends Factory {
 		$hprhlf->getByHolidayPolicyId( $this->getId() );
 		Debug::text('Found Recurring Holidays Attached to this Policy: '. $hprhlf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		foreach ($hprhlf->rs as $obj) {
-			$hprhlf->data[] = (array)$obj;
+			$hprhlf->data = (array)$obj;
 			$obj = $hprhlf;
 			$list[] = $obj->getRecurringHoliday();
 		}
@@ -687,7 +687,7 @@ class HolidayPolicyFactory extends Factory {
 		if ( isset($list) ) {
 			return $list;
 		}
-
+		
 		return FALSE;
 	}
 	function setRecurringHoliday($ids) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\policy;
 use App\Http\Controllers\Controller;
 
 use App\Models\Core\Environment;
+use App\Models\Core\Factory;
 use App\Models\Core\Redirect;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\BreakPolicyListFactory;
@@ -60,8 +61,8 @@ class BreakPolicyList extends Controller
 				'name' => $bp_obj->getName(),
 				'type_id' => $bp_obj->getType(),
 				'type' => $type_options[$bp_obj->getType()],
-				'amount' => $bp_obj->getAmount(),
-				'trigger_time' => $bp_obj->getTriggerTime(),
+				'amount' => Factory::convertToHoursAndMinutes($bp_obj->getAmount()),
+				'trigger_time' => Factory::convertToHoursAndMinutes($bp_obj->getTriggerTime()),
 				'assigned_policy_groups' => (int)$bp_obj->getColumn('assigned_policy_groups'),
 				'deleted' => $bp_obj->getDeleted()
 			);

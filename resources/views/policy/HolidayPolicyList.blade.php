@@ -50,6 +50,7 @@
                                 <td>{{ $policy['name'] }}</td>
                                 <td>{{ $policy['type'] }}</td>
                                 <td>
+                                    <a class="btn btn-primary btn-sm" href="{{ route('policy.holidays', $policy['id']) }}">Holidays</a>
                                     <a class="btn btn-secondary btn-sm" href="{{ route('policy.holiday_policies.add', ['id' => $policy['id']]) }}">Edit</a>
                                     <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/holiday_policies/delete/{{ $policy['id'] }}', 'Absence Policy', this)">Delete</button>
                                 </td>

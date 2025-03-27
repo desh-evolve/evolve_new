@@ -8,6 +8,7 @@ use App\Models\Core\Environment;
 use App\Models\Core\Redirect;
 use App\Models\Core\URLBuilder;
 use App\Models\Holiday\HolidayListFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 
 class HolidayList extends Controller
@@ -30,18 +31,22 @@ class HolidayList extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
         if ( !$permission->Check('holiday_policy','enabled')
 				OR !( $permission->Check('holiday_policy','view') OR $permission->Check('holiday_policy','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
+		if(empty($id)){
+			dd('No Holiday Policy ID');
+		}
 
         $viewData['title'] = 'Holiday List';
 		$current_company = $this->currentCompany;
 
 		$hlf = new HolidayListFactory();
+
 		$hlf->getByCompanyIdAndHolidayPolicyId( $current_company->getId(), $id );
 
 		if ( $hlf->getRecordCount() > 0 ) {
@@ -51,7 +56,7 @@ class HolidayList extends Controller
 
 				$rows[] = array(
 					'id' => $h_obj->getId(),
-					'date_stamp' => $h_obj->getDateStamp(),
+					'date_stamp' => date('Y-m-d', $h_obj->getDateStamp()),
 					'name' => $h_obj->getName(),
 					'deleted' => $h_obj->getDeleted()
 				);
@@ -66,7 +71,7 @@ class HolidayList extends Controller
 
     }
 
-	public function delete($id){
+	public function delete($id, $holiday_policy_id){
 		if (empty($id)) {
             return response()->json(['error' => 'No Holiday Selected.'], 400);
         }
@@ -91,8 +96,7 @@ class HolidayList extends Controller
 				}
 			}
 		}
-
-		Redirect::Page( URLBuilder::getURL( array('id' => $holiday_policy_id ), 'HolidayList') );
+		return redirect(URLBuilder::getURL( array('id' => $holiday_policy_id ), 'HolidayList'));
 
 	}
 

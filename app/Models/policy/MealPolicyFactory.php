@@ -2,12 +2,14 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateTotalListFactory;
 
 class MealPolicyFactory extends Factory {
 	protected $table = 'meal_policy';
@@ -394,7 +396,7 @@ class MealPolicyFactory extends Factory {
 	function Validate() {
 		if ( $this->getDeleted() == TRUE ){
 			//Check to make sure there are no hours using this meal policy.
-			$udtlf = new UserDateTotalListFactory();
+			$udtlf = new UserDateTotalListFactory(); 
 			$udtlf->getByMealPolicyId( $this->getId() );
 			if ( $udtlf->getRecordCount() > 0 ) {
 				$this->Validator->isTRUE(	'in_use',

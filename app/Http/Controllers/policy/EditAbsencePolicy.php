@@ -129,8 +129,7 @@ class EditAbsencePolicy extends Controller
 
 		if ( $apf->isValid() ) {
 			$apf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList') );
+			return redirect(URLBuilder::getURL( NULL, '/policy/absence_policies'));
 		}
 
 	}

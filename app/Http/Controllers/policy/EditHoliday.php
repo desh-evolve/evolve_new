@@ -17,6 +17,7 @@ use App\Models\Core\URLBuilder;
 use App\Models\Holiday\HolidayFactory;
 use App\Models\Holiday\HolidayListFactory;
 use App\Models\Users\UserListFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 
 class EditHoliday extends Controller
@@ -39,14 +40,14 @@ class EditHoliday extends Controller
 
     }
 
-    public function index($id = null) {
+    public function index($holiday_policy_id, $id = null) {
         /*
 		if ( !$permission->Check('holiday_policy','enabled')
 				OR !( $permission->Check('holiday_policy','edit') OR $permission->Check('holiday_policy','edit_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-
+		
 		$viewData['title'] = isset($id) ? 'Edit Holiday' : 'Add Holiday';
 
 		if ( isset($data['date_stamp'] ) ) {
@@ -55,7 +56,7 @@ class EditHoliday extends Controller
 		
 		$hf = new HolidayFactory(); 
 
-		if ( isset($id) AND $id != '' ) {
+		if ( !empty($id)) {
 
 			$hlf = new HolidayListFactory();
 			$hlf->getByIdAndHolidayPolicyID( $id, $holiday_policy_id );
@@ -67,27 +68,27 @@ class EditHoliday extends Controller
 					//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 					$data = array(
-										'id' => $h_obj->getId(),
-										'holiday_policy_id' => $h_obj->getHolidayPolicyID(),
-										'date_stamp' => $h_obj->getDateStamp(),
-										'name' => $h_obj->getName(),
-										'created_date' => $h_obj->getCreatedDate(),
-										'created_by' => $h_obj->getCreatedBy(),
-										'updated_date' => $h_obj->getUpdatedDate(),
-										'updated_by' => $h_obj->getUpdatedBy(),
-										'deleted_date' => $h_obj->getDeletedDate(),
-										'deleted_by' => $h_obj->getDeletedBy()
-									);
+						'id' => $h_obj->getId(),
+						'holiday_policy_id' => $h_obj->getHolidayPolicyID(),
+						'date_stamp' => date('Y-m-d', $h_obj->getDateStamp()),
+						'name' => $h_obj->getName(),
+						'created_date' => $h_obj->getCreatedDate(),
+						'created_by' => $h_obj->getCreatedBy(),
+						'updated_date' => $h_obj->getUpdatedDate(),
+						'updated_by' => $h_obj->getUpdatedBy(),
+						'deleted_date' => $h_obj->getDeletedDate(),
+						'deleted_by' => $h_obj->getDeletedBy()
+					);
 				}
 				$holiday_policy_id = $h_obj->getHolidayPolicyID();
 			}
 		} else {
 			$data = array(
-						'date_stamp' => TTDate::getTime(),
-						'holiday_policy_id' => $holiday_policy_id
-						);
+				'date_stamp' => date('Y-m-d', TTDate::getTime()),
+				'holiday_policy_id' => $holiday_policy_id
+			);
 		}
-
+		
 		$viewData['holiday_policy_id'] = $holiday_policy_id;
 		$viewData['data'] = $data;
 		$viewData['hf'] = $hf;
@@ -107,15 +108,15 @@ class EditHoliday extends Controller
 		if ( isset($data['holiday_policy_id'] ) ) {
 			$hf->setHolidayPolicyId( $data['holiday_policy_id'] );
 		}
+
 		//Set datestamp first.
-		$hf->setDateStamp( $data['date_stamp'] );
+		$hf->setDateStamp( Carbon::createFromFormat('Y-m-d', $data['date_stamp'])->timestamp );
 		$hf->setName( $data['name'] );
 
 
 		if ( $hf->isValid() ) {
 			$hf->Save();
-
-			Redirect::Page( URLBuilder::getURL( array('id' => $data['holiday_policy_id']), 'HolidayList') );
+			return redirect(url("/policy/holidays/{$data['holiday_policy_id']}"));
 		}
 	}
 }

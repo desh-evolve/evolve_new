@@ -103,13 +103,13 @@ class EditRoundIntervalPolicy extends Controller
 
     }
 
-	public function submit($id = null, Request $request){
+	public function submit(Request $request){
 		$ripf = new RoundIntervalPolicyFactory();
 		$data = $request->data;
 		$current_company = $this->currentCompany;
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-		$ripf->setId( $id );
+		$ripf->setId( $data['id'] );
 		$ripf->setCompany( $current_company->getId() );
 		$ripf->setName( $data['name'] );
 		$ripf->setPunchType( $data['punch_type_id'] );

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
+use App\Models\Core\Factory;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
 use App\Models\Core\Misc;
@@ -96,8 +97,8 @@ class EditHolidayPolicy extends Controller
 					'force_over_time_policy' => $hp_obj->getForceOverTimePolicy(),
 					'include_over_time' => $hp_obj->getIncludeOverTime(),
 					'include_paid_absence_time' => $hp_obj->getIncludePaidAbsenceTime(),
-					'minimum_time' => $hp_obj->getMinimumTime(),
-					'maximum_time' => $hp_obj->getMaximumTime(),
+					'minimum_time' => Factory::convertToHoursAndMinutes($hp_obj->getMinimumTime()),
+					'maximum_time' => Factory::convertToHoursAndMinutes($hp_obj->getMaximumTime()),
 					//'time' => $hp_obj->getTime(),
 
 					'round_interval_policy_id' => $hp_obj->getRoundIntervalPolicyID(),
@@ -116,6 +117,7 @@ class EditHolidayPolicy extends Controller
 		} else {
 			//Defaults
 			$data = array(
+				'type_id' => 10,
 				'default_schedule_status_id' => 20,
 				'minimum_employed_days' => 30,
 				'minimum_worked_period_days' => 30,
@@ -127,8 +129,8 @@ class EditHolidayPolicy extends Controller
 				'force_over_time_policy' => FALSE,
 				'include_over_time' => FALSE,
 				'include_paid_absence_time' => TRUE,
-				'minimum_time' => 0,
-				'maximum_time' => 0
+				'minimum_time' => Factory::convertToHoursAndMinutes(0),
+				'maximum_time' => Factory::convertToHoursAndMinutes(0)
 			);
 		}
 
@@ -150,7 +152,7 @@ class EditHolidayPolicy extends Controller
 		$data['absence_options'] = $absence_options;
 		$data['round_interval_options'] = $round_interval_options;
 		$data['recurring_holiday_options'] = $recurring_holiday_options;
-
+		
 		$viewData['data'] = $data;
 		$viewData['hpf'] = $hpf;
 
@@ -162,7 +164,7 @@ class EditHolidayPolicy extends Controller
 		$hpf = new HolidayPolicyFactory();
 		$data = $request->data;
 		$current_company = $this->currentCompany;
-
+		
 		//Debug::setVerbosity(11);
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -213,8 +215,8 @@ class EditHolidayPolicy extends Controller
 			$hpf->setForceOverTimePolicy( FALSE );
 		}
 
-		$hpf->setMinimumTime( $data['minimum_time'] );
-		$hpf->setMaximumTime( $data['maximum_time'] );
+		$hpf->setMinimumTime( Factory::convertToSeconds($data['minimum_time']) );
+		$hpf->setMaximumTime( Factory::convertToSeconds($data['maximum_time']) );
 		$hpf->setAbsencePolicyID( $data['absence_policy_id'] );
 		$hpf->setRoundIntervalPolicyID( $data['round_interval_policy_id'] );
 
@@ -226,8 +228,7 @@ class EditHolidayPolicy extends Controller
 			if ( $hpf->isValid() ) {
 				$hpf->Save();
 				$hpf->CommitTransaction();
-
-				Redirect::Page( URLBuilder::getURL( NULL, 'HolidayPolicyList') );
+				return redirect(URLBuilder::getURL( NULL, '/policy/holiday_policies'));
 			}
 		}
 

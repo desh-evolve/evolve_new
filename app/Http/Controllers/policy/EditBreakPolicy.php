@@ -7,16 +7,11 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
-use App\Models\Core\Redirect;
+use App\Models\Core\Factory;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\BreakPolicyFactory;
 use App\Models\Policy\BreakPolicyListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class EditBreakPolicy extends Controller
@@ -75,13 +70,13 @@ class EditBreakPolicy extends Controller
 					'id' => $mp_obj->getId(),
 					'name' => $mp_obj->getName(),
 					'type_id' => $mp_obj->getType(),
-					'trigger_time' => $mp_obj->getTriggerTime(),
-					'amount' => $mp_obj->getAmount(),
+					'trigger_time' => Factory::convertToHoursAndMinutes($mp_obj->getTriggerTime()),
+					'amount' => Factory::convertToHoursAndMinutes($mp_obj->getAmount()),
 					'auto_detect_type_id' => $mp_obj->getAutoDetectType(),
-					'start_window' => $mp_obj->getStartWindow(),
-					'window_length' => $mp_obj->getWindowLength(),
-					'minimum_punch_time' => $mp_obj->getMinimumPunchTime(),
-					'maximum_punch_time' => $mp_obj->getMaximumPunchTime(),
+					'start_window' => Factory::convertToHoursAndMinutes($mp_obj->getStartWindow()),
+					'window_length' => Factory::convertToHoursAndMinutes($mp_obj->getWindowLength()),
+					'minimum_punch_time' => Factory::convertToHoursAndMinutes($mp_obj->getMinimumPunchTime()),
+					'maximum_punch_time' => Factory::convertToHoursAndMinutes($mp_obj->getMaximumPunchTime()),
 					'include_break_punch_time' => $mp_obj->getIncludeBreakPunchTime(),
 					'include_multiple_breaks' => $mp_obj->getIncludeMultipleBreaks(),
 					'created_date' => $mp_obj->getCreatedDate(),
@@ -94,13 +89,14 @@ class EditBreakPolicy extends Controller
 			}
 		} else {
 			$data = array (
-				'trigger_time' => 3600 * 1,
-				'amount' => 60 * 15,
+				'type_id' => 10,
 				'auto_detect_type_id' => 10,
-				'start_window' => 3600*1,
-				'window_length' => 3600*1,
-				'minimum_punch_time' => 60*5,
-				'maximum_punch_time' => 60*20,
+				'trigger_time' => Factory::convertToHoursAndMinutes(3600 * 1),
+				'amount' => Factory::convertToHoursAndMinutes(60 * 15),
+				'start_window' => Factory::convertToHoursAndMinutes(3600*1),
+				'window_length' => Factory::convertToHoursAndMinutes(3600*1),
+				'minimum_punch_time' => Factory::convertToHoursAndMinutes(60*5),
+				'maximum_punch_time' => Factory::convertToHoursAndMinutes(60*20),
 			);
 		}
 
@@ -110,31 +106,30 @@ class EditBreakPolicy extends Controller
 
 		$viewData['data'] = $data;
 		$viewData['bpf'] = $bpf;
-
         return view('policy/EditBreakPolicy', $viewData);
 
     }
 
 	public function submit(Request $request){
-
+		
 		$current_company = $this->currentCompany;
 		$data = $request->data;
 		$bpf = new BreakPolicyFactory();
-
+		
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		$bpf->setId( $data['id'] );
 		$bpf->setCompany( $current_company->getId() );
 		$bpf->setName( $data['name'] );
 		$bpf->setType( $data['type_id'] );
-		$bpf->setTriggerTime( $data['trigger_time'] );
-		$bpf->setAmount( $data['amount'] );
+		$bpf->setTriggerTime( Factory::convertToSeconds($data['trigger_time']) );
+		$bpf->setAmount( Factory::convertToSeconds($data['amount']) );
 
 		$bpf->setAutoDetectType( $data['auto_detect_type_id'] );
-		$bpf->setStartWindow( $data['start_window'] );
-		$bpf->setWindowLength( $data['window_length'] );
-		$bpf->setMinimumPunchTime( $data['minimum_punch_time'] );
-		$bpf->setMaximumPunchTime( $data['maximum_punch_time'] );
+		$bpf->setStartWindow(Factory::convertToSeconds( $data['start_window']) );
+		$bpf->setWindowLength( Factory::convertToSeconds($data['window_length']) );
+		$bpf->setMinimumPunchTime( Factory::convertToSeconds($data['minimum_punch_time']) );
+		$bpf->setMaximumPunchTime( Factory::convertToSeconds($data['maximum_punch_time']) );
 
 		if ( isset($data['include_break_punch_time']) ) {
 			$bpf->setIncludeBreakPunchTime( TRUE );
@@ -150,8 +145,7 @@ class EditBreakPolicy extends Controller
 
 		if ( $bpf->isValid() ) {
 			$bpf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'BreakPolicyList') );
+			return redirect(URLBuilder::getURL( NULL, '/policy/break_policies'));
 		}
 	}
 }

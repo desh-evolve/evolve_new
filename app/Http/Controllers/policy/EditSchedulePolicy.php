@@ -121,7 +121,7 @@ class EditSchedulePolicy extends Controller
 
     }
 
-	public function submit($id = null, Request $request){
+	public function submit(Request $request){
 		$spf = new SchedulePolicyFactory();
 		$data = $request->data;
 		$current_company = $this->currentCompany;
@@ -132,7 +132,7 @@ class EditSchedulePolicy extends Controller
 		
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-		$spf->setId( $id );
+		$spf->setId( $data['id'] );
 		$spf->setCompany( $current_company->getId() );
 		$spf->setName( $data['name'] );
 		$spf->setMealPolicyID( $data['meal_policy_id'] );

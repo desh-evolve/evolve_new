@@ -5,6 +5,7 @@ namespace App\Http\Controllers\policy;
 use App\Http\Controllers\Controller;
 
 use App\Models\Core\Environment;
+use App\Models\Core\Factory;
 use App\Models\Core\Redirect;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\MealPolicyListFactory;
@@ -56,15 +57,15 @@ class MealPolicyList extends Controller
 			}
 
 			$policies[] = array(
-								'id' => $mp_obj->getId(),
-								'name' => $mp_obj->getName(),
-								'type_id' => $mp_obj->getType(),
-								'type' => $type_options[$mp_obj->getType()],
-								'amount' => $mp_obj->getAmount(),
-								'trigger_time' => $mp_obj->getTriggerTime(),
-								'assigned_policy_groups' => (int)$mp_obj->getColumn('assigned_policy_groups'),
-								'deleted' => $mp_obj->getDeleted()
-							);
+				'id' => $mp_obj->getId(),
+				'name' => $mp_obj->getName(),
+				'type_id' => $mp_obj->getType(),
+				'type' => $type_options[$mp_obj->getType()],
+				'amount' => Factory::convertToHoursAndMinutes($mp_obj->getAmount()),
+				'trigger_time' => Factory::convertToHoursAndMinutes($mp_obj->getTriggerTime()),
+				'assigned_policy_groups' => (int)$mp_obj->getColumn('assigned_policy_groups'),
+				'deleted' => $mp_obj->getDeleted()
+			);
 
 		}
 
