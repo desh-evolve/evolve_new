@@ -29,7 +29,7 @@ use App\Models\Users\UserListFactory;
 use App\Models\Users\UserTitleListFactory;
 use Illuminate\Support\Facades\View;
 
-class CurrencyList extends Controller
+class PayStubAmendmentList extends Controller
 {
     protected $permission;
     protected $currentUser;
@@ -58,6 +58,21 @@ class CurrencyList extends Controller
         */
 
         $viewData['title'] = 'Pay Stub Amendment List';
+
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'form',
+				'page',
+				'filter_data',
+				'sort_column',
+				'sort_order',
+				'saved_search_id',
+				'filter_user_id',
+				'recurring_ps_amendment_id',
+				'ids',
+			) 
+		) );
 
 		$columns = array(
 			'-1010-first_name' => _('First Name'),
@@ -94,6 +109,9 @@ class CurrencyList extends Controller
 		$ugdlf = new UserGenericDataListFactory(); 
 		$ugdf = new UserGenericDataFactory();
 		$pplf = new PayPeriodListFactory();
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
+		$current_user_prefs = $this->userPrefs;
 
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 		$hlf = new HierarchyListFactory();
@@ -135,6 +153,7 @@ class CurrencyList extends Controller
 		$ulf = new UserListFactory();
 		$psalf = new PayStubAmendmentListFactory(); 
 
+		/*
 		if ( $permission->Check('pay_stub_amendment','view') == FALSE ) {
 			if ( $permission->Check('pay_stub_amendment','view_child') ) {
 				$filter_data['permission_children_ids'] = $permission_children_ids;
@@ -143,6 +162,7 @@ class CurrencyList extends Controller
 				$filter_data['permission_children_ids'][] = $current_user->getId();
 			}
 		}
+		*/
 
 		$filter_data['start_date'] = NULL;
 		$filter_data['end_date'] = NULL;
@@ -183,7 +203,7 @@ class CurrencyList extends Controller
 		$recurring_ps_amendment_options = $rpsalf->getArrayByListFactory( $rpsalf, FALSE, TRUE );
 
 		$uglf = new UserGroupListFactory();
-		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
+		$group_options = $uglf->getArrayByNodes( $uglf->getByCompanyIdArray( $current_company->getId() ) );
 
 		foreach ($psalf as $psa_obj) {
 			$user_obj = $ulf->getById( $psa_obj->getUser() )->getCurrent();

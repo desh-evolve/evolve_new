@@ -14,7 +14,7 @@ class FastTree {
 
 	function __construct( $options = NULL ) {
 		//Debug::Text(' Contruct... ', __FILE__, __LINE__, __METHOD__,10);
-
+/*
 		$this->db = $options['db'];
 		//Debug::Text(' Setting DB to: '. $options['db'] , __FILE__, __LINE__, __METHOD__,10);
 
@@ -26,7 +26,7 @@ class FastTree {
 			//$this->tree_id = $options['tree_id'];
 			//Debug::Text(' Setting Tree ID to: '. $options['tree_id'] , __FILE__, __LINE__, __METHOD__,10);
 		}
-
+*/
 		return TRUE;
 	}
 

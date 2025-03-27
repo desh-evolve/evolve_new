@@ -214,7 +214,11 @@
                                         class="nav-link {{ request()->routeIs('payroll.payroll_processing') ? 'active' : '' }}">End of Pay Period
                                     </a>
                                 </li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Amendments</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.pay_stub_amendment') }}" 
+                                        class="nav-link {{ request()->routeIs('payroll.pay_stub_amendment') ? 'active' : '' }}">Pay Stub Amendments
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Recurring PS Amendments</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Pay Period Schedules</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Pay Stub Accounts</a></li>

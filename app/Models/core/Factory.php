@@ -1052,7 +1052,7 @@ class Factory {
 
 		return $array;
 	}
-
+/*
 	protected function getSortSQL($array, $strict = TRUE, $additional_fields = NULL)
 	{
 		if (is_array($array)) {
@@ -1063,9 +1063,14 @@ class Factory {
 
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-
+			$sql_chunks = [];
 			if (is_array($additional_fields)) {
-				$fields = array_merge($fields, $additional_fields);
+				foreach($additional_fields as $orig_column => $order){
+					$column = $this->parseColumnName($orig_column);
+					$order = trim($order);
+
+					$sql_chunks[] = $orig_column . ' ' . $order;
+				}
 			}
 
 			foreach ($array as $orig_column => $order) {
@@ -1096,12 +1101,65 @@ class Factory {
 
 			if (isset($sql_chunks)) {
 				$sql = implode(',', $sql_chunks);
+				dd($sql);
 				return ' order by ' . $sql;
 			}
 		}
 
 		return FALSE;
 	}
+*/
+
+	protected function getSortSQL($array, $strict = true, $additional_fields = null)
+	{
+		if (!is_array($array)) {
+			return false;
+		}
+
+		$array = $this->convertFlexArray($array);
+		$alt_order_options = [1 => 'asc', -1 => 'desc'];
+		$order_options = ['asc', 'desc'];
+		$rs = $this->getEmptyRecordSet();
+		$fields = $this->getRecordSetColumnList($rs);
+		$sql_chunks = [];
+
+		if (is_array($additional_fields)) {
+			foreach ($additional_fields as $orig_column => $order) {
+				$sql_chunks[] = $this->parseColumnName($orig_column) . ' ' . trim($order);
+			}
+		}
+
+		foreach ($array as $orig_column => $order) {
+			$orig_column = trim($orig_column);
+			$column = $this->parseColumnName($orig_column);
+			$order = trim($order);
+
+			if (is_numeric($order) && isset($alt_order_options[$order])) {
+				$order = $alt_order_options[$order];
+			}
+
+			if (
+				!$strict || (
+					is_array($fields) && (in_array($column, $fields) || in_array($orig_column, $fields)) &&
+					in_array(strtolower($order), $order_options)
+				)
+			) {
+				if (!$strict || (strpos($orig_column, ';') === false && strpos($order, ';') === false)) {
+					$sql_chunks[] = "$orig_column $order";
+				} else {
+					Debug::text("ERROR: Found ';' in SQL order string: $orig_column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
+				}
+			} else {
+				Debug::text("Invalid Sort Column/Order: $column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
+			}
+		}
+
+		if (!empty($sql_chunks)) {
+			return ' ORDER BY ' . implode(',', $sql_chunks);
+		}
+
+		return false;
+	}	
 
 
 	public function getColumnList() {
