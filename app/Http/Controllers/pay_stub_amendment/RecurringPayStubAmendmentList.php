@@ -48,32 +48,16 @@ class RecurringPayStubAmendmentList extends Controller
         */
 
         $viewData['title'] = 'Recurring Pay Stub Amendment List';
-
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
-		
-
-		URLBuilder::setURL(NULL, array('sort_column' => $sort_column, 'sort_order' => $sort_order) );
+		$current_company = $this->currentCompany;
 
 		$rpsalf = new RecurringPayStubAmendmentListFactory();
-
-		$rpsalf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-
-		$pager = new Pager($rpsalf);
+		$rpsalf->getByCompanyId($current_company->getId());
 
 		$psealf = new PayStubEntryAccountListFactory();
 
-		foreach ($rpsalf as $recurring_pay_stub_amendment) {
+		foreach ($rpsalf->rs as $recurring_pay_stub_amendment) {
+			$rpsalf->data = (array)$recurring_pay_stub_amendment;
+			$recurring_pay_stub_amendment = $rpsalf;
 
 			$recurring_pay_stub_amendments[] = array(
 				'id' => $recurring_pay_stub_amendment->GetId(),
@@ -88,38 +72,26 @@ class RecurringPayStubAmendmentList extends Controller
 		}
 
 		$viewData['recurring_pay_stub_amendments'] = $recurring_pay_stub_amendments;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
-		$viewData['user_id'] = $user_id;
 
         return view('pay_stub_amendment/RecurringPayStubAmendmentList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditRecurringPayStubAmendment', FALSE) );
-	}
-
-	public function delete(){
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
-		}
+	public function delete($id){
+		$delete = TRUE;
 
 		$rpsalf = new RecurringPayStubAmendmentListFactory();
+		$rpsalf->getById( $id );
+		foreach ($rpsalf->rs as $recurring_pay_stub_amendment) {
+			$rpsalf->data = (array)$recurring_pay_stub_amendment;
+			$recurring_pay_stub_amendment = $rpsalf;
 
-		foreach ($ids as $id) {
-			$rpsalf->getById( $id );
-			foreach ($rpsalf as $recurring_pay_stub_amendment) {
-				$recurring_pay_stub_amendment->setDeleted($delete);
-				$recurring_pay_stub_amendment->Save();
-			}
+			$recurring_pay_stub_amendment->setDeleted($delete);
+			$recurring_pay_stub_amendment->Save();
 		}
-		unset($recurring_pay_stub_amendment);
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'RecurringPayStubAmendmentList', FALSE) );
+		unset($recurring_pay_stub_amendment);
+		return redirect(URLBuilder::getURL( NULL, '/payroll/recurring_pay_stub_amendment', TRUE));
 	}
 
 }

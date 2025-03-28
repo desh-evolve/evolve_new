@@ -19,7 +19,10 @@ use App\Http\Controllers\users\UserGroupList;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\pay_stub_amendment\EditPayStubAmendment;
+use App\Http\Controllers\pay_stub_amendment\EditRecurringPayStubAmendment;
 use App\Http\Controllers\pay_stub_amendment\PayStubAmendmentList;
+use App\Http\Controllers\pay_stub_amendment\RecurringPayStubAmendmentList;
 use App\Http\Controllers\policy\AbsencePolicyList;
 use App\Http\Controllers\policy\AccrualPolicyList;
 use App\Http\Controllers\policy\BreakPolicyList;
@@ -114,6 +117,14 @@ Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('
 Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
 
 Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
+Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
+Route::post('/payroll/pay_stub_amendment/submit/{id?}', [EditPayStubAmendment::class, 'submit'])->name('payroll.pay_stub_amendment.submit');
+Route::delete('/payroll/pay_stub_amendment/delete/{id}', [PayStubAmendmentList::class, 'delete'])->name('payroll.pay_stub_amendment.delete');
+
+Route::get('/payroll/recurring_pay_stub_amendment', [RecurringPayStubAmendmentList::class, 'index'])->name('payroll.recurring_pay_stub_amendment');
+Route::get('/payroll/recurring_pay_stub_amendment/add/{id?}', [EditRecurringPayStubAmendment::class, 'index'])->name('payroll.recurring_pay_stub_amendment.add');
+Route::post('/payroll/recurring_pay_stub_amendment/submit/{id?}', [EditRecurringPayStubAmendment::class, 'submit'])->name('payroll.recurring_pay_stub_amendment.submit');
+Route::delete('/payroll/recurring_pay_stub_amendment/delete/{id}', [RecurringPayStubAmendmentList::class, 'delete'])->name('payroll.recurring_pay_stub_amendment.delete');
 
 // ===============================================================================================================================
 // Progress Bar Functions
