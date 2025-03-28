@@ -50,15 +50,7 @@ class EditCompany extends Controller
         $permission = $this->permission;
         $viewData['title'] = 'Edit Company';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'company_data'
-			)
-		) );
-
-		$cf = new CompanyFactory();
+        $cf = new CompanyFactory();
 
         // Initialize the array keys to prevent undefined key errors
         $company_data = [
@@ -76,13 +68,6 @@ class EditCompany extends Controller
         if (isset($id)) {
             $clf = new CompanyListFactory();
 
-            // if ($permission->Check('company', 'edit')) {
-            //     $clf->GetByID($id);
-            // } else {
-            //     $id = $current_company->getId();
-            //     $clf->GetByID($id);
-            // }
-
             if ($permission->Check('company', 'edit')) {
                 // Force a refresh to get the latest data
                 $clf->GetByID($id, NULL, NULL, true);
@@ -90,8 +75,6 @@ class EditCompany extends Controller
                 $id = $current_company->getId();
                 $clf->GetByID($id, NULL, NULL, true);  // Force refresh here as well
             }
-
-
 
             foreach ($clf->rs as $company) {
                 $clf->data = (array) $company;
@@ -310,14 +293,11 @@ class EditCompany extends Controller
 		// if ( $cf->isValid() ) {
 		// 	$cf->Save();
 
-		// 	//$cf->FailTransaction();
 		// 	$cf->CommitTransaction();
 
 		// 	if ( $permission->Check('company','edit') ) {
-		// 		// Redirect::Page( URLBuilder::getURL(NULL, '/company') );
         //         return redirect()->to(URLBuilder::getURL(null, '/company'))->with('success', 'Company saved successfully.');
 		// 	} else {
-		// 		// Redirect::Page( URLBuilder::getURL(NULL, '../index.php') );
         //         Debug::Text('Save failed!', __FILE__, __LINE__, __METHOD__,10);
         //         return redirect()->back()->withErrors(['error' => 'Failed to save data.'])->withInput();
 		// 	}

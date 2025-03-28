@@ -136,11 +136,10 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 // ===============================================================================================================================
 // Compnay Information
 // ===============================================================================================================================
-Route::get('/company/company_information', [EditCompanyNew::class, 'index'])->name('company.index');
-<<<<<<< Updated upstream
-=======
+Route::get('/company', [EditCompany::class, 'index'])->name('company.index');
 
-
+Route::get('/company/add/{id?}', [EditCompany::class, 'index'])->name('company.add');
+Route::post('/company/save/{id?}', [EditCompany::class, 'save'])->name('company.save');
 // ===============================================================================================================================
 // Policies
 // ===============================================================================================================================
@@ -202,4 +201,4 @@ Route::delete('/policy/holiday_policies/delete/{id}', [HolidayPolicyList::class,
 
 
 // ===============================================================================================================================
->>>>>>> Stashed changes
+
