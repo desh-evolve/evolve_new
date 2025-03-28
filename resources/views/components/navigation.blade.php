@@ -105,6 +105,12 @@
                         <div class="collapse menu-dropdown" id="company">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('company.index') }}"
+                                        class="nav-link {{ request()->routeIs('company.index') ? 'active' : '' }}">
+                                        Company Information
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Designations</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Employee Titles</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Currencies</a></li>

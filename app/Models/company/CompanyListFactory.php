@@ -43,13 +43,18 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 		return $this;
 	}
 
-	function getById($id, $where = NULL, $order = NULL) {
+	function getById($id, $where = NULL, $order = NULL, $forceRefresh = false) {
 		if ( $id == '' ) {
 			return FALSE;
 		}
-		$this->rs = $this->getCache($id);
+		// $this->rs = $this->getCache($id);
 
-		if ($this->rs === FALSE) {
+        // Only fetch data from cache if we're not forcing a refresh
+        if (!$forceRefresh) {
+            $this->rs = $this->getCache($id);
+        }
+
+		if (empty($this->rs) || $this->rs === FALSE) {
 			$query = '
 				SELECT *
 				FROM ' . $this->getTable() . '
@@ -78,6 +83,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 
 		return $this;
 	}
+
 
 	function getByIdAndCompanyId($id, $company_id, $where = NULL, $order = NULL) {
 		if ( $id == '' ) {

@@ -120,4 +120,4 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 Route::get('/company', [EditCompany::class, 'index'])->name('company.index');
 
 Route::get('/company/add/{id?}', [EditCompany::class, 'index'])->name('company.add');
-Route::post('/company/save/{id?}', [EditCompany::class, 'submit'])->name('company.save');
+Route::post('/company/save/{id?}', [EditCompany::class, 'save'])->name('company.save');
