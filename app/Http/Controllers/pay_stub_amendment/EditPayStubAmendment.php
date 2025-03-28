@@ -47,7 +47,7 @@ class EditPayStubAmendment extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
         if ( !$permission->Check('pay_stub_amendment','enabled')
 				OR !( $permission->Check('pay_stub_amendment','edit') OR $permission->Check('pay_stub_amendment','edit_own') ) ) {
@@ -55,7 +55,8 @@ class EditPayStubAmendment extends Controller
 		}
         */
 
-        $viewData['title'] = 'Accrual List';
+        $viewData['title'] = !empty($id) ? 'Edit Pay Stub Amendment' : 'Add Pay Stub Amendment';
+		$current_company = $this->currentCompany;
 
 		if ( isset($pay_stub_amendment_data) ) {
 			if ( $pay_stub_amendment_data['effective_date'] != '' ) {
@@ -71,44 +72,41 @@ class EditPayStubAmendment extends Controller
 			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
 			$psalf->GetById($id);
 
-			foreach ($psalf as $pay_stub_amendment) {
+			foreach ($psalf->rs as $pay_stub_amendment) {
+				$psalf->data = (array)$pay_stub_amendment;
+				$pay_stub_amendment = $psalf;
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				$user_id = $pay_stub_amendment->getUser();
 
 				$pay_stub_amendment_data = array(
-									'id' => $pay_stub_amendment->getId(),
-									'filter_user_id' => $pay_stub_amendment->getUser(),
-									'pay_stub_entry_name_id' => $pay_stub_amendment->getPayStubEntryNameId(),
-									'status_id'	=> $pay_stub_amendment->getStatus(),
-									'effective_date' => $pay_stub_amendment->getEffectiveDate(),
+					'id' => $pay_stub_amendment->getId(),
+					'user_ids' => [$pay_stub_amendment->getUser()],
+					'pay_stub_entry_name_id' => $pay_stub_amendment->getPayStubEntryNameId(),
+					'status_id'	=> $pay_stub_amendment->getStatus(),
+					'effective_date' => date('Y-m-d', $pay_stub_amendment->getEffectiveDate()),
 
-									'type_id' => $pay_stub_amendment->getType(),
+					'type_id' => $pay_stub_amendment->getType(),
 
-									'rate' => $pay_stub_amendment->getRate(),
-									'units' => $pay_stub_amendment->getUnits(),
-									'amount' => $pay_stub_amendment->getAmount(),
+					'rate' => $pay_stub_amendment->getRate(),
+					'units' => $pay_stub_amendment->getUnits(),
+					'amount' => $pay_stub_amendment->getAmount(),
 
-									'percent_amount' => $pay_stub_amendment->getPercentAmount(),
-									'percent_amount_entry_name_id' => $pay_stub_amendment->getPercentAmountEntryNameId(),
+					'percent_amount' => $pay_stub_amendment->getPercentAmount(),
+					'percent_amount_entry_name_id' => $pay_stub_amendment->getPercentAmountEntryNameId(),
 
-									'description' => $pay_stub_amendment->getDescription(),
+					'description' => $pay_stub_amendment->getDescription(),
 
-									'authorized' => $pay_stub_amendment->getAuthorized(),
-									'ytd_adjustment' => $pay_stub_amendment->getYTDAdjustment(),
+					'authorized' => $pay_stub_amendment->getAuthorized(),
+					'ytd_adjustment' => $pay_stub_amendment->getYTDAdjustment(),
 
-									'created_date' => $pay_stub_amendment->getCreatedDate(),
-									'created_by' => $pay_stub_amendment->getCreatedBy(),
-									'updated_date' => $pay_stub_amendment->getUpdatedDate(),
-									'updated_by' => $pay_stub_amendment->getUpdatedBy(),
-									'deleted_date' => $pay_stub_amendment->getDeletedDate(),
-									'deleted_by' => $pay_stub_amendment->getDeletedBy()
-								);
-			}
-		} else {
-			if ( $pay_stub_amendment_data['effective_date'] == '' ) {
-				$pay_stub_amendment_data['effective_date'] = TTDate::getTime();
-				$pay_stub_amendment_data['user_id'] = $user_id;
+					'created_date' => $pay_stub_amendment->getCreatedDate(),
+					'created_by' => $pay_stub_amendment->getCreatedBy(),
+					'updated_date' => $pay_stub_amendment->getUpdatedDate(),
+					'updated_by' => $pay_stub_amendment->getUpdatedBy(),
+					'deleted_date' => $pay_stub_amendment->getDeletedDate(),
+					'deleted_by' => $pay_stub_amendment->getDeletedBy()
+				);
 			}
 		}
 
@@ -130,7 +128,6 @@ class EditPayStubAmendment extends Controller
 
 		$user_options = Misc::arrayDiffByKey( (array)$pay_stub_amendment_data['filter_user_id'], $src_user_options );
 		$filter_user_options = Misc::arrayIntersectByKey( (array)$pay_stub_amendment_data['filter_user_id'], $src_user_options );
-
 
 		$status_options = Option::getByArray( $status_options_filter, $psaf->getOptions('status') );
 		$pay_stub_amendment_data['status_options'] = $status_options;
@@ -164,15 +161,15 @@ class EditPayStubAmendment extends Controller
 	public function submit(Request $request){
 		$psaf = new PayStubAmendmentFactory();
 
-		$pay_stub_amendment_data = $request->data;
-
+		$pay_stub_amendment_data = $request->pay_stub_amendment_data;
+		
 		//Debug::setVerbosity( 11 );
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		$psaf->StartTransaction();
 
 		$fail_transaction = FALSE;
-		foreach( $pay_stub_amendment_data['filter_user_id'] as $user_id ) {
+		foreach( $pay_stub_amendment_data['user_ids'] as $user_id ) {
 			$psaf->setId($pay_stub_amendment_data['id']);
 			$psaf->setUser( $user_id );
 			$psaf->setPayStubEntryNameId($pay_stub_amendment_data['pay_stub_entry_name_id']);
@@ -218,8 +215,8 @@ class EditPayStubAmendment extends Controller
 		if ( $fail_transaction == FALSE ) {
 			//$pf->FailTransaction();
 			$psaf->CommitTransaction();
+			return redirect(route('payroll.pay_stub_amendment'));
 
-			Redirect::Page( URLBuilder::getURL( array('user_id' => $user_id), 'PayStubAmendmentList.php') );
 		} else {
 			$psaf->FailTransaction();
 		}

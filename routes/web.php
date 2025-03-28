@@ -17,6 +17,7 @@ use App\Http\Controllers\department\EditDepartmentBranchUser;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\pay_stub_amendment\EditPayStubAmendment;
 use App\Http\Controllers\pay_stub_amendment\PayStubAmendmentList;
 use App\Http\Controllers\policy\AbsencePolicyList;
 use App\Http\Controllers\policy\AccrualPolicyList;
@@ -106,6 +107,9 @@ Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('
 Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
 
 Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
+Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
+Route::post('/payroll/pay_stub_amendment/submit/{id?}', [EditPayStubAmendment::class, 'submit'])->name('payroll.pay_stub_amendment.submit');
+Route::delete('/payroll/pay_stub_amendment/delete/{id}', [PayStubAmendmentList::class, 'delete'])->name('payroll.pay_stub_amendment.delete');
 
 // ===============================================================================================================================
 // Progress Bar Functions

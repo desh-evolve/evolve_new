@@ -1454,7 +1454,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					}
 				}
 
-				$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
+				$additional_order_fields = array('b.name' => 'asc', 'c.name' => 'asc', 'd.name' => 'asc', 'e.name' => 'asc');
 				if ( $order == NULL ) {
 					$order = array( 'punch_machine_user_id'=>'asc', 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
 					$strict = FALSE;
@@ -1496,7 +1496,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 				}
 				//Debug::Arr($order,'Order Data:', __FILE__, __LINE__, __METHOD__,10);
 				//Debug::Arr($filter_data,'Filter Data:', __FILE__, __LINE__, __METHOD__,10);
-
+				
 				if ( isset($filter_data['exclude_user_ids']) ) {
 					$filter_data['exclude_id'] = $filter_data['exclude_user_ids'];
 				}
@@ -1615,14 +1615,13 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$ph[':sin'] = trim($filter_data['sin']);
 					$query  .=	' AND a.sin LIKE :sin';
 				}
-						
-
+			
 				$query .= 	'
 								AND a.deleted = 0
 							';
 				$query .= $this->getWhereSQL( $where );
 				$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
-
+				
 				if ($limit == NULL) {
 					$this->rs = DB::select($query, $ph);
 				} else {
@@ -1634,7 +1633,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			}
 
 				
-				function getSearchByCompanyIdAndArrayCriteriaForOT( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+			function getSearchByCompanyIdAndArrayCriteriaForOT( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
 				if ( $company_id == '') {
 					return FALSE;
 				}

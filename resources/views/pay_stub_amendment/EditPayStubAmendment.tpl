@@ -171,55 +171,55 @@ function getHourlyRate() {
 
 				<tbody id="type_id-10" >
 
-				<tr onClick="showHelpEntry('rate')">
-					<td class="{isvalid object="psaf" label="rate" value="cellLeftEditTable"}">
-						{t}Rate:{/t}
-					</td>
-					<td class="cellRightEditTable">
-						<input type="text" size="15" name="pay_stub_amendment_data[rate]" id="rate" value="{$pay_stub_amendment_data.rate}" onKeyUp="calcAmount()">
-						<input type="button" name="getUserHourlyRate" value="{t}Get Employee Rate{/t}" onclick="getHourlyRate(); return false;"/>
-					</td>
-				</tr>
+					<tr onClick="showHelpEntry('rate')">
+						<td class="{isvalid object="psaf" label="rate" value="cellLeftEditTable"}">
+							{t}Rate:{/t}
+						</td>
+						<td class="cellRightEditTable">
+							<input type="text" size="15" name="pay_stub_amendment_data[rate]" id="rate" value="{$pay_stub_amendment_data.rate}" onKeyUp="calcAmount()">
+							<input type="button" name="getUserHourlyRate" value="{t}Get Employee Rate{/t}" onclick="getHourlyRate(); return false;"/>
+						</td>
+					</tr>
 
-				<tr onClick="showHelpEntry('units')">
-					<td class="{isvalid object="psaf" label="units" value="cellLeftEditTable"}">
-						{t}Units:{/t}
-					</td>
-					<td class="cellRightEditTable">
-						<input type="text" size="15" name="pay_stub_amendment_data[units]" id="units" value="{$pay_stub_amendment_data.units}" onKeyUp="calcAmount()">
-					</td>
-				</tr>
+					<tr onClick="showHelpEntry('units')">
+						<td class="{isvalid object="psaf" label="units" value="cellLeftEditTable"}">
+							{t}Units:{/t}
+						</td>
+						<td class="cellRightEditTable">
+							<input type="text" size="15" name="pay_stub_amendment_data[units]" id="units" value="{$pay_stub_amendment_data.units}" onKeyUp="calcAmount()">
+						</td>
+					</tr>
 
-				<tr onClick="showHelpEntry('amount')">
-					<td class="{isvalid object="psaf" label="amount" value="cellLeftEditTable"}">
-						{t}Amount:{/t}
-					</td>
-					<td class="cellRightEditTable">
-						<input type="text" size="15" name="pay_stub_amendment_data[amount]" id="amount" value="{$pay_stub_amendment_data.amount}">
-					</td>
-				</tr>
+					<tr onClick="showHelpEntry('amount')">
+						<td class="{isvalid object="psaf" label="amount" value="cellLeftEditTable"}">
+							{t}Amount:{/t}
+						</td>
+						<td class="cellRightEditTable">
+							<input type="text" size="15" name="pay_stub_amendment_data[amount]" id="amount" value="{$pay_stub_amendment_data.amount}">
+						</td>
+					</tr>
 				</tbody>
 
 				<tbody id="type_id-20" style="display:none" >
-				<tr onClick="showHelpEntry('percent_amount')">
-					<td class="{isvalid object="psaf" label="percent_amount" value="cellLeftEditTable"}">
-						{t}Percent:{/t}
-					</td>
-					<td class="cellRightEditTable">
-						<input type="text" size="10" name="pay_stub_amendment_data[percent_amount]" value="{$pay_stub_amendment_data.percent_amount}">%
-					</td>
-				</tr>
+					<tr onClick="showHelpEntry('percent_amount')">
+						<td class="{isvalid object="psaf" label="percent_amount" value="cellLeftEditTable"}">
+							{t}Percent:{/t}
+						</td>
+						<td class="cellRightEditTable">
+							<input type="text" size="10" name="pay_stub_amendment_data[percent_amount]" value="{$pay_stub_amendment_data.percent_amount}">%
+						</td>
+					</tr>
 
-				<tr onClick="showHelpEntry('percent_amount_entry_name')">
-					<td class="{isvalid object="psaf" label="percent_amount_entry_name" value="cellLeftEditTable"}">
-						{t}Percent Of:{/t}
-					</td>
-					<td class="cellRightEditTable">
-						<select name="pay_stub_amendment_data[percent_amount_entry_name_id]">
-							{html_options options=$pay_stub_amendment_data.percent_amount_entry_name_options selected=$pay_stub_amendment_data.percent_amount_entry_name_id}
-						</select>
-					</td>
-				</tr>
+					<tr onClick="showHelpEntry('percent_amount_entry_name')">
+						<td class="{isvalid object="psaf" label="percent_amount_entry_name" value="cellLeftEditTable"}">
+							{t}Percent Of:{/t}
+						</td>
+						<td class="cellRightEditTable">
+							<select name="pay_stub_amendment_data[percent_amount_entry_name_id]">
+								{html_options options=$pay_stub_amendment_data.percent_amount_entry_name_options selected=$pay_stub_amendment_data.percent_amount_entry_name_id}
+							</select>
+						</td>
+					</tr>
 
 				</tbody>
 
