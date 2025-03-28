@@ -40,13 +40,24 @@ class CurrencyList extends Controller
 
     }
 
-    public function index() {
+    public function index()
+    {
         /*
-        if (!$this->permission->Check('currency', 'enabled') || 
+        if (!$this->permission->Check('currency', 'enabled') ||
             !($this->permission->Check('currency', 'view') || $this->permission->Check('currency', 'view_own'))) {
             return $this->permission->Redirect(false);
         }
         */
+
+         // Initialize sort column and sort order with default values or from the request
+        $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'name'; // Default sort by 'name'
+        $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc'; // Default sort order 'asc'
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Default page is 1 if not set
+        // Example: Define $ids, assuming we are getting selected ids from the query string or any other source
+        $ids = isset($_GET['ids']) ? $_GET['ids'] : []; // Fetch selected IDs from URL or set empty array if not provided
+
+        // Debugging (if you need to debug $ids)
+        Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
 
         $current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
@@ -120,18 +131,18 @@ class CurrencyList extends Controller
         if (empty($id)) {
             return response()->json(['error' => 'No currencies selected.'], 400);
         }
-        
+
         $clf = new CurrencyListFactory();
         $currency = $clf->getByIdAndCompanyId($id, $current_company->getId());
-        
+
         foreach ($currency->rs as $c_obj) {
             $currency->data = (array)$c_obj; // added bcz currency data is null and it gives an error
-            
+
             $currency->setDeleted(true); // Set deleted flag to true
 
             if ($currency->isValid()) {
                 $res = $currency->Save();
-                
+
                 if($res){
                     return response()->json(['success' => 'Currency deleted successfully.']);
                 }else{
@@ -139,6 +150,6 @@ class CurrencyList extends Controller
                 }
             }
         }
-        
+
     }
 }

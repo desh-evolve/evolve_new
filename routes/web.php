@@ -9,8 +9,10 @@ use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
 use App\Http\Controllers\company\EditCompany;
 use App\Http\Controllers\Company\EditCompanyNew;
+use App\Http\Controllers\company\EditOtherField;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
+use App\Http\Controllers\company\OtherFieldList;
 use App\Http\Controllers\department\DepartmentList;
 use App\Http\Controllers\department\EditDepartment;
 use App\Http\Controllers\department\EditDepartmentBranchUser;
@@ -140,6 +142,16 @@ Route::get('/company', [EditCompany::class, 'index'])->name('company.index');
 
 Route::get('/company/add/{id?}', [EditCompany::class, 'index'])->name('company.add');
 Route::post('/company/save/{id?}', [EditCompany::class, 'save'])->name('company.save');
+
+// ===============================================================================================================================
+// Policies
+// ===============================================================================================================================
+Route::get('/company/other_field', [OtherFieldList::class, 'index'])->name('company.other_field.index');
+
+Route::get('/company/other_field/add/{id?}', [EditOtherField::class, 'index'])->name('company.other_field.add');
+Route::post('/company/other_field/save/{id?}', [EditOtherField::class, 'save'])->name('company.other_field.save');
+Route::delete('/company/other_field/delete/{id}', [OtherFieldList::class, 'delete'])->name('company.other_field.delete');
+
 // ===============================================================================================================================
 // Policies
 // ===============================================================================================================================
