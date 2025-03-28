@@ -121,7 +121,6 @@ class OverTimePolicyListFactory extends OverTimePolicyFactory implements Iterato
 						AND a.deleted = 0';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
-
 		$this->rs = DB::select($query, $ph);
 	}
 

@@ -44,14 +44,6 @@ class EditPayStubEntryAccount extends Controller
 
         $viewData['title'] = 'Edit Pay Stub Account';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		$pseaf = new PayStubEntryAccountFactory();
 
 		if ( isset($id) ) {

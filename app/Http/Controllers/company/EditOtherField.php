@@ -45,14 +45,6 @@ class EditOtherField extends Controller
 
         $viewData['title'] = 'Edit Other Field';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-
 		if ( isset($id) ) {
 
 			$oflf = new OtherFieldListFactory();

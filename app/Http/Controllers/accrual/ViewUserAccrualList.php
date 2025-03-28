@@ -52,18 +52,6 @@ class ViewUserAccrualList extends Controller
 
         $viewData['title'] = 'Accrual List';
 
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'user_id',
-				'accrual_policy_id',
-				'ids',
-			) 
-		) );
-
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array(
 				'user_id' => $user_id,
@@ -134,19 +122,6 @@ class ViewUserAccrualList extends Controller
 	}
 
 	public function delete(){
-
-
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'user_id',
-				'accrual_policy_id',
-				'ids',
-			) 
-		) );
 
 		$alf = new AccrualListFactory();
 

@@ -1,6 +1,6 @@
 <x-app-layout :title="'Input Example'">
 
-    <div class="row">
+    <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
@@ -8,16 +8,16 @@
                         <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
                     </div>
 
-                    {{-- <div class="justify-content-md-end">
+                    <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
                             <a 
                                 type="button" 
-                                href="/policy/policy_groups/add"
+                                href="{{ route('policy.holidays.add', $holiday_policy_id) }}"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
-                                Add Policy Group <i class="ri-add-line"></i>
+                                Add Holiday <i class="ri-add-line"></i>
                             </a>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -37,8 +37,8 @@
                                 <td>{{ $row['date_stamp'] }}</td>
                                 <td>{{ $row['name'] }}</td>
                                 <td>
-                                    <a class="btn btn-secondary btn-sm" href="{{ route('policy.absence_policies.add', ['id' => $row['id']]) }}">Edit</a>
-                                    <a class="btn btn-danger btn-sm" href="{{ route('policy.absence_policies.delete', ['id' => $row['id']]) }}">Delete</a>
+                                    <a class="btn btn-secondary btn-sm" href="{{ route('policy.holidays.add', [$holiday_policy_id, $row['id']]) }}">Edit</a>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/holidays/delete/{{ $row['id'] }}', 'Holiday', this)">Delete</button>
                                 </td>
                             </tr>
                         @endforeach

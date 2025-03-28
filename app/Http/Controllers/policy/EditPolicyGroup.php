@@ -54,22 +54,13 @@ class EditPolicyGroup extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-
+		
         $viewData['title'] = isset($id) ? 'Edit Policy Group' : 'Add Policy Group';
 		$current_company = $this->currentCompany;
-		
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
 		
 		$pgf = new PolicyGroupFactory(); 
 
 		if ( isset($id) ) {
-
 			$pglf = new PolicyGroupListFactory();
 			$pglf->getByIdAndCompanyID( $id, $current_company->getID() );
 
@@ -155,7 +146,7 @@ class EditPolicyGroup extends Controller
 		$viewData['data'] = $data;
 		$viewData['pgf'] = $pgf;
 
-		//print_r($data['over_time_policy_options']);exit;
+		//print_r($data);exit;
 
         return view('policy/EditPolicyGroup', $viewData);
 
@@ -163,9 +154,10 @@ class EditPolicyGroup extends Controller
 
 	public function submit(Request $request){
 		$pgf = new PolicyGroupFactory();
-		$data = $request->data;
 		$current_company = $this->currentCompany;
-
+		$data = $request->data;
+		
+		//print_r($data);exit;
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		//Debug::setVerbosity(11);
@@ -178,7 +170,6 @@ class EditPolicyGroup extends Controller
 		$pgf->setExceptionPolicyControlID( $data['exception_policy_control_id'] );
 
 		if ( $pgf->isValid() ) {
-			$pgf->Save(FALSE);
 
 			if ( isset($data['user_ids'] ) ) {
 				$pgf->setUser( $data['user_ids'] );

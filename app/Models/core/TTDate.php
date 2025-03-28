@@ -69,7 +69,7 @@ class TTDate {
 				);
 	}
 
-	private function _get_month_long_names() {
+	private static function _get_month_long_names() {
 		// i18n: It's purpose is simply to ensure that the short (3 letter)
 		//       month forms are included in gettext() calls so that they
 		//       will be properly extracted for translation.

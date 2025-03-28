@@ -34,15 +34,6 @@ class ApprovedCoveredBy extends Controller
         $current_user = $this->currentCompany;
 
         $viewData['title'] = 'Employee Leaves covered Aprooval';
-
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data',
-                'filter_data'
-            ) 
-        ) );
         
         $lrlf = new LeaveRequestListFactory();
         $lrlf->getByCoveredEmployeeId($current_user->getId());

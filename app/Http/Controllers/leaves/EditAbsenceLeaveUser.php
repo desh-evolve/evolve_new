@@ -50,15 +50,6 @@ class EditAbsenceLeaveUser extends Controller
         */
 
         $viewData['title'] = 'Edit Employee Leaves';
-
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data'
-            ) 
-        ) );
-        
         
         if ( isset($data)) {
             if ( $data['start_date'] != '' ) {
@@ -174,14 +165,6 @@ class EditAbsenceLeaveUser extends Controller
     }
 
     public function submit(){
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data'
-            ) 
-        ) );
-        
         
         if ( isset($data)) {
             if ( $data['start_date'] != '' ) {

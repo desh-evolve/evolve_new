@@ -32,16 +32,6 @@ class ApprovedHrBy extends Controller
     public function index() {
 
         $viewData['title'] = 'Employee Leaves Supervisor Aprooval';
-
-
-        extract	(FormVariables::GetVariables(
-            array	(
-                'action',
-                'id',
-                'data',
-                'filter_data'
-            ) 
-        ) );
         
         //$lrlf = new LeaveRequestListFactory();
         $data = array();

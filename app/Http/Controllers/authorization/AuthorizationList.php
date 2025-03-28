@@ -56,17 +56,6 @@ class AuthorizationList extends Controller
 
         $viewData['title'] = 'Authorization List';
 
-		extract	(FormVariables::GetVariables(
-			array	(
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-				'selected_levels'
-			) 
-		) );
-
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 			array(
 				'sort_column' => $sort_column,

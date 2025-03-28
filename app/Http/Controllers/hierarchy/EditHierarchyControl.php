@@ -52,16 +52,6 @@ class EditHierarchyControl extends Controller
 		$hcf = new HierarchyControlFactory(); 
 		$hlf = new HierarchyLevelFactory();
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'ids',
-				'hierarchy_control_id',
-				'hierarchy_control_data',
-				'hierarchy_level_data'
-			) 
-		) );
-
 		if ( isset($hierarchy_control_id) ) {
 
 			$hclf = new HierarchyControlListFactory();
@@ -193,16 +183,6 @@ class EditHierarchyControl extends Controller
 		$hcf = new HierarchyControlFactory();
 		$hlf = new HierarchyLevelFactory();
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'ids',
-				'hierarchy_control_id',
-				'hierarchy_control_data',
-				'hierarchy_level_data'
-			) 
-		) );
-
 		//Debug::setVerbosity(11);
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
@@ -282,15 +262,6 @@ class EditHierarchyControl extends Controller
 	}
 
 	public function delete_level(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'ids',
-				'hierarchy_control_id',
-				'hierarchy_control_data',
-				'hierarchy_level_data'
-			) 
-		) );
 
 		if ( count($ids) > 0) {
 			foreach ($ids as $hl_id) {

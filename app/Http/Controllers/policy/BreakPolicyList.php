@@ -3,16 +3,10 @@
 namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
-use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
+use App\Models\Core\Factory;
 use App\Models\Core\Redirect;
-use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\BreakPolicyListFactory;
 use Illuminate\Support\Facades\View;
@@ -46,34 +40,10 @@ class BreakPolicyList extends Controller
         */
 
         $viewData['title'] = 'Break Policy List';
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}		
+		$current_company = $this->currentCompany;
 
 		$bplf = new BreakPolicyListFactory(); 
 		$bplf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($bplf);
 
 		$type_options = $bplf->getOptions('type');
 
@@ -91,8 +61,8 @@ class BreakPolicyList extends Controller
 				'name' => $bp_obj->getName(),
 				'type_id' => $bp_obj->getType(),
 				'type' => $type_options[$bp_obj->getType()],
-				'amount' => $bp_obj->getAmount(),
-				'trigger_time' => $bp_obj->getTriggerTime(),
+				'amount' => Factory::convertToHoursAndMinutes($bp_obj->getAmount()),
+				'trigger_time' => Factory::convertToHoursAndMinutes($bp_obj->getTriggerTime()),
 				'assigned_policy_groups' => (int)$bp_obj->getColumn('assigned_policy_groups'),
 				'deleted' => $bp_obj->getDeleted()
 			);
@@ -101,34 +71,34 @@ class BreakPolicyList extends Controller
 
 		$viewData['policies'] = $policies;
 		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
 		
         return view('policy/BreakPolicyList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditBreakPolicy', FALSE) );
-	}
+	public function delete($id){
+		if (empty($id)) {
+            return response()->json(['error' => 'No Break Policy Selected.'], 400);
+        }
 
-	public function delete(){
 		$current_company = $this->currentCompany;
-
 		$delete = TRUE;
 
 		$bplf = new BreakPolicyListFactory();
+		$bplf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$bplf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($bplf as $bp_obj) {
-				$bplf->data = (array)$bp_obj;
-				$bp_obj = $bplf;
+		foreach ($bplf as $bp_obj) {
+			$bplf->data = (array)$bp_obj;
+			$bp_obj = $bplf;
 
-				$bp_obj->setDeleted($delete);
-				if ( $bp_obj->isValid() ) {
-					$bp_obj->Save();
+			$bp_obj->setDeleted($delete);
+			if ( $bp_obj->isValid() ) {
+				$res = $bp_obj->Save();
+
+				if($res){
+					return response()->json(['success' => 'Break Policy Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Break Policy Deleted Failed.']);
 				}
 			}
 		}

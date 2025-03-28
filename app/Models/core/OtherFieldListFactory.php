@@ -119,14 +119,14 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		}
 
 		$ph = array(
-					'id' => (int)$id,
+					':id' => (int)$id,
 					//'type_id' => (int)$type_id,
 					);
 
 		$query = '
 					select 	*
 					from	'. $this->getTable() .' as a
-					where	company_id = ?
+					where	company_id = :id
 						AND type_id in ('. $this->getListSQL($type_id, $ph) .')
 						AND deleted = 0';
 		$query .= $this->getWhereSQL( $where );

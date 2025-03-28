@@ -53,14 +53,6 @@ class CurrencyList extends Controller
 
         $viewData['title'] = 'Currency List';
 
-        extract(FormVariables::GetVariables([
-            'action',
-            'page',
-            'sort_column',
-            'sort_order',
-            'ids'
-        ]));
-
         URLBuilder::setURL($_SERVER['SCRIPT_NAME'], [
             'sort_column' => $sort_column,
             'sort_order' => $sort_order,

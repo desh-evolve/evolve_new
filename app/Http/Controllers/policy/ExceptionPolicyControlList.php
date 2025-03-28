@@ -3,19 +3,11 @@
 namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
-use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
-use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Policy\ExceptionPolicyControlListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class ExceptionPolicyControlList extends Controller
@@ -49,34 +41,8 @@ class ExceptionPolicyControlList extends Controller
         $viewData['title'] = 'Exception Policy List';
 		$current_company = $this->currentCompany;
 		
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
-		
-
 		$epclf = new ExceptionPolicyControlListFactory();
 		$epclf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($epclf);
 
 		$show_no_policy_group_notice = FALSE;
 		foreach ($epclf->rs as $epc_obj) {
@@ -97,34 +63,34 @@ class ExceptionPolicyControlList extends Controller
 
 		$viewData['policies'] = $policies;
 		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
 		
         return view('policy/ExceptionPolicyControlList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditExceptionPolicyControl', FALSE) );
-	}
+	public function delete($id){
+		if (empty($id)) {
+            return response()->json(['error' => 'No Exception Policy Selected.'], 400);
+        }
 
-	public function delete(){
 		$current_company = $this->currentCompany;
-
 		$delete = TRUE;
 
 		$epclf = new ExceptionPolicyControlListFactory();
+		$epclf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$epclf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($epclf->rs as $epc_obj) {
-				$epclf->data = (array)$epc_obj;
-				$epc_obj = $epclf;
-				
-				$epc_obj->setDeleted($delete);
-				if ( $epc_obj->isValid() ) {
-					$epc_obj->Save();
+		foreach ($epclf->rs as $epc_obj) {
+			$epclf->data = (array)$epc_obj;
+			$epc_obj = $epclf;
+			
+			$epc_obj->setDeleted($delete);
+			if ( $epc_obj->isValid() ) {
+				$res = $epc_obj->Save();
+
+				if($res){
+					return response()->json(['success' => 'Exception Policy Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Exception Policy Deleted Failed.']);
 				}
 			}
 		}

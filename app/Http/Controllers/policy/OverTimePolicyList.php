@@ -3,20 +3,12 @@
 namespace App\Http\Controllers\policy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
-use App\Models\Core\Debug;
-use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
-use App\Models\Core\Misc;
-use App\Models\Core\Pager;
+use App\Models\Core\Factory;
 use App\Models\Core\Redirect;
-use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
-use App\Models\Policy\OverTimePolicyFactory;
 use App\Models\Policy\OverTimePolicyListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class OverTimePolicyList extends Controller
@@ -50,33 +42,8 @@ class OverTimePolicyList extends Controller
         $viewData['title'] = 'Overtime Policy List';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'ids',
-			) 
-		) );
-		
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}		
-
 		$otplf = new OverTimePolicyListFactory();
 		$otplf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($otplf);
 
 		$type_options = $otplf->getOptions('type');
 
@@ -90,47 +57,47 @@ class OverTimePolicyList extends Controller
 			}
 
 			$policies[] = array(
-								'id' => $otp_obj->getId(),
-								'name' => $otp_obj->getName(),
-								'type_id' => $otp_obj->getType(),
-								'type' => $type_options[$otp_obj->getType()],
-								'trigger_time' => $otp_obj->getTriggerTime(),
-								'assigned_policy_groups' => (int)$otp_obj->getColumn('assigned_policy_groups'),
-								'deleted' => $otp_obj->getDeleted()
-							);
+				'id' => $otp_obj->getId(),
+				'name' => $otp_obj->getName(),
+				'type_id' => $otp_obj->getType(),
+				'type' => $type_options[$otp_obj->getType()],
+				'trigger_time' => Factory::convertToHoursAndMinutes($otp_obj->getTriggerTime()),
+				'assigned_policy_groups' => (int)$otp_obj->getColumn('assigned_policy_groups'),
+				'deleted' => $otp_obj->getDeleted()
+			);
 
 		}
 
 		$viewData['policies'] = $policies;
 		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
 		
         return view('policy/OverTimePolicyList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditOverTimePolicy', FALSE) );
-	}
+	public function delete($id){
+		if (empty($id)) {
+            return response()->json(['error' => 'No Over Time Policy Selected.'], 400);
+        }
 
-	public function delete(){
 		$delete = TRUE;
 		$current_company = $this->currentCompany;
 
 		$otplf = new OverTimePolicyListFactory();
+		$otplf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$otplf->getByIdAndCompanyId($id, $current_company->getId() );
+		foreach ($otplf->rs as $otp_obj) {
+			$otplf->data = (array)$otp_obj;
+			$otp_obj = $otplf;
 
-			foreach ($otplf->rs as $otp_obj) {
-				$otplf->data = (array)$otp_obj;
-				$otp_obj = $otplf;
+			$otp_obj->setDeleted($delete);
+			if ( $otp_obj->isValid() ) {
+				$res = $otp_obj->Save();
 
-				$otp_obj->setDeleted($delete);
-				if ( $otp_obj->isValid() ) {
-					$otp_obj->Save();
+				if($res){
+					return response()->json(['success' => 'Over Time Policy Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Over Time Policy Deleted Failed.']);
 				}
 			}
 		}

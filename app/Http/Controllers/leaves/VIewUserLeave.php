@@ -43,15 +43,6 @@ class VIewUserLeave extends Controller
         */
 		
         $viewData['title'] = 'Apply Employee Leaves';
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data',
-				'filter_data'
-			) 
-		) );
 		
 		$lrlf = new LeaveRequestListFactory();
 		$lrlf->getById($id);

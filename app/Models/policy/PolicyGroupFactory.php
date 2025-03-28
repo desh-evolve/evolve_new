@@ -166,12 +166,12 @@ class PolicyGroupFactory extends Factory {
 		}
 
 		if ( is_array($ids) ) {
+			$tmp_ids = array();
 			if ( !$this->isNew() ) {
 				//If needed, delete mappings first.
 				$pgulf = new PolicyGroupUserListFactory();
 				$pgulf->getByPolicyGroupId( $this->getId() );
 
-				$tmp_ids = array();
 				foreach ($pgulf->rs as $obj) {
 					$pgulf->data = (array) $obj;
 					$obj = $pgulf;

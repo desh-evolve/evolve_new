@@ -23,13 +23,11 @@
                 <div class="card-body">
                    
                     {{-- --------------------------------------------------------------------------- --}}
-                    
-                    @if ($errors->any())
+
+                    @if (!$pgf->Validator->isValid())
                         <div class="alert alert-danger">
                             <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <li>Error list</li>
                             </ul>
                         </div>
                     @endif
@@ -60,8 +58,8 @@
                                 <x-general.multiselect-php 
                                     title="Employees" 
                                     :data="$data['user_options']" 
-                                    :selected="[]" 
-                                    name="data[user_ids][]"
+                                    :selected="!empty($data['user_ids']) ? array_values($data['user_ids']) : []" 
+                                    :name="'data[user_ids][]'"
                                     id="userSelector"
                                 />
                             </div>
@@ -75,7 +73,12 @@
                                 multiple
                             >
                                 @foreach ($data['over_time_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option 
+                                        value="{{$id}}"
+                                        @if(!empty($data['over_time_policy_ids']) && in_array($id, $data['over_time_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -88,7 +91,12 @@
                                 multiple
                             >
                                 @foreach ($data['round_interval_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option 
+                                        value="{{$id}}"
+                                        @if(!empty($data['round_interval_policy_ids']) && in_array($id, $data['round_interval_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -101,7 +109,12 @@
                                 multiple
                             >
                                 @foreach ($data['meal_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option
+                                        value="{{$id}}"
+                                        @if(!empty($data['meal_policy_ids']) && in_array($id, $data['meal_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -114,7 +127,12 @@
                                 multiple
                             >
                                 @foreach ($data['break_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                    <option
+                                        value="{{$id}}"
+                                        @if(!empty($data['break_policy_ids']) && in_array($id, $data['break_policy_ids']))
+                                            selected
+                                        @endif
+                                    >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -127,7 +145,12 @@
                                 multiple
                             >
                                 @foreach ($data['accrual_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['accrual_policy_ids']) && in_array($id, $data['accrual_policy_ids']))
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -140,7 +163,12 @@
                                 multiple
                             >
                                 @foreach ($data['premium_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['premium_policy_ids']) && in_array($id, $data['premium_policy_ids']))
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -153,7 +181,12 @@
                                 multiple
                             >
                                 @foreach ($data['holiday_policy_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['holiday_policy_ids']) && in_array($id, $data['holiday_policy_ids']))
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -165,16 +198,21 @@
                                 name="data[exception_policy_control_id]" 
                             >
                                 @foreach ($data['exception_options'] as $id => $name )
-                                    <option value="{{$id}}">{{$name}}</option>
+                                <option 
+                                    value="{{$id}}"
+                                    @if(!empty($data['exception_policy_control_id']) && $id == $data['exception_policy_control_id'])
+                                        selected
+                                    @endif
+                                >{{$name}}</option>
                                 @endforeach
                             </select>
                         </div>
             
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
+                            <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit">
                         </div>
             
-                        <input type="hidden" name="data[id]" value="{$data['id']}">
+                        <input type="hidden" name="data[id]" value="{{!empty($data['id']) ? $data['id'] : ''}}">
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}

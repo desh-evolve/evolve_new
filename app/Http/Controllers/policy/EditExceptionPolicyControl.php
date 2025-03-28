@@ -52,14 +52,6 @@ class EditExceptionPolicyControl extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Exception Policy' : 'Add Exception Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['exceptions'])) {
 			foreach( $data['exceptions'] as $code => $exception ) {
 		
@@ -149,7 +141,7 @@ class EditExceptionPolicyControl extends Controller
 									'deleted_by' => $epc_obj->getDeletedBy()
 								);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			//Populate default values.
 			$exceptions = $epf->getExceptionTypeDefaultValues( NULL, $current_company->getProductEdition() );
 

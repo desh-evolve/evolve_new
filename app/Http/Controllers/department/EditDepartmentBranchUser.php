@@ -38,8 +38,10 @@ class EditDepartmentBranchUser extends Controller
 
     }
 
-    public function index() {
+    public function index(Request $request) {
 
+		$current_company = $this->currentCompany;
+		$current_user_prefs = $this->userPrefs;
         /*
         if ( !$permission->Check('department','enabled')
 				OR !( $permission->Check('department','assign') ) ) {
@@ -47,15 +49,8 @@ class EditDepartmentBranchUser extends Controller
 		}
         */
 		
+		$id = $request->id;
         $viewData['title'] = 'Department Employees';
-
-		extract	(FormVariables::GetVariables(
-			array(
-				'action',
-				'id',
-				'department_data'
-			) 
-		) );
 
 		$dlf = new DepartmentListFactory();
 
@@ -92,7 +87,7 @@ class EditDepartmentBranchUser extends Controller
 					}
 				} else {
 					//Use selected User Id's.
-					$department_branch_user_ids = $department_data['branch_data'][$branch_id];
+					$department_branch_user_ids = $department_branch['branch_data'][$branch_id];
 				}
 
 				$blf = new BranchListFactory();
@@ -121,7 +116,6 @@ class EditDepartmentBranchUser extends Controller
 							);
 		}
 
-
 		//Select box options;
 		$department_data['branch_list_options'] = BranchListFactory::getByCompanyIdArray($current_company->getId());
 
@@ -129,6 +123,7 @@ class EditDepartmentBranchUser extends Controller
 		$department_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
 		//var_dump($te);
 
+		$dbuf = new DepartmentBranchUserFactory();
 		$viewData['department_data'] = $department_data;
 		$viewData['dbuf'] = $dbuf;
 
@@ -138,13 +133,13 @@ class EditDepartmentBranchUser extends Controller
 
 	public function submit(Request $request){
 		
-		$department_data = $request->data;
+
+		$department_data = $request->input('department_data');
 
 		$dbuf = new DepartmentBranchUserFactory();
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		Debug::Text('Department ID: '. $department_data['id'] , __FILE__, __LINE__, __METHOD__,10);
-
 
 		$dbulf = new DepartmentBranchUserListFactory();
 
@@ -194,7 +189,7 @@ class EditDepartmentBranchUser extends Controller
 
 		if ( $dbuf->isValid() ) {
 
-			Redirect::Page( URLBuilder::getURL(NULL, 'DepartmentList.php') );
+			return redirect()->to(URLBuilder::getURL(null, '/department'))->with('success', 'Department saved successfully.');
 
 		}
 	}

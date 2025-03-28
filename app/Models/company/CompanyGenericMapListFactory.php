@@ -117,7 +117,7 @@ class CompanyGenericMapListFactory extends CompanyGenericMapFactory implements I
 					';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
-
+		
 		$this->rs = DB::select($query, $ph);
 
 		return $this;

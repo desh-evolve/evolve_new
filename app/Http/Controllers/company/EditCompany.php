@@ -50,7 +50,15 @@ class EditCompany extends Controller
         $permission = $this->permission;
         $viewData['title'] = 'Edit Company';
 
-        $cf = new CompanyFactory();
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'company_data'
+			)
+		) );
+
+		$cf = new CompanyFactory();
 
         // Initialize the array keys to prevent undefined key errors
         $company_data = [

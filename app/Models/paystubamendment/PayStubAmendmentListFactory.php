@@ -741,7 +741,7 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 			}
 		}
 
-		$additional_order_fields = array('b.last_name', 'b.first_name');
+		$additional_order_fields = array('b.last_name' => 'asc', 'b.first_name' => 'asc');
 		if ( $order == NULL ) {
 			$order = array( 'a.effective_date' => 'desc', 'a.status_id' => 'asc', 'b.last_name' => 'asc' );
 			$strict = FALSE;

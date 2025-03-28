@@ -57,15 +57,6 @@ class EditPayStubAmendment extends Controller
 
         $viewData['title'] = 'Accrual List';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'user_id',
-				'pay_stub_amendment_data'
-			) 
-		) );
-		
 		if ( isset($pay_stub_amendment_data) ) {
 			if ( $pay_stub_amendment_data['effective_date'] != '' ) {
 				$pay_stub_amendment_data['effective_date'] = TTDate::parseDateTime($pay_stub_amendment_data['effective_date']);

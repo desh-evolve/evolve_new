@@ -53,14 +53,6 @@ class EditAbsencePolicy extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Absence Policy' : 'Add Absence Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		$apf = new AbsencePolicyFactory();
 
 		if ( isset($id) ) {
@@ -137,8 +129,7 @@ class EditAbsencePolicy extends Controller
 
 		if ( $apf->isValid() ) {
 			$apf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'AbsencePolicyList') );
+			return redirect(URLBuilder::getURL( NULL, '/policy/absence_policies'));
 		}
 
 	}

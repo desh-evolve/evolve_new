@@ -57,17 +57,6 @@ class CurrencyList extends Controller
         */
 
         $viewData['title'] = 'Message List';
-
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'filter_folder_id',
-				'ids',
-			) 
-		) );
 		
 		$sort_array = NULL;
 		if ( $sort_column != '' ) {
@@ -158,17 +147,6 @@ class CurrencyList extends Controller
 	}
 
 	public function delete(){
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'filter_folder_id',
-				'ids',
-			) 
-		) );
-		
 		$sort_array = NULL;
 		if ( $sort_column != '' ) {
 			$sort_array = array($sort_column => $sort_order);

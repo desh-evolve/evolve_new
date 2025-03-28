@@ -47,22 +47,6 @@ class ViewMessage extends Controller
 
         $viewData['title'] = 'View Message';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'page',
-				'sort_column',
-				'sort_order',
-				'filter_folder_id',
-				'object_type_id',
-				'object_id',
-				'parent_id',
-				'id',
-				'message_data',
-				'ack_message_id',
-			) 
-		) );
-		
 		$mcf = new MessageControlFactory();
 
 		if ( isset($object_type_id) AND isset($object_id) ) {

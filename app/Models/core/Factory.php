@@ -24,7 +24,7 @@ class Factory {
 
 	protected $db;
     protected $cache;
-    protected $Validator;
+    public $Validator;
 
 	protected $currentUser;
 	protected $profiler;
@@ -932,6 +932,7 @@ class Factory {
 		return $retval;
 	}
 
+	/* //original code - commented by desh(2025-03-26)
 	protected function getWhereSQL($array, $append_where = FALSE) {
 		//Make this a multi-dimensional array, the first entry
 		//is the WHERE clauses with '?' for placeholders, the second is
@@ -939,13 +940,12 @@ class Factory {
 		if (is_array($array) ) {
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-
 			foreach ($array as $orig_column => $expression) {
 				$orig_column = trim($orig_column);
 				$column = $this->parseColumnName( $orig_column );
 
 				$expression = trim($expression);
-
+				
 				if ( in_array($column, $fields) ) {
 					$sql_chunks[] = $orig_column.' '.$expression;
 				}
@@ -964,6 +964,36 @@ class Factory {
 
 		return FALSE;
 	}
+	*/
+
+	protected function getWhereSQL($array, $append_where = false) {
+		if (!is_array($array) || empty($array)) {
+			return ''; // Return empty string if input is not a valid array
+		}
+	
+		$sql_chunks = [];
+	
+		foreach ($array as $column => $value) {
+			$column = trim($column);
+			$value = trim($value);
+	
+			// Ensure proper SQL escaping (use prepared statements in real-world applications)
+			if (is_numeric($value)) {
+				$sql_chunks[] = "`$column` $value"; // No quotes for numeric values
+			} else {
+				$sql_chunks[] = "`$column` " . addslashes($value); // No quotes around values
+			}
+		}
+	
+		$sql = implode(' AND ', $sql_chunks);
+	
+		if ($append_where) {
+			return ' WHERE ' . $sql;
+		} else {
+			return ' AND ' . $sql;
+		}
+	}
+		
 
 	protected function getColumnsFromAliases( $columns, $aliases ) {
 		// Columns is the original column array.
@@ -1022,7 +1052,7 @@ class Factory {
 
 		return $array;
 	}
-
+/*
 	protected function getSortSQL($array, $strict = TRUE, $additional_fields = NULL)
 	{
 		if (is_array($array)) {
@@ -1033,9 +1063,14 @@ class Factory {
 
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-
+			$sql_chunks = [];
 			if (is_array($additional_fields)) {
-				$fields = array_merge($fields, $additional_fields);
+				foreach($additional_fields as $orig_column => $order){
+					$column = $this->parseColumnName($orig_column);
+					$order = trim($order);
+
+					$sql_chunks[] = $orig_column . ' ' . $order;
+				}
 			}
 
 			foreach ($array as $orig_column => $order) {
@@ -1066,12 +1101,65 @@ class Factory {
 
 			if (isset($sql_chunks)) {
 				$sql = implode(',', $sql_chunks);
+				dd($sql);
 				return ' order by ' . $sql;
 			}
 		}
 
 		return FALSE;
 	}
+*/
+
+	protected function getSortSQL($array, $strict = true, $additional_fields = null)
+	{
+		if (!is_array($array)) {
+			return false;
+		}
+
+		$array = $this->convertFlexArray($array);
+		$alt_order_options = [1 => 'asc', -1 => 'desc'];
+		$order_options = ['asc', 'desc'];
+		$rs = $this->getEmptyRecordSet();
+		$fields = $this->getRecordSetColumnList($rs);
+		$sql_chunks = [];
+
+		if (is_array($additional_fields)) {
+			foreach ($additional_fields as $orig_column => $order) {
+				$sql_chunks[] = $this->parseColumnName($orig_column) . ' ' . trim($order);
+			}
+		}
+
+		foreach ($array as $orig_column => $order) {
+			$orig_column = trim($orig_column);
+			$column = $this->parseColumnName($orig_column);
+			$order = trim($order);
+
+			if (is_numeric($order) && isset($alt_order_options[$order])) {
+				$order = $alt_order_options[$order];
+			}
+
+			if (
+				!$strict || (
+					is_array($fields) && (in_array($column, $fields) || in_array($orig_column, $fields)) &&
+					in_array(strtolower($order), $order_options)
+				)
+			) {
+				if (!$strict || (strpos($orig_column, ';') === false && strpos($order, ';') === false)) {
+					$sql_chunks[] = "$orig_column $order";
+				} else {
+					Debug::text("ERROR: Found ';' in SQL order string: $orig_column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
+				}
+			} else {
+				Debug::text("Invalid Sort Column/Order: $column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
+			}
+		}
+
+		if (!empty($sql_chunks)) {
+			return ' ORDER BY ' . implode(',', $sql_chunks);
+		}
+
+		return false;
+	}	
 
 
 	public function getColumnList() {
@@ -1303,7 +1391,7 @@ class Factory {
 				$this->setId($insert_id);
 				
 				// Return the ID of the newly created record
-				$retval = $insert_id;
+				$retval = (int)$insert_id;
 				$log_action = 10; // 'Add'
 				// echo 'check error: ';
 			} else {
@@ -1351,13 +1439,13 @@ class Factory {
 
 		if ( $this->getId() !== FALSE ) {
 			$ph = array(
-						'id' => $this->getId(),
+						':id' => $this->getId(),
 						);
 
-			$query = 'DELETE FROM '. $this->getTable() .' WHERE id = ?';
+			$query = 'DELETE FROM '. $this->getTable() .' WHERE id = :id';
 
 			try {
-				DB::select($query, $ph);
+				DB::delete($query, $ph);
 
 				if ( method_exists($this,'addLog') ) {
 					//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
@@ -1457,6 +1545,24 @@ class Factory {
 	public function getConfigVars(){
 		return $this->configVars;
 	}
+
+	static function convertToSeconds($time) {
+		// Validate the format of the time (hh:mm)
+		if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time)) {
+			throw new Exception("Invalid time format. Expected hh:mm (e.g., 05:00).");
+		}
+		
+		list($hours, $minutes) = explode(':', $time);
+		return ($hours * 3600) + ($minutes * 60);
+	}
+
+	static function convertToHoursAndMinutes($seconds) {
+		$hours = floor($seconds / 3600);  // Get the total hours
+		$minutes = floor(($seconds % 3600) / 60);  // Get the remaining minutes
+	
+		return sprintf("%02d:%02d", $hours, $minutes);  // Return in hh:mm format
+	}
+	
 	//===========================================================================
 	
 }

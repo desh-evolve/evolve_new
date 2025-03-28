@@ -7,6 +7,11 @@ use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTLog;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Policy\HolidayPolicyFactory;
+use App\Models\Policy\HolidayPolicyListFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Users\UserListFactory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -69,7 +74,7 @@ class HolidayFactory extends Factory {
 			return $this->holiday_policy_obj;
 		} else {
 
-			$hplf = new HolidayPolicyListFactory();
+			$hplf = new HolidayPolicyListFactory(); 
 			$hplf->getById( $this->getHolidayPolicyID() );
 
 			if ( $hplf->getRecordCount() == 1 ) {
@@ -118,7 +123,7 @@ class HolidayFactory extends Factory {
 	function isUniqueDateStamp($date_stamp) {
 		$ph = array(
 					':policy_id' => $this->getHolidayPolicyID(),
-					':date_stamp' => Carbon::parse( $date_stamp )->toDateString(),
+					':date_stamp' => date('Y-m-d', $date_stamp),
 					);
 
 		$query = 'select id from '. $this->getTable() .'
@@ -126,7 +131,8 @@ class HolidayFactory extends Factory {
 						AND date_stamp = :date_stamp
 						AND deleted=0';
 		$date_stamp_id = DB::select($query, $ph);
-        if ($date_stamp_id === FALSE ) {
+		
+        if (empty($date_stamp_id) || $date_stamp_id == FALSE ) {
             $date_stamp_id = 0;
         }else{
             $date_stamp_id = current(get_object_vars($date_stamp_id[0]));
@@ -134,7 +140,7 @@ class HolidayFactory extends Factory {
 
 		Debug::Arr($date_stamp_id,'Unique Date Stamp: '. $date_stamp, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $date_stamp_id === FALSE ) {
+		if (empty($date_stamp_id) || $date_stamp_id == FALSE ) {
 			return TRUE;
 		} else {
 			if ($date_stamp_id == $this->getId() ) {
@@ -167,9 +173,9 @@ class HolidayFactory extends Factory {
 														('Date is already in use by another Holiday'))
 
 			) {
-
+				
 			if 	( $epoch > 0 ) {
-				$this->data['date_stamp'] = $epoch;
+				$this->data['date_stamp'] = date('Y-m-d',$epoch);
 
 				return TRUE;
 			} else {
@@ -195,14 +201,15 @@ class HolidayFactory extends Factory {
 		//
 		//I think this can only happen with New Years, or other holidays that fall within two days of the new year.
 		//So exclude the first three days of the year to allow for weekend adjustments.
-		$ph = array(
-					':policy_id' => $this->getHolidayPolicyID(),
-					':name' => $name,
-					':start_date1' => Carbon::parse( TTDate::getBeginYearEpoch( $this->getDateStamp()->toDateString() )+(86400*3) ),
-					':end_date1' => Carbon::parse( TTDate::getEndYearEpoch( $this->getDateStamp()->toDateString() ) ),
-					':start_date2' => Carbon::parse( $this->getDateStamp()->toDateString()-(86400*15) ),
-					':end_date2' => Carbon::parse( $this->getDateStamp()->toDateString()+(86400*15) ),
-					);
+		
+		$ph = [
+			':policy_id'  => $this->getHolidayPolicyID(),
+			':name'       => $name,
+			':start_date1' => Carbon::createFromTimestamp(TTDate::getBeginYearEpoch($this->getDateStamp()) + (86400 * 3))->toDateString(),
+			':end_date1'   => Carbon::createFromTimestamp(TTDate::getEndYearEpoch($this->getDateStamp()))->toDateString(),
+			':start_date2' => Carbon::createFromTimestamp($this->getDateStamp() - (86400 * 15))->toDateString(),
+			':end_date2'   => Carbon::createFromTimestamp($this->getDateStamp() + (86400 * 15))->toDateString(),
+		];
 
 		$query = 'select id from '. $this->getTable() .'
 					where holiday_policy_id = :policy_id
@@ -222,14 +229,14 @@ class HolidayFactory extends Factory {
 						AND deleted=0';
 		$name_id = DB::select($query, $ph);
 
-		if ($name_id === FALSE ) {
+		if (empty($name_id) || $name_id == FALSE ) {
             $name_id = 0;
         }else{
             $name_id = current(get_object_vars($name_id[0]));
         }
 		Debug::Arr($name_id,'Unique Name: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $name_id === FALSE ) {
+		if ( empty($name_id) || $name_id == FALSE ) {
 			return TRUE;
 		} else {
 			if ($name_id == $this->getId() ) {
@@ -348,7 +355,7 @@ class HolidayFactory extends Factory {
 
 		//$this->getHolidayPolicyObject();
 
-		$ulf = new UserListFactory();
+		$ulf = new UserListFactory(); 
 		$user_obj = $ulf->getById($user_id)->getCurrent();
 
 		$slf = new ScheduleListFactory();

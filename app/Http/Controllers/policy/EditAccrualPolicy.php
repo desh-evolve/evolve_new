@@ -52,16 +52,6 @@ class EditAccrualPolicy extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Accrual Policy' : 'Add Accrual Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'ids',
-				'data',
-				'type_id',
-			) 
-		) );
-		
 		if ( isset($data['recalculate_start_date']) ) {
 			$data['recalculate_start_date'] = TTDate::parseDateTime( $data['recalculate_start_date'] );
 		}
@@ -96,7 +86,7 @@ class EditAccrualPolicy extends Controller
 		
 		$apf = new AccrualPolicyFactory();
 		$apmf = new AccrualPolicyMilestoneFactory();
-
+		$action = '';
 		if ( isset($id) ) {
 
 			$aplf = new AccrualPolicyListFactory();

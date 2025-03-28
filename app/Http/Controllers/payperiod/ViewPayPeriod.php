@@ -52,14 +52,6 @@ class ViewPayPeriod extends Controller
 
         $viewData['title'] = 'View Pay Period';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'pay_period_id',
-				'status_id'
-			) 
-		) );
-		
 		$ppf = new PayPeriodFactory(); 
 
 		if ( isset($pay_period_id) ) {

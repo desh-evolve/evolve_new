@@ -40,19 +40,6 @@ class SystemBackup extends Controller
         */
         
         $viewData['title'] = 'System Backup';
-
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'backup_data',
-                'upload_file',
-                'page',
-                'sort_column',
-                'sort_order',
-                'ids'
-            ) 
-        ) );
-        
         
         URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
             array (

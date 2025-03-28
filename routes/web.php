@@ -11,10 +11,13 @@ use App\Http\Controllers\company\EditCompany;
 use App\Http\Controllers\Company\EditCompanyNew;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
-
+use App\Http\Controllers\department\DepartmentList;
+use App\Http\Controllers\department\EditDepartment;
+use App\Http\Controllers\department\EditDepartmentBranchUser;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\pay_stub_amendment\PayStubAmendmentList;
 use App\Http\Controllers\policy\AbsencePolicyList;
 use App\Http\Controllers\policy\AccrualPolicyList;
 use App\Http\Controllers\policy\BreakPolicyList;
@@ -22,6 +25,7 @@ use App\Http\Controllers\policy\EditAbsencePolicy;
 use App\Http\Controllers\policy\EditAccrualPolicy;
 use App\Http\Controllers\policy\EditBreakPolicy;
 use App\Http\Controllers\policy\EditExceptionPolicyControl;
+use App\Http\Controllers\policy\EditHoliday;
 use App\Http\Controllers\policy\EditHolidayPolicy;
 use App\Http\Controllers\policy\EditMealPolicy;
 use App\Http\Controllers\policy\EditOverTimePolicy;
@@ -30,6 +34,7 @@ use App\Http\Controllers\policy\EditPremiumPolicy;
 use App\Http\Controllers\policy\EditRoundIntervalPolicy;
 use App\Http\Controllers\policy\EditSchedulePolicy;
 use App\Http\Controllers\policy\ExceptionPolicyControlList;
+use App\Http\Controllers\policy\HolidayList;
 use App\Http\Controllers\policy\HolidayPolicyList;
 use App\Http\Controllers\policy\MealPolicyList;
 use App\Http\Controllers\policy\OverTimePolicyList;
@@ -82,11 +87,25 @@ Route::get('/wage_group/add/{id?}', [EditWageGroup::class, 'index'])->name('wage
 Route::post('/wage_group/save/{id?}', [EditWageGroup::class, 'save'])->name('wage_group.save');
 Route::delete('/wage_group/delete/{id}', [WageGroupList::class, 'delete'])->name('wage_group.delete');
 
+// ==================== Department =====================================================================================
+Route::get('/department', [DepartmentList::class, 'index'])->name('department.index');
+
+Route::get('/department/add/{id?}', [EditDepartment::class, 'index'])->name('department.add');
+Route::post('/department/save/{id?}', [EditDepartment::class, 'submit'])->name('department.save');
+Route::delete('/department/delete/{id}', [DepartmentList::class, 'delete'])->name('department.delete');
+
+Route::get('/department_branch_user/{id?}', [EditDepartmentBranchUser::class, 'index'])->name('department_branch_user.index');
+Route::post('/department_branch_user/save/{id?}', [EditDepartmentBranchUser::class, 'submit'])->name('department_branch_user.save');
+
+// ===============================================================================================================================
+// Payroll
+// ===============================================================================================================================
 
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
 Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll.payroll_action');
 Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
 
+Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
 
 // ===============================================================================================================================
 // Progress Bar Functions
@@ -117,7 +136,70 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 // ===============================================================================================================================
 // Compnay Information
 // ===============================================================================================================================
-Route::get('/company', [EditCompany::class, 'index'])->name('company.index');
+Route::get('/company/company_information', [EditCompanyNew::class, 'index'])->name('company.index');
+<<<<<<< Updated upstream
+=======
 
-Route::get('/company/add/{id?}', [EditCompany::class, 'index'])->name('company.add');
-Route::post('/company/save/{id?}', [EditCompany::class, 'save'])->name('company.save');
+
+// ===============================================================================================================================
+// Policies
+// ===============================================================================================================================
+
+Route::get('/policy/policy_groups', [PolicyGroupList::class, 'index'])->name('policy.policy_groups');
+Route::get('/policy/policy_groups/add/{id?}', [EditPolicyGroup::class, 'index'])->name('policy.policy_groups.add');
+Route::post('/policy/policy_groups/submit/{id?}', [EditPolicyGroup::class, 'submit'])->name('policy.policy_groups.submit');
+Route::delete('/policy/policy_groups/delete/{id}', [PolicyGroupList::class, 'delete'])->name('policy.policy_groups.delete');
+
+Route::get('/policy/absence_policies', [AbsencePolicyList::class, 'index'])->name('policy.absence_policies');
+Route::get('/policy/absence_policies/add/{id?}', [EditAbsencePolicy::class, 'index'])->name('policy.absence_policies.add');
+Route::post('/policy/absence_policies/submit/{id?}', [EditAbsencePolicy::class, 'submit'])->name('policy.absence_policies.submit');
+Route::delete('/policy/absence_policies/delete/{id}', [AbsencePolicyList::class, 'delete'])->name('policy.absence_policies.delete');
+
+Route::get('/policy/accrual_policies', [AccrualPolicyList::class, 'index'])->name('policy.accrual_policies');
+Route::get('/policy/accrual_policies/add/{id?}', [EditAccrualPolicy::class, 'index'])->name('policy.accrual_policies.add');
+Route::post('/policy/accrual_policies/submit/{id?}', [EditAccrualPolicy::class, 'submit'])->name('policy.accrual_policies.submit');
+Route::delete('/policy/accrual_policies/delete/{id}', [AccrualPolicyList::class, 'delete'])->name('policy.accrual_policies.delete');
+
+Route::get('/policy/schedule_policies', [SchedulePolicyList::class, 'index'])->name('policy.schedule_policies');
+Route::get('/policy/schedule_policies/add/{id?}', [EditSchedulePolicy::class, 'index'])->name('policy.schedule_policies.add');
+Route::post('/policy/schedule_policies/submit/{id?}', [EditSchedulePolicy::class, 'submit'])->name('policy.schedule_policies.submit');
+Route::delete('/policy/schedule_policies/delete/{id}', [SchedulePolicyList::class, 'delete'])->name('policy.schedule_policies.delete');
+
+Route::get('/policy/rounding_policies', [RoundIntervalPolicyList::class, 'index'])->name('policy.rounding_policies');
+Route::get('/policy/rounding_policies/add/{id?}', [EditRoundIntervalPolicy::class, 'index'])->name('policy.rounding_policies.add');
+Route::post('/policy/rounding_policies/submit/{id?}', [EditRoundIntervalPolicy::class, 'submit'])->name('policy.rounding_policies.submit');
+Route::delete('/policy/rounding_policies/delete/{id}', [RoundIntervalPolicyList::class, 'delete'])->name('policy.rounding_policies.delete');
+
+Route::get('/policy/meal_policies', [MealPolicyList::class, 'index'])->name('policy.meal_policies');
+Route::get('/policy/meal_policies/add/{id?}', [EditMealPolicy::class, 'index'])->name('policy.meal_policies.add');
+Route::post('/policy/meal_policies/submit/{id?}', [EditMealPolicy::class, 'submit'])->name('policy.meal_policies.submit');
+Route::delete('/policy/meal_policies/delete/{id}', [MealPolicyList::class, 'delete'])->name('policy.meal_policies.delete');
+
+Route::get('/policy/break_policies', [BreakPolicyList::class, 'index'])->name('policy.break_policies');
+Route::get('/policy/break_policies/add/{id?}', [EditBreakPolicy::class, 'index'])->name('policy.break_policies.add');
+Route::post('/policy/break_policies/submit/{id?}', [EditBreakPolicy::class, 'submit'])->name('policy.break_policies.submit');
+Route::delete('/policy/break_policies/delete/{id}', [BreakPolicyList::class, 'delete'])->name('policy.break_policies.delete');
+
+Route::get('/policy/overtime_policies', [OverTimePolicyList::class, 'index'])->name('policy.overtime_policies');
+Route::get('/policy/overtime_policies/add/{id?}', [EditOverTimePolicy::class, 'index'])->name('policy.overtime_policies.add');
+Route::post('/policy/overtime_policies/submit/{id?}', [EditOverTimePolicy::class, 'submit'])->name('policy.overtime_policies.submit');
+Route::delete('/policy/overtime_policies/delete/{id}', [OverTimePolicyList::class, 'delete'])->name('policy.overtime_policies.delete');
+
+Route::get('/policy/premium_policies', [PremiumPolicyList::class, 'index'])->name('policy.premium_policies');
+Route::get('/policy/premium_policies/add/{id?}', [EditPremiumPolicy::class, 'index'])->name('policy.premium_policies.add');
+Route::post('/policy/premium_policies/submit/{id?}', [EditPremiumPolicy::class, 'submit'])->name('policy.premium_policies.submit');
+Route::delete('/policy/premium_policies/delete/{id}', [PremiumPolicyList::class, 'delete'])->name('policy.premium_policies.delete');
+
+Route::get('/policy/exception_policies', [ExceptionPolicyControlList::class, 'index'])->name('policy.exception_policies');
+Route::get('/policy/exception_policies/add/{id?}', [EditExceptionPolicyControl::class, 'index'])->name('policy.exception_policies.add');
+Route::post('/policy/exception_policies/submit/{id?}', [EditExceptionPolicyControl::class, 'submit'])->name('policy.exception_policies.submit');
+Route::delete('/policy/exception_policies/delete/{id}', [ExceptionPolicyControlList::class, 'delete'])->name('policy.exception_policies.delete');
+
+Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->name('policy.holiday_policies');
+Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'index'])->name('policy.holiday_policies.add');
+Route::post('/policy/holiday_policies/submit/{id?}', [EditHolidayPolicy::class, 'submit'])->name('policy.holiday_policies.submit');
+Route::delete('/policy/holiday_policies/delete/{id}', [HolidayPolicyList::class, 'delete'])->name('policy.holiday_policies.delete');
+
+
+// ===============================================================================================================================
+>>>>>>> Stashed changes

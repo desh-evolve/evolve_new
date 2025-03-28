@@ -51,14 +51,6 @@ class EditCompanyDeduction extends Controller
 
         $viewData['title'] = 'Edit Tax / Deduction';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-
 		if ( isset($data)) {
 			if ( $data['start_date'] != '' ) {
 				$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );

@@ -56,16 +56,6 @@ class ApprovedSupervisedBy extends Controller
 
         $viewData['title'] = 'Employee Leaves Supervisor Aprooval';
 
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data',
-                'filter_data'
-            ) 
-        ) );
-        
-        
         //$lrlf = new LeaveRequestListFactory();
         $msg = "";
         $lrlf = new LeaveRequestListFactory();
@@ -106,15 +96,6 @@ class ApprovedSupervisedBy extends Controller
     public function submit(){
         
         global $config_vars;
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data',
-                'filter_data'
-            ) 
-        ) );
-
 
         //$lrlf = new LeaveRequestListFactory();
         $msg = "";
@@ -721,15 +702,6 @@ class ApprovedSupervisedBy extends Controller
     public function rejected(){
         
         global $config_vars;
-        extract	(FormVariables::GetVariables(
-            array (
-                'action',
-                'id',
-                'data',
-                'filter_data'
-            ) 
-        ) );
-
 
         //$lrlf = new LeaveRequestListFactory();
         $msg = "";

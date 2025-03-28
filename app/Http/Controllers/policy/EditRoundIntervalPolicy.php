@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
+use App\Models\Core\Factory;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
 use App\Models\Core\Misc;
@@ -50,14 +51,6 @@ class EditRoundIntervalPolicy extends Controller
 		$viewData['title'] = isset($id) ? 'Edit Rounding Policy' : 'Add Rounding Policy';
 		$current_company = $this->currentCompany;
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data'
-			) 
-		) );
-		
 		if ( isset($data['interval'] ) ) {
 			$data['interval'] = TTDate::parseTimeUnit($data['interval']);
 			$data['grace'] = TTDate::parseTimeUnit($data['grace']);
@@ -92,7 +85,7 @@ class EditRoundIntervalPolicy extends Controller
 					'deleted_by' => $rip_obj->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			$data = array(
 							'interval' => 900,
 							'grace' => 0
@@ -121,8 +114,12 @@ class EditRoundIntervalPolicy extends Controller
 		$ripf->setName( $data['name'] );
 		$ripf->setPunchType( $data['punch_type_id'] );
 		$ripf->setRoundType( $data['round_type_id'] );
-		$ripf->setInterval( $data['interval'] );
-		$ripf->setGrace( $data['grace'] );
+		$interval = Factory::convertToSeconds($data['interval']);
+		$grace = Factory::convertToSeconds($data['grace']);
+
+		$ripf->setInterval( $interval );
+		$ripf->setGrace( $grace );
+		
 		if ( isset($data['strict'] ) ) {
 			$ripf->setStrict( TRUE );
 		} else {
@@ -132,7 +129,7 @@ class EditRoundIntervalPolicy extends Controller
 		if ( $ripf->isValid() ) {
 			$ripf->Save();
 
-			Redirect::Page( URLBuilder::getURL( NULL, 'RoundIntervalPolicyList') );
+			return redirect(URLBuilder::getURL( NULL, '/policy/rounding_policies'));
 
 		}
 

@@ -674,9 +674,9 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $rs->RecordCount() > 0 ) {
+		if ( count($rs) > 0 ) {
 			foreach( $rs as $row ) {
-				$retval[] = $row['user_id'];
+				$retval[] = $row->user_id;
 			}
 		}
 

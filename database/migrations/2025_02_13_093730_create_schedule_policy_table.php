@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('meal_policy_id')->nullable(); // Foreign key to `meal_policy` table
             $table->integer('over_time_policy_id')->nullable(); // Foreign key to `over_time_policy` table
             $table->integer('absence_policy_id')->nullable(); // Foreign key to `absence_policy` table
-            $table->integer('start_window'); // Start window
+            $table->integer('start_window')->nullable()->default(0); // Start window
             $table->integer('start_stop_window')->nullable(); // Start stop window (nullable)
             $table->integer('created_date')->nullable();
             $table->integer('created_by')->nullable();

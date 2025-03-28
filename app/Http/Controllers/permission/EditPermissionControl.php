@@ -51,17 +51,6 @@ class EditPermissionControl extends Controller
 
         $viewData['title'] = 'Edit Permission Group';
 
-		extract	(FormVariables::GetVariables(
-			array (
-				'action',
-				'id',
-				'data',
-				'group_id',
-				'old_data',
-				'src_user_id',
-			) 
-		) );
-		
 		$pcf = new PermissionControlFactory();
 
 		$pf = new PermissionFactory();
