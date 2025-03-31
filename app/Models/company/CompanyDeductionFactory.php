@@ -606,7 +606,7 @@ class CompanyDeductionFactory extends Factory {
 
 		Debug::Arr($id,'Unique Pay Stub Account: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $id === FALSE ) {
+		if ( empty($id) || $id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId() ) {
@@ -1767,7 +1767,7 @@ class CompanyDeductionFactory extends Factory {
 	function getIncludePayStubEntryAccount() {
 		$cache_id = 'include_pay_stub_entry-'. $this->getId();
 		$list = $this->getCache( $cache_id );
-		if ( $list === FALSE ) {
+		if ( empty($list) || $list === FALSE ) {
 			//Debug::text('Caching Include IDs: '. $this->getId(), __FILE__, __LINE__, __METHOD__, 10);
 			$cdpsealf = new CompanyDeductionPayStubEntryAccountListFactory();
 			$cdpsealf->getByCompanyDeductionIdAndTypeId( $this->getId(), 10 );
@@ -1869,7 +1869,7 @@ class CompanyDeductionFactory extends Factory {
 	function getExcludePayStubEntryAccount() {
 		$cache_id = 'exclude_pay_stub_entry-'. $this->getId();
 		$list = $this->getCache( $cache_id );
-		if ( $list === FALSE ) {
+		if ( empty($list) || $list === FALSE ) {
 			//Debug::text('Caching Exclude IDs: '. $this->getId(), __FILE__, __LINE__, __METHOD__, 10);
 			$cdpsealf = new CompanyDeductionPayStubEntryAccountListFactory();
 			$cdpsealf->getByCompanyDeductionIdAndTypeId( $this->getId(), 20 );

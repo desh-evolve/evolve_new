@@ -206,14 +206,14 @@ class PayStubEntryAccountFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND type_id = :type_id AND name = :name AND deleted=0';
 		$id = DB::select($query, $ph);
 
-		if ($id === FALSE ) {
+		if (empty($id) || $id === FALSE ) {
             $id = 0;
         }else{
             $id = current(get_object_vars($id[0]));
         }
 		Debug::Arr($id,'Unique Pay Stub Account: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $id === FALSE ) {
+		if ( empty($id) || $id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId() ) {

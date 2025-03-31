@@ -133,7 +133,7 @@ class BranchBankAccountFactory extends Factory {
 	
 			$id = DB::select($query, $ph);
 	
-			if ($id === FALSE ) {
+			if (empty($id) || $id === FALSE ) {
 				$id = 0;
 			}else{
 				$id = current(get_object_vars($id[0]));
@@ -141,7 +141,7 @@ class BranchBankAccountFactory extends Factory {
 	
 			Debug::Arr($id,'Unique ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 	
-			if ( $id === FALSE ) {
+			if (empty($id) || $id === FALSE ) {
 				return TRUE;
 			} else {
 				if ($id == $this->getId() ) {

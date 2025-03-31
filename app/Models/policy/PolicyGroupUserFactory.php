@@ -70,7 +70,7 @@ class PolicyGroupUserFactory extends Factory {
         }
 		//Debug::Arr($user_id,'Unique User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_id === FALSE ) {
+		if ( empty($user_id) || $user_id === FALSE ) {
 			return TRUE;
 		}
 

@@ -408,7 +408,7 @@ class CurrencyFactory extends Factory {
 		$name_id = !empty($result) ? $result[0]->id : null;
 		Debug::Arr($name_id,'Unique Name: '. $name, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $name_id === FALSE ) {
+		if ( empty($name_id) || $name_id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($name_id == $this->getId() ) {
@@ -602,7 +602,7 @@ class CurrencyFactory extends Factory {
 		$id = !empty($result) ? $result[0]->id : null;
 		Debug::Arr($id,'Unique Currency Default: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $id === FALSE ) {
+		if ( empty($id) || $id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId() ) {
@@ -647,7 +647,7 @@ class CurrencyFactory extends Factory {
 		$id = !empty($result) ? $result[0]->id : null;
 		Debug::Arr($id,'Unique Currency Base: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $id === FALSE ) {
+		if ( empty($id) || $id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId() ) {

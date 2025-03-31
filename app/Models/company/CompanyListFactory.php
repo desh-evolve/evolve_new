@@ -49,7 +49,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 		}
 		$this->rs = $this->getCache($id);
 
-		if ($this->rs === FALSE) {
+		if (empty($this->rs) || $this->rs === FALSE) {
 			$query = '
 				SELECT *
 				FROM ' . $this->getTable() . '

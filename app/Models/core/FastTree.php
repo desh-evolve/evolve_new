@@ -50,7 +50,7 @@ class FastTree {
 	function _setupTree() {
 		//Add the root node if its missing.
 		$node_data = $this->getNode( 0 );
-		if ( $node_data === FALSE ) {
+		if ( empty($node_data) || $node_data === FALSE ) {
 			Debug::Text(' Initiating Tree with Root object: ' , __FILE__, __LINE__, __METHOD__,10);
 			$this->add( 0, -1 );
 
@@ -71,7 +71,7 @@ class FastTree {
 		// $root_id = $this->db->GetOne($query, $ph);
         $root_id = DB::select($query, $ph);
 
-        if ($root_id === FALSE ) {
+        if (empty($root_id) || $root_id === FALSE ) {
             $root_id = 0;
         }else{
             $root_id = current(get_object_vars($root_id[0]));
@@ -118,7 +118,7 @@ class FastTree {
 		//Debug::Text(' Object ID: '. $object_id, __FILE__, __LINE__, __METHOD__,10);
 
 		$data = $this->getNode( $object_id );
-		if ($data === FALSE ) {
+		if (empty($data) || $data === FALSE ) {
 			return FALSE;
 		}
 		return $data['level'];
@@ -128,7 +128,7 @@ class FastTree {
 		//Debug::Text(' Object ID: '. $object_id, __FILE__, __LINE__, __METHOD__,10);
 
 		$data = $this->getNode( $object_id );
-		if ($data === FALSE ) {
+		if (empty($data) || $data === FALSE ) {
 			return FALSE;
 		}
 		return $data['right_id'];
@@ -138,7 +138,7 @@ class FastTree {
 		//Debug::Text(' Object ID: '. $object_id, __FILE__, __LINE__, __METHOD__,10);
 
 		$data = $this->getNode( $object_id );
-		if ($data === FALSE ) {
+		if (empty($data) || $data === FALSE ) {
 			return FALSE;
 		}
 		return $data['left_id'];
@@ -148,7 +148,7 @@ class FastTree {
 		//Debug::Text(' Object ID: '. $object_id, __FILE__, __LINE__, __METHOD__,10);
 
 		$data = $this->getNode( $object_id );
-		if ($data === FALSE ) {
+		if (empty($data) || $data === FALSE ) {
 			return FALSE;
 		}
 		return $data['parent_id'];
@@ -163,7 +163,7 @@ class FastTree {
         DB::statement('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE'); // Set the isolation level to SERIALIZABLE
 
 
-		if ( $object_id === FALSE ) {
+		if ( empty($object_id) || $object_id === FALSE ) {
 			Debug::Text(' Object ID not specified, using root: ', __FILE__, __LINE__, __METHOD__,10);
 			$object_id = $this->getRootId();
 			$left_id = 1;
@@ -172,7 +172,7 @@ class FastTree {
 			$left_id = $this->getLeftId( $object_id );
 		}
 
-		if ( $left_id === FALSE ) {
+		if ( empty($left_id) || $left_id === FALSE ) {
 			Debug::Text(' Error getting left id: ', __FILE__, __LINE__, __METHOD__,10);
 			return FALSE;
 		}
@@ -180,7 +180,7 @@ class FastTree {
 		Debug::Text(' aObject ID: '. $object_id .' - Left ID: '. $left_id , __FILE__, __LINE__, __METHOD__,10);
 		$rebuilt = $this->_rebuildTree( $object_id, $left_id );
 
-		if ($rebuilt === FALSE) {
+		if (empty($rebuilt) || $rebuilt === FALSE) {
 			Debug::Text(' Error rebuilding tree: ', __FILE__, __LINE__, __METHOD__,10);
 			// $this->db->RollBackTrans();
             DB::rollBack();
@@ -227,7 +227,7 @@ class FastTree {
 			Debug::Text(' Right ID: '. $right_id , __FILE__, __LINE__, __METHOD__,10);
 			$right_id = $this->_rebuildTree($row['object_id'], $right_id);
 
-			if ( $right_id === FALSE ) {
+			if ( empty($right_id) || $right_id === FALSE ) {
 				Debug::Text(' Right was false: ', __FILE__, __LINE__, __METHOD__,10);
 				return FALSE;
 			}
@@ -303,7 +303,7 @@ class FastTree {
 		// $child_id = $this->db->GetOne($query, $ph);
         $child_id = DB::select($query, $ph);
 
-        if ($child_id === FALSE ) {
+        if (empty($child_id) || $child_id === FALSE ) {
             $child_id = 0;
         }else{
             $child_id = current(get_object_vars($child_id[0]));
@@ -330,7 +330,7 @@ class FastTree {
 
 		$node_data = $this->getNode( $object_id );
 
-		if ( $node_data === FALSE ) {
+		if ( empty($node_data) || $node_data === FALSE ) {
 			Debug::Text(' Getting node data of object id failed.' , __FILE__, __LINE__, __METHOD__,10);
 			return FALSE;
 		}
@@ -551,7 +551,7 @@ class FastTree {
 			$query = 'SELECT max(right_id) as right_id FROM '. $this->table .' WHERE tree_id = :tree_id';
 			// $right_id = $this->db->GetOne($query, $ph) + 1000;
             $right_id = DB::Select($query, $ph);
-            if ($right_id === FALSE ) {
+            if (empty($right_id) || $right_id === FALSE ) {
                     $right_id = 0;
             }else{
                 $right_id = current(get_object_vars($right_id[0])) + 1000;
@@ -897,7 +897,7 @@ class FastTree {
 			array_unshift($nodes, $root_node);
 		}
 
-		if ( $nodes === FALSE ) {
+		if ( empty($nodes) || $nodes === FALSE ) {
 			return FALSE;
 		}
 

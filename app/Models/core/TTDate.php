@@ -1448,7 +1448,7 @@ class TTDate {
 		return $start_days;
 	}
 
-	function getNearestWeekDay( $epoch, $type = 0, $exclude_epochs = array() ) {
+	static function getNearestWeekDay( $epoch, $type = 0, $exclude_epochs = array() ) {
 		Debug::Text('Epoch: '. TTDate::getDate('DATE+TIME', $epoch ) .' Type: '. $type, __FILE__, __LINE__, __METHOD__, 10);
 
 		while( TTDate::isWeekDay($epoch) == FALSE OR in_array( TTDate::getBeginDayEpoch( $epoch ), $exclude_epochs) ) {

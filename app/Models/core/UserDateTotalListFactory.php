@@ -737,7 +737,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				';
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -767,7 +767,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -797,7 +797,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -832,7 +832,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -862,13 +862,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
@@ -903,13 +903,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
@@ -960,13 +960,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				';
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		//Debug::text('Total: '. $total .' Week Start: '. TTDate::getDate('DATE+TIME', $week_start_epoch ) .' End: '. TTDate::getDate('DATE+TIME', $epoch ), __FILE__, __LINE__, __METHOD__, 10);
@@ -1225,13 +1225,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
@@ -1275,13 +1275,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
@@ -1332,13 +1332,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
@@ -1383,13 +1383,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
@@ -1448,13 +1448,13 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);
@@ -1492,7 +1492,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -1533,7 +1533,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -1574,7 +1574,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -1614,7 +1614,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -1696,7 +1696,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -1739,7 +1739,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
@@ -1782,7 +1782,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));

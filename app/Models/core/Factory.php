@@ -1287,7 +1287,7 @@ class Factory {
 		$query = $this->db->GetUpdateSQL($rs, $this->data);
 
 		//No updates are fine. We still want to run postsave() etc...
-		if ($query === FALSE) {
+		if (empty($query) || $query === FALSE) {
 			$query = TRUE;
 		} else {
 			Debug::text('Data changed, set updated date: ', __FILE__, __LINE__, __METHOD__, 9);

@@ -353,7 +353,7 @@ class StationFactory extends Factory {
 
 		Debug::Arr($id,'Unique Station: '. $station, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $id === FALSE ) {
+		if ( empty($id) || $id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId() ) {

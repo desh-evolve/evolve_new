@@ -642,7 +642,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 
 		$total = $this->db->GetOne($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total === FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);

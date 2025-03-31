@@ -224,6 +224,11 @@
                                         class="nav-link {{ request()->routeIs('payroll.recurring_pay_stub_amendment') ? 'active' : '' }}">Recurring PS Amendments
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.pay_period_schedules') }}" 
+                                        class="nav-link {{ request()->routeIs('payroll.pay_period_schedules') ? 'active' : '' }}">Pay Period Schedules
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Pay Period Schedules</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Pay Stub Accounts</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Taxes/Deductions/Earnings</a></li>

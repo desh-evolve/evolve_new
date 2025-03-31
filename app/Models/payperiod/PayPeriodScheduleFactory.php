@@ -265,7 +265,8 @@ class PayPeriodScheduleFactory extends Factory {
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND name = :name AND deleted=0';
 		$pay_period_schedule_id = DB::select($query, $ph);
-        if ($pay_period_schedule_id === FALSE ) {
+		
+        if (empty($pay_period_schedule_id) || $pay_period_schedule_id == FALSE ) {
             $pay_period_schedule_id = 0;
         }else{
             $pay_period_schedule_id = current(get_object_vars($pay_period_schedule_id[0]));
@@ -273,7 +274,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		Debug::Arr($pay_period_schedule_id,'Unique Pay Period Schedule ID: '. $pay_period_schedule_id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $pay_period_schedule_id === FALSE ) {
+		if ( empty($pay_period_schedule_id) || $pay_period_schedule_id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($pay_period_schedule_id == $this->getId() ) {
@@ -1293,7 +1294,7 @@ class PayPeriodScheduleFactory extends Factory {
 
 		$retval = $this->getCache($id);
 
-		if ( $retval === FALSE ) {
+		if ( empty($retval) || $retval === FALSE ) {
 			//FIXME: I'm sure there is a quicker way to do this.
 			$next_transaction_date = 0;
 			$next_end_date = $end_date_epoch;

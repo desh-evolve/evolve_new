@@ -1736,7 +1736,7 @@ class UserFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where user_name = :user_name AND deleted=0';
 		$user_name_id = DB::select($query, $ph);
 
-        if ($user_name_id === FALSE ) {
+        if (empty($user_name_id) || $user_name_id== FALSE ) {
             $user_name_id = 0;
         }else{
             $user_name_id = current(get_object_vars($user_name_id[0]));
@@ -1744,7 +1744,7 @@ class UserFactory extends Factory {
 
 		Debug::Arr($user_name_id,'Unique User Name: '. $user_name, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_name_id === FALSE ) {
+		if ( empty($user_name_id) || $user_name_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($user_name_id == $this->getId() ) {
@@ -1979,7 +1979,7 @@ class UserFactory extends Factory {
 
 		$query = 'select id from '. $this->getTable() .' where phone_id = :phone_id and deleted = 0';
 		$phone_id = DB::select($query, $ph);
-        if ($phone_id === FALSE ) {
+        if (empty($phone_id) || $phone_id== FALSE ) {
             $phone_id = 0;
         }else{
             $phone_id = current(get_object_vars($phone_id[0]));
@@ -1987,7 +1987,7 @@ class UserFactory extends Factory {
 
 		Debug::Arr($phone_id,'Unique Phone ID:', __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $phone_id === FALSE ) {
+		if ( empty($phone_id) || $phone_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($phone_id == $this->getId() ) {
@@ -2105,7 +2105,7 @@ class UserFactory extends Factory {
 
 		$query = 'select id from '. $this->getTable() .' where ibutton_id = :id and deleted = 0';
 		$ibutton_id = DB::select($query, $ph);
-        if ($ibutton_id === FALSE ) {
+        if (empty($ibutton_id) || $ibutton_id== FALSE ) {
             $ibutton_id = 0;
         }else{
             $ibutton_id = current(get_object_vars($ibutton_id[0]));
@@ -2113,7 +2113,7 @@ class UserFactory extends Factory {
 
 		Debug::Arr($ibutton_id,'Unique iButton ID:', __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $ibutton_id === FALSE ) {
+		if ( empty($ibutton_id) || $ibutton_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($ibutton_id == $this->getId() ) {
@@ -2405,14 +2405,14 @@ class UserFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where employee_number = :manual_id AND company_id = :company_id AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
-		if ($user_id === FALSE ) {
+		if (empty($user_id) || $user_id== FALSE ) {
             $user_id = 0;
         }else{
             $user_id = current(get_object_vars($user_id[0]));
         }
 		Debug::Arr($user_id,'Unique Employee Number: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_id === FALSE ) {
+		if ( empty($user_id) || $user_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($user_id == $this->getId() ) {
@@ -2594,14 +2594,14 @@ class UserFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id  AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
-		if ($user_id === FALSE ) {
+		if (empty($user_id) || $user_id== FALSE ) {
             $user_id = 0;
         }else{
             $user_id = current(get_object_vars($user_id[0]));
         }
 		Debug::Arr($user_id,'Unique Employee Number Only: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_id === FALSE ) {
+		if ( empty($user_id) || $user_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($user_id == $this->getId() ) {
@@ -2638,14 +2638,14 @@ class UserFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id  AND default_branch_id = ? AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
-		if ($user_id === FALSE ) {
+		if (empty($user_id) || $user_id== FALSE ) {
             $user_id = 0;
         }else{
             $user_id = current(get_object_vars($user_id[0]));
         }
 		Debug::Arr($user_id,'Unique Employee Number Only: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_id === FALSE ) {
+		if ( empty($user_id) || $user_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($user_id == $this->getId() ) {
@@ -2731,14 +2731,14 @@ class UserFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where punch_machine_user_id = :punch_machine_user_id AND company_id = :company_id AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
-		if ($user_id === FALSE ) {
+		if (empty($user_id) || $user_id== FALSE ) {
             $user_id = 0;
         }else{
             $user_id = current(get_object_vars($user_id[0]));
         }
 		Debug::Arr($user_id,'Unique punch_machine_user_id : '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_id === FALSE ) {
+		if ( empty($user_id) || $user_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($user_id == $this->getId() ) {
@@ -2766,14 +2766,14 @@ class UserFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where rf_id = :rf_id AND company_id = :company_id AND deleted = 0';
 		$user_id = DB::select($query, $ph);
 
-		if ($user_id === FALSE ) {
+		if (empty($user_id) || $user_id== FALSE ) {
             $user_id = 0;
         }else{
             $user_id = current(get_object_vars($user_id[0]));
         }
 		Debug::Arr($user_id,'Unique RFID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_id === FALSE ) {
+		if ( empty($user_id) || $user_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($user_id == $this->getId() ) {

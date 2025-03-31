@@ -18,6 +18,7 @@ use App\Models\PayPeriod\PayPeriodFactory;
 use App\Models\PayPeriod\PayPeriodListFactory;
 use App\Models\PayPeriod\PayPeriodScheduleListFactory;
 use App\Models\Users\UserListFactory;
+use DateTime;
 use Illuminate\Support\Facades\View;
 
 class EditPayPeriod extends Controller
@@ -40,7 +41,7 @@ class EditPayPeriod extends Controller
 
     }
 
-    public function index() {
+    public function index($pay_period_schedule_id, $id = null) {
         /*
         if ( !$permission->Check('pay_period_schedule','enabled')
 				OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
@@ -48,7 +49,8 @@ class EditPayPeriod extends Controller
 		}
         */
 
-        $viewData['title'] = 'Edit Pay Period';
+        $viewData['title'] = !empty($id) ? 'Edit Pay Period' : 'Add Pay Period';
+		$current_company = $this->currentCompany;
 
 		if ( isset($data) ) {
 			if ( isset($data['start_date']) ) {
@@ -78,17 +80,17 @@ class EditPayPeriod extends Controller
 			foreach ($pplf as $pp_obj) {
 				$pplf->data = (array)$pp_obj;
 				$pp_obj = $pplf;
-
+//check here - date problem
 				$data = array(
 					'id' => $pp_obj->getId(),
 					'company_id' => $pp_obj->getCompany(),
 					'pay_period_schedule_id' => $pp_obj->getPayPeriodSchedule(),
 					'pay_period_schedule_type_id' => $pp_obj->getPayPeriodScheduleObject()->getType(),
-					'start_date' => $pp_obj->getStartDate(),
-					'end_date' => $pp_obj->getEndDate(),
-					'transaction_date' => $pp_obj->getTransactionDate(),
-					'advance_end_date' => $pp_obj->getAdvanceEndDate(),
-					'advance_transaction_date' => $pp_obj->getAdvanceTransactionDate(),
+					'start_date' => (new DateTime())->setTimestamp($pp_obj->getStartDate())->format('Y-m-d\TH:i'),
+					'end_date' => date('Y-m-d\TH:i', $pp_obj->getEndDate()),
+					'transaction_date' => date('Y-m-d\TH:i', $pp_obj->getTransactionDate()),
+					'advance_end_date' => date('Y-m-d\TH:i', $pp_obj->getAdvanceEndDate()),
+					'advance_transaction_date' => date('Y-m-d\TH:i', $pp_obj->getAdvanceTransactionDate()),
 					'deleted' => $pp_obj->getDeleted(),
 					'created_date' => $pp_obj->getCreatedDate(),
 					'created_by' => $pp_obj->getCreatedBy(),
@@ -116,8 +118,8 @@ class EditPayPeriod extends Controller
 						$pplf->data = (array)$pp_obj;
 						$pp_obj = $pplf;
 						
-						$data['start_date'] = $pp_obj->getEndDate()+1;
-						$data['end_date'] = $pp_obj->getEndDate()+86400;
+						$data['start_date'] = date('Y-m-d', $pp_obj->getEndDate()+1);
+						$data['end_date'] = date('Y-m-d', $pp_obj->getEndDate()+86400);
 					}
 				}
 			}
@@ -150,9 +152,10 @@ class EditPayPeriod extends Controller
 		if ( is_object( $ppf->getPayPeriodScheduleObject() ) ) {
 			$ppf->getPayPeriodScheduleObject()->setPayPeriodTimeZone();
 		}
-		$ppf->setStartDate($data['start_date']);
-		$ppf->setEndDate($data['end_date']+59);
-		$ppf->setTransactionDate($data['transaction_date']+59);
+		
+		$ppf->setStartDate($data['start_date']);// date+time
+		$ppf->setEndDate($data['end_date']+59); // date+time
+		$ppf->setTransactionDate($data['transaction_date']+59);// date+time - 59 seconds added to the time 23:59 -> 23:59:59 (H:i => H:i:s)
 
 		if ( isset($data['advance_end_date']) ) {
 			$ppf->setAdvanceEndDate($data['advance_end_date']);
@@ -167,7 +170,7 @@ class EditPayPeriod extends Controller
 			$ppf->Save();
 
 			$ppf->CommitTransaction();
-			Redirect::Page( URLBuilder::getURL( array('id' => $data['pay_period_schedule_id'] ), 'PayPeriodList.php') );
+			return redirect(URLBuilder::getURL( array('id' => $data['pay_period_schedule_id'] ), '/payroll/pay_periods'));
 		}
 
 		$ppf->FailTransaction();

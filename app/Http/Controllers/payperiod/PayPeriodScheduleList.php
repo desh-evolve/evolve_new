@@ -18,7 +18,7 @@ use App\Models\PayPeriod\PayPeriodScheduleListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
-class CurrencyList extends Controller
+class PayPeriodScheduleList extends Controller
 {
     protected $permission;
     protected $currentUser;
@@ -47,20 +47,10 @@ class CurrencyList extends Controller
         */
 
         $viewData['title'] = 'Pay Period Schedule List';
-
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);		
+		$current_company = $this->currentCompany;
 
 		$ppslf = new PayPeriodScheduleListFactory();
-
-		$ppslf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, array($sort_column => $sort_order) );
-
-		$pager = new Pager($ppslf);
+		$ppslf->getByCompanyId($current_company->getId());
 
 		foreach ($ppslf->rs as $pay_period_schedule) {
 			$ppslf->data = (array)$pay_period_schedule;
@@ -85,37 +75,28 @@ class CurrencyList extends Controller
 		}
 
 		$viewData['pay_period_schedules'] = $pay_period_schedules;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
 
         return view('payperiod/PayPeriodScheduleList', $viewData);
 
     }
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL(NULL, 'EditPayPeriodSchedule.php', FALSE) );
-	}
-
-	public function delete(){
+	public function delete($id){
 		$current_company = $this->currentCompany;
 
 		$delete = TRUE;
 
 		$ppslf = new PayPeriodScheduleListFactory();
 
-		foreach ($ids as $id) {
-			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($ppslf->rs as $pay_period_schedule) {
-				$ppslf->data = (array)$pay_period_schedule;
-				$pay_period_schedule = $ppslf;
-				
-				$pay_period_schedule->setDeleted($delete);
-				$pay_period_schedule->Save();
-			}
+		$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
+		foreach ($ppslf->rs as $pay_period_schedule) {
+			$ppslf->data = (array)$pay_period_schedule;
+			$pay_period_schedule = $ppslf;
+			
+			$pay_period_schedule->setDeleted($delete);
+			$pay_period_schedule->Save();
 		}
 
-		Redirect::Page( URLBuilder::getURL(NULL, 'PayPeriodScheduleList.php') );
+		return redirect(URLBuilder::getURL(NULL, '/payroll/pay_period_schedules'));
 	}
 }
 

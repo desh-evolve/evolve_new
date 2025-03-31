@@ -12,7 +12,7 @@ class Permission {
 		$cache_id = 'permission_all'.$user_id.$company_id;
 		$perm_arr = $plf->getCache($cache_id);
 		//Debug::Arr($perm_arr, 'Cached Perm Arr:', __FILE__, __LINE__, __METHOD__,9);
-		if ( $perm_arr === FALSE ) {
+		if ( empty($perm_arr) || $perm_arr === FALSE ) {
 			$plf->getAllPermissionsByCompanyIdAndUserId( $company_id, $user_id );
 			if ( $plf->getRecordCount() > 0 ) {
 				//Debug::Text('Found Permissions in DB!', __FILE__, __LINE__, __METHOD__,9);

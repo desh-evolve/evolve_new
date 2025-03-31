@@ -39,7 +39,7 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 			$this->rs = $this->getCache($id);
 		}
 
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 
 			$ph = array();
 
@@ -72,7 +72,7 @@ class UserPreferenceListFactory extends UserPreferenceFactory implements Iterato
 			$this->rs = $this->getCache($id);
 		}
 
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 
 			$ph = array();
 

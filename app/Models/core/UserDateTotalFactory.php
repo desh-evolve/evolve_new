@@ -2335,7 +2335,7 @@ class UserDateTotalFactory extends Factory {
 
         $profiler->startTimer('UserDateTotal::calcPremiumPolicyTotalTime() - Part 1');
 
-        if ($daily_total_time === FALSE) {
+        if (empty($daily_total_time) || $daily_total_time === FALSE) {
             $daily_total_time = $this->getDailyTotalTime();
         }
 

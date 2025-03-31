@@ -18,9 +18,6 @@ use App\Models\Users\UserListFactory;
 class RecurringPayStubAmendmentFactory extends Factory {
 	protected $table = 'recurring_ps_amendment';
 	protected $pk_sequence_name = 'recurring_ps_amendment_id_seq'; //PK Sequence name
-/*
-*/
-
 
 	function _getFactoryOptions( $name ) {
 
@@ -415,7 +412,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 	}
 	function setPayStubEntryNameId($id) {
 		$id = trim($id);
-
+		
 		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getById( $id );
 
@@ -762,6 +759,7 @@ class RecurringPayStubAmendmentFactory extends Factory {
 		$this->StartTransaction();
 
 		$tmp_user_ids = $this->getUser();
+		
 		if ( $tmp_user_ids[0] == -1) {
 			$ulf->getByCompanyIdAndStatus( $this->getCompany(), 10 );
 			foreach($ulf->rs as $user_obj) {

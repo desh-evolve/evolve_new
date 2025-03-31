@@ -101,7 +101,7 @@ class WageGroupFactory extends Factory
 		$name_id = !empty($result) ? $result[0]->id : null;
 		Debug::Arr($name_id, 'Unique Name: ' . $name, __FILE__, __LINE__, __METHOD__, 10);
 
-		// if ($name_id === FALSE) {
+		// if (empty($name_id) || $name_id === FALSE) {
 		// 	return TRUE;
 		// } else {
 		// 	if ($name_id == $this->getId()) {

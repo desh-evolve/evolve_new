@@ -40,15 +40,16 @@ class EditRecurringPayStubAmendment extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
-        if ( !$permission->Check('pay_stub_amendment','enabled')
-				OR !( $permission->Check('pay_stub_amendment','edit') OR $permission->Check('pay_stub_amendment','edit_own') ) ) {
+        if ( !$permission->Check('recurring_pay_stub_amendment','enabled')
+				OR !( $permission->Check('recurring_pay_stub_amendment','edit') OR $permission->Check('recurring_pay_stub_amendment','edit_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
 
         $viewData['title'] = 'Edit Recurring Pay Stub Amendment';
+		$current_company = $this->currentCompany;
 
 		if ( isset($pay_stub_amendment_data) ) {
 			if ( $pay_stub_amendment_data['start_date'] != '' ) {
@@ -68,7 +69,9 @@ class EditRecurringPayStubAmendment extends Controller
 			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
 			$rpsalf->GetById($id);
 
-			foreach ($rpsalf as $recurring_pay_stub_amendment) {
+			foreach ($rpsalf->rs as $recurring_pay_stub_amendment) {
+				$rpsalf->data = (array)$recurring_pay_stub_amendment;
+				$recurring_pay_stub_amendment = $rpsalf;
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				//$user_id = $recurring_pay_stub_amendment->getUser();
@@ -78,54 +81,54 @@ class EditRecurringPayStubAmendment extends Controller
 				}
 
 				$pay_stub_amendment_data = array(
-									'id' => $recurring_pay_stub_amendment->getId(),
-									'company_id' => $recurring_pay_stub_amendment->getCompany(),
+					'id' => $recurring_pay_stub_amendment->getId(),
+					'company_id' => $recurring_pay_stub_amendment->getCompany(),
 
-									'status_id'	=> $recurring_pay_stub_amendment->getStatus(),
+					'status_id'	=> $recurring_pay_stub_amendment->getStatus(),
 
-									'name' => $recurring_pay_stub_amendment->getName(),
-									'description' => $recurring_pay_stub_amendment->getDescription(),
+					'name' => $recurring_pay_stub_amendment->getName(),
+					'description' => $recurring_pay_stub_amendment->getDescription(),
 
-									'start_date' => $recurring_pay_stub_amendment->getStartDate(),
-									'end_date' => $recurring_pay_stub_amendment->getEndDate(),
-									'frequency_id' => $recurring_pay_stub_amendment->getFrequency(),
+					'start_date' => date('Y-m-d', $recurring_pay_stub_amendment->getStartDate()),
+					'end_date' => date('Y-m-d', $recurring_pay_stub_amendment->getEndDate()),
+					'frequency_id' => $recurring_pay_stub_amendment->getFrequency(),
 
-									'user_ids' => $recurring_pay_stub_amendment->getUser(),
+					'user_ids' => $recurring_pay_stub_amendment->getUser(),
 
-									'type_id' => $recurring_pay_stub_amendment->getType(),
-									'pay_stub_entry_name_id' => $recurring_pay_stub_amendment->getPayStubEntryNameId(),
+					'type_id' => $recurring_pay_stub_amendment->getType(),
+					'pay_stub_entry_name_id' => $recurring_pay_stub_amendment->getPayStubEntryNameId(),
 
-									'amount_type_id' => $amount_type_id,
+					'amount_type_id' => $amount_type_id,
 
-									'rate' => $recurring_pay_stub_amendment->getRate(),
-									'units' => $recurring_pay_stub_amendment->getUnits(),
-									'amount' => $recurring_pay_stub_amendment->getAmount(),
+					'rate' => $recurring_pay_stub_amendment->getRate(),
+					'units' => $recurring_pay_stub_amendment->getUnits(),
+					'amount' => $recurring_pay_stub_amendment->getAmount(),
 
-									'percent_amount' => $recurring_pay_stub_amendment->getPercentAmount(),
-									'percent_amount_entry_name_id' => $recurring_pay_stub_amendment->getPercentAmountEntryNameId(),
+					'percent_amount' => $recurring_pay_stub_amendment->getPercentAmount(),
+					'percent_amount_entry_name_id' => $recurring_pay_stub_amendment->getPercentAmountEntryNameId(),
 
-									'ps_amendment_description' => $recurring_pay_stub_amendment->getPayStubAmendmentDescription(),
+					'ps_amendment_description' => $recurring_pay_stub_amendment->getPayStubAmendmentDescription(),
 
-									'created_date' => $recurring_pay_stub_amendment->getCreatedDate(),
-									'created_by' => $recurring_pay_stub_amendment->getCreatedBy(),
-									'updated_date' => $recurring_pay_stub_amendment->getUpdatedDate(),
-									'updated_by' => $recurring_pay_stub_amendment->getUpdatedBy(),
-									'deleted_date' => $recurring_pay_stub_amendment->getDeletedDate(),
-									'deleted_by' => $recurring_pay_stub_amendment->getDeletedBy()
-								);
+					'created_date' => $recurring_pay_stub_amendment->getCreatedDate(),
+					'created_by' => $recurring_pay_stub_amendment->getCreatedBy(),
+					'updated_date' => $recurring_pay_stub_amendment->getUpdatedDate(),
+					'updated_by' => $recurring_pay_stub_amendment->getUpdatedBy(),
+					'deleted_date' => $recurring_pay_stub_amendment->getDeletedDate(),
+					'deleted_by' => $recurring_pay_stub_amendment->getDeletedBy()
+				);
 			}
 		} else {
-			if ( $pay_stub_amendment_data['start_date'] == '' ) {
-				$pay_stub_amendment_data['start_date'] = TTDate::getTime();
+			if ( empty($pay_stub_amendment_data['start_date']) ) {
+				$pay_stub_amendment_data['start_date'] = date('Y-m-d', TTDate::getTime());
 			}
 		}
-
+		
 		//Select box options;
 		$status_options_filter = array(50,60);
 		/*
-		if ( isset($pay_stub_amendment) AND $pay_stub_amendment->getStatus() == 55 ) {
+		if ( isset($recurring_pay_stub_amendment) AND $recurring_pay_stub_amendment->getStatus() == 55 ) {
 			$status_options_filter = array(55);
-		} elseif ( isset($pay_stub_amendment) AND $pay_stub_amendment->getStatus() == 52 ) {
+		} elseif ( isset($recurring_pay_stub_amendment) AND $recurring_pay_stub_amendment->getStatus() == 52 ) {
 			$status_options_filter = array(52);
 		}
 		*/
@@ -155,23 +158,12 @@ class EditRecurringPayStubAmendment extends Controller
 			unset($pay_stub_amendment_data['percent_amount_entry_name_options'][$net_pay_psea_id]);
 		}
 
-		$viewData['pay_stub_amendment_data'] = $pay_stub_amendment_data;
-
+		
 		$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
 		$user_options = Misc::prependArray( array( -1 => _('-- ALL --')), $user_options );
 		$pay_stub_amendment_data['user_options'] = $user_options;
-
-		if ( isset($pay_stub_amendment_data['user_ids']) AND is_array($pay_stub_amendment_data['user_ids']) ) {
-			$tmp_user_options = $user_options;
-			foreach( $pay_stub_amendment_data['user_ids'] as $user_id ) {
-				if( isset($tmp_user_options[$user_id]) ) {
-					$filter_user_options[$user_id] = $tmp_user_options[$user_id];
-				}
-			}
-			unset($user_id);
-		}
-
-		$viewData['filter_user_options'] = $filter_user_options;
+		
+		$viewData['pay_stub_amendment_data'] = $pay_stub_amendment_data;
 		$viewData['rpsaf'] = $rpsaf;
 
         return view('pay_stub_amendment/EditRecurringPayStubAmendment', $viewData);
@@ -179,7 +171,10 @@ class EditRecurringPayStubAmendment extends Controller
     }
 
 	public function recalculate($pay_stub_amendment_id){
-		
+		if(empty($pay_stub_amendment_id)){
+			return false;
+		}
+
 		//Debug::setVerbosity(11);
 		$rpsalf = new RecurringPayStubAmendmentListFactory();
 		$rpsalf->getById( $pay_stub_amendment_id );
@@ -188,14 +183,15 @@ class EditRecurringPayStubAmendment extends Controller
 			$rpsa_obj->createPayStubAmendments();
 		}
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'RecurringPayStubAmendmentList.php') );
+		return redirect(URLBuilder::getURL( NULL, '/payroll/recurring_pay_stub_amendment'));
+
 	}
 
 	public function submit(Request $request){
 		$rpsaf = new RecurringPayStubAmendmentFactory();
-
-		$pay_stub_amendment_data = $request->data;
 		$current_company = $this->currentCompany;
+
+		$pay_stub_amendment_data = $request->pay_stub_amendment_data;
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -207,9 +203,9 @@ class EditRecurringPayStubAmendment extends Controller
 		$rpsaf->setName( $pay_stub_amendment_data['name'] );
 		$rpsaf->setDescription( $pay_stub_amendment_data['description'] );
 
-		$rpsaf->setStartDate( $pay_stub_amendment_data['start_date'] );
+		$rpsaf->setStartDate( TTDate::parseDateTime($pay_stub_amendment_data['start_date']) );
 		if ( $pay_stub_amendment_data['end_date'] != '' ) {
-			$rpsaf->setEndDate( $pay_stub_amendment_data['end_date'] );
+			$rpsaf->setEndDate( TTDate::parseDateTime($pay_stub_amendment_data['end_date']) );
 		}
 		$rpsaf->setFrequency( $pay_stub_amendment_data['frequency_id'] );
 
@@ -243,7 +239,7 @@ class EditRecurringPayStubAmendment extends Controller
 
 			$rpsaf->Save();
 
-			Redirect::Page( URLBuilder::getURL( NULL, 'RecurringPayStubAmendmentList.php') );
+			return redirect(URLBuilder::getURL( NULL, '/payroll/recurring_pay_stub_amendment'));
 
 		}
 	}

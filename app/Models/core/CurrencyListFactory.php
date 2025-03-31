@@ -32,7 +32,7 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		}
 
 		$this->rs = $this->getCache($id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
 						);
@@ -151,7 +151,7 @@ class CurrencyListFactory extends CurrencyFactory implements IteratorAggregate {
 		}
 
 		$this->rs = $this->getCache( $company_id.$is_base );
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':company_id' => $company_id,
 						':is_base' => $is_base,

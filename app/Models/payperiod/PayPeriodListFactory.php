@@ -38,7 +38,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		}
 
 		$this->rs = $this->getCache($id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
 						);
@@ -1252,7 +1252,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		}
 
 		$retarr = $this->getCache($cache_id);
-		if ( $retarr === FALSE ) {
+		if ( empty($retarr) || $retarr === FALSE ) {
 			$pplf = new PayPeriodListFactory();
 			if ( $include_all_pay_period_schedules == TRUE ) {
 				$pplf->getByCompanyId( $current_company->getId(), 13);

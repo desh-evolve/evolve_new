@@ -190,7 +190,7 @@ class BranchFactory extends Factory
 
 		Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
-		if ($id === FALSE) {
+		if (empty($id) || $id === FALSE) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId()) {
@@ -321,7 +321,7 @@ class BranchFactory extends Factory
 
 		Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
-		if ($id === FALSE) {
+		if (empty($id) || $id === FALSE) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId()) {
@@ -399,7 +399,7 @@ class BranchFactory extends Factory
 		// $id = $this->db->GetOne($query, $ph);
 		$id = DB::select($query, $ph);
 
-		if ($id === FALSE) {
+		if (empty($id) || $id === FALSE) {
 			$id = 0;
 		} else {
 			// Ensure $id is an array before accessing index 0
@@ -411,7 +411,7 @@ class BranchFactory extends Factory
 		}
 		Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
-		// if ($id === FALSE) {
+		// if (empty($id) || $id === FALSE) {
 		// 	var_dump($id,'333');
 		// 	return TRUE;
 		// } else {var_dump($id,'00');
@@ -500,7 +500,7 @@ class BranchFactory extends Factory
 
 		Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
-		if ($id === FALSE) {
+		if (empty($id) || $id === FALSE) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId()) {
@@ -578,7 +578,7 @@ class BranchFactory extends Factory
 
 		Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
-		if ($id === FALSE) {
+		if (empty($id) || $id === FALSE) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId()) {
@@ -656,7 +656,7 @@ class BranchFactory extends Factory
 
 		Debug::Arr($id, 'Unique Code: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 
-		if ($id === FALSE) {
+		if (empty($id) || $id === FALSE) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId()) {

@@ -144,7 +144,7 @@ class OtherFieldFactory extends Factory {
 						AND deleted = 0';
 		// $type_id = $this->db->GetOne($query, $ph);
         $type_id = DB::select($query, $ph);
-        if ($type_id === FALSE ) {
+        if (empty($type_id) || $type_id === FALSE ) {
             $type_id = 0;
         }else{
             $type_id = current(get_object_vars($type_id[0]));
@@ -152,7 +152,7 @@ class OtherFieldFactory extends Factory {
 
 		Debug::Arr($type_id,'Unique Type: '. $type, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $type_id === FALSE ) {
+		if ( empty($type_id) || $type_id === FALSE ) {
 			return TRUE;
 		} else {
 			if ( $type_id == $this->getId() ) {

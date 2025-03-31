@@ -33,9 +33,9 @@ class BranchListFactory extends BranchFactory implements IteratorAggregate {
 		if ( $id == '') {
 			return FALSE;
 		}
-
+		
 		$this->rs = $this->getCache($id);
-		if ( $this->rs === FALSE ) {
+		if (empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 				':id' => $id,
 			);

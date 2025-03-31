@@ -40,7 +40,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		}
 
 		$this->rs = $this->getCache($id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
 						);
@@ -124,7 +124,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		}
 
 		$this->rs = $this->getCache($id.$user_id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
 						':user_id' => $user_id,

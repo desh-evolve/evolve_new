@@ -44,7 +44,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		$this->rs = $this->getCache($id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
 						);
