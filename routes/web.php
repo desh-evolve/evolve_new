@@ -16,10 +16,15 @@ use App\Http\Controllers\company\OtherFieldList;
 use App\Http\Controllers\department\DepartmentList;
 use App\Http\Controllers\department\EditDepartment;
 use App\Http\Controllers\department\EditDepartmentBranchUser;
+use App\Http\Controllers\users\EditUserGroup;
+use App\Http\Controllers\users\UserGroupList;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\pay_stub_amendment\EditPayStubAmendment;
+use App\Http\Controllers\pay_stub_amendment\EditRecurringPayStubAmendment;
 use App\Http\Controllers\pay_stub_amendment\PayStubAmendmentList;
+use App\Http\Controllers\pay_stub_amendment\RecurringPayStubAmendmentList;
 use App\Http\Controllers\policy\AbsencePolicyList;
 use App\Http\Controllers\policy\AccrualPolicyList;
 use App\Http\Controllers\policy\BreakPolicyList;
@@ -70,7 +75,6 @@ Route::delete('/currency/delete/{id}', [CurrencyList::class, 'delete'])->name('c
 Route::get('/branch', [BranchList::class, 'index'])->name('branch.index');
 
 Route::get('/branch/add/{id?}', [EditBranch::class, 'index'])->name('branch.add');
-
 Route::post('/branch/save/{id?}', [EditBranch::class, 'save'])->name('branch.save');
 Route::delete('/branch/delete/{id}', [BranchList::class, 'delete'])->name('branch.delete');
 
@@ -99,6 +103,13 @@ Route::delete('/department/delete/{id}', [DepartmentList::class, 'delete'])->nam
 Route::get('/department_branch_user/{id?}', [EditDepartmentBranchUser::class, 'index'])->name('department_branch_user.index');
 Route::post('/department_branch_user/save/{id?}', [EditDepartmentBranchUser::class, 'submit'])->name('department_branch_user.save');
 
+
+// ==================== wage group =====================================================================================
+Route::get('/user_group', [UserGroupList::class, 'index'])->name('user_group.index');
+
+Route::get('/user_group/add/{id?}', [EditUserGroup::class, 'index'])->name('user_group.add');
+Route::post('/user_group/save/{id?}', [EditUserGroup::class, 'submit'])->name('user_group.save');
+Route::delete('/user_group/delete/{id}', [UserGroupList::class, 'delete'])->name('user_group.delete');
 // ===============================================================================================================================
 // Payroll
 // ===============================================================================================================================
@@ -108,6 +119,14 @@ Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('
 Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
 
 Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
+Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
+Route::post('/payroll/pay_stub_amendment/submit/{id?}', [EditPayStubAmendment::class, 'submit'])->name('payroll.pay_stub_amendment.submit');
+Route::delete('/payroll/pay_stub_amendment/delete/{id}', [PayStubAmendmentList::class, 'delete'])->name('payroll.pay_stub_amendment.delete');
+
+Route::get('/payroll/recurring_pay_stub_amendment', [RecurringPayStubAmendmentList::class, 'index'])->name('payroll.recurring_pay_stub_amendment');
+Route::get('/payroll/recurring_pay_stub_amendment/add/{id?}', [EditRecurringPayStubAmendment::class, 'index'])->name('payroll.recurring_pay_stub_amendment.add');
+Route::post('/payroll/recurring_pay_stub_amendment/submit/{id?}', [EditRecurringPayStubAmendment::class, 'submit'])->name('payroll.recurring_pay_stub_amendment.submit');
+Route::delete('/payroll/recurring_pay_stub_amendment/delete/{id}', [RecurringPayStubAmendmentList::class, 'delete'])->name('payroll.recurring_pay_stub_amendment.delete');
 
 // ===============================================================================================================================
 // Progress Bar Functions

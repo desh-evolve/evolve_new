@@ -1125,7 +1125,7 @@ class Factory {
 
 		if (is_array($additional_fields)) {
 			foreach ($additional_fields as $orig_column => $order) {
-				$sql_chunks[] = $this->parseColumnName($orig_column) . ' ' . trim($order);
+				$sql_chunks[] = $orig_column . ' ' . trim($order);
 			}
 		}
 
