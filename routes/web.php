@@ -14,6 +14,8 @@ use App\Http\Controllers\company\EditWageGroup;
 use App\Http\Controllers\department\DepartmentList;
 use App\Http\Controllers\department\EditDepartment;
 use App\Http\Controllers\department\EditDepartmentBranchUser;
+use App\Http\Controllers\users\EditUserGroup;
+use App\Http\Controllers\users\UserGroupList;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
@@ -75,7 +77,6 @@ Route::delete('/currency/delete/{id}', [CurrencyList::class, 'delete'])->name('c
 Route::get('/branch', [BranchList::class, 'index'])->name('branch.index');
 
 Route::get('/branch/add/{id?}', [EditBranch::class, 'index'])->name('branch.add');
-
 Route::post('/branch/save/{id?}', [EditBranch::class, 'save'])->name('branch.save');
 Route::delete('/branch/delete/{id}', [BranchList::class, 'delete'])->name('branch.delete');
 
@@ -104,6 +105,13 @@ Route::delete('/department/delete/{id}', [DepartmentList::class, 'delete'])->nam
 Route::get('/department_branch_user/{id?}', [EditDepartmentBranchUser::class, 'index'])->name('department_branch_user.index');
 Route::post('/department_branch_user/save/{id?}', [EditDepartmentBranchUser::class, 'submit'])->name('department_branch_user.save');
 
+
+// ==================== wage group =====================================================================================
+Route::get('/user_group', [UserGroupList::class, 'index'])->name('user_group.index');
+
+Route::get('/user_group/add/{id?}', [EditUserGroup::class, 'index'])->name('user_group.add');
+Route::post('/user_group/save/{id?}', [EditUserGroup::class, 'submit'])->name('user_group.save');
+Route::delete('/user_group/delete/{id}', [UserGroupList::class, 'delete'])->name('user_group.delete');
 // ===============================================================================================================================
 // Payroll 
 // ===============================================================================================================================
