@@ -93,27 +93,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{-- <div class="form-group text-right">
-                        <input type="hidden" name="id" id="currency_id"
-                            value="{{ $data['id'] ?? '' }}">
-
-                        @if ($permission->Check('currency', 'add'))
-                            <button type="button" name="action:Update_Rates"
-                                class="btn btn-secondary">Update Rates</button>
-                            <button type="button" name="action:add"
-                                class="btn btn-success">Add</button>
-                        @endif
-
-                        @if ($permission->Check('currency', 'delete'))
-                            <button type="button" name="action:delete" class="btn btn-danger"
-                                onclick="return confirmSubmit()">Delete</button>
-                        @endif
-
-                        @if ($permission->Check('currency', 'undelete'))
-                            <button type="button" name="action:undelete"
-                                class="btn btn-warning">UnDelete</button>
-                        @endif
-                    </div> --}}
+                    
 
                 </div><!-- end card -->
             </div>

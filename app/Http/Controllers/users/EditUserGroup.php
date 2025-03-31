@@ -33,84 +33,137 @@ class EditUserGroup extends Controller
 		$this->permission = View::shared('permission');
 	}
 
+	// public function index($id = null)
+	// {
+	// 	/*
+	//     if (!$this->permission->Check('user', 'enabled')
+	//         || !($this->permission->Check('user', 'edit') || $this->permission->Check('user', 'edit_own'))) {
+	//         $this->permission->Redirect(FALSE);
+	//     }
+	//     */
+
+	// 	$current_company = $this->company;
+
+	// 	$ugf = new UserGroupFactory();
+
+	// 	// Edit mode: Fetch existing user group data
+	// 	$uglf = new UserGroupListFactory();
+
+	// 	$nodes = FastTree::FormatArray($uglf->getByCompanyIdArray($current_company->getId()), 'TEXT', TRUE);
+
+	// 	// Alternatively, if the data is not in a collection, you can loop through and format it manually:
+	// 	$parent_list_options = [];
+	// 	foreach ($nodes as $node) {
+	// 		$parent_list_options[$node->id] = $node->text;
+	// 	}
+
+	// 	if (isset($id) ) {
+
+
+
+
+
+	// 		$uglf->getByIdAndCompanyId($id, $this->company);
+
+	// 		$user_group = $uglf->rs ?? [];
+	// 		if ($user_group) {
+	// 			foreach ($user_group as $group_obj) {
+	// 				$ft = new FastTree(); // Assuming FastTree doesn't need options here
+	// 				$ft->setTree($this->company);
+	// 				$parent_id = $ft->getParentID($group_obj->getId());
+
+	// 				$data = [
+	// 					'id' => $group_obj->getId(),
+	// 					'parent_id' => $parent_id,
+	// 					'previous_parent_id' => $parent_id,
+	// 					'name' => $group_obj->getName(),
+	// 					'created_date' => $group_obj->getCreatedDate(),
+	// 					'created_by' => $group_obj->getCreatedBy(),
+	// 					'updated_date' => $group_obj->getUpdatedDate(),
+	// 					'updated_by' => $group_obj->getUpdatedBy(),
+	// 					'deleted_date' => $group_obj->getDeletedDate(),
+	// 					'deleted_by' => $group_obj->getDeletedBy()
+	// 				];
+	// 			}
+	// 		}
+	// 	} else {
+	// 		// Add mode: Set default values
+	// 		$data = [
+	// 			'parent_id' => '',
+	// 			'name' => ''
+	// 		];
+	// 	}
+
+	// 	// Select box options for parent groups
+	// 	$uglf = new UserGroupListFactory();
+	// 	$nodes = FastTree::FormatArray($uglf->getByCompanyIdArray($this->company), 'TEXT', TRUE);
+	// 	$parent_list_options = [];
+	// 	foreach ($nodes as $node) {
+	// 		$parent_list_options[$node['id']] = $node['text'];
+	// 	}
+
+	// 	$data['parent_list_options'] = $parent_list_options;
+
+	// 	$viewData = [
+	// 		'title' => $id ? 'Edit Employee Group' : 'Add Employee Group',
+	// 		'data' => $data,
+	// 	];
+
+	// 	return view('users.EditUserGroup', $viewData);
+	// }
+
 	public function index($id = null)
 	{
-		/*
-        if (!$this->permission->Check('user', 'enabled')
-            || !($this->permission->Check('user', 'edit') || $this->permission->Check('user', 'edit_own'))) {
-            $this->permission->Redirect(FALSE);
-        }
-        */
-
 		$current_company = $this->company;
-
 		$ugf = new UserGroupFactory();
-
-		if ($id) {
-			// Edit mode: Fetch existing user group data
-			$uglf = new UserGroupListFactory();
-			$uglf->getByIdAndCompanyId($id, $current_company->getId());
-
-			$user_group = $uglf->rs ?? [];
-			if ($user_group) {
-				foreach ($user_group as $group_obj) {
-					$ft = new FastTree(); // Assuming FastTree doesn't need options here
-					$ft->setTree($current_company->getId());
-					$parent_id = $ft->getParentID($group_obj->getId());
-
-					$data = [
-						'id' => $group_obj->getId(),
-						'parent_id' => $parent_id,
-						'previous_parent_id' => $parent_id,
-						'name' => $group_obj->getName(),
-						'created_date' => $group_obj->getCreatedDate(),
-						'created_by' => $group_obj->getCreatedBy(),
-						'updated_date' => $group_obj->getUpdatedDate(),
-						'updated_by' => $group_obj->getUpdatedBy(),
-						'deleted_date' => $group_obj->getDeletedDate(),
-						'deleted_by' => $group_obj->getDeletedBy()
-					];
-				}
-			}
-		} else {
-			// Add mode: Set default values
-			$data = [
-				'parent_id' => '',
-				'name' => ''
-			];
-		}
-
-		// Select box options for parent groups
 		$uglf = new UserGroupListFactory();
-		$uglf->getByCompanyId($current_company->getId());
+
+		$nodes = FastTree::FormatArray($uglf->getByCompanyIdArray($current_company->getId()), 'TEXT', TRUE);
+
 		$parent_list_options = [];
-
-		foreach ($uglf->rs as $row) {
-			$id = is_object($row) ? $row->id : $row['id'];
-			$name = is_object($row) ? $row->name : $row['name'];
-			$parent_list_options[$id] = $name;
+		foreach ($nodes as $node) {
+			   $cleanText = str_replace('|  &nbsp;', '', $node['text']);
+			   $parent_list_options[$node['id']] = $cleanText;
 		}
+		$data = [];
+		if ($id) {
 
+
+			$ft = new FastTree();
+			$ft->setTree($current_company->getID());
+			$uglf->getById($id);
+			// dd($uglf);
+			foreach ($uglf->rs as $group_obj) {
+				$uglf->data = (array)$group_obj;
+				$group_obj = $uglf;
+				$parent_id = $ft->getParentID($group_obj->getId());
+
+				$data = [
+					'id' => $group_obj->getId(),
+					'previous_parent_id' => $parent_id,
+					'parent_id' => $parent_id,
+					'name' => $group_obj->getName(),
+					'created_date' => $group_obj->getCreatedDate(),
+					'created_by' => $group_obj->getCreatedBy(),
+					'updated_date' => $group_obj->getUpdatedDate(),
+					'updated_by' => $group_obj->getUpdatedBy(),
+					'deleted_date' => $group_obj->getDeletedDate(),
+					'deleted_by' => $group_obj->getDeletedBy()
+				];
+			}
+		}
 		$data['parent_list_options'] = $parent_list_options;
 		$viewData = [
 			'title' => $id ? 'Edit Employee Group' : 'Add Employee Group',
-			'data' => $data,
+			'data' => $data
 		];
 
-		// dd($viewData);
 		return view('users.EditUserGroup', $viewData);
 	}
 
 	public function submit(Request $request, $id = null)
 	{
 		$current_company = $this->company;
-
-		/*
-        if (!$this->permission->Check('user', 'enabled')
-            || !($this->permission->Check('user', 'edit') || $this->permission->Check('user', 'edit_own'))) {
-            $this->permission->Redirect(FALSE);
-        }
-        */
 
 		$data = $request->all();
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
@@ -124,10 +177,9 @@ class EditUserGroup extends Controller
 		$ugf->setName($data['name'] ?? '');
 
 		if ($ugf->isValid()) {
-			$ugf->Save();
-			return redirect()->to(URLBuilder::getURL(null, '/user_group'))->with('success', 'User group saved successfully.');
-		}
-
+            $ugf->Save();
+            return redirect()->to(URLBuilder::getURL(null, '/user_group'))->with('success', 'User group saved successfully.');
+        }
 		// If validation fails, return back with errors
 		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 	}
