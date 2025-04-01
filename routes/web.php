@@ -16,6 +16,8 @@ use App\Http\Controllers\department\EditDepartment;
 use App\Http\Controllers\department\EditDepartmentBranchUser;
 use App\Http\Controllers\users\EditUserGroup;
 use App\Http\Controllers\users\UserGroupList;
+use App\Http\Controllers\users\EditUserTitle;
+use App\Http\Controllers\users\UserTitleList;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
@@ -112,6 +114,13 @@ Route::get('/user_group', [UserGroupList::class, 'index'])->name('user_group.ind
 Route::get('/user_group/add/{id?}', [EditUserGroup::class, 'index'])->name('user_group.add');
 Route::post('/user_group/save/{id?}', [EditUserGroup::class, 'submit'])->name('user_group.save');
 Route::delete('/user_group/delete/{id}', [UserGroupList::class, 'delete'])->name('user_group.delete');
+
+// ==================== user title =====================================================================================
+Route::get('/user_title', [UserTitleList::class, 'index'])->name('user_title.index');
+
+Route::get('/user_title/add/{id?}', [EditUserTitle::class, 'index'])->name('user_title.add');
+Route::post('/user_title/save/{id?}', [EditUserTitle::class, 'submit'])->name('user_title.save');
+Route::delete('/user_title/delete/{id}', [UserTitleList::class, 'delete'])->name('user_title.delete');
 // ===============================================================================================================================
 // Payroll 
 // ===============================================================================================================================
