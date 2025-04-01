@@ -238,10 +238,10 @@ class UserDateFactory extends Factory {
 		if ( $this->getDateStamp() == FALSE  ) {
 			return FALSE;
 		}
-
+		
 		$ph = array(
-					'user_id' => $this->getUser(),
-					'date_stamp' => Carbon::parse( $this->getDateStamp()->toDateString() ),
+					':user_id' => $this->getUser(),
+					':date_stamp' => date('Y-m-d', $this->getDateStamp()),
 					);
 
 		$query = 'select id from '. $this->getTable() .' where user_id = :user_id AND date_stamp = :date_stamp AND deleted=0';

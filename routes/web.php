@@ -29,6 +29,7 @@ use App\Http\Controllers\payperiod\EditPayPeriod;
 use App\Http\Controllers\payperiod\EditPayPeriodSchedule;
 use App\Http\Controllers\payperiod\PayPeriodList;
 use App\Http\Controllers\payperiod\PayPeriodScheduleList;
+use App\Http\Controllers\payperiod\ViewPayPeriod;
 use App\Http\Controllers\policy\AbsencePolicyList;
 use App\Http\Controllers\policy\AccrualPolicyList;
 use App\Http\Controllers\policy\BreakPolicyList;
@@ -150,7 +151,11 @@ Route::get('/payroll/pay_periods/add/{pay_period_schedule_id}/{id?}', [EditPayPe
 Route::post('/payroll/pay_periods/submit/{pay_period_schedule_id}/{id?}', [EditPayPeriod::class, 'submit'])->name('payroll.pay_periods.submit');
 Route::delete('/payroll/pay_periods/delete/{id}', [PayPeriodList::class, 'delete'])->name('payroll.pay_periods.delete');
 
-Route::delete('/payroll/pay_periods/view/{pay_period_id}', [PayPeriodList::class, 'index'])->name('payroll.pay_periods.view');
+Route::get('/payroll/pay_periods/view/{pay_period_id}', [ViewPayPeriod::class, 'index'])->name('payroll.pay_periods.view');
+Route::post('/payroll/pay_periods_view/submit', [ViewPayPeriod::class, 'submit'])->name('payroll.pay_periods_view.submit');
+Route::get('/payroll/pay_periods_view/generate_paystubs/{pay_period_id}', [ViewPayPeriod::class, 'generate_paystubs'])->name('payroll.pay_periods_view.generate_paystubs');
+Route::get('/payroll/pay_periods_view/import/{pay_period_id}', [ViewPayPeriod::class, 'import'])->name('payroll.pay_periods_view.import');
+Route::get('/payroll/pay_periods_view/delete_data/{pay_period_id}', [ViewPayPeriod::class, 'delete_data'])->name('payroll.pay_periods_view.delete_data');
 
 // ===============================================================================================================================
 // Progress Bar Functions
