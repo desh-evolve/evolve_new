@@ -48,7 +48,7 @@ class EditPayPeriod extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-
+		
         $viewData['title'] = !empty($id) ? 'Edit Pay Period' : 'Add Pay Period';
 		$current_company = $this->currentCompany;
 
@@ -77,16 +77,16 @@ class EditPayPeriod extends Controller
 			$pplf = new PayPeriodListFactory();
 			$pplf->getByIdAndCompanyId($id, $current_company->getId() );
 
-			foreach ($pplf as $pp_obj) {
+			foreach ($pplf->rs as $pp_obj) {
 				$pplf->data = (array)$pp_obj;
 				$pp_obj = $pplf;
-//check here - date problem
+				
 				$data = array(
 					'id' => $pp_obj->getId(),
 					'company_id' => $pp_obj->getCompany(),
 					'pay_period_schedule_id' => $pp_obj->getPayPeriodSchedule(),
 					'pay_period_schedule_type_id' => $pp_obj->getPayPeriodScheduleObject()->getType(),
-					'start_date' => (new DateTime())->setTimestamp($pp_obj->getStartDate())->format('Y-m-d\TH:i'),
+					'start_date' => date('Y-m-d\TH:i', $pp_obj->getStartDate()),
 					'end_date' => date('Y-m-d\TH:i', $pp_obj->getEndDate()),
 					'transaction_date' => date('Y-m-d\TH:i', $pp_obj->getTransactionDate()),
 					'advance_end_date' => date('Y-m-d\TH:i', $pp_obj->getAdvanceEndDate()),
@@ -118,8 +118,8 @@ class EditPayPeriod extends Controller
 						$pplf->data = (array)$pp_obj;
 						$pp_obj = $pplf;
 						
-						$data['start_date'] = date('Y-m-d', $pp_obj->getEndDate()+1);
-						$data['end_date'] = date('Y-m-d', $pp_obj->getEndDate()+86400);
+						$data['start_date'] = date('Y-m-d\TH:i', $pp_obj->getEndDate()+1);
+						$data['end_date'] = date('Y-m-d\TH:i', $pp_obj->getEndDate()+86400);
 					}
 				}
 			}
@@ -152,16 +152,20 @@ class EditPayPeriod extends Controller
 		if ( is_object( $ppf->getPayPeriodScheduleObject() ) ) {
 			$ppf->getPayPeriodScheduleObject()->setPayPeriodTimeZone();
 		}
-		
-		$ppf->setStartDate($data['start_date']);// date+time
-		$ppf->setEndDate($data['end_date']+59); // date+time
-		$ppf->setTransactionDate($data['transaction_date']+59);// date+time - 59 seconds added to the time 23:59 -> 23:59:59 (H:i => H:i:s)
+
+		$start_date = date('Y-m-d H:i:s', strtotime($data['start_date']));
+		$end_date = date('Y-m-d H:i:s', strtotime($data['end_date']) + 59);
+		$transaction_date = date('Y-m-d H:i:s', strtotime($data['transaction_date']) + 59);
+
+		$ppf->setStartDate(TTDate::parseDateTime(date('Y-m-d H:i:s', strtotime($data['start_date']))));
+		$ppf->setEndDate(TTDate::parseDateTime(date('Y-m-d H:i:s', strtotime($data['end_date']) + 59)));
+		$ppf->setTransactionDate(TTDate::parseDateTime(date('Y-m-d H:i:s', strtotime($data['transaction_date']) + 59)));
 
 		if ( isset($data['advance_end_date']) ) {
-			$ppf->setAdvanceEndDate($data['advance_end_date']);
+			$ppf->setAdvanceEndDate(date('Y-m-d H:i:s', $data['advance_end_date']));
 		}
 		if ( isset($data['advance_transaction_date']) ) {
-			$ppf->setAdvanceTransactionDate($data['advance_transaction_date']);
+			$ppf->setAdvanceTransactionDate(date('Y-m-d H:i:s', $data['advance_transaction_date']));
 		}
 
 		$ppf->setEnableImportData( TRUE ); //Import punches when creating new pay periods.
@@ -170,7 +174,7 @@ class EditPayPeriod extends Controller
 			$ppf->Save();
 
 			$ppf->CommitTransaction();
-			return redirect(URLBuilder::getURL( array('id' => $data['pay_period_schedule_id'] ), '/payroll/pay_periods'));
+			return redirect(URLBuilder::getURL( NULL, '/payroll/pay_periods/'.$data['pay_period_schedule_id']));
 		}
 
 		$ppf->FailTransaction();

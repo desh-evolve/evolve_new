@@ -42,7 +42,7 @@ class ViewPayPeriod extends Controller
 
     }
 
-    public function index() {
+    public function index($pay_period_id) {
         /*
         if ( !$permission->Check('pay_period_schedule','enabled')
 				OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
@@ -51,6 +51,7 @@ class ViewPayPeriod extends Controller
         */
 
         $viewData['title'] = 'View Pay Period';
+		$current_company = $this->currentCompany;
 
 		$ppf = new PayPeriodFactory(); 
 
@@ -73,9 +74,9 @@ class ViewPayPeriod extends Controller
 					'pay_period_schedule_type' => $pay_period_obj->getPayPeriodScheduleObject()->getType(),
 					'status_id' => $pay_period_obj->getStatus(),
 					'status' => $status_options[$pay_period_obj->getStatus()],
-					'start_date' => $pay_period_obj->getStartDate(),
-					'end_date' => $pay_period_obj->getEndDate(),
-					'transaction_date' => $pay_period_obj->getTransactionDate(),
+					'start_date' => date('Y-m-d h:i:s', $pay_period_obj->getStartDate()),
+					'end_date' => date('Y-m-d h:i:s', $pay_period_obj->getEndDate()),
+					'transaction_date' => date('Y-m-d h:i:s', $pay_period_obj->getTransactionDate()),
 					'is_primary' => $pay_period_obj->getPrimary(),
 
 					'deleted' => $pay_period_obj->getDeleted(),
@@ -109,7 +110,7 @@ class ViewPayPeriod extends Controller
 
 			$status_options = Option::getByArray( $status_filter_arr, $status_options);
 
-			$smarty->assign_by_ref('status_options', $status_options);
+			$viewData['status_options'] = $status_options;
 
 			$elf = new ExceptionListFactory(); 
 			$elf->getSumExceptionsByPayPeriodIdAndBeforeDate($pay_period_obj->getId(), $pay_period_obj->getEndDate() );
@@ -161,12 +162,21 @@ class ViewPayPeriod extends Controller
 		$viewData['exceptions'] = $exceptions;
 		$viewData['pay_period_data'] = $pay_period_data;
 		$viewData['current_epoch'] = TTDate::getTime();
+
+		//dd($viewData);
 		$viewData['ppf'] = $ppf;
+
         return view('payperiod/ViewPayPeriod', $viewData);
 
     }
 
-	public function submit(){
+	public function submit(Request $request){
+		dd('hi');
+		$current_company = $this->currentCompany;
+		$data = $request->pay_period_data;
+
+		$pay_period_id = $data['pay_period_id'];
+		$status_id = $data['status_id'];
 		$pplf = new PayPeriodListFactory();
 		$pplf->getByIdAndCompanyId($pay_period_id, $current_company->getId() );
 		foreach ($pplf->rs as $pay_period_obj) {
@@ -177,11 +187,11 @@ class ViewPayPeriod extends Controller
 			$pay_period_obj->save();
 		}
 
-		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
+		return redirect(URLBuilder::getURL( NULL, '/payroll/pay_periods/view/'.$pay_period_id));
 
 	}
 
-	public function generate_paystubs(){
+	public function generate_paystubs($pay_period_id){
 		Debug::Text('Generate Pay Stubs!', __FILE__, __LINE__, __METHOD__,10);
 
 		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paystubs', 'pay_period_ids' => $pay_period_id, 'next_page' => URLBuilder::getURL( array('filter_pay_period_id' => $pay_period_id ), '../pay_stub/PayStubList.php') ), '../progress_bar/ProgressBarControl.php') );
@@ -193,7 +203,8 @@ class ViewPayPeriod extends Controller
 		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paymiddle', 'pay_period_ids' => $pay_period_id, 'next_page' => URLBuilder::getURL( array('filter_pay_period_id' => $pay_period_id ), '../pay_stub/PayStubList.php') ), '../progress_bar/ProgressBarControl.php') );
 	}
 
-	public function import(){
+	public function import($pay_period_id){
+		$current_company = $this->currentCompany;
 		//Imports already created shifts in to this pay period, from another pay period.
 		//Get all users assigned to this pay period schedule.
 		$pplf = new PayPeriodListFactory();
@@ -201,10 +212,11 @@ class ViewPayPeriod extends Controller
 
 		$pay_period_obj->importData();
 
-		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
+		return redirect(URLBuilder::getURL( NULL, '/payroll/pay_periods/view/'.$pay_period_id));
 	}
 
-	public function delete_data(){
+	public function delete_data($pay_period_id){
+		$current_company = $this->currentCompany;
 		//Deletes all data assigned to this pay period.
 		//Get all users assigned to this pay period schedule.
 		$pplf = new PayPeriodListFactory();
@@ -212,7 +224,7 @@ class ViewPayPeriod extends Controller
 
 		$pay_period_obj->deleteData();
 
-		Redirect::Page( URLBuilder::getURL( array('pay_period_id' => $pay_period_id), 'ViewPayPeriod.php') );
+		return redirect(URLBuilder::getURL( NULL, '/payroll/pay_periods/view/'.$pay_period_id));
 	}
 
 }

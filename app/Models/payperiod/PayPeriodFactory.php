@@ -239,11 +239,11 @@ class PayPeriodFactory extends Factory {
 		} else {
 			$id = $this->getId();
 		}
-
+		
 		$ph = array(
 					':pay_period_schedule_id' => (int)$this->getPayPeriodSchedule(),
-					':start_date' => Carbon::parse($epoch)->toDateTimeString(),
-					':end_date' => Carbon::parse($epoch)->toDateTimeString(),
+					':start_date' => date('Y-m-d H:i:s', $epoch),
+					':end_date' => date('Y-m-d H:i:s', $epoch),
 					':id' => (int)$id,
 					);
 
@@ -333,7 +333,7 @@ class PayPeriodFactory extends Factory {
 			) {
 
 			//$this->data['start_date'] = $epoch;
-			$this->data['start_date'] = $epoch;
+			$this->data['start_date'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -360,7 +360,7 @@ class PayPeriodFactory extends Factory {
 												('Incorrect end date')) ) {
 
 			//$this->data['end_date'] = $epoch;
-			$this->data['end_date'] = $epoch;
+			$this->data['end_date'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -386,7 +386,7 @@ class PayPeriodFactory extends Factory {
 												$epoch,
 												('Incorrect transaction date')) ) {
 
-			$this->data['transaction_date'] = $epoch;
+			$this->data['transaction_date'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -410,7 +410,7 @@ class PayPeriodFactory extends Factory {
 												$epoch,
 												('Incorrect advance end date')) ) {
 
-			$this->data['advance_end_date'] = $epoch;
+			$this->data['advance_end_date'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
