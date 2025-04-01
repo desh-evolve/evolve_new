@@ -189,6 +189,9 @@ switch ($action) {
 								);
 			}
 		}
+
+  
+
 		//Select box options;
 		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );

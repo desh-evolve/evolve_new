@@ -75,6 +75,7 @@ class EditOtherField extends Controller
 				);
 			}
 		}
+        
 		//Select box options;
 		//$jif = new JobItemFactory();
 

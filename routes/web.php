@@ -50,6 +50,7 @@ use App\Http\Controllers\policy\PremiumPolicyList;
 use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\users\EditUserDefaultNew;
 use App\Http\Controllers\users\UserGenericStatusList;
 use Illuminate\Support\Facades\Route;
 
@@ -163,13 +164,21 @@ Route::get('/company/add/{id?}', [EditCompany::class, 'index'])->name('company.a
 Route::post('/company/save/{id?}', [EditCompany::class, 'save'])->name('company.save');
 
 // ===============================================================================================================================
-// Policies
+// Company Other Fields
 // ===============================================================================================================================
 Route::get('/company/other_field', [OtherFieldList::class, 'index'])->name('company.other_field.index');
 
 Route::get('/company/other_field/add/{id?}', [EditOtherField::class, 'index'])->name('company.other_field.add');
 Route::post('/company/other_field/save/{id?}', [EditOtherField::class, 'save'])->name('company.other_field.save');
 Route::delete('/company/other_field/delete/{id}', [OtherFieldList::class, 'delete'])->name('company.other_field.delete');
+
+// ===============================================================================================================================
+// New Hire Defaults
+// ===============================================================================================================================
+Route::get('/new_hire_defaults', [EditUserDefaultNew::class, 'index'])->name('new_hire_defaults.index');
+
+Route::get('/new_hire_defaults/add/{id?}', [EditUserDefaultNew::class, 'index'])->name('new_hire_defaults.add');
+Route::post('/new_hire_defaults/save/{id?}', [EditUserDefaultNew::class, 'save'])->name('new_hire_defaults.save');
 
 // ===============================================================================================================================
 // Policies

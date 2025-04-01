@@ -418,6 +418,3 @@
     </script>
 
 </x-app-layout>
-
-
-

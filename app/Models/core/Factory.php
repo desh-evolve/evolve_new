@@ -37,7 +37,7 @@ class Factory {
 		$this->db = DB::connection();
         $this->cache = Cache::store();
 		$this->Validator = new Validator();
-    
+
         $this->currentUser = View::shared('current_user');
         $this->profiler = View::shared('profiler');
 		$this->userPrefs = View::shared('current_user_prefs');
@@ -94,43 +94,43 @@ class Factory {
 		// Ensure Cache ID is formatted correctly
 		$cache_id = str_replace(':', '_', $cache_id);
 		$cacheKey = $this->getTable(true) . '_' . $cache_id;
-	
+
 		return Cache::get($cacheKey, false); // Return cached data or false if not found
 	}
-	
+
 	public function saveCache($data, $cache_id) {
 		// Ensure Cache ID is formatted correctly
 		$cache_id = str_replace(':', '_', $cache_id);
 		$cacheKey = $this->getTable(true) . '_' . $cache_id;
-	
+
 		// Save to Laravel Cache for 2 hours
 		$success = Cache::put($cacheKey, $data, now()->addHours(2));
-	
+
 		if (!$success) {
 			Log::warning("WARNING: Unable to write cache file. Cache ID: $cache_id | Table: " . $this->getTable(true));
 		}
-	
+
 		return $success;
 	}
-	
+
 	public function removeCache($cache_id = null) {
 		if ($cache_id) {
 			$cache_id = str_replace(':', '_', $cache_id);
 			$cacheKey = $this->getTable(true) . '_' . $cache_id;
-	
+
 			Cache::forget($cacheKey); // Remove specific cache entry
 			return true;
 		}
-	
+
 		return false;
 	}
-	
+
 	public function setCacheLifeTime($seconds) {
 		// Laravel doesn't support dynamic cache lifetime setting per request.
 		// You need to modify the expiration time inside `saveCache()` instead.
 		return false;
 	}
-	
+
 
 	function getTable($strip_quotes = FALSE) {
 
@@ -211,7 +211,7 @@ class Factory {
 		} elseif ($force_lookup === true) {
 			// Check if the record exists in the database
 			$exists = DB::table($this->getTable())->where('id', $this->getId())->exists();
-			
+
 			if (!$exists) {
 				// ID does not exist in the database, treat as new
 				return true;
@@ -220,7 +220,7 @@ class Factory {
 		// Not new data (the record exists in the DB)
 		return false;
 	}
-	
+
 
 	//Determines if we were called by a save function or not.
 	//This is useful for determining if we are just validating or actually saving data. Problem is its too late to throw any new validation errors.
@@ -608,7 +608,7 @@ class Factory {
 	}
 
 	function getRecordCount() {
-		
+
 		if (isset($this->rs) && is_array($this->rs)) {
 			return count($this->rs);
 		}
@@ -945,7 +945,7 @@ class Factory {
 				$column = $this->parseColumnName( $orig_column );
 
 				$expression = trim($expression);
-				
+
 				if ( in_array($column, $fields) ) {
 					$sql_chunks[] = $orig_column.' '.$expression;
 				}
@@ -970,13 +970,13 @@ class Factory {
 		if (!is_array($array) || empty($array)) {
 			return ''; // Return empty string if input is not a valid array
 		}
-	
+
 		$sql_chunks = [];
-	
+
 		foreach ($array as $column => $value) {
 			$column = trim($column);
 			$value = trim($value);
-	
+
 			// Ensure proper SQL escaping (use prepared statements in real-world applications)
 			if (is_numeric($value)) {
 				$sql_chunks[] = "`$column` $value"; // No quotes for numeric values
@@ -984,16 +984,16 @@ class Factory {
 				$sql_chunks[] = "`$column` " . addslashes($value); // No quotes around values
 			}
 		}
-	
+
 		$sql = implode(' AND ', $sql_chunks);
-	
+
 		if ($append_where) {
 			return ' WHERE ' . $sql;
 		} else {
 			return ' AND ' . $sql;
 		}
 	}
-		
+
 
 	protected function getColumnsFromAliases( $columns, $aliases ) {
 		// Columns is the original column array.
@@ -1095,8 +1095,8 @@ class Factory {
 					}
 				} else {
 					Debug::text('Invalid Sort Column/Order: ' . $column . ' Order: ' . $order, __FILE__, __LINE__, __METHOD__, 10);
-				}				
-				
+				}
+
 			}
 
 			if (isset($sql_chunks)) {
@@ -1159,7 +1159,9 @@ class Factory {
 		}
 
 		return false;
-	}	
+	}
+
+
 
 
 	public function getColumnList() {
@@ -1212,7 +1214,7 @@ class Factory {
 
 		try {
 			$query = 'select '. $column_str .' from '. $this->table .' where id = '. $id;
-			
+
 			if ( $id == -1 AND isset($config_vars['cache']['enable']) AND $config_vars['cache']['enable'] == TRUE ) {
 
 				/*
@@ -1312,7 +1314,7 @@ class Factory {
 		//Use table name instead of recordset, especially when using CacheLite for caching empty recordsets.
 		//$query = $this->db->GetInsertSQL($rs, $this->data);
 		$query = $this->db->GetInsertSQL($this->getTable(), $this->data);
-                
+
                // echo $query;
                // exit();
 
@@ -1362,7 +1364,7 @@ class Factory {
 			}
 			// Get the table name dynamically
 			$table = $this->getTable();
-			
+
 			// Determine if we're inserting a new record or updating an existing one
 			if ($this->isNew($force_lookup)) {
 				//Insert
@@ -1371,25 +1373,25 @@ class Factory {
 				if ( empty($this->getCreatedDate()) ) {
 					$this->setCreatedDate($time);
 				}
-				
+
 				if ( empty($this->getCreatedBy()) ) {
 					$this->setCreatedBy();
 				}
-				
+
 				//Set updated date at the same time, so we can easily select last
 				//updated, or last created records.
 				$this->setUpdatedDate($time);
 				$this->setUpdatedBy();
-				
+
 				unset($time);
-				
+
 				// Perform the insert and get the insert ID
 				$insert_id = DB::table($table)->insertGetId($this->data);
 				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
-				
+
 				// Set the insert ID in the model
 				$this->setId($insert_id);
-				
+
 				// Return the ID of the newly created record
 				$retval = (int)$insert_id;
 				$log_action = 10; // 'Add'
@@ -1422,7 +1424,7 @@ class Factory {
 
 			// Commit the transaction
 			DB::commit();
-			
+
 			return $retval;
 		} catch (\Exception $e) {
 			// Roll back the transaction on error
@@ -1551,7 +1553,7 @@ class Factory {
 		if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time)) {
 			throw new Exception("Invalid time format. Expected hh:mm (e.g., 05:00).");
 		}
-		
+
 		list($hours, $minutes) = explode(':', $time);
 		return ($hours * 3600) + ($minutes * 60);
 	}
@@ -1559,11 +1561,11 @@ class Factory {
 	static function convertToHoursAndMinutes($seconds) {
 		$hours = floor($seconds / 3600);  // Get the total hours
 		$minutes = floor(($seconds % 3600) / 60);  // Get the remaining minutes
-	
+
 		return sprintf("%02d:%02d", $hours, $minutes);  // Return in hh:mm format
 	}
-	
+
 	//===========================================================================
-	
+
 }
 ?>
