@@ -38,7 +38,7 @@ class UserDefaultListFactory extends UserDefaultFactory implements IteratorAggre
 		}
 
 		$this->rs = $this->getCache($id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
 						);

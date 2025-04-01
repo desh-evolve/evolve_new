@@ -250,13 +250,13 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 				';
 		$total = DB::select($query, $ph);
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total === FALSE ) {
             $total = 0;
         }else{
             $total = current(get_object_vars($total[0]));
         }
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total === FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Total: '. $total, __FILE__, __LINE__, __METHOD__, 10);

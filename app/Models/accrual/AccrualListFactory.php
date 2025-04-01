@@ -538,7 +538,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$total = DB::select($query, $ph);
 
 
-		if ($total === FALSE ) {
+		if (empty($total) || $total == FALSE ) {
 			$total = 0;
 		}
 		Debug::text('Balance: '. $total, __FILE__, __LINE__, __METHOD__, 10);

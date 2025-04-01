@@ -111,7 +111,7 @@ class HierarchyControlFactory extends Factory {
 
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND name = :name AND deleted = 0';
 		$hierarchy_control_id = DB::select($query, $ph);
-        if ($hierarchy_control_id === FALSE ) {
+        if (empty($hierarchy_control_id) || $hierarchy_control_id === FALSE ) {
             $hierarchy_control_id = 0;
         }else{
             $hierarchy_control_id = current(get_object_vars($hierarchy_control_id[0]));
@@ -119,7 +119,7 @@ class HierarchyControlFactory extends Factory {
 
 		Debug::Arr($hierarchy_control_id,'Unique Hierarchy Control ID: '. $hierarchy_control_id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $hierarchy_control_id === FALSE ) {
+		if ( empty($hierarchy_control_id) || $hierarchy_control_id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($hierarchy_control_id == $this->getId() ) {

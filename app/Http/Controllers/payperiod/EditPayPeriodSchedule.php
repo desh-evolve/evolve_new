@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
+use App\Models\Core\Factory;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
 use App\Models\Core\Misc;
@@ -39,7 +40,7 @@ class EditPayPeriodSchedule extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
         if ( !$permission->Check('pay_period_schedule','enabled')
 				OR !( $permission->Check('pay_period_schedule','edit') OR $permission->Check('pay_period_schedule','edit_own') ) ) {
@@ -48,6 +49,8 @@ class EditPayPeriodSchedule extends Controller
         */
 
         $viewData['title'] = 'Edit Pay Period Schedule';
+		$current_user_prefs = $this->userPrefs;
+		$current_company = $this->currentCompany;
 
 		if ( isset($pay_period_schedule_data) ) {
 			if ( isset($pay_period_schedule_data['anchor_date']) ) {
@@ -67,11 +70,9 @@ class EditPayPeriodSchedule extends Controller
 		//var_dump($pay_period_schedule_data);
 		$ppsf = new PayPeriodScheduleFactory(); 
 
-
 		if ( isset($id) ) {
 
 			$ppslf = new PayPeriodScheduleListFactory();
-
 			$ppslf->GetByIdAndCompanyId($id, $current_company->getId() );
 
 			foreach ($ppslf->rs as $pay_period_schedule) {
@@ -101,10 +102,10 @@ class EditPayPeriodSchedule extends Controller
 
 					'annual_pay_periods' => $pay_period_schedule->getAnnualPayPeriods(),
 
-					'day_start_time' => $pay_period_schedule->getDayStartTime(),
+					'day_start_time' => Factory::convertToHoursAndMinutes($pay_period_schedule->getDayStartTime()),
 					'time_zone' => $pay_period_schedule->getTimeZone(),
-					'new_day_trigger_time' => $pay_period_schedule->getNewDayTriggerTime(),
-					'maximum_shift_time' => $pay_period_schedule->getMaximumShiftTime(),
+					'new_day_trigger_time' => Factory::convertToHoursAndMinutes($pay_period_schedule->getNewDayTriggerTime()),
+					'maximum_shift_time' => Factory::convertToHoursAndMinutes($pay_period_schedule->getMaximumShiftTime()),
 					'shift_assigned_day_id' => $pay_period_schedule->getShiftAssignedDay(),
 
 					'timesheet_verify_type_id' => $pay_period_schedule->getTimeSheetVerifyType(),
@@ -124,13 +125,13 @@ class EditPayPeriodSchedule extends Controller
 					'deleted_by' => $pay_period_schedule->getDeletedBy()
 				);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 
 			$pay_period_schedule_data = array(
 				'anchor_date' => TTDate::getBeginMonthEpoch( time() ),
-				'day_start_time' => 0,
-				'new_day_trigger_time' => (3600*4),
-				'maximum_shift_time' => (3600*16),
+				'day_start_time' => Factory::convertToHoursAndMinutes(0),
+				'new_day_trigger_time' => Factory::convertToHoursAndMinutes((3600*4)),
+				'maximum_shift_time' => Factory::convertToHoursAndMinutes((3600*16)),
 				'time_zone' => $current_user_prefs->getTimeZone(),
 				'type' => 20,
 				'timesheet_verify_type_id' => 10, //Disabled
@@ -153,22 +154,6 @@ class EditPayPeriodSchedule extends Controller
 
 		$pay_period_schedule_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE);
 
-		if ( isset($pay_period_schedule_data['user_ids']) AND is_array($pay_period_schedule_data['user_ids']) ) {
-			$tmp_user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
-			foreach( $pay_period_schedule_data['user_ids'] as $user_id ) {
-				if ( isset($tmp_user_options[$user_id]) ) {
-					$filter_user_options[$user_id] = $tmp_user_options[$user_id];
-				}
-			}
-			unset($user_id);
-		}
-		$smarty->assign_by_ref('filter_user_options', $filter_user_options);
-
-		$smarty->assign_by_ref('pay_period_schedule_data', $pay_period_schedule_data);
-
-		$smarty->assign_by_ref('ppsf', $ppsf);
-
-		$viewData['filter_user_options'] = $filter_user_options;
 		$viewData['pay_period_schedule_data'] = $pay_period_schedule_data;
 		$viewData['ppsf'] = $ppsf;
 
@@ -177,10 +162,10 @@ class EditPayPeriodSchedule extends Controller
     }
 
 	public function submit(Request $request){
-		$ppsf = new PayPeriodScheduleFactory();
-
-		$pay_period_schedule_data = $request->data;
 		$current_company = $this->currentCompany;
+		
+		$ppsf = new PayPeriodScheduleFactory();
+		$pay_period_schedule_data = $request->pay_period_schedule_data;
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -217,14 +202,14 @@ class EditPayPeriodSchedule extends Controller
 		$ppsf->setTransactionDateBusinessDay( $pay_period_schedule_data['transaction_date_bd'] );
 
 		if ( isset($pay_period_schedule_data['day_start_time']) ) {
-			$ppsf->setDayStartTime( $pay_period_schedule_data['day_start_time'] );
+			$ppsf->setDayStartTime( Factory::convertToSeconds($pay_period_schedule_data['day_start_time']) );
 		} else {
 			$ppsf->setDayStartTime(	0 );
 		}
 
 		$ppsf->setTimeZone( $pay_period_schedule_data['time_zone'] );
-		$ppsf->setNewDayTriggerTime( $pay_period_schedule_data['new_day_trigger_time'] );
-		$ppsf->setMaximumShiftTime( $pay_period_schedule_data['maximum_shift_time'] );
+		$ppsf->setNewDayTriggerTime( Factory::convertToSeconds($pay_period_schedule_data['new_day_trigger_time']) );
+		$ppsf->setMaximumShiftTime( Factory::convertToSeconds($pay_period_schedule_data['maximum_shift_time']) );
 		$ppsf->setShiftAssignedDay( $pay_period_schedule_data['shift_assigned_day_id'] );
 
 		$ppsf->setTimeSheetVerifyType( $pay_period_schedule_data['timesheet_verify_type_id'] );
@@ -236,8 +221,7 @@ class EditPayPeriodSchedule extends Controller
 		}
 
 		if ( $ppsf->isValid() ) {
-			//Pay Period schedule has to be saved before users can be assigned to it, so
-			//do it this way.
+			//Pay Period schedule has to be saved before users can be assigned to it, so do it this way.
 			$ppsf->Save(FALSE);
 			$ppsf->setEnableInitialPayPeriods(FALSE);
 
@@ -249,11 +233,8 @@ class EditPayPeriodSchedule extends Controller
 
 			if ( $ppsf->isValid() ) {
 				$ppsf->Save(TRUE);
-
-				//$ppsf->FailTransaction();
-
 				$ppsf->CommitTransaction();
-				Redirect::Page( URLBuilder::getURL( NULL, 'PayPeriodScheduleList.php') );
+				return redirect(URLBuilder::getURL( NULL, '/payroll/pay_period_schedules'));
 			}
 		}
 

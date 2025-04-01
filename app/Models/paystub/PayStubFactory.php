@@ -633,7 +633,7 @@ class PayStubFactory extends Factory {
 
 			$pay_stub_id = DB::select($query, $ph);
 
-			if ( $pay_stub_id === FALSE ) {
+			if ( empty($pay_stub_id) || $pay_stub_id === FALSE ) {
 
 				$this->is_unique_pay_stub = TRUE;
 

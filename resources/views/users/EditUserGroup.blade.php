@@ -47,7 +47,7 @@
                       id="userGroupForm">
                     @csrf
                     @if(isset($data['id']))
-                        @method('PUT')
+                        @method('POST')
                     @endif
 
                     <div class="form-group">

@@ -208,14 +208,14 @@ class UserReportDataFactory extends Factory {
 		$query .= ' AND deleted = 0';
 		$name_id = DB::select($query, $ph);
 
-		if ($name_id === FALSE ) {
+		if (empty($name_id) || $name_id== FALSE ) {
             $name_id = 0;
         }else{
             $name_id = current(get_object_vars($name_id[0]));
         }
 		Debug::Arr($name_id,'Unique Name: '. $name , __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $name_id === FALSE ) {
+		if ( empty($name_id) || $name_id== FALSE ) {
 			return TRUE;
 		} else {
 			if ($name_id == $this->getId() ) {

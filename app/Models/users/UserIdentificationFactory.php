@@ -148,14 +148,14 @@ class UserIdentificationFactory extends Factory {
 						AND ( a.deleted = 0 AND b.deleted = 0 )';
 		$id = DB::select($query, $ph);
 
-		if ($id === FALSE ) {
+		if (empty($id) || $id === FALSE ) {
             $id = 0;
         }else{
             $id = current(get_object_vars($id[0]));
         }
 		//Debug::Arr($id,'Unique Value: '. $value, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $id === FALSE ) {
+		if ( empty($id) || $id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($id == $this->getId() ) {

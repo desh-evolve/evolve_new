@@ -90,7 +90,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		$hotf = new HierarchyObjectTypeFactory();
 
 		$this->rs = $this->getCache($cache_id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':id' => $id,
 						':object_type_id' => $object_type_id,

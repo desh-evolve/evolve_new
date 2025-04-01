@@ -43,7 +43,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		$ids = $this->getCurrentLevelIdArrayByHierarchyControlIdAndUserId($tree_id, $user_id, FALSE);
 		//Debug::Arr($ids ,' zzNodes at the same level: User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $ids === FALSE ) {
+		if ( empty($ids) || $ids === FALSE ) {
 			return FALSE;
 		}
 
@@ -55,7 +55,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 			$children = $this->getFastTreeObject()->getAllChildren( $id, $recurse );
 			//Debug::Arr($children ,' ccNodes at the same level', __FILE__, __LINE__, __METHOD__,10);
 
-			if ( $children === FALSE ) {
+			if ( empty($children) || $children === FALSE ) {
 				continue;
 			}
 
@@ -98,7 +98,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 
 			$hierarchy_share = $hslf->getByHierarchyControlIdAndUserId( $tree_id, $id )->getCurrent()->isNew();
 
-			if ( $hierarchy_share === FALSE ) {
+			if ( empty($hierarchy_share) || $hierarchy_share === FALSE ) {
 				//Debug::Text(' Node IS shared:  '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 				//Get current level IDs
@@ -143,7 +143,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 
 		$node = $this->getFastTreeObject()->getNode( $user_id );
 
-		if ($node === FALSE ) {
+		if (empty($node) || $node === FALSE ) {
 			return FALSE;
 		}
 
@@ -153,7 +153,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		$hslf = new HierarchyShareListFactory();
 		$hierarchy_share = $hslf->getByHierarchyControlIdAndUserId( $tree_id, $user_id )->getCurrent()->isNew();
 
-		if ( $hierarchy_share === FALSE ) {
+		if ( empty($hierarchy_share) || $hierarchy_share === FALSE ) {
 			$shared = TRUE;
 		} else {
 			$shared = FALSE;
@@ -600,7 +600,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 					if ( $valid_level === FALSE OR $valid_level == $row['level'] ) {
 						$retval[] = (int)$row['user_id'];
 
-						if ( $valid_level === FALSE ) {
+						if ( empty($valid_level) || $valid_level === FALSE ) {
 							$valid_level = $row['level'];
 						}
 					}
@@ -752,7 +752,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		$parent_id = $this->getFastTreeObject()->getParentId( $user_id);
 
 		$children = $this->getFastTreeObject()->getAllChildren( $parent_id );
-		if ( $children === FALSE ) {
+		if ( empty($children) || $children === FALSE ) {
 			return FALSE;
 		}
 

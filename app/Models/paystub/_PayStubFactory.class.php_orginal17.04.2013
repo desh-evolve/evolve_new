@@ -569,7 +569,7 @@ class PayStubFactory extends Factory {
 			$query = 'select id from '. $this->getTable() .' where pay_period_id = ? AND user_id = ? AND deleted = 0';
 			$pay_stub_id = $this->db->GetOne($query, $ph);
 
-			if ( $pay_stub_id === FALSE ) {
+			if ( empty($pay_stub_id) || $pay_stub_id === FALSE ) {
 				$this->is_unique_pay_stub = TRUE;
 			} else {
 				if ($pay_stub_id == $this->getId() ) {

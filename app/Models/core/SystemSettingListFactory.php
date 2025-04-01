@@ -75,7 +75,7 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 		$id = 'all';
 
 		$retarr = $this->getCache($id);
-		if ( $retarr === FALSE ) {
+		if ( empty($retarr) || $retarr === FALSE ) {
 			$sslf = new SystemSettingListFactory();
 			$sslf->getAll();
 			if ( $sslf->getRecordCount() > 0 ) {

@@ -27,118 +27,121 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Group</th>
                                 <th scope="col">Functions</th>
-                                <th scope="col">
-                                    <input type="checkbox" class="form-check-input" id="select_all" onclick="CheckAll(this)">
-                                </th>
                             </tr>
                         </thead>
 
                         <tbody id="table_body">
                             @foreach ($rows as $index => $row)
                                 @php
-                                    $row_class = isset($row['deleted']) && $row['deleted']
-                                        ? 'table-danger'
-                                        : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
+                                    $row_class =
+                                        isset($row['deleted']) && $row['deleted']
+                                            ? 'table-danger'
+                                            : ($loop->iteration % 2 == 0
+                                                ? 'table-light'
+                                                : 'table-white');
                                 @endphp
                                 <tr class="{{ $row_class }}">
                                     <td>
                                         {{ $loop->iteration }}
                                     </td>
                                     <td>
-                                        {!! $row['spacing'] !!} ({{ $row['level'] }}) {{ $row['name'] }}
+                                        ({{ $row['level'] }})
+                                        {{ $row['name'] }}
                                     </td>
                                     <td>
-                                        @if ($permission->Check('user', 'edit'))
-                                            <button type="button" class="btn btn-primary btn-sm" 
-                                                onclick="window.location.href='/user_group/add/{{ $row['id'] }}'">
-                                                {{ __('Edit') }}
-                                            </button>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" class="form-check-input" name="ids[]"
-                                            value="{{ $row['id'] ?? '' }}">
+                                        <!-- Edit Button -->
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                            onclick="window.location.href='{{ route('user_group.add', ['id' => $row['id'] ?? '']) }}'">
+                                            {{ __('Edit') }}
+                                        </button>
+
+                                        {{-- <!-- Delete Button -->
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="deleteUserGroup({{ $row['id'] }})">
+                                            {{ __('Delete') }}
+                                        </button> --}}
+
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="deleteUserGroup({{ $row['id'] }})">
+                                            {{ __('Delete') }}
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
 
-                    <div class="form-group text-right">
-                        @if ($permission->Check('user', 'add'))
-                            <button type="button" name="action:add" class="btn btn-success"
-                                onclick="window.location.href='/user_group/edit'">Add</button>
-                        @endif
 
-                        @if ($permission->Check('user', 'delete'))
-                            <button type="button" name="action:delete" class="btn btn-danger"
-                                onclick="deleteSelected()">Delete</button>
-                        @endif
-
-                        @if ($permission->Check('user', 'undelete'))
-                            <button type="button" name="action:undelete" class="btn btn-warning"
-                                onclick="undeleteSelected()">UnDelete</button>
-                        @endif
-                    </div>
-
-                    @if (isset($paging_data))
-                        <div class="pagination">
-                            {!! $paging_data['html'] ?? '' !!}
-                        </div>
-                    @endif
-                </div><!-- end card -->
+                </div>
             </div>
-            <!-- end col -->
         </div>
-        <!-- end col -->
     </div>
-
     <script>
-        function CheckAll(checkbox) {
-            const checkboxes = document.querySelectorAll('input[name="ids[]"]');
-            checkboxes.forEach(cb => cb.checked = checkbox.checked);
-        }
+        // async function deleteUserGroup(userGroupId) {
+        //     if (confirm('Are you sure you want to delete this user group?')) {
+        //         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        async function deleteSelected() {
-            if (confirm('Are you sure you want to delete the selected groups?')) {
-                const selectedIds = Array.from(document.querySelectorAll('input[name="ids[]"]:checked'))
-                    .map(cb => cb.value);
-                
-                if (selectedIds.length === 0) {
-                    alert('Please select at least one group to delete.');
-                    return;
-                }
+        //         try {
+        //             const response = await fetch(`/user_group/delete/${userGroupId}`, {
+        //                 method: 'DELETE',
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': token,
+        //                     'Content-Type': 'application/json'
+        //                 }
+        //             });
 
+        //             const data = await response.json();
+        //             if (response.ok) {
+        //                 alert(data.success); // Display success message
+        //                 window.location.reload(); // Reload the page to reflect changes
+        //             } else {
+        //                 console.error(`Error deleting user group ID ${userGroupId}:`, data.error);
+        //             }
+        //         } catch (error) {
+        //             console.error(`Error deleting user group ID ${userGroupId}:`, error);
+        //         }
+        //     }
+        // }
+
+        async function deleteUserGroup(userGroupId) {
+            if (confirm('Are you sure you want to delete this user group?')) {
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 try {
-                    const response = await fetch('/user_group/delete/' + selectedIds[0], {
-                        method: 'POST',
+                    const response = await fetch(`/user_group/delete/${userGroupId}`, {
+                        method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ ids: selectedIds })
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
                     });
 
-                    const data = await response.json();
+                    // First check if response exists and is OK
+                    if (!response) {
+                        throw new Error('No response from server');
+                    }
+
+                    // Try to parse JSON, but fallback to text if it fails
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (jsonError) {
+                        const text = await response.text();
+                        throw new Error(text || 'Invalid server response');
+                    }
+
                     if (response.ok) {
-                        alert(data.success);
+                        alert(data.message || 'User group deleted successfully');
                         window.location.reload();
                     } else {
-                        alert(data.error || 'Failed to delete groups');
+                        throw new Error(data.error || 'Deletion failed');
                     }
                 } catch (error) {
-                    console.error('Error deleting groups:', error);
-                    alert('An error occurred while deleting groups');
+                    console.error(`Error deleting user group ID ${userGroupId}:`, error);
+                    alert('Error: ' + error.message);
                 }
             }
-        }
-
-        async function undeleteSelected() {
-            // Similar implementation as deleteSelected but for undelete action
-            // You might need to adjust this based on your backend implementation
-            alert('Undelete functionality not fully implemented in this example');
         }
     </script>
 </x-app-layout>

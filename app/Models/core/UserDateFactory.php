@@ -247,7 +247,7 @@ class UserDateFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where user_id = :user_id AND date_stamp = :date_stamp AND deleted=0';
 		// $user_date_id = $this->db->GetOne($query, $ph);
         $user_date_id = DB::select($query, $ph);
-        if ($user_date_id === FALSE ) {
+        if (empty($user_date_id) || $user_date_id === FALSE ) {
             $user_date_id = 0;
         }else{
             $user_date_id = current(get_object_vars($user_date_id[0]));
@@ -255,7 +255,7 @@ class UserDateFactory extends Factory {
         
 		Debug::Arr($user_date_id,'Unique User Date.', __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_date_id === FALSE ) {
+		if ( empty($user_date_id) || $user_date_id === FALSE ) {
 			return TRUE;
 		} else {
 			if ($user_date_id == $this->getId() ) {

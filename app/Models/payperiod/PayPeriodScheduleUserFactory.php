@@ -6,6 +6,8 @@ use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 
 class PayPeriodScheduleUserFactory extends Factory {
 	protected $table = 'pay_period_schedule_user';
@@ -58,14 +60,14 @@ class PayPeriodScheduleUserFactory extends Factory {
 		$query = 'select a.id from '. $this->getTable() .' as a, '. $ppslf->getTable() .' as b where a.pay_period_schedule_id = b.id AND a.user_id = :id AND b.deleted=0';
 		$user_id = DB::select($query, $ph);
 
-		if ($user_id === FALSE ) {
+		if (empty($user_id) || $user_id == FALSE ) {
             $user_id = 0;
         }else{
             $user_id = current(get_object_vars($user_id[0]));
         }
 		Debug::Arr($user_id,'Unique User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $user_id === FALSE ) {
+		if ( empty($user_id) || $user_id === FALSE ) {
 			return TRUE;
 		}
 

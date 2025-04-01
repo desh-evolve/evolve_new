@@ -163,7 +163,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate {
 		}
 
 		$this->rs = $this->getCache($station_id);
-		if ( $this->rs === FALSE ) {
+		if ( empty($this->rs) || $this->rs === FALSE ) {
 			$ph = array(
 						':station_id' => $station_id,
 						);
