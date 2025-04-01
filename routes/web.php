@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\company\CompanyDeductionList;
 use App\Http\Controllers\payperiod\ClosePayPeriod;
 use App\Http\Controllers\currency\CurrencyList;
 use App\Http\Controllers\currency\EditCurrency;
@@ -8,7 +9,7 @@ use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
 use App\Http\Controllers\company\EditCompany;
-use App\Http\Controllers\Company\EditCompanyNew;
+use App\Http\Controllers\company\EditCompanyDeduction;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
 use App\Http\Controllers\department\DepartmentList;
@@ -19,6 +20,9 @@ use App\Http\Controllers\users\UserGroupList;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\pay_stub\EditPayStubEntryAccount;
+use App\Http\Controllers\pay_stub\EditPayStubEntryAccountLink;
+use App\Http\Controllers\pay_stub\PayStubEntryAccountList;
 use App\Http\Controllers\pay_stub_amendment\EditPayStubAmendment;
 use App\Http\Controllers\pay_stub_amendment\EditRecurringPayStubAmendment;
 use App\Http\Controllers\pay_stub_amendment\PayStubAmendmentList;
@@ -147,6 +151,19 @@ Route::post('/payroll/pay_periods_view/submit', [ViewPayPeriod::class, 'submit']
 Route::get('/payroll/pay_periods_view/generate_paystubs/{pay_period_id}', [ViewPayPeriod::class, 'generate_paystubs'])->name('payroll.pay_periods_view.generate_paystubs');
 Route::get('/payroll/pay_periods_view/import/{pay_period_id}', [ViewPayPeriod::class, 'import'])->name('payroll.pay_periods_view.import');
 Route::get('/payroll/pay_periods_view/delete_data/{pay_period_id}', [ViewPayPeriod::class, 'delete_data'])->name('payroll.pay_periods_view.delete_data');
+
+Route::get('/payroll/paystub_accounts', [PayStubEntryAccountList::class, 'index'])->name('payroll.paystub_accounts');
+Route::get('/payroll/paystub_accounts/add/{id?}', [EditPayStubEntryAccount::class, 'index'])->name('payroll.paystub_accounts.add');
+Route::post('/payroll/paystub_accounts/submit/{id?}', [EditPayStubEntryAccount::class, 'submit'])->name('payroll.paystub_accounts.submit');
+Route::delete('/payroll/paystub_accounts/delete/{id}', [PayStubEntryAccountList::class, 'delete'])->name('payroll.paystub_accounts.delete');
+
+Route::get('/payroll/paystub_account_link', [EditPayStubEntryAccountLink::class, 'index'])->name('payroll.paystub_account_link');
+Route::post('/payroll/paystub_account_link/submit', [EditPayStubEntryAccountLink::class, 'submit'])->name('payroll.paystub_account_link.submit');
+
+Route::get('/payroll/company_deductions', [CompanyDeductionList::class, 'index'])->name('payroll.company_deductions');
+Route::get('/payroll/company_deductions/add/{id?}', [EditCompanyDeduction::class, 'index'])->name('payroll.company_deductions.add');
+Route::post('/payroll/company_deductions/submit/{id?}', [EditCompanyDeduction::class, 'submit'])->name('payroll.company_deductions.submit');
+Route::delete('/payroll/company_deductions/delete/{id}', [CompanyDeductionList::class, 'delete'])->name('payroll.company_deductions.delete');
 
 // ===============================================================================================================================
 // Progress Bar Functions

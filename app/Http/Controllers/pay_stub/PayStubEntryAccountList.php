@@ -43,24 +43,10 @@ class PayStubEntryAccountList extends Controller
         */
 
         $viewData['title'] = 'Pay Stub Account List';
-
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
+		$current_company = $this->currentCompany;
 
 		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getByCompanyId( $current_company->getId() );
-
-		$pager = new Pager($psealf);
 
 		$status_options = $psealf->getOptions('status');
 		$type_options = $psealf->getOptions('type');
@@ -85,48 +71,37 @@ class PayStubEntryAccountList extends Controller
 		}
 		
 		$viewData['rows'] = $rows;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
-
+		
         return view('pay_stub/PayStubEntryAccountList', $viewData);
 
     }
 
 	public function add_presets(){
+		$current_company = $this->currentCompany;
 		//Debug::setVerbosity(11);
 		PayStubEntryAccountFactory::addPresets( $current_company->getId() );
 		
-		Redirect::Page( URLBuilder::getURL( NULL, 'PayStubEntryAccountList.php') );
+		return redirect(URLBuilder::getURL( NULL, '/payroll/paystub_accounts'));
 	}
 
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditPayStubEntryAccount.php', FALSE) );
-	}
-
-	public function delete(){
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
-		}
+	public function delete($id){
+		$delete = TRUE;
+		$current_company = $this->currentCompany;
 
 		$psealf = new PayStubEntryAccountListFactory();
+		$psealf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($ids as $id) {
-			$psealf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($psealf->rs as $psea_obj) {
-				$psealf->data = (array)$psea_obj;
-				$psea_obj = $psealf;
+		foreach ($psealf->rs as $psea_obj) {
+			$psealf->data = (array)$psea_obj;
+			$psea_obj = $psealf;
 
-				$psea_obj->setDeleted($delete);
-				if ( $psea_obj->isValid() ) {
-					$psea_obj->Save();
-				}
+			$psea_obj->setDeleted($delete);
+			if ( $psea_obj->isValid() ) {
+				$psea_obj->Save();
 			}
 		}
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'PayStubEntryAccountList.php') );
+		URLBuilder::getURL( NULL, '/payroll/paystub_accounts');
 
 	}
 

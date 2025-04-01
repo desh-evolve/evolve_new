@@ -50,6 +50,7 @@ class EditCompanyDeduction extends Controller
         */
 
         $viewData['title'] = 'Edit Tax / Deduction';
+		$current_company = $this->currentCompany;
 
 		if ( isset($data)) {
 			if ( $data['start_date'] != '' ) {
@@ -159,6 +160,7 @@ class EditCompanyDeduction extends Controller
 			);
 		}
 
+		$cdf = new CompanyDeductionFactory();
 		//Select box options;
 		$data['status_options'] = $cdf->getOptions('status');
 		$data['type_options'] = $cdf->getOptions('type');
@@ -199,43 +201,9 @@ class EditCompanyDeduction extends Controller
 		$data['pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50), FALSE );
 		//$data['pay_stub_entry_account_options'] = PayStubEntryAccountListFactory::getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(20,30), FALSE );
 
-		$data['include_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-		if ( isset($data['include_pay_stub_entry_account_ids']) AND is_array($data['include_pay_stub_entry_account_ids']) ) {
-			$tmp_psea_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-			foreach( $data['include_pay_stub_entry_account_ids'] as $include_psea_id ) {
-				if ( isset($tmp_psea_options[$include_psea_id]) ) {
-					$filter_include_options[$include_psea_id] = $tmp_psea_options[$include_psea_id];
-				}
-			}
-			unset($include_psea_id, $tmp_psea_options);
-		}
-		$viewData['filter_include_options'] = $filter_include_options;
-
-		$data['exclude_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-		if ( isset($data['exclude_pay_stub_entry_account_ids']) AND is_array($data['exclude_pay_stub_entry_account_ids']) ) {
-			$tmp_psea_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-			foreach( $data['exclude_pay_stub_entry_account_ids'] as $exclude_psea_id ) {
-				$filter_exclude_options[$exclude_psea_id] = $tmp_psea_options[$exclude_psea_id];
-			}
-			unset($exclude_psea_id, $tmp_psea_options);
-		}
-		$viewData['filter_exclude_options'] = $filter_exclude_options;
-
-		//var_dump($data);
-
 		//Employee Selection Options
 		$data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
-		if ( isset($data['user_ids']) AND is_array($data['user_ids']) ) {
-			$tmp_user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
-			foreach( $data['user_ids'] as $user_id ) {
-				if ( isset($tmp_user_options[$user_id]) ) {
-					$filter_user_options[$user_id] = $tmp_user_options[$user_id];
-				}
-			}
-			unset($user_id, $tmp_user_options);
-		}
-
-		$viewData['filter_user_options'] = $filter_user_options;
+		
 		$viewData['data'] = $data;
 		$viewData['cdf'] = $cdf;
 
