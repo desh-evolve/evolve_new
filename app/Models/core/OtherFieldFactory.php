@@ -143,11 +143,20 @@ class OtherFieldFactory extends Factory {
 						AND type_id = :type_id
 						AND deleted = 0';
         $type_id = DB::select($query, $ph);
-        if ($type_id === FALSE ) {
+
+        $type_id = !empty($type_id) ? $type_id[0]->id : null;
+        // if ($type_id === FALSE ) {
+        //     $type_id = 0;
+        // }else{
+        //     $type_id = current(get_object_vars($type_id[0]));
+        // }
+
+        if (empty($type_id) || $type_id === FALSE ) {
             $type_id = 0;
         }else{
             $type_id = current(get_object_vars($type_id[0]));
         }
+
 
 		Debug::Arr($type_id,'Unique Type: '. $type, __FILE__, __LINE__, __METHOD__,10);
 

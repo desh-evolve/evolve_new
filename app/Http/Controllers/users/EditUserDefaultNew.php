@@ -11,6 +11,7 @@ use App\Models\Core\Debug;
 use App\Models\Core\Environment;
 use App\Models\Core\Misc;
 use App\Models\Core\PermissionControlListFactory;
+use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\URLBuilder;
 use App\Models\Department\DepartmentListFactory;
@@ -43,6 +44,7 @@ class EditUserDefaultNew extends Controller
         $this->userPrefs = View::shared('current_user_prefs');
     }
 
+
     public function index($id = null)
     {
 
@@ -55,8 +57,9 @@ class EditUserDefaultNew extends Controller
 
 
         $current_company = $this->currentCompany;
-        $viewData['title'] = 'New Hire Defaults';
+        $viewData['title'] = 'Add New Hire Defaults';
 
+        $uf = new UserFactory();
         $udlf = new UserDefaultListFactory();
         $udf = new UserDefaultFactory();
         $user_data = [];
@@ -172,6 +175,7 @@ class EditUserDefaultNew extends Controller
 		$user_data['company'] = $current_company->getName();
 
 		// $user_data['language_options'] = TTi18n::getLanguageArray();
+        $user_data['language_options'] = [ 'en' => 'English' ]; // hardcode the language options you can edit
 		$user_data['date_format_options'] = $upf->getOptions('date_format');
 		$user_data['other_date_format_options'] = $upf->getOptions('other_date_format');
 		$user_data['time_format_options'] = $upf->getOptions('time_format');
@@ -197,6 +201,8 @@ class EditUserDefaultNew extends Controller
     {
        $udf = new UserDefaultFactory();
        $user_data = $request->all();
+    //    dd($request->all());
+
        $current_company = $this->currentCompany;
        $permission = $this->permission;
 
@@ -217,11 +223,21 @@ class EditUserDefaultNew extends Controller
         $udf->setPolicyGroup( $user_data['policy_group_id'] );
         $udf->setCurrency( $user_data['currency_id'] );
 
-        if ( $permission->Check('permission','edit') AND isset($user_data['permission_control_id']) ) {
-            $udf->setPermissionControl( $user_data['permission_control_id'] );
+        // if ( $permission->Check('permission','edit') AND isset($user_data['permission_control_id']) ) {
+        //     $udf->setPermissionControl( $user_data['permission_control_id'] );
+        // }
+        // dd($permission->Check('permission', 'edit'), $user_data['permission_control_id']);
+
+        if (isset($user_data['permission_control_id'])) {
+            $udf->setPermissionControl($user_data['permission_control_id']);
         }
 
+        // Convert hire_date using TTDate::parseDateTime()
+        if (isset($user_data['hire_date']) && $user_data['hire_date'] != '') {
+            $user_data['hire_date'] = TTDate::parseDateTime($user_data['hire_date']);
+        }
         $udf->setHireDate( $user_data['hire_date'] );
+
         $udf->setEmployeeNumber( $user_data['employee_number'] );
         $udf->setDefaultBranch( $user_data['default_branch_id'] );
         $udf->setDefaultDepartment( $user_data['default_department_id'] );
@@ -267,7 +283,6 @@ class EditUserDefaultNew extends Controller
 			if ( $udf->isValid() ) {
 				$udf->Save(FALSE);
 
-				// Redirect::Page( URLBuilder::getURL( array('id' => $user_data['id'], 'data_saved' => TRUE), 'EditUserDefault.php') );
                 return redirect()->to(URLBuilder::getURL(array('id' => $user_data['id'], 'data_saved' => TRUE), '/new_hire_defaults'))->with('success', 'New Hire Defaults saved successfully.');
 			}
 		}

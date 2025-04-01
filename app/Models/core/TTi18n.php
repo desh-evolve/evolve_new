@@ -2,6 +2,8 @@
 
 namespace App\Models\Core;
 use Illuminate\Support\Facades\Log;
+use App\Models\Core\I18Nv2_Language;
+use Doctrine\Inflector\Language;
 
 class TTi18n {
 	static private $locale_handler = NULL;
