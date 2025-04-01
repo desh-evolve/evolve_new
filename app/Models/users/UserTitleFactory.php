@@ -7,6 +7,8 @@ use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use Illuminate\Support\Facades\DB;
+use App\Models\Company\CompanyListFactory;
 
 class UserTitleFactory extends Factory {
 	protected $table = 'user_title';

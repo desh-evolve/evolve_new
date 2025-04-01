@@ -105,12 +105,36 @@
                         <div class="collapse menu-dropdown" id="company">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Designations</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Employee Titles</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Currencies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Locations</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Departments</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Secondary Wage Groups</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user_title.index') }}" 
+                                        class="nav-link {{ request()->routeIs('user_title.index') ? 'active' : '' }}">Designations
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user_group.index') }}" 
+                                        class="nav-link {{ request()->routeIs('user_group.index') ? 'active' : '' }}">Employee Titles
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('currency.index') }}" 
+                                        class="nav-link {{ request()->routeIs('currency.index') ? 'active' : '' }}">Currencies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('branch.index') }}" 
+                                        class="nav-link {{ request()->routeIs('branch.index') ? 'active' : '' }}">Locations
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('department.index') }}" 
+                                        class="nav-link {{ request()->routeIs('department.index') ? 'active' : '' }}">Departments
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('wage_group.index') }}" 
+                                        class="nav-link {{ request()->routeIs('wage_group.index') ? 'active' : '' }}">Secondary Wage Groups
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Stations</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">New Hire Defaults</a></li>

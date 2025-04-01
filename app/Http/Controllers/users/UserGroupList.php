@@ -82,50 +82,35 @@ class UserGroupList extends Controller
 	// 	return Redirect::Page(URLBuilder::getURL(null, 'UserGroupList.php'));
 	// }
 
-	public function delete($id)
+	public function delete($id, $delete = true)
 	{
 		$current_company = $this->currentCompany;
 
-		try {
-			if (empty($id)) {
-				return response()->json([
-					'success' => false,
-					'error' => 'No User group selected.'
-				], 400);
-			}
+		if (empty($id)) {
+			return response()->json(['error' => 'No Group selected.'], 400);
+		}
 
-			$uglf = new UserGroupListFactory();
-			$uglf->getByIdAndCompanyId($id, $current_company->getId());
+		$utlf = new UserGroupListFactory();
 
-			if (empty($uglf->rs)) {
-				return response()->json([
-					'success' => false,
-					'error' => 'User group not found.'
-				], 404);
-			}
+			$user_group = $utlf->GetByIdAndCompanyId($id, $current_company->getId());
 
-			$success = false;
-			foreach ($uglf->rs as $user_group) {
-				$uglf->data = (array)$user_group;
-				$user_group = $uglf;
-
-				$user_group->setDeleted(true);
-				$res = $user_group->Save();
-
-				if ($res) {
-					$success = true;
+			foreach ($user_group->rs as $g_obj) {
+				$user_group->data = (array)$g_obj; // added bcz currency data is null and it gives an error
+				
+				$user_group->setDeleted(true); // Set deleted flag to true
+	
+				if ($user_group->isValid()) {
+					$res = $user_group->Save();
+					
+					if($res){
+						return response()->json(['success' => 'Group deleted successfully.']);
+					}else{
+						return response()->json(['error' => 'Group deleted failed.']);
+					}
 				}
 			}
 
-			return response()->json([
-				'success' => $success,
-				'message' => $success ? 'User group deleted successfully.' : 'User group deletion failed.'
-			]);
-		} catch (\Exception $e) {
-			return response()->json([
-				'success' => false,
-				'error' => 'Server error: ' . $e->getMessage()
-			], 500);
-		}
+		return response()->json(['success' => 'Operation completed successfully.']);
 	}
+
 }
