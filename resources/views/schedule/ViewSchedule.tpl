@@ -14,7 +14,7 @@ var report_criteria_elements = new Array(
 									'filter_exclude_user' );
 
 function ViewTypeTarget(obj) {
-	if ( !isUndefined(obj) ) {
+	if ( typeof obj !== 'undefined' ) {
 		if ( obj.value == 10 ) { //Month
 			action = '{/literal}{$BASE_URL}{literal}/schedule/ViewScheduleMonth.php';
 		} else if ( obj.value == 20 ) { //Week

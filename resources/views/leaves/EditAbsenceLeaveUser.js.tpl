@@ -114,7 +114,7 @@ function showCalculation( type ) {
 
 	//Hide old ID
 	old_section = document.getElementById(fields[old_id]);
-	if ( isUndefined( fields[old_id] ) == false && old_section != null ) {
+	if ( typeof fields[old_id] !== 'undefined' && old_section != null ) {
 		old_section.className = 'none';
 		old_section.style.display = 'none';
 
@@ -131,7 +131,7 @@ function showCalculation( type ) {
 
 	//alert('Field ID: '+ fields[id] );
 	section = document.getElementById(fields[id]);
-	if ( isUndefined( fields[id] ) == false && section != null ) {
+	if ( typeof fields[id] !== 'undefined' && section != null ) {
 		section.className = '';
 		section.style.display = '';
 		section.disabled = false;

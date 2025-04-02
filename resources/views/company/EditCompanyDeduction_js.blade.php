@@ -1,6 +1,15 @@
+
+
 <script	language=JavaScript>
 
-    {$data['js_arrays']}
+    document.addEventListener("DOMContentLoaded", function () {
+        showCalculation(); 
+        filterIncludeCount(); 
+        filterExcludeCount(); 
+        filterUserCount();
+    })
+
+    {!! $data['js_arrays'] !!}
     
     function filterIncludeCount() {
         total = countSelect(document.getElementById('filter_include'));
@@ -86,12 +95,14 @@
         }
     }
     
-    $calculation_id = $data['calculation_id'];
-    $country = !empty($data['country']) ? '-' . $data['country'] : '';
-    $province = !empty($data['province']) ? '-' . $data['province_id'] : '';
+    @php
+        $res = isset($data['calculation_id']) 
+            ? $data['calculation_id'] . (!empty($data['country']) ? '-' . $data['country'] : '') . (!empty($data['province']) ? '-' . $data['province_id'] : '') 
+            : '';
+    @endphp
 
-    $key = "{$calculation_id}{$country}{$province}";
-    $old_id = $fields[$key];
+    old_id = {{!! isset($data['calculation_id']) ? "fields['$res']" : ""; !!}};
+
 
     function showCalculation( type ) {
         if ( document.getElementById('id').value == '' ) {
@@ -119,7 +130,7 @@
     
         //Hide old ID
         old_section = document.getElementById(fields[old_id]);
-        if ( isUndefined( fields[old_id] ) == false && old_section != null ) {
+        if ( typeof fields[old_id] !== 'undefined' && old_section != null ) {
             old_section.className = 'none';
             old_section.style.display = 'none';
     
@@ -136,7 +147,7 @@
     
         //alert('Field ID: '+ fields[id] );
         section = document.getElementById(fields[id]);
-        if ( isUndefined( fields[id] ) == false && section != null ) {
+        if ( typeof fields[id] !== 'undefined' && section != null ) {
             section.className = '';
             section.style.display = '';
             section.disabled = false;
@@ -225,7 +236,7 @@
     }
     
     //Sync calls
-    var remoteHW = new AJAX_Server();
+    //var remoteHW = new AJAX_Server();
     
-    </script>
+</script>
     

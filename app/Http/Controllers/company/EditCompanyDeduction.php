@@ -205,6 +205,8 @@ class EditCompanyDeduction extends Controller
 		$data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
 		
 		$viewData['data'] = $data;
+
+		//dd($viewData);
 		$viewData['cdf'] = $cdf;
 
         return view('company/EditCompanyDeduction', $viewData);
