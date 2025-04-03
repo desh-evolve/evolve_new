@@ -2,6 +2,7 @@
 
 namespace App\Models\PayStub;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;

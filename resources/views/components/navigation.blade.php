@@ -105,12 +105,6 @@
                         <div class="collapse menu-dropdown" id="company">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
-                                <li class="nav-item">
-                                    <a href="{{ route('company.index') }}"
-                                        class="nav-link {{ request()->routeIs('company.index') ? 'active' : '' }}">
-                                        Company Information
-                                    </a>
-                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Designations</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Employee Titles</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Currencies</a></li>
@@ -221,24 +215,35 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('payroll.pay_stub_amendment') }}" 
+                                    <a href="{{ route('payroll.pay_stub_amendment') }}"
                                         class="nav-link {{ request()->routeIs('payroll.pay_stub_amendment') ? 'active' : '' }}">Pay Stub Amendments
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('payroll.recurring_pay_stub_amendment') }}" 
+                                    <a href="{{ route('payroll.recurring_pay_stub_amendment') }}"
                                         class="nav-link {{ request()->routeIs('payroll.recurring_pay_stub_amendment') ? 'active' : '' }}">Recurring PS Amendments
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('payroll.pay_period_schedules') }}" 
+                                    <a href="{{ route('payroll.pay_period_schedules') }}"
                                         class="nav-link {{ request()->routeIs('payroll.pay_period_schedules') ? 'active' : '' }}">Pay Period Schedules
                                     </a>
                                 </li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Period Schedules</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Accounts</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Taxes/Deductions/Earnings</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Account Linking</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.paystub_accounts') }}"
+                                        class="nav-link {{ request()->routeIs('payroll.paystub_accounts') ? 'active' : '' }}">Pay Stub Accounts
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.company_deductions') }}"
+                                        class="nav-link {{ request()->routeIs('payroll.company_deductions') ? 'active' : '' }}">Taxes/Deductions/Earnings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.paystub_account_link') }}"
+                                        class="nav-link {{ request()->routeIs('payroll.paystub_account_link') ? 'active' : '' }}">Pay Stub Account Linking
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>

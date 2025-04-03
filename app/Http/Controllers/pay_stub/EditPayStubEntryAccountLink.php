@@ -43,7 +43,13 @@ class EditPayStubEntryAccountLink extends Controller
 		}
         */
 
+		$data_saved = false;
+		if(isset($_GET['data_saved'])){
+			$data_saved = true;
+		}
+
         $viewData['title'] = 'Edit Pay Stub Account Links';
+		$current_company = $this->currentCompany;
 
 		$psealf = new PayStubEntryAccountLinkFactory(); 
 
@@ -115,8 +121,10 @@ class EditPayStubEntryAccountLink extends Controller
 
     }
 
-	public function submit(){
+	public function submit(Request $request){
 		$psealf = new PayStubEntryAccountLinkFactory();
+		$data = $request->data;
+		$current_company = $this->currentCompany;
 
 		//Debug::setVerbosity(11);
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
@@ -141,8 +149,7 @@ class EditPayStubEntryAccountLink extends Controller
 
 		if ( $psealf->isValid() ) {
 			$psealf->Save();
-
-			Redirect::Page( URLBuilder::getURL( array( 'data_saved' => TRUE), 'EditPayStubEntryAccountLink.php') );
+			return redirect(URLBuilder::getURL( array( 'data_saved' => TRUE), '/payroll/paystub_account_link'));
 		}
 	}
 }

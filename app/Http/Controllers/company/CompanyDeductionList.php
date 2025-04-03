@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\accrual;
+namespace App\Http\Controllers\company;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company\CompanyDeductionFactory;
@@ -43,30 +43,11 @@ class CompanyDeductionList extends Controller
 		}
         */
 
+		$current_company = $this->currentCompany;
         $viewData['title'] = 'Tax / Deduction List';
 
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array(
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
-
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-		}
-
 		$cdlf = new CompanyDeductionListFactory();
-		$cdlf->getByCompanyId( $current_company->getId(), NULL, $sort_array );
-
-		$pager = new Pager($cdlf);
+		$cdlf->getByCompanyId( $current_company->getId());
 
 		$status_options = $cdlf->getOptions('status');
 		$type_options = $cdlf->getOptions('type');
@@ -91,11 +72,7 @@ class CompanyDeductionList extends Controller
 		}
 
 		$viewData['rows'] = $rows;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
-
-
+		
         return view('company/CompanyDeductionList', $viewData);
 
     }
