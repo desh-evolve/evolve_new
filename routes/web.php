@@ -18,6 +18,8 @@ use App\Http\Controllers\users\EditUserGroup;
 use App\Http\Controllers\users\UserGroupList;
 use App\Http\Controllers\users\EditUserTitle;
 use App\Http\Controllers\users\UserTitleList;
+use App\Http\Controllers\station\EditStation;
+use App\Http\Controllers\station\StationList;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
@@ -122,6 +124,13 @@ Route::get('/user_title', [UserTitleList::class, 'index'])->name('user_title.ind
 Route::get('/user_title/add/{id?}', [EditUserTitle::class, 'index'])->name('user_title.add');
 Route::post('/user_title/save/{id?}', [EditUserTitle::class, 'submit'])->name('user_title.save');
 Route::delete('/user_title/delete/{id}', [UserTitleList::class, 'delete'])->name('user_title.delete');
+
+// ==================== station =====================================================================================
+Route::get('/station', [StationList::class, 'index'])->name('station.index');
+
+Route::get('/station/add/{id?}', [EditStation::class, 'index'])->name('station.add');
+Route::post('/station/save/{id?}', [EditStation::class, 'submit'])->name('station.save');
+Route::delete('/station/delete/{id}', [StationList::class, 'delete'])->name('station.delete');
 // ===============================================================================================================================
 // Payroll 
 // ===============================================================================================================================

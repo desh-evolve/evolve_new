@@ -134,8 +134,11 @@
                                     <a href="{{ route('wage_group.index') }}" 
                                         class="nav-link {{ request()->routeIs('wage_group.index') ? 'active' : '' }}">Secondary Wage Groups
                                     </a>
+                                </li><li class="nav-item">
+                                    <a href="{{ route('station.index') }}" 
+                                        class="nav-link {{ request()->routeIs('station.index') ? 'active' : '' }}">Stations 
+                                    </a>
                                 </li>
-                                <li class="nav-item"><a href="#" class="nav-link">Stations</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">New Hire Defaults</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
