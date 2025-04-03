@@ -283,7 +283,7 @@ class EditUserDefault extends Controller
 			if ( $udf->isValid() ) {
 				$udf->Save(FALSE);
 
-                return redirect()->to(URLBuilder::getURL(array('id' => $user_data['id'], 'data_saved' => TRUE), '/new_hire_defaults'))->with('success', 'New Hire Defaults saved successfully.');
+                return redirect()->to(URLBuilder::getURL(array('id' => $user_data['id'], 'data_saved' => TRUE), '/new_hire_defaults/add'))->with('success', 'Form Data saved successfully.');
 			}
 		}
 

@@ -31,8 +31,7 @@
 
 
                     <form method="POST"
-                        action="{{ isset($user_data['id']) ? route('new_hire_defaults.save', $user_data['id']) : route('new_hire_defaults.save') }}"
-                        id="companyFormID">
+                        action="{{ isset($user_data['id']) ? route('new_hire_defaults.save', $user_data['id']) : route('new_hire_defaults.save') }}">
                         @csrf
 
                         <h5 class="bg-primary text-white p-1 mb-3">

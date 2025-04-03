@@ -104,7 +104,12 @@
                         </a>
                         <div class="collapse menu-dropdown" id="company">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user_preference.index') }}"
+                                        class="nav-link {{ request()->routeIs('user_preference.index') ? 'active' : '' }}">
+                                        Company Information
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Designations</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Employee Titles</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Currencies</a></li>
@@ -113,11 +118,21 @@
                                 <li class="nav-item"><a href="#" class="nav-link">Secondary Wage Groups</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Stations</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">New Hire Defaults</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('new_hire_defaults.index') }}"
+                                        class="nav-link {{ request()->routeIs('new_hire_defaults.index') ? 'active' : '' }}">
+                                        New Hire Defaults
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Company Bank Information</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Recurring Holidays</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Other Fields</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('company.other_field.index') }}"
+                                        class="nav-link {{ request()->routeIs('company.other_field.index') ? 'active' : '' }}">
+                                        Other Fields
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -258,7 +273,12 @@
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item"><a href="#" class="nav-link">Messages</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Preferences</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user_preference.index') }}"
+                                        class="nav-link {{ request()->routeIs('user_preference.index') ? 'active' : '' }}">
+                                        Preferences
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Bank Information</a></li>
                             </ul>
                         </div>

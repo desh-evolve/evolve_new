@@ -9,7 +9,8 @@ use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
 use App\Http\Controllers\company\EditCompany;
-use App\Http\Controllers\Company\EditCompanyNew;
+use App\Http\Controllers\company\EditCompanyDeduction;
+use App\Http\Controllers\company\EditOtherField;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
 use App\Http\Controllers\company\OtherFieldList;
@@ -61,6 +62,7 @@ use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
 use App\Http\Controllers\users\EditUserDefault;
+use App\Http\Controllers\users\EditUserPreferenceNew;
 use App\Http\Controllers\users\UserGenericStatusList;
 use Illuminate\Support\Facades\Route;
 
@@ -226,6 +228,14 @@ Route::get('/new_hire_defaults', [EditUserDefault::class, 'index'])->name('new_h
 
 Route::get('/new_hire_defaults/add/{id?}', [EditUserDefault::class, 'index'])->name('new_hire_defaults.add');
 Route::post('/new_hire_defaults/save/{id?}', [EditUserDefault::class, 'save'])->name('new_hire_defaults.save');
+
+// ===============================================================================================================================
+// User Preference
+// ===============================================================================================================================
+Route::get('/user/preference', [EditUserPreferenceNew::class, 'index'])->name('user_preference.index');
+
+Route::get('/user/preference/add/{id?}', [EditUserPreferenceNew::class, 'index'])->name('user_preference.add');
+Route::post('/user/preference/save/{id?}', [EditUserPreferenceNew::class, 'save'])->name('user_preference.save');
 
 // ===============================================================================================================================
 // Policies
