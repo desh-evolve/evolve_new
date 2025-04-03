@@ -2,12 +2,14 @@
 
 namespace App\Models\PayStub;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\PayStubAmendment\PayStubAmendmentListFactory;
 use Illuminate\Support\Facades\DB;
 
 class PayStubEntryAccountFactory extends Factory {
@@ -20,70 +22,70 @@ class PayStubEntryAccountFactory extends Factory {
 		$retval = NULL;
 		switch( $name ) {
 			case 'status':
-				$retval = array(
-										10 => ('Enabled'),
-										20 => ('Disabled'),
-									);
+				$retval = 	array(
+								10 => ('Enabled'),
+								20 => ('Disabled'),
+							);
 				break;
 			case 'type':
-				$retval = array(
-										10 => ('Earning'),
-										20 => ('Employee Deduction'),
-										30 => ('Employer Deduction'),
-										40 => ('Total'),
-										50 => ('Accrual'),
-										//60 => ('Advance Earning'),
-										//65 => ('Advance Deduction'),
-									);
+				$retval = 	array(
+								10 => ('Earning'),
+								20 => ('Employee Deduction'),
+								30 => ('Employer Deduction'),
+								40 => ('Total'),
+								50 => ('Accrual'),
+								//60 => ('Advance Earning'),
+								//65 => ('Advance Deduction'),
+							);
 				break;
 			case 'type_calculation_order':
-				$retval = array(
-										10 => 40,
-										20 => 50,
-										30 => 60,
-										40 => 70,
-										50 => 30,
-										60 => 10,
-										65 => 20,
-									);
+				$retval = 	array(
+								10 => 40,
+								20 => 50,
+								30 => 60,
+								40 => 70,
+								50 => 30,
+								60 => 10,
+								65 => 20,
+							);
 				break;
 			case 'columns':
-				$retval = array(
-										'-1010-status' => ('Status'),
-										'-1020-type' => ('Type'),
-										'-1030-name' => ('Name'),
+				$retval = 	array(
+								'-1010-status' => ('Status'),
+								'-1020-type' => ('Type'),
+								'-1030-name' => ('Name'),
 
-										'-1140-ps_order' => ('Order'),
-										'-1150-debit_account' => ('Debit Account'),
-										'-1150-credit_account' => ('Credit Account'),
+								'-1140-ps_order' => ('Order'),
+								'-1150-debit_account' => ('Debit Account'),
+								'-1150-credit_account' => ('Credit Account'),
 
-										'-2000-created_by' => ('Created By'),
-										'-2010-created_date' => ('Created Date'),
-										'-2020-updated_by' => ('Updated By'),
-										'-2030-updated_date' => ('Updated Date'),
+								'-2000-created_by' => ('Created By'),
+								'-2010-created_date' => ('Created Date'),
+								'-2020-updated_by' => ('Updated By'),
+								'-2030-updated_date' => ('Updated Date'),
 							);
 				break;
 			case 'list_columns':
 				$retval = Misc::arrayIntersectByKey( $this->getOptions('default_display_columns'), Misc::trimSortPrefix( $this->getOptions('columns') ) );
 				break;
 			case 'default_display_columns': //Columns that are displayed by default.
-				$retval = array(
+				$retval = 	array(
 								'status',
 								'type',
 								'name',
 								'ps_order',
-								);
+							);
 				break;
 			case 'unique_columns': //Columns that are unique, and disabled for mass editing.
-				$retval = array(
+				$retval = 	array(
 								'name',
-								);
+							);
 				break;
 			case 'linked_columns': //Columns that are linked together, mainly for Mass Edit, if one changes, they all must.
-				$retval = array(
+				$retval = 	array(
 								'type',
 								'accrual',
-								);
+							);
 				break;
 
 		}
@@ -92,7 +94,7 @@ class PayStubEntryAccountFactory extends Factory {
 	}
 
 	function _getVariableToFunctionMap( $data ) {
-			$variable_function_map = array(
+			$variable_function_map = 	array(
 											'id' => 'ID',
 											'company_id' => 'Company',
 											'status_id' => 'Status',
@@ -105,7 +107,7 @@ class PayStubEntryAccountFactory extends Factory {
 											'credit_account' => 'CreditAccount',
 											'accrual_pay_stub_entry_account_id' => 'Accrual',
 											'deleted' => 'Deleted',
-											);
+										);
 			return $variable_function_map;
 	}
 

@@ -34,7 +34,7 @@ class EditPayStubEntryAccount extends Controller
 
     }
 
-    public function index() {
+    public function index($id = null) {
         /*
         if ( !$permission->Check('pay_stub_account','enabled')
 				OR !( $permission->Check('pay_stub_account','edit') OR $permission->Check('pay_stub_account','edit_own') ) ) {
@@ -42,7 +42,8 @@ class EditPayStubEntryAccount extends Controller
 		}
         */
 
-        $viewData['title'] = 'Edit Pay Stub Account';
+        $viewData['title'] = !empty($id) ? 'Edit Pay Stub Account' : 'Add Pay Stub Account';
+		$current_company = $this->currentCompany;
 
 		$pseaf = new PayStubEntryAccountFactory();
 
@@ -58,22 +59,22 @@ class EditPayStubEntryAccount extends Controller
 				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 				$data = array(
-									'id' => $psea_obj->getId(),
-									'status_id' => $psea_obj->getStatus(),
-									'type_id' => $psea_obj->getType(),
-									'name' => $psea_obj->getName(),
-									'order' => $psea_obj->getOrder(),
-									'accrual_id' => $psea_obj->getAccrual(),
-									'debit_account' => $psea_obj->getDebitAccount(),
-									'credit_account' => $psea_obj->getCreditAccount(),
-									'accrual_id' => $psea_obj->getAccrual(),
-									'created_date' => $psea_obj->getCreatedDate(),
-									'created_by' => $psea_obj->getCreatedBy(),
-									'updated_date' => $psea_obj->getUpdatedDate(),
-									'updated_by' => $psea_obj->getUpdatedBy(),
-									'deleted_date' => $psea_obj->getDeletedDate(),
-									'deleted_by' => $psea_obj->getDeletedBy()
-								);
+					'id' => $psea_obj->getId(),
+					'status_id' => $psea_obj->getStatus(),
+					'type_id' => $psea_obj->getType(),
+					'name' => $psea_obj->getName(),
+					'order' => $psea_obj->getOrder(),
+					'accrual_id' => $psea_obj->getAccrual(),
+					'debit_account' => $psea_obj->getDebitAccount(),
+					'credit_account' => $psea_obj->getCreditAccount(),
+					'accrual_id' => $psea_obj->getAccrual(),
+					'created_date' => $psea_obj->getCreatedDate(),
+					'created_by' => $psea_obj->getCreatedBy(),
+					'updated_date' => $psea_obj->getUpdatedDate(),
+					'updated_by' => $psea_obj->getUpdatedBy(),
+					'deleted_date' => $psea_obj->getDeletedDate(),
+					'deleted_by' => $psea_obj->getDeletedBy()
+				);
 			}
 		}
 
@@ -91,8 +92,10 @@ class EditPayStubEntryAccount extends Controller
 
     }
 
-	public function submit(){
+	public function submit(Request $request){
 		$pseaf = new PayStubEntryAccountFactory();
+		$current_company = $this->currentCompany;
+		$data = $request->data;
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		//Debug::setVerbosity(11);
@@ -109,9 +112,7 @@ class EditPayStubEntryAccount extends Controller
 
 		if ( $pseaf->isValid() ) {
 			$pseaf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'PayStubEntryAccountList.php') );
-
+			return redirect(URLBuilder::getURL( NULL, '/payroll/paystub_accounts'));
 		}
 
 	}

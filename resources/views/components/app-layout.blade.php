@@ -69,6 +69,11 @@
             });
         </script>
 
+        <script type="text/javascript">
+            @include('components.general.global_js')
+        </script>
+
+
         <style>
             .cursor-pointer{
                 cursor: pointer;

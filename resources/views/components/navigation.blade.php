@@ -256,10 +256,21 @@
                                         class="nav-link {{ request()->routeIs('payroll.pay_period_schedules') ? 'active' : '' }}">Pay Period Schedules
                                     </a>
                                 </li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Period Schedules</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Accounts</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Taxes/Deductions/Earnings</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Stub Account Linking</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.paystub_accounts') }}" 
+                                        class="nav-link {{ request()->routeIs('payroll.paystub_accounts') ? 'active' : '' }}">Pay Stub Accounts
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.company_deductions') }}" 
+                                        class="nav-link {{ request()->routeIs('payroll.company_deductions') ? 'active' : '' }}">Taxes/Deductions/Earnings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payroll.paystub_account_link') }}" 
+                                        class="nav-link {{ request()->routeIs('payroll.paystub_account_link') ? 'active' : '' }}">Pay Stub Account Linking
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
