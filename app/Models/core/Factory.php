@@ -1125,7 +1125,11 @@ class Factory {
 
 		if (is_array($additional_fields)) {
 			foreach ($additional_fields as $orig_column => $order) {
-				$sql_chunks[] = $orig_column . ' ' . trim($order);
+				if (is_numeric($orig_column)) { 
+					$sql_chunks[] = trim($order) . ' ASC'; 
+				} else { 
+					$sql_chunks[] = "`" . $orig_column . "` " . strtoupper(trim($order)); 
+				}				
 			}
 		}
 

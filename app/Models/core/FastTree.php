@@ -8,7 +8,7 @@ class FastTree
 {
 
 	var $db = NULL;
-	var $table = 'fast_tree';
+	var $table = 'user_group_tree';
 	var $tree_id = 0;
 
 	var $spacer = 0;

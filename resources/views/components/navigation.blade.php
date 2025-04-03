@@ -289,14 +289,24 @@
                     </li>
 
                     <!-- Admin -->
+                    @php
+                        $checkAdminNav = request()->routeIs('admin.*');
+                    @endphp
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#admin" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false">
-                            <i class="ri-bar-chart-line"></i> <span>Admin</span>
+                        <a 
+                            class="nav-link menu-link {{ $checkAdminNav ? 'active' : '' }}" href="#admin"
+                            data-bs-toggle="collapse" role="button"
+                            aria-expanded="{{ $checkAdminNav ? 'true' : 'false' }}"
+                            aria-controls="admin">
+                            <i class="ri-admin-line"></i> <span>Admin</span>
                         </a>
                         <div class="collapse menu-dropdown" id="admin">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item"><a href="#" class="nav-link">Employee Administration</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.userlist') }}" 
+                                        class="nav-link {{ request()->routeIs('admin.userlist') ? 'active' : '' }}">Employee Administration
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Census Infortion</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">December Bonus Calculation</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Attendance Bonus Calculation</a></li>

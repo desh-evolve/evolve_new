@@ -847,7 +847,7 @@ class TTDate {
 		return $current_epoch;
 	}
 
-	function getTimeStampFromSmarty($prefix, $array) {
+	static function getTimeStampFromSmarty($prefix, $array) {
 		Debug::text('Prefix: '. $prefix, __FILE__, __LINE__, __METHOD__, 10);
 		//Debug::Arr($array, 'getTimeStampFromSmarty Array:', __FILE__, __LINE__, __METHOD__, 10);
 

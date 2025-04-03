@@ -90,12 +90,16 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 		} else {
 			$current_company = $clf->getByID( $current_user->getCompany() )->getCurrent();
 		}
+
+		$user_id = $current_user->getId();
+		$company_id = $current_company->getId();
+
 		//Check to make sure the logged in user's information is all up to date.
 		//Make sure they also have permissions to edit information, otherwise don't redirect them.
 		if ( $current_user->isInformationComplete() == FALSE
 				AND ( !stristr( $_SERVER['SCRIPT_NAME'], 'permissiondenied') AND !stristr( $_SERVER['SCRIPT_NAME'], 'logout') AND !stristr( $_SERVER['SCRIPT_NAME'], 'about') AND !stristr( $_SERVER['SCRIPT_NAME'], 'punch.php') AND !stristr( $_SERVER['SCRIPT_NAME'], 'ajax_server') AND !stristr( $_SERVER['SCRIPT_NAME'], 'global.js') AND !stristr( $_SERVER['SCRIPT_NAME'], 'menu.js') AND !stristr( $_SERVER['SCRIPT_NAME'], 'embeddeddocument') AND !stristr( $_SERVER['SCRIPT_NAME'], 'send_file') )
 				AND !isset($_GET['incomplete']) AND !isset($_POST['incomplete'])
-				AND ($permission->Check('user','enabled') AND ( $permission->Check('user','edit') OR $permission->Check('user','edit_own') OR $permission->Check('user','edit_child')) ) ) {
+				AND ($permission->Check('user','enabled', $user_id, $company_id) AND ( $permission->Check('user','edit', $user_id, $company_id) OR $permission->Check('user','edit_own', $user_id, $company_id) OR $permission->Check('user','edit_child', $user_id, $company_id)) ) ) {
 			Redirect::Page( URLBuilder::getURL( array('id' => $current_user->getID(), 'incomplete' => 1 ), Environment::GetBaseURL().'users/EditUser.php') );
 		}
 
@@ -143,7 +147,7 @@ if ( isset($authenticate) AND $authenticate === FALSE ) {
 				AND $current_user_prefs->isPreferencesComplete() == FALSE
 				AND ( !stristr( $_SERVER['SCRIPT_NAME'], 'permissiondenied') AND !stristr( $_SERVER['SCRIPT_NAME'], 'logout') AND !stristr( $_SERVER['SCRIPT_NAME'], 'about') AND !stristr( $_SERVER['SCRIPT_NAME'], 'punch.php') AND !stristr( $_SERVER['SCRIPT_NAME'], 'ajax_server') AND !stristr( $_SERVER['SCRIPT_NAME'], 'global.js') AND !stristr( $_SERVER['SCRIPT_NAME'], 'menu.js') )
 				AND !isset($_GET['incomplete']) AND !isset($_POST['incomplete'])
-				AND ($permission->Check('user_preference','enabled') AND ( $permission->Check('user_preference','edit') OR $permission->Check('user_preference','edit_child') OR $permission->Check('user_preference','edit_own') ) ) ) {
+				AND ($permission->Check('user_preference','enabled', $user_id, $company_id) AND ( $permission->Check('user_preference','edit', $user_id, $company_id) OR $permission->Check('user_preference','edit_child', $user_id, $company_id) OR $permission->Check('user_preference','edit_own', $user_id, $company_id) ) ) ) {
 			Redirect::Page( URLBuilder::getURL( array('incomplete' => 1 ), Environment::GetBaseURL().'users/EditUserPreference.php') );
 		}
 

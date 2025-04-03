@@ -59,7 +59,9 @@ use App\Http\Controllers\policy\PremiumPolicyList;
 use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\users\EditUser;
 use App\Http\Controllers\users\UserGenericStatusList;
+use App\Http\Controllers\users\UserList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -270,5 +272,14 @@ Route::get('/policy/holidays/add/{holiday_policy_id}/{id?}', [EditHoliday::class
 Route::post('/policy/holidays/submit/{id?}', [EditHoliday::class, 'submit'])->name('policy.holidays.submit');
 Route::delete('/policy/holidays/delete/{id}', [HolidayList::class, 'delete'])->name('policy.holidays.delete');
 
+
+// ===============================================================================================================================
+// user functions
+// ===============================================================================================================================
+
+Route::get('/admin/userlist', [UserList::class, 'index'])->name('admin.userlist');
+Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
+Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
+Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name('admin.userlist.delete');
 
 // ===============================================================================================================================
