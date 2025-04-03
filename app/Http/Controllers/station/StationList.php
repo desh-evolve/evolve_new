@@ -1,108 +1,123 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: StationList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('station','enabled')
-		OR !( $permission->Check('station','view') OR $permission->Check('station','view_own') ) ) {
+namespace App\Http\Controllers\station;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Station;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 
+use App\Models\Core\Environment;
+use App\Models\Core\BreadCrumb;
+use App\Models\Core\StationFactory;
+use App\Models\Core\StationListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Pager;
+use App\Models\Core\TTi18n;
+use App\Models\Core\URLBuilder;
+use Illuminate\Support\Facades\View;
+
+class StationList extends Controller
+{
+    protected $permission;
+    protected $company;
+    protected $userPrefs;
+
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+        $this->userPrefs = View::shared('current_user_prefs');
+        $this->company = View::shared('current_company');
+        $this->permission = View::shared('permission');
+    }
+
+    public function index() {
+    
+        $current_company = $this->company;
+        $current_user_prefs = $this->userPrefs;
+
+        // Get request variables
+        $page = request('page', 1);
+        $sort_column = request('sort_column', '');
+        $sort_order = request('sort_order', '');
+        $ids = request('ids', []);
+
+        URLBuilder::setURL($_SERVER['SCRIPT_NAME'], [
+            'sort_column' => $sort_column,
+            'sort_order' => $sort_order,
+            'page' => $page
+        ]);
+
+        $sort_array = $sort_column != '' ? [$sort_column => $sort_order] : null;
+
+        Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
+
+        BreadCrumb::setCrumb('Station List');
+// dd($current_user_prefs->getItemsPerPage());
+        $slf = new StationListFactory();
+        $slf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
+        $pager = new Pager($slf);
+
+        $stations = [];
+        foreach ($slf->rs as $s_obj) {
+			// dd($s_obj);
+            $stations[] = [
+                'id' => $s_obj->id,
+                'type' => Option::getByKey($s_obj->type_id, $slf->getOptions('type')),
+                'status' => Option::getByKey($s_obj->status_id, $slf->getOptions('status')),
+                'source' => $s_obj->source,
+                'station' => $s_obj->station_id,
+                'short_station' => Misc::TruncateString($s_obj->station_id, 15),
+                'description' => Misc::TruncateString($s_obj->description, 30),
+                'deleted' => $s_obj->deleted
+            ];
+        }
+
+        $viewData = [
+            'title' => 'Station List',
+            'stations' => $stations,
+            'sort_column' => $sort_column,
+            'sort_order' => $sort_order,
+            'paging_data' => $pager->getPageVariables()
+        ];
+
+        return view('station.StationList', $viewData);
+    }
+
+    public function add() {
+        Redirect::Page(URLBuilder::getURL(NULL, '/station/add'));
+    }
+
+    public function delete($id) {
+        $current_company = $this->company;
+
+        if (empty($id)) {
+            return response()->json(['error' => 'No stations selected.'], 400);
+        }
+        
+        $slf = new StationListFactory();
+        $station = $slf->getByIdAndCompanyId($id, $current_company->getId());
+        
+        foreach ($station->rs as $s_obj) {
+            $station->data = (array)$s_obj;
+            $station->setDeleted(true);
+
+            if ($station->isValid()) {
+                $res = $station->Save();
+                
+                if($res){
+                    return response()->json(['success' => 'Station deleted successfully.']);
+                }else{
+                    return response()->json(['error' => 'Station deletion failed.']);
+                }
+            }
+        }
+    }
 }
-
-$smarty->assign('title', __($title = 'Station List')); // See index.php
-BreadCrumb::setCrumb($title);
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'ids'
-												) ) );
-
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
-
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
-
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-
-		Redirect::Page( URLBuilder::getURL(NULL, 'EditStation.php') );
-
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
-		}
-
-		$slf = new StationListFactory();
-
-		foreach ($ids as $id) {
-			$slf->GetByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($slf as $station) {
-				$station->setDeleted($delete);
-				$station->Save();
-			}
-		}
-
-		Redirect::Page( URLBuilder::getURL(NULL, 'StationList.php') );
-
-		break;
-
-	default:
-		$slf = new StationListFactory();
-
-		$slf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-
-		$pager = new Pager($slf);
-
-		foreach ($slf as $station) {
-			$stations[] = array(
-								'id' => $station->GetId(),
-								'type' => Option::getByKey($station->getType(), $station->getOptions('type') ),
-								'status' => Option::getByKey($station->getStatus(), $station->getOptions('status') ),
-								'source' => $station->getSource(),
-								'station' => $station->getStation(),
-								'short_station' => Misc::TruncateString( $station->getStation(), 15 ),
-								'description' => Misc::TruncateString( $station->getDescription(), 30 ) ,
-								'deleted' => $station->getDeleted()
-							);
-
-			unset($description);
-		}
-		$smarty->assign_by_ref('stations', $stations);
-
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
-
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-		break;
-}
-$smarty->display('station/StationList.tpl');
-?>
