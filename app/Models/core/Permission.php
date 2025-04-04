@@ -15,10 +15,11 @@ class Permission {
 	{
 		$clf = new CompanyListFactory();
 		$authentication = new Authentication();
-		$authentication->Check();
-
-		$this->current_user = $authentication->getObject();
-		$this->current_company = $clf->getByID( $this->current_user->getCompany() )->getCurrent();
+		
+		if($authentication->Check() == true){
+			$this->current_user = $authentication->getObject();
+			$this->current_company = $clf->getByID( $this->current_user->getCompany() )->getCurrent();
+		}
 	}
 
 	function getPermissions( $user_id, $company_id ) {
