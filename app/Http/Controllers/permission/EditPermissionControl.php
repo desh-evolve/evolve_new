@@ -188,7 +188,7 @@ class EditPermissionControl extends Controller
 
     }
 
-	public function apply_preset(Request $request){
+	public function submit(Request $request){
 		$pcf = new PermissionControlFactory();
 
 		$data = $request->data;

@@ -12,6 +12,7 @@ use App\Models\Core\Option;
 use App\Models\Core\Misc;
 use App\Models\Core\Pager;
 use App\Models\Core\PermissionControlListFactory;
+use App\Models\Core\PermissionControlFactory;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
@@ -24,6 +25,7 @@ class PermissionControlList extends Controller
     protected $currentUser;
     protected $currentCompany;
     protected $userPrefs;
+	protected $company;
 
     public function __construct()
     {
@@ -45,21 +47,10 @@ class PermissionControlList extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
+		$current_company = $this->company;
+        $current_user_prefs = $this->userPrefs;
 
         $viewData['title'] = 'Permission Group List';
-
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
 
 		$pclf = new PermissionControlListFactory();
 		$pclf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
@@ -70,7 +61,7 @@ class PermissionControlList extends Controller
 			$pclf->data = (array)$pc_obj;
 			$pc_obj = $pclf;
 
-			$rows[] = array(
+			$permission[] = array(
 								'id' => $pc_obj->getId(),
 								'name' => $pc_obj->getColumn('name'),
 								'description' => $pc_obj->getColumn('description'),
@@ -80,16 +71,16 @@ class PermissionControlList extends Controller
 							);
 
 		}
-		$smarty->assign_by_ref('rows', $rows);
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+		$viewData = [
+            'title' => 'Permission List',
+            'permission' => $permission,
+			'sort_column' => $sort_array['sort_column'] ?? '',
+			'sort_order' => $sort_array['sort_order'] ?? '',
+			'paging_data' => $pager->getPageVariables()
+        ];
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-
-		$smarty->display('permission/PermissionControlList.tpl');
-        return view('accrual/ViewUserAccrualList', $viewData);
+        return view('permission.PermissionControlList', $viewData);
 
     }
 

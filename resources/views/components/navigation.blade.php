@@ -139,7 +139,11 @@
                                         class="nav-link {{ request()->routeIs('station.index') ? 'active' : '' }}">Stations 
                                     </a>
                                 </li>
-                                <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
+                                </li><li class="nav-item">
+                                    <a href="{{ route('permission_control.index') }}" 
+                                        class="nav-link {{ request()->routeIs('permission_control.index') ? 'active' : '' }}">Permission Groups 
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">New Hire Defaults</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Company Bank Information</a></li>
