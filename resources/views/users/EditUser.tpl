@@ -244,63 +244,6 @@ function showProvince() {
 
 				               
                 
-				{if $permission->Check('user','edit_advanced') AND $user_data.id != ''}
-				<tr class="tblHeader">
-					<td colspan="2">
-						{t}Employee:{/t}
-						<a href="javascript: submitModifiedForm('filter_user', 'prev', document.edituser);"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_prev_sm.gif"></a>
-						<select name="id" id="filter_user" onChange="submitModifiedForm('filter_user', '', document.edituser);">
-							{html_options options=$user_data.user_options selected=$user_data.id}
-						</select>
-						<input type="hidden" id="old_filter_user" value="{$user_data.id}">
-						<a href="javascript: submitModifiedForm('filter_user', 'next', document.edituser);"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_next_sm.gif"></a>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-						{assign var="user_id" value=$user_data.id}
-
-						{if $permission->Check('wage','view') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserWageList.php" values="user_id=$user_id,saved_search_id=$saved_search_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Wage{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('user_tax_deduction','view') OR ( $permission->Check('user_tax_deduction','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('user_tax_deduction','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserDeductionList.php" values="user_id=$user_id,saved_search_id=$saved_search_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Tax{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('pay_stub_amendment','view') OR ( $permission->Check('pay_stub_amendment','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('pay_stub_amendment','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="../pay_stub_amendment/PayStubAmendmentList.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}PS Amendment{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('user_preference','enabled') }
-							[ <a href="{urlbuilder script="EditUserPreference.php" values="user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Prefs{/t}</a> ]
-						{/if}
-
-						{if $user_data.country == 'CA' AND ( $permission->Check('roe','view') OR ( $permission->Check('roe','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('roe','view_own') AND $user_data.is_owner === TRUE ) )}
-							[ <a href="{urlbuilder script="../roe/ROEList.php" values="user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}ROE{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('user','edit_bank') OR ( $permission->Check('user','edit_child_bank') AND $user_data.is_child === TRUE ) OR ( $permission->Check('user','edit_own_bank') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="../bank_account/EditBankAccount.php" values="user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Bank{/t}</a> ]
-						{/if}
-                                                
-                                                {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="censusInfo.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Census{/t}</a> ]
-						{/if}
-                                                
-                                                {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserEducation.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Qualification{/t}</a> ]
-						{/if}
-                                                
-                                                 {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserWorkExperionce.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Work Experionce{/t}</a> ]
-						{/if}
-                                                
-                                                {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserLifePromotion.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Promotion{/t}</a> ]
-						{/if}
-                                                
-					</td>
-				</tr>
-				{/if}
 
 				<tr>
 					<td valign="top">
@@ -384,7 +327,6 @@ function showProvince() {
 								<td colspan="2" class="cellRightEditTable"><input type="text" size="15" name="user_data[punch_machine_user_id]" value="{$user_data.punch_machine_user_id}" /></td>      
 									
 							</tr>	
-                                                        
                             <tr onClick="showHelpEntry('default_branch')">
 								<td class="{isvalid object="uf" label="default_branch" value="cellLeftEditTable"}">
 									{t}Location:{/t}
@@ -557,6 +499,7 @@ function showProvince() {
 								</td>
 							</tr> 
                                                         
+						
                                                         
                             <!--ARSP NOTE -> I ADDED THIDS CODE FOR THUNDER & NEON -->
 							<tr onClick="showHelpEntry('resign_date')">
@@ -609,6 +552,7 @@ function showProvince() {
 								</td>
 							</tr>
 
+
 							<tr onClick="showHelpEntry('permission_control')">
 								<td class="{isvalid object="uf" label="permission_control" value="cellLeftEditTable"}">
 									{t}Permission Group:{/t}
@@ -639,6 +583,8 @@ function showProvince() {
 							
 
 							{/if}
+
+							
 
 							<tr onClick="showHelpEntry('user_name')">
 								<td class="{isvalid object="uf" label="user_name" value="cellLeftEditTable"}">
@@ -691,8 +637,6 @@ function showProvince() {
 								</td>
 							</tr>
 				-->
-
-							
 
 							
 
@@ -850,6 +794,11 @@ function showProvince() {
 							{/if}
 
 							{/if}
+
+
+//===========================desh check here==========================
+
+
 					{if $permission->Check('user','edit_advanced') AND ( $permission->Check('user','add') OR ( $permission->Check('user','edit') OR ($permission->Check('user','edit_child') AND $user_data.is_child === TRUE) OR ($permission->Check('user','edit_own') AND $user_data.is_owner === TRUE) ) )}
 						</table>
 				  </td>

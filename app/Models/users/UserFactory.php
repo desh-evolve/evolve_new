@@ -394,7 +394,7 @@ class UserFactory extends Factory {
 
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
 
-		return Environment::getStorageBasePath() .'/user_files'. '/'. $user_id;
+		return Environment::getStorageBasePath() .'/user_docs/user_files'. '/'. $user_id;
                 //return Environment::getStorageBasePath() . DIRECTORY_SEPARATOR .'User_file'. DIRECTORY_SEPARATOR . $user_id;
                 //ARSP ADD NEW CODE HERE --> getUserFileStorageBasePath()
                 //return Environment::getUserFileStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
@@ -428,22 +428,23 @@ class UserFactory extends Factory {
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserIdCopyUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER
-                //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
-                if ($handle = opendir($this->getUserIdCopyStoragePath( $this->getId() ))) {
-                    $x=0;
-                while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                //echo $entry."</br>";
-                    $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_id_copy'. '/' .$this->getId().'/'.$entry;
-                    $x++;
-                        }
-                    }
-                //print_r($file_array);
-                closedir($handle);
-                }
-                return $file_array;
-            }
+					$file_array = [];
+					// GET THE TOTAL FILES INSIDE THE FOLDER
+					//This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
+					if ($handle = opendir($this->getUserIdCopyStoragePath( $this->getId() ))) {
+						$x=0;
+					while (false !== ($entry = readdir($handle))) {
+					if ($entry != "." && $entry != "..") {
+					//echo $entry."</br>";
+						$file_array[$x] =  Environment::getUserFileStorageBasePath().'user_id_copy'. '/' .$this->getId().'/'.$entry;
+						$x++;
+							}
+						}
+					//print_r($file_array);
+					closedir($handle);
+					}
+					return $file_array;
+				}
 
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
@@ -459,50 +460,51 @@ class UserFactory extends Factory {
 		}
 
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
-		return Environment::getStorageBasePath() .'/user_id_copy'. '/'. $user_id;
+		return Environment::getStorageBasePath() .'/user_docs/user_id_copy'. '/'. $user_id;
                 }
 
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
-                function getUserIdCopyFileName()
-                {
-                if ($handle = opendir($this->getUserIdCopyStoragePath( $this->getId() ))) {
-                $x=0;
-                while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                //echo $entry."</br>";
-                    $file_array[$x] = $entry;
-                    $x++;
-        }
-    }
-                //print_r($file_array);
-                closedir($handle);
-}
-                return $file_array;
 
-                }
+				function getUserIdCopyFileName() {
+					// Initialize $file_array to prevent "undefined variable" error
+					$file_array = [];
+				
+					if ($handle = opendir($this->getUserIdCopyStoragePath($this->getId()))) {
+						while (false !== ($entry = readdir($handle))) {
+							if ($entry != "." && $entry != "..") {
+								$file_array[] = $entry; // Append directly instead of using index
+							}
+						}
+						closedir($handle);
+					}
+				
+					return $file_array;
+				}
+				
 
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserBirthCertificateUrl( ) {
-                // GET THE TOTAL FILES INSIDE THE FOLDER
-                //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
-                if ($handle = opendir($this->getUserBirthCertificateStoragePath( $this->getId() ))) {
-                    $x=0;
-                while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                //echo $entry."</br>";
-                    $file_array[$x] =  Environment::getUserFileStorageBasePath().'user_birth_certificate'. '/' .$this->getId().'/'.$entry;
-                    $x++;
-                        }
-                    }
-                //print_r($file_array);
-                closedir($handle);
-                }
-                return $file_array;
-            }
+					$file_array = [];
+					// GET THE TOTAL FILES INSIDE THE FOLDER
+					//This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
+					if ($handle = opendir($this->getUserBirthCertificateStoragePath( $this->getId() ))) {
+						$x=0;
+						while (false !== ($entry = readdir($handle))) {
+						if ($entry != "." && $entry != "..") {
+						//echo $entry."</br>";
+							$file_array[$x] =  Environment::getUserFileStorageBasePath().'user_birth_certificate'. '/' .$this->getId().'/'.$entry;
+							$x++;
+								}
+							}
+						//print_r($file_array);
+						closedir($handle);
+					}
+					return $file_array;
+				}
 
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
@@ -518,27 +520,27 @@ class UserFactory extends Factory {
 		}
 
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
-		return Environment::getStorageBasePath() .'user_birth_certificate'. '/'. $user_id;
+		return Environment::getStorageBasePath() .'/user_docs/user_birth_certificate'. '/'. $user_id;
                 }
 
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
-                function getUserBirthCertificateFileName()
-                {
-                if ($handle = opendir($this->getUserBirthCertificateStoragePath( $this->getId() ))) {
-                $x=0;
-                while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                //echo $entry."</br>";
-                    $file_array[$x] = $entry;
-                    $x++;
-        }
-    }
-                //print_r($file_array);
-                closedir($handle);
-}
-                return $file_array;
+                function getUserBirthCertificateFileName() {
+					$file_array = [];
+					if ($handle = opendir($this->getUserBirthCertificateStoragePath( $this->getId() ))) {
+						$x=0;
+						while (false !== ($entry = readdir($handle))) {
+							if ($entry != "." && $entry != "..") {
+							//echo $entry."</br>";
+								$file_array[$x] = $entry;
+								$x++;
+							}
+						}
+							//print_r($file_array);
+							closedir($handle);
+					}
+                	return $file_array;
 
                 }
 
@@ -547,6 +549,7 @@ class UserFactory extends Factory {
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserGsLetterUrl( ) {
+					$file_array = [];
                 // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserGsLetterStoragePath( $this->getId() ))) {
@@ -578,7 +581,7 @@ class UserFactory extends Factory {
 		}
 
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
-		return Environment::getStorageBasePath() .'user_gs_letter'. '/'. $user_id;
+		return Environment::getStorageBasePath() .'/user_docs/user_gs_letter'. '/'. $user_id;
                 }
 
                 /**
@@ -586,6 +589,7 @@ class UserFactory extends Factory {
                  */
                 function getUserGsLetterFileName()
                 {
+					$file_array = [];
                 if ($handle = opendir($this->getUserGsLetterStoragePath( $this->getId() ))) {
                 $x=0;
                 while (false !== ($entry = readdir($handle))) {
@@ -609,6 +613,7 @@ class UserFactory extends Factory {
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserPoliceReportUrl( ) {
+					$file_array = [];
                 // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserPoliceReportStoragePath( $this->getId() ))) {
@@ -640,7 +645,7 @@ class UserFactory extends Factory {
 		}
 
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
-		return Environment::getStorageBasePath() .'user_police_report'. '/'. $user_id;
+		return Environment::getStorageBasePath() .'/user_docs/user_police_report'. '/'. $user_id;
                 }
 
                 /**
@@ -648,6 +653,7 @@ class UserFactory extends Factory {
                  */
                 function getUserPoliceReportFileName()
                 {
+					$file_array = [];
                 if ($handle = opendir($this->getUserPoliceReportStoragePath( $this->getId() ))) {
                 $x=0;
                 while (false !== ($entry = readdir($handle))) {
@@ -670,6 +676,7 @@ class UserFactory extends Factory {
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getUserNdaUrl( ) {
+					$file_array = [];
                 // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getUserNdaUrlStoragePath( $this->getId() ))) {
@@ -701,7 +708,7 @@ class UserFactory extends Factory {
 		}
 
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
-		return Environment::getStorageBasePath() .'user_nda'. '/'. $user_id;
+		return Environment::getStorageBasePath() .'/user_docs/user_nda'. '/'. $user_id;
                 }
 
                 /**
@@ -709,6 +716,7 @@ class UserFactory extends Factory {
                  */
                 function getUserNdaFileName()
                 {
+					$file_array = [];
                 if ($handle = opendir($this->getUserNdaUrlStoragePath( $this->getId() ))) {
                 $x=0;
                 while (false !== ($entry = readdir($handle))) {
@@ -730,6 +738,7 @@ class UserFactory extends Factory {
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                  */
                 function getBondUrl( ) {
+					$file_array = [];
                 // GET THE TOTAL FILES INSIDE THE FOLDER
                 //This Code Will give full path of the file----->   $file_array =  glob($this->getUserFileStoragePathTest( $this->getId() ).'/*');
                 if ($handle = opendir($this->getBondUrlStoragePath( $this->getId() ))) {
@@ -761,7 +770,7 @@ class UserFactory extends Factory {
 		}
 
                 //echo Environment::getStorageBasePath().'user_file'. DIRECTORY_SEPARATOR .$user_id;
-		return Environment::getStorageBasePath() .'user_bond'. '/'. $user_id;
+		return Environment::getStorageBasePath() .'/user_docs/user_bond'. '/'. $user_id;
                 }
 
                 /**
@@ -769,6 +778,7 @@ class UserFactory extends Factory {
                  */
                 function getBondFileName()
                 {
+					$file_array = [];
                 if ($handle = opendir($this->getBondUrlStoragePath( $this->getId() ))) {
                 $x=0;
                 while (false !== ($entry = readdir($handle))) {
@@ -1207,7 +1217,7 @@ class UserFactory extends Factory {
 				return FALSE;
 			}
 
-			return Environment::getStorageBasePath() .'/user_template_file'. '/'. $user_id;
+			return Environment::getStorageBasePath() .'/user_docs/user_template_file'. '/'. $user_id;
 		}
 
 
