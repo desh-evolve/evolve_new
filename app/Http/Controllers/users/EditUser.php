@@ -54,7 +54,7 @@ class EditUser extends Controller
 
     }
 
-    public function index($user_id = null) {
+    public function index($id = null) {
 		/*
 			if ( !$permission->Check('user','enabled')
 					OR !( $permission->Check('user','edit') OR $permission->Check('user','edit_own') OR $permission->Check('user','edit_child') OR $permission->Check('user','add')) ) {
@@ -62,7 +62,7 @@ class EditUser extends Controller
 			}
 		*/
 
-		$viewData['title'] = !empty($user_id) ? 'Edit Employee' : 'Add Employee';
+		$viewData['title'] = !empty($id) ? 'Edit Employee' : 'Add Employee';
 
 		$current_company = $this->currentCompany;
 		$current_user = $this->currentUser;
@@ -72,33 +72,8 @@ class EditUser extends Controller
 
 		$ulf = new UserListFactory();
 		$uf = new UserFactory(); 
-
-		if ( isset($user_id) ) {
-			$ulf->getById($user_id);
-			$user_data = $ulf->getCurrent()->data;
-
-			if ( isset($user_data['hire_date']) AND $user_data['hire_date'] != '') {
-				$user_data['hire_date'] = TTDate::parseDateTime($user_data['hire_date']);
-			}
-
-			if ( isset($user_data['termination_date']) AND $user_data['termination_date'] != '') {
-				Debug::Text('Running strtotime on Termination date', __FILE__, __LINE__, __METHOD__,10);
-				$user_data['termination_date'] = TTDate::parseDateTime($user_data['termination_date']);
-			}
-			
-			if ( isset($user_data['resign_date']) AND $user_data['resign_date'] != '') {
-				$user_data['resign_date'] = TTDate::parseDateTime($user_data['resign_date']);
-			}  
-			
-			if ( isset($user_data['confirmed_date']) AND $user_data['confirmed_date'] != '') {
-				$user_data['confirmed_date'] = TTDate::parseDateTime($user_data['confirmed_date']);
-			} else {
-				Debug::Text('NOT Running strtotime on Termination date', __FILE__, __LINE__, __METHOD__,10);
-			}
-		}
-		
-		
 		$hlf = new HierarchyListFactory();
+		
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId( $current_company->getId(), $current_user->getId() );
 		//Include current user in list.
 		if ( $permission->Check('user','edit_own') ) {
@@ -111,7 +86,7 @@ class EditUser extends Controller
 			$company_id = $current_company->getId();
 		}
 
-		if ( isset($id) AND $action !== 'submit' ) {
+		if ( isset($id)) {
 			
 			if ( $permission->Check('company','view') ) {
 				$ulf->getById( $id )->getCurrent();
@@ -497,7 +472,7 @@ class EditUser extends Controller
 
 		$viewData['user_data'] = $user_data;
 		$viewData['uf'] = $uf;
-
+dd($user_data);
 		return view('users/EditUser', $viewData);
 	}
 
