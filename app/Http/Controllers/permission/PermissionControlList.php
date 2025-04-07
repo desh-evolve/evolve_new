@@ -89,6 +89,8 @@ class PermissionControlList extends Controller
 
 	public function copy()
 	{
+		$current_company = $this->company;
+		$current_user_prefs = $this->userPrefs;
 		$pclf = new PermissionControlListFactory();
 
 		$pclf->StartTransaction();

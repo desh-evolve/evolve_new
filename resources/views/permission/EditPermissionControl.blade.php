@@ -120,7 +120,7 @@
                                 <td class="cellRightEditTable">
                                     <select name="data[level]" id="level" class="form-select">
                                         @foreach ($data['level_options'] as $value => $label)
-                                            <option value="{{ $value }}"
+                                            <option value="{{ $value }}" dd($data['level']);
                                                 {{ isset($data['level']) && $data['level'] == $value ? 'selected' : '' }}>
                                                 {{ $label }}</option>
                                         @endforeach
@@ -367,9 +367,7 @@
                             </td>
                             <td class="cellRightEditTable">
                                 <x-general.multiselect-php title="Include Employees" :data="$data['user_options']"
-                                    :selected="!empty($data['user_ids'])
-                                        ? array_values($data['user_ids'])
-                                        : []" :name="'data[user_ids][]'" id="policySelector" />
+                                    :selected="!empty($data['user_ids']) ? array_values($data['user_ids']) : []" :name="'data[user_ids][]'" id="policySelector" />
                             </td>
                         </tr>
                     </table>

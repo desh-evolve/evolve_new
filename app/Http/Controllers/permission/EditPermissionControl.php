@@ -66,6 +66,7 @@ class EditPermissionControl extends Controller
 			$pclf->getByIdAndCompanyId($id, $current_company->getId());
 
 			foreach ($pclf->rs as $pc_obj) {
+				
 				$pclf->data = (array)$pc_obj;
 				$pc_obj = $pclf;
 
