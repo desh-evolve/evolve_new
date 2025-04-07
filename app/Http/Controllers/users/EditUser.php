@@ -73,7 +73,7 @@ class EditUser extends Controller
 		$ulf = new UserListFactory();
 		$uf = new UserFactory(); 
 		$hlf = new HierarchyListFactory();
-		
+
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId( $current_company->getId(), $current_user->getId() );
 		//Include current user in list.
 		if ( $permission->Check('user','edit_own') ) {
@@ -472,7 +472,7 @@ class EditUser extends Controller
 
 		$viewData['user_data'] = $user_data;
 		$viewData['uf'] = $uf;
-dd($user_data);
+		
 		return view('users/EditUser', $viewData);
 	}
 
