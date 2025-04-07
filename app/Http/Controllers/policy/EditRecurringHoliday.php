@@ -49,6 +49,8 @@ class EditRecurringHoliday extends Controller
 
 		$viewData['title'] = isset($id) ? 'Edit Recurring Holiday' : 'Add Recurring Holiday';
 		$current_company = $this->currentCompany;
+		
+        $current_user_prefs = $this->userPrefs;
 
 		$rhf = new RecurringHolidayFactory();
 
@@ -99,48 +101,44 @@ class EditRecurringHoliday extends Controller
 
     }
 
-	public function submit(Request $request){
-		$rhf = new RecurringHolidayFactory();
-		$data = $request->data;
-		$current_company = $this->currentCompany;
 
-		//Debug::setVerbosity(11);
+	public function submit(Request $request, $id = null){
+		// dd($request->all());
+		$rhf = new RecurringHolidayFactory();
+		$data = $request->input('data', []);
+		$current_company = $this->currentCompany;
+        $current_user_prefs = $this->userPrefs;
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-		$rhf->setId( $data['id'] );
+		$rhf->setId( $id ?? ($data['id'] ?? null) );
 		$rhf->setCompany( $current_company->getId() );
-		$rhf->setName( $data['name'] );
-		$rhf->setType( $data['type_id'] );
-		/*
-		if ( isset($data['easter']) ) {
-			$rhf->setEaster( TRUE );
-		} else {
-			$rhf->setEaster( FALSE );
-		}
-		*/
-		$rhf->setSpecialDay( $data['special_day_id'] );
-		$rhf->setWeekInterval( $data['week_interval'] );
-		$rhf->setPivotDayDirection( $data['pivot_day_direction_id'] );
+		$rhf->setName( $data['name'] ?? '' );
+		$rhf->setType( $data['type_id'] ?? '' );
 
-		if ( $data['type_id'] == 20 ) {
-			$rhf->setDayOfWeek( $data['day_of_week_20'] );
-		} elseif ( $data['type_id'] == 30 ) {
-			$rhf->setDayOfWeek( $data['day_of_week_30'] );
+		$rhf->setSpecialDay( $data['special_day_id'] ?? '' );
+		$rhf->setWeekInterval( $data['week_interval'] ?? '' );
+		$rhf->setPivotDayDirection( $data['pivot_day_direction_id'] ?? '' );
+
+		if ( ($data['type_id'] ?? null) == 20 ) {
+			$rhf->setDayOfWeek( $data['day_of_week_20'] ?? '' );
+		} elseif ( ($data['type_id'] ?? null) == 30 ) {
+			$rhf->setDayOfWeek( $data['day_of_week_30'] ?? '' );
 		}
 
-		$rhf->setDayOfMonth( $data['day_of_month'] );
-		$rhf->setMonth( $data['month'] );
+		$rhf->setDayOfMonth( $data['day_of_month'] ?? '' );
+		$rhf->setMonth( $data['month'] ?? '' );
 
-		$rhf->setAlwaysOnWeekDay( $data['always_week_day_id'] );
+		$rhf->setAlwaysOnWeekDay( $data['always_week_day_id'] ?? '' );
 
 		if ( $rhf->isValid() ) {
 			$rhf->Save();
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'RecurringHolidayList') );
-
+			return redirect()->to(URLBuilder::getURL(NULL, '/recurring_holidays'))->with('success', 'Saved successfully.');
 		}
+
+		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 	}
+
 }
 
 ?>

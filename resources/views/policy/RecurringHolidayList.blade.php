@@ -8,7 +8,7 @@
                         <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
                     </div>
 
-                    <div class="justify-content-md-end">
+                    {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
                             <a 
                                 type="button" 
@@ -16,6 +16,14 @@
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add Recurring Holiday <i class="ri-add-line"></i>
                             </a>
+                        </div>
+                    </div> --}}
+
+                    <div class="justify-content-md-end">
+                        <div class="d-flex justify-content-end">
+                            <a type="button" href="/recurring_holidays/add"
+                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
+                                id="add_new_btn">New Recurring Holiday <i class="ri-add-line"></i></a>
                         </div>
                     </div>
                 </div>
@@ -37,8 +45,15 @@
                                 <td>{{ $row['name'] }}</td>
                                 <td>{{ $row['next_date'] }}</td>
                                 <td>
-                                    <a class="btn btn-secondary btn-sm" href="{{ route('policy.recurring_holidays.add', ['id' => $row['id']]) }}">Edit</a>
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/recurring_holidays/delete/{{ $policy['id'] }}', 'Absence Policy', this)">Delete</button>
+                                    <!-- Edit Button -->
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('recurring_holidays.add', ['id' => $row['id'] ?? '']) }}'">
+                                        {{ __('Edit') }}
+                                    </button>
+                                
+                                    <!-- Delete Button -->
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteRecurringHolidays({{ $row['id'] }})">
+                                        {{ __('Delete') }}
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -52,4 +67,31 @@
         </div>
         <!-- end col -->
     </div>
+    <script>
+        async function deleteRecurringHolidays(recurringHolidayId) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                try {
+                    const response = await fetch(`/recurring_holidays/delete/${recurringHolidayId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert(data.success); // Display success message
+                        window.location.reload(); // Reload the page to reflect changes
+                    } else {
+                        console.error(`Error deleting item ID ${recurringHolidayId}:`, data.error);
+                    }
+                } catch (error) {
+                    console.error(`Error deleting item ID ${recurringHolidayId}:`, error);
+                }
+            }
+        }
+    </script>
 </x-app-layout>

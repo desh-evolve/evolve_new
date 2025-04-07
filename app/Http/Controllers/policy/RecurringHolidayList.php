@@ -41,9 +41,10 @@ class RecurringHolidayList extends Controller
 
         $viewData['title'] = 'Recurring Holiday List';
 		$current_company = $this->currentCompany;
+		$current_user_prefs = $this->userPrefs;
 
 		$rhlf = new RecurringHolidayListFactory();
-		$rhlf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
+		$rhlf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage());
 
 		//$type_options = $aplf->getOptions('type');
 
@@ -54,7 +55,7 @@ class RecurringHolidayList extends Controller
 			$rows[] = array(
 				'id' => $rh_obj->getId(),
 				'name' => $rh_obj->getName(),
-				'next_date' => $rh_obj->getNextDate( time() ),
+				'next_date' => date('Y-m-d',$rh_obj->getNextDate( time() )),
 				'deleted' => $rh_obj->getDeleted()
 			);
 		}
@@ -77,6 +78,8 @@ class RecurringHolidayList extends Controller
         }
 
 		$current_company = $this->currentCompany;
+		
+        $current_user_prefs = $this->userPrefs;
 		$delete = TRUE;
 
 		$rhlf = new RecurringHolidayListFactory();
