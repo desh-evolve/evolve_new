@@ -23,7 +23,8 @@
             border-collapse: collapse;
         }
 
-        .tblList th, .tblList td {
+        .tblList th,
+        .tblList td {
             padding: 0.75rem;
             vertical-align: top;
             border-top: 1px solid #dee2e6;
@@ -46,7 +47,8 @@
             background-color: #ffffff;
         }
 
-        .cellLeftEditTable, .cellRightEditTable {
+        .cellLeftEditTable,
+        .cellRightEditTable {
             padding: 8px;
         }
 
@@ -62,9 +64,15 @@
 
     <div class="center-container">
         <div class="card w-75">
-            <div class="card-header align-items-center d-flex justify-content-between">
+            {{-- <div class="card-header align-items-center d-flex justify-content-between">
                 <h4 class="card-title mb-0 flex-grow-1">{{ $title }}</h4>
-                <a href="{{ route('permission.list') }}" class="btn btn-primary">Permissions List <i class="ri-arrow-right-line"></i></a>
+                <a href="{{ route('permission_control.index') }}" class="btn btn-primary">Permissions List <i
+                        class="ri-arrow-right-line"></i></a>
+            </div> --}}
+            <div class="card-header align-items-center d-flex justify-content-between">
+                <h4 class="card-title mb-0 flex-grow-1">Permissions {{ isset($data['id']) ? 'Edit' : 'Add' }}</h4>
+                <a href="/permission_control" class="btn btn-primary">Permissions List <i
+                        class="ri-arrow-right-line"></i></a>
             </div>
 
             <div class="card-body">
@@ -78,40 +86,47 @@
                     </div>
                 @endif
 
-                <form method="post" name="edit_permission" action="{{ request()->url() }}">
+
+                <form method="POST"
+                    action="{{ isset($data['id']) ? route('permission_control.save', $data['id']) : route('permission_control.save') }}">
                     @csrf
 
                     <div id="contentBoxTwoEdit">
                         <table class="editTable">
                             <tr>
                                 <td class="cellLeftEditTable">
-                                    <label for="name">{t}Name:{/t}</label>
+                                    <label for="name">Name:</label>
                                 </td>
                                 <td class="cellRightEditTable">
-                                    <input type="text" name="data[name]" id="name" class="form-control" value="{{ $data['name'] ?? '' }}">
+                                    <input type="text" name="data[name]" id="name" class="form-control"
+                                        value="{{ $data['name'] ?? '' }}">
                                 </td>
                             </tr>
 
                             <tr>
                                 <td class="cellLeftEditTable">
-                                    <label for="description">{t}Description:{/t}</label>
+                                    <label for="description"> Description: </label>
                                 </td>
                                 <td class="cellRightEditTable">
-                                    <input type="text" name="data[description]" id="description" class="form-control" value="{{ $data['description'] ?? '' }}">
+                                    <input type="text" name="data[description]" id="description" class="form-control"
+                                        value="{{ $data['description'] ?? '' }}">
                                 </td>
                             </tr>
 
                             <tr>
                                 <td class="cellLeftEditTable">
-                                    <label for="level">{t}Level:{/t}</label>
+                                    <label for="level"> Level: </label>
                                 </td>
                                 <td class="cellRightEditTable">
                                     <select name="data[level]" id="level" class="form-select">
                                         @foreach ($data['level_options'] as $value => $label)
-                                            <option value="{{ $value }}" {{ isset($data['level']) && $data['level'] == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                            <option value="{{ $value }}"
+                                                {{ isset($data['level']) && $data['level'] == $value ? 'selected' : '' }}>
+                                                {{ $label }}</option>
                                         @endforeach
                                     </select>
-                                    <small class="form-text text-muted">{t}(Higher levels can only assign employees to lower levels){/t}</small>
+                                    <small class="form-text text-muted"> (Higher levels can only assign employees to
+                                        lower levels) </small>
                                 </td>
                             </tr>
 
@@ -120,128 +135,162 @@
                                     <table class="tblList">
                                         <tr class="tblHeader">
                                             <td colspan="6">
-                                                {t}Permission Presets:{/t}
-                                                <select id="preset" name="data[preset]" class="form-select d-inline-block w-auto">
+                                                Permission Presets:
+                                                <select id="preset" name="data[preset]"
+                                                    class="form-select d-inline-block w-auto">
                                                     @foreach ($preset_options as $value => $label)
-                                                        <option value="{{ $value }}">{{ $label }}</option>
+                                                        <option value="{{ $value }}">{{ $label }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                                 @if ($product_edition == 20)
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" name="data[preset_flags][job]" value="1" id="job_tracking">
-                                                        <label class="form-check-label" for="job_tracking">{t}Job Tracking{/t}</label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="data[preset_flags][job]" value="1"
+                                                            id="job_tracking">
+                                                        <label class="form-check-label" for="job_tracking"> Job Tracking
+                                                        </label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" name="data[preset_flags][invoice]" value="1" id="invoicing">
-                                                        <label class="form-check-label" for="invoicing">{t}Invoicing{/t}</label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="data[preset_flags][invoice]" value="1"
+                                                            id="invoicing">
+                                                        <label class="form-check-label" for="invoicing"> Invoicing
+                                                        </label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" name="data[preset_flags][document]" value="1" id="documents">
-                                                        <label class="form-check-label" for="documents">{t}Documents{/t}</label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="data[preset_flags][document]" value="1"
+                                                            id="documents">
+                                                        <label class="form-check-label" for="documents"> Documents
+                                                        </label>
                                                     </div>
                                                 @endif
-                                                <button type="submit" class="btn btn-primary" name="action" value="Apply_Preset">{t}Apply Preset{/t}</button>
+                                                <button type="submit" class="btn btn-primary" name="action"
+                                                    value="Apply_Preset"> Apply Preset </button>
                                             </td>
                                         </tr>
 
                                         <tr class="tblHeader">
                                             <td colspan="6">
-                                                {t}Display Permissions:{/t}
-                                                <select id="group" name="group_id" class="form-select d-inline-block w-auto" onChange="this.form.submit()">
+                                                Display Permissions:
+                                                {{-- <select id="group" name="group_id" --}}
+                                                <select id="group" name="data[group_id]"
+                                                    class="form-select d-inline-block w-auto"
+                                                    onChange="this.form.submit()">
                                                     @foreach ($section_group_options as $value => $label)
-                                                        <option value="{{ $value }}" {{ $group_id == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                                        <option value="{{ $value }}"
+                                                            {{ $group_id == $value ? 'selected' : '' }}>
+                                                            {{ $label }}</option>
                                                     @endforeach
                                                 </select>
                                                 <input type="hidden" id="old_group" value="{{ $group_id }}">
                                             </td>
                                         </tr>
-
                                         @foreach ($permission_data as $section)
                                             @if (!isset($ignore_permissions[$section['name']]) || $ignore_permissions[$section['name']] != 'ALL')
                                                 @if ($loop->first)
                                                     <tr class="tblHeader">
                                                         <td colspan="6">
-                                                            <a name="top">{t}Table of Contents{/t}</a>
+                                                            <a name="top"> Table of Contents </a>
                                                         </td>
                                                     </tr>
 
-                                                    <tr class="{{ $loop->iteration % 2 == 0 ? 'table-light' : 'table-white' }}">
+                                                    <tr
+                                                        class="{{ $loop->iteration % 2 == 0 ? 'table-light' : 'table-white' }}">
                                                 @endif
 
                                                 <td colspan="2">
-                                                    <a href="#{{ $section['name'] }}">{{ $section['display_name'] }}</a>
+                                                    <a
+                                                        href="#{{ $section['name'] }}">{{ $section['display_name'] }}</a>
                                                 </td>
 
                                                 @if ($loop->iteration % 3 == 0)
-                                                    </tr>
-                                                    <tr class="{{ $loop->iteration % 2 == 0 ? 'table-light' : 'table-white' }}">
-                                                @endif
-
-                                                @if ($loop->last)
-                                                    <td colspan="2">
-                                                        <a href="#employees">{t}Employee List{/t}</a>
-                                                    </td>
-                                                    @if (($loop->count + 1) % 3 != 0)
-                                                        <td colspan="6">
-                                                            <br>
-                                                        </td>
-                                                    @endif
-                                                    </tr>
-                                                @endif
-                                            @endif
-                                        @endforeach
-
-                                        @foreach ($permission_data as $section)
-                                            @if (!isset($ignore_permissions[$section['name']]) || $ignore_permissions[$section['name']] != 'ALL')
-                                                <tr class="tblHeader">
-                                                    <td>
-                                                        [ <a href="#top">{t}Top{/t}</a> ] [ <a href="#employees">{t}Bottom{/t}</a> ]
-                                                    </td>
-                                                    <td colspan="2">
-                                                        <a name="{{ $section['name'] }}">{{ $section['display_name'] }}</a>
-                                                    </td>
-                                                    <td>
-                                                        {t}Allow{/t}
-                                                    </td>
-                                                    <td>
-                                                        {t}Deny{/t}
-                                                    </td>
-                                                </tr>
-                                                
-                                                @foreach ($section['permissions'] as $perm)
-                                                    @if (!isset($ignore_permissions[$section['name']]) || 
-                                                        (isset($ignore_permissions[$section['name']]) && 
-                                                        is_array($ignore_permissions[$section['name']]) && 
-                                                        in_array($perm['name'], $ignore_permissions[$section['name']]) && 
-                                                        $permission->Check('company','edit')) ||
-                                                        (isset($ignore_permissions[$section['name']]) && 
-                                                        is_array($ignore_permissions[$section['name']]) && 
-                                                        !in_array($perm['name'], $ignore_permissions[$section['name']]))
-                                                    <tr class="{{ $loop->iteration % 2 == 0 ? 'table-light' : 'table-white' }}">
-                                                        <td colspan="3" class="cellLeftBlueEditTable">
-                                                            {{ $perm['display_name'] }}
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" name="data[permissions][{{ $section['name'] }}][{{ $perm['name'] }}]" value="1" {{ $perm['result'] === true ? 'checked' : '' }}>
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" name="data[permissions][{{ $section['name'] }}][{{ $perm['name'] }}]" value="0" {{ $perm['result'] !== true ? 'checked' : '' }}>
-                                                        </td>
-                                                        <input type="hidden" name="old_data[permissions][{{ $section['name'] }}][{{ $perm['name'] }}]" value="{{ $perm['result'] === true ? '1' : '0' }}">
-                                                    </tr>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        @endforeach
-                                    </table>
-                                    <a name="employees"></a>
-                                </td>
                             </tr>
+                            <tr class="{{ $loop->iteration % 2 == 0 ? 'table-light' : 'table-white' }}">
+                                @endif
 
-                            <tbody id="filter_employees_on" style="display:none">
+                                @if ($loop->last)
+                                    <td colspan="2">
+                                        <a href="#employees"> Employee List </a>
+                                    </td>
+                                    @if (($loop->count + 1) % 3 != 0)
+                                        <td colspan="6">
+                                            <br>
+                                        </td>
+                                    @endif
+                            </tr>
+                            @endif
+                            @endif
+                            @endforeach
+
+                            @foreach ($permission_data as $section)
+                                @if (!isset($ignore_permissions[$section['name']]) || $ignore_permissions[$section['name']] != 'ALL')
+                                    <tr class="tblHeader">
+                                        <td>
+                                            [ <a href="#top"> Top </a> ] [ <a href="#employees"> Bottom </a> ]
+                                        </td>
+                                        <td colspan="2">
+                                            <a name="{{ $section['name'] }}">{{ $section['display_name'] }}</a>
+                                        </td>
+                                        <td>
+                                            Allow
+                                        </td>
+                                        <td>
+                                            Deny
+                                        </td>
+                                    </tr>
+
+                                    @foreach ($section['permissions'] as $perm)
+                                        @php
+                                            $shouldShow =
+                                                !isset($ignore_permissions[$section['name']]) ||
+                                                (isset($ignore_permissions[$section['name']]) &&
+                                                    is_array($ignore_permissions[$section['name']]) &&
+                                                    in_array($perm['name'], $ignore_permissions[$section['name']]) &&
+                                                    (isset($permission) && $permission->Check('company', 'edit'))) ||
+                                                (isset($ignore_permissions[$section['name']]) &&
+                                                    is_array($ignore_permissions[$section['name']]) &&
+                                                    !in_array($perm['name'], $ignore_permissions[$section['name']]));
+                                        @endphp
+
+                                        @if ($shouldShow)
+                                            <tr
+                                                class="{{ $loop->iteration % 2 == 0 ? 'table-light' : 'table-white' }}">
+                                                <td colspan="3" class="cellLeftBlueEditTable">
+                                                    {{ $perm['display_name'] }}
+                                                </td>
+                                                <td>
+                                                    <input type="radio"
+                                                        name="data[permissions][{{ $section['name'] }}][{{ $perm['name'] }}]"
+                                                        value="1"
+                                                        {{ $perm['result'] === true ? 'checked' : '' }}>
+                                                </td>
+                                                <td>
+                                                    <input type="radio"
+                                                        name="data[permissions][{{ $section['name'] }}][{{ $perm['name'] }}]"
+                                                        value="0"
+                                                        {{ $perm['result'] !== true ? 'checked' : '' }}>
+                                                </td>
+                                                <input type="hidden"
+                                                    name="old_data[permissions][{{ $section['name'] }}][{{ $perm['name'] }}]"
+                                                    value="{{ $perm['result'] === true ? '1' : '0' }}">
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            @endforeach
+
+                        </table>
+                        <a name="employees"></a>
+
+                        </td>
+                        </tr>
+
+                        {{-- <tbody id="filter_employees_on" style="display:none">
                                 <tr>
                                     <td nowrap>
-                                        <b>{t}Employees:{/t}</b>
+                                        <b> Employees: </b>
                                         <a href="javascript:toggleRow('filter_employees_on','filter_employees_off');filterUserCount();">
                                             <i class="ri-arrow-up-s-line nav-button"></i>
                                         </a>
@@ -249,14 +298,14 @@
                                     <td colspan="3">
                                         <table class="editTable">
                                             <tr class="tblHeader">
-                                                <td>{t}UnAssigned Employees{/t}</td>
+                                                <td> UnAssigned Employees </td>
                                                 <td></td>
-                                                <td>{t}Assigned Employees{/t}</td>
+                                                <td> Assigned Employees </td>
                                             </tr>
                                             <tr>
                                                 <td class="cellRightEditTable" width="49%" align="center">
-                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="selectAll(document.getElementById('src_filter_user'))">{t}Select All{/t}</button>
-                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="unselectAll(document.getElementById('src_filter_user'))">{t}Un-Select All{/t}</button>
+                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="selectAll(document.getElementById('src_filter_user'))"> Select All </button>
+                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="unselectAll(document.getElementById('src_filter_user'))"> Un-Select All </button>
                                                     <br>
                                                     <select name="src_user_id[]" id="src_filter_user" style="width:200px;margin:5px 0 5px 0;" size="{{ count($data['user_options']) }}" multiple class="form-select">
                                                         @foreach ($data['user_options'] as $value => $label)
@@ -278,8 +327,8 @@
                                                     </a>
                                                 </td>
                                                 <td class="cellRightEditTable" width="49%" align="center">
-                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="selectAll(document.getElementById('filter_user'))">{t}Select All{/t}</button>
-                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="unselectAll(document.getElementById('filter_user'))">{t}Un-Select All{/t}</button>
+                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="selectAll(document.getElementById('filter_user'))"> Select All </button>
+                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="unselectAll(document.getElementById('filter_user'))"> Un-Select All </button>
                                                     <br>
                                                     <select name="data[user_ids][]" id="filter_user" style="width:200px;margin:5px 0 5px 0;" size="{{ count($filter_user_options) }}" multiple class="form-select">
                                                         @foreach ($filter_user_options as $value => $label)
@@ -291,27 +340,44 @@
                                         </table>
                                     </td>
                                 </tr>
-                            </tbody>
-                            <tbody id="filter_employees_off">
-                                <tr>
+                            </tbody> --}}
+
+                        <tbody id="filter_employees_off">
+
+                            {{-- <tr>
                                     <td nowrap>
-                                        <b>{t}Employees:{/t}</b>
+                                        <b> Employees: </b>
                                         <a href="javascript:toggleRow('filter_employees_on','filter_employees_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {{ count($data['user_options']) }})">
                                             <i class="ri-arrow-down-s-line nav-button"></i>
                                         </a>
                                     </td>
                                     <td class="cellRightEditTable" colspan="100">
-                                        <span id="filter_user_count">0</span> {t}Employees Currently Selected, Click the arrow to modify.{/t}
+                                        <span id="filter_user_count">0</span>  Employees Currently Selected, Click the arrow to modify. 
                                     </td>
-                                </tr>
-                            </tbody>
+                                </tr> --}}
+                        </tbody>
                         </table>
+
                     </div>
 
+                    <table>
+                        <tr>
+                            <td class="cellLeftEditTable">
+                                <label for="user_ids">Employees</label>
+                            </td>
+                            <td class="cellRightEditTable">
+                                <x-general.multiselect-php title="Include Employees" :data="$data['user_options']"
+                                    :selected="!empty($data['user_ids'])
+                                        ? array_values($data['user_ids'])
+                                        : []" :name="'data[user_ids][]'" id="policySelector" />
+                            </td>
+                        </tr>
+                    </table>
                     <div class="text-center mt-3">
                         <input type="hidden" name="data[id]" value="{{ $data['id'] ?? '' }}">
                         <input type="hidden" name="id" value="{{ $data['id'] ?? '' }}">
-                        <button type="submit" class="btn btn-primary" name="action" value="submit">{t}Submit{/t}</button>
+                        <button type="submit" class="btn btn-primary" name="action" value="submit"> Submit
+                        </button>
                     </div>
                 </form>
             </div>

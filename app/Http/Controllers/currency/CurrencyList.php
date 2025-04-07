@@ -53,15 +53,6 @@ class CurrencyList extends Controller
 
         $viewData['title'] = 'Currency List';
 
-        // URLBuilder::setURL($_SERVER['SCRIPT_NAME'], [
-        //     'sort_column' => $sort_column,
-        //     'sort_order' => $sort_order,
-        //     'page' => $page
-        // ]);
-
-        // $sort_array = $sort_column != '' ? [$sort_column => $sort_order] : null;
-
-        // Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
 
         BreadCrumb::setCrumb('Currency List');
 

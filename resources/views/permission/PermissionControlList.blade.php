@@ -1,104 +1,83 @@
-<x-app-layout :title="'Currency List'">
+<x-app-layout :title="'Permission Group List'">
     <x-slot name="header">
-        <h4 class="mb-sm-0">{{ __('Currencies') }}</h4>
+        <h4 class="mb-sm-0">{{ __('Permission Group') }}</h4>
     </x-slot>
 
-    <div class="row">
+    <div class="permission">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
-                        <h4 class="card-title mb-0 flex-grow-1">Currency List</h4>
+                        <h4 class="card-title mb-0 flex-gpermission-1">Permission Group List</h4>
                     </div>
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button" href="{{ route('currency.add') }}"
+                            <a type="button" href="{{ route('permission_control.add') }}"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
-                                id="add_new_btn">New Currency <i class="ri-add-line"></i></a>
+                                id="add_new_btn">New Permission Group <i class="ri-add-line"></i></a>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    @if (!$base_currency)
-                        <div class="alert alert-warning" role="alert">
-                            {{ __('WARNING: There is no base currency set. Please create a base currency immediately.') }}
-                        </div>
-                    @endif
 
                     <form method="get" action="{{ request()->url() }}">
                         <table class="table table-bordered">
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">
-                                        <x-sort-column 
-                                            label="Name" 
-                                            column="name" 
-                                            :currentColumn="$sort_column" 
-                                            :currentOrder="$sort_order" 
-                                        />
-                                    </th>
-                                    <th scope="col">
-                                        <x-sort-column 
-                                            label="Description" 
-                                            column="description" 
-                                            :currentColumn="$sort_column" 
-                                            :currentOrder="$sort_order" 
-                                        />
-                                    </th>
-                                    <th scope="col">
-                                        <x-sort-column 
-                                            label="Level" 
-                                            column="level" 
-                                            :currentColumn="$sort_column" 
-                                            :currentOrder="$sort_order" 
-                                        />
-                                    </th>
-                                    <th scope="col">Functions</th>
-                                    <th scope="col">
-                                        <input type="checkbox" class="form-check-input" name="select_all" onClick="CheckAll(this)"/>
-                                    </th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Level</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @foreach ($rows as $row)
+                                @foreach ($permissions as $permission)
                                     @php
-                                        $row_class = $loop->iteration % 2 == 0 ? 'table-light' : 'table-white';
-                                        if (isset($row['deleted']) && $row['deleted']) {
-                                            $row_class = 'table-danger';
+                                        $permission_class = $loop->iteration % 2 == 0 ? 'table-light' : 'table-white';
+                                        if (isset($permission['deleted']) && $permission['deleted']) {
+                                            $permission_class = 'table-danger';
                                         }
                                     @endphp
-                                    <tr class="{{ $row_class }}">
+                                    <tr class="{{ $permission_class }}">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $row['name'] ?? '' }}</td>
-                                        <td>{{ $row['description'] ?? '' }}</td>
-                                        <td>{{ $row['level'] ?? '' }}</td>
+                                        <td>{{ $permission['name'] ?? '' }}</td>
+                                        <td>{{ $permission['description'] ?? '' }}</td>
+                                        <td>{{ $permission['level'] ?? '' }}</td>
                                         <td>
+                                            <!-- Edit Button -->
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('permission_control.add', ['id' => $permission['id'] ?? '']) }}'">
+                                                {{ __('Edit') }}
+                                            </button>
+                                        
+                                            <!-- Delete Button -->
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="deletePermissionControl({{ $permission['id'] }})">
+                                                {{ __('Delete') }}
+                                            </button>
+                                        </td>
+                                        {{-- <td>
                                             @canany(['permission.edit', 'permission.edit_own'])
                                                 <button type="button" class="btn btn-primary btn-sm" 
-                                                    onclick="window.location.href='{{ route('currency.edit', ['id' => $row['id']]) }}'">
+                                                    onclick="window.location.href='{{ route('currency.edit', ['id' => $permission['id']]) }}'">
                                                     {{ __('Edit') }}
                                                 </button>
                                                 
                                                 <button type="button" class="btn btn-danger btn-sm" 
-                                                    onclick="deleteItem({{ $row['id'] }}, '{{ route('currency.delete', ['id' => ':id']) }}')">
+                                                    onclick="deleteItem({{ $permission['id'] }}, '{{ route('currency.delete', ['id' => ':id']) }}')">
                                                     {{ __('Delete') }}
                                                 </button>
                                             @endcanany
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" class="form-check-input" name="ids[]" value="{{ $row['id'] }}">
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
 
                         <div class="d-flex justify-content-between mt-3">
-                            <div>
+                            {{-- <div>
                                 @can('permission.add')
                                     <button type="submit" name="action" value="add" class="btn btn-primary me-2">
                                         {{ __('Add') }}
@@ -120,11 +99,11 @@
                                         {{ __('Undelete') }}
                                     </button>
                                 @endcan
-                            </div>
-
+                            </div> --}}
+{{-- 
                             <div>
-                                {{ $rows->links() }}
-                            </div>
+                                {{ $permissions->links() }}
+                            </div> --}}
                         </div>
                     </form>
                 </div>
@@ -140,13 +119,12 @@
             }
         }
 
-        async function deleteItem(id, routeTemplate) {
+        async function deletePermissionControl(id) {
             if (confirm('Are you sure you want to delete this item?')) {
-                const route = routeTemplate.replace(':id', id);
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 try {
-                    const response = await fetch(route, {
+                    const response = await fetch(`/permission_control/delete/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': token,

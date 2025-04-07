@@ -150,7 +150,7 @@ class PermissionControlFactory extends Factory {
 		$query = 'select id from '. $this->getTable() .' where company_id = :company_id AND name = :name AND deleted=0';
 		// $permission_control_id = $this->db->GetOne($query, $ph);
         $permission_control_id = DB::select($query, $ph);
-        if ($permission_control_id === FALSE ) {
+        if (empty($permission_control_id)) {
             $permission_control_id = 0;
         }else{
             $permission_control_id = current(get_object_vars($permission_control_id[0]));
