@@ -45,15 +45,8 @@
                                 <td>{{ $row['name'] }}</td>
                                 <td>{{ $row['next_date'] }}</td>
                                 <td>
-                                    <!-- Edit Button -->
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('recurring_holidays.add', ['id' => $row['id'] ?? '']) }}'">
-                                        {{ __('Edit') }}
-                                    </button>
-                                
-                                    <!-- Delete Button -->
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteRecurringHolidays({{ $row['id'] }})">
-                                        {{ __('Delete') }}
-                                    </button>
+                                    <a class="btn btn-secondary btn-sm" href="{{ route('policy.recurring_holidays.add', ['id' => $row['id']]) }}">Edit</a>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/recurring_holidays/delete/{{ $row['id'] }}', 'Absence Policy', this)">Delete</button>
                                 </td>
                             </tr>
                         @endforeach

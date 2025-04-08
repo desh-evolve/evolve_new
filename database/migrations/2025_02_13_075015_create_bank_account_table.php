@@ -27,13 +27,13 @@ return new class extends Migration
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
             $table->unsignedTinyInteger('deleted')->default(0);
-            $table->string('branch_code', 15);
-            $table->string('transit_two', 15);
-            $table->string('bank_two_name', 250);
-            $table->string('bank_two_branch', 250);
-            $table->string('branch_two_code', 15);
-            $table->string('account_two', 50);
-            $table->decimal('amount_bank_two', 20, 4);
+            $table->string('branch_code', 15)->nullable();
+            $table->string('transit_two', 15)->nullable();
+            $table->string('bank_two_name', 250)->nullable();
+            $table->string('bank_two_branch', 250)->nullable();
+            $table->string('branch_two_code', 15)->nullable();
+            $table->string('account_two', 50)->nullable();
+            $table->decimal('amount_bank_two', 20, 4)->nullable();
         });
     }
 

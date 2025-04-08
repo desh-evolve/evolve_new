@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\accrual\EditUserAccrual;
+use App\Http\Controllers\accrual\UserAccrualBalanceList;
+use App\Http\Controllers\accrual\ViewUserAccrualList;
 use App\Http\Controllers\company\CompanyDeductionList;
 use App\Http\Controllers\payperiod\ClosePayPeriod;
 use App\Http\Controllers\currency\CurrencyList;
@@ -65,6 +68,10 @@ use App\Http\Controllers\policy\PremiumPolicyList;
 use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\punch\EditPunch;
+use App\Http\Controllers\punch\PunchList;
+use App\Http\Controllers\request\EditRequest;
+use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\EditUser;
 use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserList;
@@ -318,5 +325,26 @@ Route::get('/admin/userlist', [UserList::class, 'index'])->name('admin.userlist'
 Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
 Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
 Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name('admin.userlist.delete');
+
+// ===============================================================================================================================
+// attendance functions
+// ===============================================================================================================================
+
+Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
+Route::get('/attendance/punch/add/{id?}', [EditPunch::class, 'index'])->name('attendance.punch.add');
+Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
+Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
+
+Route::get('/attendance/requests', [UserRequestList::class, 'index'])->name('attendance.requests');
+Route::get('/attendance/request/add/{id?}', [EditRequest::class, 'index'])->name('attendance.request.add');
+Route::post('/attendance/request/submit/{id?}', [EditRequest::class, 'submit'])->name('attendance.request.submit');
+Route::delete('/attendance/request/delete/{id}', [UserRequestList::class, 'delete'])->name('attendance.request.delete');
+
+Route::get('/attendance/accruals/{filter_user_id?}', [UserAccrualBalanceList::class, 'index'])->name('attendance.accruals');
+Route::get('/attendance/user_accruals/{user_id}/{ap_id}', [ViewUserAccrualList::class, 'index'])->name('attendance.user_accruals');
+Route::get('/attendance/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('attendance.user_accruals.add');
+Route::post('/attendance/user_accruals/submit/{id?}', [EditUserAccrual::class, 'submit'])->name('attendance.user_accruals.submit');
+Route::delete('/attendance/user_accruals/delete/{id}', [ViewUserAccrualList::class, 'delete'])->name('attendance.user_accruals.delete');
+
 
 // ===============================================================================================================================

@@ -1,18 +1,49 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditRequest.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\request;
+
+use App\Http\Controllers\Controller;
+use App\Models\Core\Environment;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use Illuminate\Support\Facades\View;
+
+class EditRequest extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
+
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
+
+    }
+
+    public function index() {
+		/*
+		if ( !$permission->Check('request','enabled')
+				OR !( $permission->Check('request','view') OR $permission->Check('request','view_own') OR $permission->Check('request','view_child') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+		*/
+
+		$viewData['title'] = 'Request List';
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
+		$permission = $this->permission;
+
+	}
+}
 
 if ( !$permission->Check('request','enabled')
 		OR !( $permission->Check('request','edit')

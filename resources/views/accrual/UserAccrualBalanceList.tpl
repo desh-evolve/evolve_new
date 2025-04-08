@@ -58,24 +58,8 @@ function editAccrual(userID) {
 						{assign var="row_class" value="tblDataDeleted"}
 					{/if}
 					<tr class="{$row_class}">
-						<td>
-							{$smarty.foreach.accrual.iteration}
-						</td>										
-						<td>
-							{$accrual.accrual_policy}
-						</td>
-						<td>
-                                                    {* {$accrual.balance } *}
-							{gettimeunitdecimal value=$accrual.balance default=TRUE}
-						</td>
-						<td>
-							{assign var="accrual_policy_id" value=$accrual.accrual_policy_id}
-							{assign var="user_id" value=$accrual.user_id}
-
-							{if ( $permission->Check('accrual','view') OR ($permission->Check('accrual','view_child') AND $is_child === TRUE) OR ($permission->Check('accrual','view_own') AND $is_owner === TRUE ))}
-								[ <a href="{urlbuilder script="ViewUserAccrualList.php" values="user_id=$user_id,accrual_policy_id=$accrual_policy_id" merge="FALSE"}">{t}View{/t}</a> ]
-							{/if}
-						</td>
+						
+						
 					</tr>
 				{/foreach}
 				{if $permission->Check('accrual','add')}

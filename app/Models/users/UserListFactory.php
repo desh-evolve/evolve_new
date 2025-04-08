@@ -1266,7 +1266,9 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					}
 				}
 
-				$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
+				//$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
+				$additional_order_fields = [];
+				
 				if ( $order == NULL ) {
 					$order = array( 'company_id' => 'asc', 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
 					$strict = FALSE;
@@ -1454,7 +1456,8 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					}
 				}
 
-				$additional_order_fields = array('b.name' => 'asc', 'c.name' => 'asc', 'd.name' => 'asc', 'e.name' => 'asc');
+				//$additional_order_fields = array('b.name' => 'asc', 'c.name' => 'asc', 'd.name' => 'asc', 'e.name' => 'asc');
+				$additional_order_fields = [];
 				if ( $order == NULL ) {
 					$order = array( 'punch_machine_user_id'=>'asc', 'status_id' => 'asc', 'last_name' => 'asc', 'first_name' => 'asc', 'middle_name' => 'asc');
 					$strict = FALSE;

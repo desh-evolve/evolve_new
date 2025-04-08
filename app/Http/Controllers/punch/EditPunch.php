@@ -1,252 +1,85 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditPunch.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\punch;
 
-$skip_message_check = TRUE;
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Users\UserTitleList;
+use App\Models\Company\BranchListFactory;
+use App\Models\Core\Environment;
+use App\Models\Core\FastTree;
+use App\Models\Core\Option;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use Illuminate\Support\Facades\View;
 
-if ( !$permission->Check('punch','enabled')
-		OR !( $permission->Check('punch','edit')
-				OR $permission->Check('punch','edit_own')
-				OR $permission->Check('punch','edit_child')
-				 ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+class EditPunch extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$smarty->assign('title', __($title = 'Edit Punch')); // See index.php
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'punch_control_id',
-												'user_id',
-												'date_stamp',
-												'status_id',
-												'pc_data'
-												) ) );
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
+    }
 
-$punch_full_time_stamp = NULL;
-if ( isset($pc_data) ) {
-	if ( $pc_data['date_stamp'] != '' AND $pc_data['time_stamp'] != '') {
-            
-           
-		$punch_full_time_stamp = TTDate::parseDateTime($pc_data['date_stamp'].' '.$pc_data['time_stamp']);
-		$pc_data['punch_full_time_stamp'] = $punch_full_time_stamp;
-		$pc_data['time_stamp'] = $punch_full_time_stamp;
-	} else {
-		$pc_data['punch_full_time_stamp'] = NULL;
-	}
+    public function index($id = null) {
+		/*
+		if ( !$permission->Check('punch','enabled')
+				OR !( $permission->Check('punch','edit')
+						OR $permission->Check('punch','edit_own')
+						OR $permission->Check('punch','edit_child')
+						) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+		*/
 
-	if ( $pc_data['date_stamp'] != '') {
-		$pc_data['date_stamp'] = TTDate::parseDateTime($pc_data['date_stamp']);
-	}
-}
+		$viewData['title'] = !empty($id) ? 'Edit Punch' : 'Add Punch';
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
+		$permission = $this->permission;
+		
+		$punch_full_time_stamp = NULL;
+		if ( isset($pc_data) ) {
+			if ( $pc_data['date_stamp'] != '' AND $pc_data['time_stamp'] != '') {
+				$punch_full_time_stamp = TTDate::parseDateTime($pc_data['date_stamp'].' '.$pc_data['time_stamp']);
+				$pc_data['punch_full_time_stamp'] = $punch_full_time_stamp;
+				$pc_data['time_stamp'] = $punch_full_time_stamp;
+			} else {
+				$pc_data['punch_full_time_stamp'] = NULL;
+			}
 
-$pcf = new PunchControlFactory();
-$pf = new PunchFactory();
-$ulf = new UserListFactory();
-
-$action = Misc::findSubmitButton();
-
-
-switch ($action) {
-	case 'delete':
-		//Debug::setVerbosity(11);
-		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
-
-		$plf = new PunchListFactory();
-		$plf->getById( $pc_data['punch_id'] );
-		if ( $plf->getRecordCount() > 0 ) {
-			foreach($plf as $p_obj) {
-				$p_obj->setUser( $p_obj->getPunchControlObject()->getUserDateObject()->getUser() );
-				$p_obj->setDeleted(TRUE);
-
-				//These aren't doing anything because they aren't acting on the PunchControl object?
-				$p_obj->setEnableCalcTotalTime( TRUE );
-				$p_obj->setEnableCalcSystemTotalTime( TRUE );
-				$p_obj->setEnableCalcWeeklySystemTotalTime( TRUE );
-				$p_obj->setEnableCalcUserDateTotal( TRUE );
-				$p_obj->setEnableCalcException( TRUE );
-				$p_obj->Save();
+			if ( $pc_data['date_stamp'] != '') {
+				$pc_data['date_stamp'] = TTDate::parseDateTime($pc_data['date_stamp']);
 			}
 		}
 
-		Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+		$pcf = new PunchControlFactory();
+		$pf = new PunchFactory();
+		$ulf = new UserListFactory();
 
-		break;
-	case 'submit':
-		//Debug::setBufferOutput(FALSE);
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$fail_transaction=FALSE;
-
-		$pf->StartTransaction();
-
-		//Limit it to 31 days, just in case someone makes an error entering the dates or something.
-		if ( $pc_data['repeat'] > 31 ) {
-			$pc_data['repeat'] = 31;
-		}
-		Debug::Text('Repeating Punch For: '. $pc_data['repeat'] .' Days', __FILE__, __LINE__, __METHOD__,10);
-
-		for( $i=0; $i <= (int)$pc_data['repeat']; $i++ ) {
-			$pf = new PunchFactory();
-
-			Debug::Text('Punch Repeat: '. $i, __FILE__, __LINE__, __METHOD__,10);
-			if ( $i == 0 ) {
-				$time_stamp = $punch_full_time_stamp;
-			} else {
-				$time_stamp = $punch_full_time_stamp + (86400 * $i);
-			}
-
-			Debug::Text('Punch Full Time Stamp: '. date('r', $time_stamp) .'('.$time_stamp.')', __FILE__, __LINE__, __METHOD__,10);
-
-			//Set User before setTimeStamp so rounding can be done properly.
-			$pf->setUser( $pc_data['user_id'] );
-
-			if ( $i == 0 ) {
-				$pf->setId( $pc_data['punch_id'] );
-			}
-			if ( isset($data['transfer']) ) {
-				$pf->setTransfer( TRUE );
-			}
-
-			$pf->setType( $pc_data['type_id'] );
-			$pf->setStatus( $pc_data['status_id'] );
-			if ( isset($pc_data['disable_rounding']) ) {
-				$enable_rounding = FALSE;
-			} else {
-				$enable_rounding = TRUE;
-			}
-
-			$pf->setTimeStamp( $time_stamp, $enable_rounding );
-
-			if ( $i == 0 AND isset( $pc_data['id'] ) AND $pc_data['id']  != '' ) {
-				Debug::Text('Using existing Punch Control ID: '. $pc_data['id'], __FILE__, __LINE__, __METHOD__,10);
-				$pf->setPunchControlID( $pc_data['id'] );
-			} else {
-				Debug::Text('Finding Punch Control ID: '. $pc_data['id'], __FILE__, __LINE__, __METHOD__,10);
-				$pf->setPunchControlID( $pf->findPunchControlID() );
-			}
-
-			if ( $pf->isNew() ) {
-				$pf->setActualTimeStamp( $time_stamp );
-				$pf->setOriginalTimeStamp( $pf->getTimeStamp() );
-			}
+		$action = Misc::findSubmitButton();
 
 
-
-			if ( $pf->isValid() == TRUE ) {
-
-				if ( $pf->Save( FALSE ) == TRUE ) {
-					$pcf = new PunchControlFactory();
-					$pcf->setId( $pf->getPunchControlID() );
-					$pcf->setPunchObject( $pf );
-
-					if ( $i == 0 AND $pc_data['user_date_id'] != '' ) {
-						//This is important when editing a punch, without it there can be issues calculating exceptions
-						//because if a specific punch was modified that caused the day to change, smartReCalculate
-						//may only be able to recalculate a single day, instead of both.
-						$pcf->setUserDateID( $pc_data['user_date_id'] );
-					}
-
-					if ( isset($pc_data['branch_id']) ) {
-						$pcf->setBranch( $pc_data['branch_id'] );
-					}
-					if ( isset($pc_data['department_id']) ) {
-						$pcf->setDepartment( $pc_data['department_id'] );
-					}
-					if ( isset($pc_data['job_id']) ) {
-						$pcf->setJob( $pc_data['job_id'] );
-					}
-					if ( isset($pc_data['job_item_id']) ) {
-						$pcf->setJobItem( $pc_data['job_item_id'] );
-					}
-					if ( isset($pc_data['quantity']) ) {
-						$pcf->setQuantity( $pc_data['quantity'] );
-					}
-					if ( isset($pc_data['bad_quantity']) ) {
-						$pcf->setBadQuantity( $pc_data['bad_quantity'] );
-					}
-					if ( isset($pc_data['note']) ) {
-						$pcf->setNote( $pc_data['note'] );
-					}
-
-					if ( isset($pc_data['other_id1']) ) {
-						$pcf->setOtherID1( $pc_data['other_id1'] );
-					}
-					if ( isset($pc_data['other_id2']) ) {
-						$pcf->setOtherID2( $pc_data['other_id2'] );
-					}
-					if ( isset($pc_data['other_id3']) ) {
-						$pcf->setOtherID3( $pc_data['other_id3'] );
-					}
-					if ( isset($pc_data['other_id4']) ) {
-						$pcf->setOtherID4( $pc_data['other_id4'] );
-					}
-					if ( isset($pc_data['other_id5']) ) {
-						$pcf->setOtherID5( $pc_data['other_id5'] );
-					}
-
-					$pcf->setEnableStrictJobValidation( TRUE ); 
-					$pcf->setEnableCalcUserDateID( TRUE );
-					$pcf->setEnableCalcTotalTime( TRUE );
-					$pcf->setEnableCalcSystemTotalTime( TRUE );
-					$pcf->setEnableCalcWeeklySystemTotalTime( TRUE );
-					$pcf->setEnableCalcUserDateTotal( TRUE );
-					$pcf->setEnableCalcException( TRUE );
-
-					if ( $pcf->isValid() == TRUE ) {
-						Debug::Text(' Punch Control is valid, saving...: ', __FILE__, __LINE__, __METHOD__,10);
-
-						if ( $pcf->Save( TRUE, TRUE ) != TRUE ) { //Force isNew() lookup.
-							Debug::Text(' aFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
-							$fail_transaction = TRUE;
-							break;
-						}
-					} else {
-						Debug::Text(' bFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
-						$fail_transaction = TRUE;
-						break;
-					}
-				} else {
-					Debug::Text(' cFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
-					$fail_transaction = TRUE;
-					break;
-				}
-			} else {
-				Debug::Text(' dFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
-				$fail_transaction = TRUE;
-				break;
-			}
-		}
-
-		if ( $fail_transaction == FALSE ) {
-			//$pf->FailTransaction();
-			$pf->CommitTransaction();
-
-			Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
-			break;
-		} else {
-			$pf->FailTransaction();
-		}
-	default:
 		if ( $id != '' AND $action != 'submit' ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
@@ -466,11 +299,195 @@ switch ($action) {
 		//Debug::Text('pc_data[date_stamp]: '. TTDate::getDate('DATE+TIME', $pc_data['date_stamp']), __FILE__, __LINE__, __METHOD__,10);
 		$smarty->assign_by_ref('pc_data', $pc_data);
 
-		break;
+		$smarty->assign_by_ref('pcf', $pcf);
+		$smarty->assign_by_ref('pf', $pf);
+		
+		$smarty->display('punch/EditPunch.tpl');
+	}
+
+	public function delete($id){
+		//Debug::setVerbosity(11);
+		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
+
+		$plf = new PunchListFactory();
+		$plf->getById( $pc_data['punch_id'] );
+		if ( $plf->getRecordCount() > 0 ) {
+			foreach($plf as $p_obj) {
+				$p_obj->setUser( $p_obj->getPunchControlObject()->getUserDateObject()->getUser() );
+				$p_obj->setDeleted(TRUE);
+
+				//These aren't doing anything because they aren't acting on the PunchControl object?
+				$p_obj->setEnableCalcTotalTime( TRUE );
+				$p_obj->setEnableCalcSystemTotalTime( TRUE );
+				$p_obj->setEnableCalcWeeklySystemTotalTime( TRUE );
+				$p_obj->setEnableCalcUserDateTotal( TRUE );
+				$p_obj->setEnableCalcException( TRUE );
+				$p_obj->Save();
+			}
+		}
+
+		Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+
+	}
+
+	public function submit(){
+//Debug::setBufferOutput(FALSE);
+		//Debug::setVerbosity(11);
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+		$fail_transaction=FALSE;
+
+		$pf->StartTransaction();
+
+		//Limit it to 31 days, just in case someone makes an error entering the dates or something.
+		if ( $pc_data['repeat'] > 31 ) {
+			$pc_data['repeat'] = 31;
+		}
+		Debug::Text('Repeating Punch For: '. $pc_data['repeat'] .' Days', __FILE__, __LINE__, __METHOD__,10);
+
+		for( $i=0; $i <= (int)$pc_data['repeat']; $i++ ) {
+			$pf = new PunchFactory();
+
+			Debug::Text('Punch Repeat: '. $i, __FILE__, __LINE__, __METHOD__,10);
+			if ( $i == 0 ) {
+				$time_stamp = $punch_full_time_stamp;
+			} else {
+				$time_stamp = $punch_full_time_stamp + (86400 * $i);
+			}
+
+			Debug::Text('Punch Full Time Stamp: '. date('r', $time_stamp) .'('.$time_stamp.')', __FILE__, __LINE__, __METHOD__,10);
+
+			//Set User before setTimeStamp so rounding can be done properly.
+			$pf->setUser( $pc_data['user_id'] );
+
+			if ( $i == 0 ) {
+				$pf->setId( $pc_data['punch_id'] );
+			}
+			if ( isset($data['transfer']) ) {
+				$pf->setTransfer( TRUE );
+			}
+
+			$pf->setType( $pc_data['type_id'] );
+			$pf->setStatus( $pc_data['status_id'] );
+			if ( isset($pc_data['disable_rounding']) ) {
+				$enable_rounding = FALSE;
+			} else {
+				$enable_rounding = TRUE;
+			}
+
+			$pf->setTimeStamp( $time_stamp, $enable_rounding );
+
+			if ( $i == 0 AND isset( $pc_data['id'] ) AND $pc_data['id']  != '' ) {
+				Debug::Text('Using existing Punch Control ID: '. $pc_data['id'], __FILE__, __LINE__, __METHOD__,10);
+				$pf->setPunchControlID( $pc_data['id'] );
+			} else {
+				Debug::Text('Finding Punch Control ID: '. $pc_data['id'], __FILE__, __LINE__, __METHOD__,10);
+				$pf->setPunchControlID( $pf->findPunchControlID() );
+			}
+
+			if ( $pf->isNew() ) {
+				$pf->setActualTimeStamp( $time_stamp );
+				$pf->setOriginalTimeStamp( $pf->getTimeStamp() );
+			}
+
+
+
+			if ( $pf->isValid() == TRUE ) {
+
+				if ( $pf->Save( FALSE ) == TRUE ) {
+					$pcf = new PunchControlFactory();
+					$pcf->setId( $pf->getPunchControlID() );
+					$pcf->setPunchObject( $pf );
+
+					if ( $i == 0 AND $pc_data['user_date_id'] != '' ) {
+						//This is important when editing a punch, without it there can be issues calculating exceptions
+						//because if a specific punch was modified that caused the day to change, smartReCalculate
+						//may only be able to recalculate a single day, instead of both.
+						$pcf->setUserDateID( $pc_data['user_date_id'] );
+					}
+
+					if ( isset($pc_data['branch_id']) ) {
+						$pcf->setBranch( $pc_data['branch_id'] );
+					}
+					if ( isset($pc_data['department_id']) ) {
+						$pcf->setDepartment( $pc_data['department_id'] );
+					}
+					if ( isset($pc_data['job_id']) ) {
+						$pcf->setJob( $pc_data['job_id'] );
+					}
+					if ( isset($pc_data['job_item_id']) ) {
+						$pcf->setJobItem( $pc_data['job_item_id'] );
+					}
+					if ( isset($pc_data['quantity']) ) {
+						$pcf->setQuantity( $pc_data['quantity'] );
+					}
+					if ( isset($pc_data['bad_quantity']) ) {
+						$pcf->setBadQuantity( $pc_data['bad_quantity'] );
+					}
+					if ( isset($pc_data['note']) ) {
+						$pcf->setNote( $pc_data['note'] );
+					}
+
+					if ( isset($pc_data['other_id1']) ) {
+						$pcf->setOtherID1( $pc_data['other_id1'] );
+					}
+					if ( isset($pc_data['other_id2']) ) {
+						$pcf->setOtherID2( $pc_data['other_id2'] );
+					}
+					if ( isset($pc_data['other_id3']) ) {
+						$pcf->setOtherID3( $pc_data['other_id3'] );
+					}
+					if ( isset($pc_data['other_id4']) ) {
+						$pcf->setOtherID4( $pc_data['other_id4'] );
+					}
+					if ( isset($pc_data['other_id5']) ) {
+						$pcf->setOtherID5( $pc_data['other_id5'] );
+					}
+
+					$pcf->setEnableStrictJobValidation( TRUE ); 
+					$pcf->setEnableCalcUserDateID( TRUE );
+					$pcf->setEnableCalcTotalTime( TRUE );
+					$pcf->setEnableCalcSystemTotalTime( TRUE );
+					$pcf->setEnableCalcWeeklySystemTotalTime( TRUE );
+					$pcf->setEnableCalcUserDateTotal( TRUE );
+					$pcf->setEnableCalcException( TRUE );
+
+					if ( $pcf->isValid() == TRUE ) {
+						Debug::Text(' Punch Control is valid, saving...: ', __FILE__, __LINE__, __METHOD__,10);
+
+						if ( $pcf->Save( TRUE, TRUE ) != TRUE ) { //Force isNew() lookup.
+							Debug::Text(' aFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
+							$fail_transaction = TRUE;
+							break;
+						}
+					} else {
+						Debug::Text(' bFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
+						$fail_transaction = TRUE;
+						break;
+					}
+				} else {
+					Debug::Text(' cFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
+					$fail_transaction = TRUE;
+					break;
+				}
+			} else {
+				Debug::Text(' dFail Transaction: ', __FILE__, __LINE__, __METHOD__,10);
+				$fail_transaction = TRUE;
+				break;
+			}
+		}
+
+		if ( $fail_transaction == FALSE ) {
+			//$pf->FailTransaction();
+			$pf->CommitTransaction();
+
+			Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+		} else {
+			$pf->FailTransaction();
+		}
+	}
+
 }
 
-$smarty->assign_by_ref('pcf', $pcf);
-$smarty->assign_by_ref('pf', $pf);
 
-$smarty->display('punch/EditPunch.tpl');
 ?>
