@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\accrual\EditUserAccrual;
+use App\Http\Controllers\accrual\UserAccrualBalanceList;
+use App\Http\Controllers\accrual\ViewUserAccrualList;
+use App\Http\Controllers\bank_account\EditBankAccount as Bank_accountEditBankAccount;
 use App\Http\Controllers\company\CompanyDeductionList;
 use App\Http\Controllers\payperiod\ClosePayPeriod;
 use App\Http\Controllers\currency\CurrencyList;
