@@ -48,40 +48,22 @@
                     $checkAttendancelNav = request()->routeIs('attendance.*');
                 @endphp
                 <li class="nav-item">
-                    <a
-                        class="nav-link menu-link {{ $checkAttendancelNav ? 'active' : '' }}" href="#attendance"
-                        data-bs-toggle="collapse" role="button"
-                        aria-expanded="{{ $checkAttendancelNav ? 'true' : 'false' }}"
-                        aria-controls="attendance">
-                        <i class="ri-file-list-line"></i> <span>Attendance</span>
+                    <a class="nav-link menu-link" href="#attendance" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false">
+                        <i class="ri-bar-chart-line"></i> <span>Attendance</span>
                     </a>
                     <div class="collapse menu-dropdown" id="attendance">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item"><a href="#" class="nav-link">My Timesheet</a></li>
-
-                            <li class="nav-item">
-                                <a href="{{ route('attendance.punchlist') }}"
-                                    class="nav-link {{ request()->routeIs('attendance.punchlist') ? 'active' : '' }}">Punches
-                                </a>
-                            </li>
+                            <li class="nav-item"><a href="#" class="nav-link">Punches</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
-
-                            <li class="nav-item">
-                                <a href="{{ route('attendance.requests') }}"
-                                    class="nav-link {{ request()->routeIs('attendance.requests') ? 'active' : '' }}">Requests
-                                </a>
-                            </li>
-
+                            <li class="nav-item"><a href="#" class="nav-link">Requests</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Apply Leaves</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
-                            <li class="nav-item">
-                                <a href="{{ route('attendance.accruals') }}"
-                                    class="nav-link {{ request()->routeIs('attendance.accruals') ? 'active' : '' }}">Accruals
-                                </a>
-                            </li>
+                            <li class="nav-item"><a href="#" class="nav-link">Accruals</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
                         </ul>
                     </div>

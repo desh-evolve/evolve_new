@@ -25,7 +25,8 @@ use Illuminate\Support\Facades\View;
 class ViewUserAccrualList extends Controller
 {
     protected $permission;
-    protected $company;
+    protected $currentUser;
+    protected $currentCompany;
     protected $userPrefs;
 
     public function __construct()
@@ -34,14 +35,13 @@ class ViewUserAccrualList extends Controller
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->userPrefs = View::shared('current_user_prefs');
-        $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
-
-        
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
     }
 
-	public function index() {
+	public function index($user_id, $accrual_policy_id) {
 		/*
         if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child')) {
 			$user_id = $user_id;
@@ -50,27 +50,10 @@ class ViewUserAccrualList extends Controller
 		}
         */
 
-        $viewData['title'] = 'Accrual List';
-
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array(
-				'user_id' => $user_id,
-				'accrual_policy_id' => $accrual_policy_id,
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
+		$current_company = $this->currentCompany;
 
 		$alf = new AccrualListFactory();
-		$alf->getByCompanyIdAndUserIdAndAccrualPolicyID( $current_company->getId(), $user_id, $accrual_policy_id, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
-
-		$pager = new Pager($alf);
+		$alf->getByCompanyIdAndUserIdAndAccrualPolicyID( $current_company->getId(), $user_id, $accrual_policy_id );
 
 		foreach ($alf->rs as $a_obj) {
 			$alf->data = (array)$a_obj;
@@ -80,25 +63,24 @@ class ViewUserAccrualList extends Controller
 			if ( $date_stamp != '' ) {
 				$date_stamp = TTDate::strtotime($date_stamp);
 			}
-			$accruals[] = array(
-								'id' => $a_obj->getId(),
-								'user_id' => $a_obj->getUser(),
-								'accrual_policy_id' => $a_obj->getAccrualPolicyId(),
-								'type_id' => $a_obj->getType(),
-								'type' => Option::getByKey( $a_obj->getType(), $a_obj->getOptions('type') ),
-								'user_date_total_id' => $a_obj->getUserDateTotalId(),
-								'user_date_total_date_stamp' => $date_stamp,
-								'time_stamp' => $a_obj->getTimeStamp(),
-								'amount' => $a_obj->getAmount()/(8 * 3600),
-								'system_type' => $a_obj->isSystemType(),
-								'deleted' => $a_obj->getDeleted()
-							);
 
-			
-
+			$accruals[] = 	array (
+				'id' => $a_obj->getId(),
+				'user_id' => $a_obj->getUser(),
+				'accrual_policy_id' => $a_obj->getAccrualPolicyId(),
+				'type_id' => $a_obj->getType(),
+				'type' => Option::getByKey( $a_obj->getType(), $a_obj->getOptions('type') ),
+				'user_date_total_id' => $a_obj->getUserDateTotalId(),
+				'user_date_total_date_stamp' => date('Y-m-d', $date_stamp),
+				'time_stamp' => date('Y-m-d', $a_obj->getTimeStamp()),
+				'amount' => $a_obj->getAmount()/(8 * 3600),
+				'system_type' => $a_obj->isSystemType(),
+				'deleted' => $a_obj->getDeleted()
+			);
 		}
-		$viewData['accruals'] = $accruals;
 
+		$viewData['accruals'] = $accruals;
+		
 		$ulf = new UserListFactory();
 		$user_obj = $ulf->getById( $user_id )->getCurrent();
 
@@ -109,10 +91,9 @@ class ViewUserAccrualList extends Controller
 		$viewData['user_full_name'] = $user_obj->getFullName();
 		$viewData['accrual_policy_id'] = $accrual_policy_id;
 		$viewData['accrual_policy'] = $accrual_policy_obj->getName();
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
-		$viewData['paging_data'] = $pager->getPageVariables();
-
+		
+		$viewData['title'] = 'Annual Leave Accrual Policy for '.$user_obj->getFullName();
+		
 		return view('accrual/ViewUserAccrualList', $viewData);
 
 	}
