@@ -242,7 +242,7 @@ class EditUserPreferenceNew extends Controller
 				TTi18n::setLocaleCookie( $pref_data['language'].'_'.$current_user->getCountry() );
 			}
 
-            return redirect()->to(URLBuilder::getURL(array('user_id' => $pref_data['user_id'], 'data_saved' => 1), '/user/preference/add'))->with('success', 'User Preference saved successfully.');
+            return redirect()->to(URLBuilder::getURL(array('user_id' => $pref_data['user_id'], 'data_saved' => 1), '/user/preference'))->with('success', 'User Preference saved successfully.');
         }
 
         // If validation fails, return back with errors
@@ -250,6 +250,6 @@ class EditUserPreferenceNew extends Controller
 
     }
 
-    
+
 }
 

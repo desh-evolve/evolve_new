@@ -69,7 +69,7 @@
                                         </button>
 
                                         <!-- Delete Button -->
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrency({{ $otherFields['id'] }})">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteOtherField({{ $otherFields['id'] }})">
                                             {{ __('Delete') }}
                                         </button>
                                     </td>
@@ -104,7 +104,7 @@
         <!-- end col -->
     </div>
     <script>
-        async function deleteCurrency(otherFieldId) {
+        async function deleteOtherField(otherFieldId) {
             if (confirm('Are you sure you want to delete this item?')) {
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 

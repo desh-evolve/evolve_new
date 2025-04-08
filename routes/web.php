@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\bank_account\EditBankAccount as Bank_accountEditBankAccount;
 use App\Http\Controllers\company\CompanyDeductionList;
 use App\Http\Controllers\payperiod\ClosePayPeriod;
 use App\Http\Controllers\currency\CurrencyList;
@@ -62,6 +63,7 @@ use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
 use App\Http\Controllers\users\EditUserDefault;
+use App\Http\Controllers\users\EditUserPasswordNew;
 use App\Http\Controllers\users\EditUserPreferenceNew;
 use App\Http\Controllers\users\UserGenericStatusList;
 use Illuminate\Support\Facades\Route;
@@ -233,9 +235,22 @@ Route::post('/new_hire_defaults/save/{id?}', [EditUserDefault::class, 'save'])->
 // User Preference
 // ===============================================================================================================================
 Route::get('/user/preference', [EditUserPreferenceNew::class, 'index'])->name('user_preference.index');
-
-Route::get('/user/preference/add/{id?}', [EditUserPreferenceNew::class, 'index'])->name('user_preference.add');
+// Route::get('/user/preference/add/{id?}', [EditUserPreferenceNew::class, 'index'])->name('user_preference.add');
 Route::post('/user/preference/save/{id?}', [EditUserPreferenceNew::class, 'save'])->name('user_preference.save');
+
+// ===============================================================================================================================
+// Bank Accounts
+// ===============================================================================================================================
+Route::get('/bank_account/user/{user_id?}', [Bank_accountEditBankAccount::class, 'userIndex'])->name('bank_account.user');
+Route::get('/bank_account/company/{company_id?}', [Bank_accountEditBankAccount::class, 'companyIndex'])->name('bank_account.company');
+
+Route::post('/bank_account/save/{id?}', [Bank_accountEditBankAccount::class, 'save'])->name('bank_account.save');
+Route::delete('/bank_account/delete/{id?}', [Bank_accountEditBankAccount::class, 'delete'])->name('bank_account.delete');
+
+// ===============================================================================================================================
+// User Web Password
+// ===============================================================================================================================
+Route::get('/user/web_password', [EditUserPasswordNew::class, 'index'])->name('user.web_password.index');
 
 // ===============================================================================================================================
 // Policies

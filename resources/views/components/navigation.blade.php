@@ -125,7 +125,14 @@
                                     </a>
                                 </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Company Bank Information</a></li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('bank_account.company', ['company_id' => $current_company->getId()]) }}"
+                                       class="nav-link {{ request()->routeIs('bank_account.company') ? 'active' : '' }}">
+                                       Company Bank Information
+                                    </a>
+                                </li>
+
                                 <li class="nav-item"><a href="#" class="nav-link">Recurring Holidays</a></li>
                                 <li class="nav-item">
                                     <a href="{{ route('company.other_field.index') }}"
@@ -279,7 +286,12 @@
                                         Preferences
                                     </a>
                                 </li>
-                                <li class="nav-item"><a href="#" class="nav-link">Bank Information</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('bank_account.user', ['user_id' => $current_user->getId()]) }}"
+                                       class="nav-link {{ request()->routeIs('bank_account.user') ? 'active' : '' }}">
+                                       User Bank Information
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
