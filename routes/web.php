@@ -78,6 +78,7 @@ use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\EditUser;
 use App\Http\Controllers\users\EditUserDefault;
 use App\Http\Controllers\users\EditUserPasswordNew;
+use App\Http\Controllers\Users\EditUserPreference;
 use App\Http\Controllers\Users\EditUserPreferenceNew;
 use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserList;
@@ -268,9 +269,10 @@ Route::post('/new_hire_defaults/save/{id?}', [EditUserDefault::class, 'save'])->
 // ===============================================================================================================================
 // User Preference
 // ===============================================================================================================================
-Route::get('/user/preference', [EditUserPreferenceNew::class, 'index'])->name('user_preference.index');
-// Route::get('/user/preference/add/{id?}', [EditUserPreferenceNew::class, 'index'])->name('user_preference.add');
-Route::post('/user/preference/save/{id?}', [EditUserPreferenceNew::class, 'save'])->name('user_preference.save');
+Route::get('/user/preference', [EditUserPreference::class, 'index'])->name('user_preference.index');
+
+Route::get('/user/preference/add/{id?}', [EditUserPreference::class, 'index'])->name('user_preference.add');
+Route::post('/user/preference/save/{id?}', [EditUserPreference::class, 'save'])->name('user_preference.save');
 
 // ===============================================================================================================================
 // Company & User Bank Accounts Details
