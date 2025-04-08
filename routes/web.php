@@ -68,6 +68,10 @@ use App\Http\Controllers\policy\PremiumPolicyList;
 use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\users\EditUser;
+use App\Http\Controllers\users\EditUserDefault;
+use App\Http\Controllers\users\EditUserPasswordNew;
+use App\Http\Controllers\Users\EditUserPreferenceNew;
 use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserList;
 use Illuminate\Support\Facades\Route;
@@ -262,7 +266,7 @@ Route::get('/user/preference', [EditUserPreferenceNew::class, 'index'])->name('u
 Route::post('/user/preference/save/{id?}', [EditUserPreferenceNew::class, 'save'])->name('user_preference.save');
 
 // ===============================================================================================================================
-// Bank Accounts
+// Company & User Bank Accounts Details
 // ===============================================================================================================================
 Route::get('/bank_account/user/{user_id?}', [Bank_accountEditBankAccount::class, 'userIndex'])->name('bank_account.user');
 Route::get('/bank_account/company/{company_id?}', [Bank_accountEditBankAccount::class, 'companyIndex'])->name('bank_account.company');

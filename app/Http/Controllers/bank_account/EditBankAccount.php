@@ -131,15 +131,6 @@ class EditBankAccount extends Controller
 			);
 		}
 
-		// if ( isset($user_id) AND $company_id == '' ) {
-		// 	//$user_id = $current_user->getId();
-		// 	$ulf = new UserListFactory();
-		// 	$full_name = $ulf->getById( $user_id )->getCurrent()->getFullName();
-		// } elseif ( $company_id != '' ) {
-		// 	$clf = new CompanyListFactory();
-		// 	$full_name = $clf->getById( $company_id )->getCurrent()->getName();
-		// }
-
         // Pass data to Blade
 		$bank_data['full_name'] = $full_name;
 		$bank_data['country'] = strtolower($country);
