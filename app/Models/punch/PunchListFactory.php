@@ -1339,7 +1339,7 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 		}
 
 		//$additional_order_fields = array('b.name', 'c.name', 'd.name', 'e.name');
-		$additional_order_fields = array('first_name', 'last_name', 'date_stamp','time_stamp','type_id','status_id','branch','department','default_branch','default_department','group','title');
+		$additional_order_fields = array('first_name', 'last_name', 'date_stamp','time_stamp','type_id','status_id','branch_id','department_id','default_branch_id','default_department_id','group_id','title_id');
 		if ( $order == NULL ) {
 			$order = array( 'c.pay_period_id' => 'asc','c.user_id' => 'asc', 'a.time_stamp' => 'asc', 'a.punch_control_id' => 'asc', 'a.status_id' => 'asc' );
 			$strict = FALSE;

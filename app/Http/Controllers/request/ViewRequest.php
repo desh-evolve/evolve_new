@@ -1,25 +1,56 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4285 $
- * $Id: ViewRequest.php 4285 2011-02-24 00:14:50Z ipso $
- * $Date: 2011-02-23 16:14:50 -0800 (Wed, 23 Feb 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-//Debug::setVerbosity(11);
+namespace App\Http\Controllers\request;
 
-if ( !$permission->Check('request','enabled')
-		OR !( $permission->Check('request','edit')
-				OR $permission->Check('request','edit_own')
-				 ) ) {
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use App\Models\Core\Environment;
+use App\Models\Core\Option;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
+
+class ViewRequest extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
+
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
+
+    }
+
+    public function index() {
+		/*
+		if ( !$permission->Check('request','enabled')
+				OR !( $permission->Check('request','edit')
+						OR $permission->Check('request','edit_own')
+						) ) {
+			$permission->Redirect( FALSE ); //Redirect
+		}
+		*/
+
+		$viewData['title'] = 'Request List';
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
+		$permission = $this->permission;
+
+	}
 }
+
+
 
 $smarty->assign('title', __($title = 'View Request')); // See index.php
 

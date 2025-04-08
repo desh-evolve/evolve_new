@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
+use App\Models\Core\Factory;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
@@ -23,7 +24,8 @@ use Illuminate\Support\Facades\View;
 class UserAccrualBalanceList extends Controller
 {
     protected $permission;
-    protected $company;
+    protected $currentUser;
+    protected $currentCompany;
     protected $userPrefs;
 
     public function __construct()
@@ -32,14 +34,13 @@ class UserAccrualBalanceList extends Controller
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->userPrefs = View::shared('current_user_prefs');
-        $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
-
-        
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
     }
 
-	public function index()
+	public function index($filter_user_id = null)
     {
 		/*
         if ( !$permission->Check('accrual','enabled')
@@ -50,19 +51,9 @@ class UserAccrualBalanceList extends Controller
 		
         $viewData['title'] = 'Accrual Balance List';
 
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array(
-				'filter_user_id' => $filter_user_id,
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
+		$permission = $this->permission;
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
 
 		$ablf = new AccrualBalanceListFactory();
 		$ulf = new UserListFactory();
@@ -82,17 +73,21 @@ class UserAccrualBalanceList extends Controller
 
 		//Get user object
 		$ulf->getByIdAndCompanyID( $user_id, $current_company->getId() );
+		
 		if (  $ulf->getRecordCount() > 0 ) {
 			$user_obj = $ulf->getCurrent();
 
-			$ablf->getByUserIdAndCompanyId( $user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-
-			$pager = new Pager($ablf);
+			$ablf->getByUserIdAndCompanyId( $user_id, $current_company->getId() );
 
 			$aplf = new AccrualPolicyListFactory();
-			$accrual_policy_options = $aplf->getByCompanyIDArray( $current_company->getId() );
 
-			foreach ($ablf as $ab_obj) {
+			$accrual_policy_options = $aplf->getByCompanyIDArray( $current_company->getId() );
+			$accruals = [];
+
+			foreach ($ablf->rs as $ab_obj) {
+				$ablf->data = (array)$ab_obj;
+				$ab_obj = $ablf;
+
 				$balance= $ab_obj->getBalance();
 				$balance_temp = (float)$balance;
 				$balance_temp1 = $balance_temp / 31500;
@@ -102,7 +97,7 @@ class UserAccrualBalanceList extends Controller
 					'user_id' => $ab_obj->getUser(),
 					'accrual_policy_id' => $ab_obj->getAccrualPolicyId(),
 					'accrual_policy' => $accrual_policy_options[$ab_obj->getAccrualPolicyId()],
-					'balance' => ($ab_obj->getBalance()/8),
+					'balance' => Factory::convertToHoursAndMinutes($ab_obj->getBalance()/8),
 					'deleted' => $ab_obj->getDeleted()
 				);
 			}
@@ -111,7 +106,7 @@ class UserAccrualBalanceList extends Controller
 
 			$hlf = new HierarchyListFactory();
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
-			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
+			
 			if ( $permission->Check('accrual','view') == FALSE ) {
 				if ( $permission->Check('accrual','view_child') ) {
 					$filter_data['permission_children_ids'] = $permission_children_ids;
@@ -123,14 +118,9 @@ class UserAccrualBalanceList extends Controller
 
 			$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			$user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
-
+			
 			$viewData['user_options'] = $user_options;
 			$viewData['filter_user_id'] = $filter_user_id;
-			$viewData['is_owner'] = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getId() );
-			$viewData['is_child'] = $permission->isChild( $user_obj->getId(), $permission_children_ids );
-			$viewData['sort_column'] = $sort_column;
-			$viewData['sort_order'] = $sort_order;
-			$viewData['paging_data'] = $pager->getPageVariables();
 		}
 
 		return view('accrual/UserAccrualBalanceList', $viewData);

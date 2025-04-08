@@ -25,7 +25,7 @@ class CheckSessionCookie
         }
 
         if (!$request->cookies->has('SessionID')) {
-            return redirect()->route('login', ['session_expired' => true]);
+            return redirect()->route('login');
         }
 
         return $next($request);
