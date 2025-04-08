@@ -24,6 +24,10 @@ use App\Http\Controllers\users\EditUserTitle;
 use App\Http\Controllers\users\UserTitleList;
 use App\Http\Controllers\station\EditStation;
 use App\Http\Controllers\station\StationList;
+use App\Http\Controllers\permission\PermissionControlList;
+use App\Http\Controllers\permission\EditPermissionControl;
+use App\Http\Controllers\policy\RecurringHolidayList;
+use App\Http\Controllers\policy\EditRecurringHoliday;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
@@ -144,6 +148,18 @@ Route::get('/station', [StationList::class, 'index'])->name('station.index');
 Route::get('/station/add/{id?}', [EditStation::class, 'index'])->name('station.add');
 Route::post('/station/save/{id?}', [EditStation::class, 'submit'])->name('station.save');
 Route::delete('/station/delete/{id}', [StationList::class, 'delete'])->name('station.delete');
+// ==================== Permission Control =====================================================================================
+Route::get('/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+
+Route::get('/permission_control/add/{id?}', [EditPermissionControl::class, 'index'])->name('permission_control.add');
+Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
+Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
+// ==================== Permission Control =====================================================================================
+Route::get('/recurring_holidays', [RecurringHolidayList::class, 'index'])->name('recurring_holidays.index');
+
+Route::get('/recurring_holidays/add/{id?}', [EditRecurringHoliday::class, 'index'])->name('recurring_holidays.add');
+Route::post('/recurring_holidays/save/{id?}', [EditRecurringHoliday::class, 'submit'])->name('recurring_holidays.save');
+Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, 'delete'])->name('recurring_holidays.delete');
 // ===============================================================================================================================
 // Payroll 
 // ===============================================================================================================================

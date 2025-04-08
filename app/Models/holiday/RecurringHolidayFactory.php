@@ -8,6 +8,8 @@ use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
+use App\Models\Company\CompanyListFactory;
+use Illuminate\Support\Facades\DB;
 
 class RecurringHolidayFactory extends Factory {
 	protected $table = 'recurring_holiday';
