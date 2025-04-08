@@ -12,7 +12,6 @@ use App\Models\Core\FastTree;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Option;
 use App\Models\Core\Misc;
-use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
@@ -48,6 +47,11 @@ class PayStubList extends Controller
     }
 
     public function index() {
+		$permission = $this->permission;
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
+		$current_user_prefs = $this->userPrefs;
+
         /*
         if ( !$permission->Check('pay_stub','enabled')
 				OR !( $permission->Check('pay_stub','view') OR $permission->Check('pay_stub','view_own') OR $permission->Check('pay_stub','view_child') ) ) {
@@ -56,6 +60,8 @@ class PayStubList extends Controller
         */
 
         $viewData['title'] = 'Pay Stub List';
+		$sort_column = '';
+		$saved_search_id = '';
 
 		$columns = array(
 			'-1010-first_name' => _('First Name'),
@@ -67,24 +73,24 @@ class PayStubList extends Controller
 			'-1090-transaction_date' => _('Transaction Date'),
 		);
 		
-		if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
+		if ( empty($saved_search_id) AND !isset($filter_data['columns']) ) {
 			//Default columns.
 			if ( $permission->Check('pay_stub','view') == TRUE OR $permission->Check('pay_stub','view_child')) {
 				$filter_data['columns'] = array(
-											'-1010-first_name',
-											'-1030-last_name',
-											'-1040-status',
-											'-1070-start_date',
-											'-1080-end_date',
-											'-1090-transaction_date',
-											);
+					'-1010-first_name',
+					'-1030-last_name',
+					'-1040-status',
+					'-1070-start_date',
+					'-1080-end_date',
+					'-1090-transaction_date',
+				);
 			} else {
 				$filter_data['columns'] = array(
-											'-1040-status',
-											'-1070-start_date',
-											'-1080-end_date',
-											'-1090-transaction_date',
-											);
+					'-1040-status',
+					'-1070-start_date',
+					'-1080-end_date',
+					'-1090-transaction_date',
+				);
 			}
 			if ( $sort_column == '' ) {
 				$sort_column = $filter_data['sort_column'] = 'transaction_date';
@@ -101,7 +107,6 @@ class PayStubList extends Controller
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 		
-		Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
 		//Handle different actions for different forms.
 		
 		$action = Misc::findSubmitButton();
@@ -130,8 +135,7 @@ class PayStubList extends Controller
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],	array(
 															'sort_column' => Misc::trimSortPrefix($sort_column),
 															'sort_order' => $sort_order,
-															'saved_search_id' => $saved_search_id,
-															'page' => $page
+															'saved_search_id' => $saved_search_id
 														) );
 		$pslf = new PayStubListFactory();
 		$ulf = new UserListFactory();
@@ -159,9 +163,7 @@ class PayStubList extends Controller
 			$filter_data['pay_period_id'] = array($pay_period_ids[0]);
 		}
 
-		$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-
-		$pager = new Pager($pslf);
+		$pslf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 
 		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
@@ -245,9 +247,7 @@ class PayStubList extends Controller
 		$viewData['sort_column'] = $sort_column;
 		$viewData['sort_order'] = $sort_order;
 		$viewData['saved_search_id'] = $saved_search_id;
-		
-		$viewData['paging_data'] = $pager->getPageVariables();
-
+		//dd($viewData);
         return view('pay_stub/PayStubList', $viewData);
 
     }
