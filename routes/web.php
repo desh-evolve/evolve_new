@@ -22,6 +22,12 @@ use App\Http\Controllers\users\EditUserGroup;
 use App\Http\Controllers\users\UserGroupList;
 use App\Http\Controllers\users\EditUserTitle;
 use App\Http\Controllers\users\UserTitleList;
+use App\Http\Controllers\station\EditStation;
+use App\Http\Controllers\station\StationList;
+use App\Http\Controllers\permission\PermissionControlList;
+use App\Http\Controllers\permission\EditPermissionControl;
+use App\Http\Controllers\policy\RecurringHolidayList;
+use App\Http\Controllers\policy\EditRecurringHoliday;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
@@ -62,10 +68,8 @@ use App\Http\Controllers\policy\PremiumPolicyList;
 use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
-use App\Http\Controllers\users\EditUserDefault;
-use App\Http\Controllers\users\EditUserPasswordNew;
-use App\Http\Controllers\users\EditUserPreferenceNew;
 use App\Http\Controllers\users\UserGenericStatusList;
+use App\Http\Controllers\users\UserList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -132,6 +136,25 @@ Route::get('/user_title', [UserTitleList::class, 'index'])->name('user_title.ind
 Route::get('/user_title/add/{id?}', [EditUserTitle::class, 'index'])->name('user_title.add');
 Route::post('/user_title/save/{id?}', [EditUserTitle::class, 'submit'])->name('user_title.save');
 Route::delete('/user_title/delete/{id}', [UserTitleList::class, 'delete'])->name('user_title.delete');
+
+// ==================== station =====================================================================================
+Route::get('/station', [StationList::class, 'index'])->name('station.index');
+
+Route::get('/station/add/{id?}', [EditStation::class, 'index'])->name('station.add');
+Route::post('/station/save/{id?}', [EditStation::class, 'submit'])->name('station.save');
+Route::delete('/station/delete/{id}', [StationList::class, 'delete'])->name('station.delete');
+// ==================== Permission Control =====================================================================================
+Route::get('/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+
+Route::get('/permission_control/add/{id?}', [EditPermissionControl::class, 'index'])->name('permission_control.add');
+Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
+Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
+// ==================== Permission Control =====================================================================================
+Route::get('/recurring_holidays', [RecurringHolidayList::class, 'index'])->name('recurring_holidays.index');
+
+Route::get('/recurring_holidays/add/{id?}', [EditRecurringHoliday::class, 'index'])->name('recurring_holidays.add');
+Route::post('/recurring_holidays/save/{id?}', [EditRecurringHoliday::class, 'submit'])->name('recurring_holidays.save');
+Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, 'delete'])->name('recurring_holidays.delete');
 // ===============================================================================================================================
 // Payroll
 // ===============================================================================================================================
@@ -311,6 +334,15 @@ Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'ind
 Route::post('/policy/holiday_policies/submit/{id?}', [EditHolidayPolicy::class, 'submit'])->name('policy.holiday_policies.submit');
 Route::delete('/policy/holiday_policies/delete/{id}', [HolidayPolicyList::class, 'delete'])->name('policy.holiday_policies.delete');
 
+
+// ===============================================================================================================================
+// user functions
+// ===============================================================================================================================
+
+Route::get('/admin/userlist', [UserList::class, 'index'])->name('admin.userlist');
+Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
+Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
+Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name('admin.userlist.delete');
 
 // ===============================================================================================================================
 

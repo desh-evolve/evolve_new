@@ -39,7 +39,6 @@ $transactionDate = isset($js_calendar_pay_period_dates['transaction_date']) && i
 
 ?>
 
-<script>
 var TTProductEdition = <?php if ( isset($current_company) AND is_object($current_company) AND getTTProductEdition() >= $current_company->getProductEdition() ) { echo (int)$current_company->getProductEdition(); } else { echo (int)getTTProductEdition(); } ?>;
 
 var JSCalendarPayPeriodEndDates = <?php echo Misc::getJSArray($endDate)."\n"; ?>;
@@ -2158,5 +2157,3 @@ TIMETREX.searchForm = function() {
 		}
 	};
 }();
-
-</script>

@@ -242,103 +242,8 @@ function showProvince() {
 
 			<table class="editTable">
 
-				{include file="data_saved.tpl" result=$data_saved}
-
-				{if $incomplete == 1}
-					<tr id="warning">
-						<td colspan="7">
-							{t escape="no" 1=$APPLICATION_NAME} Welcome to <b>%1</b> since this is your first time logging in, we need you to fill out the following information.{/t}
-						</td>
-					</tr>
-				{/if}
+				               
                 
-                
-				{if isset($probation_warning)}              
-					<tr class="tblProbationWarning">
-						<td colspan="100">
-                        	 <br>
-							<b>{$probation_warning}</b>
-                            <br>&nbsp;
-						</td>
-					</tr>                   
-				{/if} 
-                
-				{if isset($basis_of_employment_warning)}              
-					<tr class="tblProbationWarning">
-						<td colspan="100">
-                        	 <br>
-							<b>{$basis_of_employment_warning}</b>
-                            <br>&nbsp;
-						</td>
-					</tr>                   
-				{/if}                           
- 				{if isset($bond_warning)}              
-					<tr class="tblProbationWarning">
-						<td colspan="100">
-                        	 <br>
-							<b>{$bond_warning}</b>
-                            <br>&nbsp;
-						</td>
-					</tr>                   
-				{/if}                 
-                
-				{if $permission->Check('user','edit_advanced') AND $user_data.id != ''}
-				<tr class="tblHeader">
-					<td colspan="2">
-						{t}Employee:{/t}
-						<a href="javascript: submitModifiedForm('filter_user', 'prev', document.edituser);"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_prev_sm.gif"></a>
-						<select name="id" id="filter_user" onChange="submitModifiedForm('filter_user', '', document.edituser);">
-							{html_options options=$user_data.user_options selected=$user_data.id}
-						</select>
-						<input type="hidden" id="old_filter_user" value="{$user_data.id}">
-						<a href="javascript: submitModifiedForm('filter_user', 'next', document.edituser);"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_next_sm.gif"></a>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-						{assign var="user_id" value=$user_data.id}
-
-						{if $permission->Check('wage','view') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserWageList.php" values="user_id=$user_id,saved_search_id=$saved_search_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Wage{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('user_tax_deduction','view') OR ( $permission->Check('user_tax_deduction','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('user_tax_deduction','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserDeductionList.php" values="user_id=$user_id,saved_search_id=$saved_search_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Tax{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('pay_stub_amendment','view') OR ( $permission->Check('pay_stub_amendment','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('pay_stub_amendment','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="../pay_stub_amendment/PayStubAmendmentList.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}PS Amendment{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('user_preference','enabled') }
-							[ <a href="{urlbuilder script="EditUserPreference.php" values="user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Prefs{/t}</a> ]
-						{/if}
-
-						{if $user_data.country == 'CA' AND ( $permission->Check('roe','view') OR ( $permission->Check('roe','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('roe','view_own') AND $user_data.is_owner === TRUE ) )}
-							[ <a href="{urlbuilder script="../roe/ROEList.php" values="user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}ROE{/t}</a> ]
-						{/if}
-
-						{if $permission->Check('user','edit_bank') OR ( $permission->Check('user','edit_child_bank') AND $user_data.is_child === TRUE ) OR ( $permission->Check('user','edit_own_bank') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="../bank_account/EditBankAccount.php" values="user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Bank{/t}</a> ]
-						{/if}
-                                                
-                                                {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="censusInfo.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Census{/t}</a> ]
-						{/if}
-                                                
-                                                {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserEducation.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Qualification{/t}</a> ]
-						{/if}
-                                                
-                                                 {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserWorkExperionce.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Work Experionce{/t}</a> ]
-						{/if}
-                                                
-                                                {if $permission->Check('user','edit') OR ( $permission->Check('wage','view_child') AND $user_data.is_child === TRUE ) OR ( $permission->Check('wage','view_own') AND $user_data.is_owner === TRUE )}
-							[ <a href="{urlbuilder script="UserLifePromotion.php" values="filter_user_id=$user_id" merge="FALSE"}" onClick="return isModifiedForm();">{t}Promotion{/t}</a> ]
-						{/if}
-                                                
-					</td>
-				</tr>
-				{/if}
 
 				<tr>
 					<td valign="top">
@@ -382,7 +287,7 @@ function showProvince() {
 									{/if}
 								</td>
 							</tr>
-<!-- ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
+					<!-- ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
 
 							<tr onClick="showHelpEntry('employee_number_only')">
 								<td class="{isvalid object="uf" label="employee_number_only" value="cellLeftEditTable"}">
@@ -422,8 +327,7 @@ function showProvince() {
 								<td colspan="2" class="cellRightEditTable"><input type="text" size="15" name="user_data[punch_machine_user_id]" value="{$user_data.punch_machine_user_id}" /></td>      
 									
 							</tr>	
-                                                        
-                                                        <tr onClick="showHelpEntry('default_branch')">
+                            <tr onClick="showHelpEntry('default_branch')">
 								<td class="{isvalid object="uf" label="default_branch" value="cellLeftEditTable"}">
 									{t}Location:{/t}
 								</td>
@@ -435,7 +339,7 @@ function showProvince() {
 								</td>
 							</tr>
                                                         
-                                                        <tr onClick="showHelpEntry('default_department')">
+                            <tr onClick="showHelpEntry('default_department')">
 								<td class="{isvalid object="uf" label="default_department" value="cellLeftEditTable"}">
 									{t}Department:{/t}
 								</td>
@@ -447,7 +351,7 @@ function showProvince() {
 							</tr>
                                                         
                                                         
-                                                          <tr onClick="showHelpEntry('default_department')">
+                            <tr onClick="showHelpEntry('default_department')">
 								<td class="{isvalid object="uf" label="default_department" value="cellLeftEditTable"}">
 									{t}Division:{/t}
 								</td>
@@ -558,7 +462,7 @@ function showProvince() {
                                                         
                                                         
                                                         	<!--ARSP NOTE-> I ADDED THIS CODE FOR THUNDER & NEON -->
-       		<tr onClick="showHelpEntry('probation')">
+       			<tr onClick="showHelpEntry('probation')">
 				<td rowspan="2" class="{isvalid object="uf" label="probation" value="cellLeftEditTable"}">{t}Basis of Employment:{/t} 									                </td>
                 
 				<td class="cellRightEditTable">
@@ -573,12 +477,12 @@ function showProvince() {
                         {html_options options=$user_data.month_options selected=$user_data.month}
                     </select></td>
 				    </tr>
-       		<tr onClick="showHelpEntry('probation')">
+       			<tr onClick="showHelpEntry('probation')">
        		  <td colspan="2" class="cellRightEditTable"><input type="radio"  name="user_data[basis_of_employment]" value="4"  {if $user_data.basis_of_employment =="4"}  checked="checked"  {/if} />
        		    {t}Permanent (Confirmed){/t}<br/>
-  <!-- <input type="radio"  name="user_data[basis_of_employment]" value="6"  {if $user_data.basis_of_employment =="6"}  checked="checked"  {/if} />
+  				<!-- <input type="radio"  name="user_data[basis_of_employment]" value="6"  {if $user_data.basis_of_employment =="6"}  checked="checked"  {/if} />
        		    {t}Consultant{/t}<br/> -->
-  <input type="radio"  name="user_data[basis_of_employment]" value="5"  {if $user_data.basis_of_employment =="5"}  checked="checked"  {/if} />
+  				<input type="radio"  name="user_data[basis_of_employment]" value="5"  {if $user_data.basis_of_employment =="5"}  checked="checked"  {/if} />
        		    {t}Resign{/t} </td>
        		  </tr> 
                   
@@ -595,6 +499,7 @@ function showProvince() {
 								</td>
 							</tr> 
                                                         
+						
                                                         
                             <!--ARSP NOTE -> I ADDED THIDS CODE FOR THUNDER & NEON -->
 							<tr onClick="showHelpEntry('resign_date')">
@@ -647,6 +552,7 @@ function showProvince() {
 								</td>
 							</tr>
 
+
 							<tr onClick="showHelpEntry('permission_control')">
 								<td class="{isvalid object="uf" label="permission_control" value="cellLeftEditTable"}">
 									{t}Permission Group:{/t}
@@ -677,6 +583,8 @@ function showProvince() {
 							
 
 							{/if}
+
+							
 
 							<tr onClick="showHelpEntry('user_name')">
 								<td class="{isvalid object="uf" label="user_name" value="cellLeftEditTable"}">
@@ -728,9 +636,7 @@ function showProvince() {
 									{/if}
 								</td>
 							</tr>
--->
-
-							
+				-->
 
 							
 
@@ -888,12 +794,17 @@ function showProvince() {
 							{/if}
 
 							{/if}
-{if $permission->Check('user','edit_advanced') AND ( $permission->Check('user','add') OR ( $permission->Check('user','edit') OR ($permission->Check('user','edit_child') AND $user_data.is_child === TRUE) OR ($permission->Check('user','edit_own') AND $user_data.is_owner === TRUE) ) )}
+
+
+//===========================desh check here==========================
+
+
+					{if $permission->Check('user','edit_advanced') AND ( $permission->Check('user','add') OR ( $permission->Check('user','edit') OR ($permission->Check('user','edit_child') AND $user_data.is_child === TRUE) OR ($permission->Check('user','edit_own') AND $user_data.is_owner === TRUE) ) )}
 						</table>
 				  </td>
 					<td valign="top">
 						<table class="editTable">
-{/if}
+						{/if}
 
 							<tr class="tblHeader">
 								<td colspan="3">
@@ -992,7 +903,7 @@ function showProvince() {
                               {/if}
                               </td>
 							  <td colspan="2" class="cellRightEditTable"><span id="no_logo" style="display:none">  </span><!--  <img src="{$user_data.logo_file_name}" />
-         <img src="../../storage/User_file/1/audia1.jpg" />-->
+         			<img src="../../storage/User_file/1/audia1.jpg" />-->
                                 <img src="../../storage/user_image/{$user_data.id}/user.jpg" style="width:auto; height:160px;" id="header_logo2" alt="{$APPLICATION_NAME}"/></td>
 						  </tr>
 
@@ -1498,7 +1409,7 @@ function showProvince() {
 				</tr>                              
                 
                 
-<!-------------------------BIRTH CERTIFICATE---------------------------------------------->
+					<!-------------------------BIRTH CERTIFICATE---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
 				<tr onClick="showHelpEntry('user_birth_certificate')">
@@ -1535,9 +1446,9 @@ function showProvince() {
                                                      </td>
 				</tr>       
                 
-<!-------------------------BIRTH CERTIFICATE---------------------------------------------->
+				<!-------------------------BIRTH CERTIFICATE---------------------------------------------->
   
-<!-------------------------GS LETTER---------------------------------------------->
+				<!-------------------------GS LETTER---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
 				<tr onClick="showHelpEntry('user_gs_letter')">
@@ -1574,9 +1485,9 @@ function showProvince() {
                                                      </td>
 				</tr>       
                 
-<!-------------------------GS LETTER---------------------------------------------->
+				<!-------------------------GS LETTER---------------------------------------------->
 
-<!-------------------------Police Report---------------------------------------------->
+				<!-------------------------Police Report---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
 				<tr onClick="showHelpEntry('user_police_report')">
@@ -1613,9 +1524,9 @@ function showProvince() {
                                                      </td>
 				</tr>       
                 
-<!-------------------------Police Report---------------------------------------------->
+				<!-------------------------Police Report---------------------------------------------->
 
-<!-------------------------NDA---------------------------------------------->
+				<!-------------------------NDA---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
 				<tr onClick="showHelpEntry('user_nda')">
@@ -1652,11 +1563,11 @@ function showProvince() {
                                                      </td>
 				</tr>       
                 
-<!-------------------------NDA---------------------------------------------->
+				<!-------------------------NDA---------------------------------------------->
                 
                 
                 
-<!-------------------------BOND---------------------------------------------->
+				<!-------------------------BOND---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
 				<tr onClick="showHelpEntry('bond')">
@@ -1704,7 +1615,7 @@ function showProvince() {
                   </td>
 				  </tr>       
                 
-<!-------------------------BOND---------------------------------------------->                
+            	<!-------------------------BOND---------------------------------------------->                
                 
                 
                 

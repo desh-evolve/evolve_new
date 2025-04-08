@@ -2,9 +2,26 @@
 
 namespace App\Models\Core;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Hierarchy\HierarchyListFactory;
+use Illuminate\Support\Facades\View;
 
 class Permission {
+
+	protected $current_user;
+	protected $current_company;
+
+	public function __construct()
+	{
+		$clf = new CompanyListFactory();
+		$authentication = new Authentication();
+		
+		if($authentication->Check() == true){
+			$this->current_user = $authentication->getObject();
+			$this->current_company = $clf->getByID( $this->current_user->getCompany() )->getCurrent();
+		}
+	}
+
 	function getPermissions( $user_id, $company_id ) {
 
 		$plf = new PermissionListFactory();
@@ -38,19 +55,18 @@ class Permission {
 	}
 
 	function Check($section, $name, $user_id = NULL, $company_id = NULL) {
+		
 		//Use Cache_Lite class once we need performance.
 		if ( $user_id == NULL OR $user_id == '') {
-			global $current_user;
-			if ( is_object( $current_user ) ) {
-				$user_id = $current_user->getId();
+			if ( is_object( $this->current_user ) ) {
+				$user_id = $this->current_user->getId();
 			} else {
 				return FALSE;
 			}
 		}
 
 		if ( $company_id == NULL OR $company_id == '') {
-			global $current_company;
-			$company_id = $current_company->getId();
+			$company_id = $this->current_company->getId();
 		}
 
 		//Debug::Text('Permission Check - Section: '. $section .' Name: '. $name .' User ID: '. $user_id .' Company ID: '. $company_id, __FILE__, __LINE__, __METHOD__,9);
@@ -70,17 +86,15 @@ class Permission {
 	function getLevel( $user_id = NULL, $company_id = NULL ) {
 		//Use Cache_Lite class once we need performance.
 		if ( $user_id == NULL OR $user_id == '') {
-			global $current_user;
-			if ( is_object( $current_user ) ) {
-				$user_id = $current_user->getId();
+			if ( is_object( $this->current_user ) ) {
+				$user_id = $this->current_user->getId();
 			} else {
 				return FALSE;
 			}
 		}
 
 		if ( $company_id == NULL OR $company_id == '') {
-			global $current_company;
-			$company_id = $current_company->getId();
+			$company_id = $this->current_company->getId();
 		}
 
 		$permission_arr = $this->getPermissions( $user_id, $company_id );

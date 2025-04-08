@@ -30,71 +30,72 @@
         <div class="container-fluid">
             <div id="two-column-menu"></div>
 
-                <!-- Main Navigation -->
-                <ul class="navbar-nav" id="navbar-nav">
+            <!-- Main Navigation -->
+            <ul class="navbar-nav" id="navbar-nav">
 
-                    <li class="menu-title"><span>Menu</span></li>
+                <li class="menu-title"><span>Menu</span></li>
 
-                    <!-- Dashboard -->
-                    <li class="nav-item">
-                        <a class="nav-link menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                            href="{{ route('dashboard') }}">
-                            <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
-                        </a>
-                    </li>
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                        href="{{ route('dashboard') }}">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
+                    </a>
+                </li>
 
-                    <!-- Attendance -->
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#attendance" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false">
-                            <i class="ri-bar-chart-line"></i> <span>Attendance</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="attendance">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item"><a href="#" class="nav-link">My Timesheet</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Punches</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Requests</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Apply Leaves</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Accruals</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
-                            </ul>
-                        </div>
-                    </li>
+                <!-- Attendance -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#attendance" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false">
+                        <i class="ri-bar-chart-line"></i> <span>Attendance</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="attendance">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item"><a href="#" class="nav-link">My Timesheet</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Punches</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Requests</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Apply Leaves</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Accruals</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
+                        </ul>
+                    </div>
+                </li>
 
-                    <!-- Schedule -->
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#schedule" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false">
-                            <i class="ri-bar-chart-line"></i> <span>Schedule</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="schedule">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item"><a href="#" class="nav-link">My Schedule</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Scheduled Shifts</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Mass Schedule</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule Templates</a></li>
-                            </ul>
-                        </div>
-                    </li>
+                <!-- Schedule -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#schedule" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false">
+                        <i class="ri-bar-chart-line"></i> <span>Schedule</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="schedule">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item"><a href="#" class="nav-link">My Schedule</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Scheduled Shifts</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Mass Schedule</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule Templates</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
-                    <!-- Reports -->
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#reports" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false">
-                            <i class="ri-bar-chart-line"></i> <span>Reports</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="reports">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li>
-                            </ul>
-                        </div>
-                    </li>
+                <!-- Reports -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#reports" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false">
+                        <i class="ri-bar-chart-line"></i> <span>Reports</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="reports">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li>
+                        </ul>
+                    </div>
+                </li>
 
                     <!-- Company -->
                     <li class="nav-item">
@@ -104,42 +105,44 @@
                         </a>
                         <div class="collapse menu-dropdown" id="company">
                             <ul class="nav nav-sm flex-column">
+                                <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
                                 <li class="nav-item">
-                                    <a href="{{ route('user_preference.index') }}"
-                                        class="nav-link {{ request()->routeIs('user_preference.index') ? 'active' : '' }}">
-                                        Company Information
+                                    <a href="{{ route('user_title.index') }}"
+                                        class="nav-link {{ request()->routeIs('user_title.index') ? 'active' : '' }}">Designations
                                     </a>
                                 </li>
-                                <li class="nav-item"><a href="#" class="nav-link">Designations</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Employee Titles</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Currencies</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Locations</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Departments</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Secondary Wage Groups</a></li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user_group.index') }}"
+                                        class="nav-link {{ request()->routeIs('user_group.index') ? 'active' : '' }}">Employee Titles
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('currency.index') }}"
+                                        class="nav-link {{ request()->routeIs('currency.index') ? 'active' : '' }}">Currencies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('branch.index') }}"
+                                        class="nav-link {{ request()->routeIs('branch.index') ? 'active' : '' }}">Locations
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('department.index') }}"
+                                        class="nav-link {{ request()->routeIs('department.index') ? 'active' : '' }}">Departments
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('wage_group.index') }}"
+                                        class="nav-link {{ request()->routeIs('wage_group.index') ? 'active' : '' }}">Secondary Wage Groups
+                                    </a>
+                                </li>
                                 <li class="nav-item"><a href="#" class="nav-link">Stations</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
-                                <li class="nav-item">
-                                    <a href="{{ route('new_hire_defaults.index') }}"
-                                        class="nav-link {{ request()->routeIs('new_hire_defaults.index') ? 'active' : '' }}">
-                                        New Hire Defaults
-                                    </a>
-                                </li>
+                                <li class="nav-item"><a href="#" class="nav-link">New Hire Defaults</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
-
-                                <li class="nav-item">
-                                    <a href="{{ route('bank_account.company', ['company_id' => $current_company->getId()]) }}"
-                                       class="nav-link {{ request()->routeIs('bank_account.company') ? 'active' : '' }}">
-                                       Company Bank Information
-                                    </a>
-                                </li>
-
+                                <li class="nav-item"><a href="#" class="nav-link">Company Bank Information</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Recurring Holidays</a></li>
-                                <li class="nav-item">
-                                    <a href="{{ route('company.other_field.index') }}"
-                                        class="nav-link {{ request()->routeIs('company.other_field.index') ? 'active' : '' }}">
-                                        Other Fields
-                                    </a>
-                                </li>
+                                <li class="nav-item"><a href="#" class="nav-link">Other Fields</a></li>
                             </ul>
                         </div>
                     </li>
@@ -156,7 +159,7 @@
                             aria-controls="policy">
                             <i class="ri-file-list-line"></i> <span>Policies</span>
                         </a>
-                        {{-- <div class="collapse menu-dropdown" id="policy">
+                        <div class="collapse menu-dropdown" id="policy">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
                                     <a href="{{ route('policy.policy_groups') }}"
@@ -214,7 +217,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div> --}}
+                        </div>
                     </li>
 
                     <!-- Payroll -->
@@ -280,61 +283,60 @@
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item"><a href="#" class="nav-link">Messages</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
-                                <li class="nav-item">
-                                    <a href="{{ route('user_preference.index') }}"
-                                        class="nav-link {{ request()->routeIs('user_preference.index') ? 'active' : '' }}">
-                                        Preferences
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('bank_account.user', ['user_id' => $current_user->getId()]) }}"
-                                       class="nav-link {{ request()->routeIs('bank_account.user') ? 'active' : '' }}">
-                                       User Bank Information
-                                    </a>
-                                </li>
+                                <li class="nav-item"><a href="#" class="nav-link">Preferences</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Bank Information</a></li>
                             </ul>
                         </div>
                     </li>
 
-                    <!-- Admin -->
+        <!-- Admin -->
+        @php
+            $checkAdminNav = request()->routeIs('admin.*');
+        @endphp
+        <li class="nav-item">
+            <a class="nav-link menu-link {{ $checkAdminNav ? 'active' : '' }}" href="#admin"
+                data-bs-toggle="collapse" role="button" aria-expanded="{{ $checkAdminNav ? 'true' : 'false' }}"
+                aria-controls="admin">
+                <i class="ri-admin-line"></i> <span>Admin</span>
+            </a>
+            <div class="collapse menu-dropdown" id="admin">
+                <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#admin" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false">
-                            <i class="ri-bar-chart-line"></i> <span>Admin</span>
+                        <a href="{{ route('admin.userlist') }}"
+                            class="nav-link {{ request()->routeIs('admin.userlist') ? 'active' : '' }}">Employee
+                            Administration
                         </a>
-                        <div class="collapse menu-dropdown" id="admin">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item"><a href="#" class="nav-link">Employee Administration</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Census Infortion</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">December Bonus Calculation</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Attendance Bonus Calculation</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Gratuity Calculation</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Authorization</a></li>
-                            </ul>
-                        </div>
                     </li>
+                    <li class="nav-item"><a href="#" class="nav-link">Census Infortion</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">December Bonus Calculation</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Attendance Bonus Calculation</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Gratuity Calculation</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Authorization</a></li>
+                </ul>
+            </div>
+        </li>
 
-                    <!--
+        <!--
                     <li class="nav-item"><a href="#" class="nav-link">Permission Groups</a></li>
                     -->
 
-                    <!-- Logout -->
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <a class="nav-link menu-link" href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
-                                <i class="ri-logout-box-line"></i> <span data-key="t-logout">Log Out</span>
-                            </a>
-                        </form>
-                    </li>
+        <!-- Logout -->
+        <li class="nav-item">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <a class="nav-link menu-link" href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); this.closest('form').submit();">
+                    <i class="ri-logout-box-line"></i> <span data-key="t-logout">Log Out</span>
+                </a>
+            </form>
+        </li>
 
-                </ul>
-            </div>
-            <!-- Sidebar -->
-        </div>
+        </ul>
     </div>
+    <!-- Sidebar -->
+</div>
+</div>
 </div>
 
 <div class="sidebar-background"></div>

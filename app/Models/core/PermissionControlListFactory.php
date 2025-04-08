@@ -231,7 +231,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		if ( $include_blank == TRUE ) {
 			$list[0] = '--';
 		}
-
+		
 		foreach ($lf->rs as $obj) {
 			$lf->data = (array)$obj;
 			$list[$lf->getID()] = $lf->getName().' ['. $lf->getLevel().']';

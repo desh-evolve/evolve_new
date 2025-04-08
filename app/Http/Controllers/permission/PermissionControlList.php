@@ -12,6 +12,7 @@ use App\Models\Core\Option;
 use App\Models\Core\Misc;
 use App\Models\Core\Pager;
 use App\Models\Core\PermissionControlListFactory;
+use App\Models\Core\PermissionControlFactory;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
@@ -20,49 +21,39 @@ use Illuminate\Support\Facades\View;
 
 class PermissionControlList extends Controller
 {
-    protected $permission;
-    protected $currentUser;
-    protected $currentCompany;
-    protected $userPrefs;
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
+	protected $company;
 
-    public function __construct()
-    {
-        $basePath = Environment::getBasePath();
-        require_once($basePath . '/app/Helpers/global.inc.php');
-        require_once($basePath . '/app/Helpers/Interface.inc.php');
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->permission = View::shared('permission');
-        $this->currentUser = View::shared('current_user');
-        $this->currentCompany = View::shared('current_company');
-        $this->userPrefs = View::shared('current_user_prefs');
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->company = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
 
-    }
-
-    public function index() {
-        /*
+	public function index()
+	{
+		/*
         if ( !$permission->Check('permission','enabled')
 				OR !( $permission->Check('permission','edit') OR $permission->Check('permission','edit_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
+		// dd('aa');
+		$current_company = $this->company;
+		$current_user_prefs = $this->userPrefs;
 
-        $viewData['title'] = 'Permission Group List';
-
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array (
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
 
 		$pclf = new PermissionControlListFactory();
-		$pclf->getByCompanyId( $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
+		$pclf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage());
 
 		$pager = new Pager($pclf);
 
@@ -70,40 +61,42 @@ class PermissionControlList extends Controller
 			$pclf->data = (array)$pc_obj;
 			$pc_obj = $pclf;
 
-			$rows[] = array(
-								'id' => $pc_obj->getId(),
-								'name' => $pc_obj->getColumn('name'),
-								'description' => $pc_obj->getColumn('description'),
-								'level' => $pc_obj->getLevel(),
+			$permission[] = array(
+				'id' => $pc_obj->getId(),
+				'name' => $pc_obj->getColumn('name'),
+				'description' => $pc_obj->getColumn('description'),
+				'level' => $pc_obj->getLevel(),
 
-								'deleted' => $pc_obj->getDeleted()
-							);
-
+				'deleted' => $pc_obj->getDeleted()
+			);
 		}
-		$smarty->assign_by_ref('rows', $rows);
 
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+		$viewData = [
+			'title' => 'Permission Group List',
+			'permissions' => $permission,
+			'sort_column' => $sort_array['sort_column'] ?? '',
+			'sort_order' => $sort_array['sort_order'] ?? '',
+			'paging_data' => $pager->getPageVariables()
+		];
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-
-
-		$smarty->display('permission/PermissionControlList.tpl');
-        return view('accrual/ViewUserAccrualList', $viewData);
-
-    }
-
-	public function add(){
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditPermissionControl.php', FALSE) );
+		return view('permission.PermissionControlList', $viewData);
 	}
 
-	public function copy(){
+	public function add()
+	{
+		Redirect::Page(URLBuilder::getURL(NULL, 'EditPermissionControl.php', FALSE));
+	}
+
+	public function copy()
+	{
+		$current_company = $this->company;
+		$current_user_prefs = $this->userPrefs;
 		$pclf = new PermissionControlListFactory();
 
 		$pclf->StartTransaction();
 
 		foreach ($ids as $id) {
-			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
+			$pclf->getByIdAndCompanyId($id, $current_company->getId());
 			foreach ($pclf->rs as $pc_obj) {
 				$pclf->data = (array)$pc_obj;
 				$pc_obj = $pclf;
@@ -111,49 +104,71 @@ class PermissionControlList extends Controller
 				$permission_arr = $pc_obj->getPermission();
 
 				$pc_obj->setId(FALSE);
-				$pc_obj->setName( Misc::generateCopyName( $pc_obj->getName() ) );
-				if ( $pc_obj->isValid() ) {
+				$pc_obj->setName(Misc::generateCopyName($pc_obj->getName()));
+				if ($pc_obj->isValid()) {
 					$pc_obj->Save(FALSE);
-					$pc_obj->setPermission( $permission_arr );
+					$pc_obj->setPermission($permission_arr);
 				}
 				unset($pc_obj, $permission_arr);
-
 			}
 		}
 
 		$pclf->CommitTransaction();
 
-		Redirect::Page( URLBuilder::getURL( NULL, 'PermissionControlList.php') );
-
+		Redirect::Page(URLBuilder::getURL(NULL, 'PermissionControlList.php'));
 	}
 
-	public function delete(){
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+	// public function delete(){
+	// 	if ( strtolower($action) == 'delete' ) {
+	// 		$delete = TRUE;
+	// 	} else {
+	// 		$delete = FALSE;
+	// 	}
+
+	// 	$pclf = new PermissionControlListFactory();
+
+	// 	foreach ($ids as $id) {
+	// 		$pclf->getByIdAndCompanyId($id, $current_company->getId() );
+	// 		foreach ($pclf->rs as $pc_obj) {
+	// 			$pclf->data = (array)$pc_obj;
+	// 			$pc_obj = $pclf;
+
+	// 			$pc_obj->setDeleted($delete);
+	// 			if ( $pc_obj->isValid() ) {
+	// 				$pc_obj->Save();
+	// 			}
+	// 		}
+	// 	}
+
+	// 	Redirect::Page( URLBuilder::getURL( NULL, 'PermissionControlList.php') );
+
+	// }
+
+	public function delete($id)
+	{
+		$current_company = $this->company;
+
+		if (empty($id)) {
+			return response()->json(['error' => 'No Permission Control selected.'], 400);
 		}
 
 		$pclf = new PermissionControlListFactory();
+		$PermissionControl = $pclf->getByIdAndCompanyId($id, $current_company->getId());
 
-		foreach ($ids as $id) {
-			$pclf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($pclf->rs as $pc_obj) {
-				$pclf->data = (array)$pc_obj;
-				$pc_obj = $pclf;
+		foreach ($PermissionControl->rs as $p_obj) {
+			$PermissionControl->data = (array)$p_obj; // added bcz Permission Control data is null and it gives an error
 
-				$pc_obj->setDeleted($delete);
-				if ( $pc_obj->isValid() ) {
-					$pc_obj->Save();
+			$PermissionControl->setDeleted(true); // Set deleted flag to true
+
+			if ($PermissionControl->isValid()) {
+				$res = $PermissionControl->Save();
+
+				if ($res) {
+					return response()->json(['success' => 'Permission Control deleted successfully.']);
+				} else {
+					return response()->json(['error' => 'Permission Control deleted failed.']);
 				}
 			}
 		}
-
-		Redirect::Page( URLBuilder::getURL( NULL, 'PermissionControlList.php') );
-
 	}
-
 }
-
-
-?>
