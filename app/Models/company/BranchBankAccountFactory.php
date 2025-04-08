@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class BranchBankAccountFactory extends Factory {
 	protected $table = 'branch_bank_account';
 	protected $pk_sequence_name = 'branch_bank_account_id_seq'; //PK Sequence name
-	protected $Validator;
+	public $Validator;
 
 	public function __construct() {
         $this->Validator = new Validator();
