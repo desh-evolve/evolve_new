@@ -4,6 +4,8 @@ namespace App\Http\Controllers\punch;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company\BranchListFactory;
+use Illuminate\Http\Request;
+
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
 use App\Models\Core\Factory;
@@ -21,8 +23,8 @@ use App\Models\Punch\PunchControlListFactory;
 use App\Models\Punch\PunchFactory;
 use App\Models\Punch\PunchListFactory;
 use App\Models\Users\UserListFactory;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
+
 
 class EditPunch extends Controller
 {
@@ -317,12 +319,13 @@ class EditPunch extends Controller
 	}
 
 	public function submit(Request $request){
-		dd('hi');
 
 		$pcf = new PunchControlFactory(); 
 		$pf = new PunchFactory();
-		$ulf = new UserListFactory();
 
+		$pc_data = $request->pc_data;
+
+		dd($pc_data); //check here
 
 		$fail_transaction=FALSE;
 

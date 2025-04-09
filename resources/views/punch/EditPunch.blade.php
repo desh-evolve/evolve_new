@@ -13,7 +13,8 @@
                     
                     {{-- ---------------------------------------------- --}}
 
-                    <form method="post" name="wage" action="/attendance/punch/submit">
+                    <form method="POST" action="{{ route('attendance.punch.submit') }}">
+                        @csrf
                         <div>
                             @if (!$pcf->Validator->isValid() OR !$pf->Validator->isValid())
                                 <div class="alert alert-danger">
