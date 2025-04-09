@@ -320,8 +320,8 @@ Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name(
 // ===============================================================================================================================
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
-Route::get('/attendance/punch/add/{id?}', [EditPunch::class, 'index'])->name('attendance.punch.add');
-Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
+Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
+Route::post('/attendance/punch/submit', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
 
 Route::get('/attendance/requests', [UserRequestList::class, 'index'])->name('attendance.requests');
