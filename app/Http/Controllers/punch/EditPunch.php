@@ -75,21 +75,6 @@ class EditPunch extends Controller
 		$permission = $this->permission;
 		$current_user_prefs = $this->userPrefs;
 
-		$punch_full_time_stamp = NULL;
-		if ( isset($pc_data) ) {
-			if ( !empty($pc_data['date_stamp']) AND !empty($pc_data['time_stamp']) ) {
-				$punch_full_time_stamp = TTDate::parseDateTime($pc_data['date_stamp'].' '.$pc_data['time_stamp']);
-				$pc_data['punch_full_time_stamp'] = date('H:i', $punch_full_time_stamp);
-				$pc_data['time_stamp'] = date('H:i', $punch_full_time_stamp);
-			} else {
-				$pc_data['punch_full_time_stamp'] = NULL;
-			}
-
-			if ( !empty($pc_data['date_stamp']) ) {
-				$pc_data['date_stamp'] = TTDate::parseDateTime($pc_data['date_stamp']);
-			}
-		}
-
 		$pcf = new PunchControlFactory(); 
 		$pf = new PunchFactory();
 		$ulf = new UserListFactory();
@@ -325,7 +310,22 @@ class EditPunch extends Controller
 
 		$pc_data = $request->pc_data;
 
-		dd($pc_data); //check here
+		$punch_full_time_stamp = NULL;
+		if ( isset($pc_data) ) {
+			if ( !empty($pc_data['date_stamp']) AND !empty($pc_data['time_stamp']) ) {
+				$punch_full_time_stamp = TTDate::parseDateTime($pc_data['date_stamp'].' '.$pc_data['time_stamp']);
+				$pc_data['punch_full_time_stamp'] = date('H:i', $punch_full_time_stamp);
+				$pc_data['time_stamp'] = date('H:i', $punch_full_time_stamp);
+			} else {
+				$pc_data['punch_full_time_stamp'] = NULL;
+			}
+
+			if ( !empty($pc_data['date_stamp']) ) {
+				$pc_data['date_stamp'] = TTDate::parseDateTime($pc_data['date_stamp']);
+			}
+		}
+
+		//dd($pc_data); //check here
 
 		$fail_transaction=FALSE;
 
@@ -473,7 +473,8 @@ class EditPunch extends Controller
 			//$pf->FailTransaction();
 			$pf->CommitTransaction();
 
-			Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), '/attendance/punchlist'));
+			Redirect::Page(  );
 		} else {
 			$pf->FailTransaction();
 		}
