@@ -1639,7 +1639,7 @@ class TTDate {
 		return FALSE;
 	}
 
-	function isTimeOverLap($start_date1, $end_date1, $start_date2, $end_date2) {
+	static function isTimeOverLap($start_date1, $end_date1, $start_date2, $end_date2) {
 		//Find out if Date1 overlaps with Date2
 		if ( $start_date1 == '' OR $end_date1 == '' OR $start_date2 == '' OR $end_date2 == '') {
 			return FALSE;

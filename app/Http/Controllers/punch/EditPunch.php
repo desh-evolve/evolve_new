@@ -314,8 +314,8 @@ class EditPunch extends Controller
 		if ( isset($pc_data) ) {
 			if ( !empty($pc_data['date_stamp']) AND !empty($pc_data['time_stamp']) ) {
 				$punch_full_time_stamp = TTDate::parseDateTime($pc_data['date_stamp'].' '.$pc_data['time_stamp']);
-				$pc_data['punch_full_time_stamp'] = date('H:i', $punch_full_time_stamp);
-				$pc_data['time_stamp'] = date('H:i', $punch_full_time_stamp);
+				$pc_data['punch_full_time_stamp'] = $punch_full_time_stamp;
+				$pc_data['time_stamp'] = $punch_full_time_stamp;
 			} else {
 				$pc_data['punch_full_time_stamp'] = NULL;
 			}
@@ -367,6 +367,7 @@ class EditPunch extends Controller
 				$enable_rounding = TRUE;
 			}
 
+			
 			$pf->setTimeStamp( $time_stamp, $enable_rounding );
 
 			if ( $i == 0 AND isset( $pc_data['id'] ) AND $pc_data['id']  != '' ) {
@@ -381,8 +382,6 @@ class EditPunch extends Controller
 				$pf->setActualTimeStamp( $time_stamp );
 				$pf->setOriginalTimeStamp( $pf->getTimeStamp() );
 			}
-
-
 
 			if ( $pf->isValid() == TRUE ) {
 
