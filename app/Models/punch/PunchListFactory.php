@@ -651,10 +651,10 @@ class PunchListFactory extends PunchFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-					':start_date' => Carbon::parse($start_time)->toDateString(),
-					':end_date' => Carbon::parse($epoch)->toDateString(),
-					':start_time' => Carbon::parse($start_time)->toDateTimeString(),
-					':end_time' => Carbon::parse($epoch)->toDateTimeString(),
+					':start_date' => date('Y-m-d', $start_time),
+					':end_date' => date('Y-m-d', $epoch),
+					':start_time' => date('Y-m-d H:i:s', $start_time),
+					':end_time' => date('Y-m-d H:i:s', $epoch),
 					':punch_id' => (int)$punch_id,
 					);
 

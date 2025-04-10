@@ -3,24 +3,28 @@
 namespace App\Http\Controllers\punch;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Users\UserTitleList;
 use App\Models\Company\BranchListFactory;
+use Illuminate\Http\Request;
+
+use App\Models\Core\Debug;
 use App\Models\Core\Environment;
-use App\Models\Core\FastTree;
+use App\Models\Core\Factory;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
 use App\Models\Core\Option;
+use App\Models\Core\OtherFieldListFactory;
 use App\Models\Core\Redirect;
+use App\Models\Core\StationListFactory;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Department\DepartmentListFactory;
-use App\Models\Hierarchy\HierarchyListFactory;
-use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\Punch\PunchControlFactory;
+use App\Models\Punch\PunchControlListFactory;
+use App\Models\Punch\PunchFactory;
 use App\Models\Punch\PunchListFactory;
-use App\Models\Users\UserGenericDataFactory;
-use App\Models\Users\UserGenericDataListFactory;
-use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
-use App\Models\Users\UserTitleListFactory;
 use Illuminate\Support\Facades\View;
+
 
 class EditPunch extends Controller
 {
@@ -42,7 +46,7 @@ class EditPunch extends Controller
 
     }
 
-    public function index($id = null) {
+    public function index() {
 		/*
 		if ( !$permission->Check('punch','enabled')
 				OR !( $permission->Check('punch','edit')
@@ -53,46 +57,43 @@ class EditPunch extends Controller
 		}
 		*/
 
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'punch_control_id',
+				'user_id',
+				'date_stamp',
+				'status_id',
+				'pc_data'
+			)
+		));
+		
 		$viewData['title'] = !empty($id) ? 'Edit Punch' : 'Add Punch';
 		$current_company = $this->currentCompany;
 		$current_user = $this->currentUser;
 		$permission = $this->permission;
-		
-		$punch_full_time_stamp = NULL;
-		if ( isset($pc_data) ) {
-			if ( $pc_data['date_stamp'] != '' AND $pc_data['time_stamp'] != '') {
-				$punch_full_time_stamp = TTDate::parseDateTime($pc_data['date_stamp'].' '.$pc_data['time_stamp']);
-				$pc_data['punch_full_time_stamp'] = $punch_full_time_stamp;
-				$pc_data['time_stamp'] = $punch_full_time_stamp;
-			} else {
-				$pc_data['punch_full_time_stamp'] = NULL;
-			}
+		$current_user_prefs = $this->userPrefs;
 
-			if ( $pc_data['date_stamp'] != '') {
-				$pc_data['date_stamp'] = TTDate::parseDateTime($pc_data['date_stamp']);
-			}
-		}
-
-		$pcf = new PunchControlFactory();
+		$pcf = new PunchControlFactory(); 
 		$pf = new PunchFactory();
 		$ulf = new UserListFactory();
 
-		$action = Misc::findSubmitButton();
 
-
-		if ( $id != '' AND $action != 'submit' ) {
+		if ( !empty($id) ) {
 			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 			$pclf = new PunchControlListFactory();
 			$pclf->getByPunchId( $id );
 
-			foreach ($pclf as $pc_obj) {
-				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
+			foreach ($pclf->rs as $pc_obj) {
+				$pclf->data = (array)$pc_obj;
+				$pc_obj = $pclf;
 
 				//Get punches
 				$plf = new PunchListFactory();
-				//$plf->getByPunchControlId( $pc_obj->getId() );
 				$plf->getById( $id );
+
 				if ( $plf->getRecordCount() > 0 ) {
 					$p_obj = $plf->getCurrent();
 				} else {
@@ -114,7 +115,7 @@ class EditPunch extends Controller
 											'station_id' => $s_obj->getStation(),
 											'source' => $s_obj->getSource(),
 											'description' => Misc::TruncateString( $s_obj->getDescription(), 20 )
-											);
+										);
 					}
 				}
 
@@ -148,29 +149,29 @@ class EditPunch extends Controller
 									'type_id' => $p_obj->getType(),
 									'station_id' => $p_obj->getStation(),
 									'station_data' => $station_data,
-									'time_stamp' => $p_obj->getTimeStamp(),
+									'time_stamp' => date('H:i', $p_obj->getTimeStamp()),
 									//Use this so the date is always insync with the time.
-									'date_stamp' => $p_obj->getTimeStamp(),
-									'original_time_stamp' => $p_obj->getOriginalTimeStamp(),
-									'actual_time_stamp' => $p_obj->getActualTimeStamp(),
+									'date_stamp' => date('Y-m-d', $p_obj->getTimeStamp()),
+									'original_time_stamp' => date('H:i', $p_obj->getOriginalTimeStamp()),
+									'actual_time_stamp' => date('H:i', $p_obj->getActualTimeStamp()),
 									'longitude' => $p_obj->getLongitude(),
 									'latitude' => $p_obj->getLatitude(),
 
-									'created_date' => $p_obj->getCreatedDate(),
+									'created_date' => date('Y-m-d H:i:s', $p_obj->getCreatedDate()),
 									'created_by' => $p_obj->getCreatedBy(),
 									'created_by_name' => (string)$ulf->getFullNameById( $p_obj->getCreatedBy() ),
-									'updated_date' => $p_obj->getUpdatedDate(),
+									'updated_date' => date('Y-m-d H:i:s', $p_obj->getUpdatedDate()),
 									'updated_by' => $p_obj->getUpdatedBy(),
 									'updated_by_name' => (string)$ulf->getFullNameById( $p_obj->getUpdatedBy() ),
 									'deleted_date' => $p_obj->getDeletedDate(),
 									'deleted_by' => $p_obj->getDeletedBy()
 								);
 			}
-		} elseif ( $action != 'submit' ) {
+		} else {
 			Debug::Text(' ID was NOT passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
 
 			//UserID has to be set at minimum
-			if ( $punch_control_id != '' ) {
+			if ( !empty($punch_control_id) ) {
 				Debug::Text(' Punch Control ID was passed: '. $punch_control_id, __FILE__, __LINE__, __METHOD__,10);
 
 				//Get previous punch, and default timestamp to that.
@@ -194,97 +195,67 @@ class EditPunch extends Controller
 						$date_stamp = $pc_obj->getUserDateObject()->getDateStamp();
 					}
 
-					$pc_data = array(
-									'id' => $pc_obj->getId(),
-									'user_id' => $pc_obj->getUserDateObject()->getUser(),
-									'user_full_name' => $pc_obj->getUserDateObject()->getUserObject()->getFullName(),
-									'date_stamp' => $date_stamp,
-									'user_date_id' => $pc_obj->getUserDateObject()->getId(),
-									'time_stamp' => $time_stamp,
-									'branch_id' => $pc_obj->getBranch(),
-									'department_id' => $pc_obj->getDepartment(),
-									'job_id' => $pc_obj->getJob(),
-									'job_item_id' => $pc_obj->getJobItem(),
-									'quantity' => (float)$pc_obj->getQuantity(),
-									'bad_quantity' => (float)$pc_obj->getBadQuantity(),
-									'note' => $pc_obj->getNote(),
+					$pc_data = array (
+						'id' => $pc_obj->getId(),
+						'user_id' => $pc_obj->getUserDateObject()->getUser(),
+						'user_full_name' => $pc_obj->getUserDateObject()->getUserObject()->getFullName(),
+						'date_stamp' => date('Y-m-d', $date_stamp),
+						'user_date_id' => $pc_obj->getUserDateObject()->getId(),
+						'time_stamp' => date('H:i', $time_stamp),
+						'branch_id' => $pc_obj->getBranch(),
+						'department_id' => $pc_obj->getDepartment(),
+						'job_id' => $pc_obj->getJob(),
+						'job_item_id' => $pc_obj->getJobItem(),
+						'quantity' => (float)$pc_obj->getQuantity(),
+						'bad_quantity' => (float)$pc_obj->getBadQuantity(),
+						'note' => $pc_obj->getNote(),
 
-									'other_id1' => $pc_obj->getOtherID1(),
-									'other_id2' => $pc_obj->getOtherID2(),
-									'other_id3' => $pc_obj->getOtherID3(),
-									'other_id4' => $pc_obj->getOtherID4(),
-									'other_id5' => $pc_obj->getOtherID5(),
+						'other_id1' => $pc_obj->getOtherID1(),
+						'other_id2' => $pc_obj->getOtherID2(),
+						'other_id3' => $pc_obj->getOtherID3(),
+						'other_id4' => $pc_obj->getOtherID4(),
+						'other_id5' => $pc_obj->getOtherID5(),
 
-									'status_id' => $status_id
-									);
+						'status_id' => $status_id
+					);
 				}
-			} elseif ( $user_id != '' ) {
+			} elseif ( !empty($user_id) ) {
 				Debug::Text(' User ID was passed: '. $user_id .' Date Stamp: '. $date_stamp, __FILE__, __LINE__, __METHOD__,10);
 
 				//Don't guess too much. If they click a day to add a punch. Make sure that punch is on that day.
-				if ( isset($date_stamp) AND $date_stamp != '' ) {
+				if ( isset($date_stamp) AND !empty($date_stamp) ) {
 					$time_stamp = $date_stamp + (3600*12); //Noon
 				} else {
 					$time_stamp = TTDate::getBeginDayEpoch( TTDate::getTime() ) + (3600*12); //Noon
 				}
 
-				/*
-				if ( isset($date_stamp) AND $date_stamp != '' ) {
-					$epoch = $date_stamp;
-				} else {
-					$epoch = TTDate::getTime();
-				}
-				//Get previous punch, and default timestamp to that.
-				$plf = new PunchListFactory();
-				$plf->getPreviousPunchByUserIDAndEpoch( $user_id, $epoch );
-				if ( $plf->getRecordCount() > 0 ) {
-					Debug::Text(' Found Previous punch: ', __FILE__, __LINE__, __METHOD__,10);
-					$prev_punch_obj = $plf->getCurrent();
-					$time_stamp = $prev_punch_obj->getTimeStamp()+3600;
-				} else {
-					$time_stamp = $date_stamp;
-				}
-				*/
 				$ulf = new UserListFactory();
 				$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 				if ( $ulf->getRecordCount() > 0 ) {
 					$user_obj = $ulf->getCurrent();
 
-					$pc_data = array(
-									'user_id' => $user_obj->getId(),
-									'user_full_name' => $user_obj->getFullName(),
-									'date_stamp' => $date_stamp,
-									'time_stamp' => $time_stamp,
-									'status_id' => $status_id,
-									'branch_id' => $user_obj->getDefaultBranch(),
-									'department_id' => $user_obj->getDefaultDepartment(),
-									'quantity' => 0,
-									'bad_quantity' => 0
-									);
+					$pc_data = array (
+						'user_id' => $user_obj->getId(),
+						'user_full_name' => $user_obj->getFullName(),
+						'date_stamp' => date('Y-m-d', $date_stamp),
+						'time_stamp' => date('H:i', $time_stamp),
+						'status_id' => $status_id,
+						'branch_id' => $user_obj->getDefaultBranch(),
+						'department_id' => $user_obj->getDefaultDepartment(),
+						'quantity' => 0,
+						'bad_quantity' => 0
+					);
 				}
 
 				unset($time_stamp, $plf);
 			}
 		}
 
-
 		$blf = new BranchListFactory();
 		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
 
 		$dlf = new DepartmentListFactory();
 		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
-
-		if ( $current_company->getProductEdition() == 20 ) {
-			$jlf = new JobListFactory();
-			$jlf->getByCompanyIdAndUserIdAndStatus( $current_company->getId(), $pc_data['user_id'], array(10,20,30,40) );
-			$pc_data['job_options'] = $jlf->getArrayByListFactory( $jlf, TRUE, TRUE );
-			$pc_data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
-
-			$jilf = new JobItemListFactory();
-			$jilf->getByCompanyId( $current_company->getId() );
-			$pc_data['job_item_options'] = $jilf->getArrayByListFactory( $jilf, TRUE, TRUE );
-			$pc_data['job_item_manual_id_options'] = $jilf->getManualIdArrayByListFactory( $jilf, TRUE );
-		}
 
 		//Select box options;
 		$pc_data['status_options'] = $pf->getOptions('status');
@@ -296,13 +267,12 @@ class EditPunch extends Controller
 		$oflf = new OtherFieldListFactory();
 		$pc_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getId(), 15 );
 
-		//Debug::Text('pc_data[date_stamp]: '. TTDate::getDate('DATE+TIME', $pc_data['date_stamp']), __FILE__, __LINE__, __METHOD__,10);
-		$smarty->assign_by_ref('pc_data', $pc_data);
-
-		$smarty->assign_by_ref('pcf', $pcf);
-		$smarty->assign_by_ref('pf', $pf);
+		$viewData['pc_data'] = $pc_data;
+		$viewData['pcf'] = $pcf;
+		$viewData['pf'] = $pf;
+		$viewData['current_user_prefs'] = $current_user_prefs;
 		
-		$smarty->display('punch/EditPunch.tpl');
+		return view('punch/EditPunch', $viewData);
 	}
 
 	public function delete($id){
@@ -312,7 +282,10 @@ class EditPunch extends Controller
 		$plf = new PunchListFactory();
 		$plf->getById( $pc_data['punch_id'] );
 		if ( $plf->getRecordCount() > 0 ) {
-			foreach($plf as $p_obj) {
+			foreach($plf->rs as $p_obj) {
+				$plf->data = (array)$p_obj;
+				$p_obj = $plf;
+
 				$p_obj->setUser( $p_obj->getPunchControlObject()->getUserDateObject()->getUser() );
 				$p_obj->setDeleted(TRUE);
 
@@ -330,10 +303,29 @@ class EditPunch extends Controller
 
 	}
 
-	public function submit(){
-//Debug::setBufferOutput(FALSE);
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+	public function submit(Request $request){
+
+		$pcf = new PunchControlFactory(); 
+		$pf = new PunchFactory();
+
+		$pc_data = $request->pc_data;
+
+		$punch_full_time_stamp = NULL;
+		if ( isset($pc_data) ) {
+			if ( !empty($pc_data['date_stamp']) AND !empty($pc_data['time_stamp']) ) {
+				$punch_full_time_stamp = TTDate::parseDateTime($pc_data['date_stamp'].' '.$pc_data['time_stamp']);
+				$pc_data['punch_full_time_stamp'] = $punch_full_time_stamp;
+				$pc_data['time_stamp'] = $punch_full_time_stamp;
+			} else {
+				$pc_data['punch_full_time_stamp'] = NULL;
+			}
+
+			if ( !empty($pc_data['date_stamp']) ) {
+				$pc_data['date_stamp'] = TTDate::parseDateTime($pc_data['date_stamp']);
+			}
+		}
+
+		//dd($pc_data); //check here
 
 		$fail_transaction=FALSE;
 
@@ -375,6 +367,7 @@ class EditPunch extends Controller
 				$enable_rounding = TRUE;
 			}
 
+			
 			$pf->setTimeStamp( $time_stamp, $enable_rounding );
 
 			if ( $i == 0 AND isset( $pc_data['id'] ) AND $pc_data['id']  != '' ) {
@@ -389,8 +382,6 @@ class EditPunch extends Controller
 				$pf->setActualTimeStamp( $time_stamp );
 				$pf->setOriginalTimeStamp( $pf->getTimeStamp() );
 			}
-
-
 
 			if ( $pf->isValid() == TRUE ) {
 
@@ -481,7 +472,8 @@ class EditPunch extends Controller
 			//$pf->FailTransaction();
 			$pf->CommitTransaction();
 
-			Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), '/attendance/punchlist'));
+			Redirect::Page(  );
 		} else {
 			$pf->FailTransaction();
 		}

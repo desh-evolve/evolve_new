@@ -63,7 +63,11 @@
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Accruals</a></li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.accruals') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.accruals') ? 'active' : '' }}">Accruals
+                                </a>
+                            </li>
                             <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
                         </ul>
                     </div>

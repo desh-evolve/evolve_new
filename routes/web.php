@@ -37,6 +37,7 @@ use App\Http\Controllers\Login;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccount;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccountLink;
 use App\Http\Controllers\pay_stub\PayStubEntryAccountList;
+use App\Http\Controllers\pay_stub\PayStubList;
 use App\Http\Controllers\pay_stub_amendment\EditPayStubAmendment;
 use App\Http\Controllers\pay_stub_amendment\EditRecurringPayStubAmendment;
 use App\Http\Controllers\pay_stub_amendment\PayStubAmendmentList;
@@ -373,7 +374,7 @@ Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name(
 // ===============================================================================================================================
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
-Route::get('/attendance/punch/add/{id?}', [EditPunch::class, 'index'])->name('attendance.punch.add');
+Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
 
@@ -387,6 +388,8 @@ Route::get('/attendance/user_accruals/{user_id}/{ap_id}', [ViewUserAccrualList::
 Route::get('/attendance/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('attendance.user_accruals.add');
 Route::post('/attendance/user_accruals/submit/{id?}', [EditUserAccrual::class, 'submit'])->name('attendance.user_accruals.submit');
 Route::delete('/attendance/user_accruals/delete/{id}', [ViewUserAccrualList::class, 'delete'])->name('attendance.user_accruals.delete');
+
+Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
 
 // ===============================================================================================================================
