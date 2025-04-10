@@ -5,7 +5,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h4>Change Web Password</h4>
+            <h4>{{ $title }}</h4>
         </div>
 
         <div class="card-body">
@@ -26,24 +26,22 @@
                 </div>
             @endif
 
-            <form method="POST" action="">
-
+            <form method="POST" action="{{ isset($user_data['id']) ? route('user.web_password.save', $user_data['id']) : route('user.web_password.save') }}">
                 @csrf
 
                 <div class="px-4 py-2">
 
-
                     <div class="row mb-3">
                         <label for="user_name" class="form-label req mb-1 col-md-3">User Name</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control w-75" id="user_name" name="user_name" placeholder="Enter User Name" value="">
+                            <input type="text" class="form-control w-75" id="user_name" name="user_name" placeholder="Enter User Name" value="{{ $user_data['user_name '] ?? '' }}">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="current_password" class="form-label req mb-1 col-md-3">Current Password</label>
                         <div class="col-md-9">
-                            <input type="password" class="form-control w-75" id="current_password" name="current_password" placeholder="Enter Current Password" value="">
+                            <input type="password" class="form-control w-75" id="current_password" name="current_password" placeholder="Enter Current Password" value="{{ $user_data['current_password '] ?? '' }}">
                         </div>
                     </div>
 
@@ -65,9 +63,7 @@
 
 
                 <div class="d-flex justify-content-end mt-4">
-                    <input type="hidden" name="id" value="">
-                    <input type="hidden" name="user_id" value="">
-
+                    <input type="hidden" name="id" value="{{ $user_data['id'] ?? '' }}">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
 

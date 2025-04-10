@@ -77,10 +77,12 @@ use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\EditUser;
 use App\Http\Controllers\users\EditUserDefault;
+use App\Http\Controllers\users\EditUserLifePromotionNew;
 use App\Http\Controllers\users\EditUserPasswordNew;
 use App\Http\Controllers\Users\EditUserPreference;
 use App\Http\Controllers\Users\EditUserPreferenceNew;
 use App\Http\Controllers\users\UserGenericStatusList;
+use App\Http\Controllers\users\UserLifePromotionNew;
 use App\Http\Controllers\users\UserList;
 use Illuminate\Support\Facades\Route;
 
@@ -288,6 +290,15 @@ Route::delete('/bank_account/delete/{id?}', [Bank_accountEditBankAccount::class,
 // ===============================================================================================================================
 Route::get('/user/web_password', [EditUserPasswordNew::class, 'index'])->name('user.web_password.index');
 
+Route::post('/user/web_password/save/{id?}', [EditUserPasswordNew::class, 'save'])->name('user.web_password.save');
+
+// ===============================================================================================================================
+// User promotion
+// ===============================================================================================================================
+Route::get('/user/promotion', [UserLifePromotionNew::class, 'index'])->name('user.promotion.index');
+
+Route::get('/user/promotion/add/{id?}', [EditUserLifePromotionNew::class, 'index'])->name('user.promotion.add');
+Route::post('/user/promotion/save/{id?}', [EditUserLifePromotionNew::class, 'save'])->name('user.promotion.save');
 // ===============================================================================================================================
 // Policies
 // ===============================================================================================================================
