@@ -290,7 +290,7 @@
                         <div id="contentBoxFour">
                             <input type="submit" class="btn btn-sm btn-primary" name="action:submit" value="Submit">
                             @if (!empty($pc_data['punch_id']) AND ( $permission->Check('punch','delete') OR $permission->Check('punch','delete_own') OR $permission->Check('punch','delete_child') ))
-                                <input type="submit" class="btn btn-sm btn-danger" name="action:delete" value="Delete">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch_single/delete/{{ $pc_data['punch_id'] ?? '' }}', 'Punch', this)">Delete</button>
                             @endif
                         </div>
                 
@@ -302,7 +302,6 @@
                     </form>
 
                     {{-- ---------------------------------------------- --}}
-
 
                 </div>
             </div>
