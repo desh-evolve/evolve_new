@@ -33,6 +33,7 @@ use App\Models\core\Option;
 use App\Models\core\Sort;
 use App\Models\core\FastTree;
 use App\Models\core\TTi18n;
+
 class UserInformation extends Controller
 {
     protected $permission;
@@ -50,59 +51,59 @@ class UserInformation extends Controller
         $this->permission = View::shared('permission');
     }
 
-//     public function index(Request $request)
-//     {
-//         if (!$this->permission->Check('report', 'enabled') || 
-//             !$this->permission->Check('report', 'view_user_information')) {
-//             return Redirect::to('/')->with('error', 'Permission denied');
-//         }
+    //     public function index(Request $request)
+    //     {
+    //         if (!$this->permission->Check('report', 'enabled') || 
+    //             !$this->permission->Check('report', 'view_user_information')) {
+    //             return Redirect::to('/')->with('error', 'Permission denied');
+    //         }
 
-//         $current_company = $this->company;
-//         $filter_data = $request->input('filter_data', []);
-//         $generic_data = $request->input('generic_data', []);
-//         $action = $request->input('action', '');
+    //         $current_company = $this->company;
+    //         $filter_data = $request->input('filter_data', []);
+    //         $generic_data = $request->input('generic_data', []);
+    //         $action = $request->input('action', '');
 
-//         // Define columns
-//         $columns = $this->getColumnDefinitions();
+    //         // Define columns
+    //         $columns = $this->getColumnDefinitions();
 
-//         // Get custom user fields
-//         $oflf = new OtherFieldListFactory();
-//         $other_field_names = $oflf->getByCompanyIdAndTypeIdArray($current_company->getId(), 10);
-//         if (is_array($other_field_names)) {
-//             $columns = Misc::prependArray($columns, $other_field_names);
-//         }
+    //         // Get custom user fields
+    //         $oflf = new OtherFieldListFactory();
+    //         $other_field_names = $oflf->getByCompanyIdAndTypeIdArray($current_company->getId(), 10);
+    //         if (is_array($other_field_names)) {
+    //             $columns = Misc::prependArray($columns, $other_field_names);
+    //         }
 
-//         // Company Deductions
-//         $cdlf = new CompanyDeductionListFactory();
-//         $deduction_columns = $cdlf->getByCompanyIdAndStatusIdArray($current_company->getId(), 10, false);
-//         $columns = Misc::prependArray($columns, $deduction_columns);
+    //         // Company Deductions
+    //         $cdlf = new CompanyDeductionListFactory();
+    //         $deduction_columns = $cdlf->getByCompanyIdAndStatusIdArray($current_company->getId(), 10, false);
+    //         $columns = Misc::prependArray($columns, $deduction_columns);
 
-//         // Initialize filter data if not set
-//         $filter_data = $this->initializeFilterData($filter_data);
+    //         // Initialize filter data if not set
+    //         $filter_data = $this->initializeFilterData($filter_data);
 
-//         // Handle permission hierarchy
-//         $permission_children_ids = $this->getPermissionChildrenIds();
-//         $filter_data['permission_children_ids'] = $permission_children_ids;
+    //         // Handle permission hierarchy
+    //         $permission_children_ids = $this->getPermissionChildrenIds();
+    //         $filter_data['permission_children_ids'] = $permission_children_ids;
 
-//         $wage_permission_children_ids = $this->getWagePermissionChildrenIds();
-//         $wage_filter_data['permission_children_ids'] = $wage_permission_children_ids;
+    //         $wage_permission_children_ids = $this->getWagePermissionChildrenIds();
+    //         $wage_filter_data['permission_children_ids'] = $wage_permission_children_ids;
 
-//         // Process form submission
-//         if ($action === 'export' || $action === 'display_report') {
-//             return $this->generateReport($filter_data, $columns, $action);
-//         }
+    //         // Process form submission
+    //         if ($action === 'export' || $action === 'display_report') {
+    //             return $this->generateReport($filter_data, $columns, $action);
+    //         }
 
-//         // Default view logic
-//         $data = $this->prepareFormData($filter_data, $columns, $generic_data);
+    //         // Default view logic
+    //         $data = $this->prepareFormData($filter_data, $columns, $generic_data);
 
-//         $viewData = [
-//             'title' => 'Employee Detail Report',
-//             'data' => $data,
-//             'ugdf' => new UserGenericDataFactory()
-//         ];
-// // dd($viewData);
-//         return view('report.UserInformation', $viewData);
-//     }
+    //         $viewData = [
+    //             'title' => 'Employee Detail Report',
+    //             'data' => $data,
+    //             'ugdf' => new UserGenericDataFactory()
+    //         ];
+    // // dd($viewData);
+    //         return view('report.UserInformation', $viewData);
+    //     }
 
     public function index(Request $request)
     {
@@ -282,15 +283,15 @@ class UserInformation extends Controller
         $ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
 
         if ($ulf->getRecordCount() > 0) {
-            $filter_data['user_ids'] = array_map(function($u_obj) {
-                return $u_obj->getId();
+            $filter_data['user_ids'] = array_map(function ($u_obj) {
+                return $u_obj->id;
             }, iterator_to_array($ulf));
 
             $report_data = $this->prepareReportData($filter_data);
 
-            if ($action === 'export') {
-                return $this->exportToCSV($report_data['rows'], $report_data['filter_columns']);
-            }
+            // if ($action === 'export') {
+            //     return $this->exportToCSV($report_data['rows'], $report_data['filter_columns']);
+            // }
 
             $viewData = [
                 'title' => 'Employee Detail Report',
@@ -305,40 +306,40 @@ class UserInformation extends Controller
         return response('No Data To Export!', 200);
     }
 
-    private function exportCSV($filter_data, $columns)
-    {
-        $current_company = $this->company;
-        $ulf = new UserListFactory();
-        $ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
+    // private function exportCSV($filter_data, $columns)
+    // {
+    //     $current_company = $this->company;
+    //     $ulf = new UserListFactory();
+    //     $ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
 
-        if ($ulf->getRecordCount() > 0) {
-            $filter_data['user_ids'] = array_map(function($u_obj) {
-                return $u_obj->getId();
-            }, iterator_to_array($ulf));
+    //     if ($ulf->getRecordCount() > 0) {
+    //         $filter_data['user_ids'] = array_map(function ($u_obj) {
+    //             return $u_obj->id;
+    //         }, iterator_to_array($ulf));
 
-            $report_data = $this->prepareReportData($filter_data);
+    //         $report_data = $this->prepareReportData($filter_data);
 
-            return $this->exportToCSV($report_data['rows'], $report_data['filter_columns']);
-        }
+    //         return $this->exportToCSV($report_data['rows'], $report_data['filter_columns']);
+    //     }
 
-        return response('No Data To Export!', 200);
-    }
+    //     return response('No Data To Export!', 200);
+    // }
 
     private function prepareReportData($filter_data)
     {
         $current_company = $this->company;
         $ulf = new UserListFactory();
-        $ulf->getReportByCompanyIdAndUserIDList($current_company->getId(), $filter_data['user_ids']);
+        $ulf->getReportByCompanyIdAndUserIDList($current_company->getId(), $filter_data['include_user_ids']);
 
         $options = $this->getReportOptions();
-        $wage_data = $this->getWageData($filter_data['user_ids']);
-        $deduction_data = $this->getDeductionData($filter_data['user_ids']);
+        $wage_data = $this->getWageData($filter_data['include_user_ids']);
+        $deduction_data = $this->getDeductionData($filter_data['include_user_ids']);
         $tmp_rows = [];
+        foreach ($ulf->rs as $u_obj) {
 
-        foreach ($ulf as $u_obj) {
             $row = $this->buildReportRow($u_obj, $options, $wage_data, $deduction_data);
-            if (isset($deduction_data[$u_obj->getId()])) {
-                $row = Misc::prependArray($row, $deduction_data[$u_obj->getId()]);
+            if (isset($deduction_data[$u_obj->id])) {
+                $row = Misc::prependArray($row, $deduction_data[$u_obj->id]);
             }
             $tmp_rows[] = $row;
         }
@@ -358,21 +359,21 @@ class UserInformation extends Controller
         return [
             'titles' => (new UserTitleListFactory())->getByCompanyIdArray($current_company->getId()),
             'groups' => (new UserGroupListFactory())->getArrayByNodes(FastTree::FormatArray(
-                (new UserGroupListFactory())->getByCompanyIdArray($current_company->getId()), 
-                'no_tree_text', 
+                (new UserGroupListFactory())->getByCompanyIdArray($current_company->getId()),
+                'no_tree_text',
                 true
             )),
             'branches' => (new BranchListFactory())->getByCompanyIdArray($current_company->getId()),
             'departments' => (new DepartmentListFactory())->getByCompanyIdArray($current_company->getId()),
             'permissions' => (new PermissionControlListFactory())->getArrayByListFactory(
-                (new PermissionControlListFactory())->getByCompanyId($current_company->getId()), 
+                (new PermissionControlListFactory())->getByCompanyId($current_company->getId()),
                 true
             ),
             'pay_periods' => (new PayPeriodScheduleListFactory())->getByCompanyIDArray($current_company->getId()),
             'policies' => (new PolicyGroupListFactory())->getByCompanyIDArray($current_company->getId()),
             'currencies' => (new CurrencyListFactory())->getArrayByListFactory(
-                (new CurrencyListFactory())->getByCompanyId($current_company->getId()), 
-                false, 
+                (new CurrencyListFactory())->getByCompanyId($current_company->getId()),
+                false,
                 true
             ),
             'preferences' => $this->getPreferenceOptions()
@@ -383,7 +384,7 @@ class UserInformation extends Controller
     {
         $upf = new UserPreferenceFactory();
         return [
-            'language' => TTi18n::getLanguageArray(),
+            // 'language' => TTi18n::getLanguageArray(),
             'date_format' => $upf->getOptions('date_format'),
             'time_format' => $upf->getOptions('time_format'),
             'time_unit' => $upf->getOptions('time_unit_format'),
@@ -391,16 +392,36 @@ class UserInformation extends Controller
         ];
     }
 
+    // private function getWageData($user_ids)
+    // {
+    //     $uwlf = new UserWageListFactory();
+    //     $uwlf->getLastWageByUserIdAndDate($user_ids, TTDate::getTime());
+    //     $wage_data = [];
+
+    //     foreach ($uwlf->rs as $uw_obj) {
+
+    //     // dd($uw_obj);
+    //         $wage_data[$uw_obj->getUser()] = [
+    //             'type' => Option::getByKey($uw_obj->getType(), $uw_obj->getOptions('type')),
+    //             'wage' => $uw_obj->getWage(),
+    //             'effective_date' => $uw_obj->getEffectiveDate()
+    //         ];
+    //     }
+
+    //     return $wage_data;
+    // }
+
     private function getWageData($user_ids)
     {
         $uwlf = new UserWageListFactory();
         $uwlf->getLastWageByUserIdAndDate($user_ids, TTDate::getTime());
         $wage_data = [];
-        foreach ($uwlf as $uw_obj) {
-            $wage_data[$uw_obj->getUser()] = [
-                'type' => Option::getByKey($uw_obj->getType(), $uw_obj->getOptions('type')),
-                'wage' => $uw_obj->getWage(),
-                'effective_date' => $uw_obj->getEffectiveDate()
+
+        foreach ($uwlf->rs as $uw_obj) {
+            $wage_data[$uw_obj->user_id] = [
+                'type' => Option::getByKey($uw_obj->type_id, $uwlf->getOptions('type')),
+                'wage' => $uw_obj->wage,
+                'effective_date' => $uw_obj->effective_date
             ];
         }
         return $wage_data;
@@ -413,7 +434,7 @@ class UserInformation extends Controller
         $deduction_data = [];
         foreach ($udlf as $ud_obj) {
             $user_values = $this->getUserValues($ud_obj);
-            $deduction_data[$ud_obj->getUser()][$ud_obj->getCompanyDeduction()] = 
+            $deduction_data[$ud_obj->getUser()][$ud_obj->getCompanyDeduction()] =
                 implode(' / ', $user_values) ?: 'N/A';
         }
         return $deduction_data;
@@ -423,13 +444,13 @@ class UserInformation extends Controller
     {
         $user_value_1_options = $ud_obj->getCompanyDeductionObject()->getUserValue1Options();
         $user_values = [];
-        
-        $tmp_user_value = $ud_obj->getUserValue1() !== false 
-            ? $ud_obj->getUserValue1() 
+
+        $tmp_user_value = $ud_obj->getUserValue1() !== false
+            ? $ud_obj->getUserValue1()
             : ($ud_obj->getCompanyDeductionObject()->getUserValue1() ?: null);
-        
-        $user_values[] = is_array($user_value_1_options) 
-            ? Option::getByKey($tmp_user_value, $user_value_1_options) 
+
+        $user_values[] = is_array($user_value_1_options)
+            ? Option::getByKey($tmp_user_value, $user_value_1_options)
             : $tmp_user_value;
 
         if ($ud_obj->getUserValue2() !== false) {
@@ -447,72 +468,168 @@ class UserInformation extends Controller
         return $user_values;
     }
 
+    // private function buildReportRow($u_obj, $options, $wage_data, $deduction_data)
+    // {
+    //     $bf = new BankAccountFactory();
+    //     $user_wage_data = $wage_data[$u_obj->id] ?? [
+    //         'type' => null,
+    //         'wage' => null,
+    //         'effective_date' => null
+    //     ];
+
+    //     $permission_id = $options['permissions'][$u_obj->id] ?? 0;
+    //     $policy_id = $options['policies'][$u_obj->id] ?? 0;
+    //     $pay_period_id = $options['pay_periods'][$u_obj->id] ?? 0;
+    //     $sin = $this->permission->Check('user', 'view_sin')
+    //         ? $u_obj->getSIN()
+    //         : $u_obj->getSecureSIN();
+
+    //     return [
+    //         'employee_number' => $u_obj->getEmployeeNumber(),
+    //         'status' => Option::getByKey($u_obj->getStatus(), $u_obj->getOptions('status')),
+    //         'user_name' => $u_obj->getUserName(),
+    //         'phone_id' => $u_obj->getPhoneID(),
+    //         'ibutton_id' => $u_obj->getIButtonID(),
+    //         'first_name' => $u_obj->getFirstName(),
+    //         'middle_name' => $u_obj->getMiddleName(),
+    //         'last_name' => $u_obj->getLastName(),
+    //         'calling_name' => $u_obj->getCallingName(),
+    //         'full_name' => $u_obj->getFullNameField(),
+    //         'title' => Option::getByKey($u_obj->getTitle(), $options['titles']),
+    //         'group' => Option::getByKey($u_obj->getGroup(), $options['groups']),
+    //         'default_branch' => Option::getByKey($u_obj->getDefaultBranch(), $options['branches']),
+    //         'default_department' => Option::getByKey($u_obj->getDefaultDepartment(), $options['departments']),
+    //         'permission_control' => Option::getByKey($permission_id, $options['permissions']),
+    //         'policy_group' => Option::getByKey($policy_id, $options['policies']),
+    //         'pay_period_schedule' => Option::getByKey($pay_period_id, $options['pay_periods']),
+    //         'sex' => Option::getByKey($u_obj->getSex(), $u_obj->getOptions('sex')),
+    //         'address1' => $u_obj->getAddress1(),
+    //         'address2' => $u_obj->getAddress2(),
+    //         'city' => $u_obj->getCity(),
+    //         'province' => $u_obj->getProvince(),
+    //         'country' => $u_obj->getCountry(),
+    //         'postal_code' => $u_obj->getPostalCode(),
+    //         'work_phone' => $u_obj->getWorkPhone(),
+    //         'home_phone' => $u_obj->getHomePhone(),
+    //         'mobile_phone' => $u_obj->getMobilePhone(),
+    //         'fax_phone' => $u_obj->getFaxPhone(),
+    //         'home_email' => $u_obj->getHomeEmail(),
+    //         'work_email' => $u_obj->getWorkEmail(),
+    //         'birth_date' => $u_obj->getBirthDate(),
+    //         'sin' => $sin,
+    //         'hire_date' => $u_obj->getHireDate(),
+    //         'termination_date' => $u_obj->getTerminationDate(),
+    //         'note' => $u_obj->getNote(),
+    //         'institution' => $u_obj->getColumn('institution'),
+    //         'transit' => $u_obj->getColumn('transit'),
+    //         'account' => $bf->getSecureAccount($u_obj->getColumn('account')),
+    //         'currency' => Option::getByKey($u_obj->getCurrency(), $options['currencies']),
+    //         'wage_type' => $user_wage_data['type'],
+    //         'wage' => $user_wage_data['wage'],
+    //         'effective_date' => $user_wage_data['effective_date']
+    //     ];
+    // }
+
     private function buildReportRow($u_obj, $options, $wage_data, $deduction_data)
     {
         $bf = new BankAccountFactory();
-        $user_wage_data = $wage_data[$u_obj->getId()] ?? [
+
+        $user_wage_data = $wage_data[$u_obj->id] ?? [
             'type' => null,
             'wage' => null,
             'effective_date' => null
         ];
 
-        $permission_id = $options['permissions'][$u_obj->getId()] ?? 0;
-        $policy_id = $options['policies'][$u_obj->getId()] ?? 0;
-        $pay_period_id = $options['pay_periods'][$u_obj->getId()] ?? 0;
+        $permission_id = $options['permissions'][$u_obj->id] ?? 0;
+        $policy_id = $options['policies'][$u_obj->id] ?? 0;
+        $pay_period_id = $options['pay_periods'][$u_obj->id] ?? 0;
 
-        $sin = $this->permission->Check('user', 'view_sin') 
-            ? $u_obj->getSIN() 
-            : $u_obj->getSecureSIN();
+        // SIN: use direct access since getSIN() / getSecureSIN() don't exist
+        $sin = $this->permission->Check('user', 'view_sin')
+            ? $u_obj->sin
+            : '***'; // or mask it however you prefer
 
         return [
-            'employee_number' => $u_obj->getEmployeeNumber(),
-            'status' => Option::getByKey($u_obj->getStatus(), $u_obj->getOptions('status')),
-            'user_name' => $u_obj->getUserName(),
-            'phone_id' => $u_obj->getPhoneID(),
-            'ibutton_id' => $u_obj->getIButtonID(),
-            'first_name' => $u_obj->getFirstName(),
-            'middle_name' => $u_obj->getMiddleName(),
-            'last_name' => $u_obj->getLastName(),
-            'calling_name' => $u_obj->getCallingName(),
-            'full_name' => $u_obj->getFullNameField(),
-            'title' => Option::getByKey($u_obj->getTitle(), $options['titles']),
-            'group' => Option::getByKey($u_obj->getGroup(), $options['groups']),
-            'default_branch' => Option::getByKey($u_obj->getDefaultBranch(), $options['branches']),
-            'default_department' => Option::getByKey($u_obj->getDefaultDepartment(), $options['departments']),
+            'employee_number' => $u_obj->employee_number,
+            'status' => Option::getByKey($u_obj->status_id, $u_obj->status ?? []),
+            'user_name' => $u_obj->user_name,
+            'phone_id' => $u_obj->phone_id,
+            'ibutton_id' => $u_obj->ibutton_id,
+            'first_name' => $u_obj->first_name,
+            'middle_name' => $u_obj->middle_name,
+            'last_name' => $u_obj->last_name,
+            'calling_name' => $u_obj->calling_name,
+            'full_name' => $u_obj->full_name,
+            'title' => Option::getByKey($u_obj->title_id, $options['titles']),
+            'group' => Option::getByKey($u_obj->group_id, $options['groups']),
+            'default_branch' => Option::getByKey($u_obj->default_branch_id, $options['branches']),
+            'default_department' => Option::getByKey($u_obj->default_department_id, $options['departments']),
             'permission_control' => Option::getByKey($permission_id, $options['permissions']),
             'policy_group' => Option::getByKey($policy_id, $options['policies']),
             'pay_period_schedule' => Option::getByKey($pay_period_id, $options['pay_periods']),
-            'sex' => Option::getByKey($u_obj->getSex(), $u_obj->getOptions('sex')),
-            'address1' => $u_obj->getAddress1(),
-            'address2' => $u_obj->getAddress2(),
-            'city' => $u_obj->getCity(),
-            'province' => $u_obj->getProvince(),
-            'country' => $u_obj->getCountry(),
-            'postal_code' => $u_obj->getPostalCode(),
-            'work_phone' => $u_obj->getWorkPhone(),
-            'home_phone' => $u_obj->getHomePhone(),
-            'mobile_phone' => $u_obj->getMobilePhone(),
-            'fax_phone' => $u_obj->getFaxPhone(),
-            'home_email' => $u_obj->getHomeEmail(),
-            'work_email' => $u_obj->getWorkEmail(),
-            'birth_date' => $u_obj->getBirthDate(),
+            'sex' => Option::getByKey($u_obj->sex_id, $u_obj->sex ?? []),
+            'address1' => $u_obj->address1,
+            'address2' => $u_obj->address2,
+            'city' => $u_obj->city,
+            'province' => $u_obj->province,
+            'country' => $u_obj->country,
+            'postal_code' => $u_obj->postal_code,
+            'work_phone' => $u_obj->work_phone,
+            'home_phone' => $u_obj->home_phone,
+            'mobile_phone' => $u_obj->mobile_phone,
+            'fax_phone' => $u_obj->fax_phone,
+            'home_email' => $u_obj->home_email,
+            'work_email' => $u_obj->work_email,
+            'birth_date' => $u_obj->birth_date,
             'sin' => $sin,
-            'hire_date' => $u_obj->getHireDate(),
-            'termination_date' => $u_obj->getTerminationDate(),
-            'note' => $u_obj->getNote(),
-            'institution' => $u_obj->getColumn('institution'),
-            'transit' => $u_obj->getColumn('transit'),
-            'account' => $bf->getSecureAccount($u_obj->getColumn('account')),
-            'currency' => Option::getByKey($u_obj->getCurrency(), $options['currencies']),
+            'hire_date' => $u_obj->hire_date,
+            'termination_date' => $u_obj->termination_date,
+            'note' => $u_obj->note,
+            'institution' => $u_obj->institution,
+            'transit' => $u_obj->transit,
+            'account' => $bf->getSecureAccount($u_obj->account),
+            'currency' => Option::getByKey($u_obj->currency_id, $options['currencies']),
             'wage_type' => $user_wage_data['type'],
             'wage' => $user_wage_data['wage'],
             'effective_date' => $user_wage_data['effective_date']
         ];
     }
 
+
+    // private function processRows($tmp_rows, $filter_data)
+    // {
+    //     $rows = [];
+    //     $sorted_rows = Sort::Multisort(
+    //         // $tmp_rows,
+    //         Misc::trimSortPrefix($filter_data['primary_sort'] ?? '-1080-last_name'),
+    //         Misc::trimSortPrefix($filter_data['secondary_sort'] ?? '-1160-province'),
+    //         $filter_data['primary_sort_dir'] ?? 'asc',
+    //         $filter_data['secondary_sort_dir'] ?? 'asc'
+    //     );
+
+    //     foreach ($sorted_rows as $tmp_row) {
+    //         $row_columns = [];
+    //         foreach ($tmp_row as $column => $value) {
+    //             if ($value !== '' && strpos($column, '_date') !== false) {
+    //                 $value = TTDate::getDate('DATE', $value);
+    //             }
+    //             $row_columns[$column] = $value;
+    //         }
+    //         $rows[] = $row_columns;
+    //     }
+    //     return $rows;
+    // }
+
     private function processRows($tmp_rows, $filter_data)
     {
         $rows = [];
+
+        // Debug input
+        Debug::Arr($tmp_rows, 'Input Rows', __FILE__, __LINE__, __METHOD__, 10);
+        if (!empty($tmp_rows)) {
+            Debug::Arr(array_keys($tmp_rows[0] ?? []), 'Row Keys', __FILE__, __LINE__, __METHOD__, 10);
+        }
+
         $sorted_rows = Sort::Multisort(
             $tmp_rows,
             Misc::trimSortPrefix($filter_data['primary_sort'] ?? '-1080-last_name'),
@@ -520,6 +637,9 @@ class UserInformation extends Controller
             $filter_data['primary_sort_dir'] ?? 'asc',
             $filter_data['secondary_sort_dir'] ?? 'asc'
         );
+
+        // Debug output
+        Debug::Arr($sorted_rows, 'Sorted Rows', __FILE__, __LINE__, __METHOD__, 10);
 
         foreach ($sorted_rows as $tmp_row) {
             $row_columns = [];
@@ -531,6 +651,7 @@ class UserInformation extends Controller
             }
             $rows[] = $row_columns;
         }
+
         return $rows;
     }
 

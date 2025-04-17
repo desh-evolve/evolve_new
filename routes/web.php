@@ -166,7 +166,7 @@ Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, '
 
 
 // ===============================================================================================================================
-// Payroll 
+// report 
 // ===============================================================================================================================
 Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employee_detail.index');
 Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
