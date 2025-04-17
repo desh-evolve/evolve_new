@@ -170,12 +170,12 @@ function filterUserCount() {
 				</tr>
 
 			</table>
-		</div>
-{*
-		<div id="contentBoxFour">
-		</div>
-*}
-		<input type="hidden" name="hierarchy_control_data[id]" value="{$hierarchy_control_data.id}">
+			</div>
+			{*
+					<div id="contentBoxFour">
+					</div>
+			*}
+			<input type="hidden" name="hierarchy_control_data[id]" value="{$hierarchy_control_data.id}">
 		</form>
 	</div>
 </div>
