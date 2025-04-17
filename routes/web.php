@@ -79,6 +79,9 @@ use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserList;
 use Illuminate\Support\Facades\Route;
 
+
+use App\Http\Controllers\report\UserInformation;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -162,6 +165,15 @@ Route::get('/recurring_holidays', [RecurringHolidayList::class, 'index'])->name(
 Route::get('/recurring_holidays/add/{id?}', [EditRecurringHoliday::class, 'index'])->name('recurring_holidays.add');
 Route::post('/recurring_holidays/save/{id?}', [EditRecurringHoliday::class, 'submit'])->name('recurring_holidays.save');
 Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, 'delete'])->name('recurring_holidays.delete');
+
+
+// ===============================================================================================================================
+// report 
+// ===============================================================================================================================
+Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employee_detail.index');
+Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
+
+
 // ===============================================================================================================================
 // Payroll 
 // ===============================================================================================================================

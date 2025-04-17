@@ -122,8 +122,14 @@
                     </a>
                     <div class="collapse menu-dropdown" id="reports">
                         <ul class="nav nav-sm flex-column">
+                            
+                            <li class="nav-item">
+                                <a href="{{ route('employee_detail.index') }}"
+                                    class="nav-link {{ request()->routeIs('employee_detail.index') ? 'active' : '' }}">Employee Detail Report
+                                </a>
+                            </li>
+                            {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}
                             <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li>
                         </ul>
                     </div>
                 </li>

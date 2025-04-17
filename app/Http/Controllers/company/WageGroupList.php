@@ -48,24 +48,24 @@ class WageGroupList extends Controller
     $viewData['title'] = 'Wage Group List';
 
     // Set URL parameters for pagination and sorting
-    URLBuilder::setURL(
-        $_SERVER['SCRIPT_NAME'],
-        array(
-            'sort_column' => $sort_column,
-            'sort_order' => $sort_order,
-            'page' => $page
-        )
-    );
+    // URLBuilder::setURL(
+    //     $_SERVER['SCRIPT_NAME'],
+    //     array(
+    //         'sort_column' => $sort_column,
+    //         'sort_order' => $sort_order,
+    //         'page' => $page
+    //     )
+    // );
 
-    // Prepare sorting array
-    $sort_array = null;
-    if ($sort_column != '') { // Fixed: Removed extra parenthesis
-        $sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-    }
+    // // Prepare sorting array
+    // $sort_array = null;
+    // if ($sort_column != '') { // Fixed: Removed extra parenthesis
+    //     $sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
+    // }
 
     // Fetch wage groups
     $wglf = new WageGroupListFactory();
-    $wglf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, null, $sort_array);
+    $wglf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage());
 
     // Map wage group data
     $groups = array_map(function ($group_obj) {
@@ -81,8 +81,6 @@ class WageGroupList extends Controller
 
     // Prepare view data
     $viewData['groups'] = $groups;
-    $viewData['sort_column'] = $sort_column;
-    $viewData['sort_order'] = $sort_order;
     $viewData['paging_data'] = $pager->getPageVariables();
 
     // Return the view
