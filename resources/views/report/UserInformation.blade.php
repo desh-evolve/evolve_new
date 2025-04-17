@@ -193,7 +193,7 @@
 
                     <div class="form-group text-center mt-4">
                         <button type="submit" name="action" value="display_report" class="btn btn-primary">Display Report</button>
-                        <button type="submit" name="action" value="export" class="btn btn-success">Export to CSV</button>
+                        {{-- <button type="submit" name="action" value="export" class="btn btn-success">Export to CSV</button> --}}
                     </div>
                 </form>
             </div>
