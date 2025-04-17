@@ -49,7 +49,6 @@ class PunchList extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
 		*/
-
 		$viewData['title'] = 'Punch List';
 		$current_company = $this->currentCompany;
 		$current_user = $this->currentUser;
@@ -142,35 +141,40 @@ class PunchList extends Controller
 		return view('punch/PunchList', $viewData);
 	}
 
-	public function delete($id){
-		$delete = TRUE;
-		$current_company = $this->currentCompany;
-		$permission = $this->permission;
+	public function delete($punch_id){
+		//Debug::setVerbosity(11);
+		if (empty($punch_id)) {
+            return response()->json(['error' => 'No Punch Selected.'], 400);
+        }
 
-		if ( DEMO_MODE == FALSE
-			AND ( $permission->Check('punch','delete') OR $permission->Check('punch','delete_own') OR $permission->Check('punch','delete_child')  ) ) {
-			$plf = new PunchListFactory();
-			$plf->StartTransaction();
+		$plf = new PunchListFactory();
+		$plf->getById( $punch_id );
+		if ( $plf->getRecordCount() > 0 ) {
+			foreach($plf->rs as $p_obj) {
+				$plf->data = (array)$p_obj;
+				$p_obj = $plf;
 
-			$plf->getByCompanyIdAndId($current_company->getID(), $ids );
-			if ( $plf->getRecordCount() > 0 ) {
-				foreach($plf as $p_obj) {
-					$p_obj->setDeleted(TRUE);
-					$p_obj->setEnableCalcTotalTime( TRUE );
-					$p_obj->setEnableCalcSystemTotalTime( TRUE );
-					$p_obj->setEnableCalcWeeklySystemTotalTime( TRUE );
-					$p_obj->setEnableCalcUserDateTotal( TRUE );
-					$p_obj->setEnableCalcException( TRUE );
-					if (  $p_obj->isValid() ) {
-						$p_obj->Save();
-					}
+				$p_obj->setUser( $p_obj->getPunchControlObject()->getUserDateObject()->getUser() );
+				$p_obj->setDeleted(TRUE);
+
+				//These aren't doing anything because they aren't acting on the PunchControl object?
+				$p_obj->setEnableCalcTotalTime( TRUE );
+				$p_obj->setEnableCalcSystemTotalTime( TRUE );
+				$p_obj->setEnableCalcWeeklySystemTotalTime( TRUE );
+				$p_obj->setEnableCalcUserDateTotal( TRUE );
+				$p_obj->setEnableCalcException( TRUE );
+				$res = $p_obj->Save();
+
+				if($res){
+					return response()->json(['success' => 'Punch Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Punch Deleted Failed.']);
 				}
 			}
-			//$plf->FailTransaction();
-			$plf->CommitTransaction();
 		}
 
-		return redirect( URLBuilder::getURL( NULL , '/attendance/punchlist') );
+		//return redirect(route('attendance.punchlist'));
+
 	}
 }
 

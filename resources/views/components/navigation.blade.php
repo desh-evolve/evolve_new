@@ -65,7 +65,12 @@
                                     class="nav-link {{ request()->routeIs('attendance.punchlist') ? 'active' : '' }}">Punches
                                 </a>
                             </li>
-                            <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.masspunch.add') }}" 
+                                    class="nav-link {{ request()->routeIs('attendance.masspunch.add') ? 'active' : '' }}">Mass Punch
+                                </a>
+                            </li>
                             
                             <li class="nav-item">
                                 <a href="{{ route('attendance.requests') }}" 
@@ -82,7 +87,11 @@
                                     class="nav-link {{ request()->routeIs('attendance.accruals') ? 'active' : '' }}">Accruals
                                 </a>
                             </li>
-                            <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.paystubs') }}" 
+                                    class="nav-link {{ request()->routeIs('attendance.paystubs') ? 'active' : '' }}">Pay Slips
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>

@@ -27,15 +27,15 @@
                                 <th>#</th>
                                 <th>First Name </th>
                                 <th>Last Name </th>
-                                <th>Title </th>
-                                <th>Group </th>
-                                <th>Default Branch </th>
-                                <th>Default Department </th>
-                                <th>Branch </th>
-                                <th>Department </th>
+                                {{-- <th>Title </th> --}}
+                                {{-- <th>Group </th> --}}
+                                {{-- <th>Default Branch </th> --}}
+                                {{-- <th>Default Department </th> --}}
+                                {{-- <th>Branch </th> --}}
+                                {{-- <th>Department </th> --}}
                                 <th>Type </th>
                                 <th>Status </th>
-                                <th>Date </th>
+                                {{-- <th>Date </th> --}}
                                 <th>Time </th>
                                 <th>Functions </th>
                             </thead>
@@ -44,19 +44,19 @@
                                     <td>{{ $index + 1 }} </td>
                                     <td>{{ $row['first_name'] }}</td>
                                     <td>{{ $row['last_name'] }}</td>
-                                    <td>{{ $row['title'] }}</td>
-                                    <td>{{ $row['group'] }}</td>
-                                    <td>{{ $row['default_branch'] }}</td>
-                                    <td>{{ $row['default_department'] }}</td>
-                                    <td>{{ $row['branch'] }}</td>
-                                    <td>{{ $row['department'] }}</td>
+                                    {{-- <td>{{ $row['title'] }}</td> --}}
+                                    {{-- <td>{{ $row['group'] }}</td> --}}
+                                    {{-- <td>{{ $row['default_branch'] }}</td> --}}
+                                    {{-- <td>{{ $row['default_department'] }}</td> --}}
+                                    {{-- <td>{{ $row['branch'] }}</td> --}}
+                                    {{-- <td>{{ $row['department'] }}</td> --}}
                                     <td>{{ $row['type_id'] }}</td>
                                     <td>{{ $row['status_id'] }}</td>
-                                    <td>{{ $row['date_stamp'] }}</td>
+                                    {{-- <td>{{ $row['date_stamp'] }}</td> --}}
                                     <td>{{ $row['time_stamp'] }}</td>
                                     <td>
                                         <a class="btn btn-info btn-sm" href="#">View</a>
-                                        <a class="btn btn-secondary btn-sm" href="{{ route('attendance.punch.add', ['id' => $row['id']]) }}">Edit</a>
+                                        <a class="btn btn-secondary btn-sm" href="{{ route('attendance.punch.add', ['id' => $row['id'], 'punch_control_id' => 'undefined', 'user_id' => 'undefined', 'date_stamp' => 'undefined', 'status_id' => 'undefined']) }}">Edit</a>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch/delete/{{ $row['id'] }}', 'Punch', this)">Delete</button>
                                     </td>
                                 </tr>
@@ -80,6 +80,13 @@
             }
 
             initTable();
+
+            @if(request()->get('refresh') == 'true')
+                if (window.opener) {
+                    console.log('refreshing..')
+                    window.opener.location.reload();
+                }
+            @endif
         })
     </script>
 </x-app-layout>

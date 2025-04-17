@@ -766,7 +766,7 @@ class PunchFactory extends Factory {
 			) {
 
 			Debug::text(' Set: '. $epoch , __FILE__, __LINE__, __METHOD__,10);
-			$this->data['time_stamp'] = $epoch;
+			$this->data['time_stamp'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
