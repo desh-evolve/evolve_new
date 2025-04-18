@@ -76,15 +76,31 @@ use App\Http\Controllers\punch\EditPunch;
 use App\Http\Controllers\punch\PunchList;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
+use App\Http\Controllers\users\CensusInfo;
+use App\Http\Controllers\users\CensusInfoNew;
+use App\Http\Controllers\users\EditCensus;
+use App\Http\Controllers\users\EditCensusNew;
 use App\Http\Controllers\users\EditUser;
 use App\Http\Controllers\users\EditUserDefault;
+use App\Http\Controllers\users\EditUserEducation;
+use App\Http\Controllers\users\EditUserEducationNew;
+use App\Http\Controllers\users\EditUserLifePromotion;
 use App\Http\Controllers\users\EditUserLifePromotionNew;
 use App\Http\Controllers\users\EditUserPasswordNew;
 use App\Http\Controllers\Users\EditUserPreference;
 use App\Http\Controllers\Users\EditUserPreferenceNew;
+use App\Http\Controllers\users\EditUserWageNew;
+use App\Http\Controllers\users\EditUserWorkExperionce;
+use App\Http\Controllers\users\EditUserWorkExperionceNew;
+use App\Http\Controllers\users\UserEducation;
+use App\Http\Controllers\users\UserEducationNew;
 use App\Http\Controllers\users\UserGenericStatusList;
+use App\Http\Controllers\users\UserLifePromotion;
 use App\Http\Controllers\users\UserLifePromotionNew;
 use App\Http\Controllers\users\UserList;
+use App\Http\Controllers\users\UserWageListNew;
+use App\Http\Controllers\users\UserWorkExperionce;
+use App\Http\Controllers\users\UserWorkExperionceNew;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -296,10 +312,48 @@ Route::post('/user/web_password/save/{id?}', [EditUserPasswordNew::class, 'save'
 // ===============================================================================================================================
 // User promotion
 // ===============================================================================================================================
-Route::get('/user/promotion', [UserLifePromotionNew::class, 'index'])->name('user.promotion.index');
+Route::get('/user/promotion', [UserLifePromotion::class, 'index'])->name('user.promotion.index');
 
-Route::get('/user/promotion/add/{id?}', [EditUserLifePromotionNew::class, 'index'])->name('user.promotion.add');
-Route::post('/user/promotion/save/{id?}', [EditUserLifePromotionNew::class, 'save'])->name('user.promotion.save');
+Route::get('/user/promotion/add/{id?}', [EditUserLifePromotion::class, 'index'])->name('user.promotion.add');
+Route::post('/user/promotion/save/{id?}', [EditUserLifePromotion::class, 'save'])->name('user.promotion.save');
+Route::delete('/user/promotion/delete/{id}', [UserLifePromotion::class, 'delete'])->name('user.promotion.delete');
+
+// ===============================================================================================================================
+// User qualification
+// ===============================================================================================================================
+Route::get('/user/qualification', [UserEducation::class, 'index'])->name('user.qualification.index');
+
+Route::get('/user/qualification/add/{id?}', [EditUserEducation::class, 'index'])->name('user.qualification.add');
+Route::post('/user/qualification/save/{id?}', [EditUserEducation::class, 'save'])->name('user.qualification.save');
+Route::delete('/user/qualification/delete/{id}', [UserEducation::class, 'delete'])->name('user.qualification.delete');
+
+// ===============================================================================================================================
+// User work_experionce
+// ===============================================================================================================================
+Route::get('/user/work_experionce', [UserWorkExperionce::class, 'index'])->name('user.work_experionce.index');
+
+Route::get('/user/work_experionce/add/{id?}', [EditUserWorkExperionce::class, 'index'])->name('user.work_experionce.add');
+Route::post('/user/work_experionce/save/{id?}', [EditUserWorkExperionce::class, 'save'])->name('user.work_experionce.save');
+Route::delete('/user/work_experionce/delete/{id}', [UserWorkExperionce::class, 'delete'])->name('user.work_experionce.delete');
+
+// ===============================================================================================================================
+// User census
+// ===============================================================================================================================
+Route::get('/user/census', [CensusInfo::class, 'index'])->name('user.census.index');
+
+Route::get('/user/census/add/{id?}', [EditCensus::class, 'index'])->name('user.census.add');
+Route::post('/user/census/save/{id?}', [EditCensus::class, 'save'])->name('user.census.save');
+Route::delete('/user/census/delete/{id}', [CensusInfo::class, 'delete'])->name('user.census.delete');
+
+// ===============================================================================================================================
+// User wage
+// ===============================================================================================================================
+Route::get('/user/wage', [UserWageListNew::class, 'index'])->name('user.wage.index');
+Route::get('/user/wage/add/{user_id?}', [UserWageListNew::class, 'add'])->name('user.wage.add');
+Route::get('/user/wage/edit/{id?}', [EditUserWageNew::class, 'index'])->name('user.wage.edit');
+Route::post('/user/wage/save/{id?}', [EditUserWageNew::class, 'save'])->name('user.wage.save');
+Route::delete('/user/wage/delete/{id}', [UserWageListNew::class, 'delete'])->name('user.wage.delete');
+
 // ===============================================================================================================================
 // Policies
 // ===============================================================================================================================

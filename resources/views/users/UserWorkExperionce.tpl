@@ -39,7 +39,7 @@ function editAccrual(userID) {
 				<tr class="tblHeader">
 					<td>
 						#
-					</td>				
+					</td>
 					<td>
 						{capture assign=label}{t}Company Name{/t}{/capture}
 						{include file="column_sort.tpl" label=$label sort_column="c.name" current_column="$sort_column" current_order="$sort_order"}
@@ -64,7 +64,7 @@ function editAccrual(userID) {
 						{capture assign=label}{t}Remarks{/t}{/capture}
 						{include file="column_sort.tpl" label=$label sort_column="a.balance" current_column="$sort_column" current_order="$sort_order"}
 					</td>
-                                      
+
 					<td>
 						{t}Functions{/t}
 					</td>
@@ -77,7 +77,7 @@ function editAccrual(userID) {
 					<tr class="{$row_class}">
 						<td>
 							{$smarty.foreach.workexperionce.iteration}
-						</td>										
+						</td>
 						<td>
 							{$workexperionce.company_name}
 						</td>
@@ -96,8 +96,8 @@ function editAccrual(userID) {
                                                 <td>
                                                         {$workexperionce.remarks}
 						</td>
-                                                
-                                              
+
+
 						<td>
 							{assign var="id" value=$workexperionce.id}
 							{assign var="user_id" value=$workexperionce.user_id}

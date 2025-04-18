@@ -134,7 +134,7 @@ class UserWageFactory extends Factory {
 			return $this->wage_group_obj;
 		} else {
 
-			$wglf = new WageGroupListFactory();
+			$wglf = new UserWageListFactory();
 			$wglf->getById( $this->getWageGroup() );
 
 			if ( $wglf->getRecordCount() == 1 ) {
@@ -183,7 +183,7 @@ class UserWageFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Wage Group ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$wglf = new WageGroupListFactory();
+		$wglf = new UserWageListFactory();
 
 		if (
 				$id == 0
@@ -236,8 +236,8 @@ class UserWageFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
 	function setWage($wage) {
 		$wage = trim($wage);
 
@@ -279,10 +279,10 @@ class UserWageFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
-        
+
+
+
+
        function getBudgetoryAllowance() {
 		if ( isset($this->data['budgetary_allowance']) ) {
 			return $this->data['budgetary_allowance'];
@@ -290,8 +290,8 @@ class UserWageFactory extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
 	function setBudgetoryAllowance($budgetary_allowance) {
 		$wage = trim($budgetary_allowance);
 
@@ -573,12 +573,12 @@ class UserWageFactory extends Factory {
 
 		if ( $this->getType() == 10 ) {
 			$hourly_wage = $this->getWage();
-                //added for aqua fresh 2018/04/18 by Thilini - 15->type monthly 
+                //added for aqua fresh 2018/04/18 by Thilini - 15->type monthly
                 } else if($this->getType() == 15){
                     $hourly_wage = $this->getMonthlyHourlyRate( $this->getWage(), $epoch, $accurate_calculation );
 		} else {
                     $hourly_wage = $this->getMonthlyHourlyRate( $this->getAnnualWage(), $epoch, $accurate_calculation );
-                   
+
 		}
 
 		return Misc::MoneyFormat($hourly_wage, FALSE);
@@ -587,7 +587,7 @@ class UserWageFactory extends Factory {
         //Added By Thilini 2018/04/18 hourly rate with Basic + Budgetary Allowance
 	function getMonthlyHourlyRate($monthly_wage, $epoch = FALSE, $accurate_calculation = FALSE ) {
             //echo 'here::'.$this->getUser();
-            
+
 		if ( $epoch == FALSE ) {
 			$epoch = TTDate::getTime();
 		}
@@ -605,11 +605,11 @@ class UserWageFactory extends Factory {
                         $budgetary_allowance = $udlf_obj->getUserValue1();
                     }
                 }
-                
+
                 $average_monthly_hours = $this->getWeeklyTime()/3600;
-                
+
                 $full_wage = $monthly_wage + $budgetary_allowance;
-                
+
                 if ( $average_monthly_hours == 0 ) {
                     //No default schedule, can't pay them.
                     $hourly_wage = 0;
@@ -630,7 +630,7 @@ class UserWageFactory extends Factory {
 //		} else {
 //			$annual_work_weeks = 52;
 //		}
-                
+
 //		$average_weekly_hours = TTDate::getHours( $this->getWeeklyTime() );
 		//Debug::text('Average Weekly Hours: '. $average_weekly_hours , __FILE__, __LINE__, __METHOD__,10);
 
@@ -650,7 +650,7 @@ class UserWageFactory extends Factory {
 
 		return $hourly_wage;
 	}
-        
+
         function getAnnualHourlyRate( $annual_wage, $epoch = FALSE, $accurate_calculation = FALSE ) {
 		if ( $epoch == FALSE ) {
 			$epoch = TTDate::getTime();
@@ -693,7 +693,7 @@ class UserWageFactory extends Factory {
 
 		return $hourly_wage;
 	}
-        
+
 
 	static function proRateSalary($salary, $wage_effective_date, $prev_wage_effective_date, $pp_start_date, $pp_end_date, $termination_date ) {
 		$prev_wage_effective_date = (int)$prev_wage_effective_date;
@@ -701,13 +701,13 @@ class UserWageFactory extends Factory {
 		if ( $wage_effective_date < $pp_start_date ) {
 			$wage_effective_date = $pp_start_date;
 		}
-                      
+
                 /* commented by thusitha request by Mr Printoe 2018-03-09 */
-                
+
 		//$total_pay_period_days = ceil( TTDate::getDayDifference( $pp_start_date, $pp_end_date) );
-                
+
                 $total_pay_period_days = 30;
-                
+
                // $total_pay_period_days = 30;
 
 		if ( $prev_wage_effective_date == 0 ) {
@@ -715,14 +715,14 @@ class UserWageFactory extends Factory {
 			if ( $termination_date != '' AND $termination_date > 0 AND $termination_date < $pp_end_date ) {
 				Debug::text(' Setting PP end date to Termination Date: '. TTDate::GetDate('DATE', $termination_date) , __FILE__, __LINE__, __METHOD__,10);
 				$pp_end_date = $termination_date;
-                              
+
                                 $total_pay_period_days = 30;
 			}
 
 			Debug::text(' Using Pay Period End Date: '. TTDate::GetDate('DATE', $pp_end_date) , __FILE__, __LINE__, __METHOD__,10);
 			 $total_wage_effective_days = ceil( TTDate::getDayDifference( $wage_effective_date, $pp_end_date) );
 		} else {
-                    
+
 			Debug::text(' Using Prev Effective Date: '. TTDate::GetDate('DATE', $prev_wage_effective_date ) , __FILE__, __LINE__, __METHOD__,10);
 			$total_wage_effective_days = ceil( TTDate::getDayDifference( $wage_effective_date, $prev_wage_effective_date ) );
 		}
@@ -730,34 +730,34 @@ class UserWageFactory extends Factory {
 		Debug::text('Salary: '. $salary .' Total Pay Period Days: '. $total_pay_period_days .' Wage Effective Days: '. $total_wage_effective_days , __FILE__, __LINE__, __METHOD__,10);
 
                 if($total_pay_period_days > $total_wage_effective_days){
-                    
+
                     $total_pay_period_days = 30;
                 }
                 else{
                     $total_wage_effective_days = 30;
                 }
-               
-		
+
+
 		 $pro_rate_salary = bcmul( $salary, bcdiv($total_wage_effective_days, $total_pay_period_days) );
  //echo bcdiv($total_wage_effective_days, $total_pay_period_days);exit;
 		Debug::text('Pro Rate Salary: '. $pro_rate_salary, __FILE__, __LINE__, __METHOD__,10);
 		return $pro_rate_salary;
 	}
 
-        
+
         static function proRateBudgetory($salary, $wage_effective_date, $prev_wage_effective_date, $pp_start_date, $pp_end_date, $termination_date ) {
 		$prev_wage_effective_date = (int)$prev_wage_effective_date;
 
 		if ( $wage_effective_date < $pp_start_date ) {
 			$wage_effective_date = $pp_start_date;
 		}
-                      
+
                 /* commented by thusitha request by Mr Printoe 2018-03-09 */
-                
+
 		//$total_pay_period_days = ceil( TTDate::getDayDifference( $pp_start_date, $pp_end_date) );
-                
+
                 $total_pay_period_days = 30;
-                
+
                // $total_pay_period_days = 30;
 
 		if ( $prev_wage_effective_date == 0 ) {
@@ -765,7 +765,7 @@ class UserWageFactory extends Factory {
 			if ( $termination_date != '' AND $termination_date > 0 AND $termination_date < $pp_end_date ) {
 				Debug::text(' Setting PP end date to Termination Date: '. TTDate::GetDate('DATE', $termination_date) , __FILE__, __LINE__, __METHOD__,10);
 				$pp_end_date = $termination_date;
-                              
+
                                 $total_pay_period_days = 30;
 			}
 
@@ -779,7 +779,7 @@ class UserWageFactory extends Factory {
 		Debug::text('Salary: '. $salary .' Total Pay Period Days: '. $total_pay_period_days .' Wage Effective Days: '. $total_wage_effective_days , __FILE__, __LINE__, __METHOD__,10);
 
                 if($total_pay_period_days > $total_wage_effective_days){
-                    
+
                     $total_pay_period_days = 30;
                 }
                 //echo $wage_effective_date.' '.$pp_end_date;exit;
@@ -790,21 +790,21 @@ class UserWageFactory extends Factory {
 		return $pro_rate_salary;
 	}
 
-       
-            
+
+
         static function proReversRateBudgetory($salary, $wage_effective_date, $prev_wage_effective_date, $pp_start_date, $pp_end_date, $termination_date ) {
 		$prev_wage_effective_date = (int)$prev_wage_effective_date;
 
 		if ( $wage_effective_date < $pp_start_date ) {
 			$wage_effective_date = $pp_start_date;
 		}
-                      
+
                 /* commented by thusitha request by Mr Printoe 2018-03-09 */
-                
+
 		//$total_pay_period_days = ceil( TTDate::getDayDifference( $pp_start_date, $pp_end_date) );
-                
+
                 $total_pay_period_days = 30;
-                
+
                // $total_pay_period_days = 30;
 
 		if ( $prev_wage_effective_date == 0 ) {
@@ -812,7 +812,7 @@ class UserWageFactory extends Factory {
 			if ( $termination_date != '' AND $termination_date > 0 AND $termination_date < $pp_end_date ) {
 				Debug::text(' Setting PP end date to Termination Date: '. TTDate::GetDate('DATE', $termination_date) , __FILE__, __LINE__, __METHOD__,10);
 				$pp_end_date = $termination_date;
-                              
+
                                 $total_pay_period_days = 30;
 			}
 
@@ -826,7 +826,7 @@ class UserWageFactory extends Factory {
 		Debug::text('Salary: '. $salary .' Total Pay Period Days: '. $total_pay_period_days .' Wage Effective Days: '. $total_wage_effective_days , __FILE__, __LINE__, __METHOD__,10);
 
                 if($total_pay_period_days > $total_wage_effective_days){
-                    
+
                     $total_pay_period_days = 30;
                 }
                 //echo $wage_effective_date.' '.$pp_end_date;exit;
@@ -837,8 +837,8 @@ class UserWageFactory extends Factory {
 		return $pro_rate_salary;
 	}
 
-        
-        
+
+
 	static function getWageFromArray( $date, $wage_arr ) {
 		if ( !is_array($wage_arr) ) {
 			return FALSE;

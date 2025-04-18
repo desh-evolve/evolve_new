@@ -18,7 +18,7 @@
     </style> --}}
 
     <x-slot name="header">
-        <h4 class="mb-sm-0">{{ __('Employee Promotions') }}</h4>
+        <h4 class="mb-sm-0">{{ __('Employee Qualification') }}</h4>
     </x-slot>
 
     <div class="row">
@@ -26,7 +26,7 @@
             <div class="card"> <!-- Adjust width as needed -->
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <h4 class="card-title mb-0 flex-grow-1">{{ isset($data['id']) ? 'Edit' : 'Add' }} {{ $title }} </h4>
-                    <a href="/user/promotion" class="btn btn-primary">Employee Promotions <i class="ri-arrow-right-line"></i></a>
+                    <a href="/user/qualification" class="btn btn-primary">Employee Qualification <i class="ri-arrow-right-line"></i></a>
                 </div>
 
                 <div class="card-body">
@@ -46,11 +46,11 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ isset($data['id']) ? route('user.promotion.save', $data['id']) : route('user.promotion.save') }}">
+                    <form method="POST" action="{{ isset($data['id']) ? route('user.qualification.save', $data['id']) : route('user.qualification.save') }}">
                         @csrf
 
                         <div class="px-4 py-2">
-                            
+
                             <div class="row mb-3" onclick="showHelpEntry('user')">
                                 <label for="user_id" class="form-label req mb-1 col-md-3">Employee</label>
                                 <div class="col-md-9">
@@ -65,48 +65,37 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="current_designation" class="form-label req mb-1 col-md-3">Current Designation</label>
+                                <label for="qualification" class="form-label req mb-1 col-md-3">Qualification</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="current_designation" name="current_designation" placeholder="Enter Current Designation" value="{{ $data['current_designation'] ?? '' }}">
+                                    <input type="text" class="form-control w-50" id="qualification" name="qualification" placeholder="Enter Qualification" value="{{ $data['qualification'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="new_designation" class="form-label req mb-1 col-md-3">New Designation</label>
+                                <label for="institute" class="form-label req mb-1 col-md-3">Institute</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="new_designation" name="new_designation" placeholder="Enter New Designation" value="{{ $data['new_designation'] ?? '' }}">
+                                    <input type="text" class="form-control w-50" id="institute" name="institute" placeholder="Enter Institute" value="{{ $data['institute'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="current_salary" class="form-label req mb-1 col-md-3">Current Salary</label>
+                                <label for="year" class="form-label req mb-1 col-md-3">Year</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="current_salary" name="current_salary" placeholder="Enter Current Salary" value="{{ $data['current_salary'] ?? '' }}">
+                                    <input type="text" class="form-control w-50" id="year" name="year" placeholder="Enter Year" value="{{ $data['year'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="new_salary" class="form-label req mb-1 col-md-3">New Salary</label>
+                                <label for="remaks" class="form-label req mb-1 col-md-3">Remarks</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="new_salary" name="new_salary" placeholder="Enter New Salary" value="{{ $data['new_salary'] ?? '' }}">
+                                    <input type="text" class="form-control w-50" id="remaks" name="remaks" placeholder="Enter Remarks" value="{{ $data['remaks'] ?? '' }}">
                                 </div>
                             </div>
-
-                            <div class="row mb-3">
-                                <label for="effective_date" class="form-label req mb-1 col-md-3">Effective Date</label>
-                                <div class="col-md-9 d-flex align-items-center gap-2">
-                                    <input type="date" class="form-control w-50" id="year" name="effective_date" placeholder="Enter Effective Date"
-                                        value="{{ \Carbon\Carbon::createFromTimestamp( $data['effective_date'] ?? '' )->format('Y-m-d') }}"
-                                    >
-                                    <small class="text-muted d-block mt-1">ie: {{ $current_user_prefs->getDateFormatExample() ?? 'yyyy-mm-dd' }}</small>
-                                </div>
-                            </div>
-
 
                         </div>
 
                         <div class="d-flex justify-content-end mt-4">
-                            <input type="hidden" name="id" id="promotion_id" value="{{ $data['id'] ?? '' }}">
+                            <input type="hidden" name="id" id="qualification" value="{{ $data['id'] ?? '' }}">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
 

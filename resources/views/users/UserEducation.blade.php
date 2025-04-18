@@ -1,6 +1,6 @@
 <x-app-layout :title="'Input Example'">
     <x-slot name="header">
-        <h4 class="mb-sm-0">{{ __('Promotions') }}</h4>
+        <h4 class="mb-sm-0">{{ __('Qualification') }}</h4>
     </x-slot>
 
     <div class="row">
@@ -13,9 +13,9 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button" href="/user/promotion/add"
+                            <a type="button" href="/user/qualification/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
-                                id="add_new_btn">New Promotions <i class="ri-add-line"></i></a>
+                                id="add_new_btn">New Qualification <i class="ri-add-line"></i></a>
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                             </div>
 
                             <div class="col-lg-10">
-                                <form method="GET" action="{{ route('user.promotion.index') }}">
+                                <form method="GET" action="{{ route('user.qualification.index') }}">
                                     <select name="filter_user_id" id="filter_user" class="form-select" onChange="this.form.submit()">
                                         @foreach ($user_options as $value => $label)
                                             <option value="{{ $value }}"
@@ -46,33 +46,28 @@
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Current Designation</th>
-                                    <th scope="col">New Designation</th>
-                                    <th scope="col">Current Salary</th>
-                                    <th scope="col">New Salary</th>
-                                    <th scope="col">Effective Date</th>
+                                    <th scope="col">Qualification</th>
+                                    <th scope="col">Institute</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Remaks</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
 
                             <tbody id="table_body">
-                                @foreach ($lifepromotions as $promotion)
+                                @foreach ($qualifications as $education)
                                     @php
-                                        $row_class = isset($promotion['deleted']) && $promotion['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
+                                        $row_class = isset($education['deleted']) && $education['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
                                     @endphp
                                     <tr class="{{ $row_class }}">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $promotion['current_designation'] ?? '' }}</td>
-                                        <td>{{ $promotion['new_designation'] ?? '' }}</td>
-                                        <td>{{ $promotion['current_salary'] ?? '' }}</td>
-                                        <td>{{ $promotion['new_salary'] ?? '' }}</td>
-                                        <td>
-                                            {{ \Carbon\Carbon::createFromTimestamp($promotion['effective_date'] ?? 0)->format('d/m/Y') }}
-                                        </td>
-
+                                        <td>{{ $education['qualification'] ?? '' }}</td>
+                                        <td>{{ $education['institute'] ?? '' }}</td>
+                                        <td>{{ $education['year'] ?? '' }}</td>
+                                        <td>{{ $education['remaks'] ?? '' }}</td>
                                         <td>
                                             <!-- Edit Button -->
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ route('user.promotion.add', ['id' => $promotion['id'] ?? '']) }}'">
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ route('user.qualification.add', ['id' => $education['id'] ?? '']) }}'">
                                                 {{ __('Edit') }}
                                             </button>
                                         </td>
@@ -94,7 +89,7 @@
         if (tableBody && tableBody.children.length === 0) {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td colspan="7" class="text-center text-danger font-weight-bold">No promotions yet.</td>
+                <td colspan="7" class="text-center text-danger font-weight-bold">No qualifications yet.</td>
             `;
             tableBody.appendChild(row);
         }

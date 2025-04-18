@@ -1,114 +1,109 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: UserAccrualBalanceList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('user','enabled')
-		OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\users;
 
-//Debug::setVerbosity( 11 );
+use App\Http\Controllers\Controller;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserLifePromotionListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Employee Promotions')); // See index.php
-BreadCrumb::setCrumb($title);
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'filter_user_id',
-												'ids',
-												) ) );
+class UserLifePromotion extends Controller
+{
+    protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'filter_user_id' => $filter_user_id,
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+        // if ( !$permission->Check('user','enabled')
+        //     OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
+        //     $permission->Redirect( FALSE ); //Redirect
+        // }
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserLifePromotion.php') );
-		break;
-	default:
-             
-		$ulplf = new UserLifePromotionListFactory();
-       
+	}
+
+
+    public function index(Request $request, $user_id = null)
+    {
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $current_user_prefs = $this->userPrefs;
+        $permission = $this->permission;
+
+        $viewData['title'] = 'Employee Promotions';
+
+        $ulplf = new UserLifePromotionListFactory();
 		$ulf = new UserListFactory();
 
-		if ( $permission->Check('user','view') OR $permission->Check('user','view_child') ) {
-			if ( isset($filter_user_id) ) {
-				$user_id = $filter_user_id;
-			} else {
-				$user_id = $current_user->getId();
-				$filter_user_id = $current_user->getId();
-			}
-		} else {
-			$filter_user_id = $user_id = $current_user->getId();
-		}
+		// if ( $permission->Check('user','view') OR $permission->Check('user','view_child') ) {
+		// 	if ( isset($filter_user_id) ) {
+		// 		$user_id = $filter_user_id;
+		// 	} else {
+		// 		$user_id = $current_user->getId();
+		// 		$filter_user_id = $current_user->getId();
+		// 	}
+		// } else {
+		// 	$filter_user_id = $user_id = $current_user->getId();
+		// }
+
+        $filter_user_id = $request->input('filter_user_id', $user_id);
+
+        if ( isset($filter_user_id) ) {
+            $user_id = $filter_user_id;
+        } else {
+            $user_id = $current_user->getId();
+            $filter_user_id = $current_user->getId();
+        }
 
 		$filter_data = NULL;
 
 		//Get user object
 		$ulf->getByIdAndCompanyID( $user_id, $current_company->getId() );
+
 		if (  $ulf->getRecordCount() > 0 ) {
 			$user_obj = $ulf->getCurrent();
 
-			$ulplf->getByUserIdAndCompanyId( $user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
+			$ulplf->getByUserIdAndCompanyId( $user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage() );
+            $lifepromotions = [];
 
-			$pager = new Pager($ulplf);
+			foreach ($ulplf->rs as $ulpf_obj) {
+                $ulplf->data = (array)$ulpf_obj;
+                $ulpf_obj = $ulplf;
 
-			
-
-			foreach ($ulplf as $ulpf_obj) {
-                            
-                           
-                           
 				$lifepromotions[] = array(
 									'id' => $ulpf_obj->getId(),
 									'user_id' => $ulpf_obj->getUser(),
-                                                                        'current_designation' => $ulpf_obj->getCurrentDesignation(),
-                                                                        'new_designation' => $ulpf_obj->getNewDesignation(),
-                                                                        'current_salary' => $ulpf_obj->getCurrentSalary(),
-                                                                        'new_salary' => $ulpf_obj->getNewSalary(),
-                                                                        'effective_date' => $ulpf_obj->getEffectiveDate(),
-                                                                        
-                                                                      
-									
+                                    'current_designation' => $ulpf_obj->getCurrentDesignation(),
+                                    'new_designation' => $ulpf_obj->getNewDesignation(),
+                                    'current_salary' => $ulpf_obj->getCurrentSalary(),
+                                    'new_salary' => $ulpf_obj->getNewSalary(),
+                                    'effective_date' => $ulpf_obj->getEffectiveDate(),
 								);
 			}
-                        
-                       
 
-			$smarty->assign_by_ref('lifepromotions', $lifepromotions);
 
 			$hlf = new HierarchyListFactory();
+
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
+
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
+
 			if ( $permission->Check('accrual','view') == FALSE ) {
 				if ( $permission->Check('user','view_child') ) {
 					$filter_data['permission_children_ids'] = $permission_children_ids;
@@ -118,21 +113,31 @@ switch ($action) {
 				}
 			}
 
+            $user_options = []; // Initialize the variable to prevent errors
+
 			$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			$user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
-			$smarty->assign_by_ref('user_options', $user_options);
 
-			$smarty->assign_by_ref('filter_user_id', $filter_user_id);
-			$smarty->assign('is_owner', $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getId() ) );
-			$smarty->assign('is_child', $permission->isChild( $user_obj->getId(), $permission_children_ids ) );
+            $is_owner = $permission->isOwner($user_obj->getCreatedBy(), $user_obj->getId());
+            $is_child = $permission->isChild($user_obj->getId(), $permission_children_ids);
 
-			$smarty->assign_by_ref('sort_column', $sort_column );
-			$smarty->assign_by_ref('sort_order', $sort_order );
+            $viewData['is_owner'] = $is_owner;
+            $viewData['is_child'] = $is_child;
+            $viewData['lifepromotions'] = $lifepromotions;
+            $viewData['user_options'] = $user_options;
+            $viewData['filter_user_id'] = $filter_user_id;
+            // dd($viewData);
 
-			$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+            return view('users.UserLifePromotion', $viewData);
+
 		}
+    }
 
-		break;
+
+    public function add()
+    {
+        Redirect::Page( URLBuilder::getURL( NULL, 'EditUserLifePromotion.php') );
+    }
+
+
 }
-$smarty->display('users/UserLifePromotion.tpl');
-?>

@@ -42,11 +42,6 @@ class EditUserDefault extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
-    }
-
-
-    public function index($id = null)
-    {
 
         // if ( !$permission->Check('user','enabled')
         //         OR !( $permission->Check('user','edit') ) ) {
@@ -55,7 +50,11 @@ class EditUserDefault extends Controller
 
         // }
 
+    }
 
+
+    public function index($id = null)
+    {
         $current_company = $this->currentCompany;
         $viewData['title'] = 'Add New Hire Defaults';
 

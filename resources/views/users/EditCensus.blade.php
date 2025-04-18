@@ -18,7 +18,7 @@
     </style> --}}
 
     <x-slot name="header">
-        <h4 class="mb-sm-0">{{ __('Employee Promotions') }}</h4>
+        <h4 class="mb-sm-0">{{ __('Census Information') }}</h4>
     </x-slot>
 
     <div class="row">
@@ -26,7 +26,7 @@
             <div class="card"> <!-- Adjust width as needed -->
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <h4 class="card-title mb-0 flex-grow-1">{{ isset($data['id']) ? 'Edit' : 'Add' }} {{ $title }} </h4>
-                    <a href="/user/promotion" class="btn btn-primary">Employee Promotions <i class="ri-arrow-right-line"></i></a>
+                    <a href="/user/census" class="btn btn-primary">Census <i class="ri-arrow-right-line"></i></a>
                 </div>
 
                 <div class="card-body">
@@ -46,11 +46,11 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ isset($data['id']) ? route('user.promotion.save', $data['id']) : route('user.promotion.save') }}">
+                    <form method="POST" action="{{ isset($data['id']) ? route('user.census.save', $data['id']) : route('user.census.save') }}">
                         @csrf
 
                         <div class="px-4 py-2">
-                            
+
                             <div class="row mb-3" onclick="showHelpEntry('user')">
                                 <label for="user_id" class="form-label req mb-1 col-md-3">Employee</label>
                                 <div class="col-md-9">
@@ -65,48 +65,61 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="current_designation" class="form-label req mb-1 col-md-3">Current Designation</label>
+                                <label for="dependant" class="form-label req mb-1 col-md-3">Dependent</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="current_designation" name="current_designation" placeholder="Enter Current Designation" value="{{ $data['current_designation'] ?? '' }}">
+                                    <input type="text" class="form-control w-50" id="dependant" name="dependant" placeholder="Enter Dependent" value="{{ $data['dependant'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="new_designation" class="form-label req mb-1 col-md-3">New Designation</label>
+                                <label for="name" class="form-label req mb-1 col-md-3">Name</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="new_designation" name="new_designation" placeholder="Enter New Designation" value="{{ $data['new_designation'] ?? '' }}">
+                                    <input type="text" class="form-control w-50" id="name" name="name" placeholder="Enter Name" value="{{ $data['name'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="current_salary" class="form-label req mb-1 col-md-3">Current Salary</label>
+                                <label for="relationship" class="form-label req mb-1 col-md-3">Relationship</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="current_salary" name="current_salary" placeholder="Enter Current Salary" value="{{ $data['current_salary'] ?? '' }}">
+                                    <input type="text" class="form-control w-50" id="relationship" name="relationship" placeholder="Enter Relationship" value="{{ $data['relationship'] ?? '' }}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="new_salary" class="form-label req mb-1 col-md-3">New Salary</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control w-50" id="new_salary" name="new_salary" placeholder="Enter New Salary" value="{{ $data['new_salary'] ?? '' }}">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="effective_date" class="form-label req mb-1 col-md-3">Effective Date</label>
+                                <label for="dob" class="form-label req mb-1 col-md-3">Date</label>
                                 <div class="col-md-9 d-flex align-items-center gap-2">
-                                    <input type="date" class="form-control w-50" id="year" name="effective_date" placeholder="Enter Effective Date"
-                                        value="{{ \Carbon\Carbon::createFromTimestamp( $data['effective_date'] ?? '' )->format('Y-m-d') }}"
+                                    <input type="date" class="form-control w-50" id="year" name="dob" placeholder="Enter Date"
+                                        value="{{ \Carbon\Carbon::createFromTimestamp( $data['dob'] ?? '' )->format('Y-m-d') }}"
                                     >
                                     <small class="text-muted d-block mt-1">ie: {{ $current_user_prefs->getDateFormatExample() ?? 'yyyy-mm-dd' }}</small>
                                 </div>
                             </div>
 
+                            <div class="row mb-3">
+                                <label for="nic" class="form-label req mb-1 col-md-3">NIC</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control w-50" id="nic" name="nic" placeholder="Enter NIC" value="{{ $data['nic'] ?? '' }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="gender" class="form-label req mb-1 col-md-3">Gender</label>
+                                <div class="col-md-9">
+                                    <select name="gender" class="form-select w-50" id="gender">
+                                        @foreach ($data['gender_options'] as $value => $label)
+                                            <option value="{{ $value }}"
+                                                {{ isset($data['gender']) && $data['gender'] == $value ? 'selected' : '' }}>
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
                         </div>
 
                         <div class="d-flex justify-content-end mt-4">
-                            <input type="hidden" name="id" id="promotion_id" value="{{ $data['id'] ?? '' }}">
+                            <input type="hidden" name="id" id="census_id" value="{{ $data['id'] ?? '' }}">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
 

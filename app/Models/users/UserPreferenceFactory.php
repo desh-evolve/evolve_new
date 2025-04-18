@@ -1565,6 +1565,7 @@ class UserPreferenceFactory extends Factory {
 
 		return $options[$this->getTimeUnitFormat()];
 	}
+
 	function getTimeUnitFormat() {
 		if ( isset($this->data['time_unit_format']) ) {
 			return $this->data['time_unit_format'];
@@ -1572,6 +1573,7 @@ class UserPreferenceFactory extends Factory {
 
 		return FALSE;
 	}
+    
 	function setTimeUnitFormat($time_unit_format) {
 		$time_unit_format = trim($time_unit_format);
 

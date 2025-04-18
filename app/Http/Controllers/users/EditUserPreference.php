@@ -35,6 +35,13 @@ class EditUserPreference extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
+
+        // Permission check
+        // if ( !$permission->Check('user_preference','enabled')
+        //         OR !( $permission->Check('user_preference','edit') OR $permission->Check('user_preference','edit_child') OR $permission->Check('user_preference','edit_own') ) ) {
+        //     $permission->Redirect( FALSE ); //Redirect
+        // }
+
     }
 
     public function index($user_id = null)
@@ -44,12 +51,6 @@ class EditUserPreference extends Controller
         $permission = $this->permission;
 
         $viewData['title'] = 'Employee Preferences';
-
-        // Permission check
-        // if ( !$permission->Check('user_preference','enabled')
-        //         OR !( $permission->Check('user_preference','edit') OR $permission->Check('user_preference','edit_child') OR $permission->Check('user_preference','edit_own') ) ) {
-        //     $permission->Redirect( FALSE ); //Redirect
-        // }
 
         $hlf = new HierarchyListFactory();
         // $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId( $current_company->getId(), $current_user->getId() );
