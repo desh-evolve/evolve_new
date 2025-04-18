@@ -56,9 +56,20 @@
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item"><a href="#" class="nav-link">My Timesheet</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Punches</a></li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.punchlist') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.punchlist') ? 'active' : '' }}">Punches
+                                </a>
+                            </li>
                             <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Requests</a></li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.requests') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.requests') ? 'active' : '' }}">Requests
+                                </a>
+                            </li>
+
                             <li class="nav-item"><a href="#" class="nav-link">Apply Leaves</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
@@ -99,8 +110,14 @@
                     </a>
                     <div class="collapse menu-dropdown" id="reports">
                         <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item">
+                                <a href="{{ route('employee_detail.index') }}"
+                                    class="nav-link {{ request()->routeIs('employee_detail.index') ? 'active' : '' }}">Employee Detail Report
+                                </a>
+                            </li>
+                            {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}
                             <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li>
                         </ul>
                     </div>
                 </li>

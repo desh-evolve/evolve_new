@@ -275,12 +275,14 @@ class EditPunch extends Controller
 		return view('punch/EditPunch', $viewData);
 	}
 
-	public function delete($id){
+	public function delete($punch_id){
 		//Debug::setVerbosity(11);
-		Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
+		if (empty($punch_id)) {
+            return response()->json(['error' => 'No Punch Selected.'], 400);
+        }
 
 		$plf = new PunchListFactory();
-		$plf->getById( $pc_data['punch_id'] );
+		$plf->getById( $punch_id );
 		if ( $plf->getRecordCount() > 0 ) {
 			foreach($plf->rs as $p_obj) {
 				$plf->data = (array)$p_obj;
@@ -295,11 +297,11 @@ class EditPunch extends Controller
 				$p_obj->setEnableCalcWeeklySystemTotalTime( TRUE );
 				$p_obj->setEnableCalcUserDateTotal( TRUE );
 				$p_obj->setEnableCalcException( TRUE );
-				$p_obj->Save();
+				$res = $p_obj->Save();
 			}
 		}
 
-		Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+		return redirect(route('attendance.punchlist'));
 
 	}
 
@@ -473,7 +475,6 @@ class EditPunch extends Controller
 			$pf->CommitTransaction();
 
 			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), '/attendance/punchlist'));
-			Redirect::Page(  );
 		} else {
 			$pf->FailTransaction();
 		}

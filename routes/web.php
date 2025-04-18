@@ -72,6 +72,7 @@ use App\Http\Controllers\policy\PremiumPolicyList;
 use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\punch\AddMassPunch;
 use App\Http\Controllers\punch\EditPunch;
 use App\Http\Controllers\punch\PunchList;
 use App\Http\Controllers\request\EditRequest;
@@ -102,6 +103,9 @@ use App\Http\Controllers\users\UserWageListNew;
 use App\Http\Controllers\users\UserWorkExperionce;
 use App\Http\Controllers\users\UserWorkExperionceNew;
 use Illuminate\Support\Facades\Route;
+
+
+use App\Http\Controllers\report\UserInformation;
 
 Route::get('/', function () {
     return view('welcome');
@@ -186,6 +190,15 @@ Route::get('/recurring_holidays', [RecurringHolidayList::class, 'index'])->name(
 Route::get('/recurring_holidays/add/{id?}', [EditRecurringHoliday::class, 'index'])->name('recurring_holidays.add');
 Route::post('/recurring_holidays/save/{id?}', [EditRecurringHoliday::class, 'submit'])->name('recurring_holidays.save');
 Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, 'delete'])->name('recurring_holidays.delete');
+
+
+// ===============================================================================================================================
+// report 
+// ===============================================================================================================================
+Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employee_detail.index');
+Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
+
+
 // ===============================================================================================================================
 // Payroll
 // ===============================================================================================================================
@@ -237,6 +250,7 @@ Route::delete('/payroll/company_deductions/delete/{id}', [CompanyDeductionList::
 // ===============================================================================================================================
 // Progress Bar Functions
 // ===============================================================================================================================
+Route::get('/progress_bar_control', [ProgressBar::class, 'index'])->name('progress_bar_control');
 Route::get('/progress_bar', [ProgressBar::class, 'index'])->name('progress_bar');
 Route::get('/progress_bar/recalculate_employee', [ProgressBar::class, 'recalculate_employee'])->name('progress_bar.recalculate_employee');
 Route::get('/progress_bar/generate_paystubs', [ProgressBar::class, 'generate_paystubs'])->name('progress_bar.generate_paystubs');
@@ -431,6 +445,10 @@ Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendan
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
+Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete'])->name('attendance.punch_single.delete');
+
+Route::get('/attendance/masspunch/add', [AddMassPunch::class, 'index'])->name('attendance.masspunch.add');
+Route::post('/attendance/masspunch/submit', [AddMassPunch::class, 'submit'])->name('attendance.masspunch.submit');
 
 Route::get('/attendance/requests', [UserRequestList::class, 'index'])->name('attendance.requests');
 Route::get('/attendance/request/add/{id?}', [EditRequest::class, 'index'])->name('attendance.request.add');

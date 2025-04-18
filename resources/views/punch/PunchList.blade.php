@@ -80,6 +80,13 @@
             }
 
             initTable();
+
+            @if(request()->get('refresh') == 'true')
+                if (window.opener) {
+                    console.log('refreshing..')
+                    window.opener.location.reload();
+                }
+            @endif
         })
     </script>
 </x-app-layout>

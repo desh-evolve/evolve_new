@@ -79,15 +79,15 @@
 					</td>
 				</tr>
 			</table>
-		</div>
+			</div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('filter_user'))">
-		</div>
+			<div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('filter_user'))">
+			</div>
 
-		<input type="hidden" name="id" value="{$id}">
-		<input type="hidden" name="old_id" value="{$old_id}">
-		<input type="hidden" name="hierarchy_id" value="{$hierarchy_id}">
+			<input type="hidden" name="id" value="{$id}">
+			<input type="hidden" name="old_id" value="{$old_id}">
+			<input type="hidden" name="hierarchy_id" value="{$hierarchy_id}">
 		</form>
 	</div>
 </div>
