@@ -410,7 +410,7 @@ $( document ).ready(function() {
                                         
                                        </tr>    
                                  </table>
-		</div>
+		    </div>
                                         
                     <div>
                                        <table class="tblList">

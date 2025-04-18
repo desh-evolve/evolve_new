@@ -1,284 +1,275 @@
 {include file="header.tpl" enable_calendar=true enable_ajax=true;"}
 
 <script	language=JavaScript>
-{literal}
-function showWeeklyTime(objectID) {		
-	if(document.getElementById) {
-		if ( document.getElementById(objectID).style.display == 'none' ) {
-			if ( document.getElementById('type_id').value != 10 ) {
-				//Show
-				document.getElementById(objectID).className = '';
-				document.getElementById(objectID).style.display = '';
+	{literal}
+	function showWeeklyTime(objectID) {		
+		if(document.getElementById) {
+			if ( document.getElementById(objectID).style.display == 'none' ) {
+				if ( document.getElementById('type_id').value != 10 ) {
+					//Show
+					document.getElementById(objectID).className = '';
+					document.getElementById(objectID).style.display = '';
+				}
+			} else {
+				if ( document.getElementById('type_id').value == 10 ) {
+					document.getElementById(objectID).style.display = 'none';
+				}
 			}
-		} else {
-			if ( document.getElementById('type_id').value == 10 ) {
-				document.getElementById(objectID).style.display = 'none';
+		}
+
+	}
+
+	var hwCallback = {
+			getHourlyRate: function(result) {
+				document.getElementById('hourly_rate').value = result;
+			},
+			getUserLaborBurdenPercent: function(result) {
+				document.getElementById('labor_burden_percent').value = result;
 			}
 		}
-	}
 
-}
+	var remoteHW = new AJAX_Server(hwCallback);
 
-var hwCallback = {
-		getHourlyRate: function(result) {
-			document.getElementById('hourly_rate').value = result;
-		},
-		getUserLaborBurdenPercent: function(result) {
-			document.getElementById('labor_burden_percent').value = result;
+	function getHourlyRate() {
+		//alert('Wage: '+ document.getElementById('wage_val').value +' Time: '+ document.getElementById('weekly_time_val').value);
+		if ( document.getElementById('type_id').value != 10 ) {
+			remoteHW.getHourlyRate( document.getElementById('wage_val').value, document.getElementById('weekly_time_val').value, document.getElementById('type_id').value);
 		}
 	}
 
-var remoteHW = new AJAX_Server(hwCallback);
-
-function getHourlyRate() {
-	//alert('Wage: '+ document.getElementById('wage_val').value +' Time: '+ document.getElementById('weekly_time_val').value);
-	if ( document.getElementById('type_id').value != 10 ) {
-		remoteHW.getHourlyRate( document.getElementById('wage_val').value, document.getElementById('weekly_time_val').value, document.getElementById('type_id').value);
+	function getUserLaborBurdenPercent() {
+		remoteHW.getUserLaborBurdenPercent( {/literal}{$user_data->getId()}{literal} );
 	}
-}
-
-function getUserLaborBurdenPercent() {
-	remoteHW.getUserLaborBurdenPercent( {/literal}{$user_data->getId()}{literal} );
-}
 
 
 
 
 
-	/*
-	ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
-	*/
-function calculateTotal(obj, prefix) {
-	//alert(obj.value);
-    document.getElementById("total"+prefix).textContent= obj.value * 10;	
+		/*
+		ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
+		*/
+	function calculateTotal(obj, prefix) {
+		//alert(obj.value);
+		document.getElementById("total"+prefix).textContent= obj.value * 10;	
 
-}
+	}
 
-	/*
-	ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
-	*/
-function calculateSubTotal() {
-	//alert(document.getElementById("job_history_data[scorea1]").value);
-	//alert(document.getElementById("scorea1").value);
-	var total = 0;
-	for(var i=1;i<=12;i++)
-	{
-		var score = document.getElementById("kpi_data[scorea"+i+"]").value
-		//alert(total);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
+		/*
+		ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
+		*/
+	function calculateSubTotal() {
+		//alert(document.getElementById("job_history_data[scorea1]").value);
+		//alert(document.getElementById("scorea1").value);
+		var total = 0;
+		for(var i=1;i<=12;i++)
+		{
+			var score = document.getElementById("kpi_data[scorea"+i+"]").value
+			//alert(total);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';
+			//total = total + parseInt(document.getElementById("job_history_data[scorea"+i+"]").value);	
+			//alert(total);
+			document.getElementById("sum").textContent= total * 10;
 		}
-		score = '';
-		//total = total + parseInt(document.getElementById("job_history_data[scorea"+i+"]").value);	
 		//alert(total);
-		document.getElementById("sum").textContent= total * 10;
+		//document.getElementById("sum").textContent= total;	
 	}
-	//alert(total);
-    //document.getElementById("sum").textContent= total;	
-}
 
 
-	/*
-	ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
-	*/
-function calculateSubTotal1() {
-	
-	
-	var total = 0;
-	for(var i=1;i<=6;i++)
-	{
-		//alert(total);
-		var score = document.getElementById("kpi_data[scoreb"+i+"]").value
-		//alert(score);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
-		}
-		score = '';
- 		document.getElementById("sum1").textContent= total * 10;
-	}
-}
-
-
-	/*
-	ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
-	*/
-function calculateSubTotal2() {
-	
-	var total = 0;
-	for(var i=1;i<=6;i++)
-	{
-		var score = document.getElementById("kpi_data[scorec"+i+"]").value
-		//alert(total);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
-		}
-		score = '';
- 		document.getElementById("sum2").textContent= total * 10;
-	}
-}
-
-
-	/*
-	ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
-	*/
-function calculateSubTotal3() {
-	
-	var total = 0;
-	for(var i=1;i<=6;i++)
-	{
-		var score = document.getElementById("kpi_data[scored"+i+"]").value
-		//alert(total);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
-		}
-		score = '';
-		//total = total + parseInt(document.getElementById("job_history_data[scorea"+i+"]").value);	
-		//alert(total);
-		document.getElementById("sum3").textContent= total * 10;
-	}
-}
-
-function calculateFinalScore() {
-	
-	//alert(finalScoreA());
-	
-	var total = 0;
-	total = finalScoreA() + finalScoreB() + finalScoreC() + finalScoreD();
-	//alert(total);
-	document.getElementById("kpi_data[total_score]").value = (total / 30).toFixed(2);
-
-}
-
-function finalScoreA() {
-
-	var total = 0;
-	
-	for(var i=1;i<=12;i++)
-	{
-		var score = document.getElementById("kpi_data[scorea"+i+"]").value
-		//alert(total);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
-		}
-		score = '';		
-	}
-	//alert(total);	
-	return total;
-}
-
-function finalScoreB() {
-	
-	var total = 0;
-
-	for(var j=1;j<=6;j++)
-	{
-		var score = document.getElementById("kpi_data[scoreb"+j+"]").value
-		//alert(total);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
-		}
-		score = '';		
-	}
-	return total;
-}
-
-function finalScoreC() {
-	
-	var total = 0;
-
-	for(var k=1;k<=6;k++)
-	{
-		var score = document.getElementById("kpi_data[scorec"+k+"]").value
-		//alert(total);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
-		}
-		score = '';
-	}
-	return total;
-}
-
-function finalScoreD() {
-	
-	var total = 0;
-
-	for(var l=1;l<=6;l++)
-	{
-		var score = document.getElementById("kpi_data[scored"+l+"]").value
-		//alert(total);
-		if (!isNaN(score) && score != '')
-		{			
-			total = total + parseInt(score);			
-		}
-		score = '';
-	}
-	return total;
-}
-
-
-
-function changeValues(element,val)
-{
- 
-   var txt_t = "txtt"+val;
-   var val_t =  document.getElementById(txt_t).value;
-   
-   var txta = "txta"+val;
-   var val_a =  document.getElementById(txta).value;
-  
-   
-   var  score = (val_a/val_t)*100;
-    var txtt = "txts"+val;
-    document.getElementById(txtt).value = score.toFixed(2);
-	
-	
-	var txt_w = "txtw"+val;
-    var val_w =  document.getElementById(txt_w).value;
-	
-	var final_kpi = (val_w*score)/100;
-	var txtf = "txtf"+val;
-    document.getElementById(txtf).value = final_kpi.toFixed(2);
-	
-	calcKPI();
-
-}
-
-
-function calcKPI() {
-    var o = 0;
-	var total = 0;
-    while (o < document.getElementsByName("txtf").length) {
-        var inputVal = document.getElementsByName("txtf")[o].value;
-        
-        total = Number(total) + Number(inputVal);
+		/*
+		ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
+		*/
+	function calculateSubTotal1() {
 		
 		
-        o++;
-    }
-	document.getElementById('lblfinalkpi').innerHTML  =total.toFixed(2)+'%';
+		var total = 0;
+		for(var i=1;i<=6;i++)
+		{
+			//alert(total);
+			var score = document.getElementById("kpi_data[scoreb"+i+"]").value
+			//alert(score);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';
+			document.getElementById("sum1").textContent= total * 10;
+		}
+	}
+
+
+		/*
+		ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
+		*/
+	function calculateSubTotal2() {
+		
+		var total = 0;
+		for(var i=1;i<=6;i++)
+		{
+			var score = document.getElementById("kpi_data[scorec"+i+"]").value
+			//alert(total);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';
+			document.getElementById("sum2").textContent= total * 10;
+		}
+	}
+
+
+		/*
+		ARSP NOTE --> I ADDED THIS CODE FOR THUNDER AND NEON KPI
+		*/
+	function calculateSubTotal3() {
+		
+		var total = 0;
+		for(var i=1;i<=6;i++)
+		{
+			var score = document.getElementById("kpi_data[scored"+i+"]").value
+			//alert(total);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';
+			//total = total + parseInt(document.getElementById("job_history_data[scorea"+i+"]").value);	
+			//alert(total);
+			document.getElementById("sum3").textContent= total * 10;
+		}
+	}
+
+	function calculateFinalScore() {
+		
+		//alert(finalScoreA());
+		
+		var total = 0;
+		total = finalScoreA() + finalScoreB() + finalScoreC() + finalScoreD();
+		//alert(total);
+		document.getElementById("kpi_data[total_score]").value = (total / 30).toFixed(2);
+
+	}
+
+	function finalScoreA() {
+
+		var total = 0;
+		
+		for(var i=1;i<=12;i++)
+		{
+			var score = document.getElementById("kpi_data[scorea"+i+"]").value
+			//alert(total);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';		
+		}
+		//alert(total);	
+		return total;
+	}
+
+	function finalScoreB() {
+		
+		var total = 0;
+
+		for(var j=1;j<=6;j++)
+		{
+			var score = document.getElementById("kpi_data[scoreb"+j+"]").value
+			//alert(total);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';		
+		}
+		return total;
+	}
+
+	function finalScoreC() {
+		
+		var total = 0;
+
+		for(var k=1;k<=6;k++)
+		{
+			var score = document.getElementById("kpi_data[scorec"+k+"]").value
+			//alert(total);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';
+		}
+		return total;
+	}
+
+	function finalScoreD() {
+		
+		var total = 0;
+
+		for(var l=1;l<=6;l++)
+		{
+			var score = document.getElementById("kpi_data[scored"+l+"]").value
+			//alert(total);
+			if (!isNaN(score) && score != '')
+			{			
+				total = total + parseInt(score);			
+			}
+			score = '';
+		}
+		return total;
+	}
+
+
+
+	function changeValues(element,val)
+	{
 	
-	drawWithexcelValue(total);
-}
+	var txt_t = "txtt"+val;
+	var val_t =  document.getElementById(txt_t).value;
+	
+	var txta = "txta"+val;
+	var val_a =  document.getElementById(txta).value;
+	
+	
+	var  score = (val_a/val_t)*100;
+		var txtt = "txts"+val;
+		document.getElementById(txtt).value = score.toFixed(2);
+		
+		
+		var txt_w = "txtw"+val;
+		var val_w =  document.getElementById(txt_w).value;
+		
+		var final_kpi = (val_w*score)/100;
+		var txtf = "txtf"+val;
+		document.getElementById(txtf).value = final_kpi.toFixed(2);
+		
+		calcKPI();
+
+	}
+
+
+	function calcKPI() {
+		var o = 0;
+		var total = 0;
+		while (o < document.getElementsByName("txtf").length) {
+			var inputVal = document.getElementsByName("txtf")[o].value;
+			
+			total = Number(total) + Number(inputVal);
+			
+			
+			o++;
+		}
+		document.getElementById('lblfinalkpi').innerHTML  =total.toFixed(2)+'%';
+		
+		drawWithexcelValue(total);
+	}
 
 
 
-{/literal}
-
-
-
-
-
-
-
-
-
+	{/literal}
 </script>
 
 <div id="rowContent">
@@ -655,15 +646,15 @@ function calcKPI() {
                 </td>
 			</tr>                                                                                                                                               
 			</table>
-		</div>
+			</div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
-		</div>
+			<div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
+			</div>
 
-		<input type="hidden" name="kpi_data[id]" value="{$kpi_data.id}">
-		<input type="hidden" name="user_id" value="{$user_data->getId()}">
-		<input type="hidden" name="saved_search_id" value="{$saved_search_id}">
+			<input type="hidden" name="kpi_data[id]" value="{$kpi_data.id}">
+			<input type="hidden" name="user_id" value="{$user_data->getId()}">
+			<input type="hidden" name="saved_search_id" value="{$saved_search_id}">
 		</form>
 	</div>
 </div>

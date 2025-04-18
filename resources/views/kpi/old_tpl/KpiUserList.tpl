@@ -36,7 +36,7 @@
 				  <td>
 						{capture assign=label}{t}End Date{/t}{/capture}
 						{include file="column_sort.tpl" label=$label sort_column="b.end_date" current_column="$sort_column" current_order="$sort_order"}
-	  </td>
+	  		</td>
 					<td>
 						{capture assign=label}{t}Review Date{/t}{/capture}
 						{include file="column_sort.tpl" label=$label sort_column="b.review_date" current_column="$sort_column" current_order="$sort_order"}

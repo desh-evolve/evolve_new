@@ -47,13 +47,13 @@
                                         
                                        </tr>    
                                  </table>
-		</div>
+      </div>
 
-		<div id="contentBoxFour">
-			
-		</div>
+      <div id="contentBoxFour">
+        
+      </div>
 
-		<input type="hidden" id="id" name="data[id]" value="{$data.id}">
+      <input type="hidden" id="id" name="data[id]" value="{$data.id}">
 		</form>
 	</div>
 </div>
