@@ -24,7 +24,7 @@
                     
                     {{-- -------------------------------------------- --}}
 
-                    <form method="post" name="wage" action="{$smarty.server.SCRIPT_NAME}">
+                    <form method="post" name="wage" action="#">
                         <div id="contentBoxTwoEdit">
                             <table class="tblList">
                                 <tr id="row">
@@ -33,9 +33,8 @@
                                     <th>Leave start date</th>
                                     <th>Leave End Date</th>
                                 </tr>
-                                @foreach ($data['leaves'] as row)
+                                @foreach ($data['leaves'] as $row)
                                     <tr id="row">
-                                        
                                         <td>{{$row['user']}}</td>
                                         <td>{{$row['leave_method']}}</td>
                                         <td>{{$row['start_date']}}</td>
