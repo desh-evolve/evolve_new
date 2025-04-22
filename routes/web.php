@@ -81,6 +81,7 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
+use App\Http\Controllers\report\DailyAttendanceReport;
 
 Route::get('/', function () {
     return view('welcome');
@@ -173,6 +174,9 @@ Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, '
 Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employee_detail.index');
 Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
 
+
+Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
+Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 'generate'])->name('report.daily_attendance.generate');
 
 // ===============================================================================================================================
 // Payroll 

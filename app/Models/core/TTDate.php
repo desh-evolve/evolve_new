@@ -228,11 +228,13 @@ class TTDate {
 		return $epoch;
 	}
 
-	function convertSecondsToHMS( $seconds, $include_seconds = FALSE ) {
+	static function convertSecondsToHMS( $seconds, $include_seconds = FALSE ) {
+		if (is_array($seconds)) {
+			$seconds = array_sum($seconds);
+		}
 		if ( $seconds < 0 ) {
 			$negative_number = TRUE;
 		}
-
 		$seconds = abs($seconds);
 
 		// there are 3600 seconds in an hour, so if we
@@ -269,6 +271,35 @@ class TTDate {
 
 		return $negative.implode(':', $retval );
 	}
+	// static function convertSecondsToHMS($seconds, $include_seconds = FALSE) {
+	// 	// Convert arrays to sum of their elements
+	// 	if (is_array($seconds)) {
+	// 		$seconds = array_sum($seconds);
+	// 	}
+		
+	// 	// Ensure numeric value
+	// 	if (!is_numeric($seconds)) {
+	// 		throw new InvalidArgumentException('Seconds must be numeric, received: '.gettype($seconds));
+	// 	}
+	
+	// 	$negative_number = $seconds < 0;
+	// 	$seconds = abs($seconds);
+	
+	// 	$hours = intval(intval($seconds) / 3600);
+	// 	$retval = [
+	// 		str_pad($hours, 2, "0", STR_PAD_LEFT)
+	// 	];
+	
+	// 	$minutes = intval(($seconds / 60) % 60);
+	// 	$retval[] = str_pad($minutes, 2, "0", STR_PAD_LEFT);
+	
+	// 	if ($include_seconds) {
+	// 		$secs = intval($seconds % 60);
+	// 		$retval[] = str_pad($secs, 2, "0", STR_PAD_LEFT);
+	// 	}
+	
+	// 	return ($negative_number ? '-' : '').implode(':', $retval);
+	// }
 
 	public static function parseTimeUnit($time_unit) {
 		/*

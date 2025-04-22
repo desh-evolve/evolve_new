@@ -982,80 +982,156 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		return $this;
 	}
 
-	function getDayReportByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
-		if ( $company_id == '' ) {
+	// function getDayReportByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+	// 	if ( $company_id == '' ) {
+	// 		return FALSE;
+	// 	}
+
+	// 	if ( isset($filter_data['branch_ids']) ) {
+	// 		$filter_data['branch_id'] = $filter_data['branch_ids'];
+	// 	}
+	// 	if ( isset($filter_data['department_ids']) ) {
+	// 		$filter_data['department_id'] = $filter_data['department_ids'];
+	// 	}
+
+	// 	if ( isset($filter_data['punch_branch_ids']) ) {
+	// 		$filter_data['punch_branch_id'] = $filter_data['punch_branch_ids'];
+	// 	}
+	// 	if ( isset($filter_data['punch_department_ids']) ) {
+	// 		$filter_data['punch_department_id'] = $filter_data['punch_department_ids'];
+	// 	}
+
+	// 	$udf = new UserDateFactory();
+	// 	$uf = new UserFactory();
+
+	// 	$ph = array( ':company_id' => $company_id );
+
+	// 	$query = '
+	// 				select 	b.user_id as user_id,
+	// 						b.pay_period_id as pay_period_id,
+	// 						b.date_stamp as date_stamp,
+	// 						a.status_id as status_id,
+	// 						a.schedule_policy_id as sch_policy_id,
+    //                                                     start_time,end_time,
+	// 						sum(total_time) as total_time
+	// 				from	'. $this->getTable() .' as a,
+	// 						'. $udf->getTable() .' as b,
+	// 						'. $uf->getTable() .' as c
+	// 				where 	a.user_date_id = b.id
+	// 					AND b.user_id = c.id
+	// 					AND c.company_id = :company_id
+	// 				';
+
+	// 	if ( isset($filter_data['include_user_ids']) AND isset($filter_data['include_user_ids'][0]) AND !in_array(-1, (array)$filter_data['include_user_ids']) ) {
+	// 		$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['include_user_ids'], $ph) .') ';
+	// 	}
+
+ 	// 	if ( isset($filter_data['pay_period_ids']) AND isset($filter_data['pay_period_ids'][0]) AND !in_array(-1, (array)$filter_data['pay_period_ids']) ) {
+	// 		$query .= 	' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_ids'], $ph) .') ';
+	// 	}
+
+	// 	//Schedule/Punch branches/departments
+ 	// 	if ( isset($filter_data['punch_branch_id']) AND isset($filter_data['punch_branch_id'][0]) AND !in_array(-1, (array)$filter_data['punch_branch_id']) ) {
+	// 		$query .= 	' AND a.branch_id in ('. $this->getListSQL($filter_data['punch_branch_id'], $ph) .') ';
+	// 	}
+ 	// 	if ( isset($filter_data['punch_department_id']) AND isset($filter_data['punch_department_id'][0]) AND !in_array(-1, (array)$filter_data['punch_department_id']) ) {
+	// 		$query .= 	' AND a.department_id in ('. $this->getListSQL($filter_data['punch_department_id'], $ph) .') ';
+	// 	}
+
+	// 	if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
+	// 		$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
+	// 		$query  .=	' AND b.date_stamp >= :start_date';
+	// 	}
+	// 	if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
+	// 		$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
+	// 		$query  .=	' AND b.date_stamp <= :end_date';
+	// 	}
+
+	// 	$query .= '
+	// 					AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0)
+	// 				GROUP BY b.user_id,b.pay_period_id,b.date_stamp,a.status_id
+	// 				';
+	// 	$query .= $this->getWhereSQL( $where );
+	// 	$query .= $this->getSortSQL( $order );
+		
+	// 	$this->rs = DB::select($query, $ph);
+
+	// 	return $this;
+	// }
+	function getDayReportByCompanyIdAndArrayCriteria($company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+		if ($company_id == '') {
 			return FALSE;
 		}
-
-		if ( isset($filter_data['branch_ids']) ) {
+	
+		if (isset($filter_data['branch_ids'])) {
 			$filter_data['branch_id'] = $filter_data['branch_ids'];
 		}
-		if ( isset($filter_data['department_ids']) ) {
+		if (isset($filter_data['department_ids'])) {
 			$filter_data['department_id'] = $filter_data['department_ids'];
 		}
-
-		if ( isset($filter_data['punch_branch_ids']) ) {
+	
+		if (isset($filter_data['punch_branch_ids'])) {
 			$filter_data['punch_branch_id'] = $filter_data['punch_branch_ids'];
 		}
-		if ( isset($filter_data['punch_department_ids']) ) {
+		if (isset($filter_data['punch_department_ids'])) {
 			$filter_data['punch_department_id'] = $filter_data['punch_department_ids'];
 		}
-
+	
 		$udf = new UserDateFactory();
 		$uf = new UserFactory();
-
-		$ph = array( ':company_id' => $company_id );
-
+	
+		$ph = array(':company_id' => $company_id);
+	
 		$query = '
-					select 	b.user_id as user_id,
-							b.pay_period_id as pay_period_id,
-							b.date_stamp as date_stamp,
-							a.status_id as status_id,
-							a.schedule_policy_id as sch_policy_id,
-                                                        start_time,end_time,
-							sum(total_time) as total_time
-					from	'. $this->getTable() .' as a,
-							'. $udf->getTable() .' as b,
-							'. $uf->getTable() .' as c
-					where 	a.user_date_id = b.id
-						AND b.user_id = c.id
-						AND c.company_id = :company_id
-					';
-
-		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND b.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+			select  b.user_id as user_id,
+					b.pay_period_id as pay_period_id,
+					b.date_stamp as date_stamp,
+					a.status_id as status_id,
+					a.schedule_policy_id as sch_policy_id,
+					a.start_time,
+					a.end_time,
+					sum(total_time) as total_time
+			from    '. $this->getTable() .' as a,
+					'. $udf->getTable() .' as b,
+					'. $uf->getTable() .' as c
+			where   a.user_date_id = b.id
+				AND b.user_id = c.id
+				AND c.company_id = :company_id
+		';
+	
+		if (isset($filter_data['include_user_ids']) && isset($filter by_data['include_user_ids'][0]) && !in_array(-1, (array)$filter_data['include_user_ids'])) {
+			$query .= ' AND b.user_id in ('. $this->getListSQL($filter_data['include_user_ids'], $ph) .') ';
 		}
-
- 		if ( isset($filter_data['pay_period_ids']) AND isset($filter_data['pay_period_ids'][0]) AND !in_array(-1, (array)$filter_data['pay_period_ids']) ) {
-			$query .= 	' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_ids'], $ph) .') ';
+	
+		if (isset($filter_data['pay_period_ids']) && isset($filter_data['pay_period_ids'][0]) && !in_array(-1, (array)$filter_data['pay_period_ids'])) {
+			$query .= ' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_ids'], $ph) .') ';
 		}
-
-		//Schedule/Punch branches/departments
- 		if ( isset($filter_data['punch_branch_id']) AND isset($filter_data['punch_branch_id'][0]) AND !in_array(-1, (array)$filter_data['punch_branch_id']) ) {
-			$query .= 	' AND a.branch_id in ('. $this->getListSQL($filter_data['punch_branch_id'], $ph) .') ';
+	
+		if (isset($filter_data['punch_branch_id']) && isset($filter_data['punch_branch_id'][0]) && !in_array(-1, (array)$filter_data['punch_branch_id'])) {
+			$query .= ' AND a.branch_id in ('. $this->getListSQL($filter_data['punch_branch_id'], $ph) .') ';
 		}
- 		if ( isset($filter_data['punch_department_id']) AND isset($filter_data['punch_department_id'][0]) AND !in_array(-1, (array)$filter_data['punch_department_id']) ) {
-			$query .= 	' AND a.department_id in ('. $this->getListSQL($filter_data['punch_department_id'], $ph) .') ';
+		if (isset($filter_data['punch_department_id']) && isset($filter_data['punch_department_id'][0]) && !in_array(-1, (array)$filter_data['punch_department_id'])) {
+			$query .= ' AND a.department_id in ('. $this->getListSQL($filter_data['punch_department_id'], $ph) .') ';
 		}
-
-		if ( isset($filter_data['start_date']) AND trim($filter_data['start_date']) != '' ) {
+	
+		if (isset($filter_data['start_date']) && trim($filter_data['start_date']) != '') {
 			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
-			$query  .=	' AND b.date_stamp >= :start_date';
+			$query .= ' AND b.date_stamp >= :start_date';
 		}
-		if ( isset($filter_data['end_date']) AND trim($filter_data['end_date']) != '' ) {
+		if (isset($filter_data['end_date']) && trim($filter_data['end_date']) != '') {
 			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
-			$query  .=	' AND b.date_stamp <= :end_date';
+			$query .= ' AND b.date_stamp <= :end_date';
 		}
-
+	
 		$query .= '
-						AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0)
-					GROUP BY b.user_id,b.pay_period_id,b.date_stamp,a.status_id
-					';
-		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order );
-
+			AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0)
+			GROUP BY b.user_id, b.pay_period_id, b.date_stamp, a.status_id, a.schedule_policy_id, a.start_time, a.end_time
+		';
+		$query .= $this->getWhereSQL($where);
+		$query .= $this->getSortSQL($order);
+	
 		$this->rs = DB::select($query, $ph);
-
+	
 		return $this;
 	}
 
@@ -1263,8 +1339,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		if ( isset($filter_data['exclude_id']) AND isset($filter_data['exclude_id'][0]) AND !in_array(-1, (array)$filter_data['exclude_id']) ) {
 			$query  .=	' AND d.id not in ('. $this->getListSQL($filter_data['exclude_id'], $ph) .') ';
 		}
-		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
-			$query  .=	' AND c.user_id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
+		if ( isset($filter_data['include_user_ids']) AND isset($filter_data['include_user_ids'][0]) AND !in_array(-1, (array)$filter_data['include_user_ids']) ) {
+			$query  .=	' AND c.user_id in ('. $this->getListSQL($filter_data['include_user_ids'], $ph) .') ';
 		}
 
 		if ( isset($filter_data['user_status_id']) AND isset($filter_data['user_status_id'][0]) AND !in_array(-1, (array)$filter_data['user_status_id']) ) {
