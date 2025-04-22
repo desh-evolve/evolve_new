@@ -22,7 +22,7 @@ function setTransactionDate() {
                                     
                               {if !isset($view)}
 
-				<tr onClick="showHelpEntry('start_date')">
+				<tr>
 					<td class="{isvalid object="bdf" label="start_date" value="cellLeftEditTable"}">
 						{t}Year :{/t}
 					</td>
@@ -36,7 +36,7 @@ function setTransactionDate() {
 
 				
 
-			        <tr onClick="showHelpEntry('y_number')">
+			        <tr>
 					<td class="{isvalid object="abf" label="y_number" value="cellLeftEditTable"}">
 						{t}Bonus December:{/t}
 					</td>
@@ -52,7 +52,7 @@ function setTransactionDate() {
                             {else}
                                 
                                 
-				<tr onClick="showHelpEntry('year')">
+				<tr>
 					<td class="{isvalid object="bdf" label="year" value="cellLeftEditTable"}">
 						{t}Year :{/t}
 					</td>
@@ -66,7 +66,7 @@ function setTransactionDate() {
 
 				
 
-			        <tr onClick="showHelpEntry('y_number')">
+			        <tr>
 					<td class="{isvalid object="abf" label="y_number" value="cellLeftEditTable"}">
 						{t}Bonus December:{/t}
 					</td>
@@ -81,7 +81,7 @@ function setTransactionDate() {
                                 {if isset($data.id)}
 				
 
-                                    <tr onClick="showHelpEntry('y_number')">
+                                    <tr>
                                             <td class="{isvalid object="ppf" label="y_number" value="cellLeftEditTable"}">
                                                     {t}Actions:{/t}
                                             </td>

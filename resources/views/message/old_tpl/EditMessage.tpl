@@ -72,7 +72,7 @@ function filterUserCount() {
 				</tbody>
 
 				{else}
-					<tr onClick="showHelpEntry('to')">
+					<tr>
 						<td class="{isvalid object="mcf" label="to" value="cellLeftEditTable"}" style="width: 20%;">
 							{t}To:{/t}
 						</td>
@@ -84,7 +84,7 @@ function filterUserCount() {
 					</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('subject')">
+				<tr>
 					<td class="{isvalid object="mcf" label="subject" value="cellLeftEditTable"}" style="width: 20%;">
 						{t}Subject:{/t}
 					</td>
@@ -92,7 +92,7 @@ function filterUserCount() {
 						<input type="text" size="45" name="data[subject]" value="{if !empty($data.subject)}{$data.subject}{else}{$default_subject}{/if}">
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('body')">
+				<tr>
 					<td class="{isvalid object="mcf" label="body" value="cellLeftEditTable"}">
 						{t}Body:{/t}
 					</td>
@@ -103,7 +103,7 @@ function filterUserCount() {
 
 				{* Disable this feature for the first version of the rewritten message system.
 				{if $permission->Check('message','add_advanced')}
-				<tr onClick="showHelpEntry('require_ack')">
+				<tr>
 					<td class="{isvalid object="mcf" label="require_ack" value="cellLeftEditTable"}" style="width: 20%;">
 						{t}Requires Acknowledgment:{/t}
 					</td>

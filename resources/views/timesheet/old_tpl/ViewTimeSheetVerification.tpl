@@ -34,7 +34,7 @@ function viewTimeSheet(userID,dateStamp) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('date_stamp')">
+				<tr>
 					<td class="{isvalid object="pptsvf" label="datestamp" value="cellLeftEditTable"}">
 						{t}Pay Period:{/t}
 					</td>

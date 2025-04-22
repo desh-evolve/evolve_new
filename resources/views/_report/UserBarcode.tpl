@@ -535,7 +535,7 @@ var report_criteria_elements = new Array(
 					</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td class="{isvalid object="uf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Sort By:{/t}
 					</td>

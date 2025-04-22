@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="spf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('meal_policy')">
+				<tr>
 					<td class="{isvalid object="spf" label="meal_policy" value="cellLeftEditTable"}">
 						{t}Meal Policy:{/t}
 					</td>
@@ -32,7 +32,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('break_policy')">
+				<tr>
 					<td class="{isvalid object="spf" label="break_policy" value="cellLeftEditTable"}">
 						{t}Break Policies:{/t}
 					</td>
@@ -43,7 +43,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('absence_policy')">
+				<tr>
 					<td class="{isvalid object="spf" label="absence_policy" value="cellLeftEditTable"}">
 						{t}Undertime Absence Policy:{/t}
 					</td>
@@ -54,7 +54,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('overtime_policy')">
+				<tr>
 					<td class="{isvalid object="spf" label="over_time_policy" value="cellLeftEditTable"}">
 						{t}Overtime Policy:{/t}
 					</td>
@@ -65,7 +65,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('start_stop_window')">
+				<tr>
 					<td class="{isvalid object="spf" label="start_stop_window" value="cellLeftEditTable"}">
 						{t}Start / Stop Window:{/t}
 					</td>

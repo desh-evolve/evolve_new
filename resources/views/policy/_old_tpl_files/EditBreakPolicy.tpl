@@ -54,7 +54,7 @@ function showAutoDetectType() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="bpf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -63,7 +63,7 @@ function showAutoDetectType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="bpf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -74,7 +74,7 @@ function showAutoDetectType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="bpf" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -83,7 +83,7 @@ function showAutoDetectType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('amount')">
+				<tr>
 					<td class="{isvalid object="bpf" label="amount" value="cellLeftEditTable"}">
 						<span id="type_10_desc" {if $data.type_id != 10}style="display:none"{/if}>{t}Deduction/Addition Time{/t}</span><span id="type_20_desc" {if $data.type_id != 20}style="display:none"{/if}>{t}Break Time{/t}</span>:
 					</td>
@@ -92,7 +92,7 @@ function showAutoDetectType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('auto_detect_type')">
+				<tr>
 					<td class="{isvalid object="bpf" label="type" value="cellLeftEditTable"}">
 						{t}Auto-Detect Breaks By:{/t}
 					</td>
@@ -104,7 +104,7 @@ function showAutoDetectType() {
 				</tr>
 
 				<tbody id="auto_detect_type-10" style="display:none">
-				<tr onClick="showHelpEntry('start_window')">
+				<tr>
 					<td class="{isvalid object="bpf" label="start_window" value="cellLeftEditTable"}">
 						{t}Start Window:{/t}
 					</td>
@@ -113,7 +113,7 @@ function showAutoDetectType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('window_length')">
+				<tr>
 					<td class="{isvalid object="bpf" label="window_length" value="cellLeftEditTable"}">
 						{t}Window Length:{/t}
 					</td>
@@ -124,7 +124,7 @@ function showAutoDetectType() {
 				</tbody>
 
 				<tbody id="auto_detect_type-20" style="display:none">
-				<tr onClick="showHelpEntry('minimum_punch_time')">
+				<tr>
 					<td class="{isvalid object="bpf" label="minimum_punch_time" value="cellLeftEditTable"}">
 						{t}Minimum Punch Time:{/t}
 					</td>
@@ -133,7 +133,7 @@ function showAutoDetectType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_punch_time')">
+				<tr>
 					<td class="{isvalid object="bpf" label="maximum_punch_time" value="cellLeftEditTable"}">
 						{t}Maximum Punch Time:{/t}
 					</td>
@@ -144,7 +144,7 @@ function showAutoDetectType() {
 				</tbody>
 
 				<tbody id="include_break_punch_time" style="display:none">
-				<tr onClick="showHelpEntry('include_break_punch_time')">
+				<tr>
 					<td class="{isvalid object="bpf" label="window_length" value="cellLeftEditTable"}">
 						{t}Include Any Punched Time for Break:{/t}
 					</td>
@@ -152,7 +152,7 @@ function showAutoDetectType() {
 						<input type="checkbox" class="checkbox" name="data[include_break_punch_time]" value="1" {if $data.include_break_punch_time == TRUE}checked{/if}>
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('include_multiple_breaks')">
+				<tr>
 					<td class="{isvalid object="bpf" label="window_length" value="cellLeftEditTable"}">
 						{t}Include Multiple Breaks:{/t}
 					</td>

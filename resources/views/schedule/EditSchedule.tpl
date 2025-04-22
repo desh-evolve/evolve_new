@@ -125,7 +125,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="sf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -136,7 +136,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('date_stamp')">
+				<tr>
 					<td class="{isvalid object="sf" label="date_stamp" value="cellLeftEditTable"}">
 						<a href="javascript:toggleRowObject('repeat');toggleImage(document.getElementById('repeat_img'), '{$IMAGES_URL}/nav_bottom_sm.gif', '{$IMAGES_URL}/nav_top_sm.gif'); fixHeight(); "><img style="vertical-align: middle" id="repeat_img" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
 						{t}Date:{/t}
@@ -159,7 +159,7 @@ function getScheduleTotalTime() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('start_time')">
+				<tr>
 					<td class="{isvalid object="sf" label="start_time" value="cellLeftEditTable"}">
 						{t}In:{/t}
 					</td>
@@ -169,7 +169,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('end_time')">
+				<tr>
 					<td class="{isvalid object="sf" label="end_time" value="cellLeftEditTable"}">
 						{t}Out:{/t}
 					</td>
@@ -179,7 +179,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('total_time')">
+				<tr>
 					<td class="{isvalid object="sf" label="total_time" value="cellLeftEditTable"}">
 						{t}Total:{/t}
 					</td>
@@ -190,7 +190,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('schedule_policy')">
+				<tr>
 					<td class="{isvalid object="sf" label="schedule_policy" value="cellLeftEditTable"}">
 						{t}Schedule Policy:{/t}
 					</td>
@@ -202,7 +202,7 @@ function getScheduleTotalTime() {
 				</tr>
 
 				<tbody id="absence" style="display:none">
-				<tr onClick="showHelpEntry('absence_policy')">
+				<tr>
 					<td class="{isvalid object="sf" label="absence_policy" value="cellLeftEditTable"}">
 						{t}Absence Policy:{/t}
 					</td>
@@ -217,7 +217,7 @@ function getScheduleTotalTime() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('branch')">
+				<tr>
 					<td class="{isvalid object="sf" label="branch" value="cellLeftEditTable"}">
 						{t}Branch:{/t}
 					</td>
@@ -228,7 +228,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('department')">
+				<tr>
 					<td class="{isvalid object="sf" label="department" value="cellLeftEditTable"}">
 						{t}Department:{/t}
 					</td>
@@ -240,7 +240,7 @@ function getScheduleTotalTime() {
 				</tr>
 
 				{if $permission->Check('job','enabled') }
-				<tr onClick="showHelpEntry('job')">
+				<tr>
 					<td class="{isvalid object="sf" label="job" value="cellLeftEditTable"}">
 						{t}Job:{/t}
 					</td>
@@ -253,7 +253,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('job_item')">
+				<tr>
 					<td class="{isvalid object="sf" label="job_item" value="cellLeftEditTable"}">
 						Task:
 					</td>

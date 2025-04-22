@@ -12,7 +12,7 @@
 
 			<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="utf" label="name" value="cellLeftEditTable"}">
 						{t}Title:{/t}
 					</td>
@@ -22,7 +22,7 @@
 				</tr>
                                 
 {*                                FL ADDED*}
-				<tr onClick="showHelpEntry('cl_name_id')">
+				<tr>
 					<td class="{isvalid object="utf" label="cl_name_id" value="cellLeftEditTable"}">
 						{t}Occupation Classificaton Id:{/t}
 					</td>

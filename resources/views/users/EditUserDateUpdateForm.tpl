@@ -56,7 +56,7 @@ function getUserLaborBurdenPercent() {
 
 				<table class="editTable">
                                     
-                                <tr onclick="showHelpEntry('Contact')">
+                                <tr>
                                     <td class="tblHeader" colspan="3">
                                             Employee Details								</td>
                                 </tr>
@@ -70,7 +70,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('year_date')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="year_date" value="cellLeftEditTable"}">
 						{t}Year / Date :{/t}
 					</td>
@@ -79,7 +79,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('epf_no')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="epf_no" value="cellLeftEditTable"}">
 						{t}EPF Number :{/t}
 					</td>
@@ -88,7 +88,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('full_name')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="full_name" value="cellLeftEditTable"}">
 						{t}Full Name :{/t}
 					</td>
@@ -97,7 +97,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('nic')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="title_id" value="cellLeftEditTable"}">
 						{t}Designation :{/t}
 					</td>
@@ -108,7 +108,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('nic')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="nic" value="cellLeftEditTable"}">
 						{t}NIC No :{/t}
 					</td>
@@ -117,7 +117,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('contact_mobile')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="contact_mobile" value="cellLeftEditTable"}">
 						{t}Mobile Number :{/t}
 					</td>
@@ -125,7 +125,7 @@ function getUserLaborBurdenPercent() {
 						<input type="text" size="25" id="contact_mobile" name="user_date_update_data[contact_mobile]" value="{$user_date_update_data.contact_mobile}"> 
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('nic')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="contact_home" value="cellLeftEditTable"}">
 						{t}Home Number:{/t}
 					</td>
@@ -134,7 +134,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('passport_no')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="passport_no" value="cellLeftEditTable"}">
 						{t}Passport Number:{/t}
 					</td>
@@ -144,7 +144,7 @@ function getUserLaborBurdenPercent() {
 				</tr>
                                 
                                  
-                                <tr onClick="showHelpEntry('driving_licence_no')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="driving_licence_no" value="cellLeftEditTable"}">
 						{t}Driving Licence Number:{/t}
 					</td>
@@ -153,7 +153,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
 
-                                <tr onClick="showHelpEntry('permenent_address')">
+                                <tr>
 					<td class="{isvalid object="ujf" label="permenent_address" value="cellLeftEditTable"}">
 						{t}Permenent Address:{/t}
 					</td>
@@ -163,7 +163,7 @@ function getUserLaborBurdenPercent() {
 				</tr>
                                 
                                 
-				<tr onClick="showHelpEntry('present_address')">
+				<tr>
 					<td class="{isvalid object="ujf" label="note" value="cellLeftEditTable"}">
 						{t}Present Address:{/t}
 					</td>
@@ -172,11 +172,11 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onclick="showHelpEntry('Contact')">
+                                <tr>
                                     <td class="tblHeader" colspan="3">
                                             Emergency Contact Person							</td>
                                 </tr>
-                                <tr onClick="showHelpEntry('contact_person')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="contact_person" value="cellLeftEditTable"}">
 						{t}Contact Person in Emergency:{/t}
 					</td>
@@ -185,7 +185,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('address_contact_person')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="address_contact_person" value="cellLeftEditTable"}">
 						{t}Contact Person Address:{/t}
 					</td>
@@ -193,7 +193,7 @@ function getUserLaborBurdenPercent() {
 						<textarea rows="5" cols="45" name="user_date_update_data[address_contact_person]">{$user_date_update_data.address_contact_person|escape}</textarea>
 					</td>
 				</tr>
-                                 <tr onClick="showHelpEntry('tel_contact_person')">
+                                 <tr>
 					<td class="{isvalid object="uwf" label="tel_contact_person" value="cellLeftEditTable"}">
 						{t}Contact Telephone Number:{/t}
 					</td>
@@ -201,11 +201,11 @@ function getUserLaborBurdenPercent() {
 						<input type="text" size="25" id="tel_contact_person" name="user_date_update_data[tel_contact_person]" value="{$user_date_update_data.tel_contact_person}"> 
 					</td>
 				</tr>
-                                <tr onclick="showHelpEntry('Contact')">
+                                <tr>
                                     <td class="tblHeader" colspan="3">
                                             Family								</td>
                                 </tr>
-                                 <tr onClick="showHelpEntry('maritial_status')">
+                                 <tr>
 					<td class="{isvalid object="uwf" label="maritial_status" value="cellLeftEditTable"}">
 						{t}Maritial Status:{/t}
 					</td>
@@ -215,7 +215,7 @@ function getUserLaborBurdenPercent() {
                                         </td>
 				</tr>
                                 
-                                 <tr onClick="showHelpEntry('spouse_name')">
+                                 <tr>
 					<td class="{isvalid object="uwf" label="spouse_name" value="cellLeftEditTable"}">
 						{t}Name of Spouse:{/t}
 					</td>
@@ -224,7 +224,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                 <tr onClick="showHelpEntry('contact_spouse')">
+                                 <tr>
 					<td class="{isvalid object="uwf" label="contact_spouse" value="cellLeftEditTable"}">
 						{t}Contact No:{/t}
 					</td>
@@ -233,7 +233,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
                                 
-                                 <tr onClick="showHelpEntry('nic')">
+                                 <tr>
 					<td class="{isvalid object="uwf" label="children" value="cellLeftEditTable"}">
 						{t}Children's Details:{/t}
 					</td>

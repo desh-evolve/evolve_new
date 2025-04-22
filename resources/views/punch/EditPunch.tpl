@@ -46,7 +46,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('timestamp')">
+				<tr>
 					<td class="{isvalid object="pf" label="timestamp" value="cellLeftEditTable"}">
 						{t}Time:{/t}
 					</td>
@@ -79,7 +79,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 				</tbody>
-				<tr onClick="showHelpEntry('punch_type')">
+				<tr>
 					<td class="{isvalid object="pf" label="punch_type" value="cellLeftEditTable"}">
 						{t}Punch Type:{/t}
 					</td>
@@ -91,7 +91,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="pf" label="status" value="cellLeftEditTable"}">
 						{t}In/Out:{/t}
 					</td>
@@ -103,7 +103,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 
 				{if count($pc_data.branch_options) > 1 OR $pc_data.branch_id != 0}
-				<tr onClick="showHelpEntry('branch')">
+				<tr>
 					<td class="{isvalid object="pcf" label="branch" value="cellLeftEditTable"}">
 						{t}Branch:{/t}
 					</td>
@@ -116,7 +116,7 @@ if ( TTProductEdition == 20 ) {
 				{/if}
 
 				{if count($pc_data.department_options) > 1 OR $pc_data.department_id != 0}
-				<tr onClick="showHelpEntry('department')">
+				<tr>
 					<td class="{isvalid object="pcf" label="department" value="cellLeftEditTable"}">
 						{t}Department:{/t}
 					</td>
@@ -130,7 +130,7 @@ if ( TTProductEdition == 20 ) {
 
 				{if $permission->Check('job','enabled') }
 					{if count($pc_data.job_options) > 1 OR $pc_data.job_id != 0}
-					<tr onClick="showHelpEntry('job')">
+					<tr>
 						<td class="{isvalid object="pcf" label="job" value="cellLeftEditTable"}">
 							{t}Job:{/t}
 						</td>
@@ -144,7 +144,7 @@ if ( TTProductEdition == 20 ) {
 					{/if}
 
 					{if count($pc_data.job_options) > 1 AND ( count($pc_data.job_item_options) > 1 OR $pc_data.job_item_id != 0) }
-					<tr onClick="showHelpEntry('job_item')">
+					<tr>
 						<td class="{isvalid object="pcf" label="job_item" value="cellLeftEditTable"}">
 							{t}Task:{/t}
 						</td>
@@ -160,7 +160,7 @@ if ( TTProductEdition == 20 ) {
 
 					{if ( count($pc_data.job_options) > 1 OR $pc_data.job_id != 0 )
 							OR ( count($pc_data.job_item_options) > 1 OR $pc_data.job_item_id != 0 ) }
-					<tr onClick="showHelpEntry('quantity')">
+					<tr>
 						<td class="{isvalid object="pcf" label="quantity" value="cellLeftEditTable"}">
 							{t}Quantity:{/t}
 						</td>
@@ -172,7 +172,7 @@ if ( TTProductEdition == 20 ) {
 				{/if}
 
 				{if isset($pc_data.other_field_names.other_id1) }
-					<tr onClick="showHelpEntry('other_id1')">
+					<tr>
 						<td class="{isvalid object="jf" label="other_id1" value="cellLeftEditTable"}">
 							{$pc_data.other_field_names.other_id1}:
 						</td>
@@ -183,7 +183,7 @@ if ( TTProductEdition == 20 ) {
 				{/if}
 
 				{if isset($pc_data.other_field_names.other_id2) }
-				<tr onClick="showHelpEntry('other_id2')">
+				<tr>
 					<td class="{isvalid object="jf" label="other_id2" value="cellLeftEditTable"}">
 						{$pc_data.other_field_names.other_id2}:
 					</td>
@@ -193,7 +193,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 				{/if}
 				{if isset($pc_data.other_field_names.other_id3) }
-				<tr onClick="showHelpEntry('other_id3')">
+				<tr>
 					<td class="{isvalid object="jf" label="other_id3" value="cellLeftEditTable"}">
 						{$pc_data.other_field_names.other_id3}:
 					</td>
@@ -203,7 +203,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 				{/if}
 				{if isset($pc_data.other_field_names.other_id4) }
-					<tr onClick="showHelpEntry('other_id4')">
+					<tr>
 						<td class="{isvalid object="jf" label="other_id4" value="cellLeftEditTable"}">
 							{$pc_data.other_field_names.other_id4}:
 						</td>
@@ -213,7 +213,7 @@ if ( TTProductEdition == 20 ) {
 					</tr>
 				{/if}
 				{if isset($pc_data.other_field_names.other_id5) }
-					<tr onClick="showHelpEntry('other_id5')">
+					<tr>
 						<td class="{isvalid object="jf" label="other_id5" value="cellLeftEditTable"}">
 							{$pc_data.other_field_names.other_id5}:
 						</td>
@@ -223,7 +223,7 @@ if ( TTProductEdition == 20 ) {
 					</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('note')">
+				<tr>
 					<td class="{isvalid object="pcf" label="note" value="cellLeftEditTable"}">
 						{t}Note:{/t}
 					</td>
@@ -233,7 +233,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 
 				{if $pc_data.id != '' }
-					<tr onClick="showHelpEntry('station')">
+					<tr>
 						<td class="{isvalid object="pf" label="station" value="cellLeftEditTable"}">
 							{t}Station:{/t} <a href="javascript:toggleRowObject('station');toggleImage(document.getElementById('station_img'), '{$IMAGES_URL}/nav_bottom_sm.gif', '{$IMAGES_URL}/nav_top_sm.gif');"><img style="vertical-align: middle" id="station_img" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
 						</td>
@@ -249,7 +249,7 @@ if ( TTProductEdition == 20 ) {
 
 				<tbody id="station" style="display:none">
 				{if $pc_data.longitude != '' AND $pc_data.latitude != '' }
-				<tr onClick="showHelpEntry('created_by')">
+				<tr>
 					<td class="cellLeftEditTable">
 						{t}Location:{/t}
 					</td>
@@ -259,7 +259,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 				{/if}
 				{if $pc_data.created_date != ''}
-				<tr onClick="showHelpEntry('created_by')">
+				<tr>
 					<td class="cellLeftEditTable">
 						{t}Created By:{/t}
 					</td>
@@ -269,7 +269,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 				{/if}
 				{if $pc_data.updated_date != ''}
-				<tr onClick="showHelpEntry('updated_by')">
+				<tr>
 					<td class="cellLeftEditTable">
 						{t}Updated By:{/t}
 					</td>

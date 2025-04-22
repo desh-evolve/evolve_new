@@ -352,7 +352,7 @@ var report_criteria_elements = new Array(
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Year:{/t}
 					</td>
@@ -398,7 +398,7 @@ var report_criteria_elements = new Array(
 				{htmlreportgroup filter_data=$filter_data}
 				{htmlreportsort filter_data=$filter_data}
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Form Type:{/t}
 					</td>
@@ -409,7 +409,7 @@ var report_criteria_elements = new Array(
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Include Instruction Page:{/t}
 					</td>

@@ -61,7 +61,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('company')">
+							<tr>
 								<td class="{isvalid object="udf" label="company" value="cellLeftEditTable"}">
 									{t}Company:{/t}
 								</td>
@@ -70,7 +70,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('permission_control')">
+							<tr>
 								<td class="{isvalid object="uf" label="permission_control" value="cellLeftEditTable"}">
 									{t}Permission Group:{/t}
 								</td>
@@ -86,7 +86,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('pay_period_schedule')">
+							<tr>
 								<td class="{isvalid object="udf" label="pay_period_schedule" value="cellLeftEditTable"}">
 									{t}Pay Period Schedule:{/t}
 								</td>
@@ -97,7 +97,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('policy_group')">
+							<tr>
 								<td class="{isvalid object="udf" label="policy_group" value="cellLeftEditTable"}">
 									{t}Policy Group:{/t}
 								</td>
@@ -108,7 +108,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('currency')">
+							<tr>
 								<td class="{isvalid object="udf" label="currency" value="cellLeftEditTable"}">
 									{t}Currency:{/t}
 								</td>
@@ -119,7 +119,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('title')">
+							<tr>
 								<td class="{isvalid object="udf" label="title" value="cellLeftEditTable"}">
 									{t}Title:{/t}
 								</td>
@@ -130,7 +130,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('employee_number')">
+							<tr>
 								<td class="{isvalid object="udf" label="employee_number" value="cellLeftEditTable"}">
 									{t}Employee Number:{/t}
 								</td>
@@ -139,7 +139,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('hire_date')">
+							<tr>
 								<td class="{isvalid object="udf" label="hire_date" value="cellLeftEditTable"}">
 									{t}Appointment Date:{/t}
 								</td>
@@ -150,7 +150,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('default_branch')">
+							<tr>
 								<td class="{isvalid object="udf" label="default_branch" value="cellLeftEditTable"}">
 									{t}Default Branch:{/t}
 								</td>
@@ -161,7 +161,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('default_department')">
+							<tr>
 								<td class="{isvalid object="udf" label="default_department" value="cellLeftEditTable"}">
 									{t}Default Department:{/t}
 								</td>
@@ -178,7 +178,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('city')">
+							<tr>
 								<td class="{isvalid object="udf" label="city" value="cellLeftEditTable"}">
 									{t}City:{/t}
 								</td>
@@ -187,7 +187,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('country')">
+							<tr>
 								<td class="{isvalid object="udf" label="country" value="cellLeftEditTable"}">
 									{t}Country:{/t}
 								</td>
@@ -198,7 +198,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('province')">
+							<tr>
 								<td class="{isvalid object="udf" label="province" value="cellLeftEditTable"}">
 									{t}Province / State:{/t}
 								</td>
@@ -208,7 +208,7 @@ function showDateFormat() {
 									<input type="hidden" id="selected_province" value="{$user_data.province}">
 								</td>
 							</tr>
-							<tr onClick="showHelpEntry('work_phone')">
+							<tr>
 								<td class="{isvalid object="udf" label="work_phone,work_phone_ext" value="cellLeftEditTable"}">
 									{t}Work Phone:{/t}
 								</td>
@@ -218,7 +218,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('work_email')">
+							<tr>
 								<td class="{isvalid object="udf" label="work_email" value="cellLeftEditTable"}">
 									{t}Work Email:{/t}
 								</td>
@@ -238,7 +238,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('language')">
+							<tr>
 								<td class="{isvalid object="udf" label="language" value="cellLeftEditTable"}">
 									{t}Language:{/t}
 								</td>
@@ -249,7 +249,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('date_format')">
+							<tr>
 								<td class="{isvalid object="udf" label="date_format" value="cellLeftEditTable"}">
 									{t}Date Format:{/t}
 								</td>
@@ -265,7 +265,7 @@ function showDateFormat() {
 
 							</tr>
 
-							<tr onClick="showHelpEntry('time_format')">
+							<tr>
 								<td class="{isvalid object="udf" label="time_format" value="cellLeftEditTable"}">
 									{t}Time Format:{/t}
 								</td>
@@ -276,7 +276,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('time_unit_format')">
+							<tr>
 								<td class="{isvalid object="udf" label="time_unit_format" value="cellLeftEditTable"}">
 									{t}Time Units:{/t}
 								</td>
@@ -287,7 +287,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('time_zone')">
+							<tr>
 								<td class="{isvalid object="udf" label="time_zone" value="cellLeftEditTable"}">
 									{t}Time Zone:{/t}
 								</td>
@@ -298,7 +298,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('start_week_day')">
+							<tr>
 								<td class="{isvalid object="udf" label="start_week_day" value="cellLeftEditTable"}">
 									{t}Start Weeks on:{/t}
 								</td>
@@ -309,7 +309,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('items_per_page')">
+							<tr>
 								<td class="{isvalid object="udf" label="items_per_page" value="cellLeftEditTable"}">
 									{t}Rows per Page:{/t}
 								</td>
@@ -324,7 +324,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('email_notification_exception')">
+							<tr>
 								<td class="{isvalid object="udf" label="email_notification_exception" value="cellLeftEditTable"}">
 									{t}Exceptions:{/t}
 								</td>
@@ -333,7 +333,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('email_notification_message')">
+							<tr>
 								<td class="{isvalid object="udf" label="email_notification_message" value="cellLeftEditTable"}">
 									{t}Messages:{/t}
 								</td>
@@ -342,7 +342,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('email_notification_home')">
+							<tr>
 								<td class="{isvalid object="udf" label="email_notification_home" value="cellLeftEditTable"}">
 									{t}Send Notifications to Home Email:{/t}
 								</td>
@@ -357,7 +357,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('company_deduction')">
+							<tr>
 								<td class="{isvalid object="udf" label="company_deduction" value="cellLeftEditTable"}">
 									{t}Deductions:{/t}
 								</td>
@@ -369,7 +369,7 @@ function showDateFormat() {
 							</tr>
 
 {*
-							<tr onClick="showHelpEntry('federal_claim')">
+							<tr>
 								<td class="{isvalid object="udf" label="federal_claim" value="cellLeftEditTable"}">
 									{t}Federal Claim Amount:{/t}
 								</td>
@@ -378,7 +378,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('federal_tax_exempt')">
+							<tr>
 								<td class="{isvalid object="udf" label="federal_tax_exempt" value="cellLeftEditTable"}">
 									{t}Federal Tax Exempt:{/t}
 								</td>
@@ -387,7 +387,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('provincial_claim')">
+							<tr>
 								<td class="{isvalid object="udf" label="provincial_claim" value="cellLeftEditTable"}">
 									{t}Provincial Claim Amount:{/t}
 								</td>
@@ -396,7 +396,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('provincial_tax_exempt')">
+							<tr>
 								<td class="{isvalid object="udf" label="provincial_tax_exempt" value="cellLeftEditTable"}">
 									{t}Provincial Tax Exempt:{/t}
 								</td>
@@ -405,7 +405,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('federal_additional_deduction')">
+							<tr>
 								<td class="{isvalid object="udf" label="federal_additional_deduction" value="cellLeftEditTable"}">
 									{t}Additional Deduction Amount:{/t}
 								</td>
@@ -414,7 +414,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('wcb_rate')">
+							<tr>
 								<td class="{isvalid object="udf" label="wcb_rate" value="cellLeftEditTable"}">
 									{t}WCB Rate:{/t}
 								</td>
@@ -423,7 +423,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('vacation_rate')">
+							<tr>
 								<td class="{isvalid object="udf" label="vacation_rate" value="cellLeftEditTable"}">
 									{t}Vacation Rate:{/t}
 								</td>
@@ -432,7 +432,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('release_vacation')">
+							<tr>
 								<td class="{isvalid object="udf" label="release_vacation" value="cellLeftEditTable"}">
 									{t}Always Release Vacation:{/t}
 								</td>
@@ -441,7 +441,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('ei_exempt')">
+							<tr>
 								<td class="{isvalid object="udf" label="ei_exempt" value="cellLeftEditTable"}">
 									{t}EI Exempt:{/t}
 								</td>
@@ -450,7 +450,7 @@ function showDateFormat() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('cpp_exempt')">
+							<tr>
 								<td class="{isvalid object="udf" label="cpp_exempt" value="cellLeftEditTable"}">
 									{t}CPP Exempt:{/t}
 								</td>

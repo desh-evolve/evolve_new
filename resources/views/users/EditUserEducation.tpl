@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="uef" label="user_id" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('qualification')">
+				<tr>
 					<td class="{isvalid object="uef" label="qualification" value="cellLeftEditTable"}">
 						{t}Qualification :{/t}
 					</td>
@@ -37,7 +37,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('name')">
+                                <tr>
 					<td class="{isvalid object="uef" label="institute" value="cellLeftEditTable"}">
 						{t}Institute:{/t}
 					</td>
@@ -46,7 +46,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('year')">
+                                <tr>
 					<td class="{isvalid object="uef" label="year" value="cellLeftEditTable"}">
 						{t}Year:{/t}
 					</td>
@@ -56,7 +56,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('remaks')">
+                                <tr>
 					<td class="{isvalid object="uef" label="relationship" value="cellLeftEditTable"}">
 						{t}Remarks:{/t}
 					</td>
@@ -71,7 +71,7 @@
 	
 
 {*
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="af" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -80,7 +80,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="af" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>

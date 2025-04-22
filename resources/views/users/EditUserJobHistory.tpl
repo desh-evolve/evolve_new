@@ -67,7 +67,7 @@ function getUserLaborBurdenPercent() {
 
                 <!--ARSP EDIT START FOR THUNDER & NEON -->
                 
-				<tr onClick="showHelpEntry('default_branch')">
+				<tr>
 					<td class="{isvalid object="ujf" label="default_branch" value="cellLeftEditTable"}">
 						{t}Default Branch:{/t}
 					</td>
@@ -79,7 +79,7 @@ function getUserLaborBurdenPercent() {
 				</tr>                
                 
                 
-				<tr onClick="showHelpEntry('default_department')">
+				<tr>
 					<td class="{isvalid object="ujf" label="default_department" value="cellLeftEditTable"}">
 						{t}Default Department:{/t}
 					</td>
@@ -91,7 +91,7 @@ function getUserLaborBurdenPercent() {
 				</tr>   
                 
 
-				<tr onClick="showHelpEntry('title')">
+				<tr>
 					<td class="{isvalid object="ujf" label="title" value="cellLeftEditTable"}">
 						{t}Employee Title:{/t}
 					</td>
@@ -111,7 +111,7 @@ function getUserLaborBurdenPercent() {
                 
                 
 				<!--ARSP HIDE
-				<tr onClick="showHelpEntry('labor_burden_percent')">
+				<tr>
 					<td class="{isvalid object="uwf" label="labor_burden_percent" value="cellLeftEditTable"}">
 						{t}Labor Burden Percent:{/t}
 					</td>
@@ -122,7 +122,7 @@ function getUserLaborBurdenPercent() {
 				</tr>
                 -->
 
-				<tr onClick="showHelpEntry('first_worked_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="first_worked_date" value="cellLeftEditTable"}">
 						{t}First Day Worked:{/t}
 					</td>
@@ -139,7 +139,7 @@ function getUserLaborBurdenPercent() {
 				</tr>
                 
                 
-				<tr onClick="showHelpEntry('last_worked_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="last_worked_date" value="cellLeftEditTable"}">
 						{t}Last Day Worked:{/t}
 					</td>
@@ -151,7 +151,7 @@ function getUserLaborBurdenPercent() {
 				</tr>
              
                 
-				<tr onClick="showHelpEntry('note')">
+				<tr>
 					<td class="{isvalid object="ujf" label="note" value="cellLeftEditTable"}">
 						{t}Note:{/t}
 					</td>

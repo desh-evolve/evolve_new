@@ -15,7 +15,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -26,7 +26,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="cdf" label="type" value="cellLeftEditTable"}">
 						{t}Absence Policy:{/t}
 					</td>
@@ -37,7 +37,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="cdf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -46,7 +46,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('leave_date_year')">
+				<tr>
 					<td class="{isvalid object="cdf" label="leave_date_year" value="cellLeftEditTable"}">
 						{t}Leave Year:{/t}
 					</td>
@@ -61,7 +61,7 @@
 					</td>
 				</tr>
 
-				{*<tr onClick="showHelpEntry('start_date')">
+				{*<tr>
 					<td class="{isvalid object="rscf" label="start_date" value="cellLeftEditTable"}">
 						{t}Start Date{/t}:
 					</td>
@@ -72,7 +72,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="rscf" label="end_date" value="cellLeftEditTable"}">
 						{t}End Date{/t}:
 					</td>
@@ -82,7 +82,7 @@
 						{t}ie{/t}: {$current_user_prefs->getDateFormatExample()} <b>{t}(Leave blank for no end date){/t}</b>
 					</td>
 				</tr>*}
-                                <tr onClick="showHelpEntry('type')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="type" value="cellLeftEditTable"}">
 						{t}Basis of Employment:{/t}
 					</td>
@@ -92,7 +92,7 @@
 						</select>
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('type')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="type" value="cellLeftEditTable"}">
 						{t}Applicable:{/t}
 					</td>
@@ -102,7 +102,7 @@
 						</select>
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('minimum_length_of_service')">
+				<tr>
 					<td class="{isvalid object="udf" label="minimum_length_of_service" value="cellLeftEditTable"}">
 						{t}Minimum Length Of Service:{/t}
 					</td>
@@ -114,7 +114,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_length_of_service')">
+				<tr>
 					<td class="{isvalid object="udf" label="maximum_length_of_service" value="cellLeftEditTable"}">
 						{t}Maximum Length Of Service:{/t}
 					</td>
@@ -126,7 +126,7 @@
 					</td>
 				</tr>
 
-				{*<tr onClick="showHelpEntry('minimum_user_age')">
+				{*<tr>
 					<td class="{isvalid object="udf" label="minimum_user_age" value="cellLeftEditTable"}">
 						{t}Minimum Employee Age:{/t}
 					</td>
@@ -135,7 +135,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_user_age')">
+				<tr>
 					<td class="{isvalid object="udf" label="maximum_user_age" value="cellLeftEditTable"}">
 						{t}Maximum Employee Age:{/t}
 					</td>
@@ -151,7 +151,7 @@
 				</tr>
  
                                 
-				<tr onClick="showHelpEntry('amount')">
+				<tr>
 					<td class="{isvalid object="cdf" label="amount" value="cellLeftEditTable"}">
 						{t}Number of leave :{/t}
 					</td>

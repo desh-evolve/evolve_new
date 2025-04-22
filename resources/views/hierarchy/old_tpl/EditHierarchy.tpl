@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('parent')">
+				<tr>
 					<td class="{isvalid object="hf" label="parent" value="cellLeftEditTable"}">
 						{t}Parent:{/t}
 					</td>
@@ -22,7 +22,7 @@
 						</select>
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('share')">
+				<tr>
 					<td class="{isvalid object="hf" label="share" value="cellLeftEditTable"}">
 						{t}Shared:{/t}
 					</td>

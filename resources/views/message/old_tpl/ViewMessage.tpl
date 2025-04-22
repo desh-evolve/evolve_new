@@ -123,7 +123,7 @@ function toggleAckButton() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('ack')">
+					<tr>
 						<td class="cellRightEditTable" colspan="2" align="center">
 							{t escape="no" 1=$current_user->getFullName()}By clicking the checkbox, I <b>%1</b> hereby acknowledge<br> that I have read and understand this message in its entirety on{/t} <b>{getdate type="DATE" epoch=$current_date}</b>: <input type="checkbox" class="checkbox" name="data[require_ack]" onClick="toggleAckButton();" value="1">
 						</td>
@@ -155,7 +155,7 @@ function toggleAckButton() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('subject')">
+					<tr>
 						<td class="{isvalid object="mcf" label="subject" value="cellLeftEditTable"}" style="width: 20%;">
 							<a name="form_start"></a>
 							{t}Subject:{/t}
@@ -164,7 +164,7 @@ function toggleAckButton() {
 							<input type="text" size="45" name="message_data[subject]" value="{if !empty($message_data.subject)}{$message_data.subject}{else}{$default_subject}{/if}">
 						</td>
 					</tr>
-					<tr onClick="showHelpEntry('body')">
+					<tr>
 						<td class="{isvalid object="mcf" label="body" value="cellLeftEditTable"}">
 							{t}Body:{/t}
 						</td>

@@ -28,7 +28,7 @@ function showAccrualRate() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="otpf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -37,7 +37,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="otpf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -47,7 +47,7 @@ function showAccrualRate() {
 						</select>
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="otpf" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -55,7 +55,7 @@ function showAccrualRate() {
 						<input type="text" size="8" name="data[trigger_time]" value="{gettimeunit value=$data.trigger_time}"> {$current_user_prefs->getTimeUnitFormatExample()}
 					</td>
 				</tr>
-                <tr onClick="showHelpEntry('max_time')">
+                <tr>
 					<td class="{isvalid object="otpf" label="max_time" value="cellLeftEditTable"}">
 						{t}Max Time:{/t}
 					</td>
@@ -63,7 +63,7 @@ function showAccrualRate() {
 						<input type="text" size="8" name="data[max_time]" value="{gettimeunit value=$data.max_time}"> {$current_user_prefs->getTimeUnitFormatExample()}
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="otpf" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>
@@ -72,7 +72,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('wage_group')">
+				<tr>
 					<td class="{isvalid object="otpf" label="rate" value="cellLeftEditTable"}">
 						{t}Wage Group:{/t}
 					</td>
@@ -83,7 +83,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('pay_stub_entry')">
+				<tr>
 					<td class="{isvalid object="otpf" label="pay_stub_entry_account_id" value="cellLeftEditTable"}">
 						{t}Pay Stub Account:{/t}
 					</td>
@@ -94,7 +94,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('accrual_policy')">
+				<tr>
 					<td class="{isvalid object="otpf" label="accrual_policy" value="cellLeftEditTable"}">
 						{t}Accrual Policy:{/t}
 					</td>
@@ -106,7 +106,7 @@ function showAccrualRate() {
 				</tr>
 
 				<tbody id="accrual_rate" style="display:none">
-				<tr onClick="showHelpEntry('accural_rate')">
+				<tr>
 					<td class="{isvalid object="otpf" label="accrual_rate" value="cellLeftEditTable"}">
 						{t}Accrual Rate:{/t}
 					</td>

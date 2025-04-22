@@ -448,7 +448,7 @@ function confirmAction() {
 						{/foreach}
 					</tr>
 				{/foreach}
-//check here
+			//check here
 				{foreach from=$date_premium_total_rows item=date_premium_total_row name=date_premium_total_row}
 					{if $smarty.foreach.date_premium_total_row.first}
 						<tr class="tblHeader">

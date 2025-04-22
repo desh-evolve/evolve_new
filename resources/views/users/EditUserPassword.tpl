@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('user_name')">
+				<tr>
 					<td class="{isvalid object="uf" label="user_name" value="cellLeftEditTable"}">
 						{t}User Name:{/t}
 					</td>
@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('current_password')">
+				<tr>
 					<td class="{isvalid object="uf" label="current_password" value="cellLeftEditTable"}">
 						{t}Current Password:{/t}
 					</td>
@@ -30,7 +30,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('password')">
+				<tr>
 					<td class="{isvalid object="uf" label="password" value="cellLeftEditTable"}">
 						{t}New Password:{/t}
 					</td>
@@ -39,7 +39,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('password')">
+				<tr>
 					<td class="{isvalid object="uf" label="password" value="cellLeftEditTable"}">
 						{t}New Password (confirm):{/t}
 					</td>

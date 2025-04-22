@@ -695,7 +695,7 @@
 	</tr>
 {else}
 	<tbody id="10" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Percent{/t}:
 			</td>
@@ -707,7 +707,7 @@
 	</tbody>
 
 	<tbody id="15" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Percent{/t}:
 			</td>
@@ -716,7 +716,7 @@
 				{if $data.default_user_value1 != ''}({t}Default{/t}: {$data.default_user_value1}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Annual Wage Base/Maximum Earnings{/t}:
 			</td>
@@ -725,7 +725,7 @@
 				{if $data.default_user_value2 != ''}({t}Default{/t}: {$data.default_user_value2}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Annual Deduction Amount{/t}:
 			</td>
@@ -737,7 +737,7 @@
 	</tbody>
 
 	<tbody id="17" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Percent{/t}:
 			</td>
@@ -746,7 +746,7 @@
 				{if $data.default_user_value1 != ''}({t}Default{/t}: {$data.default_user_value1}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Annual Amount Greater Than{/t}:
 			</td>
@@ -755,7 +755,7 @@
 				{if $data.default_user_value2 != ''}({t}Default{/t}: {$data.default_user_value2}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Annual Amount Less Than{/t}:
 			</td>
@@ -764,7 +764,7 @@
 				{if $data.default_user_value3 != ''}({t}Default{/t}: {$data.default_user_value3}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value4')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value4" value="cellLeftEditTable"}">
 				{t}Annual Deduction Amount{/t}:
 			</td>
@@ -773,7 +773,7 @@
 				{if $data.default_user_value4 != ''}({t}Default{/t}: {$data.default_user_value4}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value5')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value5" value="cellLeftEditTable"}">
 				{t}Annual Fixed Amount{/t}:
 			</td>
@@ -785,7 +785,7 @@
 	</tbody>
 
 	<tbody id="18" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Percent{/t}:
 			</td>
@@ -794,7 +794,7 @@
 				{if $data.default_user_value1 != ''}({t}Default{/t}: {$data.default_user_value1}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Annual Wage Base/Maximum Earnings{/t}:
 			</td>
@@ -803,7 +803,7 @@
 				{if $data.default_user_value2 != ''}({t}Default{/t}: {$data.default_user_value2}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Annual Exempt Amount{/t}:
 			</td>
@@ -812,7 +812,7 @@
 				{if $data.default_user_value3 != ''}({t}Default{/t}: {$data.default_user_value3}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value4')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Annual Deduction Amount{/t}:
 			</td>
@@ -824,7 +824,7 @@
 	</tbody>
 
 	<tbody id="19" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Percent{/t}:
 			</td>
@@ -833,7 +833,7 @@
 				{if $data.default_user_value1 != ''}({t}Default{/t}: {$data.default_user_value1}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Annual Amount Greater Than{/t}:
 			</td>
@@ -842,7 +842,7 @@
 				{if $data.default_user_value2 != ''}({t}Default{/t}: {$data.default_user_value2}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Annual Amount Less Than{/t}:
 			</td>
@@ -851,7 +851,7 @@
 				{if $data.default_user_value3 != ''}({t}Default{/t}: {$data.default_user_value3}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value4')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value4" value="cellLeftEditTable"}">
 				{t}Annual Deduction Amount{/t}:
 			</td>
@@ -860,7 +860,7 @@
 				{if $data.default_user_value4 != ''}({t}Default{/t}: {$data.default_user_value4}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value5')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value5" value="cellLeftEditTable"}">
 				{t}Annual Fixed Amount{/t}:
 			</td>
@@ -872,7 +872,7 @@
 	</tbody>
 
 	<tbody id="20" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Amount{/t}:
 			</td>
@@ -884,7 +884,7 @@
 	</tbody>
 
 	<tbody id="30" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Amount{/t}:
 			</td>
@@ -893,7 +893,7 @@
 				{if $data.default_user_value1 != ''}({t}Default{/t}: {$data.default_user_value1}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Annual Amount Greater Than{/t}:
 			</td>
@@ -902,7 +902,7 @@
 				{if $data.default_user_value2 != ''}({t}Default{/t}: {$data.default_user_value2}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Annual Amount Less Than{/t}:
 			</td>
@@ -911,7 +911,7 @@
 				{if $data.default_user_value3 != ''}({t}Default{/t}: {$data.default_user_value3}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value4')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Annual Deduction Amount{/t}:
 			</td>
@@ -923,7 +923,7 @@
 	</tbody>
 
 	<tbody id="52" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Amount{/t}:
 			</td>
@@ -932,7 +932,7 @@
 				{if $data.default_user_value1 != ''}({t}Default{/t}: {$data.default_user_value1}){/if}
 			</td>
 		</tr>
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Target Balance/Limit{/t}:
 			</td>
@@ -944,7 +944,7 @@
 	</tbody>
 
 	<tbody id="80" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -958,7 +958,7 @@
 	</tbody>
 
 	<tbody id="100-CR" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -970,7 +970,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -982,7 +982,7 @@
 	</tbody>
 
 	<tbody id="100-CA" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Claim Amount{/t}:
 			</td>
@@ -994,7 +994,7 @@
 	</tbody>
 
 	<tbody id="100-US" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1006,7 +1006,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1018,7 +1018,7 @@
 	</tbody>
 
 	<tbody id="200-CA" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Claim Amount{/t}:
 			</td>
@@ -1030,7 +1030,7 @@
 	</tbody>
 
 	<tbody id="200-US" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1042,7 +1042,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1054,7 +1054,7 @@
 	</tbody>
 
 	<tbody id="200-US-AZ" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Percent{/t}:
 			</td>
@@ -1066,7 +1066,7 @@
 	</tbody>
 
 	<tbody id="200-US-AL" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1078,7 +1078,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Dependents{/t}:
 			</td>
@@ -1090,7 +1090,7 @@
 	</tbody>
 
 	<tbody id="200-US-CT" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1104,7 +1104,7 @@
 	</tbody>
 
 	<tbody id="200-US-DC" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1116,7 +1116,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1128,7 +1128,7 @@
 	</tbody>
 
 	<tbody id="200-US-MD" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1140,7 +1140,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1150,7 +1150,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}County Rate{/t}:
 			</td>
@@ -1163,7 +1163,7 @@
 	</tbody>
 
 	<tbody id="200-US-DE" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1175,7 +1175,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1187,7 +1187,7 @@
 	</tbody>
 
 	<tbody id="200-US-NJ" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1199,7 +1199,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1211,7 +1211,7 @@
 	</tbody>
 
 	<tbody id="200-US-NC" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1223,7 +1223,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1235,7 +1235,7 @@
 	</tbody>
 
 	<tbody id="200-US-MA" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1247,7 +1247,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1259,7 +1259,7 @@
 	</tbody>
 
 	<tbody id="200-US-OK" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1271,7 +1271,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1283,7 +1283,7 @@
 	</tbody>
 
 	<tbody id="200-US-GA" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1295,7 +1295,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Employee / Spouse Allowances{/t}:
 			</td>
@@ -1305,7 +1305,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Dependent Allowances{/t}:
 			</td>
@@ -1317,7 +1317,7 @@
 	</tbody>
 
 	<tbody id="200-US-IL" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}IL-W-4 Line 1{/t}:
 			</td>
@@ -1327,7 +1327,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}IL-W-4 Line 2{/t}:
 			</td>
@@ -1339,7 +1339,7 @@
 	</tbody>
 
 	<tbody id="200-US-OH" style="display:none" >
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1351,7 +1351,7 @@
 	</tbody>
 
 	<tbody id="200-US-VA" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1361,7 +1361,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Age 65/Blind{/t}:
 			</td>
@@ -1373,7 +1373,7 @@
 	</tbody>
 
 	<tbody id="200-US-IN" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1383,7 +1383,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Dependents{/t}:
 			</td>
@@ -1395,7 +1395,7 @@
 	</tbody>
 
 	<tbody id="200-US-LA" style="display:none" >
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1407,7 +1407,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Exemptions{/t}:
 			</td>
@@ -1417,7 +1417,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Dependents{/t}:
 			</td>
@@ -1429,7 +1429,7 @@
 	</tbody>
 
 	<tbody id="200-US-ME" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1441,7 +1441,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1453,7 +1453,7 @@
 	</tbody>
 
 	<tbody id="200-US-WI" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1465,7 +1465,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1477,7 +1477,7 @@
 	</tbody>
 
 	<tbody id="200-US-WV" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1489,7 +1489,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1501,7 +1501,7 @@
 	</tbody>
 
 	<tbody id="300-US" style="display:none" >
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Filing Status{/t}:
 			</td>
@@ -1513,7 +1513,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1526,7 +1526,7 @@
 
 	<tbody id="300-US-IN" style="display:none" >
 		{if $page_type != 'user'}
-			<tr onClick="showHelpEntry('company_value1')">
+			<tr>
 				<td class="{isvalid object="cdf" label="company_value1" value="cellLeftEditTable"}">
 					{t}District / County Name{/t}:
 				</td>
@@ -1536,7 +1536,7 @@
 			</tr>
 		{/if}
 
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1546,7 +1546,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Dependents{/t}:
 			</td>
@@ -1556,7 +1556,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value3')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value3" value="cellLeftEditTable"}">
 				{t}County Rate{/t}:
 			</td>
@@ -1569,7 +1569,7 @@
 
 	<tbody id="300-US-MD" style="display:none" >
 		{if $page_type != 'user'}
-			<tr onClick="showHelpEntry('company_value1')">
+			<tr>
 				<td class="{isvalid object="cdf" label="company_value1" value="cellLeftEditTable"}">
 					{t}District / County Name{/t}:
 				</td>
@@ -1579,7 +1579,7 @@
 			</tr>
 		{/if}
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}Allowances{/t}:
 			</td>
@@ -1589,7 +1589,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value1" value="cellLeftEditTable"}">
 				{t}County Rate{/t}:
 			</td>
@@ -1601,7 +1601,7 @@
 	</tbody>
 
 	<tbody id="300-US-PERCENT" style="display:none" >
-		<tr onClick="showHelpEntry('company_value1')">
+		<tr>
 			<td class="{isvalid object="cdf" label="company_value1" value="cellLeftEditTable"}">
 				{t}District / County Name{/t}:
 			</td>
@@ -1614,7 +1614,7 @@
 			</td>
 		</tr>
 
-		<tr onClick="showHelpEntry('user_value2')">
+		<tr>
 			<td class="{isvalid object="cdf" label="user_value2" value="cellLeftEditTable"}">
 				{t}District / County Rate{/t}:
 			</td>

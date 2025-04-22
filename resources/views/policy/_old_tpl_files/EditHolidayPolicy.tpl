@@ -50,7 +50,7 @@ function showAverageDays() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="hpf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -59,7 +59,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="hpf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -70,7 +70,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('default_schedule_status')">
+				<tr>
 					<td class="{isvalid object="hpf" label="default_schedule_status" value="cellLeftEditTable"}">
 						{t}Default Schedule Status:{/t}
 					</td>
@@ -87,7 +87,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_employed_days')">
+				<tr>
 					<td class="{isvalid object="hpf" label="minimum_employed_days" value="cellLeftEditTable"}">
 						{t}Minimum Employed Days:{/t}
 					</td>
@@ -97,7 +97,7 @@ function showAverageDays() {
 				</tr>
 
 				<tbody id="type_id-20" {if $data.type_id != 20}style="display:none"{/if}>
-				<tr onClick="showHelpEntry('minimum_worked_days')">
+				<tr>
 					<td class="{isvalid object="hpf" label="minimum_worked_days" value="cellLeftEditTable"}">
 						{t}Employee Must Work at Least:{/t}
 					</td>
@@ -111,7 +111,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_worked_after_days')">
+				<tr>
 					<td class="{isvalid object="hpf" label="minimum_worked_after_days" value="cellLeftEditTable"}">
 						{t}Employee Must Work at Least:{/t}
 					</td>
@@ -133,7 +133,7 @@ function showAverageDays() {
 				</tr>
 
 				<tbody id="type_id-30" {if $data.type_id != 30}style="display:none"{/if}>
-				<tr onClick="showHelpEntry('average_time_days')">
+				<tr>
 					<td class="{isvalid object="hpf" label="average_time_days" value="cellLeftEditTable"}">
 						{t}Total Time over:{/t}
 					</td>
@@ -141,7 +141,7 @@ function showAverageDays() {
 						<input size="3" type="text" name="data[average_time_days]" value="{$data.average_time_days}"> {t}days{/t}
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('average_days')">
+				<tr>
 					<td class="{isvalid object="hpf" label="average_days" value="cellLeftEditTable"}">
 						{t}Average Time over:{/t}
 					</td>
@@ -151,7 +151,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_time')">
+				<tr>
 					<td class="{isvalid object="hpf" label="minimum_time" value="cellLeftEditTable"}">
 						{t}Minimum Time:{/t}
 					</td>
@@ -160,7 +160,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_time')">
+				<tr>
 					<td class="{isvalid object="hpf" label="maximum_time" value="cellLeftEditTable"}">
 						{t}Maximum Time:{/t}
 					</td>
@@ -169,7 +169,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('force_over_time_policy')">
+				<tr>
 					<td class="{isvalid object="hpf" label="force_over_time_policy" value="cellLeftEditTable"}">
 						{t}Always Apply Over Time/Premium Policies:{/t}
 					</td>
@@ -178,7 +178,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('include_over_time')">
+				<tr>
 					<td class="{isvalid object="hpf" label="include_over_time" value="cellLeftEditTable"}">
 						{t}Include Over Time in Average:{/t}
 					</td>
@@ -187,7 +187,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('include_paid_absence_time')">
+				<tr>
 					<td class="{isvalid object="hpf" label="include_paid_absence_time" value="cellLeftEditTable"}">
 						{t}Include Paid Absence Time in Average:{/t}
 					</td>
@@ -196,7 +196,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('round_interval_policy')">
+				<tr>
 					<td class="{isvalid object="hpf" label="round_interval_policy" value="cellLeftEditTable"}">
 						{t}Rounding Policy:{/t}
 					</td>
@@ -209,7 +209,7 @@ function showAverageDays() {
 				</tbody>
 
 				<tbody id="type_id-10_and_20" {if $data.type_id == 30}style="display:none"{/if}>
-				<tr onClick="showHelpEntry('minimum_time')">
+				<tr>
 					<td class="{isvalid object="hpf" label="minimum_time" value="cellLeftEditTable"}">
 						{t}Holiday Time:{/t}
 					</td>
@@ -219,7 +219,7 @@ function showAverageDays() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('absence_policy_id')">
+				<tr>
 					<td class="{isvalid object="hpf" label="absence_policy_id" value="cellLeftEditTable"}">
 						{t}Absence Policy:{/t}
 					</td>
@@ -236,7 +236,7 @@ function showAverageDays() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('recurring_holiday')">
+				<tr>
 					<td class="{isvalid object="hpf" label="recurring_holiday" value="cellLeftEditTable"}">
 						{t}Recurring Holidays:{/t}
 					</td>

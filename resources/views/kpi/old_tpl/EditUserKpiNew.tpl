@@ -312,7 +312,7 @@
 
                 <!--ARSP EDIT START FOR THUNDER & NEON -->
                 
-				<tr onClick="showHelpEntry('default_branch')">
+				<tr>
 					<td class="{isvalid object="ujf" label="default_branch" value="cellLeftEditTable"}">
 						{t}Default Branch:{/t}
 					</td>
@@ -324,7 +324,7 @@
 				</tr>                
                 
                 
-				<tr onClick="showHelpEntry('default_department')">
+				<tr>
 					<td class="{isvalid object="ujf" label="default_department" value="cellLeftEditTable"}">
 						{t}Default Department:{/t}
 					</td>
@@ -336,7 +336,7 @@
 				</tr>   
                 
 
-				<tr onClick="showHelpEntry('title')">
+				<tr>
 					<td class="{isvalid object="ujf" label="title" value="cellLeftEditTable"}">
 						{t}Employee Title:{/t}
 					</td>
@@ -356,7 +356,7 @@
                 
                 
 				<!--ARSP HIDE
-				<tr onClick="showHelpEntry('labor_burden_percent')">
+				<tr>
 					<td class="{isvalid object="uwf" label="labor_burden_percent" value="cellLeftEditTable"}">
 						{t}Labor Burden Percent:{/t}
 					</td>
@@ -367,7 +367,7 @@
 				</tr>
                 -->
 
-				<tr onClick="showHelpEntry('start_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="start_date" value="cellLeftEditTable"}">
 						{t}Review Start Day:{/t}
 			    </td>
@@ -379,7 +379,7 @@
 				</tr>
                 
                 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="end_date" value="cellLeftEditTable"}">
 						{t}Review End Day:{/t}
 		      </td>
@@ -391,7 +391,7 @@
 				</tr>           
 
             
-				<tr onClick="showHelpEntry('review_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="review_date" value="cellLeftEditTable"}">
 						{t}Date of Review:{/t}
 				  </td>
@@ -556,7 +556,7 @@
 				</tr> 
                 
  
-		  <tr class = "tblDataWhite" onClick="showHelpEntry('feedback1')">
+		  <tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback1" value="cellLeftEditTable"}">{t}Has the past year/Evaluation period been good/bad/satisfactory or otherwise for you, and why?{/t}</td>
                 
                 <td class="cellRightEditTable"><input name="kpi_data[feedback1]" type="text" id="kpi_data[feedback1]" value ="{$kpi_data.feedback1}" size="80"/>
@@ -569,7 +569,7 @@
                     <td colspan="4"></td>
 				</tr>  
                 
- 			<tr class = "tblDataWhite" onClick="showHelpEntry('feedback2')">
+ 			<tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback2" value="cellLeftEditTable"}">{t}What do you consider to be your most important achievements of the past year?{/t}</td>
                 
               <td colspan="4" class="cellRightEditTable"><input name="kpi_data[feedback2]" type="text" id="kpi_data[feedback2]" value ="{$kpi_data.feedback2}" size="80"/>
@@ -581,7 +581,7 @@
                     <td colspan="4"></td>
 				</tr>  
                 
- 			<tr class = "tblDataWhite" onClick="showHelpEntry('feedback3')">
+ 			<tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback3" value="cellLeftEditTable"}">{t}What do you like and dislike about working for Inbay?{/t}</td>
                 
                 <td colspan="4" class="cellRightEditTable"><input name="kpi_data[feedback3]" type="text" id="kpi_data[feedback3]" value ="{$kpi_data.feedback3}" size="80"/>
@@ -593,7 +593,7 @@
                     <td colspan="4"></td>
 				</tr>  
                 
- 			<tr class = "tblDataWhite" onClick="showHelpEntry('feedback4')">
+ 			<tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback4" value="cellLeftEditTable"}">{t}What elements of your job do you find most difficult?{/t}</td>
                 
                 <td colspan="4" class="cellRightEditTable"><input name="kpi_data[feedback4]" type="text" id="kpi_data[feedback4]" value ="{$kpi_data.feedback4}" size="80"/></td>
@@ -604,7 +604,7 @@
                     <td colspan="4"></td>
 				</tr>  
                 
- 			<tr class = "tblDataWhite" onClick="showHelpEntry('feedback5')">
+ 			<tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback5" value="cellLeftEditTable"}">{t}What elements of your job interest you the most, and least?{/t}</td>
                 
                 <td colspan="4" class="cellRightEditTable"><input name="kpi_data[feedback5]" type="text" value ="{$kpi_data.feedback5}" size="80"/>
@@ -616,7 +616,7 @@
                     <td colspan="4"></td>
 				</tr>  
                 
- 			<tr class = "tblDataWhite" onClick="showHelpEntry('feedback6')">
+ 			<tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback6" value="cellLeftEditTable"}">{t}What action could be taken to improve your performance in your current position by you, and your Supervisor?{/t}</td>
                 
                 <td colspan="4" class="cellRightEditTable"><input name="kpi_data[feedback6]" type="text" value ="{$kpi_data.feedback6}" size="80"/>
@@ -627,7 +627,7 @@
                 	<td align="left">{t}Training{/t}</td>
                     <td colspan="4"></td>
 				</tr>  
- 			<tr class = "tblDataWhite" onClick="showHelpEntry('feedback7')">
+ 			<tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback7" value="cellLeftEditTable"}">{t}What sort of training/experience would benefit you in the next year?{/t}</td>
                 
                 <td colspan="4" class="cellRightEditTable"><input name="kpi_data[feedback7]" type="text" value ="{$kpi_data.feedback7}" size="80"/>
@@ -639,7 +639,7 @@
                     <td colspan="4"></td>
 				</tr>
                 
- 			<tr class = "tblDataWhite" onClick="showHelpEntry('feedback8')">
+ 			<tr class = "tblDataWhite">
                 <td colspan="4" class="{isvalid object="ujf" label="feedback8" value="cellLeftEditTable"}">{t}Please fill this if there is anything else you want to elaborate, and that you find useful to mention in this context?{/t}</td>
                 
                 <td colspan="4" class="cellRightEditTable"><input name="kpi_data[feedback8]" type="text" value ="{$kpi_data.feedback8}" size="80"/>

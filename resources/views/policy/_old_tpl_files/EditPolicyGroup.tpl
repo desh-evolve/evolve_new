@@ -22,7 +22,7 @@ function filterUserCount() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="pgf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -91,7 +91,7 @@ function filterUserCount() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('over_time_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="over_time_policy" value="cellLeftEditTable"}">
 						{t}Overtime Policies:{/t}
 					</td>
@@ -102,7 +102,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('round_interval_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="round_interval_policy" value="cellLeftEditTable"}">
 						{t}Rounding Policies:{/t}
 					</td>
@@ -113,7 +113,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('meal_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="meal_policy" value="cellLeftEditTable"}">
 						{t}Meal Policies:{/t}
 					</td>
@@ -124,7 +124,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('break_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="break_policy" value="cellLeftEditTable"}">
 						{t}Break Policies:{/t}
 					</td>
@@ -135,7 +135,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('accrual_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="accrual_policy" value="cellLeftEditTable"}">
 						{t}Accrual Policies:{/t}
 					</td>
@@ -146,7 +146,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('premium_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="premium_policy" value="cellLeftEditTable"}">
 						{t}Premium Policies:{/t}
 					</td>
@@ -157,7 +157,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('holiday_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="holiday_policy" value="cellLeftEditTable"}">
 						{t}Holiday Policies:{/t}
 					</td>
@@ -168,7 +168,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('exception_policy')">
+				<tr>
 					<td class="{isvalid object="pgf" label="exception_policy" value="cellLeftEditTable"}">
 						{t}Exception Policy:{/t}
 					</td>

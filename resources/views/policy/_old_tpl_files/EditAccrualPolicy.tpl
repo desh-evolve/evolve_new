@@ -113,7 +113,7 @@ function showRecalculateDate() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="apf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -122,7 +122,7 @@ function showRecalculateDate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="apf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -133,7 +133,7 @@ function showRecalculateDate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('enable_pay_stub_balance_display')">
+				<tr>
 					<td class="{isvalid object="apf" label="enable_pay_stub_balance_display" value="cellLeftEditTable"}">
 						{t}Display Balance on Pay Stub:{/t}
 					</td>
@@ -149,7 +149,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr id="apply_frequency" {if $data.type_id != 20}style="display:none"{/if} onClick="showHelpEntry('apply_frequency')">
+					<tr id="apply_frequency" {if $data.type_id != 20}style="display:none"{/if}>
 						<td class="{isvalid object="apf" label="apply_frequency_id" value="cellLeftEditTable"}">
 							{t}Frequency:{/t}
 						</td>
@@ -160,7 +160,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr id="apply_frequency_hire_date_display" style="display:none" onClick="showHelpEntry('apply_frequency_hire_date')">
+					<tr id="apply_frequency_hire_date_display" style="display:none">
 						<td class="{isvalid object="apf" label="apply_frequency_hire_date" value="cellLeftEditTable"}">
 							{t}Employee's Appointment Date:{/t}
 						</td>
@@ -170,7 +170,7 @@ function showRecalculateDate() {
 					</tr>
 
 
-					<tr id="apply_frequency_month" style="display:none" onClick="showHelpEntry('apply_frequency_month')">
+					<tr id="apply_frequency_month" style="display:none">
 						<td class="{isvalid object="apf" label="apply_frequency_month" value="cellLeftEditTable"}">
 							{t}Month:{/t}
 						</td>
@@ -181,7 +181,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr id="apply_frequency_day_of_month" style="display:none" onClick="showHelpEntry('apply_frequency_day_of_month')">
+					<tr id="apply_frequency_day_of_month" style="display:none">
 						<td class="{isvalid object="apf" label="apply_frequency_day_of_month" value="cellLeftEditTable"}">
 							{t}Day Of Month:{/t}
 						</td>
@@ -192,7 +192,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr id="apply_frequency_day_of_week" style="display:none" onClick="showHelpEntry('apply_frequency_day_of_week')">
+					<tr id="apply_frequency_day_of_week" style="display:none">
 						<td class="{isvalid object="apf" label="apply_frequency_day_of_week" value="cellLeftEditTable"}">
 							{t}Day Of Week:{/t}
 						</td>
@@ -203,7 +203,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('minimum_employed_days')">
+					<tr>
 						<td class="{isvalid object="apf" label="minimum_employed_days" value="cellLeftEditTable"}">
 							{t}After Minimum Employed Days:{/t}
 						</td>
@@ -219,7 +219,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('recalculate')">
+					<tr>
 						<td class="{isvalid object="apf" label="recalculate" value="cellLeftEditTable"}">
 							{t}Enable:{/t}
 						</td>
@@ -228,7 +228,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr id="display_recalculate_start_date" style="display:none" onClick="showHelpEntry('recalculate_start_date')">
+					<tr id="display_recalculate_start_date" style="display:none">
 						<td class="{isvalid object="apf" label="recalculate_start_date" value="cellLeftEditTable"}">
 							{t}Start Date:{/t}
 						</td>
@@ -238,7 +238,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr id="display_recalculate_end_date" style="display:none" onClick="showHelpEntry('recalculate_end_date')">
+					<tr id="display_recalculate_end_date" style="display:none">
 						<td class="{isvalid object="apf" label="recalculate_end_date" value="cellLeftEditTable"}">
 							{t}End Date:{/t}
 						</td>
@@ -255,7 +255,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('milestone_rollover_hire_date')">
+					<tr>
 						<td class="{isvalid object="apf" label="milestone_rollover_hire_date" value="cellLeftEditTable"}">
 							{t}Employee's Appointment Date:{/t}
 						</td>
@@ -264,7 +264,7 @@ function showRecalculateDate() {
 						</td>
 					</tr>
 
-					<tr id="milestone_rollover_month" style="display:none" onClick="showHelpEntry('type')">
+					<tr id="milestone_rollover_month" style="display:none">
 						<td class="{isvalid object="apf" label="milestone_rollover_month" value="cellLeftEditTable"}">
 							{t}Month:{/t}
 						</td>
@@ -274,7 +274,7 @@ function showRecalculateDate() {
 							</select>
 						</td>
 					</tr>
-					<tr id="milestone_rollover_day_of_month" style="display:none" onClick="showHelpEntry('type')">
+					<tr id="milestone_rollover_day_of_month" style="display:none">
 						<td class="{isvalid object="apf" label="milestone_rollover_day_of_month" value="cellLeftEditTable"}">
 							{t}Day Of Month:{/t}
 						</td>

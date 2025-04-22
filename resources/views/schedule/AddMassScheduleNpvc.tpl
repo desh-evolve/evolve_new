@@ -170,7 +170,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="sf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -181,7 +181,7 @@ function getScheduleTotalTime() {
 					</td>
 				</tr>
 
-                                <tr onClick="showHelpEntry('status')">
+                                <tr>
 					<td class="{isvalid object="sf" label="date_stamp" value="cellLeftEditTable"}">
 						{t}Rosters:{/t}
 					</td>
@@ -297,7 +297,7 @@ function getScheduleTotalTime() {
 
 				 
 
-				<tr onClick="showHelpEntry('schedule_policy')">
+				<tr>
 					<td class="{isvalid object="sf" label="schedule_policy" value="cellLeftEditTable"}">
 						{t}Schedule Policy:{/t}
 					</td>
@@ -309,7 +309,7 @@ function getScheduleTotalTime() {
 				</tr>
 
 				<tbody id="absence" style="display:none">
-				<tr onClick="showHelpEntry('absence_policy')">
+				<tr>
 					<td class="{isvalid object="sf" label="absence_policy" value="cellLeftEditTable"}">
 						{t}Absence Policy:{/t}
 					</td>
@@ -322,7 +322,7 @@ function getScheduleTotalTime() {
 				</tbody>
 
 				{if count($data.branch_options) > 1 OR $data.branch_id != 0}
-				<tr onClick="showHelpEntry('branch')">
+				<tr>
 					<td class="{isvalid object="sf" label="branch" value="cellLeftEditTable"}">
 						{t}Branch:{/t}
 					</td>
@@ -335,7 +335,7 @@ function getScheduleTotalTime() {
 				{/if}
 
 				{if count($data.department_options) > 1 OR $data.department_id != 0}
-				<tr onClick="showHelpEntry('department')">
+				<tr>
 					<td class="{isvalid object="sf" label="department" value="cellLeftEditTable"}">
 						{t}Department:{/t}
 					</td>
@@ -349,7 +349,7 @@ function getScheduleTotalTime() {
 
 				{if $permission->Check('job','enabled') }
 				{if count($data.job_options) > 1 OR $data.job_id != 0}
-				<tr onClick="showHelpEntry('job')">
+				<tr>
 					<td class="{isvalid object="sf" label="job" value="cellLeftEditTable"}">
 						{t}Job:{/t}
 					</td>
@@ -363,7 +363,7 @@ function getScheduleTotalTime() {
 				{/if}
 
 				{if count($data.job_item_options) > 1 OR $data.job_item_id != 0}
-				<tr onClick="showHelpEntry('job_item')">
+				<tr>
 					<td class="{isvalid object="sf" label="job_item" value="cellLeftEditTable"}">
 						{t}Task:{/t}
 					</td>
@@ -378,7 +378,7 @@ function getScheduleTotalTime() {
 
 				{/if}
 
-				<tr onClick="showHelpEntry('overwrite')">
+				<tr>
 					<td class="{isvalid object="sf" label="overwrite" value="cellLeftEditTable"}">
 						{t}Overwrite Existing Shifts:{/t}
 					</td>

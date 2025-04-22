@@ -78,7 +78,7 @@
                                                 </td>
                                             </tr>
 
-                                            <tr onClick="showHelpEntry('employee_number_only')">
+                                            <tr>
                                                 <th>
                                                     Employee Number:		
                                                 </th>
@@ -506,14 +506,14 @@
 
 
                                         @if (is_array($user_data['hierarchy_control_options']) AND count($user_data['hierarchy_control_options']) > 0)
-                                            <tr onClick="showHelpEntry('termination_date')">
+                                            <tr>
                                                 <th colspan="3">
                                                     Hierarchies
                                                 </th>
                                             </tr>
 {{-- 
                                             @foreach ($user_data['hierarchy_control_options'] as $hierarchy_control_object_type_id => $hierarchy_control)
-                                                <tr onClick="showHelpEntry('termination_date')">
+                                                <tr>
                                                     <th>
                                                         {{ $user_data['hierarchy_object_type_options'][$hierarchy_control_object_type_id] }}:
                                                     </th>

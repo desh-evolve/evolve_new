@@ -22,7 +22,7 @@ function filterUserCount() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="pcf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -31,7 +31,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('description')">
+				<tr>
 					<td class="{isvalid object="pcf" label="description" value="cellLeftEditTable"}">
 						{t}Description:{/t}
 					</td>
@@ -40,7 +40,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('level')">
+				<tr>
 					<td class="{isvalid object="pcf" label="level" value="cellLeftEditTable"}">
 						{t}Level:{/t}
 					</td>

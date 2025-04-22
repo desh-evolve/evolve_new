@@ -25,7 +25,7 @@ function setModifiedEntry() {
 
 		<table class="editTable">
 
-			<tr onClick="showHelpEntry('status')">
+			<tr>
 				<td class="cellLeftEditTable">
 					{t}Employee:{/t}
 				</td>
@@ -34,7 +34,7 @@ function setModifiedEntry() {
 				</td>
 			</tr>
 
-			<tr onClick="showHelpEntry('status')">
+			<tr>
 				<td class="cellLeftEditTable">
 					{t}Status:{/t}
 				</td>
@@ -45,7 +45,7 @@ function setModifiedEntry() {
 				</td>
 			</tr>
 
-			<tr onClick="showHelpEntry('currency')">
+			<tr>
 				<td class="{isvalid object="psf" label="currency" value="cellLeftEditTable"}">
 					{t}Currency:{/t}
 				</td>
@@ -56,7 +56,7 @@ function setModifiedEntry() {
 				</td>
 			</tr>
 
-			<tr onClick="showHelpEntry('start_date')">
+			<tr>
 				<td class="{isvalid object="psf" label="start_date" value="cellLeftEditTable"}">
 					{t}Pay Start Date:{/t}
 				</td>
@@ -66,7 +66,7 @@ function setModifiedEntry() {
 				</td>
 			</tr>
 
-			<tr onClick="showHelpEntry('end_date')">
+			<tr>
 				<td class="{isvalid object="psf" label="end_date" value="cellLeftEditTable"}">
 					{t}Pay End Date:{/t}
 				</td>
@@ -76,7 +76,7 @@ function setModifiedEntry() {
 				</td>
 			</tr>
 
-			<tr onClick="showHelpEntry('transaction_date')">
+			<tr>
 				<td class="{isvalid object="psf" label="transaction_date" value="cellLeftEditTable"}">
 					{t}Payment Date:{/t}
 				</td>
