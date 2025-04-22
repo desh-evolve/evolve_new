@@ -51,59 +51,6 @@ class UserInformation extends Controller
         $this->permission = View::shared('permission');
     }
 
-    //     public function index(Request $request)
-    //     {
-    //         if (!$this->permission->Check('report', 'enabled') || 
-    //             !$this->permission->Check('report', 'view_user_information')) {
-    //             return Redirect::to('/')->with('error', 'Permission denied');
-    //         }
-
-    //         $current_company = $this->company;
-    //         $filter_data = $request->input('filter_data', []);
-    //         $generic_data = $request->input('generic_data', []);
-    //         $action = $request->input('action', '');
-
-    //         // Define columns
-    //         $columns = $this->getColumnDefinitions();
-
-    //         // Get custom user fields
-    //         $oflf = new OtherFieldListFactory();
-    //         $other_field_names = $oflf->getByCompanyIdAndTypeIdArray($current_company->getId(), 10);
-    //         if (is_array($other_field_names)) {
-    //             $columns = Misc::prependArray($columns, $other_field_names);
-    //         }
-
-    //         // Company Deductions
-    //         $cdlf = new CompanyDeductionListFactory();
-    //         $deduction_columns = $cdlf->getByCompanyIdAndStatusIdArray($current_company->getId(), 10, false);
-    //         $columns = Misc::prependArray($columns, $deduction_columns);
-
-    //         // Initialize filter data if not set
-    //         $filter_data = $this->initializeFilterData($filter_data);
-
-    //         // Handle permission hierarchy
-    //         $permission_children_ids = $this->getPermissionChildrenIds();
-    //         $filter_data['permission_children_ids'] = $permission_children_ids;
-
-    //         $wage_permission_children_ids = $this->getWagePermissionChildrenIds();
-    //         $wage_filter_data['permission_children_ids'] = $wage_permission_children_ids;
-
-    //         // Process form submission
-    //         if ($action === 'export' || $action === 'display_report') {
-    //             return $this->generateReport($filter_data, $columns, $action);
-    //         }
-
-    //         // Default view logic
-    //         $data = $this->prepareFormData($filter_data, $columns, $generic_data);
-
-    //         $viewData = [
-    //             'title' => 'Employee Detail Report',
-    //             'data' => $data,
-    //             'ugdf' => new UserGenericDataFactory()
-    //         ];
-    // // dd($viewData);
-    //         return view('report.UserInformation', $viewData);
-    //     }
 
     public function index(Request $request)
     {
