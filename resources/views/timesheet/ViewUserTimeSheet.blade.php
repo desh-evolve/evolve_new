@@ -1,5 +1,10 @@
 <x-app-layout :title="'Input Example'">
 
+    <style>
+        td, th {
+            padding: 4px !important;
+        }
+    </style>
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -7,17 +12,6 @@
                     <div>
                         <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
                     </div>
-
-                    {{-- <div class="justify-content-md-end">
-                        <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
-                                href="#"
-                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
-                                Add <i class="ri-add-line"></i>
-                            </a>
-                        </div>
-                    </div> --}}
                 </div>
 
                 <div class="card-body">
@@ -25,7 +19,7 @@
                     {{-- -------------------------------------------- --}}
 
                     <form name="timesheet" method="get" action="#">
-                        <table class="tblList">
+                        <table class="table table-bordered">
                             <tr>
                                 <td class="tblPagingLeft" colspan="7" align="right">
                                     <br>
@@ -35,7 +29,7 @@
                             @if (( $permission->Check('punch','view') OR $permission->Check('punch','view_child') )
                                 OR ( $permission->Check('punch','add') AND ( $permission->Check('punch','edit') OR $permission->Check('punch','edit_own') OR $permission->Check('punch','edit_child') ) )
                                 OR ( $permission->Check('absence','add') AND ( $permission->Check('absence','edit') OR $permission->Check('absence','edit_child') OR $permission->Check('absence','edit_own') ) ))
-                                <tr class="tblHeader">
+                                <tr class="bg-primary text-white">
                                     <td colspan="8">
                                         @if ($permission->Check('punch','view') OR $permission->Check('punch','view_child'))
                                             <span style="float:left;">
@@ -116,35 +110,35 @@
                                 </tr>
                             @endif
             
-                            <tr class="tblHeader">
+                            <tr class="bg-primary text-white">
                                 <td colspan="8">
                                     Date:
                                     <a href="prev_pp=1" onClick="resetAction();">
-                                        <i class="ri-arrow-left-double-fill"></i>
+                                        <i class="ri-arrow-left-double-fill text-white"></i>
                                     </a>
                                     <a href="prev_week=1" onClick="resetAction();">
-                                        <i class="ri-arrow-left-s-line"></i>
+                                        <i class="ri-arrow-left-s-line text-white"></i>
                                     </a>
             
                                     <input type="date" id="filter_date" name="filter_data[date]" value="{{$filter_data['date']}}" onChange="resetAction();this.form.submit()">
-                                    <i class="ri-calendar-2-line" alt="Pick a date" onMouseOver="calendar_setup('filter_date', 'cal_filter_date', false);" id="cal_filter_date" ></i>
+                                    <i class="ri-calendar-2-line text-white" alt="Pick a date" onMouseOver="calendar_setup('filter_date', 'cal_filter_date', false);" id="cal_filter_date" ></i>
 
                                     <a href="next_week=1" onClick="resetAction();">
-                                        <i class="ri-arrow-right-s-line"></i>
+                                        <i class="ri-arrow-right-s-line text-white"></i>
                                     </a>
                                     <a href="next_pp=1" onClick="resetAction();">
-                                        <i class="ri-arrow-right-double-fill"></i>
+                                        <i class="ri-arrow-right-double-fill text-white"></i>
                                     </a>
                                 </td>
                             </tr>
             
-                            @if ($pay_period_is_locked == TRUE)
+                            @if (!empty($pay_period_is_locked) && $pay_period_is_locked == TRUE)
                                 <tr class="tblDataError">
                                     <td colspan="8">
-                                        <b>NOTICE:</b> This pay period is currently {if $pay_period_status_id == 20}closed{else}locked{/if}, modifications are not permitted.
+                                        <b>NOTICE:</b> This pay period is currently {{(!empty($pay_period_status_id) && $pay_period_status_id == 20) ? 'closed' : 'locked'}}, modifications are not permitted.
                                     </td>
                                 </tr>
-                            @elseif ($pay_period_status_id == 30)
+                            @elseif (!empty($pay_period_status_id) && $pay_period_status_id == 30)
                                 <tr class="tblDataWarning">
                                     <td colspan="8">
                                         <b>NOTICE:</b> This pay period is currently in the post adjustment state.
@@ -152,13 +146,13 @@
                                 </tr>
                             @endif
             
-                            <tr class="tblHeader">
+                            <tr class="bg-primary text-white">
                                 @foreach ($calendar_array as $calendar)
                                     @if ($loop->first)
                                         <td>
                                             {{-- <a href="{$BASE_URL}/report/TimesheetDetail.php?action:display_report=1&filter_data[print_timesheet]=1&filter_data[user_id]={{$filter_data['user_id']}}&filter_data[pay_period_ids]={{$pay_period_id}}"> --}}
                                             <a href="#">
-                                                <i class="ri-printer-line" alt="Print Timesheet"></i>
+                                                <i class="ri-printer-line text-white" alt="Print Timesheet"></i>
                                             </a>
                                             {{-- </a>&nbsp;&nbsp; --}}
                                         </td>
@@ -177,7 +171,7 @@
             
                             @foreach ($rows as $row_num => $row)
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$row['status']}}
                                     </td>
                                     @foreach ($row['data'] as $epoch => $day)
@@ -244,7 +238,7 @@
             
                             @foreach ($date_break_total_rows as $date_break_total_row)
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_break_total_row['name']}}
                                     </td>
                                     @foreach ($date_break_total_row['data'] as $date_break_total_epoch => $date_break_total_day)
@@ -260,7 +254,7 @@
                             
                             @foreach ($date_break_policy_total_rows as $date_break_policy_total_row)
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_break_policy_total_row['name']}}
                                     </td>
                                     @foreach ($date_break_policy_total_row['data'] as $date_break_policy_total_epoch => $date_break_policy_total_day)
@@ -280,7 +274,7 @@
 
                             @foreach ($date_meal_policy_total_rows as $date_meal_total_row)
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_meal_total_row['name']}}
                                     </td>
                                     @foreach ($date_meal_total_row['data'] as $date_meal_total_epoch => $date_meal_total_day)
@@ -301,7 +295,7 @@
                                 <tr class="">
                                     @foreach ($date_exception_total_rows as $date_exception_total_row)
                                         @if ($loop->first)
-                                            <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                            <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                                 Exceptions
                                             </td>
                                         @endif
@@ -323,7 +317,7 @@
                                 <tr class="">
                                     @foreach ($date_request_total_rows as $request_epoch => $date_request_total_row)
                                         @if ($loop->first)
-                                            <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                            <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                                 Pending Requests
                                             </td>
                                         @endif
@@ -348,7 +342,7 @@
 
                             @foreach ($date_total_rows as $date_total_row)
                                 @if ($loop->first)
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="8">
                                             Accumulated Time
                                         </td>
@@ -356,7 +350,7 @@
                                 @endif
                                 
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_total_row['name']}}
                                     </td>
                                     @foreach ($date_total_row['data'] as $date_total_epoch => $date_total_day)
@@ -371,7 +365,7 @@
                                                     AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                     <a href="javascript:hourList('','{{$filter_data['user_id']}}','{{$date_total_epoch}}')">
                                                 @endif
-                                                @if ($date_total_day['override'] == TRUE)
+                                                @if (!empty($date_total_day['override']) && $date_total_day['override'] == TRUE)
                                                     *
                                                 @endif
                                                 {{$date_total_day['total_time'] ?? 0}}
@@ -389,14 +383,14 @@
             
                             @foreach ($date_branch_total_rows as $date_branch_total_row)
                                 @if ($loop->first)
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="100">
                                             Branch
                                         </td>
                                     </tr>
                                 @endif
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_branch_total_row['name']}}
                                     </td>
                                     @foreach ($date_branch_total_row['data'] as $date_branch_total_day)
@@ -409,7 +403,7 @@
 
                             @foreach ($date_department_total_rows as $date_department_total_row)
                                 @if ($loop->first)
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="100">
                                             Department
                                         </td>
@@ -417,7 +411,7 @@
                                 @endif
                                 
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_department_total_row['name']}}
                                     </td>
                                     @foreach ($date_department_total_row['data'] as $date_department_total_day)
@@ -430,7 +424,7 @@
                             
                             @foreach ($date_job_total_rows as $date_job_total_row)
                                 @if ($loop->first)
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="100">
                                             Job
                                         </td>
@@ -438,7 +432,7 @@
                                 @endif
                                 
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         @if ($permission->Check('job','edit') AND $date_job_total_row['id'] > 0)
                                             <a href="../job/EditJob.php?id={$date_job_total_row.id}">{{$date_job_total_row['name']}}</a>
                                         @else
@@ -455,7 +449,7 @@
                             
                             @foreach ($date_job_item_total_rows as $date_job_item_total_row)
                                 @if ($loop->first)
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="100">
                                             Task
                                         </td>
@@ -463,7 +457,7 @@
                                 @endif
                                 
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         @if ($permission->Check('job_item','edit') AND $date_job_item_total_row['id'] > 0)
                                             <a href="../job_item/EditJobItem.php?id={$date_job_item_total_row.id}">{{$date_job_item_total_row['name']}}</a>
                                         @else
@@ -480,7 +474,7 @@
                             
                             @foreach ($date_premium_total_rows as $date_premium_total_row)
                                 @if ($loop->first)
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="100">
                                             Premium
                                         </td>
@@ -488,7 +482,7 @@
                                 @endif
                                 
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_premium_total_row['name']}}
                                     </td>
                                     @foreach ($date_premium_total_row['data'] as $date_premium_total_epoch => $date_premium_total_day)
@@ -501,7 +495,7 @@
 
                             @foreach ($date_absence_total_rows as $date_absence_total_row)
                                 @if ($loop->first)
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="100">
                                             Absence
                                         </td>
@@ -509,7 +503,7 @@
                                 @endif
                                 
                                 <tr class="">
-                                    <td class="tblHeader" style="font-weight: bold; text-align: right">
+                                    <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_absence_total_row['name']}}
                                     </td>
                                     @foreach ($date_absence_total_row.data as $date_absence_total_epoch => $date_absence_total_day)
@@ -541,7 +535,7 @@
                                 <td colspan="8">
                                     @if ($is_assigned_pay_period_schedule == TRUE)
                                         Pay Period:
-                                        @if ($pay_period_start_date != '')
+                                        @if (!empty($pay_period_start_date))
                                             {{$pay_period_start_date}} to {{$pay_period_end_date}}
                                         @else
                                             NONE
@@ -554,9 +548,9 @@
             
                             <tr valign="top">
                                 <td colspan="2">
-                                    @if ($permission->Check('punch','verify_time_sheet') AND $pay_period_verify_type_id != 10)
+                                    @if ($permission->Check('punch','verify_time_sheet') AND (!empty($pay_period_verify_type_id) && $pay_period_verify_type_id != 10))
                                         @if ($time_sheet_verify['previous_pay_period_verification_display'] == TRUE)
-                                            <table class="tblList">
+                                            <table class="table table-bordered">
                                                 <tr class="tblDataWarning">
                                                     <td colspan="3">
                                                         <b>Previous pay period is not verified!</b>
@@ -566,8 +560,8 @@
                                         @endif
             
                                         @if ($pay_period_end_date != '')
-                                            <table class="tblList">
-                                                <tr class="tblHeader">
+                                            <table class="table table-bordered">
+                                                <tr class="bg-primary text-white">
                                                     <td>
                                                         Verification
                                                     </td>
@@ -589,16 +583,16 @@
                                         @endif
                                     @endif
             
-                                    <table class="tblList">
+                                    <table class="table table-bordered">
                                         @foreach ($exception_legend as $exception_legend_row)
                                             @if ($loop->first)
-                                                <tr class="tblHeader">
+                                                <tr class="bg-primary text-white">
                                                     <td colspan="2">
                                                         Exception Legend
                                                     </td>
                                                 </tr>
             
-                                                <tr class="tblHeader">
+                                                <tr class="bg-primary text-white">
                                                     <td>
                                                         Code
                                                     </td>
@@ -623,8 +617,8 @@
                                 </td>
                                 <td colspan="3">
             
-                                    <table class="tblList">
-                                        <tr class="tblHeader">
+                                    <table class="table table-bordered">
+                                        <tr class="bg-primary text-white">
                                             <td colspan="2">
                                                 Paid Time
                                             </td>
@@ -659,8 +653,8 @@
                                     </table>
             
                                     @if ($pay_period_dock_absence_total_time > 0)
-                                        <table class="tblList">
-                                            <tr class="tblHeader">
+                                        <table class="table table-bordered">
+                                            <tr class="bg-primary text-white">
                                                 <td colspan="2">
                                                     Docked Time
                                                 </td>
@@ -678,8 +672,8 @@
                                     @endif
                                 </td>
                                 <td colspan="3">
-                                    <table class="tblList">
-                                        <tr class="tblHeader">
+                                    <table class="table table-bordered">
+                                        <tr class="bg-primary text-white">
                                             <td colspan="2">
                                                 Accumulated Time
                                             </td>
@@ -705,7 +699,7 @@
                                             </td>
                                         </tr>
             
-                                        @if ($pay_period_is_locked != TRUE AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) ))
+                                        @if ((empty($pay_period_is_locked) || $pay_period_is_locked != TRUE) AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) ))
                                             <tr>
                                                 <td colspan="2" align="center">
                                                     <select name="action_option" id="select_action">

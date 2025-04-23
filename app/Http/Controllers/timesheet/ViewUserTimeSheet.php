@@ -1530,11 +1530,10 @@ class ViewUserTimeSheet extends Controller
                 $viewData['start_date'] = $start_date;
                 $viewData['end_date'] = $end_date;
                 $viewData['current_time'] = TTDate::getTime() ;
-                $viewData['pay_period_is_locked'] = true ; //added by desh since it gave an error. fix bug later. add the functions necessary. //check here
 
                 break;
         }
-        
+        //dd($viewData);
         return view('timesheet/ViewUserTimeSheet', $viewData);
     }
 
