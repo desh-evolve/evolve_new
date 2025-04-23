@@ -53,28 +53,7 @@ class DailyAttendanceReport extends Controller
 		$this->permission = View::shared('permission');
 	}
 
-	//     public function index(Request $request)
-	//     {
-	//         $filter_data = $request->input('filter_data', []);
-	//         $generic_data = $request->input('generic_data', []);
-
-	//         $columns = $this->getColumnDefinitions();
-	//         $columns = $this->appendPolicyColumns($columns);
-	//         $pay_period_options = $this->getPayPeriodOptions();
-	//         $filter_data = $this->initializeFilterData($filter_data, $pay_period_options);
-	//         $permission_children_ids = $this->getPermissionChildrenIds();
-	//         $filter_data['permission_children_ids'] = $permission_children_ids;
-
-	//         $data = $this->prepareFormData($filter_data, $columns, $generic_data, $pay_period_options);
-
-	//         $viewData = [
-	//             'title' => 'Daily Attendance Report',
-	//             'data' => $data,
-	//             'ugdf' => new UserGenericDataFactory()
-	//         ];
-	// // dd($viewData);
-	//         return view('report.DailyAttendance', $viewData);
-	//     }
+	
 
 	public function index(Request $request)
 	{
@@ -90,21 +69,7 @@ class DailyAttendanceReport extends Controller
 
 		$data = $this->prepareFormData($filter_data, $columns, $generic_data, $pay_period_options);
 
-		// // Prepare variables for the Blade template
-		// $viewData = [
-		// 	'title' => 'Daily Attendance Report',
-		// 	'filterData' => $data['filter_data'], // Pass filter_data as filterData
-		// 	'payPeriods' => $data['pay_period_options'], // Pay period options
-		// 	'userStatuses' => array_merge($data['src_user_status_options'], $data['selected_user_status_options'] ?? []),
-		// 	'groups' => array_merge($data['src_group_options'], $data['selected_group_options'] ?? []),
-		// 	'branches' => array_merge($data['src_branch_options'], $data['selected_branch_options'] ?? []),
-		// 	'departments' => array_merge($data['src_department_options'], $data['selected_department_options'] ?? []),
-		// 	'titles' => array_merge($data['src_user_title_options'], $data['selected_user_title_options'] ?? []),
-		// 	'users' => array_merge($data['src_include_user_options'], $data['selected_include_user_options'] ?? []),
-		// 	'columns' => array_merge($data['src_column_options'], $data['selected_column_options'] ?? []),
-		// 	'exportTypes' => $data['export_type_options'],
-		// 	'ugdf' => new UserGenericDataFactory(),
-		// ];
+
 
 		$viewData = [
 			'title' => 'Daily Attendance Report',
