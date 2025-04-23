@@ -46,7 +46,7 @@
                                                         @foreach ($group_options as $id => $name )
                                                             <option 
                                                                 value="{{$id}}"
-                                                                @if(!empty($filter_data['group_ids']) && in_array($id, $filter_data['group_ids']))
+                                                                @if(!empty($filter_data['group_ids']) && $id == $filter_data['group_ids'])
                                                                     selected
                                                                 @endif
                                                             >{{$name}}</option>
@@ -60,7 +60,7 @@
                                                         @foreach ($branch_options as $id => $name )
                                                             <option 
                                                                 value="{{$id}}"
-                                                                @if(!empty($filter_data['branch_ids']) && in_array($id, $filter_data['branch_ids']))
+                                                                @if(!empty($filter_data['branch_ids']) && $id == $filter_data['branch_ids'])
                                                                     selected
                                                                 @endif
                                                             >{{$name}}</option>
@@ -74,7 +74,7 @@
                                                         @foreach ($department_options as $id => $name )
                                                             <option 
                                                                 value="{{$id}}"
-                                                                @if(!empty($filter_data['department_ids']) && in_array($id, $filter_data['department_ids']))
+                                                                @if(!empty($filter_data['department_ids']) && $id == $filter_data['department_ids'])
                                                                     selected
                                                                 @endif
                                                             >{{$name}}</option>
@@ -88,7 +88,7 @@
                                                         @foreach ($user_options as $id => $name )
                                                             <option 
                                                                 value="{{$id}}"
-                                                                @if(!empty($filter_data['user_id']) && in_array($id, $filter_data['user_id']))
+                                                                @if(!empty($filter_data['user_id']) && $id = $filter_data['user_id'])
                                                                     selected
                                                                 @endif
                                                             >{{$name}}</option>
@@ -156,9 +156,11 @@
                                 @foreach ($calendar_array as $calendar)
                                     @if ($loop->first)
                                         <td>
-                                            <a href="{$BASE_URL}/report/TimesheetDetail.php?action:display_report=1&filter_data[print_timesheet]=1&filter_data[user_id]={{$filter_data['user_id']}}&filter_data[pay_period_ids]={{$pay_period_id}}">
+                                            {{-- <a href="{$BASE_URL}/report/TimesheetDetail.php?action:display_report=1&filter_data[print_timesheet]=1&filter_data[user_id]={{$filter_data['user_id']}}&filter_data[pay_period_ids]={{$pay_period_id}}"> --}}
+                                            <a href="#">
                                                 <i class="ri-printer-line" alt="Print Timesheet"></i>
-                                            </a>&nbsp;&nbsp;
+                                            </a>
+                                            {{-- </a>&nbsp;&nbsp; --}}
                                         </td>
                                     @endif
                                     <td width="12%" id="cursor-hand" {{$calendar['epoch'] == $filter_data['date'] ? 'background-color:#33CCFF' : ''}} onClick="changeDate('{{$calendar['epoch']}}')">
@@ -180,13 +182,13 @@
                                     </td>
                                     @foreach ($row['data'] as $epoch => $day)
                                         <td 
-                                            @if ($pay_period_locked_rows[$epoch] == FALSE
+                                            @if (empty($pay_period_locked_rows[$epoch])
                                                 AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                 class="cellHL" id="cursor-hand" 
                                             @endif
-                                            @if ($pay_period_locked_rows[$epoch] == FALSE
+                                            @if (empty($pay_period_locked_rows[$epoch])
                                                 AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE ))
-                                                AND $day.time_stamp == '')
+                                                AND empty($day['time_stamp']))
                                                 onClick="editPunch('','{{$day['punch_control_id']}}',{{$filter_data['user_id']}},{{$epoch}},{{$row['status_id']}});"
                                             @endif
                                             nowrap
@@ -194,9 +196,14 @@
                                             <table align="center" border="0" width="100%">
                                                 <tr>
                                                     <td width="25%" align="left">
-                                                        @if (isset($punch_exceptions[$day['id']]) OR isset($punch_control_exceptions[$day['punch_control_id']]))
+                                                        @if ((isset($day['id']) && isset($punch_exceptions[$day['id']])) || 
+                                                                (isset($day['punch_control_id']) && isset($punch_control_exceptions[$day['punch_control_id']])))
                                                             @php
-                                                                $exception_arr = $punch_exceptions[$day['id']] ?? $punch_control_exceptions[$day['punch_control_id']] ?? [];
+                                                                if (isset($punch_exceptions[$day['id']])) {
+                                                                    $exception_arr = $punch_exceptions[$day['id']];
+                                                                } else {
+                                                                    $exception_arr = $punch_control_exceptions[$day['punch_control_id']];
+                                                                }
                                                             @endphp
                                                             @foreach ($exception_arr as $exception_id => $exception_data)
                                                                 @if ($loop->first)
@@ -212,7 +219,7 @@
                                                         @endif
                                                     </td>
                                                     <td width="50%" align="center" nowrap>
-                                                        @if ($day['time_stamp'] != '')
+                                                        @if (!empty($day['time_stamp']))
                                                             @if ($day['has_note'] == TRUE)
                                                                 *
                                                             @endif
@@ -226,7 +233,7 @@
                                                         @endif
                                                     </td>
                                                     <td width="25%" align="right">
-                                                        {{$day['type_code']}}
+                                                        {{$day['type_code'] ?? ''}}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -354,13 +361,13 @@
                                     </td>
                                     @foreach ($date_total_row['data'] as $date_total_epoch => $date_total_day)
                                         <td 
-                                            @if ($date_total_day['type_id'] == 10 AND $pay_period_locked_rows[$date_total_epoch] == FALSE
+                                            @if ((isset($date_total_day['type_id']) && $date_total_day['type_id'] == 10) AND $pay_period_locked_rows[$date_total_epoch] == FALSE
                                             AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                 class="cellHL"
                                             @endif
                                         >
                                             @if ($date_total_row['type_and_policy_id'] == 100)
-                                                @if ($pay_period_locked_rows[$date_total_epoch] == FALSE
+                                                @if (empty($pay_period_locked_rows[$date_total_epoch])
                                                     AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                     <a href="javascript:hourList('','{{$filter_data['user_id']}}','{{$date_total_epoch}}')">
                                                 @endif
@@ -368,7 +375,7 @@
                                                     *
                                                 @endif
                                                 {{$date_total_day['total_time'] ?? 0}}
-                                                @if ($pay_period_locked_rows[$date_total_epoch] == FALSE
+                                                @if (empty($pay_period_locked_rows[$date_total_epoch])
                                                     AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                     </a>
                                                 @endif
