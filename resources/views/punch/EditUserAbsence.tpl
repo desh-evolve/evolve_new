@@ -104,7 +104,7 @@ function UpdateTotalLeaveTime() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('total_time')">
+				<tr>
 					<td class="{isvalid object="udtf" label="total_time" value="cellLeftEditTable"}">
 						{t}Time:{/t}
 					</td>
@@ -119,7 +119,7 @@ function UpdateTotalLeaveTime() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('absence_policy')">
+				<tr>
 					<td class="{isvalid object="udtf" label="absence_policy_id" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -135,7 +135,7 @@ function UpdateTotalLeaveTime() {
 				</tr>
 
 				{if $permission->Check('absence','edit_branch') }
-				<tr onClick="showHelpEntry('branch')">
+				<tr>
 					<td class="{isvalid object="udtf" label="branch_id" value="cellLeftEditTable"}">
 						{t}Branch:{/t}
 					</td>
@@ -148,7 +148,7 @@ function UpdateTotalLeaveTime() {
 				{/if}
 
 				{if $permission->Check('absence','edit_department') }
-				<tr onClick="showHelpEntry('department')">
+				<tr>
 					<td class="{isvalid object="udtf" label="department_id" value="cellLeftEditTable"}">
 						{t}Department:{/t}
 					</td>
@@ -162,7 +162,7 @@ function UpdateTotalLeaveTime() {
 
 				{if $permission->Check('job','enabled') }
 					{if ( count($udt_data.job_options) > 1 OR $udt_data.job_id != 0 ) AND $permission->Check('absence','edit_job')}
-					<tr onClick="showHelpEntry('job')">
+					<tr>
 						<td class="{isvalid object="udtf" label="job" value="cellLeftEditTable"}">
 							{t}Job:{/t}
 						</td>
@@ -176,7 +176,7 @@ function UpdateTotalLeaveTime() {
 					{/if}
 
 					{if ( count($udt_data.job_options) > 1 AND ( count($udt_data.job_item_options) > 1 OR $udt_data.job_item_id != 0) AND $permission->Check('absence','edit_job_item') ) }
-					<tr onClick="showHelpEntry('job_item')">
+					<tr>
 						<td class="{isvalid object="udtf" label="job_item" value="cellLeftEditTable"}">
 							{t}Task:{/t}
 						</td>
@@ -190,7 +190,7 @@ function UpdateTotalLeaveTime() {
 					{/if}
 				{/if}
 
-				<tr onClick="showHelpEntry('override')">
+				<tr>
 					<td class="{isvalid object="udtf" label="override" value="cellLeftEditTable"}">
 						{t}Override:{/t}
 					</td>

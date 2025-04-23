@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="uwef" label="user_id" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('company_name')">
+				<tr>
 					<td class="{isvalid object="uwef" label="company_name" value="cellLeftEditTable"}">
 						{t}Company Name :{/t}
 					</td>
@@ -36,7 +36,7 @@
 						<input type="text" name="data[company_name]" value="{$data.company_name}"> 
 					</td>
 				</tr>
-                               <tr onClick="showHelpEntry('from_date')">
+                               <tr>
 					<td class="{isvalid object="uwef" label="from_date" value="cellLeftEditTable"}">
 						{t}From Date:{/t}
 					</td>
@@ -46,7 +46,7 @@
 						ie: {$current_user_prefs->getDateFormatExample()}
 					</td>
 				</tr>
-                                 <tr onClick="showHelpEntry('to_date')">
+                                 <tr>
 					<td class="{isvalid object="uwef" label="to_date" value="cellLeftEditTable"}">
 						{t}To Date:{/t}
 					</td>
@@ -56,7 +56,7 @@
 						ie: {$current_user_prefs->getDateFormatExample()}
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('department')">
+                                <tr>
 					<td class="{isvalid object="uwef" label="department" value="cellLeftEditTable"}">
 						{t}Department:{/t}
 					</td>
@@ -65,7 +65,7 @@
 					</td>
 				</tr>
                                 
-                                 <tr onClick="showHelpEntry('designation')">
+                                 <tr>
 					<td class="{isvalid object="uwef" label="designation" value="cellLeftEditTable"}">
 						{t}Designation:{/t}
 					</td>
@@ -76,7 +76,7 @@
                                 
                        
                                 
-                                <tr onClick="showHelpEntry('remaks')">
+                                <tr>
 					<td class="{isvalid object="uwef" label="relationship" value="cellLeftEditTable"}">
 						{t}Remarks:{/t}
 					</td>
@@ -91,7 +91,7 @@
 	
 
 {*
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="af" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -100,7 +100,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="af" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>

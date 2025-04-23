@@ -254,7 +254,7 @@ function showProvince() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('company')">
+							<tr>
 								<td class="{isvalid object="uf" label="company" value="cellLeftEditTable"}">
 									{t}Company:{/t}
 								</td>
@@ -268,7 +268,7 @@ function showProvince() {
 							</tr>
 
 							{if $permission->Check('user','edit_advanced')}
-							<tr onClick="showHelpEntry('status')">
+							<tr>
 								<td class="{isvalid object="uf" label="status" value="cellLeftEditTable"}">
 									{t}Status:{/t}
 								</td>
@@ -289,7 +289,7 @@ function showProvince() {
 							</tr>
 					<!-- ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
 
-							<tr onClick="showHelpEntry('employee_number_only')">
+							<tr>
 								<td class="{isvalid object="uf" label="employee_number_only" value="cellLeftEditTable"}">
 									{t}Employee Number:{/t}		</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -319,7 +319,7 @@ function showProvince() {
                                 
                                 
 							<!-- ARSP NOTE -> THIS IS ID IS A FINGERPRINT MACHINE UNIQUE ID -->
-							<tr onClick="showHelpEntry('punch_machine_user_id')">
+							<tr>
 								<td class="{isvalid object="uf" label="punch_machine_user_id" value="cellLeftEditTable"}">
 									{t}Punch Machine User ID:{/t}	
 								</td>
@@ -327,7 +327,7 @@ function showProvince() {
 								<td colspan="2" class="cellRightEditTable"><input type="text" size="15" name="user_data[punch_machine_user_id]" value="{$user_data.punch_machine_user_id}" /></td>      
 									
 							</tr>	
-                            <tr onClick="showHelpEntry('default_branch')">
+                            <tr>
 								<td class="{isvalid object="uf" label="default_branch" value="cellLeftEditTable"}">
 									{t}Location:{/t}
 								</td>
@@ -339,7 +339,7 @@ function showProvince() {
 								</td>
 							</tr>
                                                         
-                            <tr onClick="showHelpEntry('default_department')">
+                            <tr>
 								<td class="{isvalid object="uf" label="default_department" value="cellLeftEditTable"}">
 									{t}Department:{/t}
 								</td>
@@ -351,7 +351,7 @@ function showProvince() {
 							</tr>
                                                         
                                                         
-                            <tr onClick="showHelpEntry('default_department')">
+                            <tr>
 								<td class="{isvalid object="uf" label="default_department" value="cellLeftEditTable"}">
 									{t}Division:{/t}
 								</td>
@@ -362,7 +362,7 @@ function showProvince() {
 								</td>
 							</tr>
                                                         
-                                                        		<tr onClick="showHelpEntry('title')">
+                                                        		<tr>
 								<td class="{isvalid object="uf" label="title" value="cellLeftEditTable"}">
 									{t}Designation:{/t}
 								</td>
@@ -378,7 +378,7 @@ function showProvince() {
 							</tr>
                                                         
                                                         
-                                                        <tr onClick="showHelpEntry('group')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="group" value="cellLeftEditTable"}">
 									{t}Employement Title:{/t}
 								</td>
@@ -390,7 +390,7 @@ function showProvince() {
 							</tr>
                                                         
                                                          <!--ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
-							<tr onClick="showHelpEntry('job_skills')">
+							<tr>
 								<td class="{isvalid object="uf" label="job_skills" value="cellLeftEditTable"}">
 									{t}Job Skills:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -399,7 +399,7 @@ function showProvince() {
 							</tr> 
                                                         
                                                         
-                                                        <tr onClick="showHelpEntry('policy_group_id')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="policy_group_id" value="cellLeftEditTable"}">
 									{t}Policy Group:{/t}
 								</td>
@@ -416,7 +416,7 @@ function showProvince() {
 							</tr>
                                                         
                                                         
-                                                        							<tr onClick="showHelpEntry('hire_date')">
+                                                        							<tr>
 								<td class="{isvalid object="uf" label="hire_date" value="cellLeftEditTable"}">
 									{t}Appoinment Date:{/t}
 								</td>
@@ -429,7 +429,7 @@ function showProvince() {
                                                      
                                                         <!-- ARSP NOTE -> I ADDED NEW CODE FOR THUNDER & NEON -->
  							{if $permission->Check('user','edit_advanced')}
-							<tr onClick="showHelpEntry('hire_note')">
+							<tr>
 								<td class="{isvalid object="uf" label="hire_note" value="cellLeftEditTable"}">
 									{t}Appoinment Note:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -437,7 +437,7 @@ function showProvince() {
 							</tr>
 							{/if}
                                                         
-                                                        <tr onClick="showHelpEntry('termination_date')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="termination_date" value="cellLeftEditTable"}">
 									{t}Termination Date:{/t}
 								</td>
@@ -450,7 +450,7 @@ function showProvince() {
                                                         
                                                         <!-- ARSP NOTE -> I ADDED NEW CODE FOR THUNDER & NEON -->
 							{if $permission->Check('user','edit_advanced')}
-							<tr onClick="showHelpEntry('termination_note')">
+							<tr>
 								<td class="{isvalid object="uf" label="termination_note" value="cellLeftEditTable"}">
 									{t}Termination Note:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -462,7 +462,7 @@ function showProvince() {
                                                         
                                                         
                                                         	<!--ARSP NOTE-> I ADDED THIS CODE FOR THUNDER & NEON -->
-       			<tr onClick="showHelpEntry('probation')">
+       			<tr>
 				<td rowspan="2" class="{isvalid object="uf" label="probation" value="cellLeftEditTable"}">{t}Basis of Employment:{/t} 									                </td>
                 
 				<td class="cellRightEditTable">
@@ -477,7 +477,7 @@ function showProvince() {
                         {html_options options=$user_data.month_options selected=$user_data.month}
                     </select></td>
 				    </tr>
-       			<tr onClick="showHelpEntry('probation')">
+       			<tr>
        		  <td colspan="2" class="cellRightEditTable"><input type="radio"  name="user_data[basis_of_employment]" value="4"  {if $user_data.basis_of_employment =="4"}  checked="checked"  {/if} />
        		    {t}Permanent (Confirmed){/t}<br/>
   				<!-- <input type="radio"  name="user_data[basis_of_employment]" value="6"  {if $user_data.basis_of_employment =="6"}  checked="checked"  {/if} />
@@ -488,7 +488,7 @@ function showProvince() {
                   
                   
                   
-                                                       <tr onClick="showHelpEntry('confirmed_date')">
+                                                       <tr>
 								<td class="{isvalid object="uf" label="confirmed_date" value="cellLeftEditTable"}">
 									{t}Date Confirmed:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -502,7 +502,7 @@ function showProvince() {
 						
                                                         
                             <!--ARSP NOTE -> I ADDED THIDS CODE FOR THUNDER & NEON -->
-							<tr onClick="showHelpEntry('resign_date')">
+							<tr>
 								<td class="{isvalid object="uf" label="resign_date" value="cellLeftEditTable"}">
 									{t}Resign Date:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -511,7 +511,7 @@ function showProvince() {
 									{t}ie:{/t} {$current_user_prefs->getDateFormatExample()}                                    								</td>
 							</tr>   
                                                         
-                                                          <tr onClick="showHelpEntry('resign_date')">
+                                                          <tr>
 								<td class="{isvalid object="uf" label="resign_date" value="cellLeftEditTable"}">
 									{t}Date Retirment:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -520,7 +520,7 @@ function showProvince() {
 								</td>
 							</tr> 
                                                         
-                                                        <tr onClick="showHelpEntry('currency_id')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="currency_id" value="cellLeftEditTable"}">
 									{t}Currency:{/t}
 								</td>
@@ -536,7 +536,7 @@ function showProvince() {
 								</td>
 							</tr>
                                                         
-                                                        		<tr onClick="showHelpEntry('pay_period_schedule_id')">
+                                                        		<tr>
 								<td class="{isvalid object="uf" label="pay_period_schedule_id" value="cellLeftEditTable"}">
 									{t}Pay Period Schedule:{/t}
 								</td>
@@ -553,7 +553,7 @@ function showProvince() {
 							</tr>
 
 
-							<tr onClick="showHelpEntry('permission_control')">
+							<tr>
 								<td class="{isvalid object="uf" label="permission_control" value="cellLeftEditTable"}">
 									{t}Permission Group:{/t}
 								</td>
@@ -586,7 +586,7 @@ function showProvince() {
 
 							
 
-							<tr onClick="showHelpEntry('user_name')">
+							<tr>
 								<td class="{isvalid object="uf" label="user_name" value="cellLeftEditTable"}">
 									{if $permission->Check('user','edit_advanced')}<font color="red">*</font>{/if}{t}User Name:{/t}
 								</td>
@@ -601,7 +601,7 @@ function showProvince() {
 							</tr>
 
 							{if $permission->Check('user','edit_advanced')}
-							<tr onClick="showHelpEntry('password')">
+							<tr>
 								<td class="{isvalid object="uf" label="password" value="cellLeftEditTable"}">
 									{if $permission->Check('user','edit_advanced')}<font color="red">*</font>{/if}{t}Password:{/t}
 								</td>
@@ -610,7 +610,7 @@ function showProvince() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('password')">
+							<tr>
 								<td class="{isvalid object="uf" label="password" value="cellLeftEditTable"}">
 									{if $permission->Check('user','edit_advanced')}<font color="red">*</font>{/if}{t}Password (confirm):{/t}
 								</td>
@@ -621,7 +621,7 @@ function showProvince() {
 
 							<!-- ARSP NOTE -> I HIDE THIS CODE FOR THUNDER & NEON<!-- ARSP NOTE ->
 
-							<tr onClick="showHelpEntry('employee_number')">
+							<tr>
 								<td class="{isvalid object="uf" label="employee_number" value="cellLeftEditTable"}">
 									{t}Employee Number:{/t}
 								</td>
@@ -641,7 +641,7 @@ function showProvince() {
 							
 
 							<!-- ARSP NOTE -> I HIDE THIS CODE FOR THUNDER & NEON
-							<tr onClick="showHelpEntry('phone_id')">
+							<tr>
 								<td class="{isvalid object="uf" label="phone_id" value="cellLeftEditTable"}">
 									{t}Quick Punch ID:{/t}
 								</td>
@@ -653,7 +653,7 @@ function showProvince() {
 							-->
 
 							<!-- ARSP NOTE -> I HIDE THIS CODE FOR THUNDER & NEON
-							<tr onClick="showHelpEntry('phone_password')">
+							<tr>
 								<td class="{isvalid object="uf" label="phone_password" value="cellLeftEditTable"}">
 									{t}Quick Punch Password:{/t}
 								</td>
@@ -691,7 +691,7 @@ function showProvince() {
                             
                             <!-- ARSO NOTE-> 
                             <!--                           
-                            					<tr onClick="showHelpEntry('probation')">
+                            					<tr>
 					  <td class="{isvalid object="uf" label="probation" value="cellLeftEditTable"}">{t}Probation Period:{/t} </td>
 					  <td colspan="2" class="cellRightEditTable">
                      	<input type="radio"  name="user_data[probation]" value="3"  {if $user_data.probation =="3"}  checked="checked"  {/if}/> {t}3 Months{/t} <br />
@@ -717,7 +717,7 @@ function showProvince() {
                     
 
 							{if isset($user_data.other_field_names.other_id1) }
-								<tr onClick="showHelpEntry('other_id1')">
+								<tr>
 									<td height="42" class="{isvalid object="uf" label="other_id1" value="cellLeftEditTable"}">
 										{$user_data.other_field_names.other_id1}:									</td>
 							  <td colspan="2" class="cellRightEditTable">
@@ -727,7 +727,7 @@ function showProvince() {
 							{/if}
 
 							{if isset($user_data.other_field_names.other_id2) }
-							<tr onClick="showHelpEntry('other_id2')">
+							<tr>
 								<td class="{isvalid object="uf" label="other_id2" value="cellLeftEditTable"}">
 									{$user_data.other_field_names.other_id2}:
 								</td>
@@ -737,7 +737,7 @@ function showProvince() {
 							</tr>
 							{/if}
 							{if isset($user_data.other_field_names.other_id3) }
-							<tr onClick="showHelpEntry('other_id3')">
+							<tr>
 								<td class="{isvalid object="uf" label="other_id3" value="cellLeftEditTable"}">
 									{$user_data.other_field_names.other_id3}:
 								</td>
@@ -747,7 +747,7 @@ function showProvince() {
 							</tr>
 							{/if}
 							{if isset($user_data.other_field_names.other_id4) }
-								<tr onClick="showHelpEntry('other_id4')">
+								<tr>
 									<td class="{isvalid object="uf" label="other_id4" value="cellLeftEditTable"}">
 										{$user_data.other_field_names.other_id4}:
 									</td>
@@ -757,7 +757,7 @@ function showProvince() {
 								</tr>
 							{/if}
 							{if isset($user_data.other_field_names.other_id5) }
-								<tr onClick="showHelpEntry('other_id5')">
+								<tr>
 									<td class="{isvalid object="uf" label="other_id5" value="cellLeftEditTable"}">
 										{$user_data.other_field_names.other_id5}:
 									</td>
@@ -768,14 +768,14 @@ function showProvince() {
 							{/if}
 
 							{if is_array($user_data.hierarchy_control_options) AND count($user_data.hierarchy_control_options) > 0}
-								<tr onClick="showHelpEntry('termination_date')">
+								<tr>
 									<td class="tblHeader" colspan="3">
 										{t}Hierarchies{/t}
 									</td>
 								</tr>
 
 								{foreach from=$user_data.hierarchy_control_options key=hierarchy_control_object_type_id item=hierarchy_control name=hierarchy_control}
-									<tr onClick="showHelpEntry('termination_date')">
+									<tr>
 										<td class="{isvalid object="uf" label="termination_date" value="cellLeftEditTable"}">
 											{$user_data.hierarchy_object_type_options[$hierarchy_control_object_type_id]}:
 										</td>
@@ -811,7 +811,7 @@ function showProvince() {
 									{t}Contact Information{/t}								</td>
 							</tr>
 
-                                                        <tr onClick="showHelpEntry('title_name')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="title_name" value="cellLeftEditTable"}">
 									{t}Title:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -820,7 +820,7 @@ function showProvince() {
 									</select>								</td>
 							</tr>
                                                         
-							<tr onClick="showHelpEntry('first_name')">
+							<tr>
 								<td class="{isvalid object="uf" label="first_name" value="cellLeftEditTable"}">
 									{if $permission->Check('user','edit_advanced')}{/if}{t}Calling Name:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -840,7 +840,7 @@ function showProvince() {
 
 							
 
-							<tr onClick="showHelpEntry('last_name')">
+							<tr>
 								<td class="{isvalid object="uf" label="last_name" value="cellLeftEditTable"}">
 									{if $permission->Check('user','edit_advanced')}<font color="red">*</font>{/if}{t}Surname:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -857,7 +857,7 @@ function showProvince() {
 								</td>
 							</tr>
                                                         
-                                                        <tr onClick="showHelpEntry('last_name')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="last_name" value="cellLeftEditTable"}">
 									{if $permission->Check('user','edit_advanced')}<font color="red">*</font>{/if}{t}Name with intials:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -875,7 +875,7 @@ function showProvince() {
 							</tr>
                                                         
                                                         
-                                                        <tr onClick="showHelpEntry('middle_name')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="full_name" value="cellLeftEditTable"}">
 									{t}Full Name:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -895,7 +895,7 @@ function showProvince() {
                                                        
                                                        
                                                         
-							<tr onClick="showHelpEntry('user_image')">
+							<tr>
 							  <td class="{isvalid object="uf" label="user_image" value="cellLeftEditTable"}">{t}Employee Photo (.jpg):{/t}
                               {if $permission->Check('user','edit_advanced')} 
                               <a href="javascript:Upload('user_image','{$user_data.id}');">
@@ -908,7 +908,7 @@ function showProvince() {
 						  </tr>
 
 							{if $current_company->getEnableSecondLastName() == TRUE}
-								<tr onClick="showHelpEntry('second_last_name')">
+								<tr>
 									<td class="{isvalid object="uf" label="second_last_name" value="cellLeftEditTable"}">
 										{t}Second Surname:{/t}									</td>
 									<td colspan="2" class="cellRightEditTable">
@@ -927,7 +927,7 @@ function showProvince() {
 							{/if}
 
                                                         
-                                                <tr onclick="showHelpEntry('nic')">
+                                                <tr>
                                                                <td class="{isvalid object="uf="uf"" label="nic" value="cellLeftEditTable"}"> {t}N.I.C:{/t} </td>
 							  <td colspan="2" class="cellRightEditTable">
 
@@ -943,7 +943,7 @@ function showProvince() {
 							  </td>
 				  </tr>
                                   
-                                  <tr onClick="showHelpEntry('birth_date')">
+                                  <tr>
 								<td class="{isvalid object="uf" label="birth_date" value="cellLeftEditTable"}">
 									{t}Date of Birth:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -952,7 +952,7 @@ function showProvince() {
                                 
                                 
                                 			{if $permission->Check('user','edit_advanced')}
-							<tr onClick="showHelpEntry('note')">
+							<tr>
 								<td class="{isvalid object="uf" label="note" value="cellLeftEditTable"}">
 									{t}Note:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -962,7 +962,7 @@ function showProvince() {
 							</tr>
                             {/if}
                                   
-							<tr onClick="showHelpEntry('sex')">
+							<tr>
 								<td class="{isvalid object="uf" label="sex" value="cellLeftEditTable"}">
 									{t}Gender:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -970,7 +970,7 @@ function showProvince() {
 										{html_options options=$user_data.sex_options selected=$user_data.sex}
 									</select>								</td>
 							</tr>
-                                                        <tr onClick="showHelpEntry('religion')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="religion" value="cellLeftEditTable"}">
 									{if $permission->Check('user','edit_advanced')}<font color="red">*</font>{/if}{t}Religion:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -984,7 +984,7 @@ function showProvince() {
 								</td>
 							</tr>
                                                         
-                                                         <tr onClick="showHelpEntry('sex')">
+                                                         <tr>
 								<td class="{isvalid object="uf" label="sex" value="cellLeftEditTable"}">
 									{t}Marital Status:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -994,7 +994,7 @@ function showProvince() {
 							</tr>
                                                         
 
-							<tr onClick="showHelpEntry('address1')">
+							<tr>
 								<td class="{isvalid object="uf" label="address1" value="cellLeftEditTable"}">
 									{if $incomplete == 1}<font color="red">*</font>{/if}{t}Home Address (Line 1):{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1010,7 +1010,7 @@ function showProvince() {
 								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('address2')">
+							<tr>
 								<td class="{isvalid object="uf" label="address2" value="cellLeftEditTable"}">
 																	</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1025,7 +1025,7 @@ function showProvince() {
 								
 									</td>
 							</tr>
-                                                        <tr onClick="showHelpEntry('address3')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="address3" value="cellLeftEditTable"}">
 																	</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1040,7 +1040,7 @@ function showProvince() {
 								
 									</td>
 							</tr>
-                                                       <tr onClick="showHelpEntry('postal_code')">
+                                                       <tr>
 								<td class="{isvalid object="uf" label="postal_code" value="cellLeftEditTable"}">
 									{if $incomplete == 1}<font color="red">*</font>{/if}{t}Postal / ZIP Code:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1058,7 +1058,7 @@ function showProvince() {
 							</tr>
                                                         
                                                         
-                                                        <tr onClick="showHelpEntry('home_phone')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="home_phone" value="cellLeftEditTable"}">
 									{if $incomplete == 1}<font color="red">*</font>{/if}{t}Home Phone:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1066,13 +1066,13 @@ function showProvince() {
 									<input type="text" name="user_data[home_phone]" value="{$user_data.home_phone}">								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('mobile_phone')">
+							<tr>
 								<td class="{isvalid object="uf" label="mobile_phone" value="cellLeftEditTable"}">
 									{t}Mobile Phone:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
 									<input type="text" name="user_data[mobile_phone]" value="{$user_data.mobile_phone}">								</td>
 							</tr>
-                                                          <tr onClick="showHelpEntry('personal_email')">
+                                                          <tr>
 								<td class="{isvalid object="uf" label="personal_email" value="cellLeftEditTable"}">
 									{t}Personal Email:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1089,7 +1089,7 @@ function showProvince() {
 							       </td>
 							</tr>
                                                         
-                                                        <tr onClick="showHelpEntry('work_phone')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="work_phone,work_phone_ext" value="cellLeftEditTable"}">
 									{t}Office Phone:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1110,7 +1110,7 @@ function showProvince() {
                                                         
                                                         
                                                          
-                                                        <tr onClick="showHelpEntry('office_mobile')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="office_mobile" value="cellLeftEditTable"}">
 									{t}Office Mobile:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1129,7 +1129,7 @@ function showProvince() {
 							</tr>
                                                         
                                                         
-                                                        <tr onClick="showHelpEntry('work_email')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="work_email" value="cellLeftEditTable"}">
 									{t}Offiece Email:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1146,7 +1146,7 @@ function showProvince() {
 							       </td>
 							</tr>
                                                         
-                                                        <tr onClick="showHelpEntry('fax_phone')">
+                                                        <tr>
 								<td class="{isvalid object="uf" label="fax_phone" value="cellLeftEditTable"}">
 									{t}Fax:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1163,7 +1163,7 @@ function showProvince() {
 									</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('city')">
+							<tr>
 								<td class="{isvalid object="uf" label="city" value="cellLeftEditTable"}">
 									{if $incomplete == 1}<font color="red">*</font>{/if}{t}City:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1181,7 +1181,7 @@ function showProvince() {
 									</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('country')">
+							<tr>
 								<td class="{isvalid object="uf" label="country" value="cellLeftEditTable"}">
 									{t}Country:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1195,7 +1195,7 @@ function showProvince() {
 									{/if}								</td>
 							</tr>
 
-							<tr onClick="showHelpEntry('province')">
+							<tr>
 								<td class="{isvalid object="uf" label="province" value="cellLeftEditTable"}">
 									{t}Province / State:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1212,7 +1212,7 @@ function showProvince() {
 							
 
 							
-							<tr onClick="showHelpEntry('epf_registration_no')">
+							<tr>
 								<td class="{isvalid object="uf" label="epf_registration_no" value="cellLeftEditTable"}">
 									{t}EPF Registration No:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1231,7 +1231,7 @@ function showProvince() {
                             
 
                             
-							<tr onClick="showHelpEntry('epf_membership_no')">
+							<tr>
 								<td class="{isvalid object="uf" label="epf_membership_no" value="cellLeftEditTable"}">
 									{t}EPF Membership No:{/t}								</td>
 								<td colspan="2" class="cellRightEditTable">
@@ -1249,7 +1249,7 @@ function showProvince() {
 							</tr>  
 							
                             
-							<tr onClick="showHelpEntry('immediate_contact_person')">
+							<tr>
 								<td class="{isvalid object="uf" label="immediate_contact_person" value="cellLeftEditTable"}">
 									{t}Emergency Contact Person:{/t}								</td>
 								<td colspan="3" class="cellRightEditTable">
@@ -1257,7 +1257,7 @@ function showProvince() {
 							</tr>                            
                             
                             
-							<tr onClick="showHelpEntry('immediate_contact_no')">
+							<tr>
 								<td class="{isvalid object="uf" label="immediate_contact_no" value="cellLeftEditTable"}">
 									{t}Emergency Contact No:{/t}								</td>
 								<td colspan="3" class="cellRightEditTable">
@@ -1274,7 +1274,7 @@ function showProvince() {
 							
 							
                          <!--
-							<tr onClick="showHelpEntry('sin')">
+							<tr>
 								<td class="{isvalid object="uf" label="sin" value="cellLeftEditTable"}">
 									{t}SIN / SSN:{/t}								</td>
 								<td class="cellRightEditTable">
@@ -1289,7 +1289,7 @@ function showProvince() {
 				
                             
                             
-				<tr onClick="showHelpEntry('template')">
+				<tr>
 				  <td height="78" class="{isvalid object="cf" label="template" value="cellLeftEditTable"}">
 						{t}Templates:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1340,7 +1340,7 @@ function showProvince() {
                             
 
 
-				<tr onClick="showHelpEntry('logo')">
+				<tr>
 					<td height="78" class="{isvalid object="cf" label="logo" value="cellLeftEditTable"}">
 						{t}Personal Files:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1374,7 +1374,7 @@ function showProvince() {
                 
                 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
-				<tr onClick="showHelpEntry('user_id_copy')">
+				<tr>
 					<td height="78" class="{isvalid object="cf" label="user_id_copy" value="cellLeftEditTable"}">
 						{t}ID Copy:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1412,7 +1412,7 @@ function showProvince() {
 					<!-------------------------BIRTH CERTIFICATE---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
-				<tr onClick="showHelpEntry('user_birth_certificate')">
+				<tr>
 					<td height="78" class="{isvalid object="cf" label="user_birth_certificate" value="cellLeftEditTable"}">
 						{t}Birth Certificate:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1451,7 +1451,7 @@ function showProvince() {
 				<!-------------------------GS LETTER---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
-				<tr onClick="showHelpEntry('user_gs_letter')">
+				<tr>
 					<td height="78" class="{isvalid object="cf" label="user_gs_letter" value="cellLeftEditTable"}">
 						{t}GS Letter:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1490,7 +1490,7 @@ function showProvince() {
 				<!-------------------------Police Report---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
-				<tr onClick="showHelpEntry('user_police_report')">
+				<tr>
 					<td height="78" class="{isvalid object="cf" label="user_police_report" value="cellLeftEditTable"}">
 						{t}Police Report:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1529,7 +1529,7 @@ function showProvince() {
 				<!-------------------------NDA---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
-				<tr onClick="showHelpEntry('user_nda')">
+				<tr>
 					<td height="78" class="{isvalid object="cf" label="user_nda" value="cellLeftEditTable"}">
 						{t}NDA:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1570,7 +1570,7 @@ function showProvince() {
 				<!-------------------------BOND---------------------------------------------->
 
                  <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
-				<tr onClick="showHelpEntry('bond')">
+				<tr>
 					<td height="78" rowspan="2" class="{isvalid object="cf" label="bond" value="cellLeftEditTable"}">
 						{t}Bond:{/t} 
                         {if $permission->Check('user','edit_advanced')}
@@ -1605,7 +1605,7 @@ function showProvince() {
 
                     </td>
   					</tr>
-				<tr onClick="showHelpEntry('bond')">
+				<tr>
 				  <td class="cellRightEditTable">
                     {t}Bond Period :{/t}
                     <select name="user_data[bond_period]">

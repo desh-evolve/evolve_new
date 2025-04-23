@@ -100,7 +100,7 @@ function done() {
 											</td>
 										</tr>
 
-										<tr onClick="showHelpEntry('subject')">
+										<tr>
 											<td class="{isvalid object="mf" label="subject" value="cellLeftEditTable"}" style="width: 20%;">
 												<a name="form_start"></a>
 												{t}Subject:{/t}
@@ -109,7 +109,7 @@ function done() {
 												<input type="text" size="80" name="message_data[subject]" value="{if !empty($message_data.subject)}{$message_data.subject}{else}{$default_subject}{/if}">
 											</td>
 										</tr>
-										<tr onClick="showHelpEntry('body')">
+										<tr>
 											<td class="{isvalid object="mf" label="body" value="cellLeftEditTable"}">
 												{t}Body:{/t}
 											</td>

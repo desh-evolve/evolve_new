@@ -28,7 +28,7 @@
 				</tr>
 
 				{foreach from=$department_data.branch_data item=branch}
-					<tr onClick="showHelpEntry('name')">
+					<tr>
 						<td class="{isvalid object="dbuf" label="name" value="cellLeftEditTable"}">
 							{$branch.name}:
 						</td>

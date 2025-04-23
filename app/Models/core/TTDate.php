@@ -1521,7 +1521,7 @@ class TTDate {
 	}
 
 	//Loop from filter start date to end date. Creating an array entry for each day.
-	function getCalendarArray($start_date, $end_date, $start_day_of_week = 0, $force_weeks = TRUE) {
+	static function getCalendarArray($start_date, $end_date, $start_day_of_week = 0, $force_weeks = TRUE) {
 		if ( $start_date == '' OR $end_date == '' ) {
 			return FALSE;
 		}

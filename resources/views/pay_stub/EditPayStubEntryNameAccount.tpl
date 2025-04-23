@@ -34,7 +34,7 @@
 					{/if}
 
 					<input type="hidden" name="name_account_data[{$name_account.pay_stub_entry_name_id}][id]" value="{$name_account.id}">
-					<tr onClick="showHelpEntry('date_format')">
+					<tr>
 						<td class="{isvalid object="psenalf" label="date_format" value="cellLeftEditTable"}">
 							{$name_account.pay_stub_entry_description}:
 						</td>

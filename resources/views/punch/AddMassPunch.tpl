@@ -121,7 +121,7 @@ function getJobItemManualId() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('timestamp')">
+				<tr>
 					<td class="{isvalid object="pf" label="timestamp" value="cellLeftEditTable"}">
 						{t}Time:{/t}
 					</td>
@@ -132,7 +132,7 @@ function getJobItemManualId() {
 				</tr>
 
 				{if $pc_data.id != '' }
-				<tr onClick="showHelpEntry('actual_time_stamp')">
+				<tr>
 					<td class="{isvalid object="pf" label="actual_time_stamp" value="cellLeftEditTable"}">
 						{t}Actual Time:{/t}
 					</td>
@@ -223,7 +223,7 @@ function getJobItemManualId() {
 					</td>
 				</tr>
 							
-				<tr onClick="showHelpEntry('disable_rounding')">
+				<tr>
 					<td class="{isvalid object="pcf" label="disable_rounding" value="cellLeftEditTable"}">
 						{t}Disable Rounding:{/t}
 					</td>
@@ -232,7 +232,7 @@ function getJobItemManualId() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('punch_type')">
+				<tr>
 					<td class="{isvalid object="pf" label="punch_type" value="cellLeftEditTable"}">
 						{t}Punch Type:{/t}
 					</td>
@@ -243,7 +243,7 @@ function getJobItemManualId() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="pf" label="status" value="cellLeftEditTable"}">
 						{t}In/Out:{/t}
 					</td>
@@ -255,7 +255,7 @@ function getJobItemManualId() {
 				</tr>
 
 				{if count($pc_data.branch_options) > 1 OR $pc_data.branch_id != 0}
-				<tr onClick="showHelpEntry('branch')">
+				<tr>
 					<td class="{isvalid object="pcf" label="branch" value="cellLeftEditTable"}">
 						{t}Branch:{/t}
 					</td>
@@ -268,7 +268,7 @@ function getJobItemManualId() {
 				{/if}
 
 				{if count($pc_data.department_options) > 1 OR $pc_data.department_id != 0}
-				<tr onClick="showHelpEntry('department')">
+				<tr>
 					<td class="{isvalid object="pcf" label="department" value="cellLeftEditTable"}">
 						{t}Department:{/t}
 					</td>
@@ -282,7 +282,7 @@ function getJobItemManualId() {
 
 				{if $permission->Check('job','enabled') }
 				{if count($pc_data.job_options) > 1 OR $pc_data.job_id != 0}
-				<tr onClick="showHelpEntry('job')">
+				<tr>
 					<td class="{isvalid object="pcf" label="job" value="cellLeftEditTable"}">
 						{t}Job:{/t}
 					</td>
@@ -296,7 +296,7 @@ function getJobItemManualId() {
 				{/if}
 
 				{if count($pc_data.job_item_options) > 1 OR $pc_data.job_item_id != 0}
-				<tr onClick="showHelpEntry('job_item')">
+				<tr>
 					<td class="{isvalid object="pcf" label="job_item" value="cellLeftEditTable"}">
 						{t}Task:{/t}
 					</td>
@@ -311,7 +311,7 @@ function getJobItemManualId() {
 
 				{if (count($data.job_options) > 1 OR $pc_data.job_id != 0 )
 						OR ( count($data.job_item_options) > 1 OR $pc_data.job_item_id != 0 ) }
-				<tr onClick="showHelpEntry('quantity')">
+				<tr>
 					<td class="{isvalid object="pcf" label="quantity" value="cellLeftEditTable"}">
 						{t}Quantity:{/t}
 					</td>
@@ -324,7 +324,7 @@ function getJobItemManualId() {
 				{/if}
 
 				{if isset($pc_data.other_field_names.other_id1) }
-					<tr onClick="showHelpEntry('other_id1')">
+					<tr>
 						<td class="{isvalid object="jf" label="other_id1" value="cellLeftEditTable"}">
 							{$pc_data.other_field_names.other_id1}:
 						</td>
@@ -335,7 +335,7 @@ function getJobItemManualId() {
 				{/if}
 
 				{if isset($pc_data.other_field_names.other_id2) }
-				<tr onClick="showHelpEntry('other_id2')">
+				<tr>
 					<td class="{isvalid object="jf" label="other_id2" value="cellLeftEditTable"}">
 						{$pc_data.other_field_names.other_id2}:
 					</td>
@@ -345,7 +345,7 @@ function getJobItemManualId() {
 				</tr>
 				{/if}
 				{if isset($pc_data.other_field_names.other_id3) }
-				<tr onClick="showHelpEntry('other_id3')">
+				<tr>
 					<td class="{isvalid object="jf" label="other_id3" value="cellLeftEditTable"}">
 						{$pc_data.other_field_names.other_id3}:
 					</td>
@@ -355,7 +355,7 @@ function getJobItemManualId() {
 				</tr>
 				{/if}
 				{if isset($pc_data.other_field_names.other_id4) }
-					<tr onClick="showHelpEntry('other_id4')">
+					<tr>
 						<td class="{isvalid object="jf" label="other_id4" value="cellLeftEditTable"}">
 							{$pc_data.other_field_names.other_id4}:
 						</td>
@@ -365,7 +365,7 @@ function getJobItemManualId() {
 					</tr>
 				{/if}
 				{if isset($pc_data.other_field_names.other_id5) }
-					<tr onClick="showHelpEntry('other_id5')">
+					<tr>
 						<td class="{isvalid object="jf" label="other_id5" value="cellLeftEditTable"}">
 							{$pc_data.other_field_names.other_id5}:
 						</td>
@@ -375,7 +375,7 @@ function getJobItemManualId() {
 					</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('note')">
+				<tr>
 					<td class="{isvalid object="pcf" label="note" value="cellLeftEditTable"}">
 						{t}Note:{/t}
 					</td>

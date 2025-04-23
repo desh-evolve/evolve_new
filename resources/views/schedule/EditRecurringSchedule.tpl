@@ -22,7 +22,7 @@ function filterUserCount() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('recurring_schedule_template_control')">
+				<tr>
 					<td class="{isvalid object="rscf" label="recurring_schedule_template_control_id" value="cellLeftEditTable"}">
 						{t}Template:{/t}
 					</td>
@@ -33,7 +33,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('start_week')">
+				<tr>
 					<td class="{isvalid object="rscf" label="start_week" value="cellLeftEditTable"}">
 						{t}Start Week:{/t}
 					</td>
@@ -42,7 +42,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('start_date')">
+				<tr>
 					<td class="{isvalid object="rscf" label="start_date" value="cellLeftEditTable"}">
 						{t}Start Date:{/t}
 					</td>
@@ -53,7 +53,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="rscf" label="end_date" value="cellLeftEditTable"}">
 						{t}End Date:{/t}
 					</td>
@@ -64,7 +64,7 @@ function filterUserCount() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('auto_fill')">
+				<tr>
 					<td class="{isvalid object="ripf" label="auto_fill" value="cellLeftEditTable"}">
 						{t}Auto-Pilot:{/t}
 					</td>

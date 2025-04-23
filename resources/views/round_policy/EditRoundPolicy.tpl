@@ -33,7 +33,7 @@ function handleEnableBankTime() {
 				{/if}
 
 				<table class="editTable">
-					<tr onClick="showHelpEntry('name')">
+					<tr>
 						<td class="{isvalid object="rpf" label="name" value="cellLeftEditTable"}">
 							{t}Name:{/t}
 						</td>
@@ -44,7 +44,7 @@ function handleEnableBankTime() {
 							<br>
 						</td>
 					</tr>
-					<tr onClick="showHelpEntry('name')">
+					<tr>
 						<td class="{isvalid object="rpf" label="description" value="cellLeftEditTable"}">
 							{t}Description:{/t}
 						</td>
@@ -56,7 +56,7 @@ function handleEnableBankTime() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('default_policy')">
+					<tr>
 						<td class="{isvalid object="rpf" label="default" value="cellLeftEditTable"}">
 							{t}Default Policy:{/t}
 						</td>
@@ -68,7 +68,7 @@ function handleEnableBankTime() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('enable_bank_time')">
+					<tr>
 						<td class="{isvalid object="rpf" label="default" value="cellLeftEditTable"}">
 							{t}Enable Time Bank:{/t}
 						</td>
@@ -80,7 +80,7 @@ function handleEnableBankTime() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('over_time_default')">
+					<tr>
 						<td class="{isvalid object="rpf" label="default" value="cellLeftEditTable"}">
 							{t}Over Time Shift Default Attribute:{/t}
 						</td>
@@ -94,7 +94,7 @@ function handleEnableBankTime() {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('under_time_default')">
+					<tr>
 						<td class="{isvalid object="rpf" label="default" value="cellLeftEditTable"}">
 							{t}Under Time Shift Default Attribute:{/t}
 						</td>
@@ -136,14 +136,14 @@ function handleEnableBankTime() {
 						<td>
 							<input type="checkbox" class="checkbox" name="" disabled="true">
 						</td>
-						<td onClick="showHelpEntry('round_lunch_total')">
+						<td>
 							<input type="checkbox" class="checkbox" name="round_policy_data[round_lunch_total]" value="1"{if $round_policy_data.round_lunch_total == TRUE}checked{/if}>
 						</td>
-						<td onClick="showHelpEntry('round_total')">
+						<td>
 							<input type="checkbox" class="checkbox" name="round_policy_data[round_total]" value="1"{if $round_policy_data.round_total == TRUE}checked{/if}>
 						</td>
 					</tr>
-					<tr class="{$row_class}" onClick="showHelpEntry('strict')">
+					<tr class="{$row_class}">
 						<td class="cellLeftEditTable">
 							{t}Strict:{/t}
 						</td>
@@ -160,7 +160,7 @@ function handleEnableBankTime() {
 							<input type="checkbox" class="checkbox" name="round_policy_data[strict_end]" value="1"{if $round_policy_data.strict_end == TRUE}checked{/if}>
 						</td>
 					</tr>
-					<tr class="{$row_class}" onClick="showHelpEntry('grace_period')">
+					<tr class="{$row_class}">
 						<td  class="cellLeftEditTable" nowrap>
 							{t}Grace Period:{/t}
 						</td>
@@ -178,7 +178,7 @@ function handleEnableBankTime() {
 						</td>
 					</tr>
 
-					<tr class="{$row_class}" onClick="showHelpEntry('round_value')">
+					<tr class="{$row_class}">
 						<td class="cellLeftEditTable" nowrap>
 							{t}Round Value:{/t}
 						</td>
@@ -196,7 +196,7 @@ function handleEnableBankTime() {
 						</td>
 					</tr>
 
-					<tr class="{$row_class}" onClick="showHelpEntry('round_type')">
+					<tr class="{$row_class}">
 						<td class="cellLeftEditTable" nowrap>
 							{t}Round Type:{/t}
 						</td>

@@ -234,7 +234,7 @@ $( document ).ready(function() {
 				           <table class="editTable">
                                        
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -242,7 +242,7 @@ $( document ).ready(function() {
                                             <input type="text" size="30" name="data[name]" value="{$data.name}" readonly="readonly">
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('designation')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Designation:{/t}
 					</td>
@@ -251,7 +251,7 @@ $( document ).ready(function() {
                                             <input type="hidden" size="30" name="data[title_id]" value="{$data.title_id}" >
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('name')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Leave Type  :{/t}
 					</td>
@@ -261,7 +261,7 @@ $( document ).ready(function() {
 						</select>
 					</td>
 				</tr>
-                                  <tr onClick="showHelpEntry('name')">
+                                  <tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Leave Methord  :{/t}
 					</td>
@@ -271,7 +271,7 @@ $( document ).ready(function() {
 						</select>
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('no_days')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="no_days" value="cellLeftEditTable"}">
 						{t}Number Of Datys:{/t}
 					</td>
@@ -279,7 +279,7 @@ $( document ).ready(function() {
 						<input type="text" size="30"  name="data[no_days]" id="no_days" value="{$data.no_days}">
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('leave_date_year')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="leave_date_year" value="cellLeftEditTable"}">
 						{t}Leave Dates:{/t}
 					</td>
@@ -290,7 +290,7 @@ $( document ).ready(function() {
                                                             {t}ie:{/t} {$current_user_prefs->getDateFormatExample()}
 					</td>
 				</tr>
-                               <!-- <tr onClick="showHelpEntry('leave_to')">
+                               <!-- <tr>
 					<td class="{isvalid object="cdf" label="leave_date_year" value="cellLeftEditTable"}">
 						{t}Leave To:{/t}
 					</td>
@@ -301,7 +301,7 @@ $( document ).ready(function() {
                                         </td>
 				</tr> -->
                                 
-                                <tr onClick="showHelpEntry('appt-time')" id="rwtime" style="" >
+                                <tr id="rwtime" style="" >
 					<td class="{isvalid object="cdf" label="appt-time" value="cellLeftEditTable"}">
 						{t}Start Time:{/t}
 					</td>
@@ -311,7 +311,7 @@ $( document ).ready(function() {
                                         </td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('end-time')" id="rwendtime" style="" >
+                                <tr id="rwendtime" style="" >
 					<td class="{isvalid object="cdf" label="appt-time" value="cellLeftEditTable"}">
 						{t}End Time:{/t}
 					</td>
@@ -321,7 +321,7 @@ $( document ).ready(function() {
                                         </td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('reason')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="no_days" value="cellLeftEditTable"}">
 						{t}Reason:{/t}
 					</td>
@@ -329,7 +329,7 @@ $( document ).ready(function() {
                                             <textarea rows="5" cols="45" name="data[reason]" id="reason"> {$data.reason|escape} </textarea>
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('no_days')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="no_days" value="cellLeftEditTable"}">
 						{t}Address/ Tel. No While On Leave:{/t}
 					</td>
@@ -338,7 +338,7 @@ $( document ).ready(function() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('name')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Agreed to Cover Duties :{/t}
 					</td>
@@ -349,7 +349,7 @@ $( document ).ready(function() {
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('name')">
+                                <tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Supervisor  :{/t}
 					</td>

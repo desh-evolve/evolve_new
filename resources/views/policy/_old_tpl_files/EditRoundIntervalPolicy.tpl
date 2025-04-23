@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="ripf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('punch_type')">
+				<tr>
 					<td class="{isvalid object="ripf" label="punch_type" value="cellLeftEditTable"}">
 						{t}Punch Type:{/t}
 					</td>
@@ -32,7 +32,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('round_type')">
+				<tr>
 					<td class="{isvalid object="ripf" label="round_type" value="cellLeftEditTable"}">
 						{t}Round Type:{/t}
 					</td>
@@ -43,7 +43,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('interval')">
+				<tr>
 					<td class="{isvalid object="ripf" label="interval" value="cellLeftEditTable"}">
 						{t}Interval:{/t}
 					</td>
@@ -52,7 +52,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('grace')">
+				<tr>
 					<td class="{isvalid object="ripf" label="grace" value="cellLeftEditTable"}">
 						{t}Grace Period:{/t}
 					</td>
@@ -61,7 +61,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('strict')">
+				<tr>
 					<td class="{isvalid object="ripf" label="strict" value="cellLeftEditTable"}">
 						{t}Strict Schedule:{/t}
 					</td>

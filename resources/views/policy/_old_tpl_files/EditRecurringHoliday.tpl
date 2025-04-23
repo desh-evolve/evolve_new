@@ -73,7 +73,7 @@ function changeSpecialDay() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="rhf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -81,7 +81,7 @@ function changeSpecialDay() {
 						<input type="text" name="data[name]" value="{$data.name}">
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('special_day')">
+				<tr>
 					<td class="{isvalid object="rhf" label="special_day" value="cellLeftEditTable"}">
 						{t}Special Day:{/t}
 					</td>
@@ -94,7 +94,7 @@ function changeSpecialDay() {
 
 				<tbody id="type" >
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="rhf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -109,7 +109,7 @@ function changeSpecialDay() {
 
 				<tbody id="dynamic-20" style="display:none" >
 
-				<tr onClick="showHelpEntry('week_interval')">
+				<tr>
 					<td class="{isvalid object="rhf" label="week_interval" value="cellLeftEditTable"}">
 						{t}Week Interval:{/t}
 					</td>
@@ -120,7 +120,7 @@ function changeSpecialDay() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('day_of_week')">
+				<tr>
 					<td class="{isvalid object="rhf" label="day_of_week" value="cellLeftEditTable"}">
 						{t}Day of the Week:{/t}
 					</td>
@@ -135,7 +135,7 @@ function changeSpecialDay() {
 
 				<tbody id="dynamic-30" style="display:none" >
 
-				<tr onClick="showHelpEntry('day_of_week')">
+				<tr>
 					<td class="{isvalid object="rhf" label="day_of_week" value="cellLeftEditTable"}">
 						{t}Day of the Week:{/t}
 					</td>
@@ -146,7 +146,7 @@ function changeSpecialDay() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('pivot_day_direction')">
+				<tr>
 					<td class="{isvalid object="rhf" label="pivot_day_direction" value="cellLeftEditTable"}">
 						{t}Pivot Day Direction:{/t}
 					</td>
@@ -162,7 +162,7 @@ function changeSpecialDay() {
 
 				<tbody id="static" >
 
-				<tr onClick="showHelpEntry('day_of_month')">
+				<tr>
 					<td class="{isvalid object="rhf" label="day_of_month" value="cellLeftEditTable"}">
 						{t}Day of the Month:{/t}
 					</td>
@@ -177,7 +177,7 @@ function changeSpecialDay() {
 
 				<tbody id="month" >
 
-				<tr onClick="showHelpEntry('month')">
+				<tr>
 					<td class="{isvalid object="rhf" label="month" value="cellLeftEditTable"}">
 						{t}Month:{/t}
 					</td>
@@ -190,7 +190,7 @@ function changeSpecialDay() {
 
 				</tbody>
 
-				<tr onClick="showHelpEntry('always_week_day_id')">
+				<tr>
 					<td class="{isvalid object="rhf" label="always_week_day_id" value="cellLeftEditTable"}">
 						{t}Always On Week Day:{/t}
 					</td>

@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="epcf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>

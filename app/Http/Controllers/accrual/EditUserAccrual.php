@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\View;
 class EditUserAccrual extends Controller
 {
     protected $permission;
-    protected $company;
+    protected $currentUser;
+    protected $currentCompany;
     protected $userPrefs;
 
     public function __construct()
@@ -28,9 +29,10 @@ class EditUserAccrual extends Controller
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->userPrefs = View::shared('current_user_prefs');
-        $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
     }
 
@@ -41,6 +43,7 @@ class EditUserAccrual extends Controller
             $permission->Redirect( FALSE ); //Redirect
         }
         */
+        
 
         $viewData['title'] = $id ? 'Edit Accrual' : 'Add Accrual';
 

@@ -14,7 +14,7 @@
 				{include file="data_saved.tpl" result=$data_saved}
 
 				{if $bank_data.country == 'ca' OR $bank_data.country == 'us'}
-				<tr onClick="showHelpEntry('country')">
+				<tr>
 					<td class="cellRightEditTable" colspan="2">
 						<div align="center">
 
@@ -26,7 +26,7 @@
 
 				{if $bank_data.country == 'ca'}
                 
-					<tr onClick="showHelpEntry('institution')">
+					<tr>
 						<td class="{isvalid object="baf" label="institution" value="cellLeftEditTable"}">
 							{t}Institution Number:{/t}
 						</td>
@@ -35,7 +35,7 @@
 						</td>
 					</tr>
                  
-					<tr onClick="showHelpEntry('transit')">
+					<tr>
 						<td class="{isvalid object="baf" label="transit" value="cellLeftEditTable"}">
 							{t}Bank Transit:{/t}
 						</td>
@@ -44,7 +44,7 @@
 						</td>
 					</tr>
                    
-					<tr onClick="showHelpEntry('account')">
+					<tr>
 						<td class="{isvalid object="baf" label="account" value="cellLeftEditTable"}">
 							{t}Account Number:{/t}
 						</td>
@@ -53,7 +53,7 @@
 						</td>
 					</tr>
 				{else}
-					<tr onClick="showHelpEntry('transit')">
+					<tr>
 						<td class="{isvalid object="baf" label="transit" value="cellLeftEditTable"}">
 							{t}Bank Code:{/t}
 						</td>
@@ -63,7 +63,7 @@
 					</tr>
 					
                     <!-- // ARSP EDIT - I ADD THIS NEW CODE -->
-					<tr onClick="showHelpEntry('bank_name')">
+					<tr>
 						<td class="{isvalid object="baf" label="bank_name" value="cellLeftEditTable"}">
 							{t}Bank Name:{/t}
 						</td>
@@ -73,7 +73,7 @@
 					</tr>
                     
                     <!-- // ARSP EDIT - I ADD THIS NEW CODE -->
-					<tr onClick="showHelpEntry('bank_branch')">
+					<tr>
 						<td class="{isvalid object="baf" label="bank_branch" value="cellLeftEditTable"}">
 							{t}Bank Branch:{/t}
 						</td>
@@ -82,7 +82,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('account')">
+					<tr>
 						<td class="{isvalid object="baf" label="account" value="cellLeftEditTable"}">
 							{t}Account Number:{/t}
 						</td>

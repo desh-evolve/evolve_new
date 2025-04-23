@@ -140,7 +140,7 @@ function showReportDateType() {
 
 				{htmlreportsort filter_data=$filter_data}
                                 
-                                <tr onClick="showHelpEntry('sort')">
+                                <tr>
                                     <td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
                                             {t}Export Format:{/t}
                                     </td>

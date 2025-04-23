@@ -132,7 +132,7 @@ function showReportDateType() {
 				{htmlreportgroup filter_data=$filter_data}
 				{htmlreportsort filter_data=$filter_data}
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Export Format:{/t}
 					</td>
@@ -143,7 +143,7 @@ function showReportDateType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('hide_employer_rows')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Hide Employer Contributions:{/t}
 					</td>

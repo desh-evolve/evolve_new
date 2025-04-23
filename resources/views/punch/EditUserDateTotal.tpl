@@ -80,7 +80,7 @@ function setOverride() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('total_time')">
+				<tr>
 					<td class="{isvalid object="udtf" label="total_time" value="cellLeftEditTable"}">
 						{t}Time:{/t}
 					</td>
@@ -90,7 +90,7 @@ function setOverride() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="udtf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -102,7 +102,7 @@ function setOverride() {
 				</tr>
 
 				<tbody id="type" style="display:none" >
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="udtf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -115,7 +115,7 @@ function setOverride() {
 				</tbody>
 
 				<tbody id="absence_policy" style="display:none" >
-				<tr onClick="showHelpEntry('absence_policy')">
+				<tr>
 					<td class="{isvalid object="udtf" label="absence_policy" value="cellLeftEditTable"}">
 						{t}Absence Policy:{/t}
 					</td>
@@ -127,7 +127,7 @@ function setOverride() {
 				</tr>
 
 				<tbody id="over_time_policy" style="display:none" >
-				<tr onClick="showHelpEntry('over_time_policy')">
+				<tr>
 					<td class="{isvalid object="udtf" label="over_time_policy" value="cellLeftEditTable"}">
 						{t}Overtime Policy:{/t}
 					</td>
@@ -140,7 +140,7 @@ function setOverride() {
 				</tbody>
 
 				<tbody id="premium_policy" style="display:none" >
-				<tr onClick="showHelpEntry('premium_policy')">
+				<tr>
 					<td class="{isvalid object="udtf" label="premium_policy" value="cellLeftEditTable"}">
 						{t}Premium Policy:{/t}
 					</td>
@@ -153,7 +153,7 @@ function setOverride() {
 				</tbody>
 
 				<tbody id="meal_policy" style="display:none" >
-				<tr onClick="showHelpEntry('meal_policy')">
+				<tr>
 					<td class="{isvalid object="udtf" label="meal_policy" value="cellLeftEditTable"}">
 						{t}Meal Policy:{/t}
 					</td>
@@ -165,7 +165,7 @@ function setOverride() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('branch')">
+				<tr>
 					<td class="{isvalid object="udtf" label="branch" value="cellLeftEditTable"}">
 						{t}Branch:{/t}
 					</td>
@@ -176,7 +176,7 @@ function setOverride() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('department')">
+				<tr>
 					<td class="{isvalid object="udtf" label="department" value="cellLeftEditTable"}">
 						{t}Department:{/t}
 					</td>
@@ -188,7 +188,7 @@ function setOverride() {
 				</tr>
 
 				{if $permission->Check('job','enabled') }
-				<tr onClick="showHelpEntry('job')">
+				<tr>
 					<td class="{isvalid object="udtf" label="job" value="cellLeftEditTable"}">
 						{t}Job:{/t}
 					</td>
@@ -199,7 +199,7 @@ function setOverride() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('job_item')">
+				<tr>
 					<td class="{isvalid object="udtf" label="job_item" value="cellLeftEditTable"}">
 						{t}Task:{/t}
 					</td>
@@ -209,7 +209,7 @@ function setOverride() {
 						</select>
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('quantity')">
+				<tr>
 					<td class="{isvalid object="udtf" label="quantity" value="cellLeftEditTable"}">
 						{t}Quantity:{/t}
 					</td>
@@ -219,7 +219,7 @@ function setOverride() {
 				</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('override')">
+				<tr>
 					<td class="{isvalid object="udtf" label="override" value="cellLeftEditTable"}">
 						{t}Override:{/t}
 					</td>

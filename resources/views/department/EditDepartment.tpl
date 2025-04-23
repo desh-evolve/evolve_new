@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="df" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -23,7 +23,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="df" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -32,7 +32,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('manual_id')">
+				<tr>
 					<td class="{isvalid object="df" label="manual_id" value="cellLeftEditTable"}">
 						{t}Code:{/t}
 					</td>
@@ -45,7 +45,7 @@
 				</tr>
 
 				{if isset($department_data.other_field_names.other_id1) }
-					<tr onClick="showHelpEntry('other_id1')">
+					<tr>
 						<td class="{isvalid object="df" label="other_id1" value="cellLeftEditTable"}">
 							{$department_data.other_field_names.other_id1}:
 						</td>
@@ -56,7 +56,7 @@
 				{/if}
 
 				{if isset($department_data.other_field_names.other_id2) }
-				<tr onClick="showHelpEntry('other_id2')">
+				<tr>
 					<td class="{isvalid object="df" label="other_id2" value="cellLeftEditTable"}">
 						{$department_data.other_field_names.other_id2}:
 					</td>
@@ -66,7 +66,7 @@
 				</tr>
 				{/if}
 				{if isset($department_data.other_field_names.other_id3) }
-				<tr onClick="showHelpEntry('other_id3')">
+				<tr>
 					<td class="{isvalid object="df" label="other_id3" value="cellLeftEditTable"}">
 						{$department_data.other_field_names.other_id3}:
 					</td>
@@ -76,7 +76,7 @@
 				</tr>
 				{/if}
 				{if isset($department_data.other_field_names.other_id4) }
-					<tr onClick="showHelpEntry('other_id4')">
+					<tr>
 						<td class="{isvalid object="df" label="other_id4" value="cellLeftEditTable"}">
 							{$department_data.other_field_names.other_id4}:
 						</td>
@@ -86,7 +86,7 @@
 					</tr>
 				{/if}
 				{if isset($department_data.other_field_names.other_id5) }
-					<tr onClick="showHelpEntry('other_id5')">
+					<tr>
 						<td class="{isvalid object="df" label="other_id5" value="cellLeftEditTable"}">
 							{$department_data.other_field_names.other_id5}:
 						</td>
@@ -97,7 +97,7 @@
 				{/if}
 
 				{if is_array($department_data.branch_list_options)}
-				<tr onClick="showHelpEntry('branch')">
+				<tr>
 					<td class="{isvalid object="df" label="branch" value="cellLeftEditTable"}">
 						{t}Branches:{/t}
 					</td>

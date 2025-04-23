@@ -265,7 +265,7 @@ function finalScoreD() {
 
                 <!--ARSP EDIT START FOR THUNDER & NEON -->
                 
-				<tr onClick="showHelpEntry('default_branch')">
+				<tr>
 					<td class="{isvalid object="ujf" label="default_branch" value="cellLeftEditTable"}">
 						{t}Default Branch:{/t}
 					</td>
@@ -277,7 +277,7 @@ function finalScoreD() {
 				</tr>                
                 
                 
-				<tr onClick="showHelpEntry('default_department')">
+				<tr>
 					<td class="{isvalid object="ujf" label="default_department" value="cellLeftEditTable"}">
 						{t}Default Department:{/t}
 					</td>
@@ -289,7 +289,7 @@ function finalScoreD() {
 				</tr>   
                 
 
-				<tr onClick="showHelpEntry('title')">
+				<tr>
 					<td class="{isvalid object="ujf" label="title" value="cellLeftEditTable"}">
 						{t}Employee Title:{/t}
 					</td>
@@ -309,7 +309,7 @@ function finalScoreD() {
                 
                 
 				<!--ARSP HIDE
-				<tr onClick="showHelpEntry('labor_burden_percent')">
+				<tr>
 					<td class="{isvalid object="uwf" label="labor_burden_percent" value="cellLeftEditTable"}">
 						{t}Labor Burden Percent:{/t}
 					</td>
@@ -320,7 +320,7 @@ function finalScoreD() {
 				</tr>
                 -->
 
-				<tr onClick="showHelpEntry('start_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="start_date" value="cellLeftEditTable"}">
 						{t}Review Start Day:{/t}
 			    </td>
@@ -332,7 +332,7 @@ function finalScoreD() {
 				</tr>
                 
                 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="end_date" value="cellLeftEditTable"}">
 						{t}Review End Day:{/t}
 		      </td>
@@ -344,7 +344,7 @@ function finalScoreD() {
 				</tr>           
 
             
-				<tr onClick="showHelpEntry('review_date')">
+				<tr>
 					<td class="{isvalid object="ujf" label="review_date" value="cellLeftEditTable"}">
 						{t}Date of Review:{/t}
 				  </td>
@@ -374,7 +374,7 @@ function finalScoreD() {
                 
                 
                 
-			<tr class = "tblDataWhite" onClick="showHelpEntry('scorea1')">
+			<tr class = "tblDataWhite">
                 <td class="{isvalid object="ujf" label="scorea1" value="cellLeftEditTable"}">{t}Job Knowledge- Understand the esential aspect of the position{/t}</td>
                 
                <td class="cellRightEditTable">10</td>  
@@ -384,7 +384,7 @@ function finalScoreD() {
 			</tr>                                
 
                 
-			<tr class = "tblDataWhite" onClick="showHelpEntry('scorea2')">
+			<tr class = "tblDataWhite">
                 <td class="{isvalid object="ujf" label="scorea2" value="cellLeftEditTable"}">{t}Quality of Works - Performe work accurately, completly and precisely, Meets Deadline{/t}</td>
                 
                <td class="cellRightEditTable">10</td>  
@@ -397,7 +397,7 @@ function finalScoreD() {
             
             
                             
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea3')">
+		<tr class = "tblDataWhite">
             
                                 <td class="{isvalid object="ujf" label="scorea3" value="cellLeftEditTable"}">{t}Quantity of Work - performe satisfactory volume of work during a given period of time{/t}</td>
                                <td class="cellRightEditTable">10</td>  
@@ -410,7 +410,7 @@ function finalScoreD() {
 
  
  
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea4')">
+		<tr class = "tblDataWhite">
                                 <td class="{isvalid object="ujf" label="scorea4" value="cellLeftEditTable"}">{t} Coreparation with Supervisor- Work with supervisor in carrying outtask and following instructions{/t}</td>
 
                                <td class="cellRightEditTable">10</td>  
@@ -422,7 +422,7 @@ function finalScoreD() {
 		</tr>                                
 
                 
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea5')">
+		<tr class = "tblDataWhite">
                             <td class="{isvalid object="ujf" label="scorea5" value="cellLeftEditTable"}">{t}Adaptarbility to Stress - Displays precence of mine and calmness during high stress periods. Relates well to others while experiencing stress{/t}</td>
 
                             <td class="cellRightEditTable">10</td>  
@@ -435,7 +435,7 @@ function finalScoreD() {
             
             
                             
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea6')">
+		<tr class = "tblDataWhite">
                                 <td class="{isvalid object="ujf" label="scorea6" value="cellLeftEditTable"}">{t}Team- working and developing others & corporate responsibility and ethics - Help others and teach themhow to do his/her work during absence{/t}</td>
 
                                 <td class="cellRightEditTable">10</td>  
@@ -448,7 +448,7 @@ function finalScoreD() {
             
             
             
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea7')">
+		<tr class = "tblDataWhite">
                             <td class="{isvalid object="ujf" label="scorea7" value="cellLeftEditTable"}">{t}Initiating Action and Organizing and planing - Looks for and takes advantage of oppotunities to act beyond what is required. Prioritizes mulitiple activities and assignements effectively and adjusts as appropriate {/t}</td>
 
                             <td class="cellRightEditTable">10</td>  
@@ -460,7 +460,7 @@ function finalScoreD() {
 		</tr>                                
 
                 
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea8')">
+		<tr class = "tblDataWhite">
                             <td class="{isvalid object="ujf" label="scorea8" value="cellLeftEditTable"}">{t}Decision Making - Identifies issues, problem and opportunities and determines that action is needed & chooses appropriate action by evaluationg options and considering implications an a timely manner{/t}</td>
 
                             <td class="cellRightEditTable">10</td>  
@@ -473,7 +473,7 @@ function finalScoreD() {
             
             
                             
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea9')">
+		<tr class = "tblDataWhite">
                                 <td class="{isvalid object="ujf" label="note" value="cellLeftEditTable"}">{t}External Relations (Division vise & Company vise) - Ability to deal with external agencies collagues and university constituents. Fosters positive working relation ship on dehaf of the division/ company{/t}</td>
 
                                <td class="cellRightEditTable">10</td>  
@@ -486,7 +486,7 @@ function finalScoreD() {
             
             
             
-		<tr class = "tblDataWhite" onClick="showHelpEntry('scorea10')">
+		<tr class = "tblDataWhite">
                             <td class="{isvalid object="ujf" label="scorea10" value="cellLeftEditTable"}">{t}Other Factors{/t}</td>
 
                            <td class="cellRightEditTable">10</td>  
@@ -498,7 +498,7 @@ function finalScoreD() {
 		</tr>   
                         
                         
-                <tr class = "tblDataWhite" onClick="showHelpEntry('scorea10')">
+                <tr class = "tblDataWhite">
                             <td class="{isvalid object="ujf" label="scorea10" value="cellLeftEditTable"}">{t}TOTAL SCORE FOR GENARAL FACTORS{/t}</td>
 
                             <td class="cellRightEditTable">100</td>  
@@ -509,7 +509,7 @@ function finalScoreD() {
               
 		</tr> 
                 
-                 <tr class = "tblDataWhite" onClick="showHelpEntry('scorea10')">
+                 <tr class = "tblDataWhite">
                             <td class="{isvalid object="ujf" label="scorea10" value="cellLeftEditTable"}">{t}Avarage maks for key performance indicators{/t}</td>
 
                             <td class="cellRightEditTable">100</td>  
@@ -520,13 +520,13 @@ function finalScoreD() {
               
 		</tr> 
                 
-                   <tr class = "tblDataWhite" onClick="showHelpEntry('scorea10')" >
+                   <tr class = "tblDataWhite" >
                        <td colspan="4" ></td>    
 
               
 		   </tr>
                    
-                <tr class = "tblDataWhite" onClick="showHelpEntry('scorea10')">
+                <tr class = "tblDataWhite">
                             <td class="{isvalid object="ujf" label="scorea10" value="cellLeftEditTable"}">{t}Final Marks{/t}</td>
 
                             <td class="cellRightEditTable">100</td>  

@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('parent')">
+				<tr>
 					<td class="{isvalid object="ugf" label="parent" value="cellLeftEditTable"}">
 						{t}Parent:{/t}
 					</td>
@@ -23,7 +23,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="ugf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>

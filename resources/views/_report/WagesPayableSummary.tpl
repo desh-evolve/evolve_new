@@ -133,7 +133,7 @@ function showReportDateType() {
 				{htmlreportgroup filter_data=$filter_data total=4}
 				{htmlreportsort filter_data=$filter_data}
 
-				<tr onClick="showHelpEntry('no_data')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uf" label="no_data" value="cellLeftEditTableHeader"}">
 						{t}Include Employees with no data:{/t}
 					</td>

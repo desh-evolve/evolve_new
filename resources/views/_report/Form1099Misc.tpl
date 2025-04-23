@@ -234,7 +234,7 @@ var report_criteria_elements = new Array(
 				{capture assign=report_display_plural_name}{t}Employees{/t}{/capture}
 				{htmlreportfilter filter_data=$filter_data label='exclude_user' display_name=$report_display_name display_plural_name=$report_display_plural_name}
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td class="{isvalid object="uf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Include Instruction Pages:{/t}
 					</td>

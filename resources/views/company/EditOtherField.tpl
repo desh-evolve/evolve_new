@@ -23,7 +23,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('other_id1')">
+				<tr>
 					<td class="{isvalid object="off" label="other_id1" value="cellLeftEditTable"}">
 						{t}Other ID1:{/t}
 					</td>
@@ -32,7 +32,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('other_id2')">
+				<tr>
 					<td class="{isvalid object="off" label="other_id2" value="cellLeftEditTable"}">
 						{t}Other ID2:{/t}
 					</td>
@@ -41,7 +41,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('other_id3')">
+				<tr>
 					<td class="{isvalid object="off" label="other_id3" value="cellLeftEditTable"}">
 						{t}Other ID3:{/t}
 					</td>
@@ -50,7 +50,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('other_id4')">
+				<tr>
 					<td class="{isvalid object="off" label="other_id4" value="cellLeftEditTable"}">
 						{t}Other ID4:{/t}
 					</td>
@@ -59,7 +59,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('other_id5')">
+				<tr>
 					<td class="{isvalid object="off" label="other_id5" value="cellLeftEditTable"}">
 						{t}Other ID5:{/t}
 					</td>

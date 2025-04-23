@@ -26,7 +26,7 @@
 				{else}
 				
 					
-						<tr onClick="showHelpEntry('country')">
+						<tr>
 							<td class="{isvalid object="udf" label="country" value="cellLeftEditTable"}">
 								{t}OP Date:{/t}
 							</td>
@@ -37,7 +37,7 @@
                                                         </td>
 						</tr>
                                                 
-                                                <tr onClick="showHelpEntry('country')">
+                                                <tr>
 							
                                                         <td class="{isvalid object="udf" label="country" value="cellLeftEditTable"}">
 								

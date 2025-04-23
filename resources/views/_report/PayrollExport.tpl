@@ -139,7 +139,7 @@ function showExportSettings() {
 				{capture assign=report_display_plural_name}{t}Employees{/t}{/capture}
 				{htmlreportfilter filter_data=$filter_data label='exclude_user' display_name=$report_display_name display_plural_name=$report_display_plural_name}
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Export Format:{/t}
 					</td>

@@ -68,7 +68,7 @@ function getTimeZoneOffset() {
 
 
 				{if $permission->Check('user_preference','edit') OR $permission->Check('user_preference','edit_child')}
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="upf" label="user" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -78,7 +78,7 @@ function getTimeZoneOffset() {
 				</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('language')">
+				<tr>
 					<td class="{isvalid object="upf" label="language" value="cellLeftEditTable"}">
 						{t}Language:{/t}
 					</td>
@@ -89,7 +89,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('date_format')">
+				<tr>
 					<td class="{isvalid object="upf" label="date_format" value="cellLeftEditTable"}">
 						{t}Date Format:{/t}
 					</td>
@@ -104,7 +104,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('time_format')">
+				<tr>
 					<td class="{isvalid object="upf" label="time_format" value="cellLeftEditTable"}">
 						{t}Time Format:{/t}
 					</td>
@@ -115,7 +115,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('time_unit_format')">
+				<tr>
 					<td class="{isvalid object="upf" label="time_unit_format" value="cellLeftEditTable"}">
 						{t}Time Units:{/t}
 					</td>
@@ -126,7 +126,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('time_zone')">
+				<tr>
 					<td class="{isvalid object="upf" label="time_zone" value="cellLeftEditTable"}">
 						{t}Time Zone:{/t}
 					</td>
@@ -138,7 +138,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('start_week_day')">
+				<tr>
 					<td class="{isvalid object="upf" label="start_week_day" value="cellLeftEditTable"}">
 						{t}Start Weeks on:{/t}
 					</td>
@@ -149,7 +149,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('items_per_page')">
+				<tr>
 					<td class="{isvalid object="upf" label="items_per_page" value="cellLeftEditTable"}">
 						{t}Rows per Page:{/t}
 					</td>
@@ -164,7 +164,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('email_notification_exception')">
+				<tr>
 					<td class="{isvalid object="upf" label="email_notification_exception" value="cellLeftEditTable"}">
 						{t}Exceptions:{/t}
 					</td>
@@ -173,7 +173,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('email_notification_message')">
+				<tr>
 					<td class="{isvalid object="upf" label="email_notification_message" value="cellLeftEditTable"}">
 						{t}Messages:{/t}
 					</td>
@@ -182,7 +182,7 @@ function getTimeZoneOffset() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('email_notification_home')">
+				<tr>
 					<td class="{isvalid object="upf" label="email_notification_home" value="cellLeftEditTable"}">
 						{t}Send Notifications to Home Email:{/t}
 					</td>

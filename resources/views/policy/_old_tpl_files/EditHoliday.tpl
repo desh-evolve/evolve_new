@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="hf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('date')">
+				<tr>
 					<td class="{isvalid object="hf" label="date_stamp" value="cellLeftEditTable"}">
 						{t}Date:{/t}
 					</td>

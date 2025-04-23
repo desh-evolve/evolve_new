@@ -107,7 +107,7 @@ var report_criteria_elements = new Array(
 
 				{htmlreportsort filter_data=$filter_data}
 {*
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="cellLeftEditTableHeader">
 						{t}Automatic Refresh:{/t}
 					</td>
