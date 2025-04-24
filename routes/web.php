@@ -72,7 +72,10 @@ use App\Http\Controllers\timesheet\ViewUserTimeSheet;
 use App\Http\Controllers\progressbar\ProgressBar;
 use App\Http\Controllers\punch\AddMassPunch;
 use App\Http\Controllers\punch\EditPunch;
+use App\Http\Controllers\punch\EditUserAbsence;
+use App\Http\Controllers\punch\EditUserDateTotal;
 use App\Http\Controllers\punch\PunchList;
+use App\Http\Controllers\punch\UserDateTotalList;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\EditUser;
@@ -342,6 +345,10 @@ Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
+Route::get('/attendance/punch/userdate_totals', [UserDateTotalList::class, 'index'])->name('attendance.punch.userdate_totals');
+Route::get('/attendance/punch/edit_userdate_total', [EditUserDateTotal::class, 'index'])->name('attendance.punch.edit_userdate_total');
+Route::get('/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
+
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
 Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete'])->name('attendance.punch_single.delete');

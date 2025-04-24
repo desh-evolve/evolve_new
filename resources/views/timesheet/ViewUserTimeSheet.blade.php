@@ -1,4 +1,4 @@
-<x-app-layout :title="'Input Example'">
+<x-app-layout :title="'Timesheet'">
 
     <style>
         td, th {
@@ -729,7 +729,7 @@
 
         function editPunch(punchID,punchControlId,userID,date,statusID) {
             try {
-                eP=window.open('{/literal}{$BASE_URL}{literal}punch/EditPunch.php?id='+ encodeURI(punchID) +'&punch_control_id='+ encodeURI(punchControlId) +'&user_id='+ encodeURI(userID) +'&date_stamp='+ encodeURI(date) +'&status_id='+ encodeURI(statusID),"Edit_Punch","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=600,height=470,resizable=1");
+                eP=window.open('/attendance/punch/add?id='+encodeURI(punchID)+'&punch_control_id='+encodeURI(punchControlId)+'&user_id='+encodeURI(userID)+'&date_stamp='+encodeURI(date)+'&status_id='+encodeURI(statusID),"Edit_Punch","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=800,height=625,resizable=1");
                 if (window.focus) {
                     eP.focus()
                 }
@@ -739,7 +739,7 @@
         }
         function hourList(userDateID,userID,date) {
             try {
-                hL=window.open('{/literal}{$BASE_URL}{literal}punch/UserDateTotalList.php?user_date_id='+ encodeURI(userDateID) +'&filter_user_id='+ encodeURI(userID) +'&filter_date='+ encodeURI(date),"Hours","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=750,height=350,resizable=1");
+                hL=window.open('/attendance/punch/userdate_totals?user_date_id='+encodeURI(userDateID)+'&filter_user_id='+encodeURI(userID)+'&filter_date='+encodeURI(date),"Hours","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=750,height=350,resizable=1");
                 if (window.focus) {
                     hL.focus()
                 }
@@ -749,7 +749,7 @@
         }
         function editAbsence(absenceID,userID,date) {
             try {
-                eA=window.open('{/literal}{$BASE_URL}{literal}punch/EditUserAbsence.php?id='+ encodeURI(absenceID) +'&user_id='+ encodeURI(userID) +'&date_stamp='+ encodeURI(date),"Edit_Absence","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
+                eA=window.open('/attendance/punch/edit_user_absence?id='+encodeURI(absenceID)+'&user_id='+encodeURI(userID)+'&date_stamp='+encodeURI(date),"Edit_Absence","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
                 if (window.focus) {
                     eA.focus()
                 }
@@ -773,8 +773,8 @@
         function confirmAction() {
             action = document.getElementById('select_action').value;
         
-            var recalculateCompany = "{/literal}Are you sure you want to recalculate the timesheets of every employee?{literal}";
-            var recalculatePayStub = "{/literal}Are you sure you want to recalculate the pay stub of this employee?{literal}";
+            var recalculateCompany = "Are you sure you want to recalculate the timesheets of every employee?";
+            var recalculatePayStub = "Are you sure you want to recalculate the pay stub of this employee?";
         
             if ( action == 'recalculate employee' ) {
                 confirm_result = true;

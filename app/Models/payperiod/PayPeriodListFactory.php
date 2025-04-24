@@ -597,10 +597,10 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$ppsf = new PayPeriodScheduleFactory();
 
 		$ph = array(
-					':user_id' => $user_id,
-					':start_date' => Carbon::parse( $end_date )->toDateTimeString(),
-					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
-					);
+			':user_id' => $user_id,
+			':start_date' => date('Y-m-d H:i:s', $end_date),
+			':end_date' => date('Y-m-d H:i:s', $end_date),
+		);
 
 		//No pay period
 		$query = '
