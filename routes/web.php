@@ -357,8 +357,10 @@ Route::delete('/attendance/request/delete/{id}', [UserRequestList::class, 'delet
 Route::get('/attendance/accruals/{filter_user_id?}', [UserAccrualBalanceList::class, 'index'])->name('attendance.accruals');
 Route::get('/attendance/user_accruals/{user_id}/{ap_id}', [ViewUserAccrualList::class, 'index'])->name('attendance.user_accruals');
 Route::get('/attendance/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('attendance.user_accruals.add');
-Route::post('/attendance/user_accruals/submit/{id?}', [EditUserAccrual::class, 'submit'])->name('attendance.user_accruals.submit');
+Route::post('/attendance/user_accruals/submit/{id?}', [EditUserAccrual::class, 'save'])->name('attendance.user_accruals.submit');
 Route::delete('/attendance/user_accruals/delete/{id}', [ViewUserAccrualList::class, 'delete'])->name('attendance.user_accruals.delete');
+Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('user_accruals.add');
+
 
 Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
 

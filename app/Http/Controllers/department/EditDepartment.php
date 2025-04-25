@@ -40,12 +40,12 @@ class EditDepartment extends Controller
 
 		$current_company = $this->currentCompany;
         $current_user_prefs = $this->userPrefs;
-        /*
-        if ( !$permission->Check('department','enabled')
-				OR !( $permission->Check('department','view') OR $permission->Check('department','view_own') ) ) {
-			$permission->Redirect( FALSE ); //Redirect
+        
+        if ( !$this->permission->Check('department','enabled')
+				OR !( $$this->permission->Check('department','view') OR $this->permission->Check('department','view_own') ) ) {
+					$this->permission->Redirect( FALSE ); //Redirect
 		}
-        */
+        
 		
         $viewData['title'] = $id ? 'Edit Department' : 'Add Department';
 
