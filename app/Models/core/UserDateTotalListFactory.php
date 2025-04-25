@@ -365,7 +365,6 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
 		return $this;
 	}
 

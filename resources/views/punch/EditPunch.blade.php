@@ -1,7 +1,14 @@
-<x-app-layout :title="'Input Example'">
-
-    <div class="d-flex justify-content-center">
-        <div class="col-lg-8">
+<x-app-modal-layout :title="'Input Example'">
+    <style>
+        .main-content{
+            margin-left: 0 !important;
+        }
+        .page-content{
+            padding: 10px !important;
+        }
+    </style>
+    <div class="">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
@@ -319,4 +326,4 @@
         }
     </script>
 
-</x-app-layout>
+</x-app-modal-layout>

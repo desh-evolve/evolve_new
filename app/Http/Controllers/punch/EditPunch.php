@@ -221,7 +221,7 @@ class EditPunch extends Controller
 				}
 			} elseif ( !empty($user_id) ) {
 				Debug::Text(' User ID was passed: '. $user_id .' Date Stamp: '. $date_stamp, __FILE__, __LINE__, __METHOD__,10);
-
+				
 				//Don't guess too much. If they click a day to add a punch. Make sure that punch is on that day.
 				if ( isset($date_stamp) AND !empty($date_stamp) ) {
 					$time_stamp = $date_stamp + (3600*12); //Noon
@@ -271,7 +271,7 @@ class EditPunch extends Controller
 		$viewData['pcf'] = $pcf;
 		$viewData['pf'] = $pf;
 		$viewData['current_user_prefs'] = $current_user_prefs;
-		
+		//dd($viewData);
 		return view('punch/EditPunch', $viewData);
 	}
 

@@ -136,25 +136,22 @@ class UserDateFactory extends Factory {
 
 		return FALSE;
 	}
-	function setDateStamp($epoch) {
+	function setDateStamp($epoch, $type = null) {
 		$epoch = trim($epoch);
 
-		if 	(	$this->Validator->isDate(		'date_stamp',
-												$epoch,
-												('Incorrect date'))
-			) {
-
+		if 	(	$this->Validator->isDate('date_stamp', $epoch, ('Incorrect date')) ) {
 			if 	( $epoch > 0 ) {
-				$this->data['date_stamp'] = $epoch;
-
+				if($type == 'date'){
+					$this->data['date_stamp'] = date('Y-m-d', $epoch);
+				}elseif($type == 'datetime'){
+					$this->data['date_stamp'] = date('Y-m-d H:i:s', $epoch);
+				}else{
+					$this->data['date_stamp'] = $epoch;
+				}
 				return TRUE;
 			} else {
-				$this->Validator->isTRUE(		'date_stamp',
-												FALSE,
-												('Incorrect date'));
+				$this->Validator->isTRUE( 'date_stamp', FALSE, ('Incorrect date'));
 			}
-
-
 		}
 
 		return FALSE;
@@ -191,9 +188,9 @@ class UserDateFactory extends Factory {
 			//Insert new row
 			$udf = new UserDateFactory();
 			$udf->setUser( $user_id );
-			$udf->setDateStamp( $date );
+			$udf->setDateStamp( $date, 'date' );
 			$udf->setPayPeriod();
-
+			
 			if ( $udf->isValid() ) {
 				return $udf->Save();
 			} else {
