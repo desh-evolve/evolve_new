@@ -6,32 +6,32 @@ use App\Models\Core\TTi18n;
 
 class UserEducationFactory  extends Factory{
     //put your code here
-    
-    
+
+
     	protected $table = 'user_education';
 	protected $pk_sequence_name = 'user_education_id_seq'; //PK Sequence name
-        
-        
-        
+
+
+
         function _getFactoryOptions( $name ) {
 
 		$retval = NULL;
 		switch( $name ) {
-                    
+
                     case 'column':
 				$retval = array(
 						   );
-                        
+
                         break;
-                
+
                 }
-                
+
                 return $retval;
         }
-        
-        
-        
-         
+
+
+
+
 	function getUser() {
 		if ( isset($this->data['user_id']) ) {
 			return $this->data['user_id'];
@@ -39,8 +39,8 @@ class UserEducationFactory  extends Factory{
 
 		return FALSE;
 	}
-        
-        
+
+
 	function setUser($id) {
 		$id = trim($id);
 
@@ -58,10 +58,10 @@ class UserEducationFactory  extends Factory{
 
 		return FALSE;
 	}
-        
-        
-        
-         
+
+
+
+
         function getQualificationName() {
 		if ( isset($this->data['qualification_name']) ) {
 			return $this->data['qualification_name'];
@@ -69,8 +69,8 @@ class UserEducationFactory  extends Factory{
 
 		return FALSE;
 	}
-        
-        
+
+
         function setQualificationName($value) {
 		$value = trim($value);
 
@@ -80,9 +80,9 @@ class UserEducationFactory  extends Factory{
 		}
 
 		return FALSE;
-	}  
-        
-        
+	}
+
+
        function getInstitute() {
 		if ( isset($this->data['institute']) ) {
 			return $this->data['institute'];
@@ -90,8 +90,8 @@ class UserEducationFactory  extends Factory{
 
 		return FALSE;
 	}
-        
-        
+
+
         function setInstitute($value) {
 		$value = trim($value);
 
@@ -101,11 +101,11 @@ class UserEducationFactory  extends Factory{
 		}
 
 		return FALSE;
-	} 
-        
-        
-        
-               
+	}
+
+
+
+
 
 	function getYear() {
 		if ( isset($this->data['year']) ) {
@@ -114,23 +114,23 @@ class UserEducationFactory  extends Factory{
 
 		return FALSE;
 	}
-        
-        
-	function setYear($year) {
+
+
+	function setYear($value) {
+        $value = trim($value);
+
 			if ($value == '' OR $this->Validator->isLength('year', $value, ('Year  is too long'), 1, 20)) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
-			$this->data['year'] =  $year ; //Allow blank birthdate.
-
+			$this->data['year'] =  $value ; //Allow blank birthdate.
 			return TRUE;
 		}
 
 		return FALSE;
 	}
 
-        
-        
-          
+
+
        function getRemarks() {
 		if ( isset($this->data['remarks']) ) {
 			return $this->data['remarks'];
@@ -138,8 +138,8 @@ class UserEducationFactory  extends Factory{
 
 		return FALSE;
 	}
-        
-        
+
+
         function setRemarks($value) {
 		$value = trim($value);
 
@@ -149,7 +149,7 @@ class UserEducationFactory  extends Factory{
 		}
 
 		return FALSE;
-	} 
-        
-    
+	}
+
+
 }

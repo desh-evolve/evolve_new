@@ -116,7 +116,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 			$strict = TRUE;
 		}
 
-		$additional_sort_fields = array( 'name', 'description', 'id' );
+		$additional_sort_fields = array( 'name' => 'asc', 'description' => 'asc', 'id' => 'asc' );
 
 		$ph = array(
 					':id' => $id,

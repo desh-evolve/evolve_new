@@ -1,106 +1,92 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: UserAccrualBalanceList.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('accrual','enabled')
-		OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\users;
 
-//Debug::setVerbosity( 11 );
+use App\Http\Controllers\Controller;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\Redirect;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserEducationListFactory;
+use App\Models\Users\UserListFactory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
-$smarty->assign('title', __($title = 'Census Information')); // See index.php
-BreadCrumb::setCrumb($title);
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'filter_user_id',
-												'ids',
-												) ) );
+class UserEducation extends Controller
+{
+    protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'filter_user_id' => $filter_user_id,
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+        // if ( !$permission->Check('accrual','enabled')
+        //         OR !( $permission->Check('accrual','view') OR $permission->Check('accrual','view_own') OR $permission->Check('accrual','view_child') ) ) {
+        //     $permission->Redirect( FALSE ); //Redirect
+        // }
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditUserEducation.php') );
-		break;
-	default:
-		$uelf = new UserEducationListFactory();
+	}
+
+
+    public function index(Request $request, $user_id = null)
+    {
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $current_user_prefs = $this->userPrefs;
+        $permission = $this->permission;
+
+        $viewData['title'] = 'Employee Qualification';
+
+        $uelf = new UserEducationListFactory();
 		$ulf = new UserListFactory();
 
-		if ( $permission->Check('user','view') OR $permission->Check('user','view_child') ) {
-			if ( isset($filter_user_id) ) {
-				$user_id = $filter_user_id;
-			} else {
-				$user_id = $current_user->getId();
-				$filter_user_id = $current_user->getId();
-			}
-		} else {
-			$filter_user_id = $user_id = $current_user->getId();
-		}
+		$filter_user_id = $request->input('filter_user_id', $user_id);
+
+        if ( isset($filter_user_id) ) {
+            $user_id = $filter_user_id;
+        } else {
+            $user_id = $current_user->getId();
+            $filter_user_id = $current_user->getId();
+        }
 
 		$filter_data = NULL;
 
 		//Get user object
 		$ulf->getByIdAndCompanyID( $user_id, $current_company->getId() );
+
 		if (  $ulf->getRecordCount() > 0 ) {
 			$user_obj = $ulf->getCurrent();
 
-			$uelf->getByUserIdAndCompanyId( $user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
+			$uelf->getByUserIdAndCompanyId( $user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage() );
+            $qualifications = [];
 
-			$pager = new Pager($ablf);
+			foreach ($uelf->rs as $uef_obj) {
+                $uelf->data = (array)$uef_obj;
+                $uef_obj = $uelf;
 
-			
-
-			foreach ($uelf as $uef_obj) {
-                            
-                           
-                           
 				$qualifications[] = array(
 									'id' => $uef_obj->getId(),
 									'user_id' => $uef_obj->getUser(),
-                                                                        'qualification' => $uef_obj->getQualificationName(),
-                                                                        'institute' => $uef_obj->getInstitute(),
-                                                                        'year' => $uef_obj->getYear(),
-                                                                        'remaks' => $uef_obj->getRemarks(),
-                                                                      
-									
+                                    'qualification' => $uef_obj->getQualificationName(),
+                                    'institute' => $uef_obj->getInstitute(),
+                                    'year' => $uef_obj->getYear(),
+                                    'remaks' => $uef_obj->getRemarks(),
 								);
 			}
 
-			$smarty->assign_by_ref('qualifications', $qualifications);
-
 			$hlf = new HierarchyListFactory();
+
 			$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 			Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 			if ( $permission->Check('accrual','view') == FALSE ) {
@@ -112,21 +98,32 @@ switch ($action) {
 				}
 			}
 
+            $user_options = [];
+
 			$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			$user_options = $ulf->getArrayByListFactory( $ulf, FALSE, TRUE );
-			$smarty->assign_by_ref('user_options', $user_options);
 
-			$smarty->assign_by_ref('filter_user_id', $filter_user_id);
-			$smarty->assign('is_owner', $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getId() ) );
-			$smarty->assign('is_child', $permission->isChild( $user_obj->getId(), $permission_children_ids ) );
+            $is_owner = $permission->isOwner($user_obj->getCreatedBy(), $user_obj->getId());
+            $is_child = $permission->isChild($user_obj->getId(), $permission_children_ids);
 
-			$smarty->assign_by_ref('sort_column', $sort_column );
-			$smarty->assign_by_ref('sort_order', $sort_order );
+            $viewData['is_owner'] = $is_owner;
+            $viewData['is_child'] = $is_child;
+            $viewData['qualifications'] = $qualifications;
+            $viewData['user_options'] = $user_options;
+            $viewData['filter_user_id'] = $filter_user_id;
+            // dd($viewData);
 
-			$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+            return view('users.UserEducation', $viewData);
+
 		}
 
-		break;
+    }
+
+    public function add()
+    {
+        Redirect::Page( URLBuilder::getURL( NULL, 'EditUserLifePromotion.php') );
+    }
+
+
+
 }
-$smarty->display('users/UserEducation.tpl');
-?>

@@ -69,7 +69,6 @@ class UserCensusInformationListFactory  extends UserCensusInformationFactory  im
 			return FALSE;
 		}
 
-		$additional_order_fields = array('c.name');
 		if ( $order == NULL ) {
 			$order = array( 'a.name' => 'asc' );
 			$strict = FALSE;
@@ -94,7 +93,7 @@ class UserCensusInformationListFactory  extends UserCensusInformationFactory  im
 						AND a.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
+		$query .= $this->getSortSQL( $order, $strict );
 
 		if ($limit == NULL) {
 			$this->rs = DB::select($query, $ph);

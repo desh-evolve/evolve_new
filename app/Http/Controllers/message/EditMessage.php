@@ -3,16 +3,9 @@
 namespace App\Http\Controllers\message;
 
 use App\Http\Controllers\Controller;
-use App\Models\Accrual\AccrualBalanceFactory;
-use App\Models\Accrual\AccrualBalanceListFactory;
-use App\Models\Accrual\AccrualFactory;
-use App\Models\Accrual\AccrualListFactory;
-use Illuminate\Http\Request;
-
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
 use App\Models\Core\FormVariables;
-use App\Models\Core\Option;
 use App\Models\Core\Misc;
 use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
@@ -22,7 +15,6 @@ use App\Models\Hierarchy\HierarchyListFactory;
 use App\Models\Message\MessageControlFactory;
 use App\Models\Message\MessageRecipientFactory;
 use App\Models\Message\MessageSenderFactory;
-use App\Models\Policy\AccrualPolicyListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
@@ -47,14 +39,14 @@ class EditMessage extends Controller
     }
 
     public function index() {
-		
+
         /*
         if ( !$permission->Check('message','enabled')
 				OR !( $permission->Check('message','edit') OR $permission->Check('message','edit_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-		
+
 		$mcf = new MessageControlFactory();
 		$mrf = new MessageRecipientFactory();
 		$msf = new MessageSenderFactory();
@@ -105,7 +97,7 @@ class EditMessage extends Controller
 
 	public function submit_message(){
 		$mcf = new MessageControlFactory();
-		
+
 		//Debug::setVerbosity(11);
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 

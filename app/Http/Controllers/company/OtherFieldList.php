@@ -42,26 +42,28 @@ class OtherFieldList extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-		
+
+        $current_company = $this->currentCompany;
+        $current_user_prefs = $this->userPrefs;
         $viewData['title'] = 'Other Field List';
 
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-			array(
-				'type_id' => $type_id,
-				'sort_column' => $sort_column,
-				'sort_order' => $sort_order,
-				'page' => $page
-			) 
-		);
+		// URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
+		// 	array(
+		// 		'type_id' => $type_id,
+		// 		'sort_column' => $sort_column,
+		// 		'sort_order' => $sort_order,
+		// 		'page' => $page
+		// 	)
+		// );
 
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
+		// $sort_array = NULL;
+		// if ( $sort_column != '' ) {
+		// 	$sort_array = array($sort_column => $sort_order);
+		// }
 
-		$oflf = new OtherFieldListFactory(); 
+		$oflf = new OtherFieldListFactory();
 
-		$oflf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
+		$oflf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() );
 
 		$pager = new Pager($oflf);
 
@@ -90,9 +92,9 @@ class OtherFieldList extends Controller
 		}
 
 		$viewData['rows'] = $rows;
-		$viewData['type_id'] = $type_id;
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
+		// $viewData['type_id'] = $type_id;
+		// $viewData['sort_column'] = $sort_column;
+		// $viewData['sort_order'] = $sort_order;
 		$viewData['paging_data'] = $pager->getPageVariables();
 
         return view('company/OtherFieldList', $viewData);
@@ -104,26 +106,56 @@ class OtherFieldList extends Controller
 		Redirect::Page( URLBuilder::getURL(array('type_id' => $type_id), 'EditOtherField', FALSE) );
 	}
 
-	public function delete(){
+	// public function delete(){
 
-		$delete = TRUE;
+	// 	$delete = TRUE;
 
-		$oflf = new OtherFieldListFactory();
+	// 	$oflf = new OtherFieldListFactory();
 
-		foreach ($ids as $id) {
-			$oflf->getByIdAndCompanyId($id, $current_company->getId() );
-			foreach ($oflf->rs as $of_obj) {
-				$oflf->data = (array)$of_obj;
-				$of_obj = $oflf;
+	// 	foreach ($ids as $id) {
+	// 		$oflf->getByIdAndCompanyId($id, $current_company->getId() );
+	// 		foreach ($oflf->rs as $of_obj) {
+	// 			$oflf->data = (array)$of_obj;
+	// 			$of_obj = $oflf;
 
-				$of_obj->setDeleted($delete);
-				$of_obj->Save();
-			}
-		}
+	// 			$of_obj->setDeleted($delete);
+	// 			$of_obj->Save();
+	// 		}
+	// 	}
 
-		Redirect::Page( URLBuilder::getURL(array('type_id' => $type_id), 'OtherFieldList') );
+	// 	Redirect::Page( URLBuilder::getURL(array('type_id' => $type_id), 'OtherFieldList') );
 
-	}
+	// }
+
+    public function delete($id)
+    {
+        $current_company = $this->currentCompany;
+
+        if (empty($id)) {
+            return response()->json(['error' => 'No Other Field Selected.'], 400);
+        }
+
+        $oflf = new OtherFieldListFactory();
+        $otherField = $oflf->getByIdAndCompanyId($id, $current_company->getId());
+
+        foreach ($otherField->rs as $of_obj) {
+            $otherField->data = (array)$of_obj; // added bcz currency data is null and it gives an error
+
+            $otherField->setDeleted(true); // Set deleted flag to true
+
+            if ($otherField->isValid()) {
+                $res = $otherField->Save();
+
+                if($res){
+                    return response()->json(['success' => 'Other Field deleted successfully.']);
+                }else{
+                    return response()->json(['error' => 'Other Field deleted failed.']);
+                }
+            }
+        }
+
+    }
+
 }
 
 ?>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('accrual_policy_id');
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('user_date_total_id')->nullable();
-            $table->timestamp('time_stamp')->nullable();
+            $table->integer('time_stamp')->nullable();
             $table->decimal('amount', 18, 4)->nullable();
             $table->integer('created_date')->nullable();
             $table->integer('created_by')->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
             $table->unsignedTinyInteger('deleted')->default(0);
-            $table->unsignedBigInteger('leave_requset_id');
+            $table->unsignedBigInteger('leave_requset_id')->nullable();
         });
     }
 

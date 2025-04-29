@@ -43,6 +43,7 @@ class EditOtherField extends Controller
 		}
         */
 
+        $off = new OtherFieldFactory();
         $viewData['title'] = 'Edit Other Field';
 
 		if ( isset($id) ) {
@@ -50,7 +51,7 @@ class EditOtherField extends Controller
 			$oflf = new OtherFieldListFactory();
 
 			//$uwlf->GetByUserIdAndCompanyId($current_user->getId(), $current_company->getId() );
-			$oflf->getById($id);
+			$oflf->getById($id, NULL, NULL, true);
 
 			foreach ($oflf->rs as $obj) {
 				$oflf->data = (array)$obj;
@@ -74,8 +75,10 @@ class EditOtherField extends Controller
 				);
 			}
 		}
+        
 		//Select box options;
 		//$jif = new JobItemFactory();
+
 		$data['type_options'] = $off->getOptions('type');
 
 		$viewData['data'] = $data;
@@ -85,13 +88,14 @@ class EditOtherField extends Controller
 
     }
 
-	public function submit(Request $request){
+	public function save(Request $request)
+    {
 		$current_company = $this->currentCompany;
-		$data = $request->data;
 
-		$off = new OtherFieldFactory();
-
+        $data = $request->all();
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+        $off = new OtherFieldFactory();
 
 		$off->setId( $data['id'] );
 		$off->setCompany( $current_company->getId() );
@@ -102,10 +106,18 @@ class EditOtherField extends Controller
 		$off->setOtherID4( $data['other_id4'] );
 		$off->setOtherID5( $data['other_id5'] );
 
-		if ( $off->isValid() ) {
-			$off->Save();
-			Redirect::Page( URLBuilder::getURL( array('type_id' => $data['type_id']), 'OtherFieldList.php') );
-		}
+		// if ( $off->isValid() ) {
+		// 	$off->Save();
+		// 	Redirect::Page( URLBuilder::getURL( array('type_id' => $data['type_id']), 'OtherFieldList.php') );
+		// }
+
+        if ($off->isValid()) {
+            $off->Save();
+            return redirect()->to(URLBuilder::getURL(array('type_id' => $data['type_id']), '/company/other_field'))->with('success', 'Other Field saved successfully.');
+        }
+
+        // If validation fails, return back with errors
+        return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 	}
 }
 

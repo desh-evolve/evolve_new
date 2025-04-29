@@ -74,7 +74,6 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 			return FALSE;
 		}
 
-		$additional_order_fields = array('c.id');
 		if ( $order == NULL ) {
 			$order = array( 'a.id' => 'asc' );
 			$strict = FALSE;
@@ -99,7 +98,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 						AND a.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
+		$query .= $this->getSortSQL( $order, $strict );
 
 		if ($limit == NULL) {
 			$this->rs = DB::select($query, $ph);
