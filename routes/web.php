@@ -235,6 +235,8 @@ Route::delete('/payroll/company_deductions/delete/{id}', [CompanyDeductionList::
 // ===============================================================================================================================
 Route::get('/progress_bar_control', [ProgressBar::class, 'index'])->name('progress_bar_control');
 Route::get('/progress_bar', [ProgressBar::class, 'index'])->name('progress_bar');
+
+/*
 Route::get('/progress_bar/recalculate_employee', [ProgressBar::class, 'recalculate_employee'])->name('progress_bar.recalculate_employee');
 Route::get('/progress_bar/generate_paystubs', [ProgressBar::class, 'generate_paystubs'])->name('progress_bar.generate_paystubs');
 Route::get('/progress_bar/generate_paymiddle', [ProgressBar::class, 'generate_paymiddle'])->name('progress_bar.generate_paymiddle');
@@ -246,6 +248,7 @@ Route::get('/progress_bar/recalculate_accrual_policy', [ProgressBar::class, 'rec
 Route::get('/progress_bar/process_late_leave', [ProgressBar::class, 'process_late_leave'])->name('progress_bar.process_late_leave');
 Route::get('/progress_bar/generate_december_bonuses', [ProgressBar::class, 'generate_december_bonuses'])->name('progress_bar.generate_december_bonuses');
 Route::get('/progress_bar/generate_attendance_bonuses', [ProgressBar::class, 'generate_attendance_bonuses'])->name('progress_bar.generate_attendance_bonuses');
+*/
 // ===============================================================================================================================
 
 

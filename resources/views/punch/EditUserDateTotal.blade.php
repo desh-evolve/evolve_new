@@ -46,7 +46,7 @@
                                         Date:
                                     </th>
                                     <td>
-                                        {{$udt_data['date_stamp']}}
+                                        {{ getdate_helper('date', $udt_data['date_stamp'] )}}
                                         <input type="hidden" name="udt_data[date_stamp]" value="{{$udt_data['date_stamp']}}">
                                     </td>
                                 </tr>
@@ -56,7 +56,7 @@
                                         Time:
                                     </th>
                                     <td>
-                                        <input type="text" size="8" name="udt_data[total_time]" value="{{$udt_data['total_time']}}" onChange="setOverride()">
+                                        <input type="text" size="8" name="udt_data[total_time]" value="{{ gettimeunit_helper($udt_data['total_time'], '00:00') }}" onChange="setOverride()">
                                         ie: {{$current_user_prefs->getTimeUnitFormatExample()}}
                                     </td>
                                 </tr>
@@ -247,16 +247,6 @@
             fixHeight(); 
             showPolicy();
         })
-
-        function toggleIcon(icon) {
-            if (icon.classList.contains('ri-arrow-down-double-line')) {
-                icon.classList.remove('ri-arrow-down-double-line');
-                icon.classList.add('ri-arrow-up-double-line');
-            } else {
-                icon.classList.remove('ri-arrow-up-double-line');
-                icon.classList.add('ri-arrow-down-double-line');
-            }
-        }
 
         function fixHeight() {
             resizeWindowToFit(document.getElementById('body'), 'height', 65);

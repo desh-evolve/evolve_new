@@ -1112,7 +1112,15 @@ class PunchControlFactory extends Factory {
 				if ( isset($punches[$this->getID()]) ) {
 					Debug::text('Current Punch ID: '. $this->getPunchObject()->getId() .' Punch Control ID: '. $this->getID() .' Status: '. $this->getPunchObject()->getStatus(), __FILE__, __LINE__, __METHOD__,10);
 					//Debug::Arr($punches, 'Punches Arr: ', __FILE__, __LINE__, __METHOD__,10);
-
+					
+					//check here - desh
+					/*
+					echo '<br>getTimeStamp:';
+					print_r($this->getPunchObject()->getTimeStamp());
+					echo '<br>time_stamp:';
+					print_r($punches[$this->getID()][20]['time_stamp']);
+					exit;
+					*/
 					if ( $this->getPunchObject()->getStatus() == 10 AND isset($punches[$this->getID()][20]) AND $this->getPunchObject()->getTimeStamp() > $punches[$this->getID()][20]['time_stamp'] ) {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
