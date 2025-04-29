@@ -79,6 +79,7 @@ use App\Http\Controllers\punch\EditUserAbsence;
 use App\Http\Controllers\punch\EditUserDateTotal;
 use App\Http\Controllers\punch\PunchList;
 use App\Http\Controllers\punch\UserDateTotalList;
+use App\Http\Controllers\Report\DailyAttendanceReport;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\CensusInfo;
@@ -101,6 +102,10 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
+use App\Http\Controllers\users\EditUserDeductionNew;
+use App\Http\Controllers\users\EditUserJobHistory;
+use App\Http\Controllers\users\UserDeductionListNew;
+use App\Http\Controllers\users\UserJobHistory;
 
 Route::get('/', function () {
     return view('welcome');
