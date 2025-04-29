@@ -78,34 +78,29 @@ use App\Http\Controllers\punch\PunchList;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\CensusInfo;
-use App\Http\Controllers\users\CensusInfoNew;
 use App\Http\Controllers\users\EditCensus;
-use App\Http\Controllers\users\EditCensusNew;
 use App\Http\Controllers\users\EditUser;
 use App\Http\Controllers\users\EditUserDefault;
 use App\Http\Controllers\users\EditUserEducation;
-use App\Http\Controllers\users\EditUserEducationNew;
 use App\Http\Controllers\users\EditUserLifePromotion;
-use App\Http\Controllers\users\EditUserLifePromotionNew;
 use App\Http\Controllers\users\EditUserPasswordNew;
 use App\Http\Controllers\Users\EditUserPreference;
-use App\Http\Controllers\Users\EditUserPreferenceNew;
 use App\Http\Controllers\users\EditUserWageNew;
 use App\Http\Controllers\users\EditUserWorkExperionce;
-use App\Http\Controllers\users\EditUserWorkExperionceNew;
 use App\Http\Controllers\users\UserEducation;
-use App\Http\Controllers\users\UserEducationNew;
 use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserLifePromotion;
-use App\Http\Controllers\users\UserLifePromotionNew;
 use App\Http\Controllers\users\UserList;
 use App\Http\Controllers\users\UserWageListNew;
 use App\Http\Controllers\users\UserWorkExperionce;
-use App\Http\Controllers\users\UserWorkExperionceNew;
 use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
+use App\Http\Controllers\users\EditUserDeductionNew;
+use App\Http\Controllers\users\EditUserJobHistory;
+use App\Http\Controllers\users\UserDeductionListNew;
+use App\Http\Controllers\users\UserJobHistory;
 
 Route::get('/', function () {
     return view('welcome');
@@ -193,7 +188,7 @@ Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, '
 
 
 // ===============================================================================================================================
-// report 
+// report
 // ===============================================================================================================================
 Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employee_detail.index');
 Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
@@ -367,6 +362,24 @@ Route::get('/user/wage/add/{user_id?}', [UserWageListNew::class, 'add'])->name('
 Route::get('/user/wage/edit/{id?}', [EditUserWageNew::class, 'index'])->name('user.wage.edit');
 Route::post('/user/wage/save/{id?}', [EditUserWageNew::class, 'save'])->name('user.wage.save');
 Route::delete('/user/wage/delete/{id}', [UserWageListNew::class, 'delete'])->name('user.wage.delete');
+
+// ===============================================================================================================================
+// User jobhistory
+// ===============================================================================================================================
+Route::get('/user/jobhistory', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
+Route::get('/user/jobhistory/add/{user_id?}', [UserJobHistory::class, 'add'])->name('user.jobhistory.add');
+Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
+Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
+Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])->name('user.jobhistory.delete');
+
+// ===============================================================================================================================
+// User tax/deduction
+// ===============================================================================================================================
+Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
+Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
+Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
+Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
+Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
 
 // ===============================================================================================================================
 // Policies

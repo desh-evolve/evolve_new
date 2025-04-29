@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company\WageGroupListFactory;
+use App\Models\Company\BranchListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
-use App\Models\Core\Misc;
 use App\Models\Core\Option;
-use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
 use App\Models\Hierarchy\HierarchyListFactory;
 use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserJobListFactory;
 use App\Models\Users\UserListFactory;
-use App\Models\Users\UserWageListFactory;
+use App\Models\Users\UserTitleListFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
-class UserWageListNew extends Controller
+class UserJobHistory extends Controller
 {
     protected $permission;
 	protected $currentUser;
@@ -51,7 +51,7 @@ class UserWageListNew extends Controller
         $current_user_prefs = $this->userPrefs;
         $permission = $this->permission;
 
-        $viewData['title'] = 'Employee Wage List';
+        $viewData['title'] = 'Employee Job History';
         $ulf = new UserListFactory();
 
         $filter_user_id = $request->input('user_id', $user_id);
@@ -63,7 +63,6 @@ class UserWageListNew extends Controller
             $filter_user_id = $current_user->getId();
         }
 
-
         //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 		$user_has_default_wage = FALSE;
 
@@ -71,59 +70,63 @@ class UserWageListNew extends Controller
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
-		$uwlf = new UserWageListFactory();
-		$uwlf->GetByUserIdAndCompanyId($user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage() );
+        $ujlf = new UserJobListFactory();
+		$ujlf->GetByUserIdAndCompanyId($user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage() );
 
-		$wglf = new WageGroupListFactory();
-		$wage_group_options = $wglf->getArrayByListFactory( $wglf->getByCompanyId( $current_company->getId() ), TRUE );
+        //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+		//Select box options;
+		$blf = new BranchListFactory();
+		$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );
+
+        //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+        //Select box options;
+		$dlf = new DepartmentListFactory();
+		$department_options = $dlf->getByCompanyIdArray( $current_company->getId() );
+
+        //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+        //Select box options;
+		$utlf = new UserTitleListFactory();
+		$title_options = $utlf->getByCompanyIdArray( $current_company->getId() );
+
+        $job_history = [];
 
 		$user_obj = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent();
-        $user_factory = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
-        $user_obj = is_object($user_factory) ? $user_factory->getCurrent() : null;
-
-        $wages = [];
-
 		if ( is_object($user_obj) ) {
 			$is_owner = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getID() );
 			$is_child = $permission->isChild( $user_obj->getId(), $permission_children_ids );
 
-			$currency_symbol = NULL;
-			if ( is_object($user_obj->getCurrencyObject()) ) {
-				$currency_symbol = $user_obj->getCurrencyObject()->getSymbol();
-			}
 
 			if ( $permission->Check('wage','view')
 					OR ( $permission->Check('wage','view_own') AND $is_owner === TRUE )
 					OR ( $permission->Check('wage','view_child') AND $is_child === TRUE ) ) {
 
-				foreach ($uwlf->rs as $wage) {
-                    $uwlf->data = (array)$wage;
-                    $wage = $uwlf;
+				foreach ($ujlf->rs as $job) {
+                    $ujlf->data = (array)$job;
+                    $job = $ujlf;
 
-					$wages[] = array(
-										'id' => $wage->getId(),
-										'user_id' => $wage->getUser(),
-										'wage_group_id' => $wage->getWageGroup(),
-										'wage_group' => Option::getByKey($wage->getWageGroup(), $wage_group_options ),
-										'type' => Option::getByKey($wage->getType(), $wage->getOptions('type') ),
-										'wage' => Misc::MoneyFormat( Misc::removeTrailingZeros($wage->getWage()), TRUE ),
-										'currency_symbol' => $currency_symbol,
-										'effective_date' => TTDate::getDate( 'DATE', $wage->getEffectiveDate() ),
+					$job_history[] = array(
+										'id' => $job->getId(),
+										'user_id' => $job->getUser(),
+                       /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON */ 'default_branch_id' => Option::getByKey($job->getDefaultBranch(), $branch_options ), $job->getDefaultBranch(),
+                       /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON */ 'default_department_id' => Option::getByKey($job->getDefaultDepartment(), $department_options ),$job->getDefaultDepartment(),
+                       /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON */ 'title_id' => Option::getByKey($job->getTitle(), $title_options ), $job->getTitle(),
+                       /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON */ 'first_worked_date' => TTDate::getDate( 'DATE', $job->getFirstWorkedDate() ),
+                       /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON */ 'last_worked_date' => TTDate::getDate( 'DATE', $job->getLastWorkedDate() ),
+                       ///* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON */ 'note' => $job->getNote(),
 										'is_owner' => $is_owner,
 										'is_child' => $is_child,
-										'deleted' => $wage->getDeleted()
+										'deleted' => $job->getDeleted()
 									);
 
-					if ( $wage->getWageGroup() == 0 ) {
-						$user_has_default_wage = TRUE;
-					}
 				}
+                // print_r($wages);
+
 			}
 		}
 
 
 		$filter_data = NULL;
-		// extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, null) );
+		// extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, NULL ) );
 
 		if ( $permission->Check('wage','view') == FALSE ) {
 			if ( $permission->Check('wage','view_child') ) {
@@ -134,30 +137,32 @@ class UserWageListNew extends Controller
 			}
 		}
 
+        $user_options = [];
+
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 
 		$user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE );
 
-
-        $viewData['user_id'] = $user_id;
-        $viewData['user_has_default_wage'] = $user_has_default_wage;
-        $viewData['wages'] = $wages;
+        $viewData['job_history'] = $job_history;
         $viewData['user_options'] = $user_options;
+        $viewData['user_has_default_wage'] = $user_has_default_wage;
+        $viewData['user_id'] = $user_id;
         // dd($viewData);
 
-        return view('users.UserWageList', $viewData);
+        return view('users.UserJobHistoryList', $viewData);
 
     }
+
 
 
     public function add($user_id = null)
     {
         if (!$user_id) {
-            return redirect()->back()->with('error', 'User ID is required to add wage.');
+            return redirect()->back()->with('error', 'User ID is required to add jobhistory.');
         }
 
         // Optionally, validate user exists here before proceeding
-        return redirect()->to(URLBuilder::getURL(array('user_id' => $user_id) , '/user/wage/edit', false));
+        return redirect()->to(URLBuilder::getURL(array('user_id' => $user_id) , '/user/jobhistory/edit', false));
     }
 
 
@@ -167,25 +172,25 @@ class UserWageListNew extends Controller
 		$current_company = $this->currentCompany;
 
 		if (empty($id)) {
-			return response()->json(['error' => 'No Wage List selected.'], 400);
+			return response()->json(['error' => 'No jobhistory List selected.'], 400);
 		}
 
-		$uwlf = new UserWageListFactory();
+		$ujlf = new UserJobListFactory();
 
-			$wage_list = $uwlf->getByIdAndCompanyId($id, $current_company->getId() );
+			$job_list = $ujlf->getByIdAndCompanyId($id, $current_company->getId() );
 
-			foreach ($wage_list->rs as $wage) {
-				$wage_list->data = (array)$wage; // added bcz currency data is null and it gives an error
+			foreach ($job_list->rs as $job) {
+				$job_list->data = (array)$job; // added bcz currency data is null and it gives an error
 
-				$wage_list->setDeleted(true); // Set deleted flag to true
+				$job_list->setDeleted(true); // Set deleted flag to true
 
-				if ($wage_list->isValid()) {
-					$res = $wage_list->Save();
+				if ($job_list->isValid()) {
+					$res = $job_list->Save();
 
 					if($res){
-						return response()->json(['success' => 'Wage List deleted successfully.']);
+						return response()->json(['success' => 'Job List deleted successfully.']);
 					}else{
-						return response()->json(['error' => 'Wage List deleted failed.']);
+						return response()->json(['error' => 'Job List deleted failed.']);
 					}
 				}
 			}

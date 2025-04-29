@@ -89,50 +89,11 @@ class WageGroupList extends Controller
         return view('company.WageGroupList', $viewData);
     }
 
-    // Set URL parameters for pagination and sorting
-    // URLBuilder::setURL(
-    //     $_SERVER['SCRIPT_NAME'],
-    //     array(
-    //         'sort_column' => $sort_column,
-    //         'sort_order' => $sort_order,
-    //         'page' => $page
-    //     )
-    // );
-
-    // // Prepare sorting array
-    // $sort_array = null;
-    // if ($sort_column != '') { // Fixed: Removed extra parenthesis
-    //     $sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-    // }
-
-    // Fetch wage groups
-    $wglf = new WageGroupListFactory();
-    $wglf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage());
-
-    // Map wage group data
-    $groups = array_map(function ($group_obj) {
-        return [
-            'id' => $group_obj->id,
-            'name' => $group_obj->name,
-            'deleted' => $group_obj->deleted,
-        ];
-    }, $wglf->rs);
-
-    // Set up pagination
-    $pager = new Pager($wglf);
-
-    // Prepare view data
-    $viewData['groups'] = $groups;
-    $viewData['paging_data'] = $pager->getPageVariables();
-
-    // Return the view
-    return view('company.WageGroupList', $viewData);
-}
-
 	public function add()
 	{
 		Redirect::Page(URLBuilder::getURL(NULL, 'EditWageGroup.php'));
 	}
+
 
 	public function delete($id)
     {

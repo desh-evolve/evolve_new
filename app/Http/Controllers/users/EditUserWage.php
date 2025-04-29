@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use App\Models\Users\UserListFactory;
+
 /*
  * $Revision: 4104 $
  * $Id: EditUserWage.php 4104 2011-01-04 19:04:05Z ipso $

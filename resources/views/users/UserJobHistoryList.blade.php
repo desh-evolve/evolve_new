@@ -1,6 +1,6 @@
 <x-app-layout :title="'Input Example'">
     <x-slot name="header">
-        <h4 class="mb-sm-0">{{ __('Employee Wage') }}</h4>
+        <h4 class="mb-sm-0">{{ __('Employee Job History') }}</h4>
     </x-slot>
 
     <div class="row">
@@ -15,7 +15,7 @@
                         <div class="d-flex justify-content-end">
                             <a type="button" href=" "
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
-                                id="add_new_btn">New Wage <i class="ri-add-line"></i></a>
+                                id="add_new_btn">New Job History <i class="ri-add-line"></i></a>
                         </div>
 
 
@@ -31,7 +31,7 @@
                             </div>
 
                             <div class="col-lg-10">
-                                <form method="GET" action="{{ route('user.wage.index') }}">
+                                <form method="GET" action="{{ route('user.jobhistory.index') }}">
                                     <select name="user_id" id="filter_user" class="form-select" onChange="this.form.submit()">
                                         @foreach($user_options as $value => $label)
                                             <option value ="{{ $value }}"
@@ -46,44 +46,40 @@
                             </div>
                         </div>
 
-                        @unless($user_has_default_wage)
-                            <div class="text-center p-4 my-3 border bg-warning">
-                                <strong>This employee does not have a wage set for the default wage group, therefore they will not receive any regular time earnings.</strong>
-                            </div>
-                        @endunless
-
                         <table class="table table-bordered">
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Group</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Wage</th>
-                                    <th scope="col">Effective Date</th>
+                                    <th scope="col">Branch</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">First Worked Date</th>
+                                    <th scope="col">Last Worked Date</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
 
                             <tbody id="table_body">
-                                @foreach ($wages as $wage)
+                                @foreach ($job_history as $job)
                                     @php
-                                        $row_class = isset($wage['deleted']) && $wage['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
+                                        $row_class = isset($job['deleted']) && $job['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
                                     @endphp
                                     <tr class="{{ $row_class }}">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $wage['wage_group'] ?? '' }}</td>
-                                        <td>{{ $wage['type'] ?? '' }}</td>
-                                        <td>{{ $wage['currency_symbol'] ?? '' }}{{ $wage['wage'] ?? '' }}</td>
-                                        <td>{{ $wage['effective_date'] ?? '' }}</td>
+                                        <td>{{ $job['default_branch_id'] ?? '' }}</td>
+                                        <td>{{ $job['default_department_id'] ?? '' }}</td>
+                                        <td>{{ $job['title_id'] ?? '' }}</td>
+                                        <td>{{ $job['first_worked_date'] ?? '' }}</td>
+                                        <td>{{ $job['last_worked_date'] ?? '' }}</td>
 
                                         <td>
                                             <!-- Edit Button -->
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ route('user.wage.edit', ['id' => $wage['id'] ?? '']) }}'">
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ route('user.jobhistory.edit', ['id' => $job['id'] ?? '']) }}'">
                                                 {{ __('Edit') }}
                                             </button>
 
                                             <!-- Delete Button -->
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteWageList({{ $wage['id'] }})">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteJobhistory({{ $job['id'] }})">
                                                 {{ __('Delete') }}
                                             </button>
 
@@ -106,7 +102,7 @@
         if (tableBody && tableBody.children.length === 0) {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td colspan="7" class="text-center text-danger font-weight-bold">No wage yet.</td>
+                <td colspan="7" class="text-center text-danger font-weight-bold">No job history.</td>
             `;
             tableBody.appendChild(row);
         }
@@ -123,17 +119,17 @@
                 return;
             }
 
-            window.location.href = "{{ route('user.wage.add', '') }}/" + selectedUserId;
+            window.location.href = "{{ route('user.jobhistory.add', '') }}/" + selectedUserId;
 
         });
 
         // delete item
-        async function deleteWageList(wageId) {
+        async function deleteJobhistory(jobId) {
             if (confirm('Are you sure you want to delete this item?')) {
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 try {
-                    const response = await fetch(`/user/wage/delete/${wageId}`, {
+                    const response = await fetch(`/user/jobhistory/delete/${jobId}`, {
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': token,
@@ -146,13 +142,14 @@
                         alert(data.success); // Display success message
                         window.location.reload(); // Reload the page to reflect changes
                     } else {
-                        console.error(`Error deleting item ID ${wageId}:`, data.error);
+                        console.error(`Error deleting item ID ${jobId}:`, data.error);
                     }
                 } catch (error) {
-                    console.error(`Error deleting item ID ${wageId}:`, error);
+                    console.error(`Error deleting item ID ${jobId}:`, error);
                 }
             }
         }
 
     </script>
 </x-app-layout>
+

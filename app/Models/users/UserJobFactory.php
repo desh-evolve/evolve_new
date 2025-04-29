@@ -2,20 +2,23 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company\BranchListFactory;
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Department\DepartmentListFactory;
 use Illuminate\Support\Facades\DB;
 
 /*******************************************************************************
- * 
+ *
  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
  * THIS CODE ADDED BY ME
  * CREATE USERES JOB HISTORY
- * 
+ *
  *******************************************************************************/
 
 class UserJobFactory extends Factory {
@@ -42,7 +45,7 @@ class UserJobFactory extends Factory {
 					//'-5010-transit' => ('Transit/Routing'),
 					//'-5020-account' => ('Account'),
 					//'-5030-institution' => ('Institution'),
-				
+
 															'-1290-note' => ('Note'),//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 
 					'-2000-created_by' => ('Created By'),
@@ -73,7 +76,7 @@ class UserJobFactory extends Factory {
         /**
          * ASRP NOTE --> I MODIFIED THIS CODE FOR THUNDER & NEON
          * BELOW DETAILS ARE DATABASE  TABLE FIELDS
-         */        
+         */
 	function _getVariableToFunctionMap( $data ) {
 		$variable_function_map = array(
 									'id' => 'ID',
@@ -81,25 +84,25 @@ class UserJobFactory extends Factory {
 									'deleted' => 'Deleted',
 									'first_worked_date' => 'FirstWorkedDate',
 									'last_worked_date' => 'LastWorkedDate',
-									'note' => 'Note',         
+									'note' => 'Note',
 									'title_id' => 'Title',
 									'title' => FALSE,
 									'default_branch_id' => 'DefaultBranch',
 									'default_branch' => FALSE,
 									'default_department_id' => 'DefaultDepartment',
-									'default_department' => FALSE,                                                                               
+									'default_department' => FALSE,
 								);
 		return $variable_function_map;
 	}
-        
-        
-        
-    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON    
- 
+
+
+
+    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON
+
         /**
          * ASRP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * BELOW DETAILS ARE DATABASE  TABLE FIELDS
-         */          
+         */
 	function getNote() {
 		if ( isset($this->data['note']) ) {
 			return $this->data['note'];
@@ -107,11 +110,11 @@ class UserJobFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /**
          * ASRP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
          * BELOW DETAILS ARE DATABASE  TABLE FIELDS
-         */          
+         */
 	function setNote($value) {
 		$value = trim($value);
 
@@ -130,24 +133,24 @@ class UserJobFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */               
+         *
+         */
 	function getDefaultBranch() {
 		if ( isset($this->data['default_branch_id']) ) {
 			return $this->data['default_branch_id'];
 		}
 
 		return FALSE;
-	}      
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */        
+         *
+         */
 	function setDefaultBranch($id) {
 		$id = (int)trim($id);
 
@@ -166,12 +169,12 @@ class UserJobFactory extends Factory {
 		}
 
 		return FALSE;
-	}         
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */      
+         *
+         */
 	function getTitle() {
 		if ( isset($this->data['title_id']) ) {
 			return $this->data['title_id'];
@@ -179,11 +182,11 @@ class UserJobFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */      
+         *
+         */
 	function setTitle($id) {
 		$id = (int)trim($id);
 
@@ -202,12 +205,12 @@ class UserJobFactory extends Factory {
 		}
 
 		return FALSE;
-	}     
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function getDefaultDepartment() {
 		if ( isset($this->data['default_department_id']) ) {
 			return $this->data['default_department_id'];
@@ -215,11 +218,11 @@ class UserJobFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
 	/**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
         function setDefaultDepartment($id) {
 		$id = (int)trim($id);
 
@@ -238,12 +241,12 @@ class UserJobFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function getFirstWorkedDate( $raw = FALSE ) {
 		if ( isset($this->data['first_worked_date']) ) {
 			if ( $raw === TRUE ) {
@@ -254,17 +257,17 @@ class UserJobFactory extends Factory {
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function setFirstWorkedDate($epoch) {
-            
+
             //echo 'This is setFirstWorkedDate = '.$epoch;
             //exit();
-            
+
 		//$epoch = TTDate::getBeginDayEpoch( trim($epoch) );
                 $epoch = trim($epoch);
 
@@ -278,7 +281,7 @@ class UserJobFactory extends Factory {
 			//$this->data['first_worked_date'] = $epoch;
 
 			//return TRUE;
-                    
+
 			if 	( $epoch > 0 ) {
 				$this->data['first_worked_date'] = $epoch;
 
@@ -287,17 +290,17 @@ class UserJobFactory extends Factory {
 				$this->Validator->isTRUE(		'first_worked_date',
 												FALSE,
 												('Incorrect first worked date'));
-			}                    
-                    
+			}
+
 		}
 
 		return FALSE;
-	}        
-        
+	}
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function getLastWorkedDate( $raw = FALSE ) {
 		if ( isset($this->data['last_worked_date']) ) {
 			if ( $raw === TRUE ) {
@@ -309,11 +312,11 @@ class UserJobFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */ 
+         *
+         */
 	function setLastWorkedDate($epoch) {
                 $epoch = trim($epoch);
 
@@ -327,7 +330,7 @@ class UserJobFactory extends Factory {
 			//$this->data['first_worked_date'] = $epoch;
 
 			//return TRUE;
-                    
+
 			if 	( $epoch > 0 ) {
 				$this->data['last_worked_date'] = $epoch;
 
@@ -336,14 +339,14 @@ class UserJobFactory extends Factory {
 				$this->Validator->isTRUE(		'last_worked_date',
 												FALSE,
 												('Incorrect last worked date'));
-			}                    
-                    
+			}
+
 		}
 
 		return FALSE;
-	}          
+	}
 
-    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON      
+    //-----------------------------ARSP NOTE --> NEW FUNCTION FOR THUNDER & NEON
 
 	function getCompany() {
 		return $this->data['company_id'];
@@ -425,11 +428,11 @@ class UserJobFactory extends Factory {
 
         /**
          * ARSP NOTE--> I ADDED THIS CODE FOR THUNDER & NEON
-         * 
-         */         
+         *
+         */
 	function Validate() {
 		//Make sure this entry is unique.
-                
+
                 //ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON
 //		if ( $this->getDeleted() == FALSE AND $this->isUnique() == TRUE ) {
 //			$this->Validator->isTRUE(		'account',
@@ -438,40 +441,40 @@ class UserJobFactory extends Factory {
 //
 //			return FALSE;
 //		}
-                
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getDefaultBranch() == 0 ) {
 			$this->Validator->isTrue(		'default_branch',
 											FALSE,
 											('Default Branch must be specified') );
-		} 
-                
+		}
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getDefaultDepartment() == 0 ) {
 			$this->Validator->isTrue(		'default_department',
 											FALSE,
 											('Default Department must be specified') );
-		}   
-                
+		}
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getTitle() == 0 ) {
 			$this->Validator->isTrue(		'title',
 											FALSE,
 											('Employee Title must be specified') );
-		}        
-                
+		}
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		if ( $this->getLastWorkedDate() != '' AND $this->getFirstWorkedDate() != '' AND $this->getLastWorkedDate() < $this->getFirstWorkedDate() ) {
 			$this->Validator->isTrue(		'last_worked_date',
 											FALSE,
 											('Conflicting last worked date'));
-		}                
+		}
 
 		return TRUE;
 	}
 
 	function preSave() {
-                //ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON            
+                //ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON
 //		if ( $this->getUser() == FALSE ) {
 //			Debug::Text('Clearing User value, because this is strictly a company record', __FILE__, __LINE__, __METHOD__,10);
 //			//$this->setUser( 0 ); //COMPANY record.
@@ -516,7 +519,7 @@ class UserJobFactory extends Factory {
 
         /**
          * ARSP NOTE --> I'M NOT MODIFIED THIS CODE.
-         */        
+         */
 	function getObjectAsArray( $include_columns = NULL ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {
@@ -545,7 +548,7 @@ class UserJobFactory extends Factory {
 
         /**
          * ARSP NOTE --> I'M NOT MODIFIED THIS CODE.
-         */          
+         */
 	function addLog( $log_action ) {
 		if ( $this->getUser() == '' ) {
 			$log_description = ('Company');

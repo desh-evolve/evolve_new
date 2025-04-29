@@ -1,179 +1,63 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: EditUserDeduction.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('user_tax_deduction','enabled')
-		OR !( $permission->Check('user_tax_deduction','edit') OR $permission->Check('user_tax_deduction','edit_own') OR $permission->Check('user_tax_deduction','add') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\users;
 
-$smarty->assign('title', __($title = 'Edit Employee Tax / Deduction')); // See index.php
+use App\Http\Controllers\Controller;
+use App\Models\Company\CompanyDeductionFactory;
+use App\Models\Company\CompanyDeductionListFactory;
+use App\Models\Company\CompanyFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\Option;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserDeductionFactory;
+use App\Models\Users\UserDeductionListFactory;
+use App\Models\Users\UserListFactory;
+use Faker\Provider\ar_EG\Company;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'company_deduction_id',
-												'user_id',
-												'saved_search_id',
-												'id',
-												'data'
-												) ) );
+class EditUserDeductionNew extends Controller
+{
+    protected $permission;
+    protected $currentUser;
+    protected $currentCompany;
+    protected $userPrefs;
 
-$udf = new UserDeductionFactory();
-$cdf = new CompanyDeductionFactory();
-$ulf = new UserListFactory();
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-		//Debug::setVerbosity(11);
+        $this->permission = View::shared('permission');
+        $this->currentUser = View::shared('current_user');
+        $this->currentCompany = View::shared('current_company');
+        $this->userPrefs = View::shared('current_user_prefs');
 
-		$udf->StartTransaction();
-		if ( $company_deduction_id != '' ) {
-			//Debug::setVerbosity(11);
-			Debug::Text('Mass User Update', __FILE__, __LINE__, __METHOD__,10);
-			//Debug::Arr($data, 'All User Data', __FILE__, __LINE__, __METHOD__,10);
+        // if ( !$permission->Check('user_tax_deduction','enabled')
+        //         OR !( $permission->Check('user_tax_deduction','edit') OR $permission->Check('user_tax_deduction','edit_own') OR $permission->Check('user_tax_deduction','add') ) ) {
+        //     $permission->Redirect( FALSE ); //Redirect
+        // }
 
-			$redirect = 0;
+    }
 
-			if ( isset($data['users']) AND is_array($data['users']) AND count($data['users']) > 0 ) {
 
-				foreach( $data['users'] as  $user_id => $user_data ) {
-					Debug::Text('Editing Deductions for User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
-					//Debug::Arr($user_data, 'Specific User Data', __FILE__, __LINE__, __METHOD__,10);
-					if ( isset($user_data['id']) AND $user_data['id'] > 0 ) {
-						$udf->setId( $user_data['id'] );
-					}
-					$udf->setUser( $user_data['user_id'] );
+    public function index(Request $request, $id = null, $company_deduction_id = null)
+    {
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
 
-					if ( isset($user_data['user_value1']) ) {
-						$udf->setUserValue1( $user_data['user_value1'] );
-					}
-					if ( isset($user_data['user_value2']) ) {
-						$udf->setUserValue2( $user_data['user_value2'] );
-					}
-					if ( isset($user_data['user_value3']) ) {
-						$udf->setUserValue3( $user_data['user_value3'] );
-					}
-					if ( isset($user_data['user_value4']) ) {
-						$udf->setUserValue4( $user_data['user_value4'] );
-					}
-					if ( isset($user_data['user_value5']) ) {
-						$udf->setUserValue5( $user_data['user_value5'] );
-					}
-					if ( isset($user_data['user_value6']) ) {
-						$udf->setUserValue6( $user_data['user_value6'] );
-					}
-					if ( isset($user_data['user_value7']) ) {
-						$udf->setUserValue7( $user_data['user_value7'] );
-					}
-					if ( isset($user_data['user_value8']) ) {
-						$udf->setUserValue8( $user_data['user_value8'] );
-					}
-					if ( isset($user_data['user_value9']) ) {
-						$udf->setUserValue9( $user_data['user_value9'] );
-					}
-					if ( isset($user_data['user_value10']) ) {
-						$udf->setUserValue10( $user_data['user_value10'] );
-					}
+        $viewData['title'] = 'Employee Tax / Deduction';
 
-					if ( $udf->isValid() ) {
-						$udf->Save();
-					} else {
-						$redirect++;
-					}
-				}
+        $cf = new CompanyFactory();
+        $cdf = new CompanyDeductionFactory();
+        $udf = new UserDeductionFactory();
 
-				if ( $redirect == 0 ) {
-					$udf->CommitTransaction();
-
-					Redirect::Page( URLBuilder::getURL( NULL, '../company/CompanyDeductionList.php') );
-
-					break;
-				}
-			}
-		} else {
-			if ( isset($data['add']) AND $data['add'] == 1 ) {
-				Debug::Text('Adding Deductions', __FILE__, __LINE__, __METHOD__,10);
-				if ( isset($data['deduction_ids']) AND count($data['deduction_ids']) > 0 ) {
-					foreach( $data['deduction_ids'] as $deduction_id ) {
-						$udf = new UserDeductionFactory();
-						$udf->setUser( $data['user_id'] );
-						$udf->setCompanyDeduction( $deduction_id );
-						if ( $udf->isValid() ) {
-							$udf->Save();
-						}
-					}
-				}
-
-				$udf->CommitTransaction();
-
-				Redirect::Page( URLBuilder::getURL( array('user_id' => $data['user_id'], 'saved_search_id' => $saved_search_id ), 'UserDeductionList.php') );
-			} else {
-				Debug::Text('Editing Deductions', __FILE__, __LINE__, __METHOD__,10);
-				$udf->setId( $data['id'] );
-				$udf->setUser( $data['user_id'] );
-
-				if ( isset($data['user_value1']) ) {
-					$udf->setUserValue1( $data['user_value1'] );
-				}
-				if ( isset($data['user_value2']) ) {
-					$udf->setUserValue2( $data['user_value2'] );
-				}
-				if ( isset($data['user_value3']) ) {
-					$udf->setUserValue3( $data['user_value3'] );
-				}
-				if ( isset($data['user_value4']) ) {
-					$udf->setUserValue4( $data['user_value4'] );
-				}
-				if ( isset($data['user_value5']) ) {
-					$udf->setUserValue5( $data['user_value5'] );
-				}
-				if ( isset($data['user_value6']) ) {
-					$udf->setUserValue6( $data['user_value6'] );
-				}
-				if ( isset($data['user_value7']) ) {
-					$udf->setUserValue7( $data['user_value7'] );
-				}
-				if ( isset($data['user_value8']) ) {
-					$udf->setUserValue8( $data['user_value8'] );
-				}
-				if ( isset($data['user_value9']) ) {
-					$udf->setUserValue9( $data['user_value9'] );
-				}
-				if ( isset($data['user_value10']) ) {
-					$udf->setUserValue10( $data['user_value10'] );
-				}
-
-				if ( $udf->isValid() ) {
-					$udf->Save();
-
-					$udf->CommitTransaction();
-
-					Redirect::Page( URLBuilder::getURL( array('user_id' => $data['user_id'], 'saved_search_id' => $saved_search_id ), 'UserDeductionList.php') );
-
-					break;
-				}
-			}
-		}
-		$udf->FailTransaction();
-	default:
-		$cf = new CompanyFactory();
+        $total_amount = 0;
+        $data = [];
 
 		if ( isset($company_deduction_id) AND $company_deduction_id != '' ) {
 			Debug::Text('Mass User Deduction Edit!', __FILE__, __LINE__, __METHOD__,10);
@@ -181,21 +65,32 @@ switch ($action) {
 			//Get all employees assigned to this company deduction.
 			$cdlf = new CompanyDeductionListFactory();
 			$cdlf->getByCompanyIdAndId( $current_company->getId(), $company_deduction_id );
-			Debug::Text('Company Deduction Records: '. $cdlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
-			if ( $cdlf->getRecordCount() > 0 ) {
 
-				foreach( $cdlf as $cd_obj ) {
+			Debug::Text('Company Deduction Records: '. $cdlf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
+
+            if ( $cdlf->getRecordCount() > 0 ) {
+
+				foreach( $cdlf->rs as $cd_obj ) {
+                    $cdlf->data = (array)$cd_obj;
+                    $cd_obj = $cdlf;
+
 					$province_options = $cf->getOptions('province', $cd_obj->getCountry() );
 					$tmp_district_options = $cf->getOptions('district', $cd_obj->getCountry() );
+
 					$district_options = array();
+
 					if ( isset($tmp_district_options[$cd_obj->getProvince()]) ) {
 						$district_options = $tmp_district_options[$cd_obj->getProvince()];
 					}
 					unset($tmp_district_options);
 
+                    $user_id = $cd_obj->getUser();
+
 					if ( !isset($data['users']) ) {
 						$data['users'] = NULL;
 					}
+
+
 
 					$data = array(
 									'id' => $cd_obj->getId(),
@@ -239,7 +134,7 @@ switch ($action) {
 									'users' => $data['users'],
 								);
 
-					if ($action != 'submit' ) {
+
 
 						$user_ids = $cd_obj->getUser();
 
@@ -248,11 +143,15 @@ switch ($action) {
 							//Get User deduction data for each user.
 							$udlf = new UserDeductionListFactory();
 							$udlf->getByUserIdAndCompanyDeductionId( $user_ids, $cd_obj->getId() );
+
 							if ( $udlf->getRecordCount() > 0 ) {
 								//Get deduction data for each user.
 								//When ever we add/subtract users to/from a company dedution, the user deduction rows are handled then.
 								//So we don't need to worry about new users at all here.
-								foreach( $udlf as $ud_obj ) {
+								foreach( $udlf->rs as $ud_obj ) {
+                                    $udlf->data = (array)$cd_obj;
+                                    $cd_obj = $udlf;
+
 									//Use Company Deduction values as default.
 									if ( $ud_obj->getUserValue1() === FALSE ) {
 										$user_value1 = $cd_obj->getUserValue1();
@@ -280,12 +179,13 @@ switch ($action) {
 										$user_value5 = $ud_obj->getUserValue5();
 									}
 
+
 									$data['users'][$ud_obj->getUser()] = array(
 														'id' => $ud_obj->getId(),
 														'user_id' => $ud_obj->getUser(),
 														'user_full_name' => $ud_obj->getUserObject()->getFullName(TRUE),
-/*ARSP ADD THIS NEW CODE FOR GET THE EMPOYEE NUMBER */  'employee_number'=> $ud_obj->getUserObject()->getEmployeeNumber(),
-
+                                                        /*ARSP ADD THIS NEW CODE FOR GET THE EMPOYEE NUMBER */
+                                                        'employee_number'=> $ud_obj->getUserObject()->getEmployeeNumber(),
 
 														'user_value1' => $user_value1,
 														'user_value2' => $user_value2,
@@ -298,24 +198,22 @@ switch ($action) {
 														'user_value9' => $ud_obj->getUserValue9(),
 														'user_value10' => $ud_obj->getUserValue10(),
 														);
-                                                                        //ARSP EDIT--> ADD NEW CODE FOR GET THE TOTAL VALUE OF THE INCREMENT OR DEDUCTION
-                                                                        $total_amount  = $total_amount + (float)$data[users][$ud_obj->getUser()][user_value1];
+
+                                                        //ARSP EDIT--> ADD NEW CODE FOR GET THE TOTAL VALUE OF THE INCREMENT OR DEDUCTION
+                                                        $total_amount  = $total_amount + (float)$data['users'][$ud_obj->getUser()]['user_value1'];
+
 
 								}
 							}
 						}
-					}
-
-
 				}
 			}
 
 
-			//print_r($data);
+			// print_r($data);
 		} else {
-			if ( isset($id) AND $action != 'submit'  ) {
+			if ( isset($id) ) {
 				Debug::Text('ID Passed', __FILE__, __LINE__, __METHOD__,10);
-				BreadCrumb::setCrumb($title);
 
 				//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 				$hlf = new HierarchyListFactory();
@@ -324,10 +222,14 @@ switch ($action) {
 				$udlf = new UserDeductionListFactory();
 				$udlf->getByCompanyIdAndId( $current_company->getID(), $id );
 
-				foreach ($udlf as $ud_obj) {
+				foreach ($udlf->rs as $ud_obj) {
+                    $udlf->data = (array)$ud_obj;
+                    $ud_obj = $udlf;
 
+                    $ulf = new UserListFactory();
 					$user_obj = $ulf->getByIdAndCompanyId( $ud_obj->getUser(), $current_company->getId() )->getCurrent();
-					if ( is_object($user_obj) ) {
+
+                    if ( is_object($user_obj) ) {
 						$is_owner = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getID() );
 						$is_child = $permission->isChild( $user_obj->getId(), $permission_children_ids );
 
@@ -377,6 +279,8 @@ switch ($action) {
 												'id' => $ud_obj->getId(),
 												'user_id' => $ud_obj->getUser(),
 												'company_id' => $cd_obj->getCompany(),
+
+                                                'company_deduction_id' => $ud_obj->getCompanyDeduction(),
 
 												'status_id' => $cd_obj->getStatus(),
 												'status' => Option::getByKey( $cd_obj->getStatus(), $cd_obj->getOptions('status') ),
@@ -433,15 +337,20 @@ switch ($action) {
 								);
 						} else {
 							$permission->Redirect( FALSE ); //Redirect
-							exit;
+
 						}
 					}
 				}
 			} else {
 				Debug::Text('Adding... ', __FILE__, __LINE__, __METHOD__,10);
+
+                // Get user_id from request when adding
+                $user_id = $request->input('user_id');
+
 				//Adding User Deductions...
 				$data['add'] = 1;
 				$data['user_id'] = $user_id;
+
 
 				//Get all Company Deductions for drop down box.
 				$cdlf = new CompanyDeductionListFactory();
@@ -452,7 +361,10 @@ switch ($action) {
 				if ($udlf->getRecordCount() > 0 ) {
 					//Remove deductions from select box that are already assigned to user.
 					$deduction_ids = array_keys($data['deduction_options']);
-					foreach( $udlf as $ud_obj) {
+					foreach( $udlf->rs as $ud_obj) {
+                        $udlf->data = (array)$ud_obj;
+                        $ud_obj = $udlf;
+
 						if ( in_array( $ud_obj->getCompanyDeduction(), $deduction_ids ) ) {
 							unset($data['deduction_options'][$ud_obj->getCompanyDeduction()]);
 						}
@@ -486,20 +398,172 @@ switch ($action) {
 
 		$data['js_arrays'] = $cdf->getJavaScriptArrays();
 
-		$smarty->assign_by_ref('data', $data);
-		$smarty->assign_by_ref('saved_search_id', $saved_search_id);
+        $viewData['data'] = $data;
+        $viewData['total_amount'] = $total_amount;
 
-		break;
+        $company_deduction_id = $data['company_deduction_id'] ?? $company_deduction_id;
+        $viewData['company_deduction_id'] = $company_deduction_id;
+
+        $user_id = $data['user_id'] ?? $user_id;
+        $viewData['user_id'] = $user_id;
+        $viewData['udf'] = $udf;
+
+        // dd($viewData);
+
+        return view('users.EditUserDeduction', $viewData);
+
+    }
+
+
+    public function save(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $company_deduction_id = $request->input('company_deduction_id', '');
+        $user_data = $request->all();
+        $data = $request->all();
+        // dd($request->all());
+
+        $udf = new UserDeductionFactory();
+
+        Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+		//Debug::setVerbosity(11);
+
+		$udf->StartTransaction();
+
+		if ( $company_deduction_id != '' ) {
+			//Debug::setVerbosity(11);
+			Debug::Text('Mass User Update', __FILE__, __LINE__, __METHOD__,10);
+			//Debug::Arr($data, 'All User Data', __FILE__, __LINE__, __METHOD__,10);
+
+			$redirect = 0;
+
+			if ( isset($data['users']) AND is_array($data['users']) AND count($data['users']) > 0 ) {
+
+                foreach( $data['users'] as  $user_id => $user_data ) {
+					Debug::Text('Editing Deductions for User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
+					//Debug::Arr($user_data, 'Specific User Data', __FILE__, __LINE__, __METHOD__,10);
+					if ( isset($user_data['id']) AND $user_data['id'] > 0 ) {
+						$udf->setId( $user_data['id'] );
+					}
+					$udf->setUser( $user_data['user_id'] );
+
+					if ( isset($user_data['user_value1']) ) {
+						$udf->setUserValue1( $user_data['user_value1'] );
+					}
+					if ( isset($user_data['user_value2']) ) {
+						$udf->setUserValue2( $user_data['user_value2'] );
+					}
+					if ( isset($user_data['user_value3']) ) {
+						$udf->setUserValue3( $user_data['user_value3'] );
+					}
+					if ( isset($user_data['user_value4']) ) {
+						$udf->setUserValue4( $user_data['user_value4'] );
+					}
+					if ( isset($user_data['user_value5']) ) {
+						$udf->setUserValue5( $user_data['user_value5'] );
+					}
+					if ( isset($user_data['user_value6']) ) {
+						$udf->setUserValue6( $user_data['user_value6'] );
+					}
+					if ( isset($user_data['user_value7']) ) {
+						$udf->setUserValue7( $user_data['user_value7'] );
+					}
+					if ( isset($user_data['user_value8']) ) {
+						$udf->setUserValue8( $user_data['user_value8'] );
+					}
+					if ( isset($user_data['user_value9']) ) {
+						$udf->setUserValue9( $user_data['user_value9'] );
+					}
+					if ( isset($user_data['user_value10']) ) {
+						$udf->setUserValue10( $user_data['user_value10'] );
+					}
+
+					if ( $udf->isValid() ) {
+						$udf->Save();
+					} else {
+						$redirect++;
+					}
+				}
+
+				if ( $redirect == 0 ) {
+					$udf->CommitTransaction();
+
+					// Redirect::Page( URLBuilder::getURL( NULL, '../company/CompanyDeductionList.php') );
+                    return redirect()->to(URLBuilder::getURL( NULL , '/user/tax'))->with('success', 'Employee Tax / Deduction saved successfully.');
+
+				}
+			}
+		} else {
+			if ( isset($data['add']) AND $data['add'] == 1 ) {
+				Debug::Text('Adding Deductions', __FILE__, __LINE__, __METHOD__,10);
+
+                if ( isset($data['deduction_ids']) AND count($data['deduction_ids']) > 0 ) {
+					foreach( $data['deduction_ids'] as $deduction_id ) {
+						$udf = new UserDeductionFactory();
+						$udf->setUser( $data['user_id'] );
+						$udf->setCompanyDeduction( $deduction_id );
+						if ( $udf->isValid() ) {
+							$udf->Save();
+						}
+					}
+				}
+
+				$udf->CommitTransaction();
+
+				// Redirect::Page( URLBuilder::getURL( array('user_id' => $data['user_id'], 'saved_search_id' => $saved_search_id ), 'UserDeductionList.php') );
+                return redirect()->to(URLBuilder::getURL(array('user_id' => $user_id) , '/user/tax'))->with('success', 'Employee Tax / Deduction saved successfully.');
+
+			} else {
+
+				Debug::Text('Editing Deductions', __FILE__, __LINE__, __METHOD__,10);
+
+				$udf->setId( $data['id'] );
+				$udf->setUser( $data['user_id'] );
+
+				if ( isset($data['user_value1']) ) {
+					$udf->setUserValue1( $data['user_value1'] );
+				}
+				if ( isset($data['user_value2']) ) {
+					$udf->setUserValue2( $data['user_value2'] );
+				}
+				if ( isset($data['user_value3']) ) {
+					$udf->setUserValue3( $data['user_value3'] );
+				}
+				if ( isset($data['user_value4']) ) {
+					$udf->setUserValue4( $data['user_value4'] );
+				}
+				if ( isset($data['user_value5']) ) {
+					$udf->setUserValue5( $data['user_value5'] );
+				}
+				if ( isset($data['user_value6']) ) {
+					$udf->setUserValue6( $data['user_value6'] );
+				}
+				if ( isset($data['user_value7']) ) {
+					$udf->setUserValue7( $data['user_value7'] );
+				}
+				if ( isset($data['user_value8']) ) {
+					$udf->setUserValue8( $data['user_value8'] );
+				}
+				if ( isset($data['user_value9']) ) {
+					$udf->setUserValue9( $data['user_value9'] );
+				}
+				if ( isset($data['user_value10']) ) {
+					$udf->setUserValue10( $data['user_value10'] );
+				}
+
+				if ( $udf->isValid() ) {
+					$udf->Save();
+
+					$udf->CommitTransaction();
+
+					// Redirect::Page( URLBuilder::getURL( array('user_id' => $data['user_id'], 'saved_search_id' => $saved_search_id ), 'UserDeductionList.php') );
+                    return redirect()->to(URLBuilder::getURL(array('user_id' => $user_id) , '/user/tax'))->with('success', 'Employee Tax / Deduction saved successfully.');
+
+				}
+			}
+		}
+		$udf->FailTransaction();
+    }
+
+
 }
-
-
-
-//ARSP EDIT --> ADD NEW CODE FOR TOTAL AMOUNT OF THE DEDUCTION OR EARNING
-$smarty->assign_by_ref('total_amount', $total_amount);
-
-$smarty->assign_by_ref('udf', $udf);
-$smarty->assign_by_ref('company_deduction_id', $company_deduction_id);
-
-$smarty->display('users/EditUserDeduction.tpl');
-?>
-

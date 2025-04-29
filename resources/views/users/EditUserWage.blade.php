@@ -134,8 +134,8 @@
                             <div class="row mb-3">
                                 <label for="effective_date" class="form-label req mb-1 col-md-3">Effective Date</label>
                                 <div class="col-md-9 d-flex align-items-center gap-2">
-                                    <input type="date" class="form-control w-50" id="effective_date" name="effective_date" placeholder="Enter Effective Date"
-                                        value="{{ isset($wage_data['effective_date']) ? \Carbon\Carbon::createFromTimestamp($wage_data['effective_date'])->format('Y-m-d') : '' }}"
+                                    <input type="date" class="form-control w-50" id="effective_date" name="effective_date"
+                                        value="{{ isset($wage_data['effective_date']) ? date('Y-m-d', $wage_data['effective_date']) : '' }}"
                                     >
                                     @if(count($pay_period_boundary_date_options) > 0)
                                         &nbsp;&nbsp;{{ __('or') }}&nbsp;&nbsp;
