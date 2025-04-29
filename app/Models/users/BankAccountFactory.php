@@ -157,6 +157,7 @@ class BankAccountFactory extends Factory {
 
 		return FALSE;
 	}
+    
 	function setInstitution($value) {
 		$value = trim($value);
 

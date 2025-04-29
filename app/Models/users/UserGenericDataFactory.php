@@ -287,6 +287,7 @@ class UserGenericDataFactory extends Factory {
 		return $retarr;
 	}
 
+
 	static function searchFormDataHandler( $action, $filter_data, $redirect_url ) {
 		global $current_company, $current_user;
 

@@ -922,7 +922,17 @@ class CompanyFactory extends Factory {
 														),
 										'GS' => array( '00' => '--'),
 										'ES' => array( '00' => '--'),
-										'LK' => array( '00' => '--'),
+										'LK' => array(
+                                                        'NC' => ('North Central'),
+                                                        'NE' => ('North Eastern'),
+                                                        'NW' => ('North Western'),
+                                                        'CE' => ('Central'),
+                                                        'EA' => ('Eastern'),
+                                                        'SA' => ('Southern'),
+                                                        'WE' => ('Western'),
+                                                        'UV' => ('Uva'),
+                                                        'SB' => ('Sabaragamuwa'),
+                                                    ),
 										'SD' => array( '00' => '--'),
 										'SR' => array( '00' => '--'),
 										'SJ' => array( '00' => '--'),
@@ -1125,12 +1135,12 @@ class CompanyFactory extends Factory {
 								);
 				break;
 		}
-		
+
 		return $retval;
 	}
 
 	function _getVariableToFunctionMap($data = null) {
-		
+
 		$variable_function_map = array(
 			'id' => 'ID',
 			'parent_id' => 'Parent',
@@ -1296,7 +1306,7 @@ class CompanyFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
           /**Fl ADDED FOR CHILD FUND CFOR REQUIREMENTS**
          * Newly added column `epf_no` **/
 	function getEpfNo() {
@@ -2119,10 +2129,10 @@ class CompanyFactory extends Factory {
 		return $logo_file_name;
 	}
 
-        
-        
+
+
         	function getLogoFileWithoutPath( $company_id = NULL, $include_default_logo = TRUE, $primary_company_logo = FALSE ) {
-                        
+
                    $file_name = 'logo';
 		//Test for both jpg and png
 		$base_name = $this->getStoragePath( $company_id ) . DIRECTORY_SEPARATOR .$file_name;
@@ -2151,9 +2161,9 @@ class CompanyFactory extends Factory {
 		//Debug::Text('Logo File Name: '. $logo_file_name .' Include Default: '. (int)$include_default_logo .' Primary Company Logo: '. (int)$primary_company_logo, __FILE__, __LINE__, __METHOD__,10);
 		return $logo_file_name;
 	}
-        
-        
-        
+
+
+
 	function cleanStoragePath( $company_id = NULL ) {
 		if ( $company_id == '' ) {
 			$company_id = $this->getCompany();
@@ -2575,8 +2585,28 @@ class CompanyFactory extends Factory {
 	}
 
 
-	// function Validate() {
-	// 	global $config_vars;
+	function Validate() {
+		global $config_vars;
+
+		//Don't allow the primary company to be deleted.
+		if ( $this->getDeleted() == TRUE
+				AND isset($config_vars['other']['primary_company_id']) AND $config_vars['other']['primary_company_id'] == $this->getID() ) {
+			$this->Validator->isTrue(		'company',
+											FALSE,
+											('Unable to delete the primary company'));
+		}
+        /*
+        $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65";
+        $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65";
+        $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65";
+        $obj = new $obj_class;
+        $retval = $obj->{$obj_function}();
+        if ( $retval !== TRUE ) {
+            $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) );
+        }
+        */
+		return TRUE;
+	}
 
 	// 	//Don't allow the primary company to be deleted.
 	// 	if ( $this->getDeleted() == TRUE
@@ -2590,44 +2620,45 @@ class CompanyFactory extends Factory {
 	// }
 
 
-	function Validate()
-    {
-        // Access global configuration variables
-        global $config_vars;
 
-        // Prevent deletion of the primary company
-        // Checks if the company is marked for deletion and matches the primary company ID
-        if (
-            $this->getDeleted() == TRUE
-            and isset($config_vars['other']['primary_company_id']) 
-            and $config_vars['other']['primary_company_id'] == $this->getID()
-        ) {
-            // Add validation error if attempting to delete the primary company
-            $this->Validator->isTrue(
-                'company',
-                FALSE,
-                ('Unable to delete the primary company')
-            );
-        }
+	// function Validate()
+    // {
+    //     // Access global configuration variables
+    //     global $config_vars;
 
-        // License validation (temporarily disabled due to "Class TTLicense not found" error)
-        // Originally checks if the license is valid using the TTLicense class
-        // Commented out to bypass the error for testing purposes
-        // WARNING: Bypassing license validation may violate software terms; consult provider
-        // $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65";
-        // $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\x65\x6e\x73\x65";
-        // $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65";
-        // @$obj = new $obj_class;
-        // $retval = $obj->{$obj_function}();
-        // if ($retval !== TRUE) {
-        //     $this->Validator->isTrue('lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval));
-        // }
+    //     // Prevent deletion of the primary company
+    //     // Checks if the company is marked for deletion and matches the primary company ID
+    //     if (
+    //         $this->getDeleted() == TRUE
+    //         and isset($config_vars['other']['primary_company_id'])
+    //         and $config_vars['other']['primary_company_id'] == $this->getID()
+    //     ) {
+    //         // Add validation error if attempting to delete the primary company
+    //         $this->Validator->isTrue(
+    //             'company',
+    //             FALSE,
+    //             ('Unable to delete the primary company')
+    //         );
+    //     }
 
-        // Return TRUE to indicate validation process completed
-        // Actual validation status is checked via $this->Validator->isValid()
-        return TRUE;
-    }
-	
+    //     // License validation (temporarily disabled due to "Class TTLicense not found" error)
+    //     // Originally checks if the license is valid using the TTLicense class
+    //     // Commented out to bypass the error for testing purposes
+    //     // WARNING: Bypassing license validation may violate software terms; consult provider
+    //     // $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65";
+    //     // $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\x65\x6e\x73\x65";
+    //     // $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65";
+    //     // @$obj = new $obj_class;
+    //     // $retval = $obj->{$obj_function}();
+    //     // if ($retval !== TRUE) {
+    //     //     $this->Validator->isTrue('lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval));
+    //     // }
+
+    //     // Return TRUE to indicate validation process completed
+    //     // Actual validation status is checked via $this->Validator->isValid()
+    //     return TRUE;
+    // }
+
 	function preSave() {
 
 		if ( $this->isNew() == TRUE ) {
@@ -2844,7 +2875,7 @@ class CompanyFactory extends Factory {
 
 		return FALSE;
 	}
-	
+
 	function getObjectAsArray( $include_columns = NULL ) {
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

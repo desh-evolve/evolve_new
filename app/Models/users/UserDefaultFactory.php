@@ -127,7 +127,7 @@ class UserDefaultFactory extends Factory {
 	function setPermissionControl($id) {
 		$id = trim($id);
 
-		$pclf = new PermissionControlListFactory(); 
+		$pclf = new PermissionControlListFactory();
 
 		if (  $this->Validator->isResultSetWithRows(		'permission_control_id',
 															$pclf->getByID($id),
@@ -151,7 +151,7 @@ class UserDefaultFactory extends Factory {
 	function setPayPeriodSchedule($id) {
 		$id = trim($id);
 
-		$ppslf = new PayPeriodScheduleListFactory(); 
+		$ppslf = new PayPeriodScheduleListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'pay_period_schedule_id',
@@ -176,7 +176,7 @@ class UserDefaultFactory extends Factory {
 	function setPolicyGroup($id) {
 		$id = trim($id);
 
-		$pglf = new PolicyGroupListFactory(); 
+		$pglf = new PolicyGroupListFactory();
 
 		if ( $id == 0
 				OR $this->Validator->isResultSetWithRows(	'policy_group_id',
@@ -258,7 +258,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Branch ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$blf = new BranchListFactory(); 
+		$blf = new BranchListFactory();
 
 		if (
 				$id == 0
@@ -287,7 +287,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Department ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$dlf = new DepartmentListFactory(); 
+		$dlf = new DepartmentListFactory();
 
 		if (
 				$id == 0
@@ -316,7 +316,7 @@ class UserDefaultFactory extends Factory {
 		$id = trim($id);
 
 		Debug::Text('Currency ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
-		$culf = new CurrencyListFactory(); 
+		$culf = new CurrencyListFactory();
 
 		if (
 				$this->Validator->isResultSetWithRows(	'currency',
@@ -377,7 +377,7 @@ class UserDefaultFactory extends Factory {
 	function setCountry($country) {
 		$country = trim($country);
 
-		$cf = new CompanyFactory(); 
+		$cf = new CompanyFactory();
 
 		if ( $this->Validator->inArrayKey(		'country',
 												$country,
@@ -806,7 +806,7 @@ class UserDefaultFactory extends Factory {
 
 			//Insert new mappings.
 			//$lf = new UserListFactory();
-			$cdlf = new CompanyDeductionListFactory(); 
+			$cdlf = new CompanyDeductionListFactory();
 
 			foreach ($ids as $id) {
 				if ( $id != FALSE AND isset($ids) AND !in_array($id, $tmp_ids) ) {

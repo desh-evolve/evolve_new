@@ -7,9 +7,9 @@ use IteratorAggregate;
 
 class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implements IteratorAggregate {
     //put your code here
-       
-     
-    
+
+
+
     function getAll($limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $order == NULL ) {
 			$order = array( 'name' => 'asc' );
@@ -34,17 +34,17 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 
 		return $this;
 	}
-        
-        
-        
-        
-        
+
+
+
+
+
     function getById($id) {
 		if ( $id == '') {
 			return FALSE;
 		}
 
-		
+
 			$ph = array(
 						':id' => $id,
 						);
@@ -57,14 +57,14 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 
 			$this->rs = DB::select($query, $ph);
 
-		
+
 
 		return $this;
 	}
-	
-        
-        
-          
+
+
+
+
     function getByUserIdAndCompanyId($user_id, $company_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $user_id == '') {
 			return FALSE;
@@ -74,7 +74,6 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 			return FALSE;
 		}
 
-		$additional_order_fields = array('c.id');
 		if ( $order == NULL ) {
 			$order = array( 'a.id' => 'asc' );
 			$strict = FALSE;
@@ -83,7 +82,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 		}
 
 		$uf = new UserFactory();
-		
+
 
 		$ph = array(
 					':company_id' => $company_id,
@@ -93,13 +92,13 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 					select 	a.*
 					from	'. $this->getTable() .' as a,
 							'. $uf->getTable() .' as b
-					
+
 					where 	a.user_id = b.id
 						AND b.company_id = :company_id
 						AND a.user_id in ('. $this->getListSQL( $user_id, $ph ) .')
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
-		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
+		$query .= $this->getSortSQL( $order, $strict );
 
 		if ($limit == NULL) {
 			$this->rs = DB::select($query, $ph);

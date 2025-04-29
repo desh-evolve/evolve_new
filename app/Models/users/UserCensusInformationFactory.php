@@ -2,39 +2,40 @@
 
 namespace App\Models\Users;
 use App\Models\Core\Factory;
+use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 
 class UserCensusInformationFactory  extends Factory {
     //put your code here
-    
+
     protected $table = 'user_census';
     protected $pk_sequence_name = 'user_census_id_seq'; //PK Sequence name
-    
-    
+
+
     	function _getFactoryOptions( $name ) {
 
 		$retval = NULL;
 		switch( $name ) {
-                    
+
                     case 'gender':
 				$retval = array(
 						   5 => ('Unspecified'),
 						   10 => ('Male'),
 						   20 => ('Female'),
 									);
-                        
+
                         break;
-                
+
                 }
-                
+
                 return $retval;
         }
-        
-    
-    
-        
-        
+
+
+
+
+
 	function getUser() {
 		if ( isset($this->data['user_id']) ) {
 			return $this->data['user_id'];
@@ -42,8 +43,8 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
 	function setUser($id) {
 		$id = trim($id);
 
@@ -61,8 +62,8 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         function getDependant() {
 		if ( isset($this->data['dependant']) ) {
 			return $this->data['dependant'];
@@ -70,8 +71,8 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         function setDependant($value) {
 		$value = trim($value);
 
@@ -81,10 +82,10 @@ class UserCensusInformationFactory  extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
-        
-        
+	}
+
+
+
         function getName() {
 		if ( isset($this->data['name']) ) {
 			return $this->data['name'];
@@ -92,8 +93,8 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         function setName($value) {
 		$value = trim($value);
 
@@ -103,10 +104,10 @@ class UserCensusInformationFactory  extends Factory {
 		}
 
 		return FALSE;
-	}      
-        
+	}
 
-        
+
+
         function getRelationship() {
 		if ( isset($this->data['relationship']) ) {
 			return $this->data['relationship'];
@@ -114,8 +115,8 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-        
-        
+
+
         function setRelationship($value) {
 		$value = trim($value);
 
@@ -126,10 +127,10 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-        
-        
-        
-             
+
+
+
+
 
 	function getBirthDate() {
 		if ( isset($this->data['dob']) ) {
@@ -153,9 +154,9 @@ class UserCensusInformationFactory  extends Factory {
 		return FALSE;
 	}
 
-        
-        
-        
+
+
+
         function getNic() {
 		if ( isset($this->data['nic']) ) {
 			return $this->data['nic'];
@@ -163,7 +164,7 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-                        
+
 	function setNic($value) {
 		$value = trim($value);
 
@@ -173,19 +174,30 @@ class UserCensusInformationFactory  extends Factory {
 		}
 
 		return FALSE;
-	}  
-        
-        
-        
-        function getGender() {
-		if ( isset($this->data['gender']) ) {
-			return $this->data['gender'];
-		}
-
-		return FALSE;
 	}
+
+
+    function getGenderExample() {
+		$options = $this->getOptions('gender');
+
+		return $options[$this->getGender()];
+	}
+
+    function getGender() {
+        if ( isset($this->data['gender']) ) {
+            return $this->data['gender'];
+        }
+
+        return FALSE;
+    }
+
 	function setGender($gender) {
 		$gender = trim($gender);
+
+        $key = Option::getByValue($gender, $this->getOptions('gender') );
+		if ($key !== FALSE) {
+			$gender = $key;
+		}
 
 		if ( $this->Validator->inArrayKey(	'gender',
 											$gender,
@@ -199,5 +211,5 @@ class UserCensusInformationFactory  extends Factory {
 
 		return FALSE;
 	}
-        
+
 }

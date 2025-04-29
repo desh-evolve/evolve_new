@@ -42,55 +42,58 @@ class WageGroupList extends Controller
 	}
 
 	public function index()
-{
-    $current_company = $this->currentCompany;
-    $current_user_prefs = $this->userPrefs;
-    $viewData['title'] = 'Wage Group List';
+    {
+        $current_company = $this->currentCompany;
+        $current_user_prefs = $this->userPrefs;
+        $viewData['title'] = 'Wage Group List';
 
-    // Set URL parameters for pagination and sorting
-    // URLBuilder::setURL(
-    //     $_SERVER['SCRIPT_NAME'],
-    //     array(
-    //         'sort_column' => $sort_column,
-    //         'sort_order' => $sort_order,
-    //         'page' => $page
-    //     )
-    // );
+        // Set URL parameters for pagination and sorting
+        URLBuilder::setURL(
+            $_SERVER['SCRIPT_NAME'],
+            array(
+                'sort_column' => $sort_column,
+                'sort_order' => $sort_order,
+                'page' => $page
+            )
+        );
 
-    // // Prepare sorting array
-    // $sort_array = null;
-    // if ($sort_column != '') { // Fixed: Removed extra parenthesis
-    //     $sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
-    // }
+        // Prepare sorting array
+        $sort_array = null;
+        if ($sort_column != '') { // Fixed: Removed extra parenthesis
+            $sort_array = array(Misc::trimSortPrefix($sort_column) => $sort_order);
+        }
 
-    // Fetch wage groups
-    $wglf = new WageGroupListFactory();
-    $wglf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage());
+        // Fetch wage groups
+        $wglf = new WageGroupListFactory();
+        $wglf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, null, $sort_array);
 
-    // Map wage group data
-    $groups = array_map(function ($group_obj) {
-        return [
-            'id' => $group_obj->id,
-            'name' => $group_obj->name,
-            'deleted' => $group_obj->deleted,
-        ];
-    }, $wglf->rs);
+        // Map wage group data
+        $groups = array_map(function ($group_obj) {
+            return [
+                'id' => $group_obj->id,
+                'name' => $group_obj->name,
+                'deleted' => $group_obj->deleted,
+            ];
+        }, $wglf->rs);
 
-    // Set up pagination
-    $pager = new Pager($wglf);
+        // Set up pagination
+        $pager = new Pager($wglf);
 
-    // Prepare view data
-    $viewData['groups'] = $groups;
-    $viewData['paging_data'] = $pager->getPageVariables();
+        // Prepare view data
+        $viewData['groups'] = $groups;
+        $viewData['sort_column'] = $sort_column;
+        $viewData['sort_order'] = $sort_order;
+        $viewData['paging_data'] = $pager->getPageVariables();
 
-    // Return the view
-    return view('company.WageGroupList', $viewData);
-}
+        // Return the view
+        return view('company.WageGroupList', $viewData);
+    }
 
 	public function add()
 	{
 		Redirect::Page(URLBuilder::getURL(NULL, 'EditWageGroup.php'));
 	}
+
 
 	public function delete($id)
     {
@@ -99,18 +102,18 @@ class WageGroupList extends Controller
         if (empty($id)) {
             return response()->json(['error' => 'No wage group selected.'], 400);
         }
-        
+
         $wglf = new WageGroupListFactory();
         $wage_group = $wglf->getByIdAndCompanyId($id, $current_company->getId());
-        
+
         foreach ($wage_group->rs as $w_obj) {
             $wage_group->data = (array)$w_obj; // added bcz currency data is null and it gives an error
-            
+
             $wage_group->setDeleted(true); // Set deleted flag to true
 
             if ($wage_group->isValid()) {
                 $res = $wage_group->Save();
-                
+
                 if($res){
                     return response()->json(['success' => 'Wage Group deleted successfully.']);
                 }else{
@@ -118,6 +121,6 @@ class WageGroupList extends Controller
                 }
             }
         }
-        
+
     }
 }

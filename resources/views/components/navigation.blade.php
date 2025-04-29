@@ -48,12 +48,9 @@
                     $checkAttendancelNav = request()->routeIs('attendance.*');
                 @endphp
                 <li class="nav-item">
-                    <a 
-                        class="nav-link menu-link {{ $checkAttendancelNav ? 'active' : '' }}" href="#attendance"
-                        data-bs-toggle="collapse" role="button"
-                        aria-expanded="{{ $checkAttendancelNav ? 'true' : 'false' }}"
-                        aria-controls="attendance">
-                        <i class="ri-file-list-line"></i> <span>Attendance</span>
+                    <a class="nav-link menu-link" href="#attendance" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false">
+                        <i class="ri-bar-chart-line"></i> <span>Attendance</span>
                     </a>
                     <div class="collapse menu-dropdown" id="attendance">
                         <ul class="nav nav-sm flex-column">
@@ -61,19 +58,14 @@
                             <li class="nav-item"><a href="#" class="nav-link">My Timesheet</a></li>
 
                             <li class="nav-item">
-                                <a href="{{ route('attendance.punchlist') }}" 
+                                <a href="{{ route('attendance.punchlist') }}"
                                     class="nav-link {{ request()->routeIs('attendance.punchlist') ? 'active' : '' }}">Punches
                                 </a>
                             </li>
+                            <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
 
                             <li class="nav-item">
-                                <a href="{{ route('attendance.masspunch.add') }}" 
-                                    class="nav-link {{ request()->routeIs('attendance.masspunch.add') ? 'active' : '' }}">Mass Punch
-                                </a>
-                            </li>
-                            
-                            <li class="nav-item">
-                                <a href="{{ route('attendance.requests') }}" 
+                                <a href="{{ route('attendance.requests') }}"
                                     class="nav-link {{ request()->routeIs('attendance.requests') ? 'active' : '' }}">Requests
                                 </a>
                             </li>
@@ -83,15 +75,11 @@
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
                             <li class="nav-item">
-                                <a href="{{ route('attendance.accruals') }}" 
+                                <a href="{{ route('attendance.accruals') }}"
                                     class="nav-link {{ request()->routeIs('attendance.accruals') ? 'active' : '' }}">Accruals
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{{ route('attendance.paystubs') }}" 
-                                    class="nav-link {{ request()->routeIs('attendance.paystubs') ? 'active' : '' }}">Pay Slips
-                                </a>
-                            </li>
+                            <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
                         </ul>
                     </div>
                 </li>
@@ -122,7 +110,7 @@
                     </a>
                     <div class="collapse menu-dropdown" id="reports">
                         <ul class="nav nav-sm flex-column">
-                            
+
                             <li class="nav-item">
                                 <a href="{{ route('employee_detail.index') }}"
                                     class="nav-link {{ request()->routeIs('employee_detail.index') ? 'active' : '' }}">Employee Detail Report
@@ -147,10 +135,10 @@
                     </a>
                     <div class="collapse menu-dropdown" id="company">
                         <ul class="nav nav-sm flex-column">
-                            {{-- <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li> --}}
                             <li class="nav-item">
                                 <a href="{{ route('company.index') }}"
-                                    class="nav-link {{ request()->routeIs('company.index') ? 'active' : '' }}">Company Information
+                                    class="nav-link {{ request()->routeIs('company.index') ? 'active' : '' }}">
+                                    Company Information
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -197,10 +185,20 @@
                         Groups
                     </a>
                 </li>
-                <li class="nav-item"><a href="#" class="nav-link">New Hire Defaults</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Company Bank Information</a></li>
+                <li class="nav-item">
+                    <a href="{{ route('new_hire_defaults.index') }}"
+                        class="nav-link {{ request()->routeIs('new_hire_defaults.index') ? 'active' : '' }}">
+                        New Hire Defaults
+                    </a>
+                </li>
 
+                <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
+
+                <li class="nav-item">
+                    <a href="{{ route('bank_account.company', ['company_id' => $current_company->getId()]) }}"
+                       class="nav-link {{ request()->routeIs('bank_account.company') ? 'active' : '' }}">
+                       Company Bank Information
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('recurring_holidays.index') }}"
@@ -208,7 +206,12 @@
                         Holidays
                     </a>
                 </li>
-                <li class="nav-item"><a href="#" class="nav-link">Other Fields</a></li>
+                <li class="nav-item">
+                    <a href="{{ route('company.other_field.index') }}"
+                        class="nav-link {{ request()->routeIs('company.other_field.index') ? 'active' : '' }}">
+                        Other Fields
+                    </a>
+                </li>
             </ul>
         </div>
         </li>
@@ -362,8 +365,27 @@
                 <ul class="nav nav-sm flex-column">
                     <li class="nav-item"><a href="#" class="nav-link">Messages</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Preferences</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Bank Information</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('user_preference.index') }}"
+                            class="nav-link {{ request()->routeIs('user_preference.index') ? 'active' : '' }}">
+                            Preferences
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('user.web_password.index') }}"
+                            class="nav-link {{ request()->routeIs('user.web_password.index') ? 'active' : '' }}">
+                            Web Password
+                        </a>
+                    </li>
+
+                    <li class="nav-item"><a href="#" class="nav-link">Quick Punch Password</a></li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('bank_account.user', ['user_id' => $current_user->getId()]) }}"
+                            class="nav-link {{ request()->routeIs('bank_account.user') ? 'active' : '' }}">
+                            Bank Information
+                        </a>
+                    </li>
                 </ul>
             </div>
         </li>

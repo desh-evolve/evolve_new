@@ -39,7 +39,7 @@ function editAccrual(userID) {
 				<tr class="tblHeader">
 					<td>
 						#
-					</td>				
+					</td>
 					<td>
 						{capture assign=label}{t}Qualification{/t}{/capture}
 						{include file="column_sort.tpl" label=$label sort_column="c.name" current_column="$sort_column" current_order="$sort_order"}
@@ -56,7 +56,7 @@ function editAccrual(userID) {
 						{capture assign=label}{t}Remaks{/t}{/capture}
 						{include file="column_sort.tpl" label=$label sort_column="a.balance" current_column="$sort_column" current_order="$sort_order"}
 					</td>
-                                      
+
 					<td>
 						{t}Functions{/t}
 					</td>
@@ -69,7 +69,7 @@ function editAccrual(userID) {
 					<tr class="{$row_class}">
 						<td>
 							{$smarty.foreach.qualification.iteration}
-						</td>										
+						</td>
 						<td>
 							{$qualification.qualification}
 						</td>
@@ -82,8 +82,8 @@ function editAccrual(userID) {
                                                 <td>
                                                         {$qualification.remaks}
 						</td>
-                                                
-                                              
+
+
 						<td>
 							{assign var="id" value=$qualification.id}
 							{assign var="user_id" value=$qualification.user_id}

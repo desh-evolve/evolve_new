@@ -4,6 +4,9 @@
  * Evolve Technology PVT LTD.
  *
  ********************************************************************************/
+
+use App\Models\Users\UserListFactory;
+
 /*
  * $Revision: 4104 $
  * $Id: EditUserWage.php 4104 2011-01-04 19:04:05Z ipso $
@@ -29,7 +32,6 @@ extract	(FormVariables::GetVariables(
 												'action',
 												'id',
 												'user_id',
-												'saved_search_id',
 												'wage_data'
 												) ) );
 
@@ -92,12 +94,12 @@ switch ($action) {
 
 			$uwlf = new UserWageListFactory();
 			$uwlf->getByIdAndCompanyId($id, $current_company->getId() );
-                        
-                        
+
+
 
 			foreach ($uwlf as $wage) {
 				$user_obj = $ulf->getByIdAndCompanyId( $wage->getUser(), $current_company->getId() )->getCurrent();
-                                
+
                                 $budgetary_allowance = 0;
                                 $udlf = new UserDeductionListFactory();
                                 $udlf->getByUserIdAndCompanyDeductionId($wage->getUser(), 3);
@@ -106,7 +108,7 @@ switch ($action) {
                                         $budgetary_allowance = $udlf_obj->getUserValue1();
                                     }
                                 }
-                                
+
 				if ( is_object($user_obj) ) {
 					$is_owner = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getID() );
 					$is_child = $permission->isChild( $user_obj->getId(), $permission_children_ids );
@@ -147,7 +149,7 @@ switch ($action) {
 			}
 		} else {
 			if ( $action != 'submit' ) {
-                            
+
                                 $budgetary_allowance = 0;
                                 $udlf = new UserDeductionListFactory();
                                 $udlf->getByUserIdAndCompanyDeductionId($user_id, 3);
@@ -156,7 +158,7 @@ switch ($action) {
                                         $budgetary_allowance = $udlf_obj->getUserValue1();
                                     }
                                 }
-                                
+
 				$wage_data = array( 'effective_date' => TTDate::getTime(), 'labor_burden_percent' => 0 ,'budgetary_allowance' => Misc::MoneyFormat( $budgetary_allowance , FALSE));
 			}
 		}

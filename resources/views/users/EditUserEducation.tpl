@@ -33,42 +33,42 @@
 						{t}Qualification :{/t}
 					</td>
 					<td class="cellRightEditTable">
-						<input type="text" name="data[qualification]" value="{$data.qualification}"> 
+						<input type="text" name="data[qualification]" value="{$data.qualification}">
 					</td>
 				</tr>
-                                
-                                <tr>
+
+                                <tr onClick="showHelpEntry('name')">
 					<td class="{isvalid object="uef" label="institute" value="cellLeftEditTable"}">
 						{t}Institute:{/t}
 					</td>
 					<td class="cellRightEditTable">
-						<input type="text" name="data[institute]" value="{$data.institute}"> 
+						<input type="text" name="data[institute]" value="{$data.institute}">
 					</td>
 				</tr>
-                                
-                                <tr>
+
+                                <tr onClick="showHelpEntry('year')">
 					<td class="{isvalid object="uef" label="year" value="cellLeftEditTable"}">
 						{t}Year:{/t}
 					</td>
 					<td class="cellRightEditTable">
 						<input type="text"  id="year" name="data[year]" value="{$data.year}">
-						
+
 					</td>
 				</tr>
-                                
-                                <tr>
+
+                                <tr onClick="showHelpEntry('remaks')">
 					<td class="{isvalid object="uef" label="relationship" value="cellLeftEditTable"}">
 						{t}Remarks:{/t}
 					</td>
 					<td class="cellRightEditTable">
-						<input type="text" name="data[remaks]" value="{$data.remaks}"> 
+						<input type="text" name="data[remaks]" value="{$data.remaks}">
 					</td>
 				</tr>
-                                
-                       
-                                
 
-	
+
+
+
+
 
 {*
 				<tr>

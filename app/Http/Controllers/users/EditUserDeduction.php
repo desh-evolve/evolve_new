@@ -52,6 +52,7 @@ switch ($action) {
 			$redirect = 0;
 
 			if ( isset($data['users']) AND is_array($data['users']) AND count($data['users']) > 0 ) {
+
 				foreach( $data['users'] as  $user_id => $user_data ) {
 					Debug::Text('Editing Deductions for User ID: '. $user_id, __FILE__, __LINE__, __METHOD__,10);
 					//Debug::Arr($user_data, 'Specific User Data', __FILE__, __LINE__, __METHOD__,10);
@@ -239,9 +240,9 @@ switch ($action) {
 								);
 
 					if ($action != 'submit' ) {
-                                            
+
 						$user_ids = $cd_obj->getUser();
- 
+
 						Debug::Text('Assigned Users: '. count($user_ids), __FILE__, __LINE__, __METHOD__,10);
 						if ( is_array($user_ids) AND count($user_ids) > 0 ) {
 							//Get User deduction data for each user.
@@ -299,17 +300,17 @@ switch ($action) {
 														);
                                                                         //ARSP EDIT--> ADD NEW CODE FOR GET THE TOTAL VALUE OF THE INCREMENT OR DEDUCTION
                                                                         $total_amount  = $total_amount + (float)$data[users][$ud_obj->getUser()][user_value1];
-														
+
 								}
 							}
 						}
 					}
-                                        
-                                        
+
+
 				}
 			}
-                        
-                       
+
+
 			//print_r($data);
 		} else {
 			if ( isset($id) AND $action != 'submit'  ) {
@@ -484,7 +485,7 @@ switch ($action) {
 		$data['state_la_filing_status_options'] = $cdf->getOptions('state_la_filing_status');
 
 		$data['js_arrays'] = $cdf->getJavaScriptArrays();
-                
+
 		$smarty->assign_by_ref('data', $data);
 		$smarty->assign_by_ref('saved_search_id', $saved_search_id);
 
@@ -501,3 +502,4 @@ $smarty->assign_by_ref('company_deduction_id', $company_deduction_id);
 
 $smarty->display('users/EditUserDeduction.tpl');
 ?>
+
