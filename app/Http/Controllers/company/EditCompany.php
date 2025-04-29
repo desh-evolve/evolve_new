@@ -36,15 +36,18 @@ class EditCompany extends Controller
         $this->userPrefs = View::shared('current_user_prefs');
     }
 
-    public function index($id) {
+    public function index($id = null)
+    {
 
-		/*
-        if ( !$permission->Check('company','enabled')
-				OR !( $permission->Check('company','edit') OR $permission->Check('company','edit_own') ) ) {
-			$permission->Redirect( FALSE ); //Redirect
-		}
-        */
+        // If ID is not provided, get the current company's ID
+        if (empty($id)) {
+            $current_company = $this->currentCompany;
+            $id = $current_company->getId();
+        }
 
+        $action = [];
+        $current_company = $this->currentCompany;
+        $permission = $this->permission;
         $viewData['title'] = 'Edit Company';
 
         $cf = new CompanyFactory();
@@ -65,79 +68,97 @@ class EditCompany extends Controller
         if (isset($id)) {
             $clf = new CompanyListFactory();
 
-			if ( $permission->Check('company','edit') ) {
-				$clf->GetByID($id);
-			} else {
-				$id = $current_company->getId();
-				$clf->GetByID( $id );
-			}
+            // if ($permission->Check('company', 'edit')) {
+            //     $clf->GetByID($id);
+            // } else {
+            //     $id = $current_company->getId();
+            //     $clf->GetByID($id);
+            // }
+
+            if ($permission->Check('company', 'edit')) {
+                // Force a refresh to get the latest data
+                $clf->GetByID($id, NULL, NULL, true);
+            } else {
+                $id = $current_company->getId();
+                $clf->GetByID($id, NULL, NULL, true);  // Force refresh here as well
+            }
+
+
 
             foreach ($clf->rs as $company) {
                 $clf->data = (array) $company;
                 $company = $clf;
 
-				$company_data = array(
-									'id' => $company->getId(),
-									'parent' => $company->getParent(),
-									'status' => $company->getStatus(),
-									'product_edition' => $company->getProductEdition(),
-									'name' => $company->getName(),
-									'short_name' => $company->getShortName(),
-									'industry_id' => $company->getIndustry(),
-									'business_number' => $company->getBusinessNumber(),
-									'originator_id' => $company->getOriginatorID(),
-									'data_center_id' => $company->getDataCenterID(),
-									'address1' => $company->getAddress1(),
-									'address2' => $company->getAddress2(),
-									'city' => $company->getCity(),
-									'province' => $company->getProvince(),
-									'country' => $company->getCountry(),
-									'postal_code' => $company->getPostalCode(),
-									'work_phone' => $company->getWorkPhone(),
-									'fax_phone' => $company->getFaxPhone(),
-									'epf_number' => $company->getEpfNo(),//FL ADDED 20160122 for EPF e Return
-									'admin_contact' => $company->getAdminContact(),
-									'billing_contact' => $company->getBillingContact(),
-									'support_contact' => $company->getSupportContact(),
-									'logo_file_name' => $company->getLogoFileName( NULL, FALSE ),
-									'enable_second_last_name' => $company->getEnableSecondLastName(),
-									'other_id1' => $company->getOtherID1(),
-									'other_id2' => $company->getOtherID2(),
-									'other_id3' => $company->getOtherID3(),
-									'other_id4' => $company->getOtherID4(),
-									'other_id5' => $company->getOtherID5(),
-									'ldap_authentication_type_id' => $company->getLDAPAuthenticationType(),
-									'ldap_host' => $company->getLDAPHost(),
-									'ldap_port' => $company->getLDAPPort(),
-									'ldap_bind_user_name' => $company->getLDAPBindUserName(),
-									'ldap_bind_password' => $company->getLDAPBindPassword(),
-									'ldap_base_dn' => $company->getLDAPBaseDN(),
-									'ldap_bind_attribute' => $company->getLDAPBindAttribute(),
-									'ldap_user_filter' => $company->getLDAPUserFilter(),
-									'ldap_login_attribute' => $company->getLDAPLoginAttribute(),
+                $company_data = [
+                    'id' => $company->getId(),
+                    'parent' => $company->getParent(),
+                    'status' => $company->getStatus(),
+                    'product_edition_id' => $company->getProductEdition(),
+                    'name' => $company->getName(),
+                    'short_name' => $company->getShortName(),
+                    'industry_id' => $company->getIndustry(),
+                    'business_number' => $company->getBusinessNumber(),
+                    'originator_id' => $company->getOriginatorID(),
+                    'data_center_id' => $company->getDataCenterID(),
+                    'address1' => $company->getAddress1(),
+                    'address2' => $company->getAddress2(),
+                    'city' => $company->getCity(),
+                    'country' => $company->getCountry(),
+                    'province' => $company->getProvince(),
+                    'postal_code' => $company->getPostalCode(),
+                    'work_phone' => $company->getWorkPhone(),
+                    'fax_phone' => $company->getFaxPhone(),
+                    'epf_number' => $company->getEpfNo(),
+                    'admin_contact' => $company->getAdminContact(),
+                    'billing_contact' => $company->getBillingContact(),
+                    'support_contact' => $company->getSupportContact(),
+                    'logo_file_name' => $company->getLogoFileName(null, false),
+                    'enable_second_last_name' => $company->getEnableSecondLastName(),
+                    'other_id1' => $company->getOtherID1(),
+                    'other_id2' => $company->getOtherID2(),
+                    'other_id3' => $company->getOtherID3(),
+                    'other_id4' => $company->getOtherID4(),
+                    'other_id5' => $company->getOtherID5(),
+                    'ldap_authentication_type_id' => $company->getLDAPAuthenticationType(),
+                    'ldap_host' => $company->getLDAPHost(),
+                    'ldap_port' => $company->getLDAPPort(),
+                    'ldap_bind_user_name' => $company->getLDAPBindUserName(),
+                    'ldap_bind_password' => $company->getLDAPBindPassword(),
+                    'ldap_base_dn' => $company->getLDAPBaseDN(),
+                    'ldap_bind_attribute' => $company->getLDAPBindAttribute(),
+                    'ldap_user_filter' => $company->getLDAPUserFilter(),
+                    'ldap_login_attribute' => $company->getLDAPLoginAttribute(),
+                    'created_date' => $company->getCreatedDate(),
+                    'created_by' => $company->getCreatedBy(),
+                    'updated_date' => $company->getUpdatedDate(),
+                    'updated_by' => $company->getUpdatedBy(),
+                    'deleted_date' => $company->getDeletedDate(),
+                    'deleted_by' => $company->getDeletedBy(),
+                ];
+            }
 
-									'created_date' => $company->getCreatedDate(),
-									'created_by' => $company->getCreatedBy(),
-									'updated_date' => $company->getUpdatedDate(),
-									'updated_by' => $company->getUpdatedBy(),
-									'deleted_date' => $company->getDeletedDate(),
-									'deleted_by' => $company->getDeletedBy(),
-								);
-			}
-		} elseif ( $action != 'submit' ) {
-			$company_data = array(
-								  'parent' => $current_company->getId(),
-								  );
-		}
+            // Ensure ldap_authentication_type_options is always set
+            $company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type') ?? [];
+            $company_data['status_options'] = $cf->getOptions('status') ?? [];
+            $company_data['country_options'] = $cf->getOptions('country') ?? [];
+            $company_data['industry_options'] = $cf->getOptions('industry') ?? [];
+            $company_data['province_options'] = $cf->getOptions('province') ?? [];
+            $company_data['company_list_options'] = CompanyListFactory::getAllArray() ?? [];
+            $company_data['product_edition_options'] = $cf->getOptions('product_edition') ?? [];
+            $company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id) ?? [];
 
-		//Select box options;
-		$company_data['status_options'] = $cf->getOptions('status');
-		$company_data['country_options'] = $cf->getOptions('country');
-		$company_data['industry_options'] = $cf->getOptions('industry');
+        } elseif ($action != 'submit') {
+            $company_data = [
+                'parent' => $current_company->getId(),
+            ];
 
-		//Company list.
-		$company_data['company_list_options'] = CompanyListFactory::getAllArray();
-		$company_data['product_edition_options'] = $cf->getOptions('product_edition');
+            // Select box options
+            $company_data['status_options'] = $cf->getOptions('status') ?? [];
+            $company_data['country_options'] = $cf->getOptions('country') ?? [];
+            $company_data['industry_options'] = $cf->getOptions('industry') ?? [];
+            $company_data['province_options'] = $cf->getOptions('province') ?? [];
+            $company_data['company_list_options'] = CompanyListFactory::getAllArray() ?? [];
+            $company_data['product_edition_options'] = $cf->getOptions('product_edition') ?? [];
 
             // Get other field names
             $oflf = new OtherFieldListFactory();
@@ -152,16 +173,20 @@ class EditCompany extends Controller
             $company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id) ?? [];
         }
 
+        // Assign company data to view
+        $viewData['company_data'] = $company_data;
+        $viewData['cf'] = $cf;
+        // dd($company_data);
 
-		$viewData['company_data'] = $company_data;
-		$viewData['cf'] = $cf;
+        return view('company/EditCompany', $viewData);
 
-		return view('company/EditCompany', $viewData);
-	}
+    }
 
-	public function submit(Request $request){
+
+	public function save(Request $request)
+    {
 		$cf = new CompanyFactory();
-		$company_data = $request->data;
+		$company_data = $request->all();
 		$current_company = $this->currentCompany;
 		$permission = $this->permission;
 
@@ -183,15 +208,33 @@ class EditCompany extends Controller
 		if ( isset($company_data['name']) ) {
 			$cf->setName($company_data['name']);
 		}
-		$cf->setShortName($company_data['short_name']);
-		$cf->setIndustry($company_data['industry_id']);
-		$cf->setBusinessNumber($company_data['business_number']);
-		$cf->setOriginatorID($company_data['originator_id']);
-		$cf->setDataCenterID($company_data['data_center_id']);
-		$cf->setAddress1($company_data['address1']);
-		$cf->setAddress2($company_data['address2']);
-		$cf->setCity($company_data['city']);
-		$cf->setCountry($company_data['country']);
+        if (isset($company_data['short_name']) ) {
+            $cf->setShortName($company_data['short_name']);
+        }
+        if ( isset($company_data['industry_id'] )) {
+            $cf->setIndustry($company_data['industry_id']);
+        }
+        if ( isset($company_data['business_number'] )) {
+            $cf->setBusinessNumber($company_data['business_number']);
+        }
+        if ( isset($company_data['originator_id'] )) {
+            $cf->setOriginatorID($company_data['originator_id']);
+        }
+        if ( isset($company_data['data_center_id'] )) {
+            $cf->setDataCenterID($company_data['data_center_id']);
+        }
+        if ( isset($company_data['address1'] )) {
+            $cf->setAddress1($company_data['address1'] ?? '');
+        }
+        if ( isset($company_data['address2'] )) {
+            $cf->setAddress2($company_data['address2'] ?? '');
+        }
+        if ( isset($company_data['city']) ) {
+			$cf->setCity($company_data['city']);
+		}
+        if ( isset($company_data['country']) ) {
+			$cf->setCountry($company_data['country']);
+		}
 		if ( isset($company_data['province']) ) {
 			$cf->setProvince($company_data['province']);
 		}
@@ -255,44 +298,19 @@ class EditCompany extends Controller
 			$cf->setEnableAddRecurringHolidayPreset( TRUE );
 		}
 
-		// Handle logo upload
-		if ($request->hasFile('company_logo')) {
-			$file = $request->file('company_logo');
-			$company_id = $company_data['id'] ?? $current_company->getId();
 
-			// Validate the file
-			$validated = $request->validate([
-				'company_logo' => 'image|mimes:jpeg,png|max:2048', // 2MB max
-			]);
+        if ($cf->isValid()) {
+            $cf->Save();
+            $cf->CommitTransaction();
 
-			// Get storage path
-			$storage_path = $cf->getStoragePath($company_id);
-			if (!file_exists($storage_path)) {
-				mkdir($storage_path, 0755, true);
-			}
+            // Fetch the updated company data again
+            return redirect()->route('company.edit', ['id' => $cf->getId()])->with('success', 'Company saved successfully.');
+        }
 
-			// Clean old logo files
-			$cf->cleanStoragePath($company_id);
+        $cf->FailTransaction();
+        // If validation fails, return back with errors
+        return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 
-			// Save new logo
-			$extension = $file->getClientOriginalExtension();
-			$file_name = 'logo.' . $extension;
-			$file->move($storage_path, $file_name);
-		}
-
-		if ( $cf->isValid() ) {
-			$cf->Save();
-
-			//$cf->FailTransaction();
-			$cf->CommitTransaction();
-
-			if ( $permission->Check('company','edit') ) {
-				Redirect::Page( URLBuilder::getURL(NULL, 'CompanyList.php') );
-			} else {
-				Redirect::Page( URLBuilder::getURL(NULL, '../index.php') );
-			}
-		}
-		$cf->FailTransaction();
 	}
 
 }
