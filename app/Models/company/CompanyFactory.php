@@ -2585,8 +2585,25 @@ class CompanyFactory extends Factory {
 	}
 
 
-	function Validate() {
-		global $config_vars;
+	// function Validate() {
+	// 	global $config_vars;
+
+	// 	//Don't allow the primary company to be deleted.
+	// 	if ( $this->getDeleted() == TRUE
+	// 			AND isset($config_vars['other']['primary_company_id']) AND $config_vars['other']['primary_company_id'] == $this->getID() ) {
+	// 		$this->Validator->isTrue(		'company',
+	// 										FALSE,
+	// 										('Unable to delete the primary company'));
+	// 	}
+	// 																																											$obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); }
+	// 	return TRUE;
+	// }
+
+
+	function Validate()
+    {
+        // Access global configuration variables
+        global $config_vars;
 
 		//Don't allow the primary company to be deleted.
 		if ( $this->getDeleted() == TRUE
@@ -2595,16 +2612,7 @@ class CompanyFactory extends Factory {
 											FALSE,
 											('Unable to delete the primary company'));
 		}
-        /*
-        $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65";
-        $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65";
-        $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65";
-        $obj = new $obj_class;
-        $retval = $obj->{$obj_function}();
-        if ( $retval !== TRUE ) {
-            $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) );
-        }
-        */
+																																												$obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); }
 		return TRUE;
 	}
 
