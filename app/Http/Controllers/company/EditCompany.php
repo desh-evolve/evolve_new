@@ -35,7 +35,10 @@ class EditCompany extends Controller
         $this->userPrefs = View::shared('current_user_prefs');
     }
 
-    public function index($id) {
+    public function index($id = null) {
+
+		$current_company = $this->currentCompany;
+        $current_user_prefs = $this->userPrefs;
 
 		/*
         if ( !$permission->Check('company','enabled')
@@ -43,6 +46,7 @@ class EditCompany extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
+		$id = $this->currentCompany->data['id'] ?? null;
 
         $viewData['title'] = 'Edit Company';
 
@@ -52,7 +56,7 @@ class EditCompany extends Controller
 
 			$clf = new CompanyListFactory();
 
-			if ( $permission->Check('company','edit') ) {
+			if ( $this->permission->Check('company','edit') ) {
 				$clf->GetByID($id);
 			} else {
 				$id = $current_company->getId();
@@ -122,6 +126,8 @@ class EditCompany extends Controller
 		$company_data['status_options'] = $cf->getOptions('status');
 		$company_data['country_options'] = $cf->getOptions('country');
 		$company_data['industry_options'] = $cf->getOptions('industry');
+		
+        $company_data['province_options'] = $cf->getOptions('province', $company_data['country'] ?? null);
 
 		//Company list.
 		$company_data['company_list_options'] = CompanyListFactory::getAllArray();
@@ -138,16 +144,22 @@ class EditCompany extends Controller
 		}
 		$company_data['user_list_options'] = UserListFactory::getByCompanyIdArray($id);
 
+		  // Add logo file name to company data
+		  if (isset($company_data['id'])) {
+			$company_data['company_logo'] = $cf->getLogoFileName($company_data['id']);
+		}
 
 		$viewData['company_data'] = $company_data;
 		$viewData['cf'] = $cf;
 
+		// dd($viewData);
 		return view('company/EditCompany', $viewData);
 	}
 
 	public function submit(Request $request){
+		// dd($request->input('data'));
 		$cf = new CompanyFactory();
-		$company_data = $request->data;
+		$company_data = $request->input('data');
 		$current_company = $this->currentCompany;
 		$permission = $this->permission;
 
@@ -173,7 +185,7 @@ class EditCompany extends Controller
 		$cf->setOriginatorID($company_data['originator_id']);
 		$cf->setDataCenterID($company_data['data_center_id']);
 		$cf->setAddress1($company_data['address1']);
-		$cf->setAddress2($company_data['address2']);
+		$cf->setAddress2($company_data['address_2']);
 		$cf->setCity($company_data['city']);
 		$cf->setCountry($company_data['country']);
 		if ( isset($company_data['province']) ) {
@@ -227,18 +239,43 @@ class EditCompany extends Controller
 			$cf->setEnableAddRecurringHolidayPreset( TRUE );
 		}
 
+		// Handle logo upload
+		if ($request->hasFile('company_logo')) {
+			$file = $request->file('company_logo');
+			$company_id = $company_data['id'] ?? $current_company->getId();
+			
+			// Validate the file
+			$validated = $request->validate([
+				'company_logo' => 'image|mimes:jpeg,png|max:2048', // 2MB max
+			]);
+			
+			// Get storage path
+			$storage_path = $cf->getStoragePath($company_id);
+			if (!file_exists($storage_path)) {
+				mkdir($storage_path, 0755, true);
+			}
+			
+			// Clean old logo files
+			$cf->cleanStoragePath($company_id);
+			
+			// Save new logo
+			$extension = $file->getClientOriginalExtension();
+			$file_name = 'logo.' . $extension;
+			$file->move($storage_path, $file_name);
+		}
+
 		if ( $cf->isValid() ) {
 			$cf->Save();
 
-			//$cf->FailTransaction();
 			$cf->CommitTransaction();
 
-			if ( $permission->Check('company','edit') ) {
-				Redirect::Page( URLBuilder::getURL(NULL, 'CompanyList.php') );
-			} else {
-				Redirect::Page( URLBuilder::getURL(NULL, '../index.php') );
-			}
+			// if ( $permission->Check('company','edit') ) {
+				return redirect()->to(URLBuilder::getURL(null, '/company/company_information'))->with('success', 'Company saved successfully.');
+			// } else {
+			// 	return redirect()->to(URLBuilder::getURL(null, '/login'))->with('success', 'Company saved successfully.');
+			// }
 		}
+
 		$cf->FailTransaction();
 	}
 

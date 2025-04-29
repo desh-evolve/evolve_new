@@ -147,7 +147,12 @@
                     </a>
                     <div class="collapse menu-dropdown" id="company">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li>
+                            {{-- <li class="nav-item"><a href="#" class="nav-link">Company Information</a></li> --}}
+                            <li class="nav-item">
+                                <a href="{{ route('company.index') }}"
+                                    class="nav-link {{ request()->routeIs('company.index') ? 'active' : '' }}">Company Information
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="{{ route('user_title.index') }}"
                                     class="nav-link {{ request()->routeIs('user_title.index') ? 'active' : '' }}">Designations

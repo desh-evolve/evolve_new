@@ -261,6 +261,7 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 // Compnay Information
 // ===============================================================================================================================
 Route::get('/company/company_information', [EditCompany::class, 'index'])->name('company.index');
+Route::post('/company/save', [EditCompany::class, 'submit'])->name('company.save');
 
 
 // ===============================================================================================================================
