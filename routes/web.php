@@ -34,6 +34,8 @@ use App\Http\Controllers\policy\EditRecurringHoliday;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\message\EditMessage;
+use App\Http\Controllers\message\UserMessageList;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccount;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccountLink;
 use App\Http\Controllers\pay_stub\PayStubEntryAccountList;
@@ -388,6 +390,15 @@ Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->na
 Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
 Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
 Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
+
+// ===============================================================================================================================
+// User messages
+// ===============================================================================================================================
+Route::get('/user/messages', [UserMessageList::class, 'index'])->name('user.messages.index');
+Route::get('/user/messages/add/{user_id?}', [UserMessageList::class, 'add'])->name('user.messages.add');
+Route::get('/user/messages/edit/{id?}', [EditMessage::class, 'index'])->name('user.messages.edit');
+Route::post('/user/messages/save/{id?}', [EditMessage::class, 'save'])->name('user.messages.save');
+Route::delete('/user/messages/delete/{id}', [UserMessageList::class, 'delete'])->name('user.messages.delete');
 
 // ===============================================================================================================================
 // Policies

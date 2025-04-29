@@ -3,12 +3,6 @@
 namespace App\Http\Controllers\message;
 
 use App\Http\Controllers\Controller;
-use App\Models\Accrual\AccrualBalanceFactory;
-use App\Models\Accrual\AccrualBalanceListFactory;
-use App\Models\Accrual\AccrualFactory;
-use App\Models\Accrual\AccrualListFactory;
-use Illuminate\Http\Request;
-
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
 use App\Models\Core\FormVariables;
@@ -18,16 +12,14 @@ use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
-use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Message\MessageControlFactory;
 use App\Models\Message\MessageControlListFactory;
 use App\Models\Message\MessageFactory;
 use App\Models\Message\MessageRecipientListFactory;
 use App\Models\Message\MessageSenderListFactory;
-use App\Models\Policy\AccrualPolicyListFactory;
-use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
-class CurrencyList extends Controller
+class UserMessageList extends Controller
 {
     protected $permission;
     protected $currentUser;
@@ -45,29 +37,32 @@ class CurrencyList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-        
-    }
-
-    public function index() {
-		/*
+        	/*
         if ( !$permission->Check('message','enabled')
 				OR !( $permission->Check('message','view') OR $permission->Check('message','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
 
-        $viewData['title'] = 'Message List';
-		
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
-		
-		$mcf = new MessageFactory();		
+    }
 
+
+    public function index()
+    {
+        $current_user = $this->currentUser;
+        $current_user_prefs = $this->userPrefs;
+        $viewData['title'] = 'Message List';
+
+		$mf = new MessageFactory();
 		$mclf = new MessageControlListFactory();
 
 		$folder_options = $mclf->getOptions('folder');
+
+        // Initialize variables to avoid undefined errors
+        $filter_folder_id = request('filter_folder_id'); // or however you are getting it
+        $require_ack = false;
+        $show_ack_column = false;
+        $messages = [];
 
 		Debug::text('Filter Folder ID: '. $filter_folder_id, __FILE__, __LINE__, __METHOD__,9);
 		if ( !isset($filter_folder_id) OR !in_array($filter_folder_id, array_keys($folder_options) ) ) {
@@ -76,11 +71,11 @@ class CurrencyList extends Controller
 		}
 
 		//Make sure folder and sort columns stays as we switch pages.
-		URLBuilder::setURL(NULL, array('filter_folder_id' => $filter_folder_id, 'sort_column' => $sort_column, 'sort_order' => $sort_order) );
+		URLBuilder::setURL(NULL, array('filter_folder_id' => $filter_folder_id ) );
 
-		$mclf->getByCompanyIdAndUserIdAndFolder( $current_user->getCompany(), $current_user->getId(), $filter_folder_id, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
+		$mclf->getByCompanyIdAndUserIdAndFolder( $current_user->getCompany(), $current_user->getId(), $filter_folder_id, $current_user_prefs->getItemsPerPage() );
 
-		$pager = new Pager($mclf);
+
 		if ( $mclf->getRecordCount() > 0 ) {
 			$object_name_options = $mclf->getOptions('object_name');
 
@@ -91,6 +86,7 @@ class CurrencyList extends Controller
 				//Get user info
 				$user_id = NULL;
 				$user_full_name = NULL;
+
 				if ( $filter_folder_id == 10 ) { //Inbox
 					$user_id = $message->getColumn('from_user_id');
 					$user_full_name = Misc::getFullName( $message->getColumn('from_first_name'), $message->getColumn('from_middle_name'), $message->getColumn('from_last_name') );
@@ -124,37 +120,31 @@ class CurrencyList extends Controller
 			}
 		}
 
-		
+
 		$viewData['messages'] = $messages;
 		$viewData['require_ack'] = $require_ack;
 		$viewData['show_ack_column'] = $show_ack_column;
-		
-		$viewData['sort_column'] = $sort_column;
-		$viewData['sort_order'] = $sort_order;
 
-		$viewData['paging_data'] = $pager->getPageVariables();
-		
 		$viewData['mf'] = $mf;
 		$viewData['folder_options'] = $folder_options;
 		$viewData['filter_folder_id'] = $filter_folder_id;
+        // dd($viewData);
 
         return view('message/UserMessageList', $viewData);
 
     }
 
-	public function new_message(){
+
+	public function new_message()
+    {
 		Redirect::Page( URLBuilder::getURL( NULL, 'EditMessage.php', FALSE) );
 	}
 
-	public function delete(){
-		$sort_array = NULL;
-		if ( $sort_column != '' ) {
-			$sort_array = array($sort_column => $sort_order);
-		}
-		
-		$mcf = new MessageFactory();
 
-		
+	public function delete()
+    {
+		$mcf = new MessageControlFactory();
+
 		if ( strtolower($action) == 'delete' ) {
 			$delete = TRUE;
 		} else {
@@ -191,6 +181,8 @@ class CurrencyList extends Controller
 
 		Redirect::Page( URLBuilder::getURL( array('filter_folder_id' => $filter_folder_id ), 'UserMessageList.php') );
 	}
+
+
 }
 
 
