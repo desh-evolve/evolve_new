@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="ulpf" label="user_id" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('current_designation')">
+				<tr>
 					<td class="{isvalid object="ulpf" label="current_designation" value="cellLeftEditTable"}">
 						{t}Current Designation :{/t}
 					</td>
@@ -37,7 +37,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('name')">
+                                <tr>
 					<td class="{isvalid object="ulpf" label="institute" value="cellLeftEditTable"}">
 						{t}New Designation:{/t}
 					</td>
@@ -45,7 +45,7 @@
 						<input type="text" name="data[new_designation]" value="{$data.new_designation}"> 
 					</td>
 				</tr>
-                                 <tr onClick="showHelpEntry('current_salary')">
+                                 <tr>
 					<td class="{isvalid object="ulpf" label="current_salary" value="cellLeftEditTable"}">
 						{t}Current Salary:{/t}
 					</td>
@@ -54,7 +54,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('new_salary')">
+                                <tr>
 					<td class="{isvalid object="ulpf" label="new_salary" value="cellLeftEditTable"}">
 						{t}New Salary:{/t}
 					</td>
@@ -64,7 +64,7 @@
 				</tr>
                                 
                                 
-                                <tr onClick="showHelpEntry('effective_date')">
+                                <tr>
 					<td class="{isvalid object="ulpf" label="effective_date" value="cellLeftEditTable"}">
 						{t}Effective Date:{/t}
 					</td>
@@ -83,7 +83,7 @@
 	
 
 {*
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="af" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -92,7 +92,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="af" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>

@@ -71,10 +71,14 @@ use App\Http\Controllers\policy\PolicyGroupList;
 use App\Http\Controllers\policy\PremiumPolicyList;
 use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
+use App\Http\Controllers\timesheet\ViewUserTimeSheet;
 use App\Http\Controllers\progressbar\ProgressBar;
 use App\Http\Controllers\punch\AddMassPunch;
 use App\Http\Controllers\punch\EditPunch;
+use App\Http\Controllers\punch\EditUserAbsence;
+use App\Http\Controllers\punch\EditUserDateTotal;
 use App\Http\Controllers\punch\PunchList;
+use App\Http\Controllers\punch\UserDateTotalList;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\CensusInfo;
@@ -97,10 +101,6 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
-use App\Http\Controllers\users\EditUserDeductionNew;
-use App\Http\Controllers\users\EditUserJobHistory;
-use App\Http\Controllers\users\UserDeductionListNew;
-use App\Http\Controllers\users\UserJobHistory;
 
 Route::get('/', function () {
     return view('welcome');
@@ -193,6 +193,9 @@ Route::delete('/recurring_holidays/delete/{id}', [RecurringHolidayList::class, '
 Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employee_detail.index');
 Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
 
+
+Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
+Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 'generate'])->name('report.daily_attendance.generate');
 
 // ===============================================================================================================================
 // Payroll
@@ -454,8 +457,14 @@ Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name(
 // attendance functions
 // ===============================================================================================================================
 
+Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('attendance.timesheet');
+
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
+Route::get('/attendance/punch/userdate_totals', [UserDateTotalList::class, 'index'])->name('attendance.punch.userdate_totals');
+Route::get('/attendance/punch/edit_userdate_total', [EditUserDateTotal::class, 'index'])->name('attendance.punch.edit_userdate_total');
+Route::get('/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
+
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
 Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete'])->name('attendance.punch_single.delete');
@@ -471,8 +480,10 @@ Route::delete('/attendance/request/delete/{id}', [UserRequestList::class, 'delet
 Route::get('/attendance/accruals/{filter_user_id?}', [UserAccrualBalanceList::class, 'index'])->name('attendance.accruals');
 Route::get('/attendance/user_accruals/{user_id}/{ap_id}', [ViewUserAccrualList::class, 'index'])->name('attendance.user_accruals');
 Route::get('/attendance/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('attendance.user_accruals.add');
-Route::post('/attendance/user_accruals/submit/{id?}', [EditUserAccrual::class, 'submit'])->name('attendance.user_accruals.submit');
+Route::post('/attendance/user_accruals/submit/{id?}', [EditUserAccrual::class, 'save'])->name('attendance.user_accruals.submit');
 Route::delete('/attendance/user_accruals/delete/{id}', [ViewUserAccrualList::class, 'delete'])->name('attendance.user_accruals.delete');
+Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('user_accruals.add');
+
 
 Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
 

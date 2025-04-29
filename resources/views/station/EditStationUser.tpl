@@ -58,7 +58,7 @@
 				</tr>
 
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="sf" label="user" value="cellLeftEditTable"}">
 						{t}Employees:{/t}
 					</td>

@@ -116,6 +116,11 @@
                                     class="nav-link {{ request()->routeIs('employee_detail.index') ? 'active' : '' }}">Employee Detail Report
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.daily_attendance') }}"
+                                    class="nav-link {{ request()->routeIs('report.daily_attendance') ? 'active' : '' }}">Daily Attendance Report
+                                </a>
+                            </li>
                             {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}
                             <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
                         </ul>

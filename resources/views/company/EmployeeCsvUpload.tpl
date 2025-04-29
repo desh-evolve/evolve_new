@@ -81,7 +81,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('parent')">
+				<tr>
 					<td class="{isvalid object="cf" label="parent" value="cellLeftEditTable"}">
 						{t}Parent:{/t}
 					</td>
@@ -92,7 +92,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="cf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -112,7 +112,7 @@ function showProvince() {
 				</td>
 
 				{if DEMO_MODE != TRUE}
-				<tr onClick="showHelpEntry('logo')">
+				<tr>
 					<td class="{isvalid object="cf" label="logo" value="cellLeftEditTable"}">
 						{t}CSV File:{/t} <a href="javascript:ImportEmployeeCsv();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a>
 					</td>

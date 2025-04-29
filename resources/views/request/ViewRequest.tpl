@@ -37,7 +37,7 @@ function viewSchedule(userID,dateStamp) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('date_stamp')">
+				<tr>
 					<td class="{isvalid object="rf" label="datestamp" value="cellLeftEditTable"}">
 						{t}Date:{/t}
 					</td>
@@ -46,7 +46,7 @@ function viewSchedule(userID,dateStamp) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type_id')">
+				<tr>
 					<td class="{isvalid object="rf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>

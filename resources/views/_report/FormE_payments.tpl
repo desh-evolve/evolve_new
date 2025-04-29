@@ -136,7 +136,7 @@ END -->
 
 <!--FL ADDED STATIC DATAS-->
                                 
-                                <tr onClick="showHelpEntry('sort')">
+                                <tr>
                                     <td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
                                             {t}Zone :{/t}
                                     </td>
@@ -146,7 +146,7 @@ END -->
                                         </select>
                                     </td> 
 				</tr>
-                                <tr onClick="showHelpEntry('sort')">
+                                <tr>
                                     <td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
                                             {t}Payment Mode :{/t}
                                     </td>
@@ -162,7 +162,7 @@ END -->
                                 
                                  
                                 
-                                <tr onClick="showHelpEntry('sort')">
+                                <tr>
                                     <td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
                                             {t}Payment Ref :{/t}
                                     </td>
@@ -172,7 +172,7 @@ END -->
                                         <input name="filter_data[account_number]"style="width: 160px;" type="text" value="{$filter_data.account1}">&nbsp;&nbsp;(Bank Code - Branch Code - A/C Number)
                                     </td> 
 				</tr>
-                                <tr onClick="showHelpEntry('date_payments')">
+                                <tr>
                                         <td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
                                             {t}Date Of Payments :{/t}
                                         </td>
@@ -183,7 +183,7 @@ END -->
                                         </td>
                                 </tr> 
                                 
-                                <tr onClick="showHelpEntry('sort')">
+                                <tr>
                                     <td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
                                             {t}D/O Code :{/t}
                                     </td>
@@ -221,7 +221,7 @@ END -->
 				{htmlreportsort filter_data=$filter_data}
 
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Export Format:{/t}
 					</td>
@@ -233,7 +233,7 @@ END -->
                                         
 				</tr>
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uwf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Allow Submission Number Count :{/t}
 					</td>
@@ -246,7 +246,7 @@ END -->
 
 <!-- ARSP EDIT - I HIDE THIS CODE START
 
-				<tr onClick="showHelpEntry('hide_employer_rows')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uf" label="type" value="cellLeftEditTableHeader"}">
 						{t}Hide Employer Contributions:{/t}
 					</td>

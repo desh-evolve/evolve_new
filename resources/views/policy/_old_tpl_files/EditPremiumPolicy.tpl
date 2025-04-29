@@ -133,7 +133,7 @@ function showAccrualRate() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="ppf" label="name" value="cellLeftEditTable"}">
 						{t}Name{/t}:
 					</td>
@@ -142,7 +142,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="ppf" label="type" value="cellLeftEditTable"}">
 						{t}Type{/t}:
 					</td>
@@ -160,7 +160,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('start_date')">
+				<tr>
 					<td class="{isvalid object="ppf" label="start_date" value="cellLeftEditTable"}">
 						{t}Start Date{/t}:
 					</td>
@@ -171,7 +171,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="ppf" label="end_date" value="cellLeftEditTable"}">
 						{t}End Date{/t}:
 					</td>
@@ -182,7 +182,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('start_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="start_time" value="cellLeftEditTable"}">
 						{t}Start Time{/t}:
 					</td>
@@ -192,7 +192,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('end_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="end_time" value="cellLeftEditTable"}">
 						{t}End Time{/t}:
 					</td>
@@ -202,7 +202,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('include_partial_punch')">
+				<tr>
 					<td class="{isvalid object="ppf" label="include_partial_punch" value="cellLeftEditTable"}">
 						{t}Include Partial Punches{/t}:
 					</td>
@@ -211,7 +211,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('daily_trigger_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="daily_trigger_time" value="cellLeftEditTable"}">
 						{t}Active After Daily (Regular) Hours{/t}:
 					</td>
@@ -220,7 +220,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('weekly_trigger_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="weekly_trigger_time" value="cellLeftEditTable"}">
 						{t}Active After Weekly (Regular) Hours{/t}:
 					</td>
@@ -229,7 +229,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('effective_days')">
+				<tr>
 					<td class="{isvalid object="ppf" label="effective_days" value="cellLeftEditTable"}">
 						{t}Effective Days{/t}:
 					</td>
@@ -691,7 +691,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('daily_trigger_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="daily_trigger_time" value="cellLeftEditTable"}">
 						{t}Active After Daily Hours{/t}:
 					</td>
@@ -700,7 +700,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_no_break_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="maximum_no_break_time" value="cellLeftEditTable"}">
 						{t}Maximum Time Without A Break{/t}:
 					</td>
@@ -709,7 +709,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('mimimum_break_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="minimum_break_time" value="cellLeftEditTable"}">
 						{t}Minimum Time Recognized As Break{/t}:
 					</td>
@@ -726,7 +726,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_time_between_shifts')">
+				<tr>
 					<td class="{isvalid object="ppf" label="minimum_time_between_shift" value="cellLeftEditTable"}">
 						{t}Minimum Time Between Shifts{/t}:
 					</td>
@@ -735,7 +735,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_first_shift_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="minimum_first_shift_time" value="cellLeftEditTable"}">
 						{t}First Shift Must Be At Least{/t}:
 					</td>
@@ -752,7 +752,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_shift_time')">
+				<tr>
 					<td class="{isvalid object="ppf" label="minimum_shift_time" value="cellLeftEditTable"}">
 						{t}Minimum Shift Time{/t}:
 					</td>
@@ -768,7 +768,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_time')">
+				<tr>
 					<td class="{isvalid object="hpf" label="minimum_time" value="cellLeftEditTable"}">
 						{t}Minimum Time{/t}:
 					</td>
@@ -778,7 +778,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_time')">
+				<tr>
 					<td class="{isvalid object="hpf" label="maximum_time" value="cellLeftEditTable"}">
 						{t}Maximum Time{/t}:
 					</td>
@@ -788,7 +788,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('include_meal_policy')">
+				<tr>
 					<td class="{isvalid object="hpf" label="include_meal_policy" value="cellLeftEditTable"}">
 						{t}Include Meal Policy in Calculation{/t}:
 					</td>
@@ -796,7 +796,7 @@ function showAccrualRate() {
 						<input type="checkbox" class="checkbox" name="data[include_meal_policy]" value="1" {if $data.include_meal_policy == TRUE}checked{/if}>
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('include_break_policy')">
+				<tr>
 					<td class="{isvalid object="hpf" label="include_break_policy" value="cellLeftEditTable"}">
 						{t}Include Break Policy in Calculation{/t}:
 					</td>
@@ -805,7 +805,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('pay_type')">
+				<tr>
 					<td class="{isvalid object="ppf" label="pay_type" value="cellLeftEditTable"}">
 						{t}Pay Type{/t}:
 					</td>
@@ -816,7 +816,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="ppf" label="rate" value="cellLeftEditTable"}">
 						<span id="pay_type_10_desc" style="display:none">{t}Rate{/t}</span><span id="pay_type_20_desc" style="display:none">{t}Premium{/t}</span><span id="pay_type_30_desc" style="display:none">{t}Hourly Rate{/t}</span>:
 					</td>
@@ -826,7 +826,7 @@ function showAccrualRate() {
 				</tr>
 
 				<tbody id="wage_group_desc" style="display:none">
-				<tr onClick="showHelpEntry('wage_group')">
+				<tr>
 					<td class="{isvalid object="ppf" label="rate" value="cellLeftEditTable"}">
 						{t}Wage Group:{/t}
 					</td>
@@ -838,7 +838,7 @@ function showAccrualRate() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('pay_stub_entry')">
+				<tr>
 					<td class="{isvalid object="ppf" label="pay_stub_entry_account_id" value="cellLeftEditTable"}">
 						{t}Pay Stub Account{/t}:
 					</td>
@@ -849,7 +849,7 @@ function showAccrualRate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('accrual_policy')">
+				<tr>
 					<td class="{isvalid object="otpf" label="accrual_policy" value="cellLeftEditTable"}">
 						{t}Accrual Policy{/t}:
 					</td>
@@ -861,7 +861,7 @@ function showAccrualRate() {
 				</tr>
 
 				<tbody id="accrual_rate" style="display:none">
-				<tr onClick="showHelpEntry('accural_rate')">
+				<tr>
 					<td class="{isvalid object="otpf" label="accrual_rate" value="cellLeftEditTable"}">
 						{t}Accrual Rate{/t}:
 					</td>

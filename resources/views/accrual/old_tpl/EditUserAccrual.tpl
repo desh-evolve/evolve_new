@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="af" label="user_id" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('accrual_policy')">
+				<tr>
 					<td class="{isvalid object="af" label="accural_policy_id" value="cellLeftEditTable"}">
 						{t}Accrual Policy:{/t}
 					</td>
@@ -44,7 +44,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="af" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -55,7 +55,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('amount')">
+				<tr>
 					<td class="{isvalid object="af" label="amount" value="cellLeftEditTable"}">
 						{t}Amount:{/t}
 					</td>
@@ -64,7 +64,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('time_stamp')">
+				<tr>
 					<td class="{isvalid object="af" label="time_stamp" value="cellLeftEditTable"}">
 						{t}Date:{/t}
 					</td>
@@ -77,7 +77,7 @@
 
 
 {*
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="af" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -86,7 +86,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="af" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>

@@ -47,7 +47,7 @@ function getRecurringScheduleTotalTime(this_week_row) {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="rstcf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -56,7 +56,7 @@ function getRecurringScheduleTotalTime(this_week_row) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('description')">
+				<tr>
 					<td class="{isvalid object="rstcf" label="description" value="cellLeftEditTable"}">
 						{t}Description:{/t}
 					</td>

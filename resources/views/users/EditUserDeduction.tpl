@@ -19,7 +19,7 @@
 				<table class="editTable">
 
 				{if $company_deduction_id == ''}
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="udf" label="user" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -30,7 +30,7 @@
 				{/if}
 
 				{if $data.add == 1}
-					<tr onClick="showHelpEntry('deduction')">
+					<tr>
 						<td class="{isvalid object="udf" label="deduction" value="cellLeftEditTable"}">
 							{t}Add Deductions:{/t}
 						</td>
@@ -42,7 +42,7 @@
 						</td>
 					</tr>
 				{else}
-					<tr onClick="showHelpEntry('status')">
+					<tr>
 						<td class="{isvalid object="udf" label="status" value="cellLeftEditTable"}">
 							{t}Status:{/t}
 						</td>
@@ -51,7 +51,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('type')">
+					<tr>
 						<td class="{isvalid object="udf" label="type" value="cellLeftEditTable"}">
 							{t}Type:{/t}
 						</td>
@@ -60,7 +60,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('name')">
+					<tr>
 						<td class="{isvalid object="udf" label="name" value="cellLeftEditTable"}">
 							{t}Name:{/t}
 						</td>
@@ -69,7 +69,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('calculation')">
+					<tr>
 						<td class="{isvalid object="udf" label="calculation" value="cellLeftEditTable"}">
 							{t}Calculation:{/t}
 						</td>
@@ -79,7 +79,7 @@
 					</tr>
 
 					{if $data.country != '' }
-						<tr onClick="showHelpEntry('country')">
+						<tr>
 							<td class="{isvalid object="udf" label="country" value="cellLeftEditTable"}">
 								{t}Country:{/t}
 							</td>
@@ -90,7 +90,7 @@
 					{/if}
 
 					{if $data.province != '' }
-						<tr onClick="showHelpEntry('province')">
+						<tr>
 							<td class="{isvalid object="udf" label="province" value="cellLeftEditTable"}">
 								{t}Province / State:{/t}
 							</td>
@@ -101,7 +101,7 @@
 					{/if}
 
 					{if $data.district != '' }
-						<tr onClick="showHelpEntry('district')">
+						<tr>
 							<td class="{isvalid object="udf" label="district" value="cellLeftEditTable"}">
 								{t}District / County:{/t}
 							</td>

@@ -65,7 +65,7 @@ if ( TTProductEdition == 20 ) {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="sf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -76,7 +76,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="sf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -87,7 +87,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('station')">
+				<tr>
 					<td class="{isvalid object="sf" label="station" value="cellLeftEditTable"}">
 						{t}Station ID:{/t}
 					</td>
@@ -96,7 +96,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('source')">
+				<tr>
 					<td class="{isvalid object="sf" label="source" value="cellLeftEditTable"}">
 						{t}Source:{/t}
 					</td>
@@ -105,7 +105,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('description')">
+				<tr>
 					<td class="{isvalid object="sf" label="description" value="cellLeftEditTable"}">
 						{t}Description:{/t}
 					</td>
@@ -120,7 +120,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('branch_id')">
+				<tr>
 					<td class="{isvalid object="sf" label="branch_id" value="cellLeftEditTable"}">
 						{t}Branch{/t}:
 					</td>
@@ -131,7 +131,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('department_id')">
+				<tr>
 					<td class="{isvalid object="sf" label="department_id" value="cellLeftEditTable"}">
 						{t}Department{/t}:
 					</td>
@@ -144,7 +144,7 @@ if ( TTProductEdition == 20 ) {
 
 				{if $current_company->getProductEdition() == 20}
 					{if count($data.job_options) > 1}
-					<tr onClick="showHelpEntry('job_id')">
+					<tr>
 						<td class="{isvalid object="sf" label="job_id" value="cellLeftEditTable"}">
 							{t}Job{/t}:
 						</td>
@@ -157,7 +157,7 @@ if ( TTProductEdition == 20 ) {
 					{/if}
 
 					{if count($data.job_item_options) > 1}
-					<tr onClick="showHelpEntry('job_item_id')">
+					<tr>
 						<td class="{isvalid object="sf" label="job_item_id" value="cellLeftEditTable"}">
 							{t}Task{/t}:
 						</td>
@@ -177,7 +177,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('password')">
+				<tr>
 					<td class="{isvalid object="sf" label="password" value="cellLeftEditTable"}">
 						{t}Password{/t}/{t}COMM Key{/t}:
 					</td>
@@ -186,7 +186,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('port')">
+				<tr>
 					<td class="{isvalid object="sf" label="port" value="cellLeftEditTable"}">
 						{t}Port:{/t}
 					</td>
@@ -195,7 +195,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('time_zone')">
+				<tr>
 					<td class="{isvalid object="sf" label="time_zone" value="cellLeftEditTable"}">
 						{t}Force Time Zone:{/t}
 					</td>
@@ -206,7 +206,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('enable_auto_punch_status')">
+				<tr>
 					<td class="{isvalid object="apf" label="enable_auto_punch_status" value="cellLeftEditTable"}">
 						{t}Enable Automatic Punch Status:{/t}
 					</td>
@@ -215,7 +215,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('mode_flag')">
+				<tr>
 					<td class="{isvalid object="sf" label="mode_flag" value="cellLeftEditTable"}">
 						{t}Configuration Modes:{/t}
 					</td>
@@ -227,7 +227,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 
 				{if $data.id != '' AND ( $data.type == 100 OR $data.type == 120 OR $data.type == 200)}
-				<tr onClick="showHelpEntry('time_clock_commands')">
+				<tr>
 					<td class="{isvalid object="sf" label="time_clock_commands" value="cellLeftEditTable"}">
 						{t}Manual Command:{/t}
 					</td>
@@ -247,7 +247,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 
 				<tbody id="type_id-100" style="display:none" >
-					<tr onClick="showHelpEntry('poll_frequency')">
+					<tr>
 						<td class="{isvalid object="sf" label="poll_frequency" value="cellLeftEditTable"}">
 							{t}Download Frequency:{/t}
 						</td>
@@ -259,7 +259,7 @@ if ( TTProductEdition == 20 ) {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('push_frequency')">
+					<tr>
 						<td class="{isvalid object="sf" label="push_frequency" value="cellLeftEditTable"}">
 							{t}Full Upload Frequency:{/t}
 						</td>
@@ -271,7 +271,7 @@ if ( TTProductEdition == 20 ) {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('partial_push_frequency')">
+					<tr>
 						<td class="{isvalid object="sf" label="partial_push_frequency" value="cellLeftEditTable"}">
 							{t}Partial Upload Frequency:{/t}
 						</td>
@@ -297,7 +297,7 @@ if ( TTProductEdition == 20 ) {
 					</td>
 				</tbody>
 
-				<tr onClick="showHelpEntry('last_punch_time_stamp')">
+				<tr>
 					<td class="{isvalid object="sf" label="poll_frequency" value="cellLeftEditTable"}">
 						{t}Last Downloaded Punch:{/t}
 					</td>

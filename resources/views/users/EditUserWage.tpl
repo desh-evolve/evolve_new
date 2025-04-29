@@ -65,7 +65,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('wage_group')">
+				<tr>
 					<td class="{isvalid object="uwf" label="type" value="cellLeftEditTable"}">
 						{t}Group:{/t}
 					</td>
@@ -76,7 +76,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="uwf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -87,7 +87,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('wage')">
+				<tr>
 					<td class="{isvalid object="uwf" label="wage" value="cellLeftEditTable"}">
 						{t}Wage:{/t}
 					</td>
@@ -96,7 +96,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
 
-                                <tr onClick="showHelpEntry('wage')">
+                                <tr>
 					<td class="{isvalid object="uwf" label="wage" value="cellLeftEditTable"}">
 						{t}Budgetary Allowance:{/t}
 					</td>
@@ -105,7 +105,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
 				<tbody id="weekly_time" style="display:none" >
-				<tr onClick="showHelpEntry('weekly_time')">
+				<tr>
 					<td class="{isvalid object="uwf" label="weekly_time" value="cellLeftEditTable"}">
 						{t}Average Time / Month:{/t}
 					</td>
@@ -113,7 +113,7 @@ function getUserLaborBurdenPercent() {
 						<input type="text" id="weekly_time_val" size="6" name="wage_data[weekly_time]" value="{gettimeunit value=$wage_data.weekly_time default="0"}" onChange="getHourlyRateAqua()"> {t}(ie: 240 hours / month){/t}
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('hourly_rate')">
+				<tr>
 					<td class="{isvalid object="uwf" label="hourly_rate" value="cellLeftEditTable"}">
 						{t}Hourly Rate:{/t}
 					</td>
@@ -124,7 +124,7 @@ function getUserLaborBurdenPercent() {
 
 				</tbody>
 
-				{*<tr onClick="showHelpEntry('labor_burden_percent')">
+				{*<tr>
 					<td class="{isvalid object="uwf" label="labor_burden_percent" value="cellLeftEditTable"}">
 						{t}Labor Burden Percent:{/t}
 					</td>
@@ -134,7 +134,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>*}
 
-				<tr onClick="showHelpEntry('effective_date')">
+				<tr>
 					<td class="{isvalid object="uwf" label="effective_date" value="cellLeftEditTable"}">
 						{t}Effective Date:{/t}
 					</td>
@@ -150,7 +150,7 @@ function getUserLaborBurdenPercent() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('note')">
+				<tr>
 					<td class="{isvalid object="uwf" label="note" value="cellLeftEditTable"}">
 						{t}Note:{/t}
 					</td>

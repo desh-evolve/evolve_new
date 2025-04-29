@@ -15,7 +15,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="cdf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -26,7 +26,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="cdf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -37,7 +37,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="cdf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -52,7 +52,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('start_date')">
+				<tr>
 					<td class="{isvalid object="rscf" label="start_date" value="cellLeftEditTable"}">
 						{t}Start Date{/t}:
 					</td>
@@ -63,7 +63,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="rscf" label="end_date" value="cellLeftEditTable"}">
 						{t}End Date{/t}:
 					</td>
@@ -74,7 +74,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_length_of_service')">
+				<tr>
 					<td class="{isvalid object="udf" label="minimum_length_of_service" value="cellLeftEditTable"}">
 						{t}Minimum Length Of Service:{/t}
 					</td>
@@ -86,7 +86,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_length_of_service')">
+				<tr>
 					<td class="{isvalid object="udf" label="maximum_length_of_service" value="cellLeftEditTable"}">
 						{t}Maximum Length Of Service:{/t}
 					</td>
@@ -98,7 +98,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('minimum_user_age')">
+				<tr>
 					<td class="{isvalid object="udf" label="minimum_user_age" value="cellLeftEditTable"}">
 						{t}Minimum Employee Age:{/t}
 					</td>
@@ -107,7 +107,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('maximum_user_age')">
+				<tr>
 					<td class="{isvalid object="udf" label="maximum_user_age" value="cellLeftEditTable"}">
 						{t}Maximum Employee Age:{/t}
 					</td>
@@ -115,7 +115,7 @@
 						<input size="3" type="text" name="data[maximum_user_age]" value="{$data.maximum_user_age}"> {t}years{/t}
 					</td>
 				</tr>
-                                <tr onClick="showHelpEntry('maximum_user_age')">
+                                <tr>
 					<td class="{isvalid object="udf" label="maximum_user_age" value="cellLeftEditTable"}">
 						{t}Basis of Employment:{/t}
 					</td>
@@ -132,7 +132,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('calculation')">
+				<tr>
 					<td class="{isvalid object="cdf" label="calculation" value="cellLeftEditTable"}">
 						{t}Calculation:{/t}
 					</td>
@@ -150,7 +150,7 @@
 				</tr>
 
 				<tbody id="country" {if $data.country == NULL AND $data.country == FALSE}style="display:none"{/if}>
-				<tr onClick="showHelpEntry('country')">
+				<tr>
 					<td class="{isvalid object="cdf" label="country" value="cellLeftEditTable"}">
 						{t}Country:{/t}
 					</td>
@@ -169,7 +169,7 @@
 				</tbody>
 
 				<tbody id="province" {if $data.calculation_id != 200 AND $data.calculation_id != 300}style="display:none"{/if}>
-				<tr onClick="showHelpEntry('province')">
+				<tr>
 					<td class="{isvalid object="cdf" label="province" value="cellLeftEditTable"}">
 						{t}Province / State:{/t}
 					</td>
@@ -189,7 +189,7 @@
 				</tbody>
 
 				<tbody id="district" {if $data.calculation_id != 300}style="display:none"{/if}>
-				<tr onClick="showHelpEntry('district')">
+				<tr>
 					<td class="{isvalid object="cdf" label="district" value="cellLeftEditTable"}">
 						{t}District / County:{/t}
 					</td>
@@ -209,7 +209,7 @@
 
 				{include file="company/EditCompanyDeductionUserValues.tpl"}
 
-				<tr onClick="showHelpEntry('pay_stub_entry_account')">
+				<tr>
 					<td class="{isvalid object="cdf" label="pay_stub_entry_account" value="cellLeftEditTable"}">
 						{t}Pay Stub Account:{/t}
 					</td>
@@ -220,7 +220,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('calculation_order')">
+				<tr>
 					<td class="{isvalid object="cdf" label="calcluorder" value="cellLeftEditTable"}">
 						{t}Calculation Order:{/t}
 					</td>

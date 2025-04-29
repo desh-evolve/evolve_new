@@ -10,11 +10,14 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
+                            {{-- <a 
                                 type="button" 
                                 href="#"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
+                            </a> --}}
+                            <a href="{{ route('attendance.user_accruals.add') }}" class="btn btn-primary">
+                                {{ __('Add') }} <i class="ri-add-line"></i>
                             </a>
                         </div>
                     </div>

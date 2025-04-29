@@ -37,7 +37,7 @@
 				</tr>
 
 				{if $tax_data.country == 'CA'}
-					<tr onClick="showHelpEntry('federal_claim')">
+					<tr>
 						<td class="{isvalid object="utf" label="federal_claim" value="cellLeftEditTable"}">
 							{t}Federal Claim Amount:{/t}
 						</td>
@@ -46,7 +46,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('federal_tax_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="federal_tax_exempt" value="cellLeftEditTable"}">
 							{t}Federal Tax Exempt:{/t}
 						</td>
@@ -55,7 +55,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('provincial_claim')">
+					<tr>
 						<td class="{isvalid object="utf" label="provincial_claim" value="cellLeftEditTable"}">
 							{t}Provincial Claim Amount:{/t}
 						</td>
@@ -64,7 +64,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('provincial_tax_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="provincial_tax_exempt" value="cellLeftEditTable"}">
 							{t}Provincial Tax Exempt:{/t}
 						</td>
@@ -73,7 +73,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('federal_additional_deduction')">
+					<tr>
 						<td class="{isvalid object="utf" label="federal_additional_deduction" value="cellLeftEditTable"}">
 							{t}Additional Deduction Amount:{/t}
 						</td>
@@ -82,7 +82,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('wcb_rate')">
+					<tr>
 						<td class="{isvalid object="utf" label="wcb_rate" value="cellLeftEditTable"}">
 							{t}WCB Rate:{/t}
 						</td>
@@ -91,7 +91,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('vacation_rate')">
+					<tr>
 						<td class="{isvalid object="utf" label="vacation_rate" value="cellLeftEditTable"}">
 							{t}Vacation Rate:{/t}
 						</td>
@@ -100,7 +100,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('release_vacation')">
+					<tr>
 						<td class="{isvalid object="utf" label="release_vacation" value="cellLeftEditTable"}">
 							{t}Always Release Vacation:{/t}
 						</td>
@@ -109,7 +109,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('ei_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="ei_exempt" value="cellLeftEditTable"}">
 							{t}EI Exempt:{/t}
 						</td>
@@ -118,7 +118,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('cpp_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="cpp_exempt" value="cellLeftEditTable"}">
 							{t}CPP Exempt:{/t}
 						</td>
@@ -127,7 +127,7 @@
 						</td>
 					</tr>
 				{elseif ($tax_data.country == 'US')}
-					<tr onClick="showHelpEntry('federal_filing_status')">
+					<tr>
 						<td class="{isvalid object="utf" label="federal_filing_status" value="cellLeftEditTable"}">
 							{t}Federal Filing Status:{/t}
 						</td>
@@ -138,7 +138,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('federal_allowance')">
+					<tr>
 						<td class="{isvalid object="utf" label="federal_allowance" value="cellLeftEditTable"}">
 							{t}Federal Allowance:{/t}
 						</td>
@@ -147,7 +147,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('federal_additional_deduction')">
+					<tr>
 						<td class="{isvalid object="utf" label="federal_additional_deduction" value="cellLeftEditTable"}">
 							{t}Federal Additional Deduction:{/t}
 						</td>
@@ -156,7 +156,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('federal_tax_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="federal_tax_exempt" value="cellLeftEditTable"}">
 							{t}Federal Tax Exempt:{/t}
 						</td>
@@ -165,7 +165,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('state_filing_status')">
+					<tr>
 						<td class="{isvalid object="utf" label="state_filing_status" value="cellLeftEditTable"}">
 							{t}State Filing Status:{/t}
 						</td>
@@ -176,7 +176,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('state_allowance')">
+					<tr>
 						<td class="{isvalid object="utf" label="state_allowance" value="cellLeftEditTable"}">
 							{t}State Allowance:{/t}
 						</td>
@@ -185,7 +185,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('state_additional_deduction')">
+					<tr>
 						<td class="{isvalid object="utf" label="state_additional_deduction" value="cellLeftEditTable"}">
 							{t}State Additional Deduction:{/t}
 						</td>
@@ -194,7 +194,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('state_ui_rate')">
+					<tr>
 						<td class="{isvalid object="utf" label="state_ui_rate" value="cellLeftEditTable"}">
 							{t}State UI Rate:{/t}
 						</td>
@@ -203,7 +203,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('state_ui_wage_base')">
+					<tr>
 						<td class="{isvalid object="utf" label="state_ui_wage_base" value="cellLeftEditTable"}">
 							{t}State UI Wage Base:{/t}
 						</td>
@@ -212,7 +212,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('provincial_tax_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="provincial_tax_exempt" value="cellLeftEditTable"}">
 							{t}State Tax Exempt:{/t}
 						</td>
@@ -221,7 +221,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('social_security_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="social_security_exempt" value="cellLeftEditTable"}">
 							{t}Social Security (FICA) Exempt:{/t}
 						</td>
@@ -230,7 +230,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('ui_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="ui_exempt" value="cellLeftEditTable"}">
 							{t}UnEmployment Insurance (FUTA) Exempt:{/t}
 						</td>
@@ -239,7 +239,7 @@
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('medicare_exempt')">
+					<tr>
 						<td class="{isvalid object="utf" label="medicare_exempt" value="cellLeftEditTable"}">
 							{t}Medicare Exempt:{/t}
 						</td>

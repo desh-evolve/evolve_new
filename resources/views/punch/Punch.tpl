@@ -63,7 +63,7 @@ if ( TTProductEdition == 20 ) {
 				</tr>
 
 				{if $station_is_allowed == TRUE}
-					<tr onClick="showHelpEntry('timestamp')">
+					<tr>
 						<td class="{isvalid object="pf" label="timestamp" value="cellLeftEditTable"}">
 							{t}Time:{/t}
 						</td>
@@ -74,7 +74,7 @@ if ( TTProductEdition == 20 ) {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('date_stamp')">
+					<tr>
 						<td class="{isvalid object="pcf" label="datestamp" value="cellLeftEditTable"}">
 							{t}Date:{/t}
 						</td>
@@ -85,7 +85,7 @@ if ( TTProductEdition == 20 ) {
 					</tr>
 
 					{if $permission->Check('punch','edit_transfer') OR $permission->Check('punch','default_transfer')}
-					<tr onClick="showHelpEntry('transfer')">
+					<tr>
 						<td class="{isvalid object="pf" label="transfer" value="cellLeftEditTable"}">
 							{t}Transfer:{/t}
 						</td>
@@ -95,7 +95,7 @@ if ( TTProductEdition == 20 ) {
 					</tr>
 					{/if}
 
-					<tr onClick="showHelpEntry('punch_type')">
+					<tr>
 						<td class="{isvalid object="pf" label="punch_type" value="cellLeftEditTable"}">
 							{t}Punch Type:{/t}
 						</td>
@@ -107,7 +107,7 @@ if ( TTProductEdition == 20 ) {
 						</td>
 					</tr>
 
-					<tr onClick="showHelpEntry('status')">
+					<tr>
 						<td class="{isvalid object="pf" label="status" value="cellLeftEditTable"}">
 							{t}In/Out:{/t}
 						</td>
@@ -120,7 +120,7 @@ if ( TTProductEdition == 20 ) {
 					</tr>
 
 					{if count($data.branch_options) > 1 AND $permission->Check('punch','edit_branch') }
-					<tr onClick="showHelpEntry('branch')">
+					<tr>
 						<td class="{isvalid object="pcf" label="branch" value="cellLeftEditTable"}">
 							{t}Branch:{/t}
 						</td>
@@ -135,7 +135,7 @@ if ( TTProductEdition == 20 ) {
 					{/if}
 
 					{if count($data.department_options) > 1 AND $permission->Check('punch','edit_department')}
-					<tr onClick="showHelpEntry('department')">
+					<tr>
 						<td class="{isvalid object="pcf" label="department" value="cellLeftEditTable"}">
 							{t}Department:{/t}
 						</td>
@@ -151,7 +151,7 @@ if ( TTProductEdition == 20 ) {
 
 					{if $permission->Check('job','enabled') }
 						{if count($data.job_options) > 1 AND $permission->Check('punch','edit_job')}
-						<tr onClick="showHelpEntry('job')">
+						<tr>
 							<td class="{isvalid object="pcf" label="job" value="cellLeftEditTable"}">
 								{t}Job:{/t}
 							</td>
@@ -165,7 +165,7 @@ if ( TTProductEdition == 20 ) {
 						{/if}
 
 						{if count($data.job_options) > 1 AND count($data.job_item_options) > 1 AND $permission->Check('punch','edit_job_item')}
-						<tr onClick="showHelpEntry('job_item')">
+						<tr>
 							<td class="{isvalid object="pcf" label="job_item" value="cellLeftEditTable"}">
 								{t}Task:{/t}
 							</td>
@@ -181,7 +181,7 @@ if ( TTProductEdition == 20 ) {
 
 						{if ( count($data.job_options) > 1 OR count($data.job_item_options) > 1 )
 								AND ( $permission->Check('punch','edit_quantity') OR $permission->Check('punch','edit_bad_quantity') )}
-						<tr onClick="showHelpEntry('quantity')">
+						<tr>
 							<td class="{isvalid object="pcf" label="quantity" value="cellLeftEditTable"}">
 								{t}Quantity:{/t}
 							</td>
@@ -193,7 +193,7 @@ if ( TTProductEdition == 20 ) {
 					{/if}
 
 					{if isset($data.other_field_names.other_id1) AND $permission->Check('punch','edit_other_id1')}
-						<tr onClick="showHelpEntry('other_id1')">
+						<tr>
 							<td class="{isvalid object="pcf" label="other_id1" value="cellLeftEditTable"}">
 								{$data.other_field_names.other_id1}:
 							</td>
@@ -204,7 +204,7 @@ if ( TTProductEdition == 20 ) {
 					{/if}
 
 					{if isset($data.other_field_names.other_id2) AND $permission->Check('punch','edit_other_id2')}
-					<tr onClick="showHelpEntry('other_id2')">
+					<tr>
 						<td class="{isvalid object="pcf" label="other_id2" value="cellLeftEditTable"}">
 							{$data.other_field_names.other_id2}:
 						</td>
@@ -214,7 +214,7 @@ if ( TTProductEdition == 20 ) {
 					</tr>
 					{/if}
 					{if isset($data.other_field_names.other_id3) AND $permission->Check('punch','edit_other_id3')}
-					<tr onClick="showHelpEntry('other_id3')">
+					<tr>
 						<td class="{isvalid object="pcf" label="other_id3" value="cellLeftEditTable"}">
 							{$data.other_field_names.other_id3}:
 						</td>
@@ -224,7 +224,7 @@ if ( TTProductEdition == 20 ) {
 					</tr>
 					{/if}
 					{if isset($data.other_field_names.other_id4) AND $permission->Check('punch','edit_other_id4')}
-						<tr onClick="showHelpEntry('other_id4')">
+						<tr>
 							<td class="{isvalid object="pcf" label="other_id4" value="cellLeftEditTable"}">
 								{$data.other_field_names.other_id4}:
 							</td>
@@ -234,7 +234,7 @@ if ( TTProductEdition == 20 ) {
 						</tr>
 					{/if}
 					{if isset($data.other_field_names.other_id5) AND $permission->Check('punch','edit_other_id5') }
-						<tr onClick="showHelpEntry('other_id5')">
+						<tr>
 							<td class="{isvalid object="pcf" label="other_id5" value="cellLeftEditTable"}">
 								{$data.other_field_names.other_id5}:
 							</td>
@@ -245,7 +245,7 @@ if ( TTProductEdition == 20 ) {
 					{/if}
 
 					{if $permission->Check('punch','edit_note')}
-					<tr onClick="showHelpEntry('note')">
+					<tr>
 						<td class="{isvalid object="pcf" label="note" value="cellLeftEditTable"}">
 							{t}Note:{/t}
 						</td>

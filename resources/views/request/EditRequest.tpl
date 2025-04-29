@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('date_stamp')">
+				<tr>
 					<td class="{isvalid object="rf" label="datestamp" value="cellLeftEditTable"}">
 						{t}Date:{/t}
 					</td>
@@ -32,7 +32,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type_id')">
+				<tr>
 					<td class="{isvalid object="rf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -46,12 +46,12 @@
 					<tr>
 						<td colspan="2">
 							<table>
-								<tr onClick="showHelpEntry('message')">
+								<tr>
 									<td colspan="2" class="tblHeader">
 										{t}Message{/t}
 									</td>
 								</tr>
-								<tr onClick="showHelpEntry('message')">
+								<tr>
 									<td colspan="2" style="text-align: center" class="{isvalid object="rf" label="message" value="cellLeftEditTable"}">
 											<textarea rows="5" cols="40" name="data[message]">{$data.message}</textarea>
 

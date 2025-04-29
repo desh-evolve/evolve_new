@@ -20,7 +20,7 @@
 				</tr>
 				*}
 
-				<tr onClick="showHelpEntry('user_name')">
+				<tr>
 					<td class="{isvalid object="uf" label="user_name" value="cellLeftEditTable"}">
 						{t}User Name:{/t}
 					</td>
@@ -29,7 +29,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('phone_id')">
+				<tr>
 					<td class="{isvalid object="uf" label="phone_id" value="cellLeftEditTable"}">
 						{t}Quick Punch ID:{/t}
 					</td>
@@ -39,7 +39,7 @@
 				</tr>
 
 				{if $user_data.phone_password !== NULL}
-					<tr onClick="showHelpEntry('phone_password')">
+					<tr>
 						<td class="{isvalid object="uf" label="phone_password" value="cellLeftEditTable"}">
 							{t}Current Quick Punch Password:{/t}
 						</td>
@@ -49,7 +49,7 @@
 					</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('phone_password')">
+				<tr>
 					<td class="{isvalid object="uf" label="phone_password" value="cellLeftEditTable"}">
 						{t}New Quick Punch Password:{/t}
 					</td>
@@ -58,7 +58,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('phone_password')">
+				<tr>
 					<td class="{isvalid object="uf" label="phone_password" value="cellLeftEditTable"}">
 						{t}New Quick Punch Password (confirm):{/t}
 					</td>

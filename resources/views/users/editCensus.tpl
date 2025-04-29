@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="ucif" label="user_id" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('dependant')">
+				<tr>
 					<td class="{isvalid object="ucif" label="dependant" value="cellLeftEditTable"}">
 						{t}Dependent:{/t}
 					</td>
@@ -37,7 +37,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('name')">
+                                <tr>
 					<td class="{isvalid object="ucif" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -46,7 +46,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('relationship')">
+                                <tr>
 					<td class="{isvalid object="ucif" label="relationship" value="cellLeftEditTable"}">
 						{t}Relationship:{/t}
 					</td>
@@ -55,7 +55,7 @@
 					</td>
 				</tr>
                                 
-                               <tr onClick="showHelpEntry('dob')">
+                               <tr>
 					<td class="{isvalid object="ucif" label="dob" value="cellLeftEditTable"}">
 						{t}Date:{/t}
 					</td>
@@ -66,7 +66,7 @@
 					</td>
 				</tr>
                                 
-                                <tr onClick="showHelpEntry('nic')">
+                                <tr>
 					<td class="{isvalid object="ucif" label="nic" value="cellLeftEditTable"}">
 						{t}NIC:{/t}
 					</td>
@@ -76,7 +76,7 @@
 				</tr>
                                 
 
-				<tr onClick="showHelpEntry('gender')">
+				<tr>
 					<td class="{isvalid object="af" label="gender" value="cellLeftEditTable"}">
 						{t}Gender:{/t}
 					</td>
@@ -90,7 +90,7 @@
 
 
 {*
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="af" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -99,7 +99,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="af" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>

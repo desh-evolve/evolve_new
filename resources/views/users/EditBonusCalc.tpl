@@ -24,7 +24,7 @@ function setTransactionDate() {
                                     
                               {if !isset($view)}
 
-				<tr onClick="showHelpEntry('start_date')">
+				<tr>
 					<td class="{isvalid object="bdf" label="start_date" value="cellLeftEditTable"}">
 						{t}Start Date:{/t}
 					</td>
@@ -36,7 +36,7 @@ function setTransactionDate() {
 
 				
 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="bdf" label="end_date" value="cellLeftEditTable"}">
 						{t}End Date:{/t}
 					</td>
@@ -46,7 +46,7 @@ function setTransactionDate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('y_number')">
+				<tr>
 					<td class="{isvalid object="ppf" label="y_number" value="cellLeftEditTable"}">
 						{t}Y Number:{/t}
 					</td>
@@ -60,7 +60,7 @@ function setTransactionDate() {
                                 
                             {else}
                                 
-                                <tr onClick="showHelpEntry('start_date')">
+                                <tr>
 					<td class="{isvalid object="bdf" label="start_date" value="cellLeftEditTable"}">
 						{t}Start Date:{/t}
 					</td>
@@ -71,7 +71,7 @@ function setTransactionDate() {
 
 				
 
-				<tr onClick="showHelpEntry('end_date')">
+				<tr>
 					<td class="{isvalid object="bdf" label="end_date" value="cellLeftEditTable"}">
 						{t}End Date:{/t}
 					</td>
@@ -80,7 +80,7 @@ function setTransactionDate() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('y_number')">
+				<tr>
 					<td class="{isvalid object="ppf" label="y_number" value="cellLeftEditTable"}">
 						{t}Y Number:{/t}
 					</td>
@@ -93,7 +93,7 @@ function setTransactionDate() {
                                 {if isset($data.id)}
 				
 
-                                    <tr onClick="showHelpEntry('y_number')">
+                                    <tr>
                                             <td class="{isvalid object="ppf" label="y_number" value="cellLeftEditTable"}">
                                                     {t}Actions:{/t}
                                             </td>

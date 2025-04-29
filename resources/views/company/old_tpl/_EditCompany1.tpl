@@ -81,7 +81,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('parent')">
+				<tr>
 					<td class="{isvalid object="cf" label="parent" value="cellLeftEditTable"}">
 						{t}Parent:{/t}
 					</td>
@@ -92,7 +92,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('status')">
+				<tr>
 					<td class="{isvalid object="cf" label="status" value="cellLeftEditTable"}">
 						{t}Status:{/t}
 					</td>
@@ -104,7 +104,7 @@ function showProvince() {
 				</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('product_edition')">
+				<tr>
 					<td class="{isvalid object="cf" label="product_edition" value="cellLeftEditTable"}">
 						{t}Product Edition:{/t}
 					</td>
@@ -115,7 +115,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="cf" label="name" value="cellLeftEditTable"}">
 						{t}Full Name:{/t}
 					</td>
@@ -127,7 +127,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('short_name')">
+				<tr>
 					<td class="{isvalid object="cf" label="short_name" value="cellLeftEditTable"}">
 						{t}Short Name:{/t}
 					</td>
@@ -136,7 +136,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('industry_id')">
+				<tr>
 					<td class="{isvalid object="cf" label="industry_id" value="cellLeftEditTable"}">
 						{t}Industry:{/t}
 					</td>
@@ -147,7 +147,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="cf" label="business_number" value="cellLeftEditTable"}">
 						{t}Business / Employer Identification Number:{/t}
 					</td>
@@ -156,7 +156,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('address1')">
+				<tr>
 					<td class="{isvalid object="cf" label="address1" value="cellLeftEditTable"}">
 						{t}Address (Line 1):{/t}
 					</td>
@@ -165,7 +165,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('address2')">
+				<tr>
 					<td class="{isvalid object="cf" label="address2" value="cellLeftEditTable"}">
 						{t}Address (Line 2):{/t}
 					</td>
@@ -174,7 +174,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('city')">
+				<tr>
 					<td class="{isvalid object="cf" label="city" value="cellLeftEditTable"}">
 						{t}City:{/t}
 					</td>
@@ -183,7 +183,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('country')">
+				<tr>
 					<td class="{isvalid object="cf" label="country" value="cellLeftEditTable"}">
 						{t}Country:{/t}
 					</td>
@@ -194,7 +194,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('province')">
+				<tr>
 					<td class="{isvalid object="cf" label="province" value="cellLeftEditTable"}">
 						{t}Province / State:{/t}
 					</td>
@@ -205,7 +205,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('postal_code')">
+				<tr>
 					<td class="{isvalid object="cf" label="postal_code" value="cellLeftEditTable"}">
 						{t}Postal / ZIP Code:{/t}
 					</td>
@@ -214,7 +214,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('work_phone')">
+				<tr>
 					<td class="{isvalid object="cf" label="work_phone" value="cellLeftEditTable"}">
 						{t}Phone:{/t}
 					</td>
@@ -223,7 +223,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('fax_phone')">
+				<tr>
 					<td class="{isvalid object="cf" label="fax_phone" value="cellLeftEditTable"}">
 						{t}Fax:{/t}
 					</td>
@@ -232,7 +232,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('admin_contact')">
+				<tr>
 					<td class="{isvalid object="cf" label="admin_contact" value="cellLeftEditTable"}">
 						{t}Administrative Contact:{/t}
 					</td>
@@ -243,7 +243,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('billing_contact')">
+				<tr>
 					<td class="{isvalid object="cf" label="billing_contact" value="cellLeftEditTable"}">
 						{t}Billing Contact:{/t}
 					</td>
@@ -254,7 +254,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('support_contact')">
+				<tr>
 					<td class="{isvalid object="cf" label="support_contact" value="cellLeftEditTable"}">
 						{t}Primary Support Contact:{/t}
 					</td>
@@ -266,7 +266,7 @@ function showProvince() {
 				</tr>
 
 				{if isset($company_data.other_field_names.other_id1) }
-					<tr onClick="showHelpEntry('other_id1')">
+					<tr>
 						<td class="{isvalid object="cf" label="other_id1" value="cellLeftEditTable"}">
 							{$company_data.other_field_names.other_id1}:
 						</td>
@@ -277,7 +277,7 @@ function showProvince() {
 				{/if}
 
 				{if isset($company_data.other_field_names.other_id2) }
-				<tr onClick="showHelpEntry('other_id2')">
+				<tr>
 					<td class="{isvalid object="cf" label="other_id2" value="cellLeftEditTable"}">
 						{$company_data.other_field_names.other_id2}:
 					</td>
@@ -287,7 +287,7 @@ function showProvince() {
 				</tr>
 				{/if}
 				{if isset($company_data.other_field_names.other_id3) }
-				<tr onClick="showHelpEntry('other_id3')">
+				<tr>
 					<td class="{isvalid object="cf" label="other_id3" value="cellLeftEditTable"}">
 						{$company_data.other_field_names.other_id3}:
 					</td>
@@ -297,7 +297,7 @@ function showProvince() {
 				</tr>
 				{/if}
 				{if isset($company_data.other_field_names.other_id4) }
-					<tr onClick="showHelpEntry('other_id4')">
+					<tr>
 						<td class="{isvalid object="cf" label="other_id4" value="cellLeftEditTable"}">
 							{$company_data.other_field_names.other_id4}:
 						</td>
@@ -307,7 +307,7 @@ function showProvince() {
 					</tr>
 				{/if}
 				{if isset($company_data.other_field_names.other_id5) }
-					<tr onClick="showHelpEntry('other_id5')">
+					<tr>
 						<td class="{isvalid object="cf" label="other_id5" value="cellLeftEditTable"}">
 							{$company_data.other_field_names.other_id5}:
 						</td>
@@ -322,7 +322,7 @@ function showProvince() {
 						{t}Direct Deposit (EFT){/t}
 					</td>
 				</td>
-				<tr onClick="showHelpEntry('originator_id')">
+				<tr>
 					<td class="{isvalid object="cf" label="originator_id" value="cellLeftEditTable"}">
 						{t}Originator ID / Immediate Origin:{/t}
 					</td>
@@ -331,7 +331,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('data_center_id')">
+				<tr>
 					<td class="{isvalid object="cf" label="originator_id" value="cellLeftEditTable"}">
 						{t}Data Center / Immediate Destination:{/t}
 					</td>
@@ -347,7 +347,7 @@ function showProvince() {
 				</td>
 
 				{if DEMO_MODE != TRUE}
-				<tr onClick="showHelpEntry('logo')">
+				<tr>
 					<td class="{isvalid object="cf" label="logo" value="cellLeftEditTable"}">
 						{t}Logo:{/t} <a href="javascript:Upload('company_logo','');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a>
 					</td>
@@ -362,7 +362,7 @@ function showProvince() {
 				</tr>
 				{/if}
 
-				<tr onClick="showHelpEntry('enable_second_last_name')">
+				<tr>
 					<td class="{isvalid object="cf" label="enable_second_last_name" value="cellLeftEditTable"}">
 						{t}Enable Second Surname:{/t}
 					</td>
@@ -378,7 +378,7 @@ function showProvince() {
 					</td>
 				</td>
 
-				<tr onClick="showHelpEntry('ldap_authentication_type_id')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_authentication_type_id" value="cellLeftEditTable"}">
 						{t}LDAP Authentication:{/t}
 					</td>
@@ -398,7 +398,7 @@ function showProvince() {
 				</td>
 				{/if}
 
-				<tr onClick="showHelpEntry('ldap_host')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_host" value="cellLeftEditTable"}">
 						{t}Server:{/t}
 					</td>
@@ -408,7 +408,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('ldap_port')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_port" value="cellLeftEditTable"}">
 						{t}Port:{/t}
 					</td>
@@ -418,7 +418,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('ldap_bind_user_name')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_bind_user_name" value="cellLeftEditTable"}">
 						{t}Bind User Name:{/t}
 					</td>
@@ -428,7 +428,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('ldap_bind_password')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_bind_password" value="cellLeftEditTable"}">
 						{t}Bind Password:{/t}
 					</td>
@@ -437,7 +437,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('ldap_base_dn')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_base_dn" value="cellLeftEditTable"}">
 						{t}Base DN:{/t}
 					</td>
@@ -447,7 +447,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('ldap_bind_attribute')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_bind_attribute" value="cellLeftEditTable"}">
 						{t}Bind Attribute:{/t}
 					</td>
@@ -457,7 +457,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('ldap_user_filter')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_user_filter" value="cellLeftEditTable"}">
 						{t}User Filter:{/t}
 					</td>
@@ -467,7 +467,7 @@ function showProvince() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('ldap_login_attribute')">
+				<tr>
 					<td class="{isvalid object="cf" label="ldap_login_attribute" value="cellLeftEditTable"}">
 						{t}Login Attribute:{/t}
 					</td>

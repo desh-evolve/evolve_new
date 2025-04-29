@@ -82,7 +82,7 @@ var report_criteria_elements = new Array(
 				{capture assign=report_display_plural_name}{t}Currencies{/t}{/capture}
 				{htmlreportfilter filter_data=$filter_data label='currency' display_name=$report_display_name display_plural_name=$report_display_plural_name}
 
-				<tr onClick="showHelpEntry('group_by')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uwf" label="group_by" value="cellLeftEditTableHeader"}">
 						{t}Group By:{/t}
 					</td>
@@ -95,7 +95,7 @@ var report_criteria_elements = new Array(
 
 				{htmlreportsort filter_data=$filter_data}
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="cellLeftEditTableHeader">
 						{t}Export Format:{/t}
 					</td>

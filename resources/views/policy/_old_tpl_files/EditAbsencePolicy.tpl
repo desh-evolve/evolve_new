@@ -39,7 +39,7 @@ function showType() {
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="apf" label="name" value="cellLeftEditTable"}">
 						{t}Name:{/t}
 					</td>
@@ -48,7 +48,7 @@ function showType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('type')">
+				<tr>
 					<td class="{isvalid object="apf" label="type" value="cellLeftEditTable"}">
 						{t}Type:{/t}
 					</td>
@@ -61,7 +61,7 @@ function showType() {
 
 				<tbody id="paid" style="display:none">
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="apf" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>
@@ -70,7 +70,7 @@ function showType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('wage_group')">
+				<tr>
 					<td class="{isvalid object="apf" label="rate" value="cellLeftEditTable"}">
 						{t}Wage Group:{/t}
 					</td>
@@ -81,7 +81,7 @@ function showType() {
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('pay_stub_entry')">
+				<tr>
 					<td class="{isvalid object="apf" label="pay_stub_entry_account_id" value="cellLeftEditTable"}">
 						{t}Pay Stub Account:{/t}
 					</td>
@@ -93,7 +93,7 @@ function showType() {
 				</tr>
 				</tbody>
 
-				<tr onClick="showHelpEntry('accrual_policy')">
+				<tr>
 					<td class="{isvalid object="apf" label="accrual_policy" value="cellLeftEditTable"}">
 						{t}Accrual Policy:{/t}
 					</td>
@@ -105,7 +105,7 @@ function showType() {
 				</tr>
 
 				<tbody id="accrual_rate" style="display:none">
-				<tr onClick="showHelpEntry('accural_rate')">
+				<tr>
 					<td class="{isvalid object="apf" label="accrual_rate" value="cellLeftEditTable"}">
 						{t}Accrual Rate:{/t}
 					</td>

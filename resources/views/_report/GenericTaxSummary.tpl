@@ -106,7 +106,7 @@ var report_criteria_elements = new Array(
 				{htmlreportgroup filter_data=$filter_data}
 				{htmlreportsort filter_data=$filter_data}
 
-				<tr onClick="showHelpEntry('sort')">
+				<tr>
 					<td colspan="2" class="{isvalid object="uf" label="transaction_date_format" value="cellLeftEditTableHeader"}">
 						{t}Transaction Date Format:{/t}
 					</td>

@@ -54,7 +54,7 @@
 
 				</tbody>
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="roef" label="user" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -65,7 +65,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('code_id')">
+				<tr>
 					<td class="{isvalid object="roef" label="code_id" value="cellLeftEditTable"}">
 						{t}Reason:{/t}
 					</td>
@@ -76,7 +76,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('pay_period_type_id')">
+				<tr>
 					<td class="{isvalid object="roef" label="pay_period_type_id" value="cellLeftEditTable"}">
 						{t}Pay Period Type:{/t}
 					</td>
@@ -87,7 +87,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('first_date')">
+				<tr>
 					<td class="{isvalid object="roef" label="first_date" value="cellLeftEditTable"}">
 						{t}First Day Worked:{/t}
 						<br>
@@ -99,7 +99,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('last_date')">
+				<tr>
 					<td class="{isvalid object="roef" label="last_date" value="cellLeftEditTable"}">
 						{t}Last Day For Which Paid:{/t}
 					</td>
@@ -109,7 +109,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('pay_period_end_date')">
+				<tr>
 					<td class="{isvalid object="roef" label="pay_period_end_date" value="cellLeftEditTable"}">
 						{t}Final Pay Period Ending Date:{/t}
 					</td>
@@ -119,7 +119,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('recall_date')">
+				<tr>
 					<td class="{isvalid object="roef" label="recall_date" value="cellLeftEditTable"}">
 						{t}Expected Date of Recall:{/t}
 					</td>
@@ -128,7 +128,7 @@
 						<img src="{$BASE_URL}/images/cal.gif" id="cal_recall_date" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('recall_date', 'cal_recall_date', false);">
 					</td>
 				</tr>
-				<tr onClick="showHelpEntry('serial')">
+				<tr>
 					<td class="{isvalid object="roef" label="serial" value="cellLeftEditTable"}">
 						{t}Serial No:{/t}
 					</td>
@@ -137,7 +137,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('comments')">
+				<tr>
 					<td class="{isvalid object="roef" label="comments" value="cellLeftEditTable"}">
 						{t}Comments:{/t}
 					</td>
@@ -146,7 +146,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('release_accruals')">
+				<tr>
 					<td class="{isvalid object="roef" label="release_accruals" value="cellLeftEditTable"}">
 						{t}Release All Accruals:{/t}
 					</td>
@@ -155,7 +155,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('generate_pay_stub')">
+				<tr>
 					<td class="{isvalid object="roef" label="generate_pay_stub" value="cellLeftEditTable"}">
 						{t}Generate Final Pay Stub:{/t}
 					</td>

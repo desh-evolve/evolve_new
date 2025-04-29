@@ -12,7 +12,7 @@
 
 			<table class="editTable">
 
-				<tr onClick="showHelpEntry('name')">
+				<tr>
 					<td class="{isvalid object="utf" label="name" value="cellLeftEditTable"}">
 						{t}Group:{/t}
 					</td>

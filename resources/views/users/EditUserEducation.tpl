@@ -12,7 +12,7 @@
 
 				<table class="editTable">
 
-				<tr onClick="showHelpEntry('user')">
+				<tr>
 					<td class="{isvalid object="uef" label="user_id" value="cellLeftEditTable"}">
 						{t}Employee:{/t}
 					</td>
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('qualification')">
+				<tr>
 					<td class="{isvalid object="uef" label="qualification" value="cellLeftEditTable"}">
 						{t}Qualification :{/t}
 					</td>
@@ -71,7 +71,7 @@
 
 
 {*
-				<tr onClick="showHelpEntry('trigger_time')">
+				<tr>
 					<td class="{isvalid object="af" label="trigger_time" value="cellLeftEditTable"}">
 						{t}Active After:{/t}
 					</td>
@@ -80,7 +80,7 @@
 					</td>
 				</tr>
 
-				<tr onClick="showHelpEntry('rate')">
+				<tr>
 					<td class="{isvalid object="af" label="rate" value="cellLeftEditTable"}">
 						{t}Rate:{/t}
 					</td>
