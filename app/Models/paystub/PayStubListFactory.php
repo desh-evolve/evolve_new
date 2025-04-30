@@ -662,7 +662,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
         
              /*FL ADDED FOR MEMBER COUNT FOR PARTICULAR PAYPERIOD */
         
-        function getMembersForPayPeriod($pay_period_id, $where = NULL, $order = NULL) {
+    function getMembersForPayPeriod($pay_period_id, $where = NULL, $order = NULL) {
 		 
 		if ( $pay_period_id == '') {
 			return FALSE;

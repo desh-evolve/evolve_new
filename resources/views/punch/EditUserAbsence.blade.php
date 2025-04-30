@@ -29,7 +29,7 @@
                                 {{-- error list here --}}
                             @endif
             
-                            <table class="editTable table table-bordered">
+                            <table class="table table-bordered">
             
                                 <tr>
                                     <th>
@@ -42,10 +42,12 @@
                 
                                 <tr>
                                     <th>
-                                        <a href="javascript:toggleRowObject('advance');toggleImage(document.getElementById('advance_img'), '{$IMAGES_URL}/nav_bottom_sm.gif', '{$IMAGES_URL}/nav_top_sm.gif')"><img style="vertical-align: middle" id="advance_img" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a> Date:
+                                        <a href="javascript:toggleRowObject('advance');toggleIcon(document.getElementById('advance_img'))">
+                                            <i id="advance_img" class="ri-arrow-down-double-line" style="vertical-align: middle;"></i>
+                                        </a> Date:
                                     </th>
                                     <td>
-                                        {{$udt_data['date_stamp']}}
+                                        {{ getdate_helper('date', $udt_data['date_stamp']) }}
                                     </td>
                                 </tr>
                 
@@ -76,8 +78,8 @@
                                             @endforeach
                                         </select>
                                     
-                                        <input  type="text" id="total_time_text" size="8" name="udt_data[total_time]" value="{{$udt_data['total_time']}}">
-                                        ie:{{$udt_data['total_time']}} {{$current_user_prefs->getTimeUnitFormatExample()}}
+                                        <input  type="text" id="total_time_text" size="8" name="udt_data[total_time]" value="{{ gettimeunit_helper($udt_data['total_time'], '00:00') }}">
+                                        ie: {{$current_user_prefs->getTimeUnitFormatExample()}}
                                     </td>
                                 </tr>
                 
@@ -156,7 +158,7 @@
                         </div>
                 
                         <div id="contentBoxFour">
-                            <input type="submit" class="btnSubmit" name="action:submit"  onClick="return singleSubmitHandler(this)">
+                            <input type="submit" class="btnSubmit btn btn-primary btn-sm" name="action:submit"  onClick="return singleSubmitHandler(this)">
                             @if (!empty($udt_data['id']) AND ( $permission->Check('absence','delete') OR $permission->Check('absence','delete_own') OR $permission->Check('absence','delete_child') ))
                                 <input type="submit" class="btnDelete1" name="action:delete"   onClick="return singleSubmitHandler(this)">
                             @endif
@@ -238,6 +240,16 @@
         function UpdateTotalLeaveTime() {  
             var selectedLeaveId = document.getElementById('leave_total_time').value;
             remoteHW.getAbsenceLeave(selectedLeaveId);  
+        }
+
+        function toggleIcon(icon) {
+            if (icon.classList.contains('ri-arrow-down-double-line')) {
+                icon.classList.remove('ri-arrow-down-double-line');
+                icon.classList.add('ri-arrow-up-double-line');
+            } else {
+                icon.classList.remove('ri-arrow-up-double-line');
+                icon.classList.add('ri-arrow-down-double-line');
+            }
         }
     </script>
 

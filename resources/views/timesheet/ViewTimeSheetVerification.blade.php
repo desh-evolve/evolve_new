@@ -46,7 +46,7 @@
                                         Pay Period:
                                     </th>
                                     <td>
-                                        {{$data['pay_period_start_date']}} - {{$data['pay_period_end_date']}}
+                                        {{getdate_helper('date', $data['pay_period_start_date'])}} - {{getdate_helper('date', $data['pay_period_end_date'])}}
                 
                                         [ <a href="javascript:viewTimeSheet('{{$data['user_id']}}','{{$data['pay_period_start_date']}}');">View TimeSheet</a> ]
                                     </td>

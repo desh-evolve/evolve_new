@@ -56,7 +56,7 @@
                                         <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_prev_sm.gif">
                                     </a>
             
-                                    <input type="text" size="15" id="filter_date" name="filter_date" value="{getdate type="DATE" epoch=$filter_date}" onChange="this.form.submit()">
+                                    <input type="date" id="filter_date" name="filter_date" value="{{ getdate_helper('date', $filter_date) }}" onChange="this.form.submit()">
                                     <img src="{$BASE_URL}/images/cal.gif" id="cal_filter_date" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('filter_date', 'cal_filter_date', false);">
 
                                     <a href="#" >
@@ -114,7 +114,7 @@
                             @foreach ($rows as $row)
                                 <tr class="">
                                     <td>
-                                        {{$row['total_time']}}
+                                        {{gettimeunit_helper($row['total_time'], '00:00')}}
                                     </td>
                                     <td>
                                         {{$row['status']}}
@@ -197,7 +197,7 @@
                                                 Worked Time
                                             </th>
                                             <td>
-                                                {{$day_total_time['worked_time']}}
+                                                {{ gettimeunit_helper($day_total_time['worked_time'], '00:00') }}
                                             </td>
                                         </tr>
                                         <tr class="" nowrap>
@@ -205,7 +205,7 @@
                                                 Total Time
                                             </th>
                                             <td>
-                                                {{$day_total_time['total_time']}}
+                                                {{ gettimeunit_helper($day_total_time['total_time'], '00:00') }}
                                             </td>
                                         </tr>
                                         <tr class="" style="font-weight: bold;" nowrap>
@@ -213,7 +213,7 @@
                                                 Difference
                                             </th>
                                             <td width="75">
-                                                {{$day_total_time['difference']}}
+                                                {{ gettimeunit_helper($day_total_time['difference'], '00:00') }}
                                             </td>
                                         </tr>
                                     </table>
@@ -264,6 +264,7 @@
 
             return confirm_result;
         }
+
     </script>
 
 </x-app-modal-layout>
