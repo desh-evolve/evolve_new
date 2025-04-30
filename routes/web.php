@@ -293,7 +293,7 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
 // ===============================================================================================================================
  // User jobhistory
  // ===============================================================================================================================
- Route::get('/user/jobhistory', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
+ Route::get('/user/jobhistory/{user_id?}', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
  Route::get('/user/jobhistory/add/{user_id?}', [UserJobHistory::class, 'add'])->name('user.jobhistory.add');
  Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
  Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
@@ -302,7 +302,7 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
  // ===============================================================================================================================
  // User wage
  // ===============================================================================================================================
- Route::get('/user/wage', [UserWageListNew::class, 'index'])->name('user.wage.index');
+ Route::get('/user/wage/{user_id?}', [UserWageListNew::class, 'index'])->name('user.wage.index');
  Route::get('/user/wage/add/{user_id?}', [UserWageListNew::class, 'add'])->name('user.wage.add');
  Route::get('/user/wage/edit/{id?}', [EditUserWageNew::class, 'index'])->name('user.wage.edit');
  Route::post('/user/wage/save/{id?}', [EditUserWageNew::class, 'save'])->name('user.wage.save');
