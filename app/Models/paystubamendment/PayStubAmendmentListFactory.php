@@ -784,7 +784,7 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 					);
 
 		$query = '
-					select 	a.*
+					select 	a.*, b.last_name, b.first_name
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 						LEFT JOIN '. $psealf->getTable() .' as c ON a.pay_stub_entry_name_id  = c.id
