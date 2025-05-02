@@ -1,22 +1,19 @@
 <?php
+/*********************************************************************************
+ * Evolve is a Payroll and Time Management program developed by
+ * Evolve Technology PVT LTD.
+ *
+ ********************************************************************************/
+/*
+ * $Revision: 5453 $
+ * $Id: Factory.class.php 5453 2011-11-03 20:30:28Z ipso $
+ * $Date: 2011-11-03 13:30:28 -0700 (Thu, 03 Nov 2011) $
+ */
 
-namespace App\Models\Core;
-
-use App\Models\Company\CompanyGenericTagFactory;
-use App\Models\Users\UserListFactory;
-use Exception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\View;
-
-
-use Illuminate\Database\QueryException;
-
-use Throwable;
-
-class Factory {
+/**
+ * @package Core
+ */
+abstract class Factory {
 	public $data = array();
 	public $old_data = array(); //Used for detailed audit log.
 
@@ -26,28 +23,12 @@ class Factory {
 	protected $progress_bar_obj = NULL;
 	protected $AMF_message_id = NULL;
 
-	protected $db;
-    protected $cache;
-    public $Validator;
-
-	protected $currentUser;
-	protected $profiler;
-	protected $userPrefs;
-	protected $currentCompany;
-	protected $permission;
-	protected $configVars;
-
 	function __construct() {
-		$this->db = DB::connection();
-        $this->cache = Cache::store();
-		$this->Validator = new Validator();
+		global $db, $cache;
 
-        $this->currentUser = View::shared('current_user');
-        $this->profiler = View::shared('profiler');
-		$this->userPrefs = View::shared('current_user_prefs');
-        $this->currentCompany = View::shared('current_company');
-        $this->permission = View::shared('permission');
-        $this->configVars = View::shared('config_vars');
+		$this->db = $db;
+		$this->cache = $cache;
+		$this->Validator = new Validator();
 
 		//Callback to the child constructor method.
 		if ( method_exists($this,'childConstruct') ) {
@@ -94,45 +75,49 @@ class Factory {
 	/*
 	 * Cache functions
 	 */
-	public function getCache($cache_id) {
-		// Ensure Cache ID is formatted correctly
-		$cache_id = str_replace(':', '_', $cache_id);
-		$cacheKey = $this->getTable(true) . '_' . $cache_id;
-
-		return Cache::get($cacheKey, false); // Return cached data or false if not found
-	}
-
-	public function saveCache($data, $cache_id) {
-		// Ensure Cache ID is formatted correctly
-		$cache_id = str_replace(':', '_', $cache_id);
-		$cacheKey = $this->getTable(true) . '_' . $cache_id;
-
-		// Save to Laravel Cache for 2 hours
-		$success = Cache::put($cacheKey, $data, now()->addHours(2));
-
-		if (!$success) {
-			Log::warning("WARNING: Unable to write cache file. Cache ID: $cache_id | Table: " . $this->getTable(true));
+	function getCache($cache_id) {
+		if ( is_object($this->cache) ) {
+			return $this->cache->get($cache_id, $this->getTable(TRUE) );
 		}
 
-		return $success;
+		return FALSE;
 	}
+	function saveCache($data, $cache_id) {
+		//Cache_ID can't have ':' in it, otherwise it fails on Windows.
+		if ( is_object($this->cache) ) {
+			$retval = $this->cache->save( $data, $cache_id, $this->getTable(TRUE) );
+			if ( $retval === FALSE ) {
+				//Due to locking, its common that cache files may fail writing once in a while.
+				Debug::text('WARNING: Unable to write cache file, likely due to permissions or locking! Cache ID: '. $cache_id .' Table: '. $this->getTable(TRUE) .' File: '. $this->cache->_file, __FILE__, __LINE__, __METHOD__,10);
+			}
 
-	public function removeCache($cache_id = null) {
-		if ($cache_id) {
-			$cache_id = str_replace(':', '_', $cache_id);
-			$cacheKey = $this->getTable(true) . '_' . $cache_id;
-
-			Cache::forget($cacheKey); // Remove specific cache entry
-			return true;
+			return $retval;
+		}
+		return FALSE;
+	}
+	function removeCache($cache_id = NULL, $group_id = NULL ) {
+		Debug::text('Attempting to remove cache: '. $cache_id, __FILE__, __LINE__, __METHOD__,10);
+		if ( is_object($this->cache) ) {
+			if ( $group_id == '' ) {
+				$group_id = $this->getTable(TRUE);
+			}
+			if ( $cache_id != '' ) {
+				Debug::text('Removing cache: '. $cache_id .' Group Id: '. $group_id, __FILE__, __LINE__, __METHOD__,10);
+				return $this->cache->remove($cache_id, $group_id );
+			} elseif ( $group_id != '' ) {
+				Debug::text('Removing cache group: '. $group_id , __FILE__, __LINE__, __METHOD__,10);
+				return $this->cache->clean( $group_id );
+			}
 		}
 
-		return false;
+		return FALSE;
 	}
+	function setCacheLifeTime( $secs ) {
+		if ( is_object($this->cache) ) {
+			return $this->cache->setLifeTime( $secs );
+		}
 
-	public function setCacheLifeTime($seconds) {
-		// Laravel doesn't support dynamic cache lifetime setting per request.
-		// You need to modify the expiration time inside `saveCache()` instead.
-		return false;
+		return FALSE;
 	}
 
 
@@ -207,56 +192,24 @@ class Factory {
 	}
 
 	//Determines if the data is new data, or updated data.
-	/*
-	public function isNew($force_lookup = false) {
-		// Check if the model has an ID (i.e., it's an existing record)
-		if (empty($this->getId())) {
-			// New Data (no ID set)
-			return true;
-		} elseif ($force_lookup === true) {
-			// Check if the record exists in the database
-			$exists = DB::table($this->getTable())->where('id', $this->getId())->exists();
-
-			if (!$exists) {
-				// ID does not exist in the database, treat as new
-				return true;
+	function isNew( $force_lookup = FALSE ) {
+		//Debug::Arr( $this->getId() ,'getId: ', __FILE__, __LINE__, __METHOD__,10);
+		if ( $this->getId() === FALSE ) {
+			//New Data
+			return TRUE;
+		} elseif ( $force_lookup == TRUE ) {
+			//See if we can find the ID to determine if the record needs to be inserted or update.
+			$ph = array( 'id' => $this->getID() );
+			$query = 'select id from '. $this->getTable() .' where id = ?';
+			$retval = $this->db->GetOne($query, $ph);
+			if ( $retval === FALSE ) {
+				return TRUE;
 			}
 		}
-		
-		// Not new data (the record exists in the DB)
-		return false;
-		
+
+		//Not new data
+		return FALSE;
 	}
-	*/
-
-	public function isNew($force_lookup = false)
-    {
-		
-        Log::debug('Checking if record is new', ['id' => $this->getId(), 'force_lookup' => $force_lookup]);
-
-        if (empty($this->getId()) || $this->getId() === false) {
-            // New data
-            return true;
-        } elseif ($force_lookup === true) {
-            // Verify if the ID exists in the database
-			$table = $this->getTable();
-			if (empty($table)) {
-				throw new \Exception('Table name is empty or not set');
-			}
-
-			$exists = DB::table($table)
-				->where('id', $this->getId())
-				->value('id');
-
-			if ($exists === null) {
-				return true;
-			}
-        }
-
-        // Not new data
-        return false;
-    }
-
 
 	//Determines if we were called by a save function or not.
 	//This is useful for determining if we are just validating or actually saving data. Problem is its too late to throw any new validation errors.
@@ -315,7 +268,7 @@ class Factory {
 		}
 
 		return FALSE;
-	} 
+	}
 
 	function getEnableSystemLogDetail() {
 		if ( isset($this->enable_system_log_detail) ) {
@@ -368,7 +321,7 @@ class Factory {
 
 		if 	(	$this->Validator->isDate(		'created_date',
 												$epoch,
-												('Incorrect Date')) ) {
+												TTi18n::gettext('Incorrect Date')) ) {
 
 			$this->data['created_date'] = $epoch;
 
@@ -389,7 +342,7 @@ class Factory {
 		$id = (int)trim($id);
 
 		if ( empty($id) ) {
-			$current_user = $this->currentUser;
+			global $current_user;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -404,7 +357,7 @@ class Factory {
 		$ulf = new UserListFactory();
 		if ( $this->Validator->isResultSetWithRows(	'created_by',
 													$ulf->getByID($id),
-													('Incorrect User')
+													TTi18n::gettext('Incorrect User')
 													) ) {
 
 			$this->data['created_by'] = $id;
@@ -436,7 +389,7 @@ class Factory {
 
 		if 	(	$this->Validator->isDate(		'updated_date',
 												$epoch,
-												('Incorrect Date')) ) {
+												TTi18n::gettext('Incorrect Date')) ) {
 
 			$this->data['updated_date'] = $epoch;
 
@@ -459,7 +412,7 @@ class Factory {
 		$id = (int)trim($id);
 
 		if ( empty($id) ) {
-			$current_user = $this->currentUser;
+			global $current_user;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -474,7 +427,7 @@ class Factory {
 		$ulf = new UserListFactory();
 		if ( $this->Validator->isResultSetWithRows(	'updated_by',
 													$ulf->getByID($id),
-													('Incorrect User')
+													TTi18n::gettext('Incorrect User')
 													) ) {
 			$this->data['updated_by'] = $id;
 
@@ -507,7 +460,7 @@ class Factory {
 
 		if 	(	$this->Validator->isDate(		'deleted_date',
 												$epoch,
-												('Incorrect Date')) ) {
+												TTi18n::gettext('Incorrect Date')) ) {
 
 			$this->data['deleted_date'] = $epoch;
 
@@ -528,7 +481,7 @@ class Factory {
 		$id = trim($id);
 
 		if ( empty($id) ) {
-			$current_user = $this->currentUser;
+			global $current_user;
 
 			if ( is_object($current_user) ) {
 				$id = $current_user->getID();
@@ -541,7 +494,7 @@ class Factory {
 
 		if ( $this->Validator->isResultSetWithRows(	'updated_by',
 													$ulf->getByID($id),
-													('Incorrect User')
+													TTi18n::gettext('Incorrect User')
 													) ) {
 
 			$this->data['deleted_by'] = $id;
@@ -577,7 +530,7 @@ class Factory {
 
 		return TRUE;
 	}
-	function getCreatedAndUpdatedColumns( $data, $include_columns = NULL ) {
+	function getCreatedAndUpdatedColumns( &$data, $include_columns = NULL ) {
 		//Update array in-place.
 		if ( $include_columns == NULL OR ( isset($include_columns['created_by_id']) AND $include_columns['created_by_id'] == TRUE) ) {
 			$data['created_by_id'] = $this->getCreatedBy();
@@ -601,7 +554,7 @@ class Factory {
 		return TRUE;
 	}
 
-	function getPermissionColumns( $data, $object_user_id, $created_by_id, $permission_children_ids = NULL, $include_columns = NULL ) {
+	function getPermissionColumns( &$data, $object_user_id, $created_by_id, $permission_children_ids = NULL, $include_columns = NULL ) {
 		$permission = new Permission();
 
 		if( $include_columns == NULL OR ( isset($include_columns['is_owner']) AND $include_columns['is_owner'] == TRUE) ) {
@@ -644,9 +597,8 @@ class Factory {
 	}
 
 	function getRecordCount() {
-
-		if (isset($this->rs) && is_array($this->rs)) {
-			return count($this->rs);
+		if ( isset($this->rs) ) {
+			return $this->rs->RecordCount();
 		}
 
 		return FALSE;
@@ -660,7 +612,6 @@ class Factory {
 		return FALSE;
 	}
 
-	/*
 	private function getRecordSetColumnList($rs) {
 		if (is_object($rs)) {
 			for ($i=0, $max=$rs->FieldCount(); $i < $max; $i++) {
@@ -673,37 +624,75 @@ class Factory {
 
 		return FALSE;
 	}
-	*/
 
-	private function getRecordSetColumnList($rs)
-    {
-        if (is_object($rs)) {
-            try {
-                // Get column names from the table schema
-                $columns = Schema::getColumnListing($this->getTable());
-                return $columns ?: false;
-            } catch (\Exception $e) {
-                Log::error('Error retrieving column list: ' . $e->getMessage());
-                return false;
-            }
-        }
+	protected function getListSQL($array, &$ph = NULL) {
+		if ( $ph === NULL ) {
+			if ( is_array( $array ) AND count($array) > 0) {
+				return '\''.implode('\',\'',$array).'\'';
+			} elseif ( is_array($array) ) {
+				//Return NULL, because this is an empty array.
+				return 'NULL';
+			} elseif ( $array == '' ) {
+				return 'NULL';
+			}
 
-        return false;
-    }
+			//Just a single ID, return it.
+			return $array;
+		} else {
+			//Debug::Arr($ph, 'Place Holder BEFORE:', __FILE__, __LINE__, __METHOD__,10);
 
-	protected function getListSQL($array, $ph = null)
-	{
-		// Ensure it's an array
-		if (!is_array($array)) {
-			$array = explode(',', (string) $array); // Convert comma-separated string to array
+			//Append $array values to end of $ph, return
+			//one "?," for each element in $array.
+
+			$array_count = is_array($array) ? count($array) : 0;
+			if ( is_array( $array ) AND $array_count > 0) {
+				foreach( $array as $key => $val ) {
+					$ph_arr[] = '?';
+
+					//Make sure we filter out any FALSE or NULL values from going into a SQL list.
+					//Replace them with "-1"'s so we keep the same number of place holders.
+					//This should hopefully prevent SQL errors if a FALSE creeps into the SQL list array.
+					if ( !is_null($val) AND ( is_numeric( $val ) OR is_string( $val ) ) ) {
+						$ph[] = $val;
+					} else {
+						$ph[] = '-1';
+					}
+				}
+
+				if ( isset($ph_arr) ) {
+					$retval = implode(',',$ph_arr);
+				}
+			} elseif ( is_array($array) ) {
+				//Return NULL, because this is an empty array.
+				//This may have to return -1 instead of NULL
+				//$ph[] = 'NULL';
+				$ph[] = -1;
+				$retval = '?';
+			} elseif ( $array == '' ) {
+				//$ph[] = 'NULL';
+				$ph[] = -1;
+				$retval = '?';
+			} else {
+				$ph[] = $array;
+				$retval = '?';
+			}
+
+			//Debug::Arr($ph, 'Place Holder AFTER:', __FILE__, __LINE__, __METHOD__,10);
+
+			//Just a single ID, return it.
+			return $retval;
 		}
-
-		// Trim values and filter out empty ones
-		$array = array_filter(array_map('trim', $array));
-
-		return implode(',', $array);
 	}
 
+	//This function takes plain input from the user and creates a SQL statement for filtering
+	//based on a date range.
+	// Supported Syntax:
+	//					>=01-Jan-09
+	//					<=01-Jan-09
+	//					<01-Jan-09
+	//					>01-Jan-09
+	//					>01-Jan-09 & <10-Jan-09
+	//
 	function getDateRangeSQL( $str, $column, $use_epoch = TRUE ) {
 
 		if ( $str == '' ) {
@@ -986,7 +975,6 @@ class Factory {
 		return $retval;
 	}
 
-	/* //original code - commented by desh(2025-03-26)
 	protected function getWhereSQL($array, $append_where = FALSE) {
 		//Make this a multi-dimensional array, the first entry
 		//is the WHERE clauses with '?' for placeholders, the second is
@@ -994,6 +982,7 @@ class Factory {
 		if (is_array($array) ) {
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
+
 			foreach ($array as $orig_column => $expression) {
 				$orig_column = trim($orig_column);
 				$column = $this->parseColumnName( $orig_column );
@@ -1018,36 +1007,6 @@ class Factory {
 
 		return FALSE;
 	}
-	*/
-
-	protected function getWhereSQL($array, $append_where = false) {
-		if (!is_array($array) || empty($array)) {
-			return ''; // Return empty string if input is not a valid array
-		}
-
-		$sql_chunks = [];
-
-		foreach ($array as $column => $value) {
-			$column = trim($column);
-			$value = trim($value);
-
-			// Ensure proper SQL escaping (use prepared statements in real-world applications)
-			if (is_numeric($value)) {
-				$sql_chunks[] = "`$column` $value"; // No quotes for numeric values
-			} else {
-				$sql_chunks[] = "`$column` " . addslashes($value); // No quotes around values
-			}
-		}
-
-		$sql = implode(' AND ', $sql_chunks);
-
-		if ($append_where) {
-			return ' WHERE ' . $sql;
-		} else {
-			return ' AND ' . $sql;
-		}
-	}
-
 
 	protected function getColumnsFromAliases( $columns, $aliases ) {
 		// Columns is the original column array.
@@ -1106,121 +1065,64 @@ class Factory {
 
 		return $array;
 	}
-/*
-	protected function getSortSQL($array, $strict = TRUE, $additional_fields = NULL)
-	{
-		if (is_array($array)) {
-			$array = $this->convertFlexArray($array);
 
-			$alt_order_options = [1 => 'asc', -1 => 'desc'];
-			$order_options = ['asc', 'desc'];
+	protected function getSortSQL($array, $strict = TRUE, $additional_fields = NULL) {
+		if ( is_array($array) ) {
+			$array = $this->convertFlexArray( $array );
+
+			$alt_order_options = array( 1 => 'asc', -1 => 'desc');
+			$order_options = array('asc', 'desc');
 
 			$rs = $this->getEmptyRecordSet();
 			$fields = $this->getRecordSetColumnList($rs);
-			$sql_chunks = [];
-			if (is_array($additional_fields)) {
-				foreach($additional_fields as $orig_column => $order){
-					$column = $this->parseColumnName($orig_column);
-					$order = trim($order);
 
-					$sql_chunks[] = $orig_column . ' ' . $order;
-				}
+			//Merge additional fields
+			if ( is_array($additional_fields) ) {
+				$fields = array_merge( $fields, $additional_fields);
 			}
+			//Debug::Arr($fields, 'Column List:', __FILE__, __LINE__, __METHOD__,10);
 
-			foreach ($array as $orig_column => $order) {
+			foreach ( $array as $orig_column => $order ) {
 				$orig_column = trim($orig_column);
-				$column = $this->parseColumnName($orig_column);
-				$order = trim($order);
 
-				if (is_numeric($order) && isset($alt_order_options[$order])) {
-					$order = $alt_order_options[$order];
+				$column = $this->parseColumnName( $orig_column );
+				$order = trim($order);
+				//Handle both order types.
+				if ( is_numeric($order) ) {
+					if ( isset($alt_order_options[$order]) ) {
+						$order = $alt_order_options[$order];
+					}
 				}
 
-				if ($strict == false || (
-					(is_array($fields) && (in_array($column, $fields) || in_array($orig_column, $fields))) &&
-					in_array(strtolower($order), $order_options)
-				)) {
-					// Check for any illegal semicolons in the column or order
-					if ($strict == true || (strpos($orig_column, ';') === false && strpos($order, ';') === false)) {
-						// Add to the SQL chunks for ORDER BY clause
-						$sql_chunks[] = $orig_column . ' ' . $order;
+				if ( $strict == FALSE
+						OR ( 	(
+									in_array($column, $fields)
+									OR
+									in_array($orig_column, $fields)
+								)
+								AND in_array( strtolower($order), $order_options)
+							)
+						) {
+					//Make sure ';' does not appear in the resulting order string, to help prevent attacks in non-strict mode.
+					if ( $strict == TRUE OR ( $strict == FALSE AND strpos( $orig_column, ';') === FALSE AND strpos( $order, ';') === FALSE ) ) {
+						$sql_chunks[] = $orig_column.' '.$order;
 					} else {
-						Debug::text('ERROR: Found ";" in SQL order string: ' . $orig_column . ' Order: ' . $order, __FILE__, __LINE__, __METHOD__, 10);
+						Debug::text('ERROR: Found ";" in SQL order string: '. $orig_column .' Order: '. $order, __FILE__, __LINE__, __METHOD__,10);
 					}
 				} else {
-					Debug::text('Invalid Sort Column/Order: ' . $column . ' Order: ' . $order, __FILE__, __LINE__, __METHOD__, 10);
+					Debug::text('Invalid Sort Column/Order: '. $column .' Order: '. $order, __FILE__, __LINE__, __METHOD__,10);
 				}
-
 			}
 
-			if (isset($sql_chunks)) {
+			if ( isset($sql_chunks) ) {
 				$sql = implode(',', $sql_chunks);
-				dd($sql);
-				return ' order by ' . $sql;
+
+				return ' order by '. $this->db->escape( $sql );
 			}
 		}
 
 		return FALSE;
 	}
-*/
-
-	protected function getSortSQL($array, $strict = true, $additional_fields = null)
-	{
-		if (!is_array($array)) {
-			return false;
-		}
-
-		$array = $this->convertFlexArray($array);
-		$alt_order_options = [1 => 'asc', -1 => 'desc'];
-		$order_options = ['asc', 'desc'];
-		$rs = $this->getEmptyRecordSet();
-		$fields = $this->getRecordSetColumnList($rs);
-		$sql_chunks = [];
-
-		if (is_array($additional_fields)) {
-			foreach ($additional_fields as $orig_column => $order) {
-				if (is_numeric($orig_column)) {
-					$sql_chunks[] = trim($order) . ' ASC';
-				} else {
-					$sql_chunks[] = "`" . $orig_column . "` " . strtoupper(trim($order));
-				}
-			}
-		}
-
-		foreach ($array as $orig_column => $order) {
-			$orig_column = trim($orig_column);
-			$column = $this->parseColumnName($orig_column);
-			$order = trim($order);
-
-			if (is_numeric($order) && isset($alt_order_options[$order])) {
-				$order = $alt_order_options[$order];
-			}
-
-			if (
-				!$strict || (
-					is_array($fields) && (in_array($column, $fields) || in_array($orig_column, $fields)) &&
-					in_array(strtolower($order), $order_options)
-				)
-			) {
-				if (!$strict || (strpos($orig_column, ';') === false && strpos($order, ';') === false)) {
-					$sql_chunks[] = "$orig_column $order";
-				} else {
-					Debug::text("ERROR: Found ';' in SQL order string: $orig_column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
-				}
-			} else {
-				Debug::text("Invalid Sort Column/Order: $column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
-			}
-		}
-
-		if (!empty($sql_chunks)) {
-			return ' ORDER BY ' . implode(',', $sql_chunks);
-		}
-
-		return false;
-	}
-
-
-
 
 	public function getColumnList() {
 		if ( is_array($this->data) AND count($this->data) > 0) {
@@ -1245,11 +1147,8 @@ class Factory {
 		return FALSE;
 	}
 
-	/*
 	public function getEmptyRecordSet($id = NULL) {
 		global $profiler, $config_vars;
-
-		$profiler  = new Profiler();
 		$profiler->startTimer( 'getEmptyRecordSet()' );
 
 		if ($id == NULL) {
@@ -1276,20 +1175,20 @@ class Factory {
 
 			if ( $id == -1 AND isset($config_vars['cache']['enable']) AND $config_vars['cache']['enable'] == TRUE ) {
 
-				
+				/*
 				//Try to use Cache Lite instead of ADODB, to avoid cache write errors from causing a transaction rollback. It should be faster too.
 				//However I think there is some issues with storing the record set, as ADODB goes to great lengths to avoid straight serialize/unserialize.
-				//$cache_id = 'empty_rs_'. $this->table .'_'. $id;
-				//$rs = $this->getCache($cache_id);
-				//if ( $rs === FALSE ) {
-				//	$rs = DB::select($query);
-				//	$this->saveCache($rs,$cache_id);
-				//}
-				
+				$cache_id = 'empty_rs_'. $this->table .'_'. $id;
+				$rs = $this->getCache($cache_id);
+				if ( $rs === FALSE ) {
+					$rs = $this->db->Execute($query);
+					$this->saveCache($rs,$cache_id);
+				}
+				*/
 				$save_error_handlers = $this->db->IgnoreErrors(); //Prevent a cache write error from causing a transaction rollback.
 				try {
 					$rs = $this->db->CacheExecute(604800, $query);
-				} catch (Throwable $e) {
+				} catch (Exception $e) {
 					if ( $e->getCode() == -32000 OR $e->getCode() == -32001 ) { //Cache write error/cache file lock error.
 						//Likely a cache write error occurred, fall back to non-cached query and log this error.
 						Debug::Text('ERROR: Unable to write cache file, likely due to permissions or locking! Code: '. $e->getCode() .' Msg: '. $e->getMessage(), __FILE__, __LINE__, __METHOD__,10);
@@ -1297,17 +1196,16 @@ class Factory {
 
 					//Execute non-cached query
 					try {
-    					$rs = DB::select($query);
-					} catch (Throwable $e) {
+						$rs = $this->db->Execute($query);
+					} catch (Exception $e) {
 						throw new DBError($e);
 					}
 				}
 				$this->db->IgnoreErrors( $save_error_handlers ); //Prevent a cache write error from causing a transaction rollback.
 			} else {
-				//$rs = DB::select($query);
-				$rs = DB::select($query);
+				$rs = $this->db->Execute($query);
 			}
-		} catch (Throwable $e) {
+		} catch (Exception $e) {
 			throw new DBError($e);
 		}
 
@@ -1332,7 +1230,7 @@ class Factory {
 		try {
 			$rs = $this->getEmptyRecordSet( $this->getId() );
 			$this->old_data = $rs->fields; //Store old data in memory for detailed audit log.
-		} catch (Throwable $e) {
+		} catch (Exception $e) {
 			throw new DBError($e);
 		}
 		if (!$rs) {
@@ -1348,7 +1246,7 @@ class Factory {
 		$query = $this->db->GetUpdateSQL($rs, $this->data);
 
 		//No updates are fine. We still want to run postsave() etc...
-		if (empty($query) || $query === FALSE) {
+		if ($query === FALSE) {
 			$query = TRUE;
 		} else {
 			Debug::text('Data changed, set updated date: ', __FILE__, __LINE__, __METHOD__, 9);
@@ -1366,14 +1264,14 @@ class Factory {
 
 		try {
 			$rs = $this->getEmptyRecordSet();
-		} catch (Throwable $e) {
+		} catch (Exception $e) {
 			throw new DBError($e);
 		}
 
 		//Use table name instead of recordset, especially when using CacheLite for caching empty recordsets.
 		//$query = $this->db->GetInsertSQL($rs, $this->data);
 		$query = $this->db->GetInsertSQL($this->getTable(), $this->data);
-
+                
                // echo $query;
                // exit();
 
@@ -1381,179 +1279,21 @@ class Factory {
 
 		return $query;
 	}
-	*/
 
-	
-	public function getEmptyRecordSet(?int $id = null): object
-    {
-        Log::debug('Starting getEmptyRecordSet for table: ' . $this->getTable() . ', ID: ' . ($id ?? -1));
+	function StartTransaction() {
+		Debug::text('StartTransaction(): Transaction Count: '. $this->db->transCnt .' Trans Off: '. $this->db->transOff, __FILE__, __LINE__, __METHOD__, 9);
+		return $this->db->StartTrans();
+	}
 
-        // Default to -1 if ID is null
-        $id = $id ?? -1;
-        $id = (int)$id;
+	function FailTransaction() {
+		Debug::text('FailTransaction(): Transaction Count: '. $this->db->transCnt .' Trans Off: '. $this->db->transOff, __FILE__, __LINE__, __METHOD__, 9);
+		return $this->db->FailTrans();
+	}
 
-        // Get column list or use all columns
-        $column_list = $this->getColumnList();
-        $column_str = is_array($column_list) ? implode(',', $column_list) : '*';
-
-        try {
-            $query = "SELECT {$column_str} FROM {$this->getTable()} WHERE id = {$id}";
-
-            if ($id == -1 && config('cache.enabled', false)) {
-                $cache_id = "empty_rs_{$this->getTable()}_{$id}";
-                
-                // Try to get from cache
-                $rs = Cache::remember($cache_id, 604800, function () use ($query) {
-                    try {
-                        $result = DB::select($query);
-                        return $result ? (object)$result[0] : (object)[];
-                    } catch (QueryException $e) {
-                        Log::error('Database error in non-cached query: ' . $e->getMessage());
-                        throw new \Exception('Database error: ' . $e->getMessage());
-                    }
-                });
-            } else {
-                // Execute non-cached query
-                $result = DB::select($query);
-                $rs = $result ? (object)$result[0] : (object)[];
-            }
-
-            Log::debug('Completed getEmptyRecordSet for table: ' . $this->getTable() . ', ID: ' . $id);
-            return $rs;
-
-        } catch (QueryException $e) {
-            Log::error('Database error in getEmptyRecordSet: ' . $e->getMessage());
-            throw new \Exception('Database error: ' . $e->getMessage());
-        } catch (\Exception $e) {
-            Log::error('Cache or database error in getEmptyRecordSet: ' . $e->getMessage());
-            throw new \Exception('Error: ' . $e->getMessage());
-        }
-    }
-
-    private function getUpdateQuery(?array $data = null): bool|string
-    {
-        try {
-            // Get existing record
-            $rs = $this->getEmptyRecordSet($this->getId());
-            
-            if (!$rs || empty((array)$rs)) {
-                Log::warning('No record found for ID: ' . $this->getId() . '. Consider inserting instead.');
-                return false;
-            }
-
-            // Store old data for audit logging
-            $this->old_data = (array)$rs;
-
-            // Prepare data to update
-            $dataToUpdate = $data ?? $this->data;
-
-            // Check if data has changed
-            $changes = array_diff_assoc($dataToUpdate, $this->old_data);
-
-            if (empty($changes)) {
-                Log::debug('No changes detected for ID: ' . $this->getId());
-                return true; // No changes, return true to allow post-save operations
-            }
-
-            // Validate table name
-            $table = $this->getTable();
-            if (empty($table)) {
-                throw new \Exception('Table name is empty or not set');
-            }
-
-            // Build update query with actual values
-            $setClauses = [];
-            foreach ($changes as $column => $value) {
-                if (is_null($value)) {
-                    $setClauses[] = "`{$column}` = NULL";
-                } elseif (is_bool($value)) {
-                    $setClauses[] = "`{$column}` = " . ($value ? '1' : '0');
-                } elseif (is_numeric($value)) {
-                    $setClauses[] = "`{$column}` = {$value}";
-                } else {
-                    $setClauses[] = "`{$column}` = " . DB::getPdo()->quote($value);
-                }
-            }
-
-            $query = "UPDATE {$table} SET " . implode(', ', $setClauses) . " WHERE id = " . (int)$this->getId();
-			
-            Log::debug('Update query prepared', ['query' => $query]);
-
-            return $query;
-
-        } catch (QueryException $e) {
-            Log::error('Database error in getUpdateQuery: ' . $e->getMessage());
-            throw new \Exception('Database error: ' . $e->getMessage());
-        } catch (\Exception $e) {
-            Log::error('Error in getUpdateQuery: ' . $e->getMessage());
-            throw new \Exception('Error: ' . $e->getMessage());
-        }
-    }
-
-    private function getInsertQuery(?array $data = null): string
-    {
-        try {
-            // Validate table name
-            $table = $this->getTable();
-            if (empty($table)) {
-                throw new \Exception('Table name is empty or not set');
-            }
-
-            // Prepare data to insert
-            $dataToInsert = $data ?? $this->data;
-
-            if (empty($dataToInsert)) {
-                throw new \Exception('No data provided for insert');
-            }
-
-            // Build insert query with actual values
-            $columns = array_keys($dataToInsert);
-            $values = array_map(function ($value) {
-                // Properly escape values based on type
-                if (is_null($value)) {
-                    return 'NULL';
-                } elseif (is_bool($value)) {
-                    return $value ? '1' : '0';
-                } elseif (is_numeric($value)) {
-                    return $value;
-                } else {
-                    return DB::getPdo()->quote($value);
-                }
-            }, array_values($dataToInsert));
-
-            $query = "INSERT INTO {$table} (`" . implode('`, `', $columns) . "`) VALUES (" . implode(', ', $values) . ")";
-
-            Log::debug('Insert query prepared', ['query' => $query]);
-
-            return $query;
-
-        } catch (QueryException $e) {
-            Log::error('Database error in getInsertQuery: ' . $e->getMessage());
-            throw new \Exception('Database error: ' . $e->getMessage());
-        } catch (\Exception $e) {
-            Log::error('Error in getInsertQuery: ' . $e->getMessage());
-            throw new \Exception('Error: ' . $e->getMessage());
-        }
-    }
-	
-
-	public function startTransaction()
-    {
-        Log::debug('StartTransaction: Starting database transaction.');
-        DB::beginTransaction();
-    }
-
-    public function failTransaction()
-    {
-        Log::debug('FailTransaction: Rolling back database transaction.');
-        DB::rollBack();
-    }
-
-    public function commitTransaction()
-    {
-        Log::debug('CommitTransaction: Committing database transaction.');
-        DB::commit();
-    }
+	function CommitTransaction() {
+		Debug::text('CommitTransaction(): Transaction Count: '. $this->db->transCnt .' Trans Off: '. $this->db->transOff, __FILE__, __LINE__, __METHOD__, 9);
+		return $this->db->CompleteTrans();
+	}
 
 	//Call class specific validation function just before saving.
 	function isValid() {
@@ -1561,104 +1301,19 @@ class Factory {
 			Debug::text('Calling Validate()' , __FILE__, __LINE__, __METHOD__,10);
 			$this->Validate();
 		}
+
         return $this->Validator->isValid();
 	}
 
 	function getNextInsertId() {
-		// Implement your logic to get next insert ID
-        return DB::table($this->getTable())->max('id') + 1;
+		return $this->db->GenID( $this->pk_sequence_name );
 	}
 
-	/*
-	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
-		DB::beginTransaction();
-		try {
-			// Validate the model before saving (if not deleted)
-			if (!$this->getDeleted() && !$this->isValid()) {
-				throw new \Exception('Invalid Data, not saving.');
-			}
-			// Get the table name dynamically
-			$table = $this->getTable();
-
-			// Determine if we're inserting a new record or updating an existing one
-			if ($this->isNew($force_lookup)) {
-				//Insert
-				$time = TTDate::getTime();
-
-				if ( empty($this->getCreatedDate()) ) {
-					$this->setCreatedDate($time);
-				}
-
-				if ( empty($this->getCreatedBy()) ) {
-					$this->setCreatedBy();
-				}
-
-				//Set updated date at the same time, so we can easily select last
-				//updated, or last created records.
-				$this->setUpdatedDate($time);
-				$this->setUpdatedBy();
-
-				unset($time);
-
-				// Perform the insert and get the insert ID
-				$insert_id = DB::table($table)->insertGetId($this->data);
-				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
-
-				// Set the insert ID in the model
-				$this->setId($insert_id);
-
-				// Return the ID of the newly created record
-				$retval = (int)$insert_id;
-				$log_action = 10; // 'Add'
-				// echo 'check error: ';
-			} else {
-				Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
-
-				// Perform the update
-				DB::table($table)
-					->where('id', $this->getId())
-					->update($this->data);
-
-				// Return true to indicate success
-				$retval = true;
-				$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
-			}
-
-			
-			if ( method_exists($this,'addLog') ) {
-				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
-				//tables like PayPeriodSchedule, so addLog() can't get the user information.
-				$this->addLog( $log_action );
-			}
-			
-
-			// Clear the data if requested
-			if ($reset_data) {
-				$this->clearData();
-			}
-
-			// Commit the transaction
-			DB::commit();
-
-			return $retval;
-		} catch (\Exception $e) {
-			// Roll back the transaction on error
-			DB::rollBack();
-			Log::error('Save failed: ' . $e->getMessage());
-			print_r($e->getMessage());exit;
-			throw new \Exception('Save failed.');
-		}
-
-	}
-	*/
-
-	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
-		//$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
-		//$caller = $backtrace[1] ?? [];
-		//dd($caller);
-		
+	//Determines to insert or update, and does it.
+	//Have this handle created, createdby, updated, updatedby.
+	function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		$this->StartTransaction();
-		
+
 		//Run Pre-Save function
 		//This is called before validate so it can do extra calculations,etc before validation.
 		//Should this AND validate() NOT be called when delete flag is set?
@@ -1668,93 +1323,85 @@ class Factory {
 				throw new GeneralError('preSave() failed.');
 			}
 		}
-		
+
 		//Don't validate when deleting, so we can delete records that may have some invalid options.
 		//However we can still manually call this function to check if we need too.
 		if ( $this->getDeleted() == FALSE AND $this->isValid() === FALSE ) {
 			throw new GeneralError('Invalid Data, not saving.');
 		}
-		
 
-		if ($this->isNew($force_lookup)) {
+		//Should we insert, or update?
+		if ( $this->isNew( $force_lookup ) ) {
 			//Insert
 			$time = TTDate::getTime();
 
-			if ( empty($this->getCreatedDate()) ) {
+			if ( $this->getCreatedDate() == '' ) {
 				$this->setCreatedDate($time);
 			}
-			
-			if ( empty($this->getCreatedBy()) ) {
+			if ( $this->getCreatedBy() == '' ) {
 				$this->setCreatedBy();
 			}
-			
+
 			//Set updated date at the same time, so we can easily select last
 			//updated, or last created records.
 			$this->setUpdatedDate($time);
 			$this->setUpdatedBy();
 
 			unset($time);
+
 			$insert_id = $this->getID();
-			if( empty($insert_id) || $insert_id == FALSE ){
+			if ( $insert_id == FALSE ) {
 				//Append insert ID to data array.
 				$insert_id = $this->getNextInsertId();
 
 				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
 				$this->setId($insert_id);
 			}
-			
+
 			try {
 				$query = $this->getInsertQuery();
 			} catch (Exception $e) {
-				dd($e);
-				throw new \Exception('Save failed.');
+				throw new DBError($e);
 			}
-			
+
 			$retval = (int)$insert_id;
-			$log_action = 10; // 'Add'
+			$log_action = 10; //'Add';
 		} else {
 			Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
-			
+
 			//Update
 			$query = $this->getUpdateQuery(); //Don't pass data, too slow
 
-			// Return true to indicate success
-			$retval = true;
-			$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
+			//Debug::Arr($this->data, 'Save(): Query: ', __FILE__, __LINE__, __METHOD__,10);
+			$retval = TRUE;
+
+			if ( $this->getDeleted() === TRUE ) {
+				$log_action = 30; //'Delete';
+			} else {
+				$log_action = 20; //'Edit';
+			}
 		}
+
+		//Debug::text('Save(): Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
+		//Debug::Arr($query, 'Save(): Query: ', __FILE__, __LINE__, __METHOD__,10);
 
 		if ( $query != '' OR $query === TRUE ) {
 
 			if ( is_string($query) AND $query != '' ) {
 				try {
-					//dd($query);
-					// Execute the insert query
-					DB::statement($query);
-					Log::debug('Insert query executed', ['query' => $query]);
-					
-					// Get the inserted ID
-					//$insert_id = DB::getPdo()->lastInsertId();
-					//$this->setId((int)$insert_id);
-
+					$this->db->Execute($query);
 				} catch (Exception $e) {
 					//Comment this out to see some errors on MySQL.
 					//throw new DBError($e);
-
-					// Roll back the transaction on error
-					DB::rollBack();
-					Log::error('Save failed: ' . $e->getMessage());
-					dd($e->getMessage());
-					throw new \Exception('Save failed.');
-
-					return false;
 				}
 			}
+
 			if ( method_exists($this,'addLog') ) {
 				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
 				//tables like PayPeriodSchedule, so addLog() can't get the user information.
 				$this->addLog( $log_action );
 			}
-			
+
 			//Run postSave function.
 			if ( method_exists($this,'postSave') ) {
 				Debug::text('Calling postSave()' , __FILE__, __LINE__, __METHOD__,10);
@@ -1763,14 +1410,16 @@ class Factory {
 				}
 			}
 
-			// Clear the data if requested
-			if ($reset_data) {
+			//Clear the data.
+			if ( $reset_data == TRUE ) {
 				$this->clearData();
 			}
 			//IF YOUR NOT RESETTING THE DATA, BE SURE TO CLEAR THE OBJECT MANUALLY
 			//IF ITS IN A LOOP!! VERY IMPORTANT!
 
 			$this->CommitTransaction();
+
+			//Debug::Arr($retval, 'Save Retval: ', __FILE__, __LINE__, __METHOD__,10);
 
 			return $retval;
 		}
@@ -1780,8 +1429,6 @@ class Factory {
 		throw new GeneralError('Save(): failed.');
 
 		return FALSE; //This should return false here?
-
-
 	}
 
 	function Delete() {
@@ -1789,13 +1436,13 @@ class Factory {
 
 		if ( $this->getId() !== FALSE ) {
 			$ph = array(
-						':id' => $this->getId(),
+						'id' => $this->getId(),
 						);
 
-			$query = 'DELETE FROM '. $this->getTable() .' WHERE id = :id';
+			$query = 'DELETE FROM '. $this->getTable() .' WHERE id = ?';
 
 			try {
-				DB::delete($query, $ph);
+				$this->db->Execute($query, $ph);
 
 				if ( method_exists($this,'addLog') ) {
 					//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
@@ -1803,7 +1450,7 @@ class Factory {
 					$this->addLog( 31 );
 				}
 
-			} catch (Throwable $e) {
+			} catch (Exception $e) {
 				throw new DBError($e);
 			}
 
@@ -1818,9 +1465,8 @@ class Factory {
 			return FALSE;
 		}
 
-		foreach( $lf->rs as $lf_obj ) {
-			$lf->data = (array)$lf_obj;
-			$retarr[] = $lf->getID();
+		foreach( $lf as $lf_obj ) {
+			$retarr[] = $lf_obj->getID();
 		}
 
 		if ( isset($retarr) ) {
@@ -1841,8 +1487,8 @@ class Factory {
 			Debug::text('Bulk Delete Query: '. $query, __FILE__, __LINE__, __METHOD__, 9);
 
 			try {
-				DB::delete($query, $ph);
-			} catch (Throwable $e) {
+				$this->db->Execute($query, $ph);
+			} catch (Exception $e) {
 				throw new DBError($e);
 			}
 
@@ -1868,52 +1514,5 @@ class Factory {
 	final function getCurrent() {
 		return $this->getIterator()->current();
 	}
-
-	public static function checkTableExists($table_name)
-	{
-		return Schema::hasTable($table_name);
-	}
-
-	//===========================================================================
-	// added by desh(2025-03-18)
-	//===========================================================================
-	public function getCurrentUser(){
-		return $this->currentUser;
-	}
-	public function getProfiler(){
-		return $this->profiler;
-	}
-	public function getUserPrefs(){
-		return $this->userPrefs;
-	}
-	public function getCurrentCompany(){
-		return $this->currentCompany;
-	}
-	public function getPermission(){
-		return $this->permission;
-	}
-	public function getConfigVars(){
-		return $this->configVars;
-	}
-
-	static function convertToSeconds($time) {
-		// Validate the format of the time (hh:mm)
-		if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time)) {
-			throw new Exception("Invalid time format. Expected hh:mm (e.g., 05:00).");
-		}
-
-		list($hours, $minutes) = explode(':', $time);
-		return ($hours * 3600) + ($minutes * 60);
-	}
-
-	static function convertToHoursAndMinutes($seconds) {
-		$hours = floor($seconds / 3600);  // Get the total hours
-		$minutes = floor(($seconds % 3600) / 60);  // Get the remaining minutes
-
-		return sprintf("%02d:%02d", $hours, $minutes);  // Return in hh:mm format
-	}
-
-	//===========================================================================
-
 }
 ?>

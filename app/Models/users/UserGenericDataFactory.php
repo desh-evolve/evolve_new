@@ -45,7 +45,7 @@ class UserGenericDataFactory extends Factory {
 															('Invalid Company')
 															) ) {
 			$this->data['company_id'] = $id;
-
+			
 			return TRUE;
 		}
 
@@ -61,7 +61,7 @@ class UserGenericDataFactory extends Factory {
 	}
 	function setUser($id) {
 		$id = trim($id);
-
+		
 		$ulf = new UserListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'user',

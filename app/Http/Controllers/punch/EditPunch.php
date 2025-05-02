@@ -381,15 +381,16 @@ class EditPunch extends Controller
 			}
 
 			if ( $pf->isNew() ) {
-				$pf->setActualTimeStamp( $time_stamp, 'timestamp' );
-				$pf->setOriginalTimeStamp( $pf->getTimeStamp(), 'timestamp' );
+				$pf->setActualTimeStamp( $time_stamp );
+				$pf->setOriginalTimeStamp( $pf->getTimeStamp() );
 			}
-
 			if ( $pf->isValid() == TRUE ) {
-				if ( $pf->Save( FALSE ) == TRUE ) {
+				
+				if ( $pf->Save( FALSE )) {
+
 					$pcf = new PunchControlFactory();
-					$pcf->setId( $pf->getPunchControlID() );
 					$pcf->setPunchObject( $pf );
+					$pcf->setId( $pf->getPunchControlID() );
 
 					if ( $i == 0 AND $pc_data['user_date_id'] != '' ) {
 						//This is important when editing a punch, without it there can be issues calculating exceptions
@@ -405,16 +406,16 @@ class EditPunch extends Controller
 						$pcf->setDepartment( $pc_data['department_id'] );
 					}
 					if ( isset($pc_data['job_id']) ) {
-						$pcf->setJob( $pc_data['job_id'] );
+						$pcf->setJob( $pc_data['job_id'] ?? 0 );
 					}
 					if ( isset($pc_data['job_item_id']) ) {
-						$pcf->setJobItem( $pc_data['job_item_id'] );
+						$pcf->setJobItem( $pc_data['job_item_id'] ?? 0  );
 					}
 					if ( isset($pc_data['quantity']) ) {
-						$pcf->setQuantity( $pc_data['quantity'] );
+						$pcf->setQuantity( $pc_data['quantity'] ?? 0  );
 					}
 					if ( isset($pc_data['bad_quantity']) ) {
-						$pcf->setBadQuantity( $pc_data['bad_quantity'] );
+						$pcf->setBadQuantity( $pc_data['bad_quantity'] ?? 0  );
 					}
 					if ( isset($pc_data['note']) ) {
 						$pcf->setNote( $pc_data['note'] );
@@ -443,7 +444,7 @@ class EditPunch extends Controller
 					$pcf->setEnableCalcWeeklySystemTotalTime( TRUE );
 					$pcf->setEnableCalcUserDateTotal( TRUE );
 					$pcf->setEnableCalcException( TRUE );
-
+					
 					if ( $pcf->isValid() == TRUE ) {
 						Debug::Text(' Punch Control is valid, saving...: ', __FILE__, __LINE__, __METHOD__,10);
 

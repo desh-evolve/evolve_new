@@ -20,6 +20,7 @@ use App\Models\Policy\ExceptionPolicyFactory;
 use App\Models\Policy\HolidayPolicyListFactory;
 use App\Models\Punch\PunchListFactory;
 use App\Models\Company\BranchListFactory;
+use App\Models\Department\DepartmentListFactory;
 use DateInterval;
 use DateTime;
 
@@ -636,7 +637,7 @@ class UserDateTotalFactory extends Factory {
             $id = 0;
         }
 
-        $dlf = new DepartmentListFactory();
+        $dlf = new DepartmentListFactory(); 
 
         if ($id == 0
                 OR
@@ -1530,26 +1531,18 @@ class UserDateTotalFactory extends Factory {
                 }
 
                 if (is_numeric($trigger_time)) {
-                    $trigger_time_arr[] = array('calculation_order' => $otp_calculation_order[$otp_obj->getType()], 'trigger_time' => $trigger_time, 'max_time' => $max_time, 'over_time_policy_id' => $otp_obj->getId(), 'over_time_policy_type_id' => $otp_obj->getType(), 'combined_rate' => ($otp_obj->getRate() + $otp_obj->getAccrualRate()));
+                    $trigger_time_arr[] = array('calculation_order' => $otp_calculation_order[$otp_obj->getType()], 'trigger_time' => $trigger_time, 'max_time' => $max_time ?? 0, 'over_time_policy_id' => $otp_obj->getId(), 'over_time_policy_type_id' => $otp_obj->getType(), 'combined_rate' => ($otp_obj->getRate() + $otp_obj->getAccrualRate()));
                 }
 
 
 
                 unset($trigger_time);
             }
-//            die;
-
-            // exit();
-            //echo '<br>$weekly_total<br>';
-            //print_r($$weekly_total);
-
 
             if (isset($trigger_time_arr)) {
                 $trigger_time_arr = $this->processTriggerTimeArray($trigger_time_arr, $weekly_total);
             }
-//            echo '<pre>trigger arrayafinal ::';
-//            print_r($trigger_time_arr);
-            //Debug::Arr($trigger_time_arr, 'Trigger Time Array', __FILE__, __LINE__, __METHOD__, 10);
+
         } else {
             Debug::text('&nbsp;&nbsp;&nbsp;&nbsp;No OverTime Policies found for this user.', __FILE__, __LINE__, __METHOD__, 10);
         }
@@ -4637,7 +4630,8 @@ class UserDateTotalFactory extends Factory {
         $profiler->stopTimer('UserDateTotal::calcSystemTotalTime() - Part 3');
 
         if ($this->getEnableCalcException() == TRUE) {
-            ExceptionPolicyFactory::calcExceptions($this->getUserDateID(), $this->getEnablePreMatureException());
+            $epf = new ExceptionPolicyFactory;
+            $epf->calcExceptions($this->getUserDateID(), $this->getEnablePreMatureException());
         }
 
         return $return_value;
@@ -4752,7 +4746,8 @@ class UserDateTotalFactory extends Factory {
         }
 
         if (!isset(self::$calc_exception) AND $enable_exception == TRUE) {
-            ExceptionPolicyFactory::calcExceptions($user_date_id, $enable_premature_exceptions, $enable_future_exceptions);
+            $epf = new ExceptionPolicyFactory;
+            $epf->calcExceptions($user_date_id, $enable_premature_exceptions, $enable_future_exceptions);
         }
 
         return TRUE;

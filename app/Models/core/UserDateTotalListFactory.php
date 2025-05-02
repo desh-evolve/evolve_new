@@ -931,11 +931,11 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$udf = new UserDateFactory();
 		$otpf = new OverTimePolicyFactory();
-
+		
 		$ph = array(
 					':user_id' => $user_id,
-					':week_start_epoch' => $this->db->BindDate( $week_start_epoch ),
-					':epoch' =>  $this->db->BindDate( $epoch ),
+					':week_start_epoch' => date( 'Y-m-d', $week_start_epoch ),
+					':epoch' =>  date( 'Y-m-d', $epoch ),
 					);
 
 		//DO NOT Include paid absences. Only count regular time towards weekly overtime.
@@ -1035,8 +1035,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					':company_id' => $company_id,
 					':user_id' => $user_id,
 					':status_id' => $status,
-                    ':start_date' => Carbon::parse( $end_date )->toDateTimeString(),
-					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+					':end_date' => date('Y-m-d', $end_date),
 					);
 
 		//Order by a.over_time_policy last so we never leave the ordering up to the database. This can cause
@@ -4595,7 +4595,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$uf = new UserFactory();
 		$udf = new UserDateFactory();
 
-			$ph = array($this->db->BindDate($date_stamp));
+			$ph = array(date( 'Y-m-d', $date_stamp));
 			$ph[] = $type_id;
 
 		$query = '

@@ -186,8 +186,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('new_hire_defaults.index') }}"
-                        class="nav-link {{ request()->routeIs('new_hire_defaults.index') ? 'active' : '' }}">
+                    <a href=""
+                        class="nav-link ">
                         New Hire Defaults
                     </a>
                 </li>
@@ -195,8 +195,8 @@
                 <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
 
                 <li class="nav-item">
-                    <a href="{{ route('bank_account.company', ['company_id' => $current_company->getId()]) }}"
-                       class="nav-link {{ request()->routeIs('bank_account.company') ? 'active' : '' }}">
+                    <a href=""
+                       class="nav-link ">
                        Company Bank Information
                     </a>
                 </li>
@@ -207,8 +207,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('company.other_field.index') }}"
-                        class="nav-link {{ request()->routeIs('company.other_field.index') ? 'active' : '' }}">
+                    <a href=""
+                        class="nav-link ">
                         Other Fields
                     </a>
                 </li>
@@ -366,14 +366,14 @@
                     <li class="nav-item"><a href="#" class="nav-link">Messages</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
                     <li class="nav-item">
-                        <a href="{{ route('user_preference.index') }}"
-                            class="nav-link {{ request()->routeIs('user_preference.index') ? 'active' : '' }}">
+                        <a href=""
+                            class="nav-link ">
                             Preferences
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('user.web_password.index') }}"
-                            class="nav-link {{ request()->routeIs('user.web_password.index') ? 'active' : '' }}">
+                        <a href=""
+                            class="nav-link ">
                             Web Password
                         </a>
                     </li>
@@ -381,8 +381,8 @@
                     <li class="nav-item"><a href="#" class="nav-link">Quick Punch Password</a></li>
 
                     <li class="nav-item">
-                        <a href="{{ route('bank_account.user', ['user_id' => $current_user->getId()]) }}"
-                            class="nav-link {{ request()->routeIs('bank_account.user') ? 'active' : '' }}">
+                        <a href=""
+                            class="nav-link ">
                             Bank Information
                         </a>
                     </li>
