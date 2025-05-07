@@ -65,7 +65,11 @@
                                     class="nav-link {{ request()->routeIs('attendance.punchlist') ? 'active' : '' }}">Punches
                                 </a>
                             </li>
-                            <li class="nav-item"><a href="#" class="nav-link">Mass Punch</a></li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.masspunch.add') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.masspunch.add') ? 'active' : '' }}">Mass Punch
+                                </a>
+                            </li>
 
                             <li class="nav-item">
                                 <a href="{{ route('attendance.requests') }}"

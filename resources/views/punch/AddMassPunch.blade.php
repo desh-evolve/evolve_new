@@ -15,8 +15,8 @@
                     
                     <form 
                         method="POST"
-                        name="wage"
-                        action="{{ route('attendance.masspunch.submit') }}"
+                        name="mass_punch"
+                        action="{{ route('attendance.masspunch.add') }}"
                     >
                         @csrf
                         <div id="contentBoxTwoEdit">
@@ -297,7 +297,7 @@
                         </div>
             
                         <div id="contentBoxFour">
-                            <input type="submit" class="btn btn-primary btn-sm" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
+                            <input type="submit" class="btn btn-primary btn-sm" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
                         </div>
                     
                     </form>
