@@ -340,6 +340,15 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
 
 
  // ===============================================================================================================================
+ // User jobhistory
+ // ===============================================================================================================================
+ Route::get('/user/jobhistory/{user_id?}', [KpiUserList::class, 'index'])->name('user.jobhistory.index');
+ Route::get('/user/jobhistory/add/{user_id?}', [KpiUserList::class, 'add'])->name('user.jobhistory.add');
+ Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
+ Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
+ Route::delete('/user/jobhistory/delete/{id}', [KpiUserList::class, 'delete'])->name('user.jobhistory.delete');
+
+ // ===============================================================================================================================
  // Company Other Fields
  // ===============================================================================================================================
  Route::get('/company/other_field', [OtherFieldList::class, 'index'])->name('company.other_field.index');

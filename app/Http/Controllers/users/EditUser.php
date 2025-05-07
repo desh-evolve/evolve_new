@@ -33,32 +33,34 @@ use App\Models\Users\UserTitleListFactory;
 use App\Models\Users\UserWageFactory;
 use App\Models\Users\UserWageListFactory;
 use Illuminate\Support\Facades\View;
+use DateTime;
 
 class EditUser extends Controller
 {
-    protected $permission;
-    protected $currentUser;
-    protected $currentCompany;
-    protected $userPrefs;
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
 
-    public function __construct()
-    {
-        $basePath = Environment::getBasePath();
-        require_once($basePath . '/app/Helpers/global.inc.php');
-        require_once($basePath . '/app/Helpers/Interface.inc.php');
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->permission = View::shared('permission');
-        $this->currentUser = View::shared('current_user');
-        $this->currentCompany = View::shared('current_company');
-        $this->userPrefs = View::shared('current_user_prefs');
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
 
-    }
-
-    public function index($id = null) {
+	public function index($id = null)
+	{
+		$id = $_GET['id'] ?? null;
 		/*
-			if ( !$permission->Check('user','enabled')
-					OR !( $permission->Check('user','edit') OR $permission->Check('user','edit_own') OR $permission->Check('user','edit_child') OR $permission->Check('user','add')) ) {
-				$permission->Redirect( FALSE ); //Redirect
+			if ( !$this->permission->Check('user','enabled')
+					OR !( $this->permission->Check('user','edit') OR $this->permission->Check('user','edit_own') OR $this->permission->Check('user','edit_child') OR $this->permission->Check('user','add')) ) {
+				$this->permission->Redirect( FALSE ); //Redirect
 			}
 		*/
 
@@ -71,52 +73,54 @@ class EditUser extends Controller
 		$company_id = $current_company->getId();
 
 		$ulf = new UserListFactory();
-		$uf = new UserFactory(); 
+		$uf = new UserFactory();
 		$hlf = new HierarchyListFactory();
 
-		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId( $current_company->getId(), $current_user->getId() );
+		$this->permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId($current_company->getId(), $current_user->getId());
 		//Include current user in list.
-		if ( $permission->Check('user','edit_own') ) {
-			$permission_children_ids[] = $current_user->getId();
+		if ($this->permission->Check('user', 'edit_own')) {
+			$this->permission_children_ids[] = $current_user->getId();
 		}
-		
+
 		$action = Misc::findSubmitButton();
 
-		if ( $permission->Check('company','view') == FALSE OR $company_id == '' OR $company_id == '-1' ) {
+		if ($this->permission->Check('company', 'view') == FALSE or $company_id == '' or $company_id == '-1') {
 			$company_id = $current_company->getId();
 		}
 
-		if ( isset($id)) {
-			
-			if ( $permission->Check('company','view') ) {
-				$ulf->getById( $id )->getCurrent();
+		if (isset($id)) {
+
+			if ($this->permission->Check('company', 'view')) {
+				$ulf->getById($id)->getCurrent();
 			} else {
-				$ulf->getByIdAndCompanyId($id, $company_id );
+				$ulf->getByIdAndCompanyId($id, $company_id);
 			}
 
 			foreach ($ulf->rs as $user) {
 				$ulf->data = (array)$user;
 				$user = $ulf;
-				
-				$is_owner = $permission->isOwner( $user->getCreatedBy(), $user->getId() );
-				$is_child = $permission->isChild( $user->getId(), $permission_children_ids );
-				if ( $permission->Check('user','edit')
-						OR ( $permission->Check('user','edit_own') AND $is_owner === TRUE )
-						OR ( $permission->Check('user','edit_child') AND $is_child === TRUE ) ) {
 
-                    $user_title = NULL;
-					if ( $user->getTitle() != 0 AND is_object( $user->getTitleObject() ) ) {
+				$is_owner = $this->permission->isOwner($user->getCreatedBy(), $user->getId());
+				$is_child = $this->permission->isChild($user->getId(), $this->permission_children_ids);
+				if (
+					$this->permission->Check('user', 'edit')
+					or ($this->permission->Check('user', 'edit_own') and $is_owner === TRUE)
+					or ($this->permission->Check('user', 'edit_child') and $is_child === TRUE)
+				) {
+
+					$user_title = NULL;
+					if ($user->getTitle() != 0 and is_object($user->getTitleObject())) {
 						$user_title = $user->getTitleObject()->getName();
 					}
-					Debug::Text('Title: '. $user_title , __FILE__, __LINE__, __METHOD__,10);
+					Debug::Text('Title: ' . $user_title, __FILE__, __LINE__, __METHOD__, 10);
 
-					if ( $permission->Check('user','view_sin') == TRUE ) {
+					if ($this->permission->Check('user', 'view_sin') == TRUE) {
 						$sin_number = $user->getSIN();
 					} else {
 						$sin_number = $user->getSecureSIN();
 					}
 
-					$user_data = 	array (
+					$user_data = 	array(
 						'id' => $user->getId(),
 						'company_id' => $user->getCompany(),
 						'status' => $user->getStatus(),
@@ -128,7 +132,7 @@ class EditUser extends Controller
 						'phone_password' => $user->getPhonePassword(),
 						'ibutton_id' => $user->getIbuttonId(),
 						'employee_number_only' => $user->getEmployeeNumberOnly(),
-						'punch_machine_user_id' => $user->getPunchMachineUserID(),			
+						'punch_machine_user_id' => $user->getPunchMachineUserID(),
 
 						'title_name' => $user->getNameTitle(),
 						'first_name' => $user->getFirstName(),
@@ -144,7 +148,7 @@ class EditUser extends Controller
 						'address1' => $user->getAddress1(),
 						'address2' => $user->getAddress2(),
 						'address3' => $user->getAddress3(),
-						'nic' =>$user->getNic(),
+						'nic' => $user->getNic(),
 						'city' => $user->getCity(),
 						'province' => $user->getProvince(),
 						'country' => $user->getCountry(),
@@ -158,15 +162,15 @@ class EditUser extends Controller
 						'home_email' => $user->getHomeEmail(),
 						'work_email' => $user->getWorkEmail(),
 						'personal_email' => $user->getPersonalEmail(),
-			
-						'epf_registration_no'=>$current_company->getEpfNo(),
-						'epf_membership_no'=> $user->getEpfMembershipNo(),		
+
+						'epf_registration_no' => $current_company->getEpfNo(),
+						'epf_membership_no' => $user->getEpfMembershipNo(),
 						'birth_date' => $user->getBirthDate(),
 						'retirement_date' => $user->getRetirementDate(),
 						'hire_date' => $user->getHireDate(),
 						'termination_date' => $user->getTerminationDate(),
-						'resign_date' => $user->getResignDate(), 
-						'confirmed_date'=> $user->getConfiremedDate(), 
+						'resign_date' => $user->getResignDate(),
+						'confirmed_date' => $user->getConfiremedDate(),
 						'sin' => $sin_number,
 
 						'other_id1' => $user->getOtherID1(),
@@ -177,10 +181,10 @@ class EditUser extends Controller
 
 						'note' => $user->getNote(),
 						'hire_note' => $user->getHireNote(),
-						'termination_note' => $user->getTerminationNote(),                       
+						'termination_note' => $user->getTerminationNote(),
 
 						'immediate_contact_person' => $user->getImmediateContactPerson(),
-						'immediate_contact_no' => $user->getImmediateContactNo(),                       
+						'immediate_contact_no' => $user->getImmediateContactNo(),
 
 						'bond_period' => $user->getBondPeriod(),
 
@@ -197,140 +201,134 @@ class EditUser extends Controller
 						'updated_by' => $user->getUpdatedBy(),
 						'deleted_date' => $user->getDeletedDate(),
 						'deleted_by' => $user->getDeletedBy(),
-						
-						'user_file'=> $user->getUserFilesUrl(),
-						'file_name'=>$user->getFileName(),
-						'probation'=>$user->getProbation(),
-							
-						'basis_of_employment'=>$user->getBasisOfEmployment(),    
-						'month'=>$user->getMonth(),    
 
-						'user_template_url'=>$user->getUserTemplateUrl(),
-						'user_template_name'=>$user->getTemplateName(),							   
+						// 'user_file'=> $user->getUserFilesUrl(),
+						// 'file_name'=>$user->getFileName(),
+						'probation' => $user->getProbation(),
+
+						// 'basis_of_employment'=>$user->getBasisOfEmployment(),    
+						'month' => $user->getMonth(),
+
+						// 'user_template_url'=>$user->getUserTemplateUrl(),
+						// 'user_template_name'=>$user->getTemplateName(),							   
 
 
-						'user_id_copy_url'=>$user->getUserIdCopyUrl(),
-						'user_id_copy_name'=>$user->getUserIdCopyFileName(),
+						// 'user_id_copy_url'=>$user->getUserIdCopyUrl(),
+						// 'user_id_copy_name'=>$user->getUserIdCopyFileName(),
 
-						'user_birth_certificate_url'=>$user->getUserBirthCertificateUrl(),
-						'user_birth_certificate_name'=>$user->getUserBirthCertificateFileName(),
+						// 'user_birth_certificate_url'=>$user->getUserBirthCertificateUrl(),
+						// 'user_birth_certificate_name'=>$user->getUserBirthCertificateFileName(),
 
-						'user_gs_letter_url'=>$user->getUserGsLetterUrl(),
-						'user_gs_letter_name'=>$user->getUserGsLetterFileName(),
+						// 'user_gs_letter_url'=>$user->getUserGsLetterUrl(),
+						// 'user_gs_letter_name'=>$user->getUserGsLetterFileName(),
 
-						'user_police_report_url'=>$user->getUserPoliceReportUrl(),
-						'user_police_report_name'=>$user->getUserPoliceReportFileName(),
+						// 'user_police_report_url'=>$user->getUserPoliceReportUrl(),
+						// 'user_police_report_name'=>$user->getUserPoliceReportFileName(),
 
-						'user_nda_url'=>$user->getUserNdaUrl(),
-						'user_nda_name'=>$user->getUserNdaFileName(),
+						// 'user_nda_url'=>$user->getUserNdaUrl(),
+						// 'user_nda_name'=>$user->getUserNdaFileName(),
 
-						'bond_url'=>$user->getBondUrl(),
-						'bond_name'=>$user->getBondFileName()
-																															
+						// 'bond_url'=>$user->getBondUrl(),
+						// 'bond_name'=>$user->getBondFileName()
+
 					);
 
 					$pclfb = new PermissionControlListFactory();
-					$pclfb->getByCompanyIdAndUserId( $user->getCompany(), $id );
-					if ( $pclfb->getRecordCount() > 0 ) {
+					$pclfb->getByCompanyIdAndUserId($user->getCompany(), $id);
+					if ($pclfb->getRecordCount() > 0) {
 						$user_data['permission_control_id'] = $pclfb->getCurrent()->getId();
 					}
 
 					$ppslfb = new PayPeriodScheduleListFactory();
-					$ppslfb->getByUserId( $id );
-					if ( $ppslfb->getRecordCount() > 0 ) {
+					$ppslfb->getByUserId($id);
+					if ($ppslfb->getRecordCount() > 0) {
 						$user_data['pay_period_schedule_id'] = $ppslfb->getCurrent()->getId();
 					}
 
 					$pglf = new PolicyGroupListFactory();
-					$pglf->getByUserIds( $id );
-					if ( $pglf->getRecordCount() > 0 ) {
+					$pglf->getByUserIds($id);
+					if ($pglf->getRecordCount() > 0) {
 						$user_data['policy_group_id'] = $pglf->getCurrent()->getId();
 					}
 
 					$hclf = new HierarchyControlListFactory();
-					$hclf->getObjectTypeAppendedListByCompanyIDAndUserID( $user->getCompany(), $user->getID() );
-					$user_data['hierarchy_control'] = $hclf->getArrayByListFactory( $hclf, FALSE, TRUE, FALSE );
+					$hclf->getObjectTypeAppendedListByCompanyIDAndUserID($user->getCompany(), $user->getID());
+					$user_data['hierarchy_control'] = $hclf->getArrayByListFactory($hclf, FALSE, TRUE, FALSE);
 					unset($hclf);
 				} else {
-					$permission->Redirect( FALSE ); //Redirect
+					$this->permission->Redirect(FALSE); //Redirect
 				}
-
 			}
-			
+
 			$uwlf = new UserWageListFactory();
-			$uwlf->getByUserId($user_data['id']);                       
-			
-			foreach ($uwlf->rs as $wage) {        
+			$uwlf->getByUserId($user_data['id']);
+
+			foreach ($uwlf->rs as $wage) {
 				$uwlf->data = (array)$wage;
 				$wage = $uwlf;
-				
+
 				$wage_data = array(
 					'id' => $wage->getId(),
-					'user_id' => $wage->getUser(),										
-					'wage' => Misc::removeTrailingZeros( $wage->getWage() )									
+					'user_id' => $wage->getUser(),
+					'wage' => Misc::removeTrailingZeros($wage->getWage())
 				);
 			}
+		} elseif ($action == 'submit') {
+			Debug::Text('ID Not set', __FILE__, __LINE__, __METHOD__, 10);
 
-		} elseif ( $action == 'submit') {
-			Debug::Text('ID Not set', __FILE__, __LINE__, __METHOD__,10);
+			if (isset($user_obj)) {
+				Debug::Text('User Object set', __FILE__, __LINE__, __METHOD__, 10);
 
-			if ( isset($user_obj ) ) {
-				Debug::Text('User Object set', __FILE__, __LINE__, __METHOD__,10);
-
-				$user_data['is_owner'] = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getId() );
-				$user_data['is_owner'] = $permission->isChild( $user_obj->getId(), $permission_children_ids );
+				$user_data['is_owner'] = $this->permission->isOwner($user_obj->getCreatedBy(), $user_obj->getId());
+				$user_data['is_owner'] = $this->permission->isChild($user_obj->getId(), $this->permission_children_ids);
 
 				//If user doesn't have permissions to edit these values, we have to pull them
 				//out of the DB and update the array.
-				if ( !isset( $user_data['company_id'] ) ) {
+				if (!isset($user_data['company_id'])) {
 					$user_data['company_id'] = $user_obj->getCompany();
 				}
 
-				if ( !isset( $user_data['status'] ) ) {
+				if (!isset($user_data['status'])) {
 					$user_data['status'] = $user_obj->getStatus();
 				}
 
-				if ( !isset( $user_data['user_name'] ) ) {
+				if (!isset($user_data['user_name'])) {
 					$user_data['user_name'] = $user_obj->getUserName();
 				}
 
-				if ( !isset( $user_data['phone_id'] ) ) {
+				if (!isset($user_data['phone_id'])) {
 					$user_data['phone_id'] = $user_obj->getPhoneId();
 				}
 
-				if ( !isset( $user_data['hire_date'] ) ) {
+				if (!isset($user_data['hire_date'])) {
 					$user_data['hire_date'] = $user_obj->getHireDate();
 				}
 
-				if ( !isset( $user_data['birth_date'] ) ) {
+				if (!isset($user_data['birth_date'])) {
 					$user_data['birth_date'] = $user_obj->getBirthDate();
 				}
 
-				if ( !isset( $user_data['province'] ) ) {
+				if (!isset($user_data['province'])) {
 					$user_data['province'] = $user_obj->getProvince();
 				}
 
-				if ( !isset( $user_data['country'] ) ) {
+				if (!isset($user_data['country'])) {
 					$user_data['country'] = $user_obj->getCountry();
 				}
-
 			} else {
-				Debug::Text('User Object NOT set', __FILE__, __LINE__, __METHOD__,10);
-				if ( !isset( $user_data['company_id'] ) ) {
+				Debug::Text('User Object NOT set', __FILE__, __LINE__, __METHOD__, 10);
+				if (!isset($user_data['company_id'])) {
 					$user_data['company_id'] = $company_id;
 				}
-
 			}
-
-
 		} else {
-			Debug::Text('Adding new User.', __FILE__, __LINE__, __METHOD__,10);
+			Debug::Text('Adding new User.', __FILE__, __LINE__, __METHOD__, 10);
 
 			//Get New Hire Defaults.
-			$udlf = new UserDefaultListFactory(); 
-			$udlf->getByCompanyId( $company_id );
-			if ( $udlf->getRecordCount() > 0 ) {
-				Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
+			$udlf = new UserDefaultListFactory();
+			$udlf->getByCompanyId($company_id);
+			if ($udlf->getRecordCount() > 0) {
+				Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__, 10);
 				$udf_obj = $udlf->getCurrent();
 
 				$user_data = array(
@@ -349,37 +347,37 @@ class EditUser extends Controller
 					'permission_control_id' => $udf_obj->getPermissionControl(),
 					'pay_period_schedule_id' => $udf_obj->getPayPeriodSchedule(),
 					'policy_group_id' => $udf_obj->getPolicyGroup(),
-													'currency_id' => $udf_obj->getCurrency(),
+					'currency_id' => $udf_obj->getCurrency(),
 				);
 			}
 
-			if ( !isset($user_obj ) ) {
-				$user_obj = $ulf->getByIdAndCompanyId($current_user->getId(), $company_id )->getCurrent();
+			if (!isset($user_obj)) {
+				$user_obj = $ulf->getByIdAndCompanyId($this->currentUser->getId(), $company_id)->getCurrent();
 			}
 
-			if ( !isset( $user_data['company_id'] ) ) {
+			if (!isset($user_data['company_id'])) {
 				$user_data['company_id'] = $company_id;
 			}
 
-			if ( !isset( $user_data['country'] ) ) {
+			if (!isset($user_data['country'])) {
 				$user_data['country'] = 'CA';
-			}                    
-            $ulf->getHighestEmployeeNumberOnlyByCompanyId( $company_id );                       
-			if ( $ulf->getRecordCount() > 0 ) {
-				Debug::Text('Highest Employee Number: '. $ulf->getCurrent()->getEmployeeNumber(), __FILE__, __LINE__, __METHOD__,10);
-				if ( is_numeric( $ulf->getCurrent()->getEmployeeNumberOnly() ) == TRUE ) {                              
-                    $user_data['next_available_employee_number_only'] = $ulf->getCurrent()->getEmployeeNumberOnly()+1;
+			}
+			$ulf->getHighestEmployeeNumberOnlyByCompanyId($company_id);
+			if ($ulf->getRecordCount() > 0) {
+				Debug::Text('Highest Employee Number: ' . $ulf->getCurrent()->getEmployeeNumber(), __FILE__, __LINE__, __METHOD__, 10);
+				if (is_numeric($ulf->getCurrent()->getEmployeeNumberOnly()) == TRUE) {
+					$user_data['next_available_employee_number_only'] = $ulf->getCurrent()->getEmployeeNumberOnly() + 1;
 				} else {
-					Debug::Text('Highest Employee Number is not an integer.', __FILE__, __LINE__, __METHOD__,10);                                       
+					Debug::Text('Highest Employee Number is not an integer.', __FILE__, __LINE__, __METHOD__, 10);
 					$user_data['next_available_employee_number_only'] = NULL;
 				}
-			} else {                                         
-                $user_data['next_available_employee_number_only'] = 1;                            
-			}			
-			
-			
+			} else {
+				$user_data['next_available_employee_number_only'] = 1;
+			}
 
-			if ( !isset($user_data['hire_date']) OR $user_data['hire_date'] == '' ) {
+
+
+			if (!isset($user_data['hire_date']) or $user_data['hire_date'] == '') {
 				$user_data['hire_date'] = time();
 			}
 		}
@@ -387,416 +385,436 @@ class EditUser extends Controller
 
 		//Select box options;
 		$blf = new BranchListFactory();
-		$branch_options = $blf->getByCompanyIdArray( $company_id );
+		$branch_options = $blf->getByCompanyIdArray($company_id);
 
 		$dlf = new DepartmentListFactory();
-		$department_options = $dlf->getByCompanyIdArray( $company_id );
+		$department_options = $dlf->getByCompanyIdArray($company_id);
 
 		$culf = new CurrencyListFactory();
-        $culf->getByCompanyId( $company_id );
-		$currency_options = $culf->getArrayByListFactory( $culf, FALSE, TRUE );
+		$culf->getByCompanyId($company_id);
+		$currency_options = $culf->getArrayByListFactory($culf, FALSE, TRUE);
 
 		$hotf = new HierarchyObjectTypeFactory();
 		$hierarchy_object_type_options = $hotf->getOptions('object_type');
 
 		$hclf = new HierarchyControlListFactory();
-		$hclf->getObjectTypeAppendedListByCompanyID( $company_id );
-		$hierarchy_control_options = $hclf->getArrayByListFactory( $hclf, TRUE, TRUE );
-                
-                
-        $clf = new CompanyListFactory();
-        $clf->getById($company_id);
-                
-        $user_data['epf_registration_no'] =$current_company->getEpfNo();
+		$hclf->getObjectTypeAppendedListByCompanyID($company_id);
+		$hierarchy_control_options = $hclf->getArrayByListFactory($hclf, TRUE, TRUE);
+
+
+		$clf = new CompanyListFactory();
+		$clf->getById($company_id);
+
+		$user_data['epf_registration_no'] = $current_company->getEpfNo();
 
 		//Select box options;
 		$user_data['branch_options'] = $branch_options;
 		$user_data['department_options'] = $department_options;
-        $user_data['currency_options'] = $currency_options;
+		$user_data['currency_options'] = $currency_options;
 
 		$user_data['sex_options'] = $uf->getOptions('sex');
-                
-        $user_data['title_name_options'] = $uf->getOptions('title');
+
+		$user_data['title_name_options'] = $uf->getOptions('title');
 		$user_data['status_options'] = $uf->getOptions('status');
-        $user_data['religion_options'] = $uf->getOptions('religion');
-        
-        $user_data['marital_options'] = $uf->getOptions('marital');
-		
-                
-                
+		$user_data['religion_options'] = $uf->getOptions('religion');
+
+		$user_data['marital_options'] = $uf->getOptions('marital');
+
+
+
 
 		$clf = new CompanyListFactory();
 		$user_data['country_options'] = $clf->getOptions('country');
-		$user_data['province_options'] = $clf->getOptions('province', $user_data['country'] );
+		$user_data['province_options'] = $clf->getOptions('province', $user_data['country']);
 
 		$utlf = new UserTitleListFactory();
-		$user_titles = $utlf->getByCompanyIdArray( $company_id );
+		$user_titles = $utlf->getByCompanyIdArray($company_id);
 		$user_data['title_options'] = $user_titles;
 
-        $user_data['month_options'] = $uf->getOptions('month');
- 
-        $user_data['bond_period_option'] = $uf->getOptions('bond_period'); 
-                
+		$user_data['month_options'] = $uf->getOptions('month');
+
+		$user_data['bond_period_option'] = $uf->getOptions('bond_period');
+
 		//Get Permission Groups
 		$pclf = new PermissionControlListFactory();
-		$pclf->getByCompanyIdAndLevel( $company_id, $permission->getLevel() );
-		$user_data['permission_control_options'] = $pclf->getArrayByListFactory( $pclf, FALSE );
+		$pclf->getByCompanyIdAndLevel($company_id, $this->permission->getLevel());
+		$user_data['permission_control_options'] = $pclf->getArrayByListFactory($pclf, FALSE);
 
 		//Get pay period schedules
 		$ppslf = new PayPeriodScheduleListFactory();
-		$pay_period_schedules = $ppslf->getByCompanyIDArray( $company_id );
+		$pay_period_schedules = $ppslf->getByCompanyIDArray($company_id);
 		$user_data['pay_period_schedule_options'] = $pay_period_schedules;
 
 		$pglf = new PolicyGroupListFactory();
-		$policy_groups = $pglf->getByCompanyIDArray( $company_id );
+		$policy_groups = $pglf->getByCompanyIDArray($company_id);
 		$user_data['policy_group_options'] = $policy_groups;
 
 		$uglf = new UserGroupListFactory();
-		$user_data['group_options'] = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $company_id ), 'TEXT', TRUE) );
+		$user_data['group_options'] = $uglf->getArrayByNodes(FastTree::FormatArray($uglf->getByCompanyIdArray($company_id), 'TEXT', TRUE));
 
 		//Get other field names
 		$oflf = new OtherFieldListFactory();
-		$user_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $company_id, 10 );
+		$user_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray($company_id, 10);
 
 		$user_data['hierarchy_object_type_options'] = $hierarchy_object_type_options;
 		$user_data['hierarchy_control_options'] = $hierarchy_control_options;
 
 		//Company list.
-		if ( $permission->Check('company','view') ) {
+		if ($this->permission->Check('company', 'view')) {
 			$user_data['company_options'] = CompanyListFactory::getAllArray();
 		} else {
-			$user_data['company_options'] = array( $company_id => $current_company->getName() );
+			$user_data['company_options'] = array($company_id => $current_company->getName());
 		}
 
-		$user_data['user_options'] = UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE );
+		$user_data['user_options'] = UserListFactory::getArrayByListFactory($ulf, FALSE, TRUE);
 
 		$viewData['user_data'] = $user_data;
 		$viewData['uf'] = $uf;
-		
+
+		// dd($viewData);
 		return view('users/EditUser', $viewData);
 	}
 
-	public function login(){
-		if ( $permission->Check('company','view') AND $permission->Check('company','login_other_user') ) {
+	public function login()
+	{
+		if ($this->permission->Check('company', 'view') and $this->permission->Check('company', 'login_other_user')) {
 
-			Debug::Text('Login as different user: '. $id, __FILE__, __LINE__, __METHOD__,10);
+			Debug::Text('Login as different user: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
 			//Get record for other user so we can check to make sure its not a primary company.
 			$ulf = new UserListFactory();
-			$ulf->getById( $id );
-			if ( $ulf->getRecordCount() > 0 ) {
-				if ( isset($config_vars['other']['primary_company_id']) AND $config_vars['other']['primary_company_id'] != $ulf->getCurrent()->getCompany() ) {
-					$authentication->changeObject( $id );
+			$ulf->getById($id);
+			if ($ulf->getRecordCount() > 0) {
+				if (isset($config_vars['other']['primary_company_id']) and $config_vars['other']['primary_company_id'] != $ulf->getCurrent()->getCompany()) {
+					$authentication->changeObject($id);
 
-					TTLog::addEntry( $current_user->getID(), 'Login',  _('Switch User').': '. _('SourceIP').': '. $authentication->getIPAddress() .' '. _('SessionID') .': '.$authentication->getSessionID() .' '.  _('UserID').': '. $id, $current_user->getId(), 'authentication');
+					TTLog::addEntry($this->currentUser->getID(), 'Login',  _('Switch User') . ': ' . _('SourceIP') . ': ' . $authentication->getIPAddress() . ' ' . _('SessionID') . ': ' . $authentication->getSessionID() . ' ' .  _('UserID') . ': ' . $id, $this->currentUser->getId(), 'authentication');
 
-					Redirect::Page( URLBuilder::getURL( NULL, '../index.php') );
+					Redirect::Page(URLBuilder::getURL(NULL, '../index.php'));
 				} else {
-					$permission->Redirect( FALSE ); //Redirect
+					$this->permission->Redirect(FALSE); //Redirect
 				}
 			}
 		} else {
-			$permission->Redirect( FALSE ); //Redirect
+			$this->permission->Redirect(FALSE); //Redirect
 		}
 	}
 
-	public function submit(){
+	public function submit(Request $request, $id = null)
+	{
 		//Debug::setVerbosity( 11 );
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
 		unset($id); //Do this so it doesn't reload the data from the DB.
+		// //Additional permission checks.
+		// if ( $this->permission->Check('company','view') ) {
+		// 	$ulf->getById( $user_data['id'] );
+		// } else {
+		// 	$ulf->getByIdAndCompanyId( $user_data['id'], $current_company->getId() );
+		// }
 
-		//Additional permission checks.
-		if ( $permission->Check('company','view') ) {
-			$ulf->getById( $user_data['id'] );
-		} else {
-			$ulf->getByIdAndCompanyId( $user_data['id'], $current_company->getId() );
-		}
+		$user_data = $request->input('user_data');
+		// dd($user_data);
+		$ulf = new UserListFactory();
+		$uf = new UserFactory();
 
-		if ( $ulf->getRecordCount() > 0 ) {
+		$hlf = new HierarchyListFactory;
+
+		$ulf->getById($user_data['id']);
+		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeId($this->currentCompany->getId(),  $this->currentUser->getId());
+
+		// dd($ulf);
+		if ($ulf->getRecordCount() > 0) {
 			$user = $ulf->getCurrent();
 
-			$is_owner = $permission->isOwner( $user->getCreatedBy(), $user->getID() );
-			$is_child = $permission->isChild( $user->getId(), $permission_children_ids );
-			if ( $permission->Check('user','edit')
-					OR ( $permission->Check('user','edit_child') AND $is_child === TRUE )
-					OR ( $permission->Check('user','edit_own') AND $is_owner === TRUE ) ) {
-					// Security measure.
-					if ( !empty($user_data['id']) ) {
-						if ( $permission->Check('company','view') ) {
-							$uf = $ulf->getById( $user_data['id'] )->getCurrent();
-						} else {
-							$uf = $ulf->getByIdAndCompanyId($user_data['id'], $current_company->getId() )->getCurrent();
-						}
+			$is_owner = $this->permission->isOwner($user->getCreatedBy(), $user->getID());
+			$is_child = $this->permission->isChild($user->getId(), $permission_children_ids);
+			if (
+				$this->permission->Check('user', 'edit')
+				or ($this->permission->Check('user', 'edit_child') and $is_child === TRUE)
+				or ($this->permission->Check('user', 'edit_own') and $is_owner === TRUE)
+			) {
+				// Security measure.
+				if (!empty($user_data['id'])) {
+					if ($this->permission->Check('company', 'view')) {
+						$uf = $ulf->getById($user_data['id'])->getCurrent();
+					} else {
+						$uf = $ulf->getByIdAndCompanyId($user_data['id'], $this->currentCompany->getId())->getCurrent();
 					}
+				}
 			} else {
-				$permission->Redirect( FALSE ); //Redirect
+				$this->permission->Redirect(FALSE); //Redirect
 				exit;
 			}
 			unset($user);
 		}
 
-		if ( isset( $user_data['company_id'] ) ) {
-			if ( $permission->Check('company','view') ) {
-				$uf->setCompany( $user_data['company_id'] );
+		if (isset($user_data['company_id'])) {
+			if ($this->permission->Check('company', 'view')) {
+				$uf->setCompany($user_data['company_id']);
 			} else {
-				$uf->setCompany( $current_company->getId() );
+				$uf->setCompany($this->currentCompany->getId());
 			}
 		} else {
-			$uf->setCompany( $current_company->getId() );
+			$uf->setCompany($this->currentCompany->getId());
 		}
 
 		//Get New Hire Defaults.
 		$udlf = new UserDefaultListFactory();
-		$udlf->getByCompanyId( $uf->getCompany() );
-		if ( $udlf->getRecordCount() > 0 ) {
-			Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
+		$udlf->getByCompanyId($uf->getCompany());
+		if ($udlf->getRecordCount() > 0) {
+			Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__, 10);
 			$udf_obj = $udlf->getCurrent();
 		}
 
-		if ( DEMO_MODE == FALSE OR $uf->isNew() == TRUE ) {
-			if ( isset( $user_data['status'] ) ) {
-				$uf->setStatus( $user_data['status'] );
+		if (DEMO_MODE == FALSE or $uf->isNew() == TRUE) {
+			if (isset($user_data['status'])) {
+				$uf->setStatus($user_data['status']);
 			}
 
-			if ( isset( $user_data['user_name'] ) ) {
-				$uf->setUserName( $user_data['user_name'] );
+			if (isset($user_data['user_name'])) {
+				$uf->setUserName($user_data['user_name']);
 			}
 
 			//Phone ID is optional now.
-			if ( isset( $user_data['phone_id'] ) ) {
-				$uf->setPhoneId( $user_data['phone_id'] );
+			if (isset($user_data['phone_id'])) {
+				$uf->setPhoneId($user_data['phone_id']);
 			}
 		}
 
-		if ( DEMO_MODE == FALSE OR $uf->isNew() == TRUE ) {
-			if ( !empty($user_data['password']) OR !empty($user_data['password2']) ) {
-				if ( $user_data['password'] == $user_data['password2'] ) {
+		if (DEMO_MODE == FALSE or $uf->isNew() == TRUE) {
+			if (!empty($user_data['password']) or !empty($user_data['password2'])) {
+				if ($user_data['password'] == $user_data['password2']) {
 					$uf->setPassword($user_data['password']);
 				} else {
-					$uf->Validator->isTrue(	'password',
-											FALSE,
-											__('Passwords don\'t match') );
+					$uf->Validator->isTrue(
+						'password',
+						FALSE,
+						__('Passwords don\'t match')
+					);
 				}
 			}
 
-			if ( isset( $user_data['phone_password'] ) ) {
+			if (isset($user_data['phone_password'])) {
 				$uf->setPhonePassword($user_data['phone_password']);
 			}
 		}
 
-		if ( $user_data['id'] != $current_user->getID()
-				AND $permission->Check('user','edit_advanced') ) {
+		if (
+			isset($user_data['id']) &&
+			$user_data['id'] != $this->currentUser->getID() &&
+			$this->permission->Check('user', 'edit_advanced')
+		) {
 			//Don't force them to update all fields.
 			//Unless they are editing their OWN user.
-								$uf->setFirstName($user_data['first_name']);
+			$uf->setFirstName($user_data['first_name']);
 
-			if ( isset($user_data['middle_name']) ) {
+			if (isset($user_data['middle_name'])) {
 				$uf->setMiddleName($user_data['middle_name']);
 			}
-						
-						if ( isset($user_data['full_name']) ) {
+
+			if (isset($user_data['full_name'])) {
 				$uf->setFullNameField($user_data['full_name']);
 			}
-						
-						if ( isset($user_data['calling_name']) ) {
+
+			if (isset($user_data['calling_name'])) {
 				$uf->setCallingName($user_data['calling_name']);
 			}
-						
-						
-						if ( isset($user_data['name_with_initials']) ) {
+
+
+			if (isset($user_data['name_with_initials'])) {
 				$uf->setNameWithInitials($user_data['name_with_initials']);
 			}
-						
-					
+
+
 
 			$uf->setLastName($user_data['last_name']);
 
-			if ( isset($user_data['second_last_name']) ){
+			if (isset($user_data['second_last_name'])) {
 				$uf->setSecondLastName($user_data['second_last_name']);
 			}
 
-			if ( !empty($user_data['title_name']) ) {
+			if (!empty($user_data['title_name'])) {
 				$uf->setNameTitle($user_data['title_name']);
 			}
-						
-						
-						if ( !empty($user_data['sex']) ) {
+
+
+			if (!empty($user_data['sex'])) {
 				$uf->setSex($user_data['sex']);
 			}
-						
-						
-						
-						
-						if ( !empty($user_data['religion']) ) {
+
+
+
+
+			if (!empty($user_data['religion'])) {
 				$uf->setReligion($user_data['religion']);
 			}
-						
-						if ( !empty($user_data['marital']) ) {
-							$uf->setMarital($user_data['marital']);
-						}
 
-			if ( isset($user_data['address1']) ) {
+			if (!empty($user_data['marital'])) {
+				$uf->setMarital($user_data['marital']);
+			}
+
+			if (isset($user_data['address1'])) {
 				$uf->setAddress1($user_data['address1']);
 			}
 
-			if ( isset($user_data['address2']) ) {
+			if (isset($user_data['address2'])) {
 				$uf->setAddress2($user_data['address2']);
 			}
-						
-						if ( isset($user_data['address3']) ) {
+
+			if (isset($user_data['address3'])) {
 				$uf->setAddress3($user_data['address3']);
 			}
-						//ARSP EDIT CODE-----> ADD NEW CODE FOR N.I.C
-						if ( isset($user_data['nic']) ) {
-											$uf->setNic($user_data['nic']);
-									}
-									//ARSP EDIT CODE-----> ADD NEW CODE FOR probation
-						if ( isset($user_data['probation']) ) {
-											$uf->setProbation($user_data['probation']);
-									}
-									
-						/**
-						 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-						 */                        
-						if ( isset($user_data['basis_of_employment']) ) {
+			//ARSP EDIT CODE-----> ADD NEW CODE FOR N.I.C
+			if (isset($user_data['nic'])) {
+				$uf->setNic($user_data['nic']);
+			}
+			//ARSP EDIT CODE-----> ADD NEW CODE FOR probation
+			if (isset($user_data['probation'])) {
+				$uf->setProbation($user_data['probation']);
+			}
+
+			/**
+			 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+			 */
+			if (isset($user_data['basis_of_employment'])) {
 				$uf->setBasisOfEmployment($user_data['basis_of_employment']);
 			}
-						
-						/**
-						 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-						 */                         
-						if ( isset($user_data['month']) ){
+
+			/**
+			 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+			 */
+			if (isset($user_data['month'])) {
 				$uf->setMonth($user_data['month']);
-			}                                      
+			}
 
-									//ARSP EDIT CODE-----> ADD NEW CODE FOR EPF registration no
-						if ( isset($user_data['epf_registration_no']) ) {
-											$uf->setEpfRegistrationNo($user_data['epf_registration_no']);
-									}      
+			//ARSP EDIT CODE-----> ADD NEW CODE FOR EPF registration no
+			if (isset($user_data['epf_registration_no'])) {
+				$uf->setEpfRegistrationNo($user_data['epf_registration_no']);
+			}
 
-						//ARSP EDIT CODE-----> ADD NEW CODE FOR EPF membership no
-						if ( isset($user_data['epf_membership_no']) ) {
-											$uf->setEpfMembershipNo($user_data['epf_membership_no']);
-									} 	
-			
-			
+			//ARSP EDIT CODE-----> ADD NEW CODE FOR EPF membership no
+			if (isset($user_data['epf_membership_no'])) {
+				$uf->setEpfMembershipNo($user_data['epf_membership_no']);
+			}
+
+
 			/**
 			 * ARSP NOTE -->
 			 * I ADDED THIS CODE FOR THUNDER & NEON
 			 */
-		//                        if ( isset($user_data['employee_number_only']) ) {
-		//				$uf->setEmployeeNumberOnly($user_data['employee_number_only']);
-		//			}			
+			//                        if ( isset($user_data['employee_number_only']) ) {
+			//				$uf->setEmployeeNumberOnly($user_data['employee_number_only']);
+			//			}			
 
-			if ( isset($user_data['city']) ) {
+			if (isset($user_data['city'])) {
 				$uf->setCity($user_data['city']);
 			}
 
-			if ( isset($user_data['country']) ) {
+			if (isset($user_data['country'])) {
 				$uf->setCountry($user_data['country']);
 			}
 
-			if ( isset($user_data['province']) ) {
+			if (isset($user_data['province'])) {
 				$uf->setProvince($user_data['province']);
 			}
 
-			if ( isset($user_data['postal_code']) ) {
+			if (isset($user_data['postal_code'])) {
 				$uf->setPostalCode($user_data['postal_code']);
 			}
 
-			if ( isset($user_data['work_phone']) ) {
+			if (isset($user_data['work_phone'])) {
 				$uf->setWorkPhone($user_data['work_phone']);
 			}
 
-			if ( isset($user_data['work_phone_ext']) ) {
+			if (isset($user_data['work_phone_ext'])) {
 				$uf->setWorkPhoneExt($user_data['work_phone_ext']);
 			}
 
-			if ( isset($user_data['home_phone']) ) {
+			if (isset($user_data['home_phone'])) {
 				$uf->setHomePhone($user_data['home_phone']);
 			}
 
-			if ( isset($user_data['mobile_phone']) ) {
+			if (isset($user_data['mobile_phone'])) {
 				$uf->setMobilePhone($user_data['mobile_phone']);
 			}
 
-			if ( isset($user_data['fax_phone']) ) {
+			if (isset($user_data['fax_phone'])) {
 				$uf->setFaxPhone($user_data['fax_phone']);
 			}
 
-			if ( isset($user_data['home_email']) ) {
+			if (isset($user_data['home_email'])) {
 				$uf->setHomeEmail($user_data['home_email']);
 			}
 
-			if ( isset($user_data['work_email']) ) {
+			if (isset($user_data['work_email'])) {
 				$uf->setWorkEmail($user_data['work_email']);
 			}
-						
-						if ( isset($user_data['office_mobile']) ) {
+
+			if (isset($user_data['office_mobile'])) {
 				$uf->setOfficeMobile($user_data['office_mobile']);
 			}
-						
-						
-						if ( isset($user_data['personal_email']) ) {
+
+
+			if (isset($user_data['personal_email'])) {
 				$uf->setPersonalEmail($user_data['personal_email']);
 			}
-						
-						
-					
 
-			if ( isset($user_data['sin']) ) {
+
+
+
+			if (isset($user_data['sin'])) {
 				$uf->setSIN($user_data['sin']);
 			}
-						
 
-								$uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
-								
-								$date = new DateTime();
-								$date->setTimestamp($uf->getBirthDate());
-								$date->modify('+60 years');
-						
-								$uf->setRetirementDate(  $date->getTimestamp()  );
-								$uf->setRetirementDate( $user_data['retirement_date']  );
+
+			$uf->setBirthDate(TTDate::getTimeStampFromSmarty('birth_', $user_data));
+
+			$date = new DateTime();
+			$date->setTimestamp($uf->getBirthDate());
+			$date->modify('+60 years');
+
+			$uf->setRetirementDate($date->getTimestamp());
+			$uf->setRetirementDate($user_data['retirement_date']);
 		} else {
 			//Force them to update all fields.
 
 			$uf->setFirstName($user_data['first_name']);
-			$uf->setMiddleName($user_data['middle_name']);
-						$uf->setFullNameField($user_data['full_name']);
-						$uf->setCallingName($user_data['calling_name']);
-						$uf->setNameWithInitials($user_data['name_with_initials']);
-					
+			$uf->setMiddleName($user_data['middle_name'] ?? '');
+			$uf->setFullNameField($user_data['full_name']);
+			$uf->setCallingName($user_data['calling_name'] ?? '');
+			$uf->setNameWithInitials($user_data['name_with_initials']);
+
 			$uf->setLastName($user_data['last_name']);
-			if ( isset($user_data['second_last_name']) ) {
+			if (isset($user_data['second_last_name'])) {
 				$uf->setSecondLastName($user_data['second_last_name']);
 			}
 			$uf->setSex($user_data['sex']);
-						$uf->setMarital($user_data['marital']);
-						$uf->setReligion($user_data['religion']);
+			$uf->setMarital($user_data['marital']);
+			$uf->setReligion($user_data['religion']);
 			$uf->setAddress1($user_data['address1']);
 			$uf->setAddress2($user_data['address2']);
-						$uf->setAddress3($user_data['address3']);
-						$uf->setNameTitle($user_data['title_name']);
-						
+			$uf->setAddress3($user_data['address3']);
+			$uf->setNameTitle($user_data['title_name']);
 
-						//ARSP EDIT CODE--->
-						$uf->setNic($user_data['nic']);
 
-									//ARSP EDIT CODE---> ADD NEW CODE FOR PROBATION PERIOD
-						$uf->setProbation($user_data['probation']);
+			//ARSP EDIT CODE--->
+			$uf->setNic($user_data['nic']);
 
-					//ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
-						$uf->setEpfRegistrationNo($user_data['epf_registration_no']);
+			//ARSP EDIT CODE---> ADD NEW CODE FOR PROBATION PERIOD
+			$uf->setProbation($user_data['probation'] ?? '');
 
-						//ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
-						$uf->setEpfMembershipNo($user_data['epf_membership_no']);				
+			//ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
+			$uf->setEpfRegistrationNo($user_data['epf_registration_no']);
 
-						$uf->setCity($user_data['city']);
+			//ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
+			$uf->setEpfMembershipNo($user_data['epf_membership_no']);
 
-			if ( isset($user_data['country']) ) {
+			$uf->setCity($user_data['city']);
+
+			if (isset($user_data['country'])) {
 				$uf->setCountry($user_data['country']);
 			}
 
-			if ( isset($user_data['province']) ) {
+			if (isset($user_data['province'])) {
 				$uf->setProvince($user_data['province']);
 			}
 
@@ -806,64 +824,65 @@ class EditUser extends Controller
 			$uf->setHomePhone($user_data['home_phone']);
 			$uf->setMobilePhone($user_data['mobile_phone']);
 			$uf->setFaxPhone($user_data['fax_phone']);
-			$uf->setHomeEmail($user_data['home_email']);
+			$uf->setHomeEmail($user_data['home_email'] ?? '');
 			$uf->setWorkEmail($user_data['work_email']);
-						$uf->setOfficeMobile($user_data['office_mobile']);
-						$uf->setPersonalEmail($user_data['personal_email']);
-						$uf->setConfiremedDate( $user_data['confirmed_date'] );
-						$uf->setResignDate( $user_data['resign_date'] );
-						
-			if ( isset($user_data['sin']) ) {
+			$uf->setOfficeMobile($user_data['office_mobile']);
+			$uf->setPersonalEmail($user_data['personal_email']);
+			$uf->setConfiremedDate($user_data['confirmed_date']);
+			$uf->setResignDate($user_data['resign_date']);
+
+			if (isset($user_data['sin'])) {
 				$uf->setSIN($user_data['sin']);
 			}
+			$uf->setBirthDate(TTDate::getTimeStampFromSmarty('birth_', $user_data));
 
-			$uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
-						
-						$uf->setRetirementDate( $user_data['retirement_date']  );
+			$uf->setRetirementDate($user_data['retirement_date']);
 		}
 
-		if ( DEMO_MODE == FALSE
-			AND isset($user_data['permission_control_id'])
-			AND $uf->getPermissionLevel() <= $permission->getLevel()
-			AND ( $permission->Check('permission','edit') OR $permission->Check('permission','edit_own') OR $permission->Check('user','edit_permission_group') ) ) {
-			$uf->setPermissionControl( $user_data['permission_control_id'] );
-		} elseif ( isset($udf_obj) AND is_object($udf_obj) AND $uf->isNew() == TRUE ) {
-			$uf->setPermissionControl( $udf_obj->getPermissionControl() );
+		if (
+			DEMO_MODE == FALSE
+			and isset($user_data['permission_control_id'])
+			and $uf->getPermissionLevel() <= $this->permission->getLevel()
+			and ($this->permission->Check('permission', 'edit') or $this->permission->Check('permission', 'edit_own') or $this->permission->Check('user', 'edit_permission_group'))
+		) {
+			$uf->setPermissionControl($user_data['permission_control_id']);
+		} elseif (isset($udf_obj) and is_object($udf_obj) and $uf->isNew() == TRUE) {
+			$uf->setPermissionControl($udf_obj->getPermissionControl());
 		}
 
-		if ( isset($user_data['pay_period_schedule_id']) AND ( $permission->Check('pay_period_schedule','edit') OR $permission->Check('user','edit_pay_period_schedule') ) ) {
-			$uf->setPayPeriodSchedule( $user_data['pay_period_schedule_id'] );
-		} elseif ( isset($udf_obj) AND is_object($udf_obj) AND $uf->isNew() == TRUE ) {
-						$uf->setPayPeriodSchedule( $udf_obj->getPayPeriodSchedule() );
+		if (isset($user_data['pay_period_schedule_id']) and ($this->permission->Check('pay_period_schedule', 'edit') or $this->permission->Check('user', 'edit_pay_period_schedule'))) {
+			$uf->setPayPeriodSchedule($user_data['pay_period_schedule_id']);
+		} elseif (isset($udf_obj) and is_object($udf_obj) and $uf->isNew() == TRUE) {
+			$uf->setPayPeriodSchedule($udf_obj->getPayPeriodSchedule());
 		}
 
-		if ( isset($user_data['policy_group_id']) AND ( $permission->Check('policy_group','edit') OR $permission->Check('user','edit_policy_group') ) ) {
-			$uf->setPolicyGroup( $user_data['policy_group_id'] );
-		} elseif ( isset($udf_obj) AND is_object($udf_obj) AND $uf->isNew() == TRUE) {
-						$uf->setPolicyGroup( $udf_obj->getPolicyGroup() );
+		if (isset($user_data['policy_group_id']) and ($this->permission->Check('policy_group', 'edit') or $this->permission->Check('user', 'edit_policy_group'))) {
+			$uf->setPolicyGroup($user_data['policy_group_id']);
+		} elseif (isset($udf_obj) and is_object($udf_obj) and $uf->isNew() == TRUE) {
+			$uf->setPolicyGroup($udf_obj->getPolicyGroup());
 		}
 
-		if ( isset($user_data['hierarchy_control']) AND ( $permission->Check('hierarchy','edit') OR $permission->Check('user','edit_hierarchy') ) ) {
-			$uf->setHierarchyControl( $user_data['hierarchy_control'] );
+		if (isset($user_data['hierarchy_control']) and ($this->permission->Check('hierarchy', 'edit') or $this->permission->Check('user', 'edit_hierarchy'))) {
+			$uf->setHierarchyControl($user_data['hierarchy_control']);
 		}
 
-		if ( isset($user_data['currency_id']) ) {
-			$uf->setCurrency( $user_data['currency_id'] );
-		} elseif ( isset($udf_obj) AND is_object($udf_obj) AND $uf->isNew() == TRUE ) {
-						$uf->setCurrency( $udf_obj->getCurrency() );
+		if (isset($user_data['currency_id'])) {
+			$uf->setCurrency($user_data['currency_id']);
+		} elseif (isset($udf_obj) and is_object($udf_obj) and $uf->isNew() == TRUE) {
+			$uf->setCurrency($udf_obj->getCurrency());
 		}
 
-		if ( isset($user_data['hire_date']) ) {
-			$uf->setHireDate( $user_data['hire_date'] );
+		if (isset($user_data['hire_date'])) {
+			$uf->setHireDate($user_data['hire_date']);
 		}
-		if ( isset($user_data['termination_date']) ) {
-			$uf->setTerminationDate( $user_data['termination_date'] );
+		if (isset($user_data['termination_date'])) {
+			$uf->setTerminationDate($user_data['termination_date']);
 		}
 
 		/**
 		 * ARSP NOTE -->
 		 * I HIDE THIS ORIGINAL CODE FOR THUNDER & NEON AND ADDED NEW CODE
-		 */  		 
+		 */
 		//if ( isset($user_data['employee_number']) ) {
 		//	$uf->setEmployeeNumber( $user_data['employee_number'] );
 		//}
@@ -871,125 +890,123 @@ class EditUser extends Controller
 		/**
 		 * ARSP NOTE -->
 		 * I MODIFIED ABOVE ORIGINAL CODE THUNDER & NEON
-		 */                
-		if ( isset($user_data['employee_number_only']) ) {                    
-			$uf->setEmployeeNumber( $user_data['branch_short_id'].$user_data['employee_number_only'] );
+		 */
+		if (isset($user_data['employee_number_only'])) {
+			$uf->setEmployeeNumber($user_data['branch_short_id'] . $user_data['employee_number_only']);
 		}
-				
-				/**
-				 * ARSP NOTE -->
-				 * I ADDED THIS ORIGINAL CODE AND ADDED NEW CODE
-				 */                
-		if ( isset($user_data['employee_number_only']) ) {                        
-			$uf->setEmployeeNumberOnly($user_data['employee_number_only'], $user_data['default_branch_id']);//ARSP NOTE --> I ADDED EXTRA PARAMETER FOR THUNDER & NEON
-		}                 
 
 		/**
 		 * ARSP NOTE -->
 		 * I ADDED THIS ORIGINAL CODE AND ADDED NEW CODE
-		 */  		
-		if ( isset($user_data['punch_machine_user_id']) ) {
-			$uf->setPunchMachineUserID( $user_data['punch_machine_user_id'] );
+		 */
+		if (isset($user_data['employee_number_only'])) {
+			$uf->setEmployeeNumberOnly($user_data['employee_number_only'], $user_data['default_branch_id']); //ARSP NOTE --> I ADDED EXTRA PARAMETER FOR THUNDER & NEON
 		}
 
-		if ( isset($user_data['default_branch_id']) ) {
-			$uf->setDefaultBranch( $user_data['default_branch_id'] );
+		/**
+		 * ARSP NOTE -->
+		 * I ADDED THIS ORIGINAL CODE AND ADDED NEW CODE
+		 */
+		if (isset($user_data['punch_machine_user_id'])) {
+			$uf->setPunchMachineUserID($user_data['punch_machine_user_id']);
 		}
-		if ( isset($user_data['default_department_id']) ) {
-			$uf->setDefaultDepartment( $user_data['default_department_id'] );
+
+		if (isset($user_data['default_branch_id'])) {
+			$uf->setDefaultBranch($user_data['default_branch_id']);
 		}
-		if ( isset($user_data['group_id']) ) {
-			$uf->setGroup( $user_data['group_id'] );
+		if (isset($user_data['default_department_id'])) {
+			$uf->setDefaultDepartment($user_data['default_department_id']);
 		}
-		if ( isset($user_data['title_id']) ) {
+		if (isset($user_data['group_id'])) {
+			$uf->setGroup($user_data['group_id']);
+		}
+		if (isset($user_data['title_id'])) {
 			$uf->setTitle($user_data['title_id']);
 		}
 
 		/**
 		 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		 * EMPLOYEE JOB SKILLS
-		 */                
-		if ( isset($user_data['job_skills']) ) {                        
+		 */
+		if (isset($user_data['job_skills'])) {
 			$uf->setJobSkills($user_data['job_skills'],  $user_data['job_skills']);
-		}  		
+		}
 
-		if ( isset($user_data['ibutton_id']) ) {
+		if (isset($user_data['ibutton_id'])) {
 			$uf->setIButtonId($user_data['ibutton_id']);
 		}
-		if ( isset($user_data['other_id1']) ) {
-			$uf->setOtherID1( $user_data['other_id1'] );
+		if (isset($user_data['other_id1'])) {
+			$uf->setOtherID1($user_data['other_id1']);
 		}
-		if ( isset($user_data['other_id2']) ) {
-			$uf->setOtherID2( $user_data['other_id2'] );
+		if (isset($user_data['other_id2'])) {
+			$uf->setOtherID2($user_data['other_id2']);
 		}
-		if ( isset($user_data['other_id3']) ) {
-			$uf->setOtherID3( $user_data['other_id3'] );
+		if (isset($user_data['other_id3'])) {
+			$uf->setOtherID3($user_data['other_id3']);
 		}
-		if ( isset($user_data['other_id4']) ) {
-			$uf->setOtherID4( $user_data['other_id4'] );
+		if (isset($user_data['other_id4'])) {
+			$uf->setOtherID4($user_data['other_id4']);
 		}
-		if ( isset($user_data['other_id5']) ) {
-			$uf->setOtherID5( $user_data['other_id5'] );
+		if (isset($user_data['other_id5'])) {
+			$uf->setOtherID5($user_data['other_id5']);
 		}
 
-		if ( isset($user_data['note']) ) {
-			$uf->setNote( $user_data['note'] );
+		if (isset($user_data['note'])) {
+			$uf->setNote($user_data['note']);
 		}
 
 		//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-		if ( isset($user_data['hire_note']) ) {
-			$uf->setHireNote( $user_data['hire_note'] );
+		if (isset($user_data['hire_note'])) {
+			$uf->setHireNote($user_data['hire_note']);
 		}
-				
+
 		//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-		if ( isset($user_data['termination_note']) ) {
-			$uf->setTerminationNote( $user_data['termination_note'] );
+		if (isset($user_data['termination_note'])) {
+			$uf->setTerminationNote($user_data['termination_note']);
 		}
-				
-				//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-		if ( isset($user_data['immediate_contact_person']) ) {
-			$uf->setImmediateContactPerson($user_data['immediate_contact_person'] );
+
+		//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+		if (isset($user_data['immediate_contact_person'])) {
+			$uf->setImmediateContactPerson($user_data['immediate_contact_person']);
 		}
-				
-				
-				//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-		if ( isset($user_data['immediate_contact_no']) ) {
-			$uf->setImmediateContactNo( $user_data['immediate_contact_no'] );
+
+
+		//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+		if (isset($user_data['immediate_contact_no'])) {
+			$uf->setImmediateContactNo($user_data['immediate_contact_no']);
 		}
-				
-				//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-		if ( isset($user_data['bond_period']) ) {
-			$uf->setBondPeriod($user_data['bond_period'] );
-		}                   
-				
-				/**
-				 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-				 */
-		if ( isset($user_data['resign_date']) ) {
-			$uf->setResignDate( $user_data['resign_date'] );
-		}    
-				
-				
-				if ( isset($user_data['confirmed_date']) ) {
-			$uf->setConfiremedDate( $user_data['confirmed_date'] );
-		}    
+
+		//ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+		if (isset($user_data['bond_period'])) {
+			$uf->setBondPeriod($user_data['bond_period']);
+		}
+
+		/**
+		 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+		 */
+		if (isset($user_data['resign_date'])) {
+			$uf->setResignDate($user_data['resign_date']);
+		}
+
+
+		if (isset($user_data['confirmed_date'])) {
+			$uf->setConfiremedDate($user_data['confirmed_date']);
+		}
 		//                var_dump($uf->isValid()); die;
 		//                echo '<pre>';                print_r($uf->getCurrent()); echo '<pre>'; die;
 
-		if ( $uf->isValid() ) {
+		if ($uf->isValid()) {
 			$uf->Save(FALSE);
-						
-						
+
+
 			$user_data['id'] = $uf->getId();
-			Debug::Text('Inserted ID: '. $user_data['id'], __FILE__, __LINE__, __METHOD__,10);
+			Debug::Text('Inserted ID: ' . $user_data['id'], __FILE__, __LINE__, __METHOD__, 10);
 
-			Redirect::Page( URLBuilder::getURL( array('id' => $user_data['id'], 'saved_search_id' => $saved_search_id, 'company_id' => $company_id, 'data_saved' => TRUE), 'EditUser.php') );
-
+			return redirect()->to(URLBuilder::getURL(null, '/admin/userlist'))->with('success', 'USer saved successfully.');
+        
+			// Redirect::Page(URLBuilder::getURL(array('id' => $user_data['id'], 'saved_search_id' => $saved_search_id, 'company_id' => $company_id, 'data_saved' => TRUE), 'EditUser.php'));
 		}
-		
-	
+
+		// D:\Evolve\storage\app\public\user_file\1
 	}
 }
-
-
-?>

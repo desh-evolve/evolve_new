@@ -1709,32 +1709,55 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 
+	// function isUniqueUserName($user_name) {
+	// 	$ph = array(
+	// 				':user_name' => trim(strtolower($user_name)),
+	// 				);
+
+	// 	$query = 'select id from '. $this->getTable() .' where user_name = :user_name AND deleted=0';
+	// 	$user_name_id = DB::select($query, $ph);
+
+    //     if (empty($user_name_id) || $user_name_id== FALSE ) {
+    //         $user_name_id = 0;
+    //     }else{
+    //         $user_name_id = current(get_object_vars($user_name_id[0]));
+    //     }
+
+	// 	Debug::Arr($user_name_id,'Unique User Name: '. $user_name, __FILE__, __LINE__, __METHOD__,10);
+
+	// 	if ( empty($user_name_id) || $user_name_id== FALSE ) {
+	// 		return TRUE;
+	// 	} else {
+	// 		if ($user_name_id == $this->getId() ) {
+	// 			return TRUE;
+	// 		}
+	// 	}
+
+	// 	return FALSE;
+	// }
+
 	function isUniqueUserName($user_name) {
-		$ph = array(
-					':user_name' => trim(strtolower($user_name)),
-					);
-
-		$query = 'select id from '. $this->getTable() .' where user_name = :user_name AND deleted=0';
-		$user_name_id = DB::select($query, $ph);
-
-        if (empty($user_name_id) || $user_name_id== FALSE ) {
-            $user_name_id = 0;
-        }else{
-            $user_name_id = current(get_object_vars($user_name_id[0]));
-        }
-
-		Debug::Arr($user_name_id,'Unique User Name: '. $user_name, __FILE__, __LINE__, __METHOD__,10);
-
-		if ( empty($user_name_id) || $user_name_id== FALSE ) {
-			return TRUE;
-		} else {
-			if ($user_name_id == $this->getId() ) {
-				return TRUE;
-			}
+		$user_name = trim(strtolower($user_name));
+	
+		$query = 'SELECT id FROM '. $this->getTable() .' WHERE user_name = :user_name AND deleted = 0';
+		$ph = [':user_name' => $user_name];
+	
+		$result = DB::select($query, $ph);
+	
+		if (empty($result)) {
+			return TRUE; // No user with this username exists
 		}
-
-		return FALSE;
+	
+		$foundId = $result[0]->id ?? null;
+	
+		if ($foundId == $this->getId()) {
+			return TRUE; // It's the same user — allow it
+		}
+	
+		return FALSE; // Another user has this username
 	}
+	
+
 	function getUserName() {
 		if ( isset($this->data['user_name']) ) {
 			return $this->data['user_name'];
@@ -1743,6 +1766,7 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 	function setUserName($user_name) {
+		
 		$user_name = trim(strtolower($user_name));
 
 		if 	(	$this->Validator->isRegEx(		'user_name',
@@ -2598,42 +2622,78 @@ class UserFactory extends Factory {
          * ARSP NOTE--> I ADDED THIS FUNCTION & MODIFIED SOME FIELD FOR 2ND TIME
          * I ADDED THIS CODE FOR THUNDER AND NEON
          */
-        function isUniqueEmployeeNumberOnly($id, $default_branch_id) {
+    //     function isUniqueEmployeeNumberOnly($id, $default_branch_id) {
 
 
-		if ( $this->getCompany() == FALSE ) {
+	// 	if ( $this->getCompany() == FALSE ) {
+	// 		return FALSE;
+	// 	}
+
+	// 	if ( $id == 0 ) {
+	// 		return FALSE;
+	// 	}
+
+
+	// 	$ph = array(
+	// 				':manual_id' => $id,
+	// 				':company_id' =>  $this->getCompany(),
+    //                                     'default_branch_id' =>  $default_branch_id,
+	// 				);
+
+	// 	$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id  AND default_branch_id = ? AND deleted = 0';
+	// 	$user_id = DB::select($query, $ph);
+
+	// 	if (empty($user_id) || $user_id== FALSE ) {
+    //         $user_id = 0;
+    //     }else{
+    //         $user_id = current(get_object_vars($user_id[0]));
+    //     }
+	// 	Debug::Arr($user_id,'Unique Employee Number Only: '. $id, __FILE__, __LINE__, __METHOD__,10);
+
+	// 	if ( empty($user_id) || $user_id== FALSE ) {
+	// 		return TRUE;
+	// 	} else {
+	// 		if ($user_id == $this->getId() ) {
+	// 			return TRUE;
+	// 		}
+	// 	}
+
+	// 	return FALSE;
+	// }
+
+	function isUniqueEmployeeNumberOnly($id, $default_branch_id) {
+		if ($this->getCompany() == FALSE) {
 			return FALSE;
 		}
-
-		if ( $id == 0 ) {
+	
+		if ($id == 0) {
 			return FALSE;
 		}
-
-
+	
 		$ph = array(
-					':manual_id' => $id,
-					':company_id' =>  $this->getCompany(),
-                                        'default_branch_id' =>  $default_branch_id,
-					);
-
-		$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id  AND default_branch_id = ? AND deleted = 0';
-		$user_id = DB::select($query, $ph);
-
-		if (empty($user_id) || $user_id== FALSE ) {
-            $user_id = 0;
-        }else{
-            $user_id = current(get_object_vars($user_id[0]));
-        }
-		Debug::Arr($user_id,'Unique Employee Number Only: '. $id, __FILE__, __LINE__, __METHOD__,10);
-
-		if ( empty($user_id) || $user_id== FALSE ) {
+			':manual_id' => $id,
+			':company_id' => $this->getCompany(),
+			':default_branch_id' => $default_branch_id,
+		);
+	
+		$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id AND default_branch_id = :default_branch_id AND deleted = 0';
+	
+		$id = DB::select($query, $ph);
+		if (empty($id) || $id === FALSE) {
+			$id = 0;
+		} else {
+			$id = current(get_object_vars($id[0]));
+		}
+		Debug::Arr($id, 'Unique Employee Number Only: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
+	
+		if (empty($id) || $id === FALSE) {
 			return TRUE;
 		} else {
-			if ($user_id == $this->getId() ) {
+			if ($id == $this->getId()) {
 				return TRUE;
 			}
 		}
-
+	
 		return FALSE;
 	}
 
@@ -3154,7 +3214,7 @@ class UserFactory extends Factory {
             $calling_name = trim($calling_name);
 
 		if 	(
-				$second_last_name == ''
+				$calling_name == ''
 				OR
 				(
 					$this->Validator->isRegEx(		'calling_name',
@@ -4038,8 +4098,8 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 	function setRetirementDate($epoch) {
-		if 	( $epoch !== FALSE AND $epoch !== '' )
-				 {
+		
+		if (!empty($epoch) || $epoch === 0) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
 			$this->data['retirement_date'] = $epoch ; //Allow blank birthdate.
@@ -4723,9 +4783,11 @@ class UserFactory extends Factory {
          * ARSP NOTE -->
          * I MODIFIED THIS ORIGINAL CODE FOR THUNDER & NEON
          */
+
         function Validate() {
+			// dd($this->data);
 		//When doing a mass edit of employees, user name is never specified, so we need to avoid this validation issue.
-		if ( $this->getUserName() == '' ) {
+		if ( $this->getUserName() == FALSE ) {
 			$this->Validator->isTrue(		'user_name',
 											FALSE,
 											('User name not specified'));
@@ -4765,7 +4827,9 @@ class UserFactory extends Factory {
 											FALSE,
 											('Default Branch must be specified for ACTIVE employees') );
 		}
-																																												if ( $this->isNew() == TRUE ) { $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); } }
+																																												if ( $this->isNew() == TRUE ) {
+																																													//  $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); } 
+																																													}
 		return TRUE;
 	}
 
