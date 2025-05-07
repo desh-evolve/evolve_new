@@ -298,10 +298,16 @@ class EditPunch extends Controller
 				$p_obj->setEnableCalcUserDateTotal( TRUE );
 				$p_obj->setEnableCalcException( TRUE );
 				$res = $p_obj->Save();
+				if($res){
+					//return redirect(URLBuilder::getURL( array('refresh' => TRUE ), 'close_window'));
+					return response()->json(['success' => 'Punch Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Punch Deleted Failed.']);
+				}
 			}
 		}
 
-		return redirect(route('attendance.punchlist'));
+		
 
 	}
 
@@ -474,7 +480,7 @@ class EditPunch extends Controller
 			//$pf->FailTransaction();
 			$pf->CommitTransaction();
 
-			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), '/attendance/punchlist'));
+			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), 'close_window'));
 		} else {
 			$pf->FailTransaction();
 		}

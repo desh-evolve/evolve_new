@@ -12,6 +12,7 @@ use App\Http\Controllers\Branch\BranchList;
 use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
+use App\Http\Controllers\CloseWindow;
 use App\Http\Controllers\company\EditCompany;
 use App\Http\Controllers\company\EditCompanyDeduction;
 use App\Http\Controllers\company\EditOtherField;
@@ -482,12 +483,14 @@ Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name(
 // ===============================================================================================================================
 
 Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('attendance.timesheet');
+Route::get('/close_window', [CloseWindow::class, 'index'])->name('close_window');
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
 Route::get('/attendance/punch/userdate_totals', [UserDateTotalList::class, 'index'])->name('attendance.punch.userdate_totals');
 Route::get('/attendance/punch/edit_userdate_total', [EditUserDateTotal::class, 'index'])->name('attendance.punch.edit_userdate_total');
-Route::get('/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
+
+Route::match(['get', 'post'], '/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
 
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');

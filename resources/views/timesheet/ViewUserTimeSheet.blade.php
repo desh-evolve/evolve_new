@@ -362,7 +362,8 @@
                                             @if ($date_total_row['type_and_policy_id'] == 100)
                                                 @if (empty($pay_period_locked_rows[$date_total_epoch])
                                                     AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
-                                                    <a href="javascript:hourList('','{{$filter_data['user_id']}}','{{$date_total_epoch}}')">
+                                                    {{-- <a href="javascript:hourList('','{{$filter_data['user_id']}}','{{$date_total_epoch}}')"> --}}
+                                                    <a href="#">
                                                 @endif
                                                 @if (!empty($date_total_day['override']) && $date_total_day['override'] == TRUE)
                                                     *
@@ -748,7 +749,7 @@
         }
         function editAbsence(absenceID,userID,date) {
             try {
-                eA=window.open('/attendance/punch/edit_user_absence?id='+encodeURI(absenceID)+'&user_id='+encodeURI(userID)+'&date_stamp='+encodeURI(date),"Edit_Absence","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=800,height=625,resizable=1");
+                eA=window.open('/attendance/punch/edit_user_absence?id='+encodeURI(absenceID)+'&user_id='+encodeURI(userID)+'&date_stamp='+encodeURI(date),"Edit_Absence","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=1200,height=625,resizable=1");
                 if (window.focus) {
                     eA.focus()
                 }

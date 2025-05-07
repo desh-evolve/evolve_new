@@ -46,7 +46,7 @@
                                         Time:
                                     </th>
                                     <td>
-                                        <input type="text" size="12" id="time_stamp" name="pc_data[time_stamp]" value="{{ getdate_helper('time', $pc_data['time_stamp']) }}">
+                                        <input type="text" size="12" id="time_stamp" name="pc_data[time_stamp]" value="{{ getdate_helper('time', $pc_data['time_stamp'] ?? 0) }}">
                                         @if (!empty($pc_data['id']))
                                             @if (!empty($pc_data['actual_time_stamp']))
                                                 (Actual Time: {{ getdate_helper('time', $pc_data['actual_time_stamp'] ?? 0, '') }}
@@ -67,7 +67,7 @@
                                         </a>
                                     </th>
                                     <td>
-                                        <input type="date" id="date_stamp" name="pc_data[date_stamp]" value="{{ getdate_helper('date', $pc_data['date_stamp']) }}">
+                                        <input type="date" id="date_stamp" name="pc_data[date_stamp]" value="{{ getdate_helper('date', $pc_data['date_stamp'] ?? 0) }}">
                                         ie: {{$current_user_prefs->getDateFormatExample()}}
                                     </td>
                                 </tr>
@@ -298,7 +298,7 @@
                         <div id="contentBoxFour">
                             <input type="submit" class="btn btn-sm btn-primary" name="action:submit" value="Submit">
                             @if (!empty($pc_data['punch_id']) AND ( $permission->Check('punch','delete') OR $permission->Check('punch','delete_own') OR $permission->Check('punch','delete_child') ))
-                                <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch_single/delete/{{ $pc_data['punch_id'] ?? '' }}', 'Punch', this)">Delete</button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch_single/delete/{{ $pc_data['punch_id'] ?? '' }}', 'Punch', this, true)">Delete</button>
                             @endif
                         </div>
                 

@@ -55,8 +55,11 @@
                     <div class="collapse menu-dropdown" id="attendance">
                         <ul class="nav nav-sm flex-column">
 
-                            <li class="nav-item"><a href="#" class="nav-link">My Timesheet</a></li>
-
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.timesheet') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.timesheet') ? 'active' : '' }}">My Timesheet
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="{{ route('attendance.punchlist') }}"
                                     class="nav-link {{ request()->routeIs('attendance.punchlist') ? 'active' : '' }}">Punches

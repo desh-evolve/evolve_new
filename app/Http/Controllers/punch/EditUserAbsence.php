@@ -82,26 +82,28 @@ class EditUserAbsence extends Controller
 
 		$udtf = new UserDateTotalFactory();
 
-		$action = Misc::findSubmitButton();
-		$action = strtolower($action);
+		$action = $_POST['action'] ?? '';
+		$action = !empty($action) ? strtolower($action) : '' ; 
+
 		switch ($action) {
 			case 'delete':
 				Debug::Text('Delete!', __FILE__, __LINE__, __METHOD__,10);
 		
-						$LeaveRecId = '';
-						$aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
-						$aluerlf->getByUserDateId($udt_data['user_date_id']);
-						if($aluerlf->getCurrent()->getId()){
-							$LeaveRecId = $aluerlf->getCurrent()->getId();
-						}  
+				$LeaveRecId = '';
+				$aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
+				$aluerlf->getByUserDateId($udt_data['user_date_id']);
+				if($aluerlf->getCurrent()->getId()){
+					$LeaveRecId = $aluerlf->getCurrent()->getId();
+				}  
 
-					
-						$udtlf = new UserDateTotalListFactory();
-						$aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
+			
+				$udtlf = new UserDateTotalListFactory();
+				$aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
 					
 				$udtlf->getById( $udt_data['id'] );
 				if ( $udtlf->getRecordCount() > 0 ) {
 					foreach($udtlf->rs as $udt_obj) {
+						$res = false;
 						$udtlf->data = (array)$udt_obj;
 						$udt_obj = $udtlf;
 
@@ -111,16 +113,23 @@ class EditUserAbsence extends Controller
 						if($leave_rec_obj->getId()){ 
 							$leave_rec_obj->setDeleted(TRUE); 
 							if($leave_rec_obj->isValid()){
-								$leave_rec_obj->Save();
+								$res = $leave_rec_obj->Save();
 							}
 						}   
 
 						$udt_obj->setDeleted(TRUE);
 						if ( $udt_obj->isValid() ) {
-								$udt_obj->setEnableCalcSystemTotalTime( TRUE );
-								$udt_obj->setEnableCalcWeeklySystemTotalTime( TRUE );
-								$udt_obj->setEnableCalcException( TRUE );
-								$udt_obj->Save();
+							$udt_obj->setEnableCalcSystemTotalTime( TRUE );
+							$udt_obj->setEnableCalcWeeklySystemTotalTime( TRUE );
+							$udt_obj->setEnableCalcException( TRUE );
+							$udt_obj->Save();
+						}
+
+						if($res){
+							//return redirect(URLBuilder::getURL( array('refresh' => TRUE ), 'close_window'));
+							return response()->json(['success' => 'User Absence Deleted Successfully.']);
+						}else{
+							return response()->json(['error' => 'User Absence Deleted Failed.']);
 						}
 					}
 				}
@@ -129,7 +138,7 @@ class EditUserAbsence extends Controller
 
 				break;
 			case 'submit':
-
+				
 				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 				//Debug::setVerbosity(11);
 
@@ -138,7 +147,7 @@ class EditUserAbsence extends Controller
 				
 				
 				//Limit it to 31 days.
-			if ( $udt_data['repeat'] > 31 ) {
+				if ( $udt_data['repeat'] > 31 ) {
 					$udt_data['repeat'] = 31;
 				}
 				Debug::Text('Repeating Punch For: '. $udt_data['repeat'] .' Days', __FILE__, __LINE__, __METHOD__,10);
@@ -365,7 +374,7 @@ class EditUserAbsence extends Controller
 		}
 
 		$viewData['udtf'] = $udtf;
-
+		
 		return view('punch/EditUserAbsence', $viewData);
 	}
 }
