@@ -32,7 +32,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/private'),
+            'root' => storage_path('app'),
             'serve' => true,
             'throw' => false,
             'report' => false,
@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -58,6 +58,62 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
+        ],
+
+        // Add new disks for user files
+        'user_files' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_files'),
+            'url' => env('APP_URL') . '/storage/user_files',
+            'visibility' => 'private',
+        ],
+        'user_templates' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_templates'),
+            'url' => env('APP_URL') . '/storage/user_templates',
+            'visibility' => 'private',
+        ],
+        'user_id_copies' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_id_copies'),
+            'url' => env('APP_URL') . '/storage/user_id_copies',
+            'visibility' => 'private',
+        ],
+        'user_birth_certificates' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_birth_certificates'),
+            'url' => env('APP_URL') . '/storage/user_birth_certificates',
+            'visibility' => 'private',
+        ],
+        'user_gs_letters' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_gs_letters'),
+            'url' => env('APP_URL') . '/storage/user_gs_letters',
+            'visibility' => 'private',
+        ],
+        'user_police_reports' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_police_reports'),
+            'url' => env('APP_URL') . '/storage/user_police_reports',
+            'visibility' => 'private',
+        ],
+        'user_ndas' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_ndas'),
+            'url' => env('APP_URL') . '/storage/user_ndas',
+            'visibility' => 'private',
+        ],
+        'bonds' => [
+            'driver' => 'local',
+            'root' => storage_path('app/bonds'),
+            'url' => env('APP_URL') . '/storage/bonds',
+            'visibility' => 'private',
+        ],
+        'user_appointment_letters' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user_appointment_letters'),
+            'url' => env('APP_URL') . '/storage/user_appointment_letters',
+            'visibility' => 'private',
         ],
 
     ],

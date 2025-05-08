@@ -11,7 +11,8 @@
 
                 <div class="card-body">
                     <form method="POST"
-                        action="{{ isset($data['id']) ? route('admin.userlist.submit', $data['id']) : route('admin.userlist.submit') }}">
+                        action="{{ isset($data['id']) ? route('admin.userlist.submit', $data['id']) : route('admin.userlist.submit') }}"
+                        enctype="multipart/form-data">
                         @csrf
                         <!-- Validation Errors -->
                         @if (!$uf->Validator->isValid())
@@ -395,14 +396,8 @@
                                                 User Name:
                                             </th>
                                             <td colspan="2">
-                                                {{-- @if ($permission->Check('user', 'edit_advanced')) --}}
-                                                    <input type="text" name="user_data[user_name]"
-                                                        value="{{ $user_data['user_name'] ?? '' }}">
-                                                {{-- @else
-                                                    {{ $user_data['user_name'] ?? 'N/A' }}
-                                                    <input type="hidden" name="user_data[user_name]"
-                                                        value="{{ $user_data['user_name'] ?? '' }}">
-                                                @endif --}}
+                                                <input type="text" name="user_data[user_name]"
+                                                    value="{{ $user_data['user_name'] ?? '' }}">
                                             </td>
                                         </tr>
 
@@ -632,9 +627,9 @@
                                     <tr onclick="showHelpEntry('user_image')">
                                         <td class="cellLeftEditTable">
                                             {{ __('Employee Photo (.jpg)') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
+                                            @if ($permission->Check('user', 'edit_advanced') && !empty($user_data['id']))
                                                 <a
-                                                    href="javascript:Upload('user_image','{{ $user_data['id'] ?? '' }}');">
+                                                    href="javascript:Upload('user_image','{{ $user_data['id'] }}');">
                                                     <img src="{{ asset('images/nav_popup.gif') }}" alt=""
                                                         style="vertical-align: middle" />
                                                 </a>
@@ -642,9 +637,22 @@
                                         </td>
                                         <td colspan="2" class="cellRightEditTable">
                                             <span id="no_logo" style="display:none"></span>
-                                            <img src="{{ asset('storage/user_image/' . ($user_data['id'] ?? '') . '/user.jpg') }}"
-                                                style="width:auto; height:160px;" id="header_logo2"
-                                                alt="{{ env('APPLICATION_NAME', 'App') }}" />
+                                            @if (!empty($user_data['user_image_array_size']))
+                                                @foreach ($user_data['user_image_url'] ?? [] as $index => $url)
+                                                    <img src="{{ $url }}"
+                                                        style="width:auto; height:160px;" id="header_logo2"
+                                                        alt="{{ env('APPLICATION_NAME', 'App') }}" />
+                                                    @if ($permission->Check('user', 'edit_advanced'))
+                                                        <span class="user_file_delete">
+                                                            <a href="javascript:deleteFiles('{{ $user_data['user_image_name'][$index] ?? '' }}','{{ $user_data['id'] }}','user_image');">{{ __('Delete') }}</a>
+                                                        </span>
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <img src="{{ asset('images/default_user.jpg') }}"
+                                                    style="width:auto; height:160px;" id="header_logo2"
+                                                    alt="{{ env('APPLICATION_NAME', 'App') }}" />
+                                            @endif
                                         </td>
                                     </tr>
 
@@ -1054,319 +1062,75 @@
                                         </td>
                                     </tr>
 
-                                    <tr onclick="showHelpEntry('template')">
-                                        <td height="78" class="cellLeftEditTable">
-                                            {{ __('Templates') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a
-                                                    href="javascript:Upload('user_template_file','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:120px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span class="user_appointment">
-                                                    {{-- <a href="{{ asset('storage/user_appointment_letter/' . ($user_data['id'] ?? '') . '/outputfile.docx') }}"
-                                                       target="_blank">{{ __('Appointment Letter') }}</a> --}}
-                                                    <a href="{{ asset('storage\app\public\appointment_letter_template\Template.docx') }}"
-                                                        target="_blank">{{ __('Appointment Letter') }}</a>
-                                                </span>
-                                                <span id="show_file1"
-                                                    @if (empty($user_data['user_template_array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['user_template_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['user_template_name'][$index] ?? '' }}</a>
+                                    @foreach ([['label' => __('Templates'), 'type' => 'user_template', 'disk' => 'user_templates', 'height' => '100px'], ['label' => __('Personal Files'), 'type' => 'user_file', 'disk' => 'user_files', 'height' => '100px'], ['label' => __('ID Copy'), 'type' => 'user_id_copy', 'disk' => 'user_id_copies', 'height' => '60px'], ['label' => __('Birth Certificate'), 'type' => 'user_birth_certificate', 'disk' => 'user_birth_certificates', 'height' => '60px'], ['label' => __('GS Letter'), 'type' => 'user_gs_letter', 'disk' => 'user_gs_letters', 'height' => '60px'], ['label' => __('Police Report'), 'type' => 'user_police_report', 'disk' => 'user_police_reports', 'height' => '60px'], ['label' => __('NDA'), 'type' => 'user_nda', 'disk' => 'user_ndas', 'height' => '60px'], ['label' => __('Bond'), 'type' => 'bond', 'disk' => 'bonds', 'height' => '60px']] as $file)
+                                        <tr onclick="showHelpEntry('{{ $file['type'] }}')">
+                                            <td height="78" class="cellLeftEditTable">
+                                                {{ $file['label'] }}
+                                                @if ($permission->Check('user', 'edit_advanced') && !empty($user_data['id']))
+                                                    <a
+                                                        href="javascript:Upload('{{ $file['type'] }}','{{ $user_data['id'] }}');">
+                                                        <img style="vertical-align: middle"
+                                                            src="{{ asset('images/nav_popup.gif') }}">
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td colspan="2" class="cellRightEditTable">
+                                                <div
+                                                    style="height:{{ $file['height'] }};width:auto;border:1px solid #7f9db9;padding-left:4px;overflow:auto;">
+                                                    @if ($file['type'] === 'user_template' && !empty($user_data['id']))
+                                                        <span class="user_appointment">
+                                                            <a href="{{ route('serveFile', ['disk' => 'templates', 'path' => 'appointment_letter_template.docx']) }}"
+                                                                target="_blank">{{ __('Appointment Letter Template') }}</a>
                                                         </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['user_template_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','user_template');">{{ __('Delete') }}</a>
-                                                            </span>
-                                                        @endif
                                                         <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file1" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr onclick="showHelpEntry('logo')">
-                                        <td height="78" class="cellLeftEditTable">
-                                            {{ __('Personal Files') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a
-                                                    href="javascript:Upload('user_file','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:120px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span id="show_file"
-                                                    @if (empty($user_data['array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['user_file_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['file_name'][$index] ?? '' }}</a>
-                                                        </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['file_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','user_file');">{{ __('Delete') }}</a>
+                                                        @if (Storage::disk('user_appointment_letters')->exists(
+                                                                "user_{$user_data['id']}/user_appointment_letter/outputfile.docx"))
+                                                            <span class="user_appointment">
+                                                                <a href="{{ route('serveFile', ['disk' => 'user_appointment_letters', 'path' => "user_{$user_data['id']}/user_appointment_letter/outputfile.docx"]) }}"
+                                                                    target="_blank">{{ __('Generated Appointment Letter') }}</a>
                                                             </span>
+                                                            <br />
                                                         @endif
-                                                        <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr onclick="showHelpEntry('user_id_copy')">
-                                        <td height="78" class="cellLeftEditTable">
-                                            {{ __('ID Copy') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a
-                                                    href="javascript:Upload('user_id_copy','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span id="show_file2"
-                                                    @if (empty($user_data['user_id_copy_array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['user_id_copy_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['user_id_copy_name'][$index] ?? '' }}</a>
-                                                        </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['user_id_copy_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','user_id_copy');">{{ __('Delete') }}</a>
+                                                    @endif
+                                                    <span id="show_file_{{ $file['type'] }}"
+                                                        @if (empty($user_data["{$file['type']}_array_size"] ?? 0)) style="display:none" @endif>
+                                                        @foreach ($user_data["{$file['type']}_url"] ?? [] as $index => $url)
+                                                            <span class="user_file">
+                                                                <a href="{{ route('serveFile', ['disk' => $file['disk'], 'path' => "user_{$user_data['id']}/{$file['type']}/{$user_data["{$file['type']}_name"][$index]}"]) }}"
+                                                                    target="_blank">{{ $index + 1 }}.{{ $user_data["{$file['type']}_name"][$index] ?? '' }}</a>
                                                             </span>
-                                                        @endif
-                                                        <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file2" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr onclick="showHelpEntry('user_birth_certificate')">
-                                        <td height="78" class="cellLeftEditTable">
-                                            {{ __('Birth Certificate') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a
-                                                    href="javascript:Upload('user_birth_certificate','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span id="show_file3"
-                                                    @if (empty($user_data['user_birth_certificate_array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['user_birth_certificate_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['user_birth_certificate_name'][$index] ?? '' }}</a>
-                                                        </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['user_birth_certificate_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','user_birth_certificate');">{{ __('Delete') }}</a>
-                                                            </span>
-                                                        @endif
-                                                        <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file3" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr onclick="showHelpEntry('user_gs_letter')">
-                                        <td height="78" class="cellLeftEditTable">
-                                            {{ __('GS Letter') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a
-                                                    href="javascript:Upload('user_gs_letter','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span id="show_file4"
-                                                    @if (empty($user_data['user_gs_letter_array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['user_gs_letter_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['user_gs_letter_name'][$index] ?? '' }}</a>
-                                                        </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['user_gs_letter_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','user_gs_letter');">{{ __('Delete') }}</a>
-                                                            </span>
-                                                        @endif
-                                                        <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file4" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr onclick="showHelpEntry('user_police_report')">
-                                        <td height="78" class="cellLeftEditTable">
-                                            {{ __('Police Report') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a
-                                                    href="javascript:Upload('user_police_report','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span id="show_file5"
-                                                    @if (empty($user_data['user_police_report_array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['user_police_report_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['user_police_report_name'][$index] ?? '' }}</a>
-                                                        </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['user_police_report_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','user_police_report');">{{ __('Delete') }}</a>
-                                                            </span>
-                                                        @endif
-                                                        <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file5" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr onclick="showHelpEntry('user_nda')">
-                                        <td height="78" class="cellLeftEditTable">
-                                            {{ __('NDA') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a
-                                                    href="javascript:Upload('user_nda','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span id="show_file6"
-                                                    @if (empty($user_data['user_nda_array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['user_nda_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['user_nda_name'][$index] ?? '' }}</a>
-                                                        </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['user_nda_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','user_nda');">{{ __('Delete') }}</a>
-                                                            </span>
-                                                        @endif
-                                                        <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file6" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr onclick="showHelpEntry('bond')">
-                                        <td height="78" rowspan="2" class="cellLeftEditTable">
-                                            {{ __('Bond') }}
-                                            @if ($permission->Check('user', 'edit_advanced'))
-                                                <a href="javascript:Upload('bond','{{ $user_data['id'] ?? '' }}');">
-                                                    <img style="vertical-align: middle"
-                                                        src="{{ asset('images/nav_popup.gif') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td colspan="2" class="cellRightEditTable">
-                                            <div
-                                                style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
-                                                <span id="show_file7"
-                                                    @if (empty($user_data['bond_array_size'] ?? 0)) style="display:none" @endif>
-                                                    @foreach ($user_data['bond_url'] ?? [] as $index => $url)
-                                                        <span class="user_file">
-                                                            <a href="{{ $url }}"
-                                                                target="_blank">{{ $index + 1 }}.{{ $user_data['bond_name'][$index] ?? '' }}</a>
-                                                        </span>
-                                                        @if ($permission->Check('user', 'edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a
-                                                                    href="javascript:deleteFiles('{{ $user_data['bond_name'][$index] ?? '' }}','{{ $user_data['id'] ?? '' }}','bond');">{{ __('Delete') }}</a>
-                                                            </span>
-                                                        @endif
-                                                        <br />
-                                                    @endforeach
-                                                </span>
-                                                <span id="no_file7" style="display:none">
-                                                    <b>{{ __('Click the "..." icon to upload a File.') }}</b>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr onclick="showHelpEntry('bond')">
-                                        <td colspan="2" class="cellRightEditTable">
-                                            {{ __('Bond Period') }}
-                                            <select name="user_data[bond_period]">
-                                                @foreach ($user_data['bond_period_option'] ?? [] as $value => $label)
-                                                    <option value="{{ $value }}"
-                                                        @if (($user_data['bond_period'] ?? '') == $value) selected @endif>
-                                                        {{ $label }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
+                                                            @if ($permission->Check('user', 'edit_advanced') && !empty($user_data['id']))
+                                                                <span class="user_file_delete">
+                                                                    <a
+                                                                        href="javascript:deleteFiles('{{ $user_data["{$file['type']}_name"][$index] ?? '' }}','{{ $user_data['id'] }}','{{ $file['type'] }}');">{{ __('Delete') }}</a>
+                                                                </span>
+                                                            @endif
+                                                            <br />
+                                                        @endforeach
+                                                    </span>
+                                                    <span id="no_file_{{ $file['type'] }}"
+                                                        @if (!empty($user_data["{$file['type']}_array_size"] ?? 0)) style="display:none" @endif>
+                                                        <b>{{ __('Click the "..." icon to upload a File.') }}</b>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @if ($file['type'] === 'bond')
+                                            <tr onclick="showHelpEntry('bond')">
+                                                <td colspan="2" class="cellRightEditTable">
+                                                    {{ __('Bond Period') }}
+                                                    <select name="user_data[bond_period]">
+                                                        @foreach ($user_data['bond_period_option'] ?? [] as $value => $label)
+                                                            <option value="{{ $value }}"
+                                                                @if (($user_data['bond_period'] ?? '') == $value) selected @endif>
+                                                                {{ $label }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
                                 </table>
                             </div>
                         </div>
@@ -1375,19 +1139,13 @@
                         <div class="mt-3">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
-                        
+
                         <input type="hidden" name="user_data[id]" value="{{ $user_data['id'] ?? '' }}">
                         <input type="hidden" name="incomplete" value="{{ $user_data['incomplete'] ?? '' }}">
-                        <input type="hidden" name="saved_search_id" value="{{ $user_data['saved_search_id'] ?? '' }}">
-                        <input type="hidden" name="user_data[branch_short_id]" value="{{ $user_data['branch_short_id'] ?? '' }}">
-
-                        {{-- <input type="hidden" name="user_data[id]" value="{$user_data.id}">
-                        <input type="hidden" name="incomplete" value="{$incomplete}">
-                        <input type="hidden" name="saved_search_id" value="{$saved_search_id}">
-                        <!-- ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON-->
-                        <input type="hidden" id="branch_short_id1" name="user_data[branch_short_id]"
-                            value="{$user_data.branch_short_id}"> --}}
-
+                        <input type="hidden" name="saved_search_id"
+                            value="{{ $user_data['saved_search_id'] ?? '' }}">
+                        <input type="hidden" name="user_data[branch_short_id]"
+                            value="{{ $user_data['branch_short_id'] ?? '' }}">
                     </form>
                 </div><!-- end card -->
             </div>
@@ -1396,4 +1154,119 @@
         <!-- end col -->
     </div>
 
+    <script>
+        // File Upload Modal
+        function Upload(fileType, userId) {
+            if (!userId) {
+                alert('Please save the user first.');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.id = 'uploadModal';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.background = 'rgba(0,0,0,0.5)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.innerHTML = `
+                <div style="background:white;padding:20px;border-radius:5px;">
+                    <h3>Upload File</h3>
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <input type="hidden" name="file_type" value="${fileType}">
+                        <input type="hidden" name="user_id" value="${userId}">
+                        <input type="file" name="file" required>
+                        <br><br>
+                        <button type="submit">Upload</button>
+                        <button type="button" onclick="document.getElementById('uploadModal').remove()">Cancel</button>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            document.getElementById('uploadForm').onsubmit = function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                fetch('{{ route('user.upload') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('File uploaded successfully.');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (data.error || 'Failed to upload file'));
+                    }
+                    modal.remove();
+                })
+                .catch(error => {
+                    alert('Error uploading file: ' + error.message);
+                    modal.remove();
+                });
+            };
+        }
+
+        // File Deletion
+        function deleteFiles(fileName, userId, fileType) {
+            if (!confirm('Are you sure you want to delete this file?')) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file_name', fileName);
+            formData.append('user_id', userId);
+            formData.append('file_type', fileType);
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+
+            fetch('{{ route('user.delete-file') }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('File deleted successfully.');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to delete file'));
+                }
+            })
+            .catch(error => {
+                alert('Error deleting file: ' + error.message);
+            });
+        }
+
+        // Placeholder for getBranchShortId
+        function getBranchShortId() {
+            // Implement branch short ID logic here
+            console.log('getBranchShortId called');
+        }
+
+        // Placeholder for getNextHighestEmployeeNumberByBranch
+        function getNextHighestEmployeeNumberByBranch() {
+            // Implement employee number logic here
+            console.log('getNextHighestEmployeeNumberByBranch called');
+        }
+
+        // Placeholder for showProvince
+        function showProvince() {
+            // Implement province selection logic here
+            console.log('showProvince called');
+        }
+
+        // Placeholder for showHelpEntry
+        function showHelpEntry(entry) {
+            // Implement help entry logic here
+            console.log('showHelpEntry called with: ' + entry);
+        }
+    </script>
 </x-app-layout>
