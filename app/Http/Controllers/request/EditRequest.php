@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\request;
 
 use App\Http\Controllers\Controller;
+use App\Models\Core\Debug;
 use App\Models\Core\Environment;
+use App\Models\Core\FormVariables;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
+use App\Models\Request\RequestFactory;
+use App\Models\Request\RequestListFactory;
 use Illuminate\Support\Facades\View;
 
 class EditRequest extends Controller
@@ -37,86 +41,79 @@ class EditRequest extends Controller
 		}
 		*/
 
-		$viewData['title'] = 'Request List';
+		$viewData['title'] = 'Edit Request';
 		$current_company = $this->currentCompany;
 		$current_user = $this->currentUser;
 		$permission = $this->permission;
+		$current_user_prefs = $this->userPrefs;
 
-	}
-}
-
-if ( !$permission->Check('request','enabled')
+		if ( !$permission->Check('request','enabled')
 		OR !( $permission->Check('request','edit')
 				OR $permission->Check('request','edit_own')
 				 ) ) {
-
-	$permission->Redirect( FALSE ); //Redirect
-
-}
-
-$smarty->assign('title', __($title = 'Edit Request')); // See index.php
-
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-												'data'
-												) ) );
-
-if ( isset($data) ) {
-	$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
-}
-
-$rf = new RequestFactory();
-
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-switch ($action) {
-	case 'submit':
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$rf->StartTransaction();
-
-		$rf->setId( $data['id'] );
-		$rf->setUserDate( $data['user_id'], $data['date_stamp'] );
-
-		$rf->setType( $data['type_id'] );
-		$rf->setStatus( 30 );
-		if ( $rf->isNew() ) {
-			Debug::Text('Object is NEW!', __FILE__, __LINE__, __METHOD__,10);
-			$rf->setMessage( $data['message'] );
-		} else {
-			Debug::Text('Object is NOT new!', __FILE__, __LINE__, __METHOD__,10);
+			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		if ( $rf->isValid() ) {
-			$request_id = $rf->Save();
+		// Get FORM variables
 
-			$rf->CommitTransaction();
-			//$rf->FailTransaction();
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data'
+			) 
+		) );
 
-			//Redirect::Page( URLBuilder::getURL( array('refresh' => FALSE ), '../CloseWindow.php') );
-
-			Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
-
+		if ( isset($data) ) {
+			$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 		}
-		$rf->FailTransaction();
 
-	default:
-		if ( (int)$id > 0 ) {
-			Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
+		$rf = new RequestFactory(); 
 
-			$rlf = new RequestListFactory();
-			$rlf->getByIDAndCompanyID( $id, $current_company->getId() );
+		$action = $_POST['action'] ?? '';
+		$action = !empty($action) ? strtolower($action) : '';
 
-			foreach ($rlf as $r_obj) {
-				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
+		switch ($action) {
+			case 'submit':
+				//Debug::setVerbosity(11);
+				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-				$data = array(
+				$rf->StartTransaction();
+
+				$rf->setId( $data['id'] );
+				$rf->setUserDate( $data['user_id'], $data['date_stamp'] );
+
+				$rf->setType( $data['type_id'] );
+				$rf->setStatus( 30 );
+				if ( $rf->isNew() ) {
+					Debug::Text('Object is NEW!', __FILE__, __LINE__, __METHOD__,10);
+					$rf->setMessage( $data['message'] );
+				} else {
+					Debug::Text('Object is NOT new!', __FILE__, __LINE__, __METHOD__,10);
+				}
+
+				if ( $rf->isValid() ) {
+					$request_id = $rf->Save();
+
+					$rf->CommitTransaction();
+					
+					Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '/close_window') );
+
+				}else{
+					$rf->FailTransaction();
+				}
+
+			default:
+				if ( (int)$id > 0 ) {
+					Debug::Text(' ID was passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
+
+					$rlf = new RequestListFactory();
+					$rlf->getByIDAndCompanyID( $id, $current_company->getId() );
+
+					foreach ($rlf as $r_obj) {
+						//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
+
+						$data = array (
 									'id' => $r_obj->getId(),
 									'user_date_id' => $r_obj->getId(),
 									'user_id' => $r_obj->getUserDateObject()->getUser(),
@@ -131,29 +128,34 @@ switch ($action) {
 									'deleted_date' => $r_obj->getDeletedDate(),
 									'deleted_by' => $r_obj->getDeletedBy()
 								);
-			}
-		} elseif ( $action != 'submit' ) {
-			Debug::Text(' ID was NOT passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
-			//UserID has to be set at minimum
-			$data = array(
-						'user_id' => $current_user->getId(),
-						'user_full_name' => $current_user->getFullName(),
-						'date_stamp' => TTDate::getTime()
-					);
-		} else {
-			$data['user_full_name'] = $current_user->getFullName();
+					}
+				} elseif ( $action != 'submit' ) {
+					Debug::Text(' ID was NOT passed: '. $id, __FILE__, __LINE__, __METHOD__,10);
+					//UserID has to be set at minimum
+					$data = array(
+								'user_id' => $current_user->getId(),
+								'user_full_name' => $current_user->getFullName(),
+								'date_stamp' => TTDate::getTime()
+							);
+				} else {
+					$data['user_full_name'] = $current_user->getFullName();
+				}
+
+				//Select box options;
+				$data['status_options'] = $rf->getOptions('status');
+				$data['type_options'] = $rf->getOptions('type');
+
+				$viewData['data'] = $data;
+
+				break;
 		}
 
-		//Select box options;
-		$data['status_options'] = $rf->getOptions('status');
-		$data['type_options'] = $rf->getOptions('type');
+		$viewData['rf'] = $rf;
 
-		$smarty->assign_by_ref('data', $data);
+		return view('request/EditRequest', $viewData);
 
-		break;
+	}
 }
 
-$smarty->assign_by_ref('rf', $rf);
 
-$smarty->display('request/EditRequest.tpl');
 ?>

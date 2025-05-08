@@ -36,6 +36,7 @@ use App\Http\Controllers\policy\EditRecurringHoliday;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\message\EditMessage;
+use App\Http\Controllers\message\EmbeddedMessageList;
 use App\Http\Controllers\message\UserMessageList;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccount;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccountLink;
@@ -105,6 +106,7 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
+use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
 use App\Http\Controllers\users\UserDeductionListNew;
@@ -368,18 +370,18 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
  Route::post('/user/web_password/save/{id?}', [EditUserPasswordNew::class, 'save'])->name('user.web_password.save');
 
 
- // ===============================================================================================================================
- // User Preference
- // ===============================================================================================================================
+// ===============================================================================================================================
+// User Preference
+// ===============================================================================================================================
  Route::get('/user/preference', [EditUserPreference::class, 'index'])->name('user_preference.index');
 
  Route::get('/user/preference/add/{id?}', [EditUserPreference::class, 'index'])->name('user_preference.add');
  Route::post('/user/preference/save/{id?}', [EditUserPreference::class, 'save'])->name('user_preference.save');
 
 
- // ===============================================================================================================================
- // User tax/deduction
- // ===============================================================================================================================
+// ===============================================================================================================================
+// User tax/deduction
+// ===============================================================================================================================
  Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
  Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
  Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
@@ -387,13 +389,16 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
  Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
 
 // ===============================================================================================================================
- // User messages
- // ===============================================================================================================================
+// User messages
+// ===============================================================================================================================
  Route::get('/user/messages', [UserMessageList::class, 'index'])->name('user.messages.index');
  Route::get('/user/messages/add/{user_id?}', [UserMessageList::class, 'add'])->name('user.messages.add');
  Route::get('/user/messages/edit/{id?}', [EditMessage::class, 'index'])->name('user.messages.edit');
  Route::post('/user/messages/save/{id?}', [EditMessage::class, 'save'])->name('user.messages.save');
  Route::delete('/user/messages/delete/{id}', [UserMessageList::class, 'delete'])->name('user.messages.delete');
+
+ Route::get('/user/embedded_messages', [EmbeddedMessageList::class, 'index'])->name('user.embedded_messages');
+ 
 // ===============================================================================================================================
 // Policies
 // ===============================================================================================================================
@@ -485,8 +490,8 @@ Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete
 Route::match(['get', 'post'], '/attendance/masspunch/add', [AddMassPunch::class, 'index'])->name('attendance.masspunch.add');
 
 Route::get('/attendance/requests', [UserRequestList::class, 'index'])->name('attendance.requests');
-Route::get('/attendance/request/add/{id?}', [EditRequest::class, 'index'])->name('attendance.request.add');
-Route::post('/attendance/request/submit/{id?}', [EditRequest::class, 'submit'])->name('attendance.request.submit');
+Route::match(['get', 'post'], '/attendance/request/add', [EditRequest::class, 'index'])->name('attendance.request.add');
+Route::get('/attendance/request/view', [ViewRequest::class, 'index'])->name('attendance.request.view');
 Route::delete('/attendance/request/delete/{id}', [UserRequestList::class, 'delete'])->name('attendance.request.delete');
 
 Route::get('/attendance/accruals/{filter_user_id?}', [UserAccrualBalanceList::class, 'index'])->name('attendance.accruals');
@@ -499,6 +504,10 @@ Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name(
 
 Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
+
+// ===============================================================================================================================
+
+// add view_schedule route
 
 // ===============================================================================================================================
 
