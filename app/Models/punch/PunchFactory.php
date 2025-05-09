@@ -788,7 +788,7 @@ class PunchFactory extends Factory {
 
 		return FALSE;
 	}
-	function setOriginalTimeStamp($epoch, $type= null) {
+	function setOriginalTimeStamp($epoch, $type= 'timestamp') {
 		$epoch = trim($epoch);
 
 		if 	(	$this->Validator->isDate(		'original_time_stamp',
@@ -825,7 +825,7 @@ class PunchFactory extends Factory {
 
 		return FALSE;
 	}
-	function setActualTimeStamp($epoch, $type = null) {
+	function setActualTimeStamp($epoch, $type = 'timestamp') {
 		$epoch = trim($epoch);
 
 		if 	(	$this->Validator->isDate(		'actual_time_stamp',

@@ -590,8 +590,8 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		//Debug::Text(' Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
-
-		if ( $rs->RecordCount() > 0 ) {
+		
+		if ( count($rs) > 0 ) {
 			$valid_level = FALSE;
 			foreach( $rs as $row ) {
 				if ( $immediate_parents_only == TRUE ) {

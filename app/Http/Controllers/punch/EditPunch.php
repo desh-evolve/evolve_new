@@ -298,10 +298,16 @@ class EditPunch extends Controller
 				$p_obj->setEnableCalcUserDateTotal( TRUE );
 				$p_obj->setEnableCalcException( TRUE );
 				$res = $p_obj->Save();
+				if($res){
+					//return redirect(URLBuilder::getURL( array('refresh' => TRUE ), 'close_window'));
+					return response()->json(['success' => 'Punch Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Punch Deleted Failed.']);
+				}
 			}
 		}
 
-		return redirect(route('attendance.punchlist'));
+		
 
 	}
 
@@ -381,15 +387,16 @@ class EditPunch extends Controller
 			}
 
 			if ( $pf->isNew() ) {
-				$pf->setActualTimeStamp( $time_stamp, 'timestamp' );
-				$pf->setOriginalTimeStamp( $pf->getTimeStamp(), 'timestamp' );
+				$pf->setActualTimeStamp( $time_stamp );
+				$pf->setOriginalTimeStamp( $pf->getTimeStamp() );
 			}
-
 			if ( $pf->isValid() == TRUE ) {
-				if ( $pf->Save( FALSE ) == TRUE ) {
+				
+				if ( $pf->Save( FALSE )) {
+
 					$pcf = new PunchControlFactory();
-					$pcf->setId( $pf->getPunchControlID() );
 					$pcf->setPunchObject( $pf );
+					$pcf->setId( $pf->getPunchControlID() );
 
 					if ( $i == 0 AND $pc_data['user_date_id'] != '' ) {
 						//This is important when editing a punch, without it there can be issues calculating exceptions
@@ -405,16 +412,16 @@ class EditPunch extends Controller
 						$pcf->setDepartment( $pc_data['department_id'] );
 					}
 					if ( isset($pc_data['job_id']) ) {
-						$pcf->setJob( $pc_data['job_id'] );
+						$pcf->setJob( $pc_data['job_id'] ?? 0 );
 					}
 					if ( isset($pc_data['job_item_id']) ) {
-						$pcf->setJobItem( $pc_data['job_item_id'] );
+						$pcf->setJobItem( $pc_data['job_item_id'] ?? 0  );
 					}
 					if ( isset($pc_data['quantity']) ) {
-						$pcf->setQuantity( $pc_data['quantity'] );
+						$pcf->setQuantity( $pc_data['quantity'] ?? 0  );
 					}
 					if ( isset($pc_data['bad_quantity']) ) {
-						$pcf->setBadQuantity( $pc_data['bad_quantity'] );
+						$pcf->setBadQuantity( $pc_data['bad_quantity'] ?? 0  );
 					}
 					if ( isset($pc_data['note']) ) {
 						$pcf->setNote( $pc_data['note'] );
@@ -443,7 +450,7 @@ class EditPunch extends Controller
 					$pcf->setEnableCalcWeeklySystemTotalTime( TRUE );
 					$pcf->setEnableCalcUserDateTotal( TRUE );
 					$pcf->setEnableCalcException( TRUE );
-
+					
 					if ( $pcf->isValid() == TRUE ) {
 						Debug::Text(' Punch Control is valid, saving...: ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -473,7 +480,7 @@ class EditPunch extends Controller
 			//$pf->FailTransaction();
 			$pf->CommitTransaction();
 
-			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), '/attendance/punchlist'));
+			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), 'close_window'));
 		} else {
 			$pf->FailTransaction();
 		}

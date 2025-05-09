@@ -200,8 +200,8 @@
 			<input type="hidden" name="sort_column" value="{$sort_column}">
 			<input type="hidden" name="sort_order" value="{$sort_order}">
 			<input type="hidden" name="page" value="{$paging_data.current_page}">
-			</table>
-		</form>
+			</form>
+		</table>
 	</div>
 </div>
 {include file="footer.tpl"}

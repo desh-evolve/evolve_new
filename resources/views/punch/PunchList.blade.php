@@ -56,8 +56,9 @@
                                     <td>{{ $row['time_stamp'] }}</td>
                                     <td>
                                         <a class="btn btn-info btn-sm" href="#">View</a>
-                                        <a class="btn btn-secondary btn-sm" href="{{ route('attendance.punch.add', ['id' => $row['id'], 'punch_control_id' => 'undefined', 'user_id' => 'undefined', 'date_stamp' => 'undefined', 'status_id' => 'undefined']) }}">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch/delete/{{ $row['id'] }}', 'Punch', this)">Delete</button>
+                                        
+                                        <button class="btn btn-secondary btn-sm" onclick="editPunch({{$row['id']}},'','','','')">Edit</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch_single/delete/{{ $row['id'] }}', 'Punch', this)">Delete</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -88,5 +89,16 @@
                 }
             @endif
         })
+
+        function editPunch(punchID,punchControlId,userID,date,statusID) {
+            try {
+                eP=window.open('/attendance/punch/add?id='+encodeURI(punchID)+'&punch_control_id='+encodeURI(punchControlId)+'&user_id='+encodeURI(userID)+'&date_stamp='+encodeURI(date)+'&status_id='+encodeURI(statusID),"Edit_Punch","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=800,height=625,resizable=1");
+                if (window.focus) {
+                    eP.focus()
+                }
+            } catch (e) {
+                //DN
+            }
+        }
     </script>
 </x-app-layout>

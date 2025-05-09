@@ -23,7 +23,9 @@
                     
                     {{-- ---------------------------------------------- --}}
 
-                    <form method="post" name="wage" action="/attendance/punch/edit_user_absence">
+                    <form method="POST" action="{{ route('attendance.punch.edit_user_absence') }}">
+                        @csrf
+
                         <div id="contentBoxTwoEdit">
                             @if (!$udtf->Validator->isValid())
                                 {{-- error list here --}}
@@ -101,7 +103,7 @@
                                         <br>
                                         Accrual Policy: <span id="accrual_policy_name">None</span><br>
                                         Available Balance: <span id="accrual_policy_balance">N/A</span><br>
-                                        <input type="hidden" name="udt_data[old_absence_policy_id]" value="{$udt_data.absence_policy_id}">
+                                        <input type="hidden" name="udt_data[old_absence_policy_id]" value="{{$udt_data['absence_policy_id'] ?? ''}}">
                                     </td>
                                 </tr>
                 
@@ -158,9 +160,10 @@
                         </div>
                 
                         <div id="contentBoxFour">
-                            <input type="submit" class="btnSubmit btn btn-primary btn-sm" name="action:submit"  onClick="return singleSubmitHandler(this)">
+                            <input type="submit" class="btnSubmit btn btn-primary btn-sm" name="action" value="submit" onClick="return singleSubmitHandler(this)">
                             @if (!empty($udt_data['id']) AND ( $permission->Check('absence','delete') OR $permission->Check('absence','delete_own') OR $permission->Check('absence','delete_child') ))
-                                <input type="submit" class="btnDelete1" name="action:delete"   onClick="return singleSubmitHandler(this)">
+                                {{-- <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch_single/delete/{{ $pc_data['punch_id'] ?? '' }}', 'Punch', this, true)">Delete</button> --}}
+                                <input type="submit" class="btnDelete1" name="action" value="delete"  onclick="commonDeleteFunction('/attendance/punch/edit_user_absence', 'User Absence', this, true)">
                             @endif
                         </div>
                 
@@ -230,7 +233,7 @@
             document.getElementById('accrual_policy_balance').innerHTML = 'N/A';
 
             if ( document.getElementById('absence_policy_id').value != 0 ) {
-                remoteHW.getAbsencePolicyBalance( document.getElementById('absence_policy_id').value, {/literal}{$udt_data.user_id}{literal});
+                remoteHW.getAbsencePolicyBalance( document.getElementById('absence_policy_id').value, {{$udt_data['user_id']}});
                 remoteHW.getAbsencePolicyData( document.getElementById('absence_policy_id').value );
             }
         }

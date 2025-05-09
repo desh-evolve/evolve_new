@@ -47,6 +47,7 @@ class ProgressBar extends Controller
     protected $currentCompany;
     protected $userPrefs;
     protected $profiler;
+    protected $current_station;
 
 	public $progress = 0;
     private $isProgressBarInitialized = false;
@@ -65,6 +66,7 @@ class ProgressBar extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
         $this->profiler = View::shared('profiler');
+        $this->current_station = View::shared('current_station');
 
         $this->isProgressBarInitialized = false;
 
@@ -144,6 +146,7 @@ class ProgressBar extends Controller
         $current_user = $this->currentUser;
         $current_company = $this->currentCompany;
         $current_user_prefs = $this->userPrefs;
+        $current_station = $this->current_station;
 
         // Get FORM variables
         extract	(FormVariables::GetVariables(
@@ -166,6 +169,9 @@ class ProgressBar extends Controller
         $ppf = new PayPeriodFactory();
 
         $action = strtolower($action);
+
+        //dd($action);
+
         switch ($action) {
             case 'recalculate_company':
             case 'recalculate_employee':
@@ -259,11 +265,10 @@ class ProgressBar extends Controller
 
                         if ( $init_progress_bar == TRUE ) {
                             //InitProgressBar( ceil(100 / $total_pay_stubs) );
-                            InitProgressBar();
+                            $this->initProgressBar(0);
                             $init_progress_bar = FALSE;
                         }
 
-                        $this->initProgressBar(0);
 
                         //Delete existing pay stub. Make sure we only
                         //delete pay stubs that are the same as what we're creating.
@@ -364,11 +369,9 @@ class ProgressBar extends Controller
 
                         if ( $init_progress_bar == TRUE ) {
                             //InitProgressBar( ceil(100 / $total_pay_stubs) );
-                            InitProgressBar();
+                            $this->initProgressBar(0);
                             $init_progress_bar = FALSE;
                         }
-
-                        $this->initProgressBar(0);
 
                         //Delete existing pay stub. Make sure we only
                         //delete pay stubs that are the same as what we're creating.
@@ -457,11 +460,9 @@ class ProgressBar extends Controller
                             if ( $total_pay_stubs > 0 ) {
 
                                 if ( $init_progress_bar == TRUE ) {
-                                    InitProgressBar();
+                                    $this->initProgressBar(0);
                                     $init_progress_bar = FALSE;
                                 }
-
-                                $this->initProgressBar(0);
 
                                 $x=1;
                                 foreach($pslf->rs as $ps_obj ) {
@@ -498,11 +499,9 @@ class ProgressBar extends Controller
                     $init_progress_bar = TRUE;
 
                     if ( $init_progress_bar == TRUE ) {
-                        InitProgressBar();
+                        $this->initProgressBar(0);
                         $init_progress_bar = FALSE;
                     }
-
-                    $this->initProgressBar(0);
 
                     //This will be slightly off depending on which days of the week they choose.
                     $total_punches = count($filter_user_id) * TTDate::getDays($data['end_punch_full_time_stamp'] - $data['start_punch_full_time_stamp']);
@@ -665,7 +664,7 @@ class ProgressBar extends Controller
 
                     $this->initProgressBar(100);
 
-                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Punch', 'batch_next_page' => urlencode( URLBuilder::getURL( array('pc_data' => $data, 'filter_user_id' => $filter_user_id ), '../punch/AddMassPunch.php' ) ) ), '../users/UserGenericStatusList.php');
+                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Punch', 'batch_next_page' => urlencode( URLBuilder::getURL( array('pc_data' => $data, 'filter_user_id' => $filter_user_id ), '/attendance/masspunch/add' ) ) ), '/users/user_generic_status_list');
                 }
 
                 break;
@@ -674,11 +673,9 @@ class ProgressBar extends Controller
                     $init_progress_bar = TRUE;
 
                     if ( $init_progress_bar == TRUE ) {
-                        InitProgressBar();
+                        $this->initProgressBar(0);
                         $init_progress_bar = FALSE;
                     }
-
-                    $this->initProgressBar(0);
 
                     //This will be slightly off depending on which days of the week they choose.
                     $total_shifts = count($filter_user_id) * TTDate::getDays($data['end_full_time_stamp'] - $data['start_full_time_stamp']);
@@ -834,11 +831,11 @@ class ProgressBar extends Controller
                                 $init_progress_bar = TRUE;
 
                     if ( $init_progress_bar == TRUE ) {
-                        InitProgressBar();
+                        $this->initProgressBar(0);
                         $init_progress_bar = FALSE;
                     }
 
-                    $this->initProgressBar(0);
+                    
 
                     //This will be slightly off depending on which days of the week they choose.
                     $total_shifts = count($filter_user_id) * count($data['shifts']); 
@@ -1075,11 +1072,10 @@ class ProgressBar extends Controller
                         $init_progress_bar = TRUE;
 
                         if ( $init_progress_bar == TRUE ) {
-                            InitProgressBar();
+                            $this->initProgressBar(0);
                             $init_progress_bar = FALSE;
                         }
 
-                        $this->initProgressBar(0);
 
                         $apf = new AccrualPolicyFactory(); 
                         $aplf = new AccrualPolicyListFactory();

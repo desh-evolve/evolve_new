@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
+
+
+use Illuminate\Database\QueryException;
+
 use Throwable;
 
 class Factory
@@ -218,8 +222,8 @@ class Factory
 	}
 
 	//Determines if the data is new data, or updated data.
-	public function isNew($force_lookup = false)
-	{
+	/*
+	public function isNew($force_lookup = false) {
 		// Check if the model has an ID (i.e., it's an existing record)
 		if (empty($this->getId())) {
 			// New Data (no ID set)
@@ -233,9 +237,40 @@ class Factory
 				return true;
 			}
 		}
+		
 		// Not new data (the record exists in the DB)
 		return false;
+		
 	}
+	*/
+
+	public function isNew($force_lookup = false)
+    {
+		
+        Log::debug('Checking if record is new', ['id' => $this->getId(), 'force_lookup' => $force_lookup]);
+
+        if (empty($this->getId()) || $this->getId() === false) {
+            // New data
+            return true;
+        } elseif ($force_lookup === true) {
+            // Verify if the ID exists in the database
+			$table = $this->getTable();
+			if (empty($table)) {
+				throw new \Exception('Table name is empty or not set');
+			}
+
+			$exists = DB::table($table)
+				->where('id', $this->getId())
+				->value('id');
+
+			if ($exists === null) {
+				return true;
+			}
+        }
+
+        // Not new data
+        return false;
+    }
 
 
 	//Determines if we were called by a save function or not.
@@ -674,8 +709,8 @@ class Factory
 		return FALSE;
 	}
 
-	private function getRecordSetColumnList($rs)
-	{
+	/*
+	private function getRecordSetColumnList($rs) {
 		if (is_object($rs)) {
 			for ($i = 0, $max = $rs->FieldCount(); $i < $max; $i++) {
 				$field = $rs->FetchField($i);
@@ -687,6 +722,23 @@ class Factory
 
 		return FALSE;
 	}
+	*/
+
+	private function getRecordSetColumnList($rs)
+    {
+        if (is_object($rs)) {
+            try {
+                // Get column names from the table schema
+                $columns = Schema::getColumnListing($this->getTable());
+                return $columns ?: false;
+            } catch (\Exception $e) {
+                Log::error('Error retrieving column list: ' . $e->getMessage());
+                return false;
+            }
+        }
+
+        return false;
+    }
 
 	protected function getListSQL($array, $ph = null)
 	{
@@ -1324,8 +1376,8 @@ class Factory
 		return FALSE;
 	}
 
-	public function getEmptyRecordSet($id = NULL)
-	{
+	/*
+	public function getEmptyRecordSet($id = NULL) {
 		global $profiler, $config_vars;
 
 		$profiler  = new Profiler();
@@ -1355,16 +1407,16 @@ class Factory
 
 			if ($id == -1 and isset($config_vars['cache']['enable']) and $config_vars['cache']['enable'] == TRUE) {
 
-				/*
+				
 				//Try to use Cache Lite instead of ADODB, to avoid cache write errors from causing a transaction rollback. It should be faster too.
 				//However I think there is some issues with storing the record set, as ADODB goes to great lengths to avoid straight serialize/unserialize.
-				$cache_id = 'empty_rs_'. $this->table .'_'. $id;
-				$rs = $this->getCache($cache_id);
-				if ( $rs === FALSE ) {
-					$rs = DB::select($query);
-					$this->saveCache($rs,$cache_id);
-				}
-				*/
+				//$cache_id = 'empty_rs_'. $this->table .'_'. $id;
+				//$rs = $this->getCache($cache_id);
+				//if ( $rs === FALSE ) {
+				//	$rs = DB::select($query);
+				//	$this->saveCache($rs,$cache_id);
+				//}
+				
 				$save_error_handlers = $this->db->IgnoreErrors(); //Prevent a cache write error from causing a transaction rollback.
 				try {
 					$rs = $this->db->CacheExecute(604800, $query);
@@ -1462,6 +1514,161 @@ class Factory
 
 		return $query;
 	}
+	*/
+
+	
+	public function getEmptyRecordSet(?int $id = null): object
+    {
+        Log::debug('Starting getEmptyRecordSet for table: ' . $this->getTable() . ', ID: ' . ($id ?? -1));
+
+        // Default to -1 if ID is null
+        $id = $id ?? -1;
+        $id = (int)$id;
+
+        // Get column list or use all columns
+        $column_list = $this->getColumnList();
+        $column_str = is_array($column_list) ? implode(',', $column_list) : '*';
+
+        try {
+            $query = "SELECT {$column_str} FROM {$this->getTable()} WHERE id = {$id}";
+
+            if ($id == -1 && config('cache.enabled', false)) {
+                $cache_id = "empty_rs_{$this->getTable()}_{$id}";
+                
+                // Try to get from cache
+                $rs = Cache::remember($cache_id, 604800, function () use ($query) {
+                    try {
+                        $result = DB::select($query);
+                        return $result ? (object)$result[0] : (object)[];
+                    } catch (QueryException $e) {
+                        Log::error('Database error in non-cached query: ' . $e->getMessage());
+                        throw new \Exception('Database error: ' . $e->getMessage());
+                    }
+                });
+            } else {
+                // Execute non-cached query
+                $result = DB::select($query);
+                $rs = $result ? (object)$result[0] : (object)[];
+            }
+
+            Log::debug('Completed getEmptyRecordSet for table: ' . $this->getTable() . ', ID: ' . $id);
+            return $rs;
+
+        } catch (QueryException $e) {
+            Log::error('Database error in getEmptyRecordSet: ' . $e->getMessage());
+            throw new \Exception('Database error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Log::error('Cache or database error in getEmptyRecordSet: ' . $e->getMessage());
+            throw new \Exception('Error: ' . $e->getMessage());
+        }
+    }
+
+    private function getUpdateQuery(?array $data = null): bool|string
+    {
+        try {
+            // Get existing record
+            $rs = $this->getEmptyRecordSet($this->getId());
+            
+            if (!$rs || empty((array)$rs)) {
+                Log::warning('No record found for ID: ' . $this->getId() . '. Consider inserting instead.');
+                return false;
+            }
+
+            // Store old data for audit logging
+            $this->old_data = (array)$rs;
+
+            // Prepare data to update
+            $dataToUpdate = $data ?? $this->data;
+
+            // Check if data has changed
+            $changes = array_diff_assoc($dataToUpdate, $this->old_data);
+
+            if (empty($changes)) {
+                Log::debug('No changes detected for ID: ' . $this->getId());
+                return true; // No changes, return true to allow post-save operations
+            }
+
+            // Validate table name
+            $table = $this->getTable();
+            if (empty($table)) {
+                throw new \Exception('Table name is empty or not set');
+            }
+
+            // Build update query with actual values
+            $setClauses = [];
+            foreach ($changes as $column => $value) {
+                if (is_null($value)) {
+                    $setClauses[] = "`{$column}` = NULL";
+                } elseif (is_bool($value)) {
+                    $setClauses[] = "`{$column}` = " . ($value ? '1' : '0');
+                } elseif (is_numeric($value)) {
+                    $setClauses[] = "`{$column}` = {$value}";
+                } else {
+                    $setClauses[] = "`{$column}` = " . DB::getPdo()->quote($value);
+                }
+            }
+
+            $query = "UPDATE {$table} SET " . implode(', ', $setClauses) . " WHERE id = " . (int)$this->getId();
+			
+            Log::debug('Update query prepared', ['query' => $query]);
+
+            return $query;
+
+        } catch (QueryException $e) {
+            Log::error('Database error in getUpdateQuery: ' . $e->getMessage());
+            throw new \Exception('Database error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Log::error('Error in getUpdateQuery: ' . $e->getMessage());
+            throw new \Exception('Error: ' . $e->getMessage());
+        }
+    }
+
+    private function getInsertQuery(?array $data = null): string
+    {
+        try {
+            // Validate table name
+            $table = $this->getTable();
+            if (empty($table)) {
+                throw new \Exception('Table name is empty or not set');
+            }
+
+            // Prepare data to insert
+            $dataToInsert = $data ?? $this->data;
+
+            if (empty($dataToInsert)) {
+                throw new \Exception('No data provided for insert');
+            }
+
+            // Build insert query with actual values
+            $columns = array_keys($dataToInsert);
+            $values = array_map(function ($value) {
+                // Properly escape values based on type
+                if (is_null($value)) {
+                    return 'NULL';
+                } elseif (is_bool($value)) {
+                    return $value ? '1' : '0';
+                } elseif (is_numeric($value)) {
+                    return $value;
+                } else {
+                    return DB::getPdo()->quote($value);
+                }
+            }, array_values($dataToInsert));
+
+            $query = "INSERT INTO {$table} (`" . implode('`, `', $columns) . "`) VALUES (" . implode(', ', $values) . ")";
+
+            Log::debug('Insert query prepared', ['query' => $query]);
+
+            return $query;
+
+        } catch (QueryException $e) {
+            Log::error('Database error in getInsertQuery: ' . $e->getMessage());
+            throw new \Exception('Database error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Log::error('Error in getInsertQuery: ' . $e->getMessage());
+            throw new \Exception('Error: ' . $e->getMessage());
+        }
+    }
+	
 
 	public function startTransaction()
 	{
@@ -1497,8 +1704,8 @@ class Factory
 		return DB::table($this->getTable())->max('id') + 1;
 	}
 
-	public function Save($reset_data = TRUE, $force_lookup = FALSE)
-	{
+	/*
+	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		DB::beginTransaction();
 		try {
 			// Validate the model before saving (if not deleted)
@@ -1552,13 +1759,13 @@ class Factory
 				$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
 			}
 
-			/*
+			
 			if ( method_exists($this,'addLog') ) {
 				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
 				//tables like PayPeriodSchedule, so addLog() can't get the user information.
 				$this->addLog( $log_action );
 			}
-			*/
+			
 
 			// Clear the data if requested
 			if ($reset_data) {
@@ -1577,6 +1784,139 @@ class Factory
 			exit;
 			throw new \Exception('Save failed.');
 		}
+	}
+	*/
+
+	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
+		//$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+		//$caller = $backtrace[1] ?? [];
+		//dd($caller);
+		
+		$this->StartTransaction();
+		
+		//Run Pre-Save function
+		//This is called before validate so it can do extra calculations,etc before validation.
+		//Should this AND validate() NOT be called when delete flag is set?
+		if ( method_exists($this,'preSave') ) {
+			Debug::text('Calling preSave()' , __FILE__, __LINE__, __METHOD__,10);
+			if ( $this->preSave() === FALSE ) {
+				throw new GeneralError('preSave() failed.');
+			}
+		}
+		
+		//Don't validate when deleting, so we can delete records that may have some invalid options.
+		//However we can still manually call this function to check if we need too.
+		if ( $this->getDeleted() == FALSE AND $this->isValid() === FALSE ) {
+			throw new GeneralError('Invalid Data, not saving.');
+		}
+		
+
+		if ($this->isNew($force_lookup)) {
+			//Insert
+			$time = TTDate::getTime();
+
+			if ( empty($this->getCreatedDate()) ) {
+				$this->setCreatedDate($time);
+			}
+			
+			if ( empty($this->getCreatedBy()) ) {
+				$this->setCreatedBy();
+			}
+			
+			//Set updated date at the same time, so we can easily select last
+			//updated, or last created records.
+			$this->setUpdatedDate($time);
+			$this->setUpdatedBy();
+
+			unset($time);
+			$insert_id = $this->getID();
+			if( empty($insert_id) || $insert_id == FALSE ){
+				//Append insert ID to data array.
+				$insert_id = $this->getNextInsertId();
+
+				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
+				$this->setId($insert_id);
+			}
+			
+			try {
+				$query = $this->getInsertQuery();
+			} catch (Exception $e) {
+				dd($e);
+				throw new \Exception('Save failed.');
+			}
+			
+			$retval = (int)$insert_id;
+			$log_action = 10; // 'Add'
+		} else {
+			Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
+			
+			//Update
+			$query = $this->getUpdateQuery(); //Don't pass data, too slow
+
+			// Return true to indicate success
+			$retval = true;
+			$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
+		}
+
+		if ( $query != '' OR $query === TRUE ) {
+
+			if ( is_string($query) AND $query != '' ) {
+				try {
+					//dd($query);
+					// Execute the insert query
+					DB::statement($query);
+					Log::debug('Insert query executed', ['query' => $query]);
+					
+					// Get the inserted ID
+					//$insert_id = DB::getPdo()->lastInsertId();
+					//$this->setId((int)$insert_id);
+
+				} catch (Exception $e) {
+					//Comment this out to see some errors on MySQL.
+					//throw new DBError($e);
+
+					// Roll back the transaction on error
+					DB::rollBack();
+					Log::error('Save failed: ' . $e->getMessage());
+					dd($e->getMessage());
+					throw new \Exception('Save failed.');
+
+					return false;
+				}
+			}
+			if ( method_exists($this,'addLog') ) {
+				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
+				//tables like PayPeriodSchedule, so addLog() can't get the user information.
+				$this->addLog( $log_action );
+			}
+			
+			//Run postSave function.
+			if ( method_exists($this,'postSave') ) {
+				Debug::text('Calling postSave()' , __FILE__, __LINE__, __METHOD__,10);
+				if ( $this->postSave( array_diff_assoc( $this->old_data, $this->data ) ) === FALSE ) {
+					throw new GeneralError('postSave() failed.');
+				}
+			}
+
+			// Clear the data if requested
+			if ($reset_data) {
+				$this->clearData();
+			}
+			//IF YOUR NOT RESETTING THE DATA, BE SURE TO CLEAR THE OBJECT MANUALLY
+			//IF ITS IN A LOOP!! VERY IMPORTANT!
+
+			$this->CommitTransaction();
+
+			return $retval;
+		}
+
+		Debug::text('Save(): returning FALSE! Very BAD!' , __FILE__, __LINE__, __METHOD__,10);
+
+		throw new GeneralError('Save(): failed.');
+
+		return FALSE; //This should return false here?
+
+
 	}
 
 	function Delete()

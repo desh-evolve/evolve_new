@@ -12,6 +12,7 @@ use App\Http\Controllers\Branch\BranchList;
 use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
+use App\Http\Controllers\CloseWindow;
 use App\Http\Controllers\company\EditCompany;
 use App\Http\Controllers\company\EditCompanyDeduction;
 use App\Http\Controllers\company\EditOtherField;
@@ -33,8 +34,10 @@ use App\Http\Controllers\policy\RecurringHolidayList;
 use App\Http\Controllers\policy\EditRecurringHoliday;
 
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\leaves\ApplyUserLeave;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\message\EditMessage;
+use App\Http\Controllers\message\EmbeddedMessageList;
 use App\Http\Controllers\message\UserMessageList;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccount;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccountLink;
@@ -104,6 +107,7 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
+use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
 use App\Http\Controllers\users\UserDeductionListNew;
@@ -257,22 +261,7 @@ Route::delete('/payroll/company_deductions/delete/{id}', [CompanyDeductionList::
 // ===============================================================================================================================
 Route::get('/progress_bar_control', [ProgressBar::class, 'index'])->name('progress_bar_control');
 Route::get('/progress_bar', [ProgressBar::class, 'index'])->name('progress_bar');
-
-/*
-Route::get('/progress_bar/recalculate_employee', [ProgressBar::class, 'recalculate_employee'])->name('progress_bar.recalculate_employee');
-Route::get('/progress_bar/generate_paystubs', [ProgressBar::class, 'generate_paystubs'])->name('progress_bar.generate_paystubs');
-Route::get('/progress_bar/generate_paymiddle', [ProgressBar::class, 'generate_paymiddle'])->name('progress_bar.generate_paymiddle');
-Route::get('/progress_bar/recalculate_paystub_ytd', [ProgressBar::class, 'recalculate_paystub_ytd'])->name('progress_bar.recalculate_paystub_ytd');
-Route::get('/progress_bar/add_mass_punch', [ProgressBar::class, 'add_mass_punch'])->name('progress_bar.add_mass_punch');
-Route::get('/progress_bar/add_mass_schedule', [ProgressBar::class, 'add_mass_schedule'])->name('progress_bar.add_mass_schedule');
-Route::get('/progress_bar/add_mass_schedule_npvc', [ProgressBar::class, 'add_mass_schedule_npvc'])->name('progress_bar.add_mass_schedule_npvc');
-Route::get('/progress_bar/recalculate_accrual_policy', [ProgressBar::class, 'recalculate_accrual_policy'])->name('progress_bar.recalculate_accrual_policy');
-Route::get('/progress_bar/process_late_leave', [ProgressBar::class, 'process_late_leave'])->name('progress_bar.process_late_leave');
-Route::get('/progress_bar/generate_december_bonuses', [ProgressBar::class, 'generate_december_bonuses'])->name('progress_bar.generate_december_bonuses');
-Route::get('/progress_bar/generate_attendance_bonuses', [ProgressBar::class, 'generate_attendance_bonuses'])->name('progress_bar.generate_attendance_bonuses');
-*/
 // ===============================================================================================================================
-
 
 
 // ===============================================================================================================================
@@ -291,132 +280,126 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
 Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name('company.logo');
 
 // ===============================================================================================================================
-// User jobhistory
-// ===============================================================================================================================
-Route::get('/user/jobhistory/{user_id?}', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
-Route::get('/user/jobhistory/add/{user_id?}', [UserJobHistory::class, 'add'])->name('user.jobhistory.add');
-Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
-Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
-Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])->name('user.jobhistory.delete');
+ // User jobhistory
+ // ===============================================================================================================================
+ Route::get('/user/jobhistory', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
+ Route::get('/user/jobhistory/add/{user_id?}', [UserJobHistory::class, 'add'])->name('user.jobhistory.add');
+ Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
+ Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
+ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])->name('user.jobhistory.delete');
 
-// ===============================================================================================================================
-// User wage
-// ===============================================================================================================================
-Route::get('/user/wage/{user_id?}', [UserWageListNew::class, 'index'])->name('user.wage.index');
-Route::get('/user/wage/add/{user_id?}', [UserWageListNew::class, 'add'])->name('user.wage.add');
-Route::get('/user/wage/edit/{id?}', [EditUserWageNew::class, 'index'])->name('user.wage.edit');
-Route::post('/user/wage/save/{id?}', [EditUserWageNew::class, 'save'])->name('user.wage.save');
-Route::delete('/user/wage/delete/{id}', [UserWageListNew::class, 'delete'])->name('user.wage.delete');
-
-
-// ===============================================================================================================================
-// User census
-// ===============================================================================================================================
-Route::get('/user/census', [CensusInfo::class, 'index'])->name('user.census.index');
-
-Route::get('/user/census/add/{id?}', [EditCensus::class, 'index'])->name('user.census.add');
-Route::post('/user/census/save/{id?}', [EditCensus::class, 'save'])->name('user.census.save');
-Route::delete('/user/census/delete/{id}', [CensusInfo::class, 'delete'])->name('user.census.delete');
+ // ===============================================================================================================================
+ // User wage
+ // ===============================================================================================================================
+ Route::get('/user/wage', [UserWageListNew::class, 'index'])->name('user.wage.index');
+ Route::get('/user/wage/add/{user_id?}', [UserWageListNew::class, 'add'])->name('user.wage.add');
+ Route::get('/user/wage/edit/{id?}', [EditUserWageNew::class, 'index'])->name('user.wage.edit');
+ Route::post('/user/wage/save/{id?}', [EditUserWageNew::class, 'save'])->name('user.wage.save');
+ Route::delete('/user/wage/delete/{id}', [UserWageListNew::class, 'delete'])->name('user.wage.delete');
 
 
-// ===============================================================================================================================
-// User work_experionce
-// ===============================================================================================================================
-Route::get('/user/work_experionce', [UserWorkExperionce::class, 'index'])->name('user.work_experionce.index');
+ // ===============================================================================================================================
+ // User census
+ // ===============================================================================================================================
+ Route::get('/user/census', [CensusInfo::class, 'index'])->name('user.census.index');
 
-Route::get('/user/work_experionce/add/{id?}', [EditUserWorkExperionce::class, 'index'])->name('user.work_experionce.add');
-Route::post('/user/work_experionce/save/{id?}', [EditUserWorkExperionce::class, 'save'])->name('user.work_experionce.save');
-Route::delete('/user/work_experionce/delete/{id}', [UserWorkExperionce::class, 'delete'])->name('user.work_experionce.delete');
-
-
-// ===============================================================================================================================
-// User qualification
-// ===============================================================================================================================
-Route::get('/user/qualification', [UserEducation::class, 'index'])->name('user.qualification.index');
-
-Route::get('/user/qualification/add/{id?}', [EditUserEducation::class, 'index'])->name('user.qualification.add');
-Route::post('/user/qualification/save/{id?}', [EditUserEducation::class, 'save'])->name('user.qualification.save');
-Route::delete('/user/qualification/delete/{id}', [UserEducation::class, 'delete'])->name('user.qualification.delete');
+ Route::get('/user/census/add/{id?}', [EditCensus::class, 'index'])->name('user.census.add');
+ Route::post('/user/census/save/{id?}', [EditCensus::class, 'save'])->name('user.census.save');
+ Route::delete('/user/census/delete/{id}', [CensusInfo::class, 'delete'])->name('user.census.delete');
 
 
-// ===============================================================================================================================
-// User jobhistory
-// ===============================================================================================================================
-Route::get('/user/jobhistory/{user_id?}', [KpiUserList::class, 'index'])->name('user.jobhistory.index');
-Route::get('/user/jobhistory/add/{user_id?}', [KpiUserList::class, 'add'])->name('user.jobhistory.add');
-Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
-Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
-Route::delete('/user/jobhistory/delete/{id}', [KpiUserList::class, 'delete'])->name('user.jobhistory.delete');
+ // ===============================================================================================================================
+ // User work_experionce
+ // ===============================================================================================================================
+ Route::get('/user/work_experionce', [UserWorkExperionce::class, 'index'])->name('user.work_experionce.index');
 
-// ===============================================================================================================================
-// Company Other Fields
-// ===============================================================================================================================
-Route::get('/company/other_field', [OtherFieldList::class, 'index'])->name('company.other_field.index');
+ Route::get('/user/work_experionce/add/{id?}', [EditUserWorkExperionce::class, 'index'])->name('user.work_experionce.add');
+ Route::post('/user/work_experionce/save/{id?}', [EditUserWorkExperionce::class, 'save'])->name('user.work_experionce.save');
+ Route::delete('/user/work_experionce/delete/{id}', [UserWorkExperionce::class, 'delete'])->name('user.work_experionce.delete');
 
-Route::get('/company/other_field/add/{id?}', [EditOtherField::class, 'index'])->name('company.other_field.add');
-Route::post('/company/other_field/save/{id?}', [EditOtherField::class, 'save'])->name('company.other_field.save');
-Route::delete('/company/other_field/delete/{id}', [OtherFieldList::class, 'delete'])->name('company.other_field.delete');
 
-// ===============================================================================================================================
-// New Hire Defaults
-// ===============================================================================================================================
-Route::get('/new_hire_defaults', [EditUserDefault::class, 'index'])->name('new_hire_defaults.index');
+ // ===============================================================================================================================
+ // User qualification
+ // ===============================================================================================================================
+ Route::get('/user/qualification', [UserEducation::class, 'index'])->name('user.qualification.index');
 
-Route::get('/new_hire_defaults/add/{id?}', [EditUserDefault::class, 'index'])->name('new_hire_defaults.add');
-Route::post('/new_hire_defaults/save/{id?}', [EditUserDefault::class, 'save'])->name('new_hire_defaults.save');
+ Route::get('/user/qualification/add/{id?}', [EditUserEducation::class, 'index'])->name('user.qualification.add');
+ Route::post('/user/qualification/save/{id?}', [EditUserEducation::class, 'save'])->name('user.qualification.save');
+ Route::delete('/user/qualification/delete/{id}', [UserEducation::class, 'delete'])->name('user.qualification.delete');
 
-// ===============================================================================================================================
-// User promotion
-// ===============================================================================================================================
-Route::get('/user/promotion', [UserLifePromotion::class, 'index'])->name('user.promotion.index');
 
-Route::get('/user/promotion/add/{id?}', [EditUserLifePromotion::class, 'index'])->name('user.promotion.add');
-Route::post('/user/promotion/save/{id?}', [EditUserLifePromotion::class, 'save'])->name('user.promotion.save');
-Route::delete('/user/promotion/delete/{id}', [UserLifePromotion::class, 'delete'])->name('user.promotion.delete');
+ // ===============================================================================================================================
+ // Company Other Fields
+ // ===============================================================================================================================
+ Route::get('/company/other_field', [OtherFieldList::class, 'index'])->name('company.other_field.index');
 
-// ===============================================================================================================================
-// Company & User Bank Accounts Details
-// ===============================================================================================================================
-Route::get('/bank_account/user/{user_id?}', [Bank_accountEditBankAccount::class, 'userIndex'])->name('bank_account.user');
-Route::get('/bank_account/company/{company_id?}', [Bank_accountEditBankAccount::class, 'companyIndex'])->name('bank_account.company');
+ Route::get('/company/other_field/add/{id?}', [EditOtherField::class, 'index'])->name('company.other_field.add');
+ Route::post('/company/other_field/save/{id?}', [EditOtherField::class, 'save'])->name('company.other_field.save');
+ Route::delete('/company/other_field/delete/{id}', [OtherFieldList::class, 'delete'])->name('company.other_field.delete');
 
-Route::post('/bank_account/save/{id?}', [Bank_accountEditBankAccount::class, 'save'])->name('bank_account.save');
-Route::delete('/bank_account/delete/{id?}', [Bank_accountEditBankAccount::class, 'delete'])->name('bank_account.delete');
+ // ===============================================================================================================================
+ // New Hire Defaults
+ // ===============================================================================================================================
+ Route::get('/new_hire_defaults', [EditUserDefault::class, 'index'])->name('new_hire_defaults.index');
 
-// ===============================================================================================================================
-// User Web Password
-// ===============================================================================================================================
-Route::get('/user/web_password', [EditUserPasswordNew::class, 'index'])->name('user.web_password.index');
+ Route::get('/new_hire_defaults/add/{id?}', [EditUserDefault::class, 'index'])->name('new_hire_defaults.add');
+ Route::post('/new_hire_defaults/save/{id?}', [EditUserDefault::class, 'save'])->name('new_hire_defaults.save');
 
-Route::post('/user/web_password/save/{id?}', [EditUserPasswordNew::class, 'save'])->name('user.web_password.save');
+ // ===============================================================================================================================
+ // User promotion
+ // ===============================================================================================================================
+ Route::get('/user/promotion', [UserLifePromotion::class, 'index'])->name('user.promotion.index');
+
+ Route::get('/user/promotion/add/{id?}', [EditUserLifePromotion::class, 'index'])->name('user.promotion.add');
+ Route::post('/user/promotion/save/{id?}', [EditUserLifePromotion::class, 'save'])->name('user.promotion.save');
+ Route::delete('/user/promotion/delete/{id}', [UserLifePromotion::class, 'delete'])->name('user.promotion.delete');
+
+ // ===============================================================================================================================
+ // Company & User Bank Accounts Details
+ // ===============================================================================================================================
+ Route::get('/bank_account/user/{user_id?}', [Bank_accountEditBankAccount::class, 'userIndex'])->name('bank_account.user');
+ Route::get('/bank_account/company/{company_id?}', [Bank_accountEditBankAccount::class, 'companyIndex'])->name('bank_account.company');
+
+ Route::post('/bank_account/save/{id?}', [Bank_accountEditBankAccount::class, 'save'])->name('bank_account.save');
+ Route::delete('/bank_account/delete/{id?}', [Bank_accountEditBankAccount::class, 'delete'])->name('bank_account.delete');
+
+ // ===============================================================================================================================
+ // User Web Password
+ // ===============================================================================================================================
+ Route::get('/user/web_password', [EditUserPasswordNew::class, 'index'])->name('user.web_password.index');
+
+ Route::post('/user/web_password/save/{id?}', [EditUserPasswordNew::class, 'save'])->name('user.web_password.save');
 
 
 // ===============================================================================================================================
 // User Preference
 // ===============================================================================================================================
-Route::get('/user/preference', [EditUserPreference::class, 'index'])->name('user_preference.index');
+ Route::get('/user/preference', [EditUserPreference::class, 'index'])->name('user_preference.index');
 
-Route::get('/user/preference/add/{id?}', [EditUserPreference::class, 'index'])->name('user_preference.add');
-Route::post('/user/preference/save/{id?}', [EditUserPreference::class, 'save'])->name('user_preference.save');
+ Route::get('/user/preference/add/{id?}', [EditUserPreference::class, 'index'])->name('user_preference.add');
+ Route::post('/user/preference/save/{id?}', [EditUserPreference::class, 'save'])->name('user_preference.save');
 
 
 // ===============================================================================================================================
 // User tax/deduction
 // ===============================================================================================================================
-Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
-Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
-Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
-Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
-Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
+ Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
+ Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
+ Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
+ Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
+ Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
 
 // ===============================================================================================================================
 // User messages
 // ===============================================================================================================================
-Route::get('/user/messages', [UserMessageList::class, 'index'])->name('user.messages.index');
-Route::get('/user/messages/add/{user_id?}', [UserMessageList::class, 'add'])->name('user.messages.add');
-Route::get('/user/messages/edit/{id?}', [EditMessage::class, 'index'])->name('user.messages.edit');
-Route::post('/user/messages/save/{id?}', [EditMessage::class, 'save'])->name('user.messages.save');
-Route::delete('/user/messages/delete/{id}', [UserMessageList::class, 'delete'])->name('user.messages.delete');
+ Route::get('/user/messages', [UserMessageList::class, 'index'])->name('user.messages.index');
+ Route::get('/user/messages/add/{user_id?}', [UserMessageList::class, 'add'])->name('user.messages.add');
+ Route::get('/user/messages/edit/{id?}', [EditMessage::class, 'index'])->name('user.messages.edit');
+ Route::post('/user/messages/save/{id?}', [EditMessage::class, 'save'])->name('user.messages.save');
+ Route::delete('/user/messages/delete/{id}', [UserMessageList::class, 'delete'])->name('user.messages.delete');
+
+ Route::get('/user/embedded_messages', [EmbeddedMessageList::class, 'index'])->name('user.embedded_messages');
+ 
 // ===============================================================================================================================
 // Policies
 // ===============================================================================================================================
@@ -499,23 +482,25 @@ Route::get('/storage/{disk}/{path}', [EditUser::class, 'serveFile'])->name('serv
 // ===============================================================================================================================
 
 Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('attendance.timesheet');
+Route::get('/close_window', [CloseWindow::class, 'index'])->name('close_window');
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
 Route::get('/attendance/punch/userdate_totals', [UserDateTotalList::class, 'index'])->name('attendance.punch.userdate_totals');
 Route::get('/attendance/punch/edit_userdate_total', [EditUserDateTotal::class, 'index'])->name('attendance.punch.edit_userdate_total');
-Route::get('/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
+
+//when using switch case u can use like this
+Route::match(['get', 'post'], '/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence'); 
 
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
 Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete'])->name('attendance.punch_single.delete');
 
-Route::get('/attendance/masspunch/add', [AddMassPunch::class, 'index'])->name('attendance.masspunch.add');
-Route::post('/attendance/masspunch/submit', [AddMassPunch::class, 'submit'])->name('attendance.masspunch.submit');
+Route::match(['get', 'post'], '/attendance/masspunch/add', [AddMassPunch::class, 'index'])->name('attendance.masspunch.add');
 
 Route::get('/attendance/requests', [UserRequestList::class, 'index'])->name('attendance.requests');
-Route::get('/attendance/request/add/{id?}', [EditRequest::class, 'index'])->name('attendance.request.add');
-Route::post('/attendance/request/submit/{id?}', [EditRequest::class, 'submit'])->name('attendance.request.submit');
+Route::match(['get', 'post'], '/attendance/request/add', [EditRequest::class, 'index'])->name('attendance.request.add');
+Route::get('/attendance/request/view', [ViewRequest::class, 'index'])->name('attendance.request.view');
 Route::delete('/attendance/request/delete/{id}', [UserRequestList::class, 'delete'])->name('attendance.request.delete');
 
 Route::get('/attendance/accruals/{filter_user_id?}', [UserAccrualBalanceList::class, 'index'])->name('attendance.accruals');
@@ -528,5 +513,11 @@ Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name(
 
 Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
+Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class, 'index'])->name('attendance.apply_leaves');
+
+
+// ===============================================================================================================================
+
+// add view_schedule route
 
 // ===============================================================================================================================

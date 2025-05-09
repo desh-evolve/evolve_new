@@ -3,9 +3,13 @@
 
 namespace App\Models\Leaves;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
+use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
 
 class LeaveRequestFactory  extends Factory {
     //put your code here
@@ -177,7 +181,10 @@ class LeaveRequestFactory  extends Factory {
 	}
         
         
-     function setDesignation($id) {
+     function setDesignation($id, $skip = false) {
+		if(empty($id) && $skip){ //added by desh for leave request(2025-05-09)
+			return true;
+		}
 		$id = trim($id);
 
 		Debug::Text('User ID: '. $id, __FILE__, __LINE__, __METHOD__,10);

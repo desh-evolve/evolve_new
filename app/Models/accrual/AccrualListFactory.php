@@ -176,7 +176,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 
 
-        function getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($company_id, $user_id, $accrual_policy_id,$type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
+    function getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($company_id, $user_id, $accrual_policy_id,$type_id, $limit = NULL, $page = NULL, $where = NULL, $order = NULL) {
 		if ( $company_id == '') {
 			return FALSE;
 		}
@@ -203,7 +203,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			':user_id' => $user_id,
 			':company_id' => $company_id,
 			':accrual_policy_id' => $accrual_policy_id,
-			':type_id' => $type_id,
+			//':type_id' => $type_id,
 		);
 
 		$query = '
@@ -217,9 +217,11 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 						a.user_id = :user_id
 						AND b.company_id = :company_id
 						AND a.accrual_policy_id = :accrual_policy_id
-                                                AND a.type_id in (70,30,75)
+                        AND a.type_id in (70,30,75)
 						AND ( a.user_date_total_id IS NULL OR ( a.user_date_total_id IS NOT NULL AND c.deleted = 0 AND d.deleted = 0) )
-						AND ( a.deleted = 0 AND b.deleted = 0 )';
+						AND ( a.deleted = 0 AND b.deleted = 0 )
+					GROUP BY d.date_stamp'
+						;
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order );
 
@@ -537,11 +539,11 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 		$total = DB::select($query, $ph);
 
-
-		if (empty($total) || $total == FALSE ) {
+		if (empty($total) || empty($total[0]->amount) || $total == FALSE ) {
 			$total = 0;
+		}else{
+			$total = $total[0]->amount;
 		}
-		Debug::text('Balance: '. $total, __FILE__, __LINE__, __METHOD__, 10);
 
 		return $total;
 	}

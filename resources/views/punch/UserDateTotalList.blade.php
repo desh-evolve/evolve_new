@@ -30,7 +30,7 @@
                                     @if ($permission->Check('punch','view'))
                                         Employee:
                                         <a href="javascript:navSelectBox('filter_user', 'prev');document.hour_list.submit()">
-                                            <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_prev_sm.gif">
+                                            <i class="ri-arrow-left-s-line text-white"></i>
                                         </a>
                                         <select name="filter_user_id" id="filter_user" onChange="this.form.submit()">
                                             @foreach ($user_options as $id => $name)
@@ -43,27 +43,27 @@
                                             @endforeach
                                         </select>
                                         <a href="javascript:navSelectBox('filter_user', 'next');document.hour_list.submit()">
-                                            <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_next_sm.gif">
+                                            <i class="ri-arrow-right-s-line text-white"></i>
                                         </a>
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     @endif
             
                                     Date:
                                     <a href="#">
-                                        <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first_sm.gif">
+                                        <i class="ri-arrow-left-double-fill text-white"></i>
                                     </a>
                                     <a href="#">
-                                        <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_prev_sm.gif">
+                                        <i class="ri-arrow-left-s-line text-white"></i>
                                     </a>
             
                                     <input type="date" id="filter_date" name="filter_date" value="{{ getdate_helper('date', $filter_date) }}" onChange="this.form.submit()">
                                     <img src="{$BASE_URL}/images/cal.gif" id="cal_filter_date" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('filter_date', 'cal_filter_date', false);">
 
-                                    <a href="#" >
-                                        <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_next_sm.gif">
+                                    <a href="#">
+                                        <i class="ri-arrow-right-double-fill text-white"></i>
                                     </a>
-                                    <a href="#" >
-                                        <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last_sm.gif">
+                                    <a href="#">
+                                        <i class="ri-arrow-right-s-line text-white"></i>
                                     </a>
             
                                 </th>
@@ -107,9 +107,6 @@
                                 <th>
                                     Functions
                                 </th>
-                                <th>
-                                    <input type="checkbox" class="checkbox" name="select_all" onClick="var system_time = document.getElementById('system_time').checked; CheckAll(this);document.getElementById('system_time').checked = system_time"/>
-                                </th>
                             </tr>
                             @foreach ($rows as $row)
                                 <tr class="">
@@ -121,7 +118,7 @@
                                     </td>
                                     @if ($filter_system_time == 1)
                                         <td>
-                                            {$row.type}
+                                            {{$row['type']}}
                                         </td>
                                     @endif
                                     <td>
@@ -163,10 +160,11 @@
                                         @if ($permission->Check('punch','edit'))
                                             [ <a href="javascript:editHour({{$row['id']}})">Edit</a> ]
                                         @endif
+                                        @if ($permission->Check('punch','delete'))
+                                            [ <a href="#">Delete</a> ]
+                                        @endif
                                     </td>
                                     <td>
-                                        <input type="checkbox" class="checkbox" name="ids[]" value="{{$row['id']}}">
-                                    </td>
                                 </tr>
                             @endforeach
                             <tr>
@@ -177,9 +175,7 @@
                                     @if ($permission->Check('punch','add'))
                                         <input type="BUTTON" class="button" name="action" value="Add" onClick="javascript:editHour('','{$user_date_id}')">
                                     @endif
-                                    @if ($permission->Check('punch','delete'))
-                                        <input type="BUTTON" class="button" name="action" value="Delete" onClick="return confirmDelete();">
-                                    @endif
+                                    
                                 </td>
                             </tr>
             

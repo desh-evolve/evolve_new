@@ -263,8 +263,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
-					);
+                    ':date' => $date,
+				);
 
 		$query = '
 					select 	*

@@ -72,12 +72,12 @@ function viewSchedule(userID,dateStamp) {
 				{/if}
 
 			</table>
-		</div>
+			</div>
 
-		<input type="hidden" name="request_id" value="{$data.id}">
-		<input type="hidden" name="hierarchy_type_id" value="{$data.hierarchy_type_id}">
-		<input type="hidden" name="selected_level" value="{$selected_level}">
-		<input type="hidden" name="request_queue_ids" value="{$request_queue_ids}">
+			<input type="hidden" name="request_id" value="{$data.id}">
+			<input type="hidden" name="hierarchy_type_id" value="{$data.hierarchy_type_id}">
+			<input type="hidden" name="selected_level" value="{$selected_level}">
+			<input type="hidden" name="request_queue_ids" value="{$request_queue_ids}">
 
 		</form>
 	</div>

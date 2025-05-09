@@ -837,6 +837,7 @@ class ViewUserTimeSheet extends Controller
 
                 //Get only system totals.
                 $udtlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $user_id, 10, $start_date, $end_date);
+                
                 if ( $udtlf->getRecordCount() > 0 ) {
                     foreach($udtlf->rs as $udt_obj) {
                         $udtlf->data = (array)$udt_obj;
@@ -867,13 +868,13 @@ class ViewUserTimeSheet extends Controller
                         //$date_total_type_ids[] = $type_and_policy_id;
                     }
                 } else {
-                    $date_totals[$start_date][] = array(
+                    $date_totals[$start_date][] =   array(
                                                         'date_stamp' => $start_date,
                                                         'type_and_policy_id' => 100,
                                                         'total_time' => 0,
                                                         'name' => _('Total Time'),
                                                         'tmp_override' => FALSE
-                                                        );
+                                                    );
                     $date_total_type_ids[100] = NULL;
                 }
                 //echo '<pre>'; print_r($date_totals);die;
