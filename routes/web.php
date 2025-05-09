@@ -34,6 +34,7 @@ use App\Http\Controllers\policy\RecurringHolidayList;
 use App\Http\Controllers\policy\EditRecurringHoliday;
 
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\leaves\ApplyUserLeave;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\message\EditMessage;
 use App\Http\Controllers\message\EmbeddedMessageList;
@@ -503,6 +504,8 @@ Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name(
 
 
 Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
+
+Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class, 'index'])->name('attendance.apply_leaves');
 
 
 // ===============================================================================================================================

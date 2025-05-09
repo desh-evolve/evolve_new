@@ -24,7 +24,8 @@
                     
                     {{-- -------------------------------------------- --}}
 
-                    <form method="post" id="frmleave" name="frmleave" action="#">
+                    <form method="POST" id="frmleave" name="frmleave" action="{{ route('attendance.apply_leaves') }}">
+                        @csrf
                         <div id="contentBoxTwoEdit">
 
                             @if (!$user->Validator->isValid())
@@ -32,7 +33,7 @@
                             @endif
                             <table class="table table-bordered">
                                 <tr>
-                                    @if (isset($data['msg']) &&  $data['msg'] !='')
+                                    @if (!empty($data['msg']))
                                         <tr class="tblDataWarning">
                                             <td colspan="100" valign="center">
                                                 <br>
@@ -42,7 +43,7 @@
                                         </tr>
                                     @endif
 
-                                    <table class="editTable">
+                                    <table class="table table-bordered">
                                         <tr>
                                             <th>Name:</th>
                                             <td>
@@ -52,8 +53,8 @@
                                         <tr>
                                             <th>Designation:</th>
                                             <td>
-                                                <input type="text" size="30" name="data[title]" value="{{$data['title']}}" readonly="readonly">
-                                                <input type="hidden" size="30" name="data[title_id]" value="{{$data['title_id']}}" >
+                                                <input type="text" size="30" name="data[title]" value="{{$data['title'] ?? ''}}" readonly="readonly">
+                                                <input type="hidden" size="30" name="data[title_id]" value="{{$data['title_id'] ?? ''}}" >
                                             </td>
                                         </tr>
                                         <tr>
@@ -72,7 +73,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Leave Methord:</th>
+                                            <th>Leave Method:</th>
                                             <td>
                                                 <select id="data[method_type]" name="data[method_type]" onChange="UpdateTotalLeaveTime();">
                                                     @foreach ($data['method_options'] as $id => $name )
@@ -87,9 +88,9 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Number Of Datys:</th>
+                                            <th>Number Of Days:</th>
                                             <td>
-                                                <input type="text" size="30"  name="data[no_days]" id="no_days" value="{{$data['no_days']}}">
+                                                <input type="number" size="30"  name="data[no_days]" id="no_days" value="{{$data['no_days'] ?? ''}}">
                                             </td>
                                         </tr>
                                         <tr>
@@ -107,7 +108,7 @@
                                                 Start Time:
                                             </th>
                                             <td>
-                                                <input id="appt-time" disabled="disabled" type="time" name="data[appt-time]" value="{{$data['appt_time']}}">
+                                                <input id="appt-time" disabled="disabled" type="time" name="data[appt-time]" value="{{$data['appt_time'] ?? ''}}">
                                             </td>
                                         </tr>       
                                         <tr id="rwendtime" style="" >
@@ -115,7 +116,7 @@
                                                 End Time:
                                             </th>
                                             <td>
-                                                <input id="end-time" disabled="disabled" type="time" name="data[end-time]" value="{{$data['end_time']}}">
+                                                <input id="end-time" disabled="disabled" type="time" name="data[end-time]" value="{{$data['end_time'] ?? ''}}">
                                             </td>
                                         </tr>             
                                         <tr>
@@ -131,7 +132,7 @@
                                                 Address/ Tel. No While On Leave:
                                             </th>
                                             <td>
-                                                <input type="text" size="30" name="data[address_tel]" value="{{$data['address_tel']}}">
+                                                <input type="text" size="30" name="data[address_tel]" value="{{$data['address_tel'] ?? ''}}">
                                             </td>
                                         </tr>
                                                         
@@ -174,13 +175,13 @@
                                         <tr>
                                             <th></th>
                                             <td>
-                                                <input type="submit" class="btnSubmit" id="btnSubmit" name="action:submit" value="Submit" onClick="">
+                                                <input type="submit" class="btn btn-primary btn-sm" id="btnSubmit" name="action" value="Submit" onClick="">
                                             </td>
                                         </tr>
                         
                                     </table>
                                                     
-                                    <table class="tblList">
+                                    <table class="table table-bordered">
                                         <tr id="row">
                                             <thead id="row">
                                                 <th></th>
@@ -213,7 +214,7 @@
                         </div>
                                                     
                         <div>
-                            <table class="tblList">
+                            <table class="table table-bordered">
                                     <tr id="row">
                                         <th>Name</th>
                                         <th>Leave Type</th>
@@ -222,19 +223,28 @@
                                         <th>End Date</th>
                                         <th>Status</th>
                                     </tr>
-                                    @foreach ($leave_request as $row)
-                                        <tr id="row">
-                                            <td>{{$row['name']}}</td>
-                                            <td>{{$row['leave_type']}}</td>
-                                            <td>{{$row['amount']}}</td>
-                                            <td>{{$row['from']}}</td>
-                                            <td>{{$row['to']}}</td>
-                                            <td>{{$row['status']}}</td>
+                                    @if (!empty($leave_request))
+                                        @foreach ($leave_request as $row)
+                                            <tr id="row">
+                                                <td>{{$row['name']}}</td>
+                                                <td>{{$row['leave_type']}}</td>
+                                                <td>{{$row['amount']}}</td>
+                                                <td>{{$row['from']}}</td>
+                                                <td>{{$row['to']}}</td>
+                                                <td>{{$row['status']}}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="tblHeader">
+                                            <td colspan="100" class="text-center">
+                                                    Sorry, You have no leave request.
+                                            </td>
                                         </tr>
-                                    @endforeach
+                                    @endif
+                                    
                             </table>                            
                         </div>
-                        <input type="hidden" id="id" name="data[id]" value="{{$data['id']}}">
+                        <input type="hidden" id="id" name="data[id]" value="{{$data['id'] ?? ''}}">
                     </form>
 
                     {{-- -------------------------------------------- --}}

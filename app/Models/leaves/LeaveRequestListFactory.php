@@ -344,23 +344,23 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
         function getPayperiodsShortLeaveCount($user_id,$leave_policy, $pp_start_date,$pp_end_date,$where = NULL, $order = NULL)
         {
-                if ( $pp_end_date == '') {
-			return FALSE;
-		}
+			if ( $pp_start_date == '') {
+				return FALSE;
+			}
 
-                if ( $pp_end_date == '') {
-			return FALSE;
-		}
+			if ( $pp_end_date == '') {
+				return FALSE;
+			}
 
-                if ( $user_id == '') {
-			return FALSE;
-		}
+			if ( $user_id == '') {
+				return FALSE;
+			}
 
 
-                   $ph = array(
-						':user_id' => $user_id,
-                                                ':accurals_policy_id'=> $leave_policy,
-						);
+			$ph = array(
+				':user_id' => $user_id,
+				':accurals_policy_id'=> $leave_policy,
+			);
 
 			$query = "select count(*) as count from ". $this->getTable() ." as a "
                                 . " WHERE  a.leave_from between '".$pp_start_date."' and '".$pp_end_date."'"
@@ -372,18 +372,15 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
 
-			$row = DB::select($query, $ph);
+			$res = DB::select($query, $ph);
+			
+			if ( empty($res['count']) ) {
+				$row['count'] = 0;
+			}else{
+				$row['count'] = $res[0]->count;
+			}
 
-                            if ( $row['count'] === NULL ) {
-                                    $row['count'] = 0;
-                            }
-
-
-
-			//$this->saveCache($this->rs,$id);
-
-
-		return $row;
+			return $row;
         }
 
 

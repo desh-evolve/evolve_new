@@ -16,19 +16,19 @@ return new class extends Migration
             $table->integer('company_id');
             $table->integer('user_id');
             $table->integer('designation_id');
-            $table->integer('accurals_policy_id');
-            $table->double('amount');
-            $table->date('leave_from');
-            $table->date('leave_to');
-            $table->string('reason', 200);
-            $table->string('address_telephone', 200);
-            $table->integer('covered_by');
-            $table->integer('supervisor_id');
-            $table->integer('method');
-            $table->tinyInteger('is_covered_approved');
-            $table->tinyInteger('is_supervisor_approved');
-            $table->tinyInteger('is_hr_approved');
-            $table->integer('status');
+            $table->integer('accurals_policy_id')->nullable();
+            $table->double('amount')->nullable();
+            $table->date('leave_from')->nullable();
+            $table->date('leave_to')->nullable();
+            $table->string('reason', 200)->nullable();
+            $table->string('address_telephone', 200)->nullable();
+            $table->integer('covered_by')->nullable();
+            $table->integer('supervisor_id')->nullable();
+            $table->integer('method')->nullable();
+            $table->tinyInteger('is_covered_approved')->nullable();
+            $table->tinyInteger('is_supervisor_approved')->nullable();
+            $table->tinyInteger('is_hr_approved')->nullable();
+            $table->integer('status')->nullable();
             $table->integer('created_date')->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('updated_date')->nullable();
@@ -36,9 +36,9 @@ return new class extends Migration
             $table->integer('deleted_date')->nullable();
             $table->integer('deleted_by')->nullable();
             $table->unsignedTinyInteger('deleted')->default(0);
-            $table->string('leave_time', 20);
-            $table->string('leave_end_time', 20);
-            $table->string('leave_dates', 2000);
+            $table->string('leave_time', 20)->nullable();
+            $table->string('leave_end_time', 20)->nullable();
+            $table->string('leave_dates', 2000)->nullable();
         });
     }
 

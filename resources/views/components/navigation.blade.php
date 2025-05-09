@@ -76,8 +76,12 @@
                                     class="nav-link {{ request()->routeIs('attendance.requests') ? 'active' : '' }}">Requests
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.apply_leaves') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.apply_leaves') ? 'active' : '' }}">Apply Leaves
+                                </a>
+                            </li>
 
-                            <li class="nav-item"><a href="#" class="nav-link">Apply Leaves</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
                             <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
