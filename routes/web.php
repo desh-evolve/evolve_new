@@ -107,6 +107,7 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
+use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
@@ -207,6 +208,8 @@ Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->nam
 
 Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
 Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 'generate'])->name('report.daily_attendance.generate');
+
+Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index'])->name('report.user_detail');
 
 // ===============================================================================================================================
 // Payroll

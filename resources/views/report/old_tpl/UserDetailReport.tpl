@@ -5,9 +5,9 @@
 </div>
 <div id="rowContentInner">
 
-		<table class="tblList">
 
 		<form method="get" action="{$smarty.server.SCRIPT_NAME}">
+			<table class="tblList">
 				<tr>
 					<td class="tblPagingLeft" colspan="100" align="right">
 						<br>{* <a href="javascript: exportReport()"><img src="{$IMAGES_URL}/excel_icon.gif"></a> *}
