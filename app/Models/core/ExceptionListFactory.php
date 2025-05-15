@@ -611,7 +611,7 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 		// 	$dow_sql = '(date_part(\'DOW\', b.date_stamp))';
 		// }
 
-
+		/*
         if (DB::connection()->getDriverName() == 'mysql') {
             $dow_sql = DB::raw('DAYOFWEEK(b.date_stamp) - 1');
         } else {
@@ -620,46 +620,42 @@ class ExceptionListFactory extends ExceptionFactory implements IteratorAggregate
 
 
 		$query = '
-						select 	b.user_id,
-								'. $dow_sql .' as dow,
-								a.exception_policy_id,
-								CASE WHEN count(*) > 0 THEN count(*) ELSE 0 END as total
-						from 	'. $udf->getTable() .' as b
-						LEFT JOIN '. $this->getTable() .' as a ON a.user_date_id = b.id
-						LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
-						where
-							c.company_id = :company_id
-							AND b.date_stamp >= :start_date
-							AND b.date_stamp <= :end_date
-							AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
-							AND a.exception_policy_id is not NULL
-							AND ( ( a.deleted = 0 OR a.deleted is NULL ) AND b.deleted=0 AND c.deleted=0)
-							GROUP BY b.user_id,'. $dow_sql .',a.exception_policy_id
-						ORDER BY b.user_id,'. $dow_sql .'
-					';
+			select 	b.user_id,
+					'. $dow_sql .' as dow,
+					a.exception_policy_id,
+					CASE WHEN count(*) > 0 THEN count(*) ELSE 0 END as total
+			from 	'. $udf->getTable() .' as b
+			LEFT JOIN '. $this->getTable() .' as a ON a.user_date_id = b.id
+			LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
+			where
+				c.company_id = :company_id
+				AND b.date_stamp >= :start_date
+				AND b.date_stamp <= :end_date
+				AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
+				AND a.exception_policy_id is not NULL
+				AND ( ( a.deleted = 0 OR a.deleted is NULL ) AND b.deleted=0 AND c.deleted=0)
+				GROUP BY b.user_id,'. $dow_sql .',a.exception_policy_id
+			ORDER BY b.user_id,'. $dow_sql .'
+		';
+		*/
 
-/*
 		$query = '
-						select 	b.user_id,
-								(date_part(\'DOW\', b.date_stamp)) as dow,
-								a.exception_policy_id,
-								CASE WHEN count(*) > 0 THEN count(*) ELSE 0 END as total
-						from 	'. $udf->getTable() .' as b
-						LEFT JOIN '. $this->getTable() .' as a ON a.user_date_id = b.id
-						LEFT JOIN '. $uf->getTable() .' as c ON b.user_id = c.id
-						where
-							c.company_id = :company_id
-							AND b.date_stamp >= :start_date
-							AND b.date_stamp <= :end_date
-							AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
-							AND a.exception_policy_id is not NULL
-							AND ( ( a.deleted = 0 OR a.deleted is NULL ) AND b.deleted=0 AND c.deleted=0)
-							GROUP BY b.user_id,(date_part(\'DOW\', b.date_stamp)),a.exception_policy_id
-						ORDER BY b.user_id,(date_part(\'DOW\', b.date_stamp))
-					';
-*/
-		//$query .= $this->getWhereSQL( $where );
-		//$query .= $this->getSortSQL( $order );
+			SELECT b.user_id,
+				DAYOFWEEK(b.date_stamp) - 1 AS dow,
+				a.exception_policy_id,
+				COUNT(*) AS total
+			FROM user_date AS b
+			LEFT JOIN exception AS a ON a.user_date_id = b.id
+			LEFT JOIN users AS c ON b.user_id = c.id
+			WHERE c.company_id = :company_id
+			AND b.date_stamp >= :start_date
+			AND b.date_stamp <= :end_date
+			AND b.user_id IN (1063, 1)
+			AND a.exception_policy_id IS NOT NULL
+			AND ( ( a.deleted = 0 OR a.deleted IS NULL ) AND b.deleted = 0 AND c.deleted = 0 )
+			GROUP BY b.user_id, b.date_stamp, a.exception_policy_id
+			ORDER BY b.user_id, DAYOFWEEK(b.date_stamp) - 1
+		';
 
 		$this->rs = DB::select($query, $ph);
 

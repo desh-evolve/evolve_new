@@ -1,5 +1,52 @@
 <x-app-layout :title="'Input Example'">
+    <style>
+        th, td{
+           padding: 3px 10px !important; 
+        }
 
+        .numonly {
+            -moz-appearance: textfield;
+        }
+
+        .calendar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 5px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .calendar-day {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .calendar-day.selected {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .calendar-day:hover {
+            background-color: #e9ecef;
+        }
+    </style>
+    
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -90,7 +137,7 @@
                                         <tr>
                                             <th>Number Of Days:</th>
                                             <td>
-                                                <input type="number" size="30"  name="data[no_days]" id="no_days" value="{{$data['no_days'] ?? ''}}">
+                                                <input type="number" size="30"  name="data[no_days]" id="no_days" value="{{$data['no_days'] ?? ''}}" readonly>
                                             </td>
                                         </tr>
                                         <tr>
@@ -98,11 +145,11 @@
                                                 Leave Dates:
                                             </th>
                                             <td>
-                                                <div id="mdp-demo"></div>
-                                                <input type="text" size="30" id="altField" name="data[leave_start_date]" value="">
+                                                <div class="calendar-container mt-3 mb-3" id="calendar" style="width: 400px;"></div>
+                                                <input type="text" size="30" id="altField" name="data[leave_start_date]" value="" readonly>
                                                 ie: {{$current_user_prefs->getDateFormatExample()}}
                                             </td>
-                                        </tr>      
+                                        </tr>     
                                         <tr id="rwtime" style="" >
                                             <th>
                                                 Start Time:
@@ -454,4 +501,116 @@
         });
       
     </script>
+
+    {{-- calander functions start --}}
+    <script>
+        const selectedDates = new Set();
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+
+        $(document).ready(function() {
+    
+            // Function to generate the calendar for the current month and year
+            function generateCalendar(year, month, selected_dates) {
+                $('#calendar').empty(); // Clear previous calendar content
+    
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+    
+                const monthsOfYear = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+    
+                // Calendar Header (Year and Month Navigation)
+                const calendarHeader = `
+                    <div class="calendar-header d-flex justify-content-between w-100">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="prevMonth">Prev Month</button>
+                        <span>${year} - ${monthsOfYear[month]}</span>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="nextMonth">Next Month</button>
+                    </div>
+                `;
+                $('#calendar').append(calendarHeader);
+    
+                // Calendar Grid (Days of the Week + Days of the Month)
+                const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                let grid = '<div class="calendar-grid d-grid grid-template-columns: repeat(7, 1fr); w-100">';
+                
+                // Days of the week
+                daysOfWeek.forEach(day => {
+                    grid += `<div class="text-center">${day}</div>`;
+                });
+    
+                // Empty cells before the first day of the month
+                for (let i = 0; i < firstDay.getDay(); i++) {
+                    grid += `<div></div>`;
+                }
+    
+                // Days of the month
+                for (let i = 1; i <= lastDay.getDate(); i++) {
+                    const formattedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+                    const isSelected = selectedDates.has(formattedDate);  // Check if the formatted date is in the selected dates set
+                    grid += `
+                        <div class="calendar-day text-center ${isSelected ? 'selected' : ''}" data-date="${formattedDate}">${i}</div>
+                    `;
+                }
+    
+                grid += '</div>';
+                $('#calendar').append(grid);
+    
+                // Attach click event to the days
+                $('.calendar-day').click(function() {
+                    const date = $(this).data('date');
+                    if (date) {
+                        toggleDateSelection(date);
+                    }
+                });
+            }
+    
+            // Toggle date selection (highlight/deselect)
+            function toggleDateSelection(date) {
+                if (selectedDates.has(date)) {
+                    selectedDates.delete(date);
+                    $(`.calendar-day[data-date="${date}"]`).removeClass('selected');
+                } else {
+                    selectedDates.add(date);
+                    $(`.calendar-day[data-date="${date}"]`).addClass('selected');
+                }
+                updateSelectedDates();
+            }
+    
+            // Update the selected dates list
+            function updateSelectedDates() {
+                $('#altField').empty();
+                let count = 0;
+                let dates = '';
+                selectedDates.forEach(date => {
+                    dates += date + ', ';
+                    count++;
+                });
+                $('#altField').val(dates.trim().replace(/,$/, '')); // Use .val() for input fields
+                $('#numberOfDays').val(count);
+            }
+    
+            // Change the month (prev or next)
+            $(document).on('click', '#prevMonth', function() {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth, selectedDates);
+            });
+    
+            $(document).on('click', '#nextMonth', function() {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth, selectedDates);
+            });
+    
+            // Initialize the calendar
+            generateCalendar(currentYear, currentMonth, selectedDates);
+        });
+    </script>
+    {{-- calander functions end --}}
 </x-app-layout>
