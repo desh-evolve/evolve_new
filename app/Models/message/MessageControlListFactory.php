@@ -255,6 +255,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		$query = '
 					SELECT 	a.*,
 							b.id as id,
+                            b.parent_id as parent_id,
 							c.status_id as status_id,
 							b.user_id as from_user_id,
 							bb.first_name as from_first_name,

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
 use App\Models\Core\FormVariables;
+use Illuminate\Http\Request;
 use App\Models\Core\Misc;
 use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
@@ -36,28 +37,37 @@ class EditMessage extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-    }
-
-    public function index() {
-
-        /*
+         /*
         if ( !$permission->Check('message','enabled')
 				OR !( $permission->Check('message','edit') OR $permission->Check('message','edit_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
+    }
+
+
+    public function index(Request $request)
+    {
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+
+        $filter_user_id = $request->input('filter_user_id', []);
 
 		$mcf = new MessageControlFactory();
 		$mrf = new MessageRecipientFactory();
 		$msf = new MessageSenderFactory();
 
         $viewData['title'] = 'New Message';
-
+        $data = []; // Always initialize
+        $filter_user_options = [];
 
 		if ( $permission->Check('message','send_to_any') ) {
 			$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE);
+
 			$data['user_options'] = Misc::arrayDiffByKey( (array)$filter_user_id, $user_options );
 			$filter_user_options = Misc::arrayIntersectByKey( (array)$filter_user_id, $user_options );
+
 		} else {
 			//Only allow sending to supervisors OR children.
 			$hlf = new HierarchyListFactory();
@@ -90,12 +100,21 @@ class EditMessage extends Controller
 		$viewData['filter_user_options'] = $filter_user_options;
 		$viewData['filter_user_id'] = $filter_user_id;
 		$viewData['mcf'] = $mcf;
+        $viewData['default_subject'] = 'New Message'; // Add this line
 
         return view('message/EditMessage', $viewData);
 
     }
 
-	public function submit_message(){
+
+	public function submit_message(Request $request)
+    {
+        $current_user = $this->currentUser;
+        $data = $request->all();
+        // dd($data);
+
+        $filter_user_id = $request->input('filter_user_id', []);
+
 		$mcf = new MessageControlFactory();
 
 		//Debug::setVerbosity(11);
@@ -119,16 +138,17 @@ class EditMessage extends Controller
 				$mcf->Save();
 
 				$mcf->CommitTransaction();
-				Redirect::Page( URLBuilder::getURL( NULL, 'UserMessageList.php') );
+                return redirect()->to(URLBuilder::getURL( NULL, '/user/messages'))->with('success', 'Message Sent successfully.');
 			}
 			$mcf->FailTransaction();
 		} else {
-			$mcf->Validator->isTrue(	'to',
-									FALSE,
-									_('Please select at least one recipient') );
+			$mcf->Validator->isTrue( 'to', FALSE,_('Please select at least one recipient') );
+            // If validation fails, return back with errors
+            return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 		}
 	}
-}
 
+
+}
 
 ?>

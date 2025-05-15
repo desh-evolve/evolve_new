@@ -132,6 +132,7 @@ class OtherFieldFactory extends Factory {
 		return FALSE;
 	}
 
+    
 	function isUniqueType($type) {
 		$ph = array(
 					':company_id' => (int)$this->getCompany(),
@@ -142,21 +143,15 @@ class OtherFieldFactory extends Factory {
 					where company_id = :company_id
 						AND type_id = :type_id
 						AND deleted = 0';
-        $type_id = DB::select($query, $ph);
+        $result = DB::select($query, $ph);
 
-        $type_id = !empty($type_id) ? $type_id[0]->id : null;
-        // if ($type_id === FALSE ) {
+        $type_id = !empty($result) ? $result[0]->id : null;
+
+        // if (empty($type_id) || $type_id === FALSE ) {
         //     $type_id = 0;
         // }else{
         //     $type_id = current(get_object_vars($type_id[0]));
         // }
-
-        if (empty($type_id) || $type_id === FALSE ) {
-            $type_id = 0;
-        }else{
-            $type_id = current(get_object_vars($type_id[0]));
-        }
-
 
 		Debug::Arr($type_id,'Unique Type: '. $type, __FILE__, __LINE__, __METHOD__,10);
 
@@ -168,8 +163,10 @@ class OtherFieldFactory extends Factory {
 			}
 		}
 
+
 		return FALSE;
 	}
+
 
 	function getType() {
 		if ( isset($this->data['type_id']) ) {

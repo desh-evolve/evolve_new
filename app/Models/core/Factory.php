@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use App\Models\Company\CompanyGenericTagFactory;
+use App\Models\Message\MessageControlFactory;
 use App\Models\Users\UserListFactory;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -279,7 +280,7 @@ class Factory {
 		}
 
 		return FALSE;
-	} 
+	}
 
 	function getEnableSystemLogDetail() {
 		if ( isset($this->enable_system_log_detail) ) {
@@ -1362,6 +1363,13 @@ class Factory {
 	public function Save($reset_data = TRUE, $force_lookup = FALSE) {
 		DB::beginTransaction();
 		try {
+
+            if (method_exists($this, 'preSave')) {
+                if ($this->preSave() === FALSE) {
+                    throw new Exception('PreSave failed.');
+                }
+            }
+
 			// Validate the model before saving (if not deleted)
 			if (!$this->getDeleted() && !$this->isValid()) {
 				throw new \Exception('Invalid Data, not saving.');
@@ -1395,6 +1403,11 @@ class Factory {
 
 				// Set the insert ID in the model
 				$this->setId($insert_id);
+
+                // Call postSave() to ensure message_sender & message_recipient are saved
+                if ($this instanceof MessageControlFactory) {
+                    $this->postSave(); // Ensure related records are saved
+                }
 
 				// Return the ID of the newly created record
 				$retval = (int)$insert_id;

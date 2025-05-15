@@ -35,108 +35,220 @@ class EmbeddedMessageList extends Controller
 
     }
 
-    public function index() {
+    // public function index()
+    // {
 
-		/*
-        if ( !$permission->Check('message','enabled')
-				OR !( $permission->Check('message','view') OR $permission->Check('message','view_own') ) ) {
-			$permission->Redirect( FALSE ); //Redirect
-		}
+	// 	/*
+    //     if ( !$permission->Check('message','enabled')
+	// 			OR !( $permission->Check('message','view') OR $permission->Check('message','view_own') ) ) {
+	// 		$permission->Redirect( FALSE ); //Redirect
+	// 	}
+    //     */
+
+    //     $current_user = $this->currentUser;
+    //     $viewData['title'] = 'Message List';
+	// 	$mcf = new MessageControlFactory();
+
+	// 	if ( isset($object_type_id) AND isset($object_id) ) {
+	// 		$mclf = new MessageControlListFactory();
+	// 		$mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject( $current_user->getCompany(), $current_user->getId(), $object_type_id, $object_id );
+
+	// 		if ( $mclf->getRecordCount() > 0 ) {
+	// 			$mark_read_message_ids = array();
+	// 			$i=0;
+	// 			foreach( $mclf->rs as $message ) {
+	// 				$mclf->data = (array)$message;
+	// 				$message = $mclf;
+
+	// 				$ulf = new UserListFactory();
+
+	// 				$from_user_id = $message->getColumn('from_user_id');
+	// 				$from_user_full_name = Misc::getFullName( $message->getColumn('from_first_name'), $message->getColumn('from_middle_name'), $message->getColumn('from_last_name') );
+
+	// 				$messages[] = array(
+	// 					'id' => $message->getId(),
+	// 					'parent_id' => $message->getParent(),
+	// 					'object_type_id' => $message->getObjectType(),
+	// 					'object_id' => $message->getObject(),
+	// 					'status_id' => $message->getStatus(),
+	// 					'subject' => $message->getSubject(),
+	// 					'body' => $message->getBody(),
+
+	// 					'from_user_id' => $from_user_id,
+	// 					'from_user_full_name' => $from_user_full_name,
+
+	// 					'created_date' => $message->getCreatedDate(),
+	// 					'created_by' => $message->getCreatedBy(),
+	// 					'updated_date' => $message->getUpdatedDate(),
+	// 					'updated_by' => $message->getUpdatedBy(),
+	// 					'deleted_date' => $message->getDeletedDate(),
+	// 					'deleted_by' => $message->getDeletedBy()
+	// 				);
+
+	// 				//Mark own messages as read.
+	// 				if ( $message->getStatus() == 10 AND $message->getCreatedBy() != $current_user->getId() ) {
+	// 					$mark_read_message_ids[] = $message->getId();
+	// 				}
+
+	// 				if ( $i == 0 ) {
+	// 					$parent_id = $message->getId();
+	// 					$default_subject = _('Re:').' '.$message->getSubject();
+	// 				}
+
+	// 				$i++;
+	// 			}
+
+	// 			MessageControlFactory::markRecipientMessageAsRead( $current_user->getCompany(), $current_user->getID(), $mark_read_message_ids );
+	// 		}
+
+	// 		//Get object data
+	// 		$object_name_options = $mclf->getOptions('object_name');
+	// 		$viewData['object_name'] = $object_name_options[$object_type_id];
+	// 		$viewData['messages'] = $messages;
+	// 		$viewData['message_data'] = $message_data;
+	// 		$viewData['default_subject'] = $default_subject;
+	// 		$viewData['total_messages'] = $i;
+
+	// 		$viewData['parent_id'] = $parent_id;
+	// 		$viewData['object_type_id'] = $object_type_id;
+	// 		$viewData['object_id'] = $object_id;
+	// 		$viewData['object_user_id'] = $object_user_id;
+	// 	}
+
+	// 	$viewData['template'] = $template;
+	// 	$viewData['close'] = $close;
+
+	// 	$viewData['mcf'] = $mcf;
+
+	// 	if ( $template == 1 ) {
+	// 		return view('message/LayerMessageList', $viewData);
+	// 	} else {
+	// 		return view('message/EmbeddedMessageList', $viewData);
+	// 	}
+
+    // }
+
+
+    //new index function
+    public function index(Request $request)
+    {
+        // Example permission check (commented out)
+        /*
+        if (!$permission->Check('message','enabled') ||
+            !($permission->Check('message','view') || $permission->Check('message','view_own'))) {
+            $permission->Redirect(FALSE);
+        }
         */
-		
+
+        $current_user = $this->currentUser;
         $viewData['title'] = 'Message List';
-		$mcf = new MessageControlFactory();
+        $mcf = new MessageControlFactory();
 
-		if ( isset($object_type_id) AND isset($object_id) ) {
-			$mclf = new MessageControlListFactory();
-			$mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject( $current_user->getCompany(), $current_user->getId(), $object_type_id, $object_id );
+        // Get variables from request
+        $object_type_id = $request->input('object_type_id');
+        $object_id = $request->input('object_id');
+        $object_user_id = $request->input('object_user_id');
+        $template = $request->input('template', 0);
+        $close = $request->input('close', false);
+        $message_data = []; // Default empty if not set
+        $messages = [];
+        $default_subject = '';
+        $parent_id = null;
+        $i = 0;
 
-			if ( $mclf->getRecordCount() > 0 ) {
-				$mark_read_message_ids = array();
-				$i=0;
-				foreach( $mclf->rs as $message ) {
-					$mclf->data = (array)$message;
-					$message = $mclf;
+        if (isset($object_type_id) && isset($object_id)) {
+            $mclf = new MessageControlListFactory();
+            $mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject(
+                $current_user->getCompany(), $current_user->getId(),
+                $object_type_id, $object_id
+            );
 
-					$ulf = new UserListFactory();
+            if ($mclf->getRecordCount() > 0) {
+                $mark_read_message_ids = [];
 
-					$from_user_id = $message->getColumn('from_user_id');
-					$from_user_full_name = Misc::getFullName( $message->getColumn('from_first_name'), $message->getColumn('from_middle_name'), $message->getColumn('from_last_name') );
+                foreach ($mclf->rs as $message) {
+                    $mclf->data = (array)$message;
+                    $message = $mclf;
 
-					$messages[] = array(
-						'id' => $message->getId(),
-						'parent_id' => $message->getParent(),
-						'object_type_id' => $message->getObjectType(),
-						'object_id' => $message->getObject(),
-						'status_id' => $message->getStatus(),
-						'subject' => $message->getSubject(),
-						'body' => $message->getBody(),
+                    $from_user_id = $message->getColumn('from_user_id');
+                    $from_user_full_name = Misc::getFullName(
+                        $message->getColumn('from_first_name'),
+                        $message->getColumn('from_middle_name'),
+                        $message->getColumn('from_last_name')
+                    );
 
-						'from_user_id' => $from_user_id,
-						'from_user_full_name' => $from_user_full_name,
+                    $messages[] = array(
+                        'id' => $message->getId(),
+                        'parent_id' => $message->getParent(),
+                        'object_type_id' => $message->getObjectType(),
+                        'object_id' => $message->getObject(),
+                        'status_id' => $message->getStatus(),
+                        'subject' => $message->getSubject(),
+                        'body' => $message->getBody(),
+                        'from_user_id' => $from_user_id,
+                        'from_user_full_name' => $from_user_full_name,
+                        'created_date' => $message->getCreatedDate(),
+                        'created_by' => $message->getCreatedBy(),
+                        'updated_date' => $message->getUpdatedDate(),
+                        'updated_by' => $message->getUpdatedBy(),
+                        'deleted_date' => $message->getDeletedDate(),
+                        'deleted_by' => $message->getDeletedBy()
+                    );
 
-						'created_date' => $message->getCreatedDate(),
-						'created_by' => $message->getCreatedBy(),
-						'updated_date' => $message->getUpdatedDate(),
-						'updated_by' => $message->getUpdatedBy(),
-						'deleted_date' => $message->getDeletedDate(),
-						'deleted_by' => $message->getDeletedBy()
-					);
+                    if ($message->getStatus() == 10 && $message->getCreatedBy() != $current_user->getId()) {
+                        $mark_read_message_ids[] = $message->getId();
+                    }
 
-					//Mark own messages as read.
-					if ( $message->getStatus() == 10 AND $message->getCreatedBy() != $current_user->getId() ) {
-						$mark_read_message_ids[] = $message->getId();
-					}
+                    if ($i == 0) {
+                        $parent_id = $message->getId();
+                        $default_subject = _('Re:') . ' ' . $message->getSubject();
+                    }
 
-					if ( $i == 0 ) {
-						$parent_id = $message->getId();
-						$default_subject = _('Re:').' '.$message->getSubject();
-					}
+                    $i++;
+                }
 
-					$i++;
-				}
+                MessageControlFactory::markRecipientMessageAsRead(
+                    $current_user->getCompany(),
+                    $current_user->getId(),
+                    $mark_read_message_ids
+                );
+            }
 
-				MessageControlFactory::markRecipientMessageAsRead( $current_user->getCompany(), $current_user->getID(), $mark_read_message_ids );
-			}
+            $object_name_options = $mclf->getOptions('object_name');
+            $viewData['object_name'] = $object_name_options[$object_type_id] ?? '';
+            $viewData['messages'] = $messages;
+            $viewData['message_data'] = $message_data;
+            $viewData['default_subject'] = $default_subject;
+            $viewData['total_messages'] = $i;
 
-			//Get object data
-			$object_name_options = $mclf->getOptions('object_name');
-			$viewData['object_name'] = $object_name_options[$object_type_id];
-			$viewData['messages'] = $messages;
-			$viewData['message_data'] = $message_data;
-			$viewData['default_subject'] = $default_subject;
-			$viewData['total_messages'] = $i;
-			
-			$viewData['parent_id'] = $parent_id;
-			$viewData['object_type_id'] = $object_type_id;
-			$viewData['object_id'] = $object_id;
-			$viewData['object_user_id'] = $object_user_id;
-		}
-		
-		$viewData['template'] = $template;
-		$viewData['close'] = $close;
+            $viewData['parent_id'] = $parent_id;
+            $viewData['object_type_id'] = $object_type_id;
+            $viewData['object_id'] = $object_id;
+            $viewData['object_user_id'] = $object_user_id;
+        }
 
-		$viewData['mcf'] = $mcf;
+        $viewData['template'] = $template;
+        $viewData['close'] = $close;
+        $viewData['mcf'] = $mcf;
 
-		if ( $template == 1 ) {
-			return view('message/LayerMessageList', $viewData);
-		} else {
-			return view('message/EmbeddedMessageList', $viewData);
-		}
-
+        if ($template == 1) {
+            return view('message/LayerMessageList', $viewData);
+        } else {
+            return view('message/EmbeddedMessageList', $viewData);
+        }
     }
 
-	public function submit_message(){
-		$mcf = new MessageControlFactory();
-
+	public function submit_message()
+    {
 		/*
 		if ( !$permission->Check('message','enabled')
 			OR !( $permission->Check('message','add') ) ) {
-
 			$permission->Redirect( FALSE ); //Redirect
-
 		}
 		*/
+
+        $current_user = $this->currentUser;
+		$mcf = new MessageControlFactory();
 
 		if ( isset($object_type_id) AND isset($object_id) ) {
 			if ( !isset($parent_id) ) {
@@ -174,7 +286,7 @@ class EmbeddedMessageList extends Controller
 																	'close' => 1,
 																	'object_type_id' => $object_type_id,
 																	'object_id' => $object_id), 'EmbeddedMessageList.php') );
-					
+
 				}
 			}
 

@@ -363,7 +363,12 @@
             </a>
             <div class="collapse menu-dropdown" id="employee">
                 <ul class="nav nav-sm flex-column">
-                    <li class="nav-item"><a href="#" class="nav-link">Messages</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('user.messages.index') }}"
+                            class="nav-link {{ request()->routeIs('user.messages.index') ? 'active' : '' }}">
+                            Messages
+                        </a>
+                    </li>
                     <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
                     <li class="nav-item">
                         <a href="{{ route('user_preference.index') }}"

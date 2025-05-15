@@ -36,6 +36,7 @@ use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\message\EditMessage;
 use App\Http\Controllers\message\UserMessageList;
+use App\Http\Controllers\message\ViewMessage;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccount;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccountLink;
 use App\Http\Controllers\pay_stub\PayStubEntryAccountList;
@@ -309,21 +310,17 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  // User census
  // ===============================================================================================================================
  Route::get('/user/census', [CensusInfo::class, 'index'])->name('user.census.index');
-
  Route::get('/user/census/add/{id?}', [EditCensus::class, 'index'])->name('user.census.add');
  Route::post('/user/census/save/{id?}', [EditCensus::class, 'save'])->name('user.census.save');
  Route::delete('/user/census/delete/{id}', [CensusInfo::class, 'delete'])->name('user.census.delete');
-
 
  // ===============================================================================================================================
  // User work_experionce
  // ===============================================================================================================================
  Route::get('/user/work_experionce', [UserWorkExperionce::class, 'index'])->name('user.work_experionce.index');
-
  Route::get('/user/work_experionce/add/{id?}', [EditUserWorkExperionce::class, 'index'])->name('user.work_experionce.add');
  Route::post('/user/work_experionce/save/{id?}', [EditUserWorkExperionce::class, 'save'])->name('user.work_experionce.save');
  Route::delete('/user/work_experionce/delete/{id}', [UserWorkExperionce::class, 'delete'])->name('user.work_experionce.delete');
-
 
  // ===============================================================================================================================
  // User qualification
@@ -334,12 +331,10 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  Route::post('/user/qualification/save/{id?}', [EditUserEducation::class, 'save'])->name('user.qualification.save');
  Route::delete('/user/qualification/delete/{id}', [UserEducation::class, 'delete'])->name('user.qualification.delete');
 
-
  // ===============================================================================================================================
  // Company Other Fields
  // ===============================================================================================================================
  Route::get('/company/other_field', [OtherFieldList::class, 'index'])->name('company.other_field.index');
-
  Route::get('/company/other_field/add/{id?}', [EditOtherField::class, 'index'])->name('company.other_field.add');
  Route::post('/company/other_field/save/{id?}', [EditOtherField::class, 'save'])->name('company.other_field.save');
  Route::delete('/company/other_field/delete/{id}', [OtherFieldList::class, 'delete'])->name('company.other_field.delete');
@@ -348,7 +343,6 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  // New Hire Defaults
  // ===============================================================================================================================
  Route::get('/new_hire_defaults', [EditUserDefault::class, 'index'])->name('new_hire_defaults.index');
-
  Route::get('/new_hire_defaults/add/{id?}', [EditUserDefault::class, 'index'])->name('new_hire_defaults.add');
  Route::post('/new_hire_defaults/save/{id?}', [EditUserDefault::class, 'save'])->name('new_hire_defaults.save');
 
@@ -356,7 +350,6 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  // User promotion
  // ===============================================================================================================================
  Route::get('/user/promotion', [UserLifePromotion::class, 'index'])->name('user.promotion.index');
-
  Route::get('/user/promotion/add/{id?}', [EditUserLifePromotion::class, 'index'])->name('user.promotion.add');
  Route::post('/user/promotion/save/{id?}', [EditUserLifePromotion::class, 'save'])->name('user.promotion.save');
  Route::delete('/user/promotion/delete/{id}', [UserLifePromotion::class, 'delete'])->name('user.promotion.delete');
@@ -366,7 +359,6 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  // ===============================================================================================================================
  Route::get('/bank_account/user/{user_id?}', [Bank_accountEditBankAccount::class, 'userIndex'])->name('bank_account.user');
  Route::get('/bank_account/company/{company_id?}', [Bank_accountEditBankAccount::class, 'companyIndex'])->name('bank_account.company');
-
  Route::post('/bank_account/save/{id?}', [Bank_accountEditBankAccount::class, 'save'])->name('bank_account.save');
  Route::delete('/bank_account/delete/{id?}', [Bank_accountEditBankAccount::class, 'delete'])->name('bank_account.delete');
 
@@ -382,10 +374,8 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  // User Preference
  // ===============================================================================================================================
  Route::get('/user/preference', [EditUserPreference::class, 'index'])->name('user_preference.index');
-
  Route::get('/user/preference/add/{id?}', [EditUserPreference::class, 'index'])->name('user_preference.add');
  Route::post('/user/preference/save/{id?}', [EditUserPreference::class, 'save'])->name('user_preference.save');
-
 
  // ===============================================================================================================================
  // User tax/deduction
@@ -400,10 +390,13 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  // User messages
  // ===============================================================================================================================
  Route::get('/user/messages', [UserMessageList::class, 'index'])->name('user.messages.index');
- Route::get('/user/messages/add/{user_id?}', [UserMessageList::class, 'add'])->name('user.messages.add');
+ Route::get('/user/new_message', [UserMessageList::class, 'new_message'])->name('user.new_messages');
  Route::get('/user/messages/edit/{id?}', [EditMessage::class, 'index'])->name('user.messages.edit');
- Route::post('/user/messages/save/{id?}', [EditMessage::class, 'save'])->name('user.messages.save');
+ Route::post('/user/messages/save/{id?}', [EditMessage::class, 'submit_message'])->name('user.messages.save');
  Route::delete('/user/messages/delete/{id}', [UserMessageList::class, 'delete'])->name('user.messages.delete');
+
+ Route::get('/user/messages/view{id?}', [ViewMessage::class, 'index'])->name('user.messages.view');
+ Route::post('/user/messages/view/save/{id?}', [ViewMessage::class, 'submit_message'])->name('user.messages.view.save');
 // ===============================================================================================================================
 // Policies
 // ===============================================================================================================================
