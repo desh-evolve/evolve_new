@@ -49,7 +49,7 @@ if (!function_exists('html_report_filter')) {
 
         // Main filter HTML
         $retval .= '
-            <td colspan="' . $colspan . '" class="text-end" nowrap>
+            <td colspan="' . $colspan . '" class="text-end" style="width:25%" nowrap>
                 <b>' . $display_name . ':</b> <a href="javascript:toggleReportCriteria(\'filter_' . $label . '\');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" id="filter_' . $label . '_img" ></i></a>
             </td>
             <td id="filter_' . $label . '_right_cell" class="cellRightEditTableHeader">

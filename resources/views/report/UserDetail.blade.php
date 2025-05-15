@@ -148,7 +148,6 @@
 
                         <div id="contentBoxFour">
                             <input class="btn btn-primary btn-sm" type="button" id="display_report" name="action" value="Display Report" onClick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'Display Report'; this.form.submit();">
-                            {{-- <input class="btn btn-primary btn-sm" type="button" id="display_report" name="action" value="Display Report" onClick="selectAllReportCriteria(); document.getElementById('action').value = 'Display Report'; this.form.submit();"> --}}
                         </div>
                         
                     </form>
