@@ -3,6 +3,13 @@
         <h4 class="mb-sm-0">{{ __('Messages') }}</h4>
     </x-slot>
 
+    <style>
+        .unread-message {
+            font-weight: bold;
+            background-color: #fff9e6; /* optional: subtle yellow */
+        }
+    </style>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -51,10 +58,10 @@
                             </tr>
                         @endif
 
-                        <table class="table table-bordered">
+                        <table class="table">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th scope="col">#</th>
+                                    {{-- <th scope="col">#</th> --}}
                                     <th scope="col">
                                         @if ($filter_folder_id == 10)
                                             From
@@ -77,21 +84,27 @@
 
                             <tbody id="table_body">
                                 @foreach ($messages as $message)
-                                    {{-- @php
-                                        $row_class = isset($message['deleted']) && $message['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
-                                    @endphp --}}
                                     @php
-                                        $isUnread = ($filter_folder_id == 10 && $message['status_id'] == 10); // unread condition
+                                        $isUnread = ($filter_folder_id == 10 && $message['status_id'] == 10); // Inbox + unread
                                         $row_class = isset($message['deleted']) && $message['deleted']
                                             ? 'table-danger'
                                             : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
-                                        $font_weight = $isUnread ? 'font-weight-bold' : '';
+
+                                        // Add bold class for unread messages
+                                        $row_class .= $isUnread ? ' unread-message' : '';
                                     @endphp
 
-                                    {{-- <tr class="{{ $row_class }}" style = "{{$filter_folder_id == 10 AND $message['status_id'] == 10 ? 'font-weight: bold' : ''}}"> --}}
-                                    <tr class="{{ $row_class }} {{ $font_weight }}">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{$message['user_full_name'] ?? '' }}</td>
+                                    <tr class="{{ $row_class }}">
+
+                                        {{-- <td>
+                                            {{ $loop->iteration }}
+                                        </td> --}}
+                                        <td>
+                                            @if ($isUnread)
+                                                <i class="ri-mail-unread-line text-danger me-1" title="Unread"></i>
+                                            @endif
+                                            {{$message['user_full_name'] ?? '' }}
+                                        </td>
                                         <td>{{$message['subject'] ?? '' }}</td>
                                         <td>{{$message['object_type'] ?? '' }}</td>
                                         <td>{{ \Carbon\Carbon::createFromTimestamp($message['created_date'])->format('M d, Y / h:i A') }}</td>

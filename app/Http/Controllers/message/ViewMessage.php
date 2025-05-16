@@ -58,6 +58,7 @@ class ViewMessage extends Controller
         $message_data = [];
         $default_subject = '';
         $parent_id = null;
+        $i = 0;
 
         $viewData['title'] = 'View Message';
 
@@ -72,11 +73,13 @@ class ViewMessage extends Controller
 
             if ( $mclf->getRecordCount() > 0 ) {
 				$mark_read_message_ids = array();
-				$i=0;
+
 
                 foreach ($mclf->rs as $message) {
                     $mclf->data = (array)$message;
 				    $message = $mclf;
+
+                    // dd($mclf->rs);
 
 					//Get user info
 					$ulf = new UserListFactory();
@@ -121,14 +124,21 @@ class ViewMessage extends Controller
                         $default_subject = 'Re: ' . $message->getSubject();
                     }
 
-                    //Mark own messages as read.
-					if ( $message->getStatus() == 10 AND $message->getCreatedBy() != $current_user->getId() ) {
-						$mark_read_message_ids[] = $message->getId();
-					}
-                    
+                    // Mark own messages as read.
+					// if ( $message->getStatus() == 10 AND $message->getCreatedBy() != $current_user->getId() ) {
+					// 	$mark_read_message_ids[] = $message->getId();
+					// }
+
+                    if ($message->getStatus() == 10 && $message->getColumn('to_user_id') == $current_user->getId() ) {
+                        $mark_read_message_ids[] = $message->getId();
+                    }
+
 					$i++;
 				}
-				MessageControlFactory::markRecipientMessageAsRead( $current_user->getCompany(), $current_user->getID(), $mark_read_message_ids );
+                // dd($mark_read_message_ids);
+
+                $mcf->markRecipientMessageAsRead( $current_user->getCompany(), $current_user->getID(), $mark_read_message_ids );
+
 			}
 
 		}

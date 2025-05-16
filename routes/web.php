@@ -395,7 +395,7 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  Route::post('/user/messages/save/{id?}', [EditMessage::class, 'submit_message'])->name('user.messages.save');
  Route::delete('/user/messages/delete/{id}', [UserMessageList::class, 'delete'])->name('user.messages.delete');
 
- Route::get('/user/messages/view{id?}', [ViewMessage::class, 'index'])->name('user.messages.view');
+ Route::get('/user/messages/view/{id?}', [ViewMessage::class, 'index'])->name('user.messages.view');
  Route::post('/user/messages/view/save/{id?}', [ViewMessage::class, 'submit_message'])->name('user.messages.view.save');
 // ===============================================================================================================================
 // Policies
