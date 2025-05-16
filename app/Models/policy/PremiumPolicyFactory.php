@@ -321,7 +321,7 @@ class PremiumPolicyFactory extends Factory {
 
 		return FALSE;
 	}
-	function setStartDate($epoch) {
+	function setStartDate($epoch, $raw = TRUE) {
 		$epoch = trim($epoch);
 
 		if ( $epoch == '' ){
@@ -336,7 +336,11 @@ class PremiumPolicyFactory extends Factory {
 												('Incorrect start date'))
 			) {
 
-			$this->data['start_date'] = $epoch;
+			if($raw){
+				$this->data['start_date'] = $epoch;
+			}else{
+				$this->data['start_date'] = date('Y-m-d H:i:s', $epoch);
+			}
 
 			return TRUE;
 		}
@@ -355,7 +359,7 @@ class PremiumPolicyFactory extends Factory {
 
 		return FALSE;
 	}
-	function setEndDate($epoch) {
+	function setEndDate($epoch, $raw = TRUE) {
 		$epoch = trim($epoch);
 
 		if ( $epoch == '' ){
@@ -369,7 +373,11 @@ class PremiumPolicyFactory extends Factory {
 												('Incorrect end date'))
 			) {
 
-			$this->data['end_date'] = $epoch;
+			if($raw){
+				$this->data['end_date'] = $epoch;
+			}else{
+				$this->data['end_date'] = date('Y-m-d H:i:s', $epoch);
+			}
 
 			return TRUE;
 		}
@@ -388,7 +396,7 @@ class PremiumPolicyFactory extends Factory {
 
 		return FALSE;
 	}
-	function setStartTime($epoch) {
+	function setStartTime($epoch, $raw = TRUE) {
 		$epoch = trim($epoch);
 
 		if 	(	$epoch == ''
@@ -397,8 +405,12 @@ class PremiumPolicyFactory extends Factory {
 												$epoch,
 												('Incorrect Start time'))
 			) {
-
-			$this->data['start_time'] = $epoch;
+			
+			if($raw){
+				$this->data['start_time'] = $epoch;
+			}else{
+				$this->data['start_time'] = date('H:i', $epoch);
+			}
 
 			return TRUE;
 		}
@@ -417,7 +429,7 @@ class PremiumPolicyFactory extends Factory {
 
 		return FALSE;
 	}
-	function setEndTime($epoch) {
+	function setEndTime($epoch, $raw = TRUE) {
 		$epoch = trim($epoch);
 
 		if 	(	$epoch == ''
@@ -426,8 +438,12 @@ class PremiumPolicyFactory extends Factory {
 												$epoch,
 												('Incorrect End time'))
 			) {
-
-			$this->data['end_time'] = $epoch;
+			
+			if($raw){
+				$this->data['end_time'] = $epoch;
+			}else{
+				$this->data['end_time'] = date('H:i', $epoch);
+			}
 
 			return TRUE;
 		}
