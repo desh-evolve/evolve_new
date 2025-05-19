@@ -46,6 +46,7 @@ class EditUserPreference extends Controller
 
     public function index($user_id = null)
     {
+
         $current_company = $this->currentCompany;
         $current_user = $this->currentUser;
         $permission = $this->permission;

@@ -383,7 +383,12 @@
                         </a>
                     </li>
 
-                    <li class="nav-item"><a href="#" class="nav-link">Quick Punch Password</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('user.quick_punch_password.index') }}"
+                            class="nav-link {{ request()->routeIs('user.quick_punch_password.index') ? 'active' : '' }}">
+                            Quick Punch Password
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('bank_account.user', ['user_id' => $current_user->getId()]) }}"

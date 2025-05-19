@@ -107,6 +107,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
+use App\Http\Controllers\users\EditUserPhonePasswordNew;
 use App\Http\Controllers\users\UserDeductionListNew;
 use App\Http\Controllers\users\UserJobHistory;
 
@@ -365,10 +366,14 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  // ===============================================================================================================================
  // User Web Password
  // ===============================================================================================================================
- Route::get('/user/web_password', [EditUserPasswordNew::class, 'index'])->name('user.web_password.index');
-
+ Route::get('/user/web_password/{id?}', [EditUserPasswordNew::class, 'index'])->name('user.web_password.index');
  Route::post('/user/web_password/save/{id?}', [EditUserPasswordNew::class, 'save'])->name('user.web_password.save');
 
+  // ===============================================================================================================================
+ // User Quick Punch Password
+ // ===============================================================================================================================
+ Route::get('/user/quick_punch_password/{id?}', [EditUserPhonePasswordNew::class, 'index'])->name('user.quick_punch_password.index');
+ Route::post('/user/quick_punch_password/save/{id?}', [EditUserPhonePasswordNew::class, 'save'])->name('user.quick_punch_password.save');
 
  // ===============================================================================================================================
  // User Preference
