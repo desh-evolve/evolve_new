@@ -203,7 +203,11 @@
                     </a>
                 </li>
 
-                <li class="nav-item"><a href="#" class="nav-link">Hierarchy</a></li>
+                <li class="nav-item">
+                    <a href="{{ route('company.hierarchy.list') }}"
+                        class="nav-link {{ request()->routeIs('company.hierarchy.list') ? 'active' : '' }}">Hierarchy
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href=""

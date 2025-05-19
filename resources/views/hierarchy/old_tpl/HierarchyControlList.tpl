@@ -3,9 +3,9 @@
   <div id="titleTab"><div class="textTitle"><span class="textTitleSub">{$title}</span></div>
 </div>
 <div id="rowContentInner">
-		<table class="tblList">
 
 		<form method="get" action="{$smarty.server.SCRIPT_NAME}">
+			<table class="tblList">
 				<tr>
 					<td class="tblPagingLeft" colspan="7" align="right">
 						{include file="pager.tpl" pager_data=$paging_data}
@@ -88,9 +88,9 @@
 						{include file="pager.tpl" pager_data=$paging_data}
 					</td>
 				</tr>
-			<input type="hidden" name="sort_column" value="{$sort_column}">
-			<input type="hidden" name="sort_order" value="{$sort_order}">
-			<input type="hidden" name="page" value="{$paging_data.current_page}">
+				<input type="hidden" name="sort_column" value="{$sort_column}">
+				<input type="hidden" name="sort_order" value="{$sort_order}">
+				<input type="hidden" name="page" value="{$paging_data.current_page}">
 			</table>
 		</form>
 	</div>

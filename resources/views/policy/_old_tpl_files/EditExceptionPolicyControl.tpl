@@ -37,11 +37,11 @@
 								<td>
 									{t}Severity{/t}
 								</td>
-{*
+								{*
 								<td>
 									{t}Demerits{/t}
 								</td>
-*}
+								*}
 								<td>
 									{t}Grace{/t}
 								</td>
@@ -71,11 +71,11 @@
 											{html_options options=$data.severity_options selected=$exception.severity_id}
 										</select>
 									</td>
-{*
+									{*
 									<td>
 										<input type="text" size="4" name="data[exceptions][{$code}][demerit]" value="{$exception.demerit}">
 									</td>
-*}
+									*}
 									<td>
 										{if $exception.is_enabled_grace == TRUE}
 											<input type="text" size="6" name="data[exceptions][{$code}][grace]" value="{gettimeunit value=$exception.grace}">
@@ -104,13 +104,13 @@
 					</td>
 				</tr>
 			</table>
-		</div>
+			</div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
-		</div>
+			<div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
+			</div>
 
-		<input type="hidden" name="data[id]" value="{$data.id}">
+			<input type="hidden" name="data[id]" value="{$data.id}">
 		</form>
 	</div>
 </div>
