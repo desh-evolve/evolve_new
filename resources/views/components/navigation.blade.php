@@ -378,7 +378,12 @@
             </a>
             <div class="collapse menu-dropdown" id="employee">
                 <ul class="nav nav-sm flex-column">
-                    <li class="nav-item"><a href="#" class="nav-link">Messages</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('user.messages.index') }}"
+                            class="nav-link {{ request()->routeIs('user.messages.index') ? 'active' : '' }}">
+                            Messages
+                        </a>
+                    </li>
                     <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
                     <li class="nav-item">
                         <a href=""
@@ -393,7 +398,12 @@
                         </a>
                     </li>
 
-                    <li class="nav-item"><a href="#" class="nav-link">Quick Punch Password</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('user.quick_punch_password.index') }}"
+                            class="nav-link {{ request()->routeIs('user.quick_punch_password.index') ? 'active' : '' }}">
+                            Quick Punch Password
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a href=""

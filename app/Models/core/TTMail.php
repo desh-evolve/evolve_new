@@ -32,6 +32,8 @@ class TTMail {
 
 		return $this->mime_obj;
 	}
+
+
 	function getMailObject() {
 		if ( $this->mail_obj == NULL ) {
 			require_once('Mail.php');

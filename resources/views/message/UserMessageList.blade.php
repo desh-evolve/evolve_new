@@ -3,6 +3,13 @@
         <h4 class="mb-sm-0">{{ __('Messages') }}</h4>
     </x-slot>
 
+    <style>
+        .unread-message {
+            font-weight: bold;
+            background-color: #fff9e6; /* optional: subtle yellow */
+        }
+    </style>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -13,9 +20,9 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button"  href="/user/messages/add"
+                            <a type="button"  href="/user/new_message"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
-                                id="add_new_btn">Add <i class="ri-add-line"></i></a>
+                                id="add_new_btn">New Message <i class="ri-add-line"></i></a>
                         </div>
                     </div>
                 </div>
@@ -51,10 +58,10 @@
                             </tr>
                         @endif
 
-                        <table class="table table-bordered">
+                        <table class="table">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th scope="col">#</th>
+                                    {{-- <th scope="col">#</th> --}}
                                     <th scope="col">
                                         @if ($filter_folder_id == 10)
                                             From
@@ -78,14 +85,29 @@
                             <tbody id="table_body">
                                 @foreach ($messages as $message)
                                     @php
-                                        $row_class = isset($message['deleted']) && $message['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
+                                        $isUnread = ($filter_folder_id == 10 && $message['status_id'] == 10); // Inbox + unread
+                                        $row_class = isset($message['deleted']) && $message['deleted']
+                                            ? 'table-danger'
+                                            : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
+
+                                        // Add bold class for unread messages
+                                        $row_class .= $isUnread ? ' unread-message' : '';
                                     @endphp
-                                    <tr class="{{ $row_class }}" style = "{{$filter_folder_id == 10 AND $message['status_id'] == 10 ? 'font-weight: bold' : ''}}">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{$message['user_full_name'] ?? '' }}</td>
+
+                                    <tr class="{{ $row_class }}">
+
+                                        {{-- <td>
+                                            {{ $loop->iteration }}
+                                        </td> --}}
+                                        <td>
+                                            @if ($isUnread)
+                                                <i class="ri-mail-unread-line text-danger me-1" title="Unread"></i>
+                                            @endif
+                                            {{$message['user_full_name'] ?? '' }}
+                                        </td>
                                         <td>{{$message['subject'] ?? '' }}</td>
                                         <td>{{$message['object_type'] ?? '' }}</td>
-                                        <td>{{$message['created_date'] ?? '' }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromTimestamp($message['created_date'])->format('M d, Y / h:i A') }}</td>
 
                                         @if ($filter_folder_id == 20 AND $show_ack_column == TRUE)
                                             <td>
@@ -101,24 +123,29 @@
                                         <td>
                                             @if ($message['object_type_id'] == 90)
                                                 @if ($permission->Check('message','view') OR $permission->Check('message','view_own'))
-                                                    <a href="../message/ViewMessage.php" values="object_type_id=90,object_id=$message['object_id'],id=$message['id']" merge="FALSE">View</a>
+                                                    <a href="/user/messages/view" values="object_type_id=90,object_id=$message['object_id'],id=$message['id']" merge="FALSE" class="btn btn-sm btn-primary">View</a>
                                                 @endif
                                             @endif
                                             @if ($message['object_type_id'] == 50)
                                                 @if ($permission->Check('request','view') OR $permission->Check('request','view_own'))
-                                                    <a href="javascript:viewRequest({$message['object_id']})">View</a>
+                                                    <a href="javascript:viewRequest({$message['object_id']})" class="btn btn-sm btn-primary">View</a>
                                                 @endif
                                             @endif
+
                                             @if ($message['object_type_id'] == 5)
                                                 @if ($permission->Check('message','view') OR $permission->Check('message','view_own'))
-                                                    <a href="/message/ViewMessage.php" values="filter_folder_id=$filter_folder_id,object_type_id=5,object_id=$message['object_id'],id=$message['id']" merge="FALSE">View</a>
+                                                    <a href="{{ route('user.messages.view', ['id' => $message['id']]) }}?filter_folder_id={{ $filter_folder_id }}&object_type_id={{ $message['object_type_id'] }}&object_id={{ $message['object_id'] }}"
+                                                        class="btn btn-sm btn-primary">
+                                                        View
+                                                    </a>
                                                 @endif
                                             @endif
+
 
                                             <!-- Delete Button -->
                                             @if ($permission->Check('message','delete') OR $permission->Check('message','delete_own'))
                                                 {{-- <input type="submit" name="action:delete" value="Delete" onClick="return confirmSubmit()"> --}}
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteJobhistory({{ $message['id'] }})">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="deletemessage({{ $message['id'] }})">
                                                     {{ __('Delete') }}
                                                 </button>
                                             @endif
@@ -142,11 +169,66 @@
         </div>
     </div>
 
-    <script	language=JavaScript>
+    <script>
 
         function viewRequest(requestID) {
             help=window.open('{/literal}{$BASE_URL}{literal}request/ViewRequest.php?id='+ encodeURI(requestID),"Request","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
         }
+
+        const tableBody = document.getElementById("table_body");
+        if (tableBody && tableBody.children.length === 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td colspan="7" class="text-center text-danger font-weight-bold">No messages.</td>
+            `;
+            tableBody.appendChild(row);
+        }
+
+        //add button
+        // document.getElementById('add_new_btn').addEventListener('click', function (e) {
+        //     e.preventDefault();
+
+        //     const userSelect = document.getElementById('filter_user');
+        //     const selectedUserId = userSelect.value;
+
+        //     if (!selectedUserId) {
+        //         alert('Please select an employee first.');
+        //         return;
+        //     }
+
+        //     window.location.href = "{{ route('user.jobhistory.add', '') }}/" + selectedUserId;
+
+        // });
+
+        // delete item
+        async function deletemessage(messageId) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                const filterFolderId = document.getElementById('filter_user').value;
+
+                try {
+                    const response = await fetch(`/user/messages/delete/${messageId}?filter_folder_id=${filterFolderId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert(data.success);
+                        window.location.reload();
+                    } else {
+                        alert(data.error || 'Delete failed');
+                        console.error(data);
+                    }
+                } catch (error) {
+                    console.error(`Error deleting item ID ${messageId}:`, error);
+                }
+            }
+        }
+
 
     </script>
 

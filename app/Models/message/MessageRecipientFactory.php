@@ -5,6 +5,7 @@ use App\Models\Core\Factory;
 use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
+use App\Models\Users\UserListFactory;
 
 class MessageRecipientFactory extends Factory {
 	protected $table = 'message_recipient';

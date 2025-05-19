@@ -75,7 +75,7 @@ class EditOtherField extends Controller
 				);
 			}
 		}
-        
+
 		//Select box options;
 		//$jif = new JobItemFactory();
 
@@ -106,11 +106,7 @@ class EditOtherField extends Controller
 		$off->setOtherID4( $data['other_id4'] );
 		$off->setOtherID5( $data['other_id5'] );
 
-		// if ( $off->isValid() ) {
-		// 	$off->Save();
-		// 	Redirect::Page( URLBuilder::getURL( array('type_id' => $data['type_id']), 'OtherFieldList.php') );
-		// }
-
+		
         if ($off->isValid()) {
             $off->Save();
             return redirect()->to(URLBuilder::getURL(array('type_id' => $data['type_id']), '/company/other_field'))->with('success', 'Other Field saved successfully.');
