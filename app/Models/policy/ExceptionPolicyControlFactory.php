@@ -2,6 +2,7 @@
 
 namespace App\Models\Policy;
 
+use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
@@ -66,7 +67,7 @@ class ExceptionPolicyControlFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = new CompanyListFactory();
+			$clf = new CompanyListFactory(); 
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;

@@ -19,6 +19,10 @@ use App\Http\Controllers\company\EditOtherField;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
 use App\Http\Controllers\company\OtherFieldList;
+
+use App\Http\Controllers\hierarchy\HierarchyControlList;
+use App\Http\Controllers\hierarchy\EditHierarchyControl;
+
 use App\Http\Controllers\department\DepartmentList;
 use App\Http\Controllers\department\EditDepartment;
 use App\Http\Controllers\department\EditDepartmentBranchUser;
@@ -283,6 +287,13 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
 Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name('company.logo');
 
 // ===============================================================================================================================
+// Hierarchy Information
+// ===============================================================================================================================
+
+Route::match(['get', 'delete'], '/company/hierarchy/list', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');    
+Route::match(['get', 'post', 'delete'], '/company/hierarchy/add', [EditHierarchyControl::class, 'index'])->name('company.hierarchy.add');    
+
+// ===============================================================================================================================
  // User jobhistory
  // ===============================================================================================================================
  Route::get('/user/jobhistory', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
@@ -418,9 +429,7 @@ Route::post('/policy/absence_policies/submit/{id?}', [EditAbsencePolicy::class, 
 Route::delete('/policy/absence_policies/delete/{id}', [AbsencePolicyList::class, 'delete'])->name('policy.absence_policies.delete');
 
 Route::get('/policy/accrual_policies', [AccrualPolicyList::class, 'index'])->name('policy.accrual_policies');
-Route::get('/policy/accrual_policies/add/{id?}', [EditAccrualPolicy::class, 'index'])->name('policy.accrual_policies.add');
-Route::post('/policy/accrual_policies/submit/{id?}', [EditAccrualPolicy::class, 'submit'])->name('policy.accrual_policies.submit');
-Route::delete('/policy/accrual_policies/delete/{id}', [AccrualPolicyList::class, 'delete'])->name('policy.accrual_policies.delete');
+Route::match(['get', 'post', 'delete'],'/policy/accrual_policies/add', [EditAccrualPolicy::class, 'index'])->name('policy.accrual_policies.add');
 
 Route::get('/policy/schedule_policies', [SchedulePolicyList::class, 'index'])->name('policy.schedule_policies');
 Route::get('/policy/schedule_policies/add/{id?}', [EditSchedulePolicy::class, 'index'])->name('policy.schedule_policies.add');
@@ -448,14 +457,10 @@ Route::post('/policy/overtime_policies/submit/{id?}', [EditOverTimePolicy::class
 Route::delete('/policy/overtime_policies/delete/{id}', [OverTimePolicyList::class, 'delete'])->name('policy.overtime_policies.delete');
 
 Route::get('/policy/premium_policies', [PremiumPolicyList::class, 'index'])->name('policy.premium_policies');
-Route::get('/policy/premium_policies/add/{id?}', [EditPremiumPolicy::class, 'index'])->name('policy.premium_policies.add');
-Route::post('/policy/premium_policies/submit/{id?}', [EditPremiumPolicy::class, 'submit'])->name('policy.premium_policies.submit');
-Route::delete('/policy/premium_policies/delete/{id}', [PremiumPolicyList::class, 'delete'])->name('policy.premium_policies.delete');
+Route::match(['get', 'post'], '/policy/premium_policies/add', [EditPremiumPolicy::class, 'index'])->name('policy.premium_policies.add');
 
 Route::get('/policy/exception_policies', [ExceptionPolicyControlList::class, 'index'])->name('policy.exception_policies');
-Route::get('/policy/exception_policies/add/{id?}', [EditExceptionPolicyControl::class, 'index'])->name('policy.exception_policies.add');
-Route::post('/policy/exception_policies/submit/{id?}', [EditExceptionPolicyControl::class, 'submit'])->name('policy.exception_policies.submit');
-Route::delete('/policy/exception_policies/delete/{id}', [ExceptionPolicyControlList::class, 'delete'])->name('policy.exception_policies.delete');
+Route::match(['get', 'post'], '/policy/exception_policies/add', [EditExceptionPolicyControl::class, 'index'])->name('policy.exception_policies.add');
 
 Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->name('policy.holiday_policies');
 Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'index'])->name('policy.holiday_policies.add');

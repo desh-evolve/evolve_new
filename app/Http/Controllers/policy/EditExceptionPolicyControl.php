@@ -41,20 +41,36 @@ class EditExceptionPolicyControl extends Controller
 
     }
 
-    public function index($id = null) {
-        /*
-        if ( !$permission->Check('exception_policy','enabled')
-				OR !( $permission->Check('exception_policy','edit') OR $permission->Check('exception_policy','edit_own') ) ) {
-			$permission->Redirect( FALSE ); //Redirect
-		} 
-        */
+    public function index() {
 
-		$viewData['title'] = isset($id) ? 'Edit Exception Policy' : 'Add Exception Policy';
+		$permission = $this->permission;
+		$current_user = $this->currentUser;
 		$current_company = $this->currentCompany;
+		$current_user_prefs = $this->userPrefs;
+
+		if ( !$permission->Check('exception_policy','enabled')
+				OR !( $permission->Check('exception_policy','edit') OR $permission->Check('exception_policy','edit_own') ) ) {
+
+			$permission->Redirect( FALSE ); //Redirect
+
+		}
+
+		$viewData['title'] = 'Edit Exception Policy';
+
+		/*
+		* Get FORM variables
+		*/
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'data'
+			) 
+		) );
 
 		if ( isset($data['exceptions'])) {
 			foreach( $data['exceptions'] as $code => $exception ) {
-		
+
 				if ( isset($exception['grace']) AND $exception['grace'] != '') {
 					Debug::Text('Grace: '. $exception['grace'] , __FILE__, __LINE__, __METHOD__,10);
 					$data['exceptions'][$code]['grace'] = TTDate::parseTimeUnit( $exception['grace'] );
@@ -64,72 +80,132 @@ class EditExceptionPolicyControl extends Controller
 				}
 			}
 		}
-		
+
 		$epf = new ExceptionPolicyFactory();
 		$epcf = new ExceptionPolicyControlFactory();
 
-		$type_options = $epf->getTypeOptions( $current_company->getProductEdition() );
+		$action = !empty($_POST['action']) ? strtolower(str_replace(' ', '_', trim($_POST['action']))) : '';
 
-		if ( isset($id) AND $id != '' ) {
-			$epclf = new ExceptionPolicyControlListFactory();
-			$epclf->getByIdAndCompanyID( $id, $current_company->getID() );
+		switch ($action) {
+			case 'submit':
+				//Debug::setVerbosity(11);
+				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
-			foreach ($epclf->rs as $epc_obj) {
-				$epclf->data = (array)$epc_obj;
-				$epc_obj = $epclf;
-				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
+				$epcf->setId( $data['id'] );
+				$epcf->setCompany( $current_company->getId() );
+				$epcf->setName( $data['name'] );
 
-				$eplf = new ExceptionPolicyListFactory();
-				$eplf->getByExceptionPolicyControlID( $id );
-				if ( $eplf->getRecordCount() > 0 ) {
-					foreach( $eplf->rs as $ep_obj ) {
-						$eplf->data = (array)$ep_obj;
-						$ep_obj = $eplf;
-						
-						if ( isset($type_options[$ep_obj->getType()]) ) {
-							$ep_objs[$ep_obj->getType()] = $ep_obj;
-						} else {
-							//Delete exceptions that aren't part of the product.
-							Debug::Text('Deleting exception outside product edition: '. $ep_obj->getID(), __FILE__, __LINE__, __METHOD__,10);
+				if ( $epcf->isValid() ) {
+					$epc_id = $epcf->Save();
 
-							$ep_obj->setDeleted(TRUE);
-							if ( $ep_obj->isValid() ) {
-								$ep_obj->Save();
+					Debug::Text('aException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
+
+					if ( $epc_id === TRUE ) {
+						$epc_id = $data['id'];
+					}
+
+					Debug::Text('bException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
+
+					if ( count($data['exceptions']) > 0 ) {
+						foreach ($data['exceptions'] as $code => $exception_data) {
+							Debug::Text('Looping Code: '. $code .' ID: '. $exception_data['id'], __FILE__, __LINE__, __METHOD__,10);
+
+							if ( $exception_data['id'] != '' AND $exception_data['id'] > 0 ) {
+								$epf->setId( $exception_data['id'] );
+							}
+							$epf->setExceptionPolicyControl( $epc_id );
+							if ( isset($exception_data['active'])  ) {
+								$epf->setActive( TRUE );
+							} else {
+								$epf->setActive( FALSE );
+							}
+							$epf->setType( $code );
+							$epf->setSeverity( $exception_data['severity_id'] );
+							$epf->setEmailNotification( $exception_data['email_notification_id'] );
+							if ( isset($exception_data['demerit']) AND $exception_data['demerit'] != '') {
+								$epf->setDemerit( $exception_data['demerit'] );
+							}
+							if ( isset($exception_data['grace']) AND $exception_data['grace'] != '' ) {
+								$epf->setGrace( $exception_data['grace'] );
+							}
+							if ( isset($exception_data['watch_window']) AND $exception_data['watch_window'] != '' ) {
+								$epf->setWatchWindow( $exception_data['watch_window'] );
+							}
+							if ( $epf->isValid() ) {
+								$epf->Save();
 							}
 						}
 					}
+
+					Redirect::Page( URLBuilder::getURL( NULL, '/policy/exception_policies') );
+
+					break;
 				}
 
-				$exceptions = array();
-				if ( isset($type_options) AND is_array($type_options) AND count($type_options) > 0 ) {
-					foreach( $type_options as $exception_type => $exception_name ) {
-						if ( isset($ep_objs[$exception_type]) ) {
-							$ep_obj = $ep_objs[$exception_type];
+			default:
+				$type_options = $epf->getTypeOptions( $current_company->getProductEdition() );
 
-							$exceptions[$ep_obj->getType()] = array(
-																	'id' => $ep_obj->getId(),
-																	'active' => $ep_obj->getActive(),
-																	'type_id' => $ep_obj->getType(),
-																	'name' => Option::getByKey( $ep_obj->getType(), $type_options ),
-																	'severity_id' => $ep_obj->getSeverity(),
-																	'email_notification_id' => $ep_obj->getEmailNotification(),
-																	'demerit' => $ep_obj->getDemerit(),
-																	'grace' => (int)$ep_obj->getGrace(),
-																	'is_enabled_grace' => $ep_obj->isEnabledGrace( $ep_obj->getType() ),
-																	'watch_window' => (int)$ep_obj->getWatchWindow(),
-																	'is_enabled_watch_window' => $ep_obj->isEnabledWatchWindow( $ep_obj->getType() )
-																	);
+				if ( isset($id) AND $id != '' ) {
+
+					$epclf = new ExceptionPolicyControlListFactory();
+					$epclf->getByIdAndCompanyID( $id, $current_company->getID() );
+
+					foreach ($epclf->rs as $epc_obj) {
+						$epclf->data = (array)$epc_obj;
+						$epc_obj = $epclf;
+						//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
+
+						$eplf = new ExceptionPolicyListFactory();
+						$eplf->getByExceptionPolicyControlID( $id );
+						if ( $eplf->getRecordCount() > 0 ) {
+							foreach( $eplf->rs as $ep_obj ) {
+								$eplf->data = (array)$ep_obj;
+								$ep_obj = $eplf;
+
+								if ( isset($type_options[$ep_obj->getType()]) ) {
+									$ep_objs[$ep_obj->getType()] = $ep_obj;
+								} else {
+									//Delete exceptions that aren't part of the product.
+									Debug::Text('Deleting exception outside product edition: '. $ep_obj->getID(), __FILE__, __LINE__, __METHOD__,10);
+
+									$ep_obj->setDeleted(TRUE);
+									if ( $ep_obj->isValid() ) {
+										$ep_obj->Save();
+									}
+								}
+							}
 						}
-					}
-					unset($exception_name);
-				}
-				//var_dump($type_options, $ep_objs,$exceptions);
-				
-				//Populate default values.
-				$default_exceptions = $epf->getExceptionTypeDefaultValues( array_keys($exceptions), $current_company->getProductEdition() );
-				$exceptions = array_merge( $exceptions, $default_exceptions );
+						// check here
+						$exceptions = array();
+						if ( isset($type_options) AND is_array($type_options) AND count($type_options) > 0 ) {
+							foreach( $type_options as $exception_type => $exception_name ) {
+								if ( isset($ep_objs[$exception_type]) ) {
+									$ep_obj = $ep_objs[$exception_type];
 
-				$data = array(
+									$exceptions[$ep_obj->getType()] = 	array (
+																			'id' => $ep_obj->getId(),
+																			'active' => $ep_obj->getActive(),
+																			'type_id' => $ep_obj->getType(),
+																			'name' => Option::getByKey( $ep_obj->getType(), $type_options ),
+																			'severity_id' => $ep_obj->getSeverity(),
+																			'email_notification_id' => $ep_obj->getEmailNotification(),
+																			'demerit' => $ep_obj->getDemerit(),
+																			'grace' => (int)$ep_obj->getGrace(),
+																			'is_enabled_grace' => $ep_obj->isEnabledGrace( $ep_obj->getType() ),
+																			'watch_window' => (int)$ep_obj->getWatchWindow(),
+																			'is_enabled_watch_window' => $ep_obj->isEnabledWatchWindow( $ep_obj->getType() )
+																		);
+								}
+							}
+							unset($exception_name);
+						}
+						//var_dump($type_options, $ep_objs,$exceptions);
+						
+						//Populate default values.
+						$default_exceptions = $epf->getExceptionTypeDefaultValues( array_keys($exceptions), $current_company->getProductEdition() );
+						$exceptions = array_merge( $exceptions, $default_exceptions );
+
+						$data = array(
 									'id' => $epc_obj->getId(),
 									'name' => $epc_obj->getName(),
 									'exceptions' => $exceptions,
@@ -140,85 +216,31 @@ class EditExceptionPolicyControl extends Controller
 									'deleted_date' => $epc_obj->getDeletedDate(),
 									'deleted_by' => $epc_obj->getDeletedBy()
 								);
-			}
-		} else {
-			//Populate default values.
-			$exceptions = $epf->getExceptionTypeDefaultValues( NULL, $current_company->getProductEdition() );
+					}
+				} elseif ( $action != 'submit' ) {
+					//Populate default values.
+					$exceptions = $epf->getExceptionTypeDefaultValues( NULL, $current_company->getProductEdition() );
 
-			$data = array( 'exceptions' => $exceptions );
+					$data = array( 'exceptions' => $exceptions );
+				}
+				//print_r($data);
+
+				//Select box options;
+				$data['severity_options'] = $epf->getOptions('severity');
+				$data['email_notification_options'] = $epf->getOptions('email_notification');
+
+				$viewData['data'] = $data;
+
+				break;
 		}
-		//print_r($data);
 
-		//Select box options;
-		$data['severity_options'] = $epf->getOptions('severity');
-		$data['email_notification_options'] = $epf->getOptions('email_notification');
-		
-		$viewData['data'] = $data;
+		$viewData['current_company'] = $current_company;
+		$viewData['current_user_prefs'] = $current_user_prefs;
 		$viewData['epf'] = $epf;
 		$viewData['epcf'] = $epcf;
-        return view('policy/EditExceptionPolicyControl', $viewData);
 
-    }
-
-	public function submit(Request $request){
-		$epf = new ExceptionPolicyFactory();
-		$epcf = new ExceptionPolicyControlFactory();
-
-		$data = $request->data;
-		$current_company = $this->currentCompany;
-
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$epcf->setId( $data['id'] );
-		$epcf->setCompany( $current_company->getId() );
-		$epcf->setName( $data['name'] );
-
-		if ( $epcf->isValid() ) {
-			$epc_id = $epcf->Save();
-
-			Debug::Text('aException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
-
-			if ( $epc_id === TRUE ) {
-				$epc_id = $data['id'];
-			}
-
-			Debug::Text('bException Policy Control ID: '. $epc_id , __FILE__, __LINE__, __METHOD__,10);
-
-			if ( count($data['exceptions']) > 0 ) {
-				foreach ($data['exceptions'] as $code => $exception_data) {
-					Debug::Text('Looping Code: '. $code .' ID: '. $exception_data['id'], __FILE__, __LINE__, __METHOD__,10);
-
-					if ( $exception_data['id'] != '' AND $exception_data['id'] > 0 ) {
-						$epf->setId( $exception_data['id'] );
-					}
-					$epf->setExceptionPolicyControl( $epc_id );
-					if ( isset($exception_data['active'])  ) {
-						$epf->setActive( TRUE );
-					} else {
-						$epf->setActive( FALSE );
-					}
-					$epf->setType( $code );
-					$epf->setSeverity( $exception_data['severity_id'] );
-					$epf->setEmailNotification( $exception_data['email_notification_id'] );
-					if ( isset($exception_data['demerit']) AND $exception_data['demerit'] != '') {
-						$epf->setDemerit( $exception_data['demerit'] );
-					}
-					if ( isset($exception_data['grace']) AND $exception_data['grace'] != '' ) {
-						$epf->setGrace( $exception_data['grace'] );
-					}
-					if ( isset($exception_data['watch_window']) AND $exception_data['watch_window'] != '' ) {
-						$epf->setWatchWindow( $exception_data['watch_window'] );
-					}
-					if ( $epf->isValid() ) {
-						$epf->Save();
-					}
-				}
-			}
-
-			Redirect::Page( URLBuilder::getURL( NULL, 'ExceptionPolicyControlList') );
-		}
-
+		//dd($viewData);
+		return view('policy/EditExceptionPolicyControl', $viewData);
 	}
 }
 
