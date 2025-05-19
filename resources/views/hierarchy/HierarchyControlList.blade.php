@@ -24,7 +24,8 @@
                     
                     {{-- -------------------------------------------- --}}
 
-                    <form method="post" action="{{ route('/company/hierarchy/list') }}">
+                    <form method="post" action="{{ route('company.hierarchy.list') }}">
+                        @csrf
                         <table class="table table-bordered">
                             @foreach ($hierarchy_controls as $i => $hierarchy_control)
                                 @php
@@ -61,9 +62,6 @@
                                         @if ($permission->Check('hierarchy','delete'))
                                             <input type="submit" name="action" value="Delete" onClick="return confirmSubmit()">
                                         @endif
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" class="checkbox" name="ids[]" value="{{$hierarchy_control['id']}}">
                                     </td>
                                 </tr>
                             @endforeach

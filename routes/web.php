@@ -292,7 +292,7 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
 // Hierarchy Information
 // ===============================================================================================================================
 
-Route::match(['get', 'delete'], '/company/hierarchy/list', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');    
+Route::match(['get', 'post', 'delete'], '/company/hierarchy/list', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');    
 Route::match(['get', 'post', 'delete'], '/company/hierarchy/add', [EditHierarchyControl::class, 'index'])->name('company.hierarchy.add');    
 
 // ===============================================================================================================================

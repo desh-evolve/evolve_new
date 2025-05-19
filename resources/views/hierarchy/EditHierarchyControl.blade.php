@@ -1,5 +1,19 @@
 <x-app-layout :title="'Input Example'">
+    <style>
+        th, td{
+            padding: 5px !important;
+        }
 
+        .arrow-icon{
+            background-color: green;
+            color: white;
+            font-size: 16px;
+            border-radius: 50%;
+            padding: 5px;
+            align-items: center;
+            margin: 2px;
+        }
+    </style>
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -24,86 +38,102 @@
                     
                     {{-- -------------------------------------------- --}}
 
-                    <form method="post" action="{$smarty.server.SCRIPT_NAME}">
+                    <form method="post" action="{{ route('company.hierarchy.add') }}">
+                        @csrf
                         <div id="contentBoxTwoEdit">
-
-                            @if (!$hcf->Validator->isValid())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        <li>Error list</li>
-                                    </ul>
-                                </div>
+                            @if (!$hcf->Validator->isValid() OR !$hlf->Validator->isValid())
+                                {{-- {include file="form_errors.tpl" object="hcf,hlf"} --}}
+                                {{-- error list here --}}
                             @endif
             
-                            <table class="editTable">
+                            <table class="table table-bordered">
             
                             <tr>
-                                <th>
+                                <td>
                                     Name:
-                                </th>
-                                <td>
-                                    <input type="text" name="hierarchy_control_data[name]" value="{{$hierarchy_control_data['name']}}">
+                                </td>
+                                <td class="cellRightEditTable">
+                                    <input type="text" name="hierarchy_control_data[name]" value="{{$hierarchy_control_data['name'] ?? ''}}">
                                 </td>
                             </tr>
             
                             <tr>
-                                <th>
+                                <td>
                                     Description:
-                                </th>
-                                <td>
-                                    <input type="text" name="hierarchy_control_data[description]" value="{{$hierarchy_control_data['description']}}">
+                                </td>
+                                <td class="cellRightEditTable">
+                                    <input type="text" name="hierarchy_control_data[description]" value="{{$hierarchy_control_data['description'] ?? ''}}">
                                 </td>
                             </tr>
             
                             <tr>
-                                <th>
+                                <td>
                                     Objects:
                                     <Br>
                                     (Select one or more)
-                                </th>
-                                <td>
-                                    <select 
-                                        name="hierarchy_control_data[object_type_ids][]" 
-                                        multiple
-                                    >
-                                        @foreach ($hierarchy_control_data['object_type_options'] as $id => $name )
-                                        <option 
-                                            value="{{$id}}"
-                                            @if(!empty($hierarchy_control_data['object_type_ids']) && in_array($id,$hierarchy_control_data['object_type_ids']))
-                                                selected
-                                            @endif
-                                        >{{$name}}</option>
-                                        @endforeach
+                                </td>
+                                <td class="cellRightEditTable">
+                                    <select name="hierarchy_control_data[object_type_ids][]" multiple>
+                                        {!! html_options([ 'options'=>$hierarchy_control_data['object_type_options'], 'selected'=>$hierarchy_control_data['object_type_ids'] ?? []]) !!}
                                     </select>
                                 </td>
                             </tr>
             
+                            <tbody id="filter_employees_on" style="display:none" >
                             <tr>
-                                <td class="{isvalid object="ppsf" label="user" value="cellLeftEditTable"}" nowrap>
-                                    <b>Subordinates:</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');filterUserCount();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+                                <td nowrap>
+                                    <b>Subordinates:</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');filterUserCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                 </td>
                                 <td colspan="3">
-                                    <div class="col-md-12">
-                                        <x-general.multiselect-php 
-                                            title="Employees" 
-                                            :data="$hierarchy_control_data['user_options']" 
-                                            :selected="!empty($hierarchy_control_data['user_ids']) ? array_values($hierarchy_control_data['user_ids']) : []" 
-                                            :name="'hierarchy_control_data[user_ids][]'"
-                                            id="userSelector"
-                                        />
-                                    </div>
+                                    <table class="table table-bordered">
+                                    <tr class="bg-primary text-white">
+                                        <td>
+                                            UnAssigned Employees
+                                        </td>
+                                        <td>
+                                            <br>
+                                        </td>
+                                        <td>
+                                            Assigned Employees
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cellRightEditTable" width="49%" align="center">
+                                            <input type="button" name="Select All" value="Select All" onClick="selectAll(document.getElementById('src_filter_user'))">
+                                            <input type="button" name="Un-Select" value="Un-Select All" onClick="unselectAll(document.getElementById('src_filter_user'))">
+                                            <br>
+                                            <select name="src_user_id" id="src_filter_user" style="width:90%;margin:5px 0 5px 0;" size="{{select_size([ 'array'=>$hierarchy_control_data['user_options']])}}" multiple>
+                                                {!! html_options([ 'options'=>$hierarchy_control_data['user_options']]) !!}
+                                            </select>
+                                        </td>
+                                        <td class="cellRightEditTable" style="vertical-align: middle;" width="1">
+                                            <a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {{select_size([ 'array'=>$hierarchy_control_data['user_options']])}})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+                                            <br>
+                                            <a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {{select_size([ 'array'=>$hierarchy_control_data['user_options']])}})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <a href="javascript:UserSearch('src_filter_user','filter_user');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a>
+                                        </td>
+                                        <td class="cellRightEditTable" width="49%" align="center">
+                                            <input type="button" name="Select All" value="Select All" onClick="selectAll(document.getElementById('filter_user'))">
+                                            <input type="button" name="Un-Select" value="Un-Select All" onClick="unselectAll(document.getElementById('filter_user'))">
+                                            <br>
+                                            <select name="hierarchy_control_data[user_ids][]" id="filter_user" style="width:90%;margin:5px 0 5px 0;" size="{{select_size(['array'=>$filter_user_options])}}" multiple>
+                                                {!! html_options([ 'options'=>$filter_user_options, 'selected'=>$hierarchy_control_data['user_ids'] ?? []]) !!}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </table>
                                 </td>
                             </tr>
-
-
-
-                            {{-- check here
+                            </tbody>
                             <tbody id="filter_employees_off">
                             <tr>
-                                <td class="{isvalid object="ppsf" label="user" value="cellLeftEditTable"}" nowrap>
-                                    <b>Subordinates:</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$hierarchy_control_data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+                                <td nowrap>
+                                    <b>Subordinates:</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {{select_size(['array'=>$hierarchy_control_data['user_options']])}})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                 </td>
-                                <td colspan="100">
+                                <td class="cellRightEditTable" colspan="100">
                                     <span id="filter_user_count">0</span> Employees Currently Selected, Click the arrow to modify.
                                 </td>
                             </tr>
@@ -111,12 +141,12 @@
                             <tr>
                               <td colspan="3">
                                 <table class="tblList">
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="3">
                                             <b>NOTE:</b> Level one denotes the top or last level of the hierarchy and employees at the same level share responsibilities.
                                         </td>
                                     </tr>
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td width="50%">
                                             Level
                                         </td>
@@ -127,48 +157,45 @@
                                             <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
                                         </td>
                                     </tr>
-                                    {foreach name="level" from=$hierarchy_level_data item=hierarchy_level}
-                                      {assign var="hierarchy_level_id" value=$hierarchy_level.id}
-                                      {cycle assign=row_class values="tblDataWhite,tblDataGrey"}
-            
-                                      <tr class="{$row_class}">
+                                    @foreach ($hierarchy_level_data as $hierarchy_level)
+                                      <tr class="">
                                         <td>
-                                            <input type="hidden" name="hierarchy_level_data[{$hierarchy_level.id}][id]" value="{$hierarchy_level.id}">
-                                            {if $hierarchy_level.level > 1}
-                                                {'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'|str_repeat:$hierarchy_level.level-1}
-                                            {/if}
-                                            <input type="text" size="4" name="hierarchy_level_data[{$hierarchy_level.id}][level]" value="{$hierarchy_level.level}">
+                                            <input type="hidden" name="hierarchy_level_data[{{$hierarchy_level['id']}}][id]" value="{{$hierarchy_level['id']}}">
+                                            @if ($hierarchy_level['level'] > 1)
+                                                {{ str_repeat('      ', $hierarchy_level['level'] - 1) }}
+                                            @endif
+                                            <input type="text" size="4" name="hierarchy_level_data[{{$hierarchy_level['id']}}][level]" value="{{$hierarchy_level['level']}}">
                                         </td>
                                         <td>
-                                            {if $hierarchy_level.level > 1}
-                                                {'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'|str_repeat:$hierarchy_level.level-1}
-                                            {/if}
-                                          <select id="hierarchy_level-{$hierarchy_level.id}" name="hierarchy_level_data[{$hierarchy_level.id}][user_id]">
-                                              {html_options options=$hierarchy_control_data.level_user_options selected=$hierarchy_level.user_id}
+                                            @if ($hierarchy_level['level'] > 1)
+                                                {{ str_repeat('      ', $hierarchy_level['level'] - 1) }}
+                                            @endif
+                                          <select id="hierarchy_level-{{$hierarchy_level['id']}}" name="hierarchy_level_data[{{$hierarchy_level['id']}}][user_id]">
+                                              {!! html_options(['options'=>$hierarchy_control_data['level_user_options'], 'selected'=>$hierarchy_level['user_id'] ?? []]) !!}
                                           </select>
                                         </td>
                                         <td>
-                                            <input type="checkbox" class="checkbox" name="ids[]" value="{$hierarchy_level.id}">
+                                            <input type="checkbox" class="checkbox" name="ids[]" value="{{$hierarchy_level['id']}}">
                                         </td>
                                       </tr>
-                                    {/foreach}
+                                    @endforeach
                                 </table>
                               </td>
                             </tr>
-                            --}}
-
-                            
+            
                             <tr>
-                                <td class="tblActionRow" colspan="3">
-                                    <input type="submit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
-                                    <input type="submit" name="action:add_level" value="Add Level" onClick="selectAll(document.getElementById('filter_user'))">
-                                    <input type="submit" name="action:delete_level" value="Delete Level" onClick="selectAll(document.getElementById('filter_user'))">
+                                <td class="tblActionRow text-end" colspan="3">
+                                    <input type="submit" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
+                                    <input type="submit" name="action" value="Add Level" onClick="selectAll(document.getElementById('filter_user'))">
+                                    <input type="submit" name="action" value="Delete Level" onClick="selectAll(document.getElementById('filter_user'))">
                                 </td>
                             </tr>
             
                         </table>
                         </div>
-                        <input type="hidden" name="hierarchy_control_data[id]" value="{{$hierarchy_control_data['id']}}">
+                        {{-- <div id="contentBoxFour">
+                        </div> --}}
+                        <input type="hidden" name="hierarchy_control_data[id]" value="{{$hierarchy_control_data['id'] ?? ''}}">
                     </form>
 
                     {{-- -------------------------------------------- --}}
