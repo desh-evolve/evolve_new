@@ -788,7 +788,7 @@ class PunchFactory extends Factory {
 
 		return FALSE;
 	}
-	function setOriginalTimeStamp($epoch) {
+	function setOriginalTimeStamp($epoch, $type= 'timestamp') {
 		$epoch = trim($epoch);
 
 		if 	(	$this->Validator->isDate(		'original_time_stamp',
@@ -797,7 +797,13 @@ class PunchFactory extends Factory {
 
 			) {
 
-			$this->data['original_time_stamp'] = $epoch;
+			if($type == 'timestamp'){ //added by desh(2025--4-29) for EditPunch
+				$this->data['original_time_stamp'] = date('Y-m-d H:i:s', $epoch);
+			}elseif($type == 'date'){
+				$this->data['original_time_stamp'] = date('Y-m-d', $epoch);
+			}else{
+				$this->data['original_time_stamp'] = $epoch;
+			}
 
 			return TRUE;
 		}
@@ -819,7 +825,7 @@ class PunchFactory extends Factory {
 
 		return FALSE;
 	}
-	function setActualTimeStamp($epoch) {
+	function setActualTimeStamp($epoch, $type = 'timestamp') {
 		$epoch = trim($epoch);
 
 		if 	(	$this->Validator->isDate(		'actual_time_stamp',
@@ -828,7 +834,13 @@ class PunchFactory extends Factory {
 
 			) {
 
-			$this->data['actual_time_stamp'] = $epoch;
+			if($type == 'timestamp'){ //added by desh(2025--4-29) for EditPunch
+				$this->data['actual_time_stamp'] = date('Y-m-d H:i:s', $epoch);
+			}elseif($type == 'date'){
+				$this->data['actual_time_stamp'] = date('Y-m-d', $epoch);
+			}else{
+				$this->data['actual_time_stamp'] = $epoch;
+			}
 
 			return TRUE;
 		}

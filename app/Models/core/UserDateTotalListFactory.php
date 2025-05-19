@@ -931,11 +931,11 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$udf = new UserDateFactory();
 		$otpf = new OverTimePolicyFactory();
-
+		
 		$ph = array(
 					':user_id' => $user_id,
-					':week_start_epoch' => $this->db->BindDate( $week_start_epoch ),
-					':epoch' =>  $this->db->BindDate( $epoch ),
+					':week_start_epoch' => date( 'Y-m-d', $week_start_epoch ),
+					':epoch' =>  date( 'Y-m-d', $epoch ),
 					);
 
 		//DO NOT Include paid absences. Only count regular time towards weekly overtime.
@@ -1035,8 +1035,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					':company_id' => $company_id,
 					':user_id' => $user_id,
 					':status_id' => $status,
-                    ':start_date' => Carbon::parse( $end_date )->toDateTimeString(),
-					':end_date' => Carbon::parse( $end_date )->toDateTimeString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+					':end_date' => date('Y-m-d', $end_date),
 					);
 
 		//Order by a.over_time_policy last so we never leave the ordering up to the database. This can cause
@@ -3439,46 +3439,83 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$udf = new UserDateFactory();
 
 		$ph = array(
-					':company_id' => $company_id,
-					':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
-					':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
-					);
+			':company_id' => $company_id,
+			':start_date' => Carbon::parse( $start_date )->format('Y-m-d'),
+			':end_date' => Carbon::parse( $end_date )->format('Y-m-d'),
+		);
 
 		$query = '
-					select 	user_id,
-							status_id,
-							type_id,
-							over_time_policy_id,
-							absence_policy_id,
-							premium_policy_id,
-							avg(total_time) as avg,
-							min(total_time) as min,
-							max(total_time) as max,
-							count(*) as date_units
-					from (
-							select 	b.user_id,
-									'. $time_period_sql .' as date,
-									a.type_id,
-									a.status_id,
-									over_time_policy_id,
-									absence_policy_id,
-									premium_policy_id,
-									sum(total_time) as total_time
-							from	'. $this->getTable() .' as a,
-									'. $udf->getTable() .' as b,
-									'. $uf->getTable() .' as c
-							where 	a.user_date_id = b.id
-								AND b.user_id = c.id
-								AND c.company_id = :company_id
-								AND b.date_stamp >= :start_date
-								AND b.date_stamp <= :end_date
-								AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
-								AND a.total_time > 0
-								AND ( a.deleted = 0 AND b.deleted=0 AND c.deleted=0)
-							GROUP BY user_id,'. $time_period_sql .',a.status_id,a.type_id,over_time_policy_id,absence_policy_id,premium_policy_id
-						) tmp
-					GROUP BY user_id,status_id,type_id,over_time_policy_id,absence_policy_id,premium_policy_id
-					';
+			SELECT user_id,
+				status_id,
+				type_id,
+				over_time_policy_id,
+				absence_policy_id,
+				premium_policy_id,
+				AVG(total_time) AS avg,
+				MIN(total_time) AS min,
+				MAX(total_time) AS max,
+				COUNT(*) AS date_units
+			FROM (
+				SELECT b.user_id,
+					a.status_id,
+					a.type_id,
+					a.over_time_policy_id,
+					a.absence_policy_id,
+					a.premium_policy_id,
+					SUM(a.total_time) AS total_time
+				FROM ' . $this->getTable() . ' AS a
+				JOIN ' . $udf->getTable() . ' AS b ON a.user_date_id = b.id
+				JOIN ' . $uf->getTable() . ' AS c ON b.user_id = c.id
+				WHERE c.company_id = :company_id
+				AND b.date_stamp >= :start_date
+				AND b.date_stamp <= :end_date
+				AND b.user_id IN (' . $this->getListSQL($user_ids, $ph) . ')
+				AND a.total_time > 0
+				AND a.deleted = 0
+				AND b.deleted = 0
+				AND c.deleted = 0
+				GROUP BY b.user_id, a.status_id, a.type_id, a.over_time_policy_id, a.absence_policy_id, a.premium_policy_id
+			) AS tmp
+			GROUP BY user_id, status_id, type_id, over_time_policy_id, absence_policy_id, premium_policy_id
+		';
+
+		/*
+			$query = '
+				select 	user_id,
+						status_id,
+						type_id,
+						over_time_policy_id,
+						absence_policy_id,
+						premium_policy_id,
+						avg(total_time) as avg,
+						min(total_time) as min,
+						max(total_time) as max,
+						count(*) as date_units
+				from (
+						select 	b.user_id,
+								'. $time_period_sql .' as date,
+								a.type_id,
+								a.status_id,
+								over_time_policy_id,
+								absence_policy_id,
+								premium_policy_id,
+								sum(total_time) as total_time
+						from	'. $this->getTable() .' as a,
+								'. $udf->getTable() .' as b,
+								'. $uf->getTable() .' as c
+						where 	a.user_date_id = b.id
+							AND b.user_id = c.id
+							AND c.company_id = :company_id
+							AND b.date_stamp >= :start_date
+							AND b.date_stamp <= :end_date
+							AND b.user_id in ('. $this->getListSQL($user_ids, $ph) .')
+							AND a.total_time > 0
+							AND ( a.deleted = 0 AND b.deleted=0 AND c.deleted=0)
+						GROUP BY user_id,'. $time_period_sql .',a.status_id,a.type_id,over_time_policy_id,absence_policy_id,premium_policy_id
+					) tmp
+				GROUP BY user_id,status_id,type_id,over_time_policy_id,absence_policy_id,premium_policy_id
+			';
+		*/
 
 		//Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 
@@ -4595,7 +4632,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 			$uf = new UserFactory();
 		$udf = new UserDateFactory();
 
-			$ph = array($this->db->BindDate($date_stamp));
+			$ph = array(date( 'Y-m-d', $date_stamp));
 			$ph[] = $type_id;
 
 		$query = '

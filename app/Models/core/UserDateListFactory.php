@@ -263,8 +263,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
-					);
+                    ':date' => $date,
+				);
 
 		$query = '
 					select 	*
@@ -491,40 +491,71 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$pcf = new PunchControlFactory();
 
 		$ph = array(
-					':company_id' => $company_id,
-                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
-                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
-					);
+			':company_id' => $company_id,
+			':start_date' =>date('Y-m-d', $start_date),
+			':end_date' => date('Y-m-d', $end_date),
+		);
 
 		$query = '
-					select 	user_id,
-							avg(total) as avg,
-							min(total) as min,
-							max(total) as max
-					from (
+			SELECT user_id, 
+				AVG(total) AS avg, 
+				MIN(total) AS min, 
+				MAX(total) AS max 
+			FROM (
+				SELECT a.user_id, 
+					COUNT(*) AS total 
+				FROM user_date AS a 
+				JOIN users AS b ON a.user_id = b.id 
+				WHERE b.company_id = :company_id 
+				AND a.date_stamp >= :start_date 
+				AND a.date_stamp <= :end_date 
+				AND a.user_id IN (1063,1) 
+				AND EXISTS (
+					SELECT 1 
+					FROM punch_control AS z 
+					WHERE z.user_date_id = a.id 
+						AND z.deleted = 0 
+				) 
+				AND a.deleted = 0 
+				AND b.deleted = 0 
+				GROUP BY a.user_id, 
+						EXTRACT(MONTH FROM a.date_stamp), 
+						EXTRACT(YEAR FROM a.date_stamp)
+			) AS tmp 
+			GROUP BY user_id;
+		';
+				
+		/*
+			$query = '
+				select 	user_id,
+						avg(total) as avg,
+						min(total) as min,
+						max(total) as max
+				from (
 
-						select 	a.user_id,
-								(EXTRACT('.$time_period.' FROM a.date_stamp) || \'-\' || EXTRACT(year FROM a.date_stamp) ) as date,
-								count(*) as total
-						from	'. $this->getTable() .' as a,
-								'. $uf->getTable() .' as b
-						where 	a.user_id = b.id
-							AND b.company_id = :company_id
-							AND a.date_stamp >= :start_date
-							AND a.date_stamp <= :end_date
-							AND a.user_id in ('. $this->getListSQL($user_ids, $ph) .')
-							AND exists(
-										select id
-										from '. $pcf->getTable() .' as z
-										where z.user_date_id = a.id
-										AND z.deleted=0
-										)
-							AND ( a.deleted = 0 AND b.deleted=0 )
-							GROUP BY user_id,(EXTRACT('.$time_period.' FROM a.date_stamp) || \'-\' || EXTRACT(year FROM a.date_stamp) )
-						) tmp
-					GROUP BY user_id
-					';
-
+					select 	a.user_id,
+							(EXTRACT('.$time_period.' FROM a.date_stamp) || \'-\' || EXTRACT(year FROM a.date_stamp) ) as date,
+							count(*) as total
+					from	'. $this->getTable() .' as a,
+							'. $uf->getTable() .' as b
+					where 	a.user_id = b.id
+						AND b.company_id = ?
+						AND a.date_stamp >= ?
+						AND a.date_stamp <= ?
+						AND a.user_id in ('. $this->getListSQL($user_ids, $ph) .')
+						AND exists(
+									select id
+									from '. $pcf->getTable() .' as z
+									where z.user_date_id = a.id
+									AND z.deleted=0
+									)
+						AND ( a.deleted = 0 AND b.deleted=0 )
+						GROUP BY user_id,(EXTRACT('.$time_period.' FROM a.date_stamp) || \'-\' || EXTRACT(year FROM a.date_stamp) )
+					) tmp
+				GROUP BY user_id
+			';	
+		*/
+		
 		$this->rs = DB::select($query, $ph);
 
 		return $this;

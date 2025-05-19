@@ -141,6 +141,7 @@ class PunchList extends Controller
 		return view('punch/PunchList', $viewData);
 	}
 
+	/*
 	public function delete($punch_id){
 		//Debug::setVerbosity(11);
 		if (empty($punch_id)) {
@@ -176,6 +177,7 @@ class PunchList extends Controller
 		//return redirect(route('attendance.punchlist'));
 
 	}
+	*/
 }
 
 

@@ -170,7 +170,7 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		
 		return $this;
 	}
 

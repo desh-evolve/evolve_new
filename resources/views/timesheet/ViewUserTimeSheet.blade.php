@@ -119,8 +119,7 @@
                                     <a href="prev_week=1" onClick="resetAction();">
                                         <i class="ri-arrow-left-s-line text-white"></i>
                                     </a>
-            
-                                    <input type="date" id="filter_date" name="filter_data[date]" value="{{$filter_data['date']}}" onChange="resetAction();this.form.submit()">
+                                    <input type="date" id="filter_date" name="filter_data[date]" value="{{getdate_helper('date', $filter_data['date'])}}" onChange="resetAction();this.form.submit()">
                                     <i class="ri-calendar-2-line text-white" alt="Pick a date" onMouseOver="calendar_setup('filter_date', 'cal_filter_date', false);" id="cal_filter_date" ></i>
 
                                     <a href="next_week=1" onClick="resetAction();">
@@ -157,7 +156,7 @@
                                             {{-- </a>&nbsp;&nbsp; --}}
                                         </td>
                                     @endif
-                                    <td width="12%" id="cursor-hand" {{$calendar['epoch'] == $filter_data['date'] ? 'background-color:#33CCFF' : ''}} onClick="changeDate('{{$calendar['epoch']}}')">
+                                    <td width="12%" id="cursor-hand" {{$calendar['epoch'] == $filter_data['date'] ? 'background-color:#33CCFF' : ''}} onClick="changeDate('{{getdate_helper('date', $calendar['epoch'])}}')">
                                         {{$calendar['day_of_week']}}
                                         <br>
                                         {{$calendar['month_short_name']}} {{$calendar['day_of_month']}}
@@ -217,10 +216,10 @@
                                                             @if ($day['has_note'] == TRUE)
                                                                 *
                                                             @endif
-                                                            @if ($pay_period_locked_rows[$epoch] == FALSE AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
-                                                                <a href="javascript:editPunch({{$day['id']}})">{{$day['time_stamp']}}</a>
+                                                            @if ((empty($pay_period_locked_rows[$epoch]) || $pay_period_locked_rows[$epoch] == FALSE) AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
+                                                                <a href="javascript:editPunch({{$day['id']}})">{{getdate_helper('time',$day['time_stamp'])}}</a>
                                                             @else
-                                                                {{$day['time_stamp']}}
+                                                                {{getdate_helper('time', $day['time_stamp'])}}
                                                             @endif
                                                         @else
                                                             <br>
@@ -243,7 +242,7 @@
                                     </td>
                                     @foreach ($date_break_total_row['data'] as $date_break_total_epoch => $date_break_total_day)
                                         <td>
-                                            {{$date_break_total_day['total_time']}} 
+                                            {{ gettimeunit_helper($date_break_total_day['total_time'], '00:00') }} 
                                             @if ($date_break_total_day['total_breaks'] > 1)
                                                 ({{$date_break_total_day['total_breaks']}})
                                             @endif
@@ -259,11 +258,11 @@
                                     </td>
                                     @foreach ($date_break_policy_total_row['data'] as $date_break_policy_total_epoch => $date_break_policy_total_day)
                                         <td>
-                                            @if ($date_break_policy_total_day['total_time'] < 0)
+                                            @if (isset($date_break_policy_total_day['total_time']) && $date_break_policy_total_day['total_time'] < 0)
                                                 <p color="red">
                                             @endif
-                                            {{$date_break_policy_total_day['total_time_display']}}
-                                            @if ($date_break_policy_total_day['total_time'] < 0)
+                                            {{ gettimeunit_helper($date_break_policy_total_day['total_time_display'] ?? 0, '00:00') }}
+                                            @if (isset($date_break_policy_total_day['total_time']) && $date_break_policy_total_day['total_time'] < 0)
                                                 </p>
                                             @endif
                                         </td>
@@ -282,7 +281,7 @@
                                             @if ($date_meal_total_day['total_time'] < 0)
                                                 <p color="red">
                                             @endif
-                                            {{$date_meal_total_day['total_time_display']}}
+                                            {{ gettimeunit_helper($date_meal_total_day['total_time_display'], '00:00') }}
                                             @if ($date_meal_total_day['total_time'] < 0)
                                                 </p>
                                             @endif
@@ -355,7 +354,7 @@
                                     </td>
                                     @foreach ($date_total_row['data'] as $date_total_epoch => $date_total_day)
                                         <td 
-                                            @if ((isset($date_total_day['type_id']) && $date_total_day['type_id'] == 10) AND $pay_period_locked_rows[$date_total_epoch] == FALSE
+                                            @if ((isset($date_total_day['type_id']) && $date_total_day['type_id'] == 10) AND (empty($pay_period_locked_rows[$date_total_epoch]) || $pay_period_locked_rows[$date_total_epoch] == FALSE)
                                             AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                 class="cellHL"
                                             @endif
@@ -363,18 +362,19 @@
                                             @if ($date_total_row['type_and_policy_id'] == 100)
                                                 @if (empty($pay_period_locked_rows[$date_total_epoch])
                                                     AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
-                                                    <a href="javascript:hourList('','{{$filter_data['user_id']}}','{{$date_total_epoch}}')">
+                                                    {{-- <a href="javascript:hourList('','{{$filter_data['user_id']}}','{{$date_total_epoch}}')"> --}}
+                                                    <a href="#">
                                                 @endif
                                                 @if (!empty($date_total_day['override']) && $date_total_day['override'] == TRUE)
                                                     *
                                                 @endif
-                                                {{$date_total_day['total_time'] ?? 0}}
+                                                {{ gettimeunit_helper($date_total_day['total_time'] ?? 0, '00:00') }}
                                                 @if (empty($pay_period_locked_rows[$date_total_epoch])
                                                     AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                     </a>
                                                 @endif
                                             @else
-                                                {{$date_total_day['total_time']}}
+                                                {{gettimeunit_helper($date_total_day['total_time'] ?? 0, '00:00')}}
                                             @endif
                                         </td>
                                     @endforeach
@@ -395,7 +395,7 @@
                                     </td>
                                     @foreach ($date_branch_total_row['data'] as $date_branch_total_day)
                                         <td>
-                                            {{$date_branch_total_day['total_time']}}
+                                            {{gettimeunit_helper($date_branch_total_day['total_time'], '00:00')}}
                                         </td>
                                     @endforeach
                                 </tr>
@@ -416,7 +416,7 @@
                                     </td>
                                     @foreach ($date_department_total_row['data'] as $date_department_total_day)
                                         <td>
-                                            {{$date_department_total_day['total_time']}}
+                                            {{gettimeunit_helper($date_department_total_day['total_time'], '00:00')}}
                                         </td>
                                     @endforeach
                                 </tr>
@@ -441,7 +441,7 @@
                                     </td>
                                     @foreach ($date_job_total_row['data'] as $date_job_total_day)
                                         <td>
-                                            {{$date_job_total_day['total_time']}}
+                                            {{gettimeunit_helper($date_job_total_day['total_time'], '00:00')}}
                                         </td>
                                     @endforeach
                                 </tr>
@@ -466,7 +466,7 @@
                                     </td>
                                     @foreach ($date_job_item_total_row['data'] as $date_job_item_total_day)
                                         <td>
-                                            {{$date_job_item_total_day['total_time']}}
+                                            {{gettimeunit_helper($date_job_item_total_day['total_time'], '00:00')}}
                                         </td>
                                     @endforeach
                                 </tr>
@@ -487,7 +487,7 @@
                                     </td>
                                     @foreach ($date_premium_total_row['data'] as $date_premium_total_epoch => $date_premium_total_day)
                                         <td>
-                                            {{$date_premium_total_day['total_time']}}
+                                            {{gettimeunit_helper($date_premium_total_day['total_time'] ?? 0, '00:00')}}
                                         </td>
                                     @endforeach
                                 </tr>
@@ -508,21 +508,21 @@
                                     </td>
                                     @foreach ($date_absence_total_row.data as $date_absence_total_epoch => $date_absence_total_day)
                                         <td 
-                                            @if ($pay_period_locked_rows[$date_absence_total_epoch] == FALSE AND ( $permission->Check('absence','edit') OR ($permission->Check('absence','edit_child') AND $is_child === TRUE) OR ($permission->Check('absence','edit_own') AND $is_owner === TRUE )))
+                                            @if ((empty($pay_period_locked_rows[$date_absence_total_epoch]) || $pay_period_locked_rows[$date_absence_total_epoch] == FALSE) AND ( $permission->Check('absence','edit') OR ($permission->Check('absence','edit_child') AND $is_child === TRUE) OR ($permission->Check('absence','edit_own') AND $is_owner === TRUE )))
                                                 class="cellHL" id="cursor-hand"
                                             @endif
                                             @if ($date_absence_total_day['total_time'] == '')
                                                 onClick="editAbsence('','{{$filter_data['user_id']}}', '{{$date_absence_total_epoch}}')"
                                             @endif
                                         >
-                                            @if ($pay_period_locked_rows[$date_absence_total_epoch] == FALSE AND ( $permission->Check('absence','edit') OR ($permission->Check('absence','edit_child') AND $is_child === TRUE) OR ($permission->Check('absence','edit_own') AND $is_owner === TRUE )))
+                                            @if ((empty($pay_period_locked_rows[$date_absence_total_epoch]) || $pay_period_locked_rows[$date_absence_total_epoch] == FALSE) AND ( $permission->Check('absence','edit') OR ($permission->Check('absence','edit_child') AND $is_child === TRUE) OR ($permission->Check('absence','edit_own') AND $is_owner === TRUE )))
                                                 <a href="javascript: editAbsence({{$date_absence_total_day['id']}});">
                                             @endif
                                             @if ($date_absence_total_day['override'] == TRUE)
                                                 *
                                             @endif
-                                            {{$date_absence_total_day['total_time']}}
-                                            @if ($pay_period_locked_rows[$date_absence_total_epoch] == FALSE AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
+                                            {{gettimeunit_helper($date_absence_total_day['total_time'], '00:00')}}
+                                            @if ((empty($pay_period_locked_rows[$date_absence_total_epoch]) || $pay_period_locked_rows[$date_absence_total_epoch] == FALSE) AND ( $permission->Check('punch','edit') OR ($permission->Check('punch','edit_child') AND $is_child === TRUE) OR ($permission->Check('punch','edit_own') AND $is_owner === TRUE )))
                                                 </a>
                                             @endif
                                         </td>
@@ -536,7 +536,7 @@
                                     @if ($is_assigned_pay_period_schedule == TRUE)
                                         Pay Period:
                                         @if (!empty($pay_period_start_date))
-                                            {{$pay_period_start_date}} to {{$pay_period_end_date}}
+                                            {{getdate_helper('date', $pay_period_start_date)}} to {{date('date', $pay_period_end_date)}}
                                         @else
                                             NONE
                                         @endif
@@ -575,7 +575,7 @@
                                                 @if ($time_sheet_verify['display_verify_button'] == TRUE)
                                                     <tr class="tblDataWhiteNH">
                                                         <td colspan="2" @if($time_sheet_verify['verification_box_color'] != '') style="background-color: {{ $time_sheet_verify['verification_box_color'] }}" @endif>
-                                                            <input type="SUBMIT" class="button" name="action:verify" value="Verify" onClick="return confirmSubmit('By pressing OK, I hereby certify that this timesheet for the pay period of {{$pay_period_start_date}} to {{$pay_period_end_date}} is accurate and correct.');">
+                                                            <input type="SUBMIT" class="button" name="action:verify" value="Verify" onClick="return confirmSubmit('By pressing OK, I hereby certify that this timesheet for the pay period of {{getdate_helper('date', $pay_period_start_date)}} to {{getdate_helper('date', $pay_period_end_date)}} is accurate and correct.');">
                                                         </td>
                                                     </tr>
                                                 @endif
@@ -629,7 +629,7 @@
                                                 Worked Time
                                             </td>
                                             <td>
-                                                {{$pay_period_worked_total_time}}
+                                                {{gettimeunit_helper($pay_period_worked_total_time, '00:00')}}
                                             </td>
                                         </tr>
                                         @if ($pay_period_paid_absence_total_time > 0)
@@ -638,7 +638,7 @@
                                                     Paid Absences
                                                 </td>
                                                 <td>
-                                                    {{$pay_period_paid_absence_total_time}}
+                                                    {{gettimeunit_helper($pay_period_paid_absence_total_time, '00:00')}}
                                                 </td>
                                             </tr>
                                         @endif
@@ -647,7 +647,7 @@
                                                 Total Time
                                             </td>
                                             <td width="75">
-                                                {{$pay_period_worked_total_time+$pay_period_paid_absence_total_time}}
+                                                {{gettimeunit_helper(($pay_period_worked_total_time+$pay_period_paid_absence_total_time), '00:00')}}
                                             </td>
                                         </tr>
                                     </table>
@@ -665,7 +665,7 @@
                                                     Docked Absences
                                                 </td>
                                                 <td>
-                                                    {{$pay_period_dock_absence_total_time}}
+                                                    {{gettimeunit_helper($pay_period_dock_absence_total_time, '00:00')}}
                                                 </td>
                                             </tr>
                                         </table>
@@ -685,7 +685,7 @@
                                                     {{$pay_period_total_row['name']}}
                                                 </td>
                                                 <td>
-                                                    {{$pay_period_total_row['total_time']}}
+                                                    {{gettimeunit_helper($pay_period_total_row['total_time'], '00:00')}}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -695,7 +695,7 @@
                                                 Total Time
                                             </td>
                                             <td>
-                                                {{$pay_period_worked_total_time+$pay_period_paid_absence_total_time}}
+                                                {{gettimeunit_helper(($pay_period_worked_total_time+$pay_period_paid_absence_total_time), '00:00')}}
                                             </td>
                                         </tr>
             
@@ -739,7 +739,7 @@
         }
         function hourList(userDateID,userID,date) {
             try {
-                hL=window.open('/attendance/punch/userdate_totals?user_date_id='+encodeURI(userDateID)+'&filter_user_id='+encodeURI(userID)+'&filter_date='+encodeURI(date),"Hours","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=750,height=350,resizable=1");
+                hL=window.open('/attendance/punch/userdate_totals?user_date_id='+encodeURI(userDateID)+'&filter_user_id='+encodeURI(userID)+'&filter_date='+encodeURI(date),"Hours","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=1200,height=625,resizable=1");
                 if (window.focus) {
                     hL.focus()
                 }
@@ -749,7 +749,7 @@
         }
         function editAbsence(absenceID,userID,date) {
             try {
-                eA=window.open('/attendance/punch/edit_user_absence?id='+encodeURI(absenceID)+'&user_id='+encodeURI(userID)+'&date_stamp='+encodeURI(date),"Edit_Absence","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
+                eA=window.open('/attendance/punch/edit_user_absence?id='+encodeURI(absenceID)+'&user_id='+encodeURI(userID)+'&date_stamp='+encodeURI(date),"Edit_Absence","toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=1200,height=625,resizable=1");
                 if (window.focus) {
                     eA.focus()
                 }

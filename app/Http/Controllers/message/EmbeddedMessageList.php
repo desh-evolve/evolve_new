@@ -144,24 +144,9 @@ class EmbeddedMessageList extends Controller
         $viewData['title'] = 'Message List';
         $mcf = new MessageControlFactory();
 
-        // Get variables from request
-        $object_type_id = $request->input('object_type_id');
-        $object_id = $request->input('object_id');
-        $object_user_id = $request->input('object_user_id');
-        $template = $request->input('template', 0);
-        $close = $request->input('close', false);
-        $message_data = []; // Default empty if not set
-        $messages = [];
-        $default_subject = '';
-        $parent_id = null;
-        $i = 0;
-
-        if (isset($object_type_id) && isset($object_id)) {
-            $mclf = new MessageControlListFactory();
-            $mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject(
-                $current_user->getCompany(), $current_user->getId(),
-                $object_type_id, $object_id
-            );
+		if ( isset($object_type_id) AND isset($object_id) ) {
+			$mclf = new MessageControlListFactory();
+			$mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject( $current_user->getCompany(), $current_user->getId(), $object_type_id, $object_id );
 
             if ($mclf->getRecordCount() > 0) {
                 $mark_read_message_ids = [];

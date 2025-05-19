@@ -50,7 +50,8 @@ class UserDeductionListNew extends Controller
         $ulf = new UserListFactory();
         $viewData['title'] = 'Employee Tax / Deduction List';
 
-        $filter_user_id = $request->input('user_id', $user_id);
+        // $filter_user_id = $request->input('user_id', $user_id);
+		$filter_user_id = $request->id;
 
         if ( isset($filter_user_id) ) {
             $user_id = $filter_user_id;

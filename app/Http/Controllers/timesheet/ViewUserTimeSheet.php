@@ -373,7 +373,7 @@ class ViewUserTimeSheet extends Controller
                 //$pptsvlf->FailTransaction();
                 $pptsvlf->CommitTransaction();
 
-                Redirect::Page( URLBuilder::getURL( NULL, '../timesheet/ViewUserTimeSheet.php') );
+                Redirect::Page( URLBuilder::getURL( NULL, '/attendance/timesheet') );
 
                 break;
             case 'recalculate_pay_stub':
@@ -387,7 +387,10 @@ class ViewUserTimeSheet extends Controller
                 $pslf = new PayStubListFactory();
                 $pslf->getByUserIdAndPayPeriodId( $filter_data['user_id'], $pay_period_id );
 
-                foreach ($pslf as $pay_stub) {
+                foreach ($pslf->rs as $pay_stub) {
+                    $pslf->data = (array)$pay_stub;
+                    $pay_stub = $pslf;
+                    
                     Debug::Text('Found Pay Stub ID: '. $pay_stub->getId(), __FILE__, __LINE__, __METHOD__,10);
                     //Do not delete PAID pay stubs!
                     if ( $pay_stub->getStatus() <= 25
@@ -416,7 +419,7 @@ class ViewUserTimeSheet extends Controller
                 $profiler->stopTimer( "Calculating Pay Stub");
                 Debug::Text('Done Calculating Pay Stub', __FILE__, __LINE__, __METHOD__,10);
 
-                ////Redirect::Page( URLBuilder::getURL( array('filter_user_id' => $filter_data['user_id'], 'filter_date' => $filter_date ), '../timesheet/ViewUserTimeSheet.php') );
+                ////Redirect::Page( URLBuilder::getURL( array('filter_user_id' => $filter_data['user_id'], 'filter_date' => $filter_date ), '/attendance/timesheet') );
                 Redirect::Page( URLBuilder::getURL( array('filter_pay_period_id' => $pay_period_id, 'filter_user_id' => $filter_data['user_id'] ), '../pay_stub/PayStubList.php') );
 
                 break;
@@ -434,27 +437,27 @@ class ViewUserTimeSheet extends Controller
                 $cps->calculate();
                 Debug::Text('Done Calculating Pay Stub', __FILE__, __LINE__, __METHOD__,10);
 
-                //Redirect::Page( URLBuilder::getURL( array('filter_user_id' => $filter_data['user_id'], 'filter_date' => $filter_date ), '../timesheet/ViewUserTimeSheet.php') );
+                //Redirect::Page( URLBuilder::getURL( array('filter_user_id' => $filter_data['user_id'], 'filter_date' => $filter_date ), '/attendance/timesheet') );
                 Redirect::Page( URLBuilder::getURL( array('filter_user_id' => $filter_data['user_id'] ), '../pay_stub_amendment/PayStubAmendmentList.php') );
 
                 break;
             case 'recalculate_company':
                 Debug::Text('Recalculating company timesheet!', __FILE__, __LINE__, __METHOD__,10);
 
-                //Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_company', 'pay_period_ids' => $pay_period_id, 'next_page' => urlencode( URLBuilder::getURL( array('filter_date' => $filter_date ), '../timesheet/ViewUserTimeSheet.php') ) ), '../progress_bar/ProgressBarControl.php') );
-                Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_company', 'pay_period_ids' => $pay_period_id, 'next_page' => urlencode( URLBuilder::getURL( NULL, '../timesheet/ViewUserTimeSheet.php') ) ), '../progress_bar/ProgressBarControl.php'), FALSE );
+                //Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_company', 'pay_period_ids' => $pay_period_id, 'next_page' => urlencode( URLBuilder::getURL( array('filter_date' => $filter_date ), '/attendance/timesheet') ) ), '/progress_bar_control') );
+                Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_company', 'pay_period_ids' => $pay_period_id, 'next_page' => urlencode( URLBuilder::getURL( NULL, '/attendance/timesheet') ) ), '/progress_bar_control'), FALSE );
 
                 break;
             case 'recalculate_employee':
                 Debug::Text('Recalculating employee timesheet!', __FILE__, __LINE__, __METHOD__,10);
 
-                Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_employee', 'pay_period_ids' => $pay_period_id, 'filter_user_id' => $filter_data['user_id'], 'next_page' => urlencode( URLBuilder::getURL( NULL, '../timesheet/ViewUserTimeSheet.php') ) ), '../progress_bar/ProgressBarControl.php'), FALSE );
+                Redirect::Page( URLBuilder::getURL( array('action' => 'recalculate_employee', 'pay_period_ids' => $pay_period_id, 'filter_user_id' => $filter_data['user_id'], 'next_page' => urlencode( URLBuilder::getURL( NULL, '/attendance/timesheet') ) ), '/progress_bar_control'), FALSE );
 
                 break;
             case 'recalculate_mid_pay':
                 Debug::Text('Recalculating Mid Pay timesheet!', __FILE__, __LINE__, __METHOD__,10);
 
-                Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paymiddle', 'pay_period_ids' => $pay_period_id, 'filter_user_id' => $filter_data['user_id'], 'next_page' => urlencode( URLBuilder::getURL( NULL, '../timesheet/ViewUserTimeSheet.php') ) ), '../progress_bar/ProgressBarControl.php'), FALSE );
+                Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paymiddle', 'pay_period_ids' => $pay_period_id, 'filter_user_id' => $filter_data['user_id'], 'next_page' => urlencode( URLBuilder::getURL( NULL, '/attendance/timesheet') ) ), '/progress_bar_control'), FALSE );
 
                 break;
             case 'submit':
@@ -491,7 +494,10 @@ class ViewUserTimeSheet extends Controller
                 $plf = new PunchListFactory(); 
                 $plf->getByCompanyIDAndUserIdAndStartDateAndEndDate( $current_company->getId(), $user_id, $start_date, $end_date);
                 if ( $plf->getRecordCount() > 0 ) {
-                    foreach($plf as $punch_obj) {
+                    foreach($plf->rs as $punch_obj) {
+                        $plf->data = (array)$punch_obj;
+                        $punch_obj = $plf;
+
                         $user_date_stamp = TTDate::strtotime( $punch_obj->getColumn('user_date_stamp') );
 
                         if ( $punch_obj->getColumn('note') != '' ) {
@@ -717,7 +723,10 @@ class ViewUserTimeSheet extends Controller
 
                 $udtlf->getByCompanyIDAndUserIdAndStatusAndTypeAndStartDateAndEndDate( $current_company->getId(), $user_id, 10, 100, $start_date, $end_date);
                 if ( $udtlf->getRecordCount() > 0 ) {
-                    foreach($udtlf as $udt_obj) {
+                    foreach($udtlf->rs as $udt_obj) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
+
                         $user_date_stamp = TTDate::strtotime( $udt_obj->getColumn('user_date_stamp') );
 
                         if ( $udt_obj->getMealPolicyID() !== FALSE AND isset($meal_policy_options[$udt_obj->getmealPolicyID()]) ) {
@@ -774,7 +783,10 @@ class ViewUserTimeSheet extends Controller
 
                 $udtlf->getByCompanyIDAndUserIdAndStatusAndTypeAndStartDateAndEndDate( $current_company->getId(), $user_id, 10, 110, $start_date, $end_date);
                 if ( $udtlf->getRecordCount() > 0 ) {
-                    foreach($udtlf as $udt_obj) {
+                    foreach($udtlf->rs as $udt_obj) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
+
                         $user_date_stamp = TTDate::strtotime( $udt_obj->getColumn('user_date_stamp') );
 
                         if ( $udt_obj->getBreakPolicyID() !== FALSE AND isset($break_policy_options[$udt_obj->getBreakPolicyID()]) ) {
@@ -825,8 +837,12 @@ class ViewUserTimeSheet extends Controller
 
                 //Get only system totals.
                 $udtlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $user_id, 10, $start_date, $end_date);
+                
                 if ( $udtlf->getRecordCount() > 0 ) {
-                    foreach($udtlf as $udt_obj) {
+                    foreach($udtlf->rs as $udt_obj) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
+
                         $user_date_stamp = TTDate::strtotime( $udt_obj->getColumn('user_date_stamp') );
 
                         $type_and_policy_id = $udt_obj->getType().(int)$udt_obj->getOverTimePolicyID();
@@ -852,13 +868,13 @@ class ViewUserTimeSheet extends Controller
                         //$date_total_type_ids[] = $type_and_policy_id;
                     }
                 } else {
-                    $date_totals[$start_date][] = array(
+                    $date_totals[$start_date][] =   array(
                                                         'date_stamp' => $start_date,
                                                         'type_and_policy_id' => 100,
                                                         'total_time' => 0,
                                                         'name' => _('Total Time'),
                                                         'tmp_override' => FALSE
-                                                        );
+                                                    );
                     $date_total_type_ids[100] = NULL;
                 }
                 //echo '<pre>'; print_r($date_totals);die;
@@ -917,7 +933,10 @@ class ViewUserTimeSheet extends Controller
                 //Get only worked/paid absence totals.
                 $udtlf->getPaidTimeByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $user_id, array(10,30) , $start_date, $end_date);
                 if ( $udtlf->getRecordCount() > 0 ) {
-                    foreach($udtlf as $udt_obj) {
+                    foreach($udtlf->rs as $udt_obj) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
+
                         $user_date_stamp = TTDate::strtotime( $udt_obj->getColumn('user_date_stamp') );
 
                         if ( $udt_obj->getBranch() != 0 AND isset($branch_options[$udt_obj->getBranch()]) ) {
@@ -1079,7 +1098,10 @@ class ViewUserTimeSheet extends Controller
                 //Get only worked totals.
                 $udtlf->getByCompanyIDAndUserIdAndStatusAndTypeAndStartDateAndEndDate( $current_company->getId(), $user_id, 10, 40, $start_date, $end_date);
                 if ( $udtlf->getRecordCount() > 0 ) {
-                    foreach($udtlf as $udt_obj) {
+                    foreach($udtlf->rs as $udt_obj) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
+
                         $user_date_stamp = TTDate::strtotime( $udt_obj->getColumn('user_date_stamp') );
 
                         if ( $udt_obj->getPremiumPolicyID() !== FALSE AND isset($premium_policy_options[$udt_obj->getPremiumPolicyID()]) ) {
@@ -1146,7 +1168,10 @@ class ViewUserTimeSheet extends Controller
                 //Get only worked totals.
                 $udtlf->getByCompanyIDAndUserIdAndStatusAndStartDateAndEndDate( $current_company->getId(), $user_id, 30, $start_date, $end_date);
                 if ( $udtlf->getRecordCount() > 0 ) {
-                    foreach($udtlf as $udt_obj) {
+                    foreach($udtlf->rs as $udt_obj) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
+
                         $user_date_stamp = TTDate::strtotime( $udt_obj->getColumn('user_date_stamp') );
 
                         if ( $udt_obj->getAbsencePolicyID() !== FALSE ) {
@@ -1218,7 +1243,9 @@ class ViewUserTimeSheet extends Controller
                 if ( $elf->getRecordCount() > 0 ) {
                     Debug::text('Found exceptions!: ', __FILE__, __LINE__, __METHOD__,10);
 
-                    foreach( $elf as $e_obj ) {
+                    foreach( $elf->rs as $e_obj ) {
+                        $elf->data = (array)$e_obj;
+                        $e_obj = $elf;
 
                         $user_date_stamp = TTDate::strtotime( $e_obj->getColumn('user_date_stamp') );
 
@@ -1283,7 +1310,10 @@ class ViewUserTimeSheet extends Controller
                 if ( $rlf->getRecordCount() > 0 ) {
                     Debug::text('Found Requests!!: ', __FILE__, __LINE__, __METHOD__,10);
 
-                    foreach( $rlf as $r_obj ) {
+                    foreach( $rlf->rs as $r_obj ) {
+                        $rlf->data = (array)$r_obj;
+                        $r_obj = $rlf;
+
                         $user_date_stamp = TTDate::strtotime( $r_obj->getColumn('date_stamp') );
 
 
@@ -1413,7 +1443,10 @@ class ViewUserTimeSheet extends Controller
                     $otplf = new OverTimePolicyListFactory(); 
                     $over_time_policy_options = $otplf->getByCompanyIdArray( $current_company->getId(), FALSE );
 
-                    foreach($udtlf as $udt_obj ) {
+                    foreach($udtlf->rs as $udt_obj ) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
+                        
                         Debug::text('Type ID: '. $udt_obj->getColumn('type_id') .' OverTime Policy ID: '. $udt_obj->getColumn('over_time_policy_id') .' Total Time: '. $udt_obj->getColumn('total_time'), __FILE__, __LINE__, __METHOD__,10);
 
                         if ( $udt_obj->getColumn('type_id') == 20 ) {

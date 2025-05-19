@@ -93,16 +93,18 @@ class UserGenericStatusList extends Controller
 
 				foreach ($ugslf->rs as $ugs_obj) {
 					$ugslf->data = (array)$ugs_obj;
+					$ugs_obj = $ugslf;
+
 					$rows[] = array(
-						'id' => $ugslf->getId(),
-						'user_id' => $ugslf->getUser(),
-						'batch_id' => $ugslf->getBatchId(),
-						'status_id' => $ugslf->getStatus(),
-						'status' => Option::getByKey( $ugslf->getStatus(), $ugslf->getOptions('status') ),
-						'label' => $ugslf->getLabel(),
-						'description' => $ugslf->getDescription(),
-						'link' => $ugslf->getLink(),
-						'deleted' => $ugslf->getDeleted()
+						'id' => $ugs_obj->getId(),
+						'user_id' => $ugs_obj->getUser(),
+						'batch_id' => $ugs_obj->getBatchId(),
+						'status_id' => $ugs_obj->getStatus(),
+						'status' => Option::getByKey( $ugs_obj->getStatus(), $ugs_obj->getOptions('status') ),
+						'label' => $ugs_obj->getLabel(),
+						'description' => $ugs_obj->getDescription(),
+						'link' => $ugs_obj->getLink(),
+						'deleted' => $ugs_obj->getDeleted()
 					);
 				}
 
@@ -111,14 +113,14 @@ class UserGenericStatusList extends Controller
 			}
 		}
 
-		print_r($rows);exit;
-
 		$viewData['rows'] = $rows;	
 		$viewData['status_count'] = $status_count_arr;	
 		$viewData['batch_title'] = $batch_title;
 		$viewData['batch_next_page'] = $batch_next_page;
 		$viewData['sort_column'] = $sort_column;
 		$viewData['sort_order'] = $sort_order;
+
+		//dd($viewData);
 		
 		return view('users.UserGenericStatusList', $viewData);
 	}

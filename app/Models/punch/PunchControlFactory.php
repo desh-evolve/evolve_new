@@ -37,6 +37,17 @@ class PunchControlFactory extends Factory {
 	protected $plf = NULL;
 	protected $is_total_time_calculated = FALSE;
 
+	// added by desh(2024-04-30)------------------------
+	protected $calc_system_total_time;
+	protected $calc_weekly_system_total_time;
+	protected $calc_exception;
+	protected $premature_exception;
+	protected $calc_user_date_total;
+	protected $calc_user_date_id;
+	protected $calc_total_time;
+	protected $strict_job_validiation;
+	//--------------------------------------------------
+	
 	function _getVariableToFunctionMap( $data ) {
 			$variable_function_map = array(
 											'id' => 'ID',
@@ -1038,7 +1049,7 @@ class PunchControlFactory extends Factory {
 		if ( $this->getEnableCalcTotalTime() == TRUE ) {
 			$this->calcTotalTime();
 		}
-
+		
 		if ( is_object( $this->getPunchObject() ) ) {
 			$this->findUserDate();
 		}
@@ -1112,7 +1123,7 @@ class PunchControlFactory extends Factory {
 				if ( isset($punches[$this->getID()]) ) {
 					Debug::text('Current Punch ID: '. $this->getPunchObject()->getId() .' Punch Control ID: '. $this->getID() .' Status: '. $this->getPunchObject()->getStatus(), __FILE__, __LINE__, __METHOD__,10);
 					//Debug::Arr($punches, 'Punches Arr: ', __FILE__, __LINE__, __METHOD__,10);
-
+					
 					if ( $this->getPunchObject()->getStatus() == 10 AND isset($punches[$this->getID()][20]) AND $this->getPunchObject()->getTimeStamp() > $punches[$this->getID()][20]['time_stamp'] ) {
 							$this->Validator->isTRUE(	'time_stamp',
 														FALSE,
@@ -1139,11 +1150,11 @@ class PunchControlFactory extends Factory {
 
 						if ( isset($punch_neighbors['prev']) AND isset($punches[$punch_neighbors['prev']]) ) {
 							Debug::text('Found prev Punch...', __FILE__, __LINE__, __METHOD__,10);
-							if ( ( isset($punches[$punch_neighbors['prev']][10]) AND $this->getPunchObject()->getTimeStamp() < $punches[$punch_neighbors['prev']][10]['time_stamp'] )
-										OR ( isset($punches[$punch_neighbors['prev']][20]) AND $this->getPunchObject()->getTimeStamp() < $punches[$punch_neighbors['prev']][20]['time_stamp'] ) ) {
-								$this->Validator->isTRUE(	'time_stamp',
-															FALSE,
-															('Time conflicts with another punch on this day').' (b)');
+							if (
+								( isset($punches[$punch_neighbors['prev']][10]) AND $this->getPunchObject()->getTimeStamp() < $punches[$punch_neighbors['prev']][10]['time_stamp'] ) OR 
+								( isset($punches[$punch_neighbors['prev']][20]) AND $this->getPunchObject()->getTimeStamp() < $punches[$punch_neighbors['prev']][20]['time_stamp'] )
+							) {
+								$this->Validator->isTRUE( 'time_stamp', FALSE, ('Time conflicts with another punch on this day').' (b)');
 							}
 						}
 					}
@@ -1232,7 +1243,7 @@ class PunchControlFactory extends Factory {
 		if ( is_object( $this->getPunchObject() ) ) {
 			$this->findUserDate();
 		}
-
+		
 		//Check to see if timesheet is verified, if so unverify it on modified punch.
 		//Make sure exceptions are calculated *after* this so TimeSheet Not Verified exceptions can be triggered again.
 		if ( is_object( $this->getPayPeriodScheduleObject() )

@@ -878,7 +878,7 @@ class TTDate {
 		return $current_epoch;
 	}
 
-	static function getTimeStampFromSmarty($prefix, $array) {
+	public static function getTimeStampFromSmarty($prefix, $array) {
 		Debug::text('Prefix: '. $prefix, __FILE__, __LINE__, __METHOD__, 10);
 		//Debug::Arr($array, 'getTimeStampFromSmarty Array:', __FILE__, __LINE__, __METHOD__, 10);
 
@@ -922,43 +922,80 @@ class TTDate {
 		return self::getTimeStamp($year,$month,$day,$hour,$min,$sec);
 	}
 
-	function getTimeStamp($year="",$month="",$day="", $hour=0, $min=0, $sec=0) {
-		if ( empty($year) ) {
+	// public static function getTimeStamp($year="",$month="",$day="", $hour=0, $min=0, $sec=0) {
+	// 	if ( empty($year) ) {
+	// 		$year = strftime("%Y");
+	// 	}
+
+	// 	if ( empty($month) ) {
+	// 		$month = strftime("%m");
+	// 	}
+
+	// 	if ( empty($day) ) {
+	// 		$day = strftime("%d");
+	// 	}
+
+	// 	if ( empty($hour) ) {
+	// 		$hour = 0;
+	// 	}
+
+	// 	if ( empty($min) ) {
+	// 		$min = 0;
+	// 	}
+
+	// 	if ( empty($sec) ) {
+	// 		$sec = 0;
+	// 	}
+
+	// 	//Use adodb time library to support dates earlier then 1970.
+	// 	//require_once( Environment::getBasePath() .'classes/adodb/adodb-time.inc.php');
+
+	// 	Debug::text('  - Year: '. $year .' Month: '. $month .' Day: '. $day .' Hour: '. $hour .' Min: '. $min .' Sec: '. $sec, __FILE__, __LINE__, __METHOD__, 10);
+
+	// 	$epoch = adodb_mktime($hour,$min,$sec,$month,$day,$year);
+
+	// 	Debug::text('Epoch: '. $epoch .' Date: '. self::getDate($epoch), __FILE__, __LINE__, __METHOD__, 10);
+
+	// 	return $epoch;
+	// }
+	
+	// Changed from using adodb_mktime to mktime to eliminate the dependency on the ADOdb library,
+    // as it simplifies the codebase and maintenance. This change assumes that the application
+    // does not require handling dates before January 1, 1970, which is a limitation of mktime.
+    // If pre-1970 dates are needed in the future, consider switching to DateTime::getTimestamp.
+	public static function getTimeStamp($year="", $month="", $day="", $hour=0, $min=0, $sec=0) {
+		if (empty($year)) {
 			$year = strftime("%Y");
 		}
-
-		if ( empty($month) ) {
+	
+		if (empty($month)) {
 			$month = strftime("%m");
 		}
-
-		if ( empty($day) ) {
+	
+		if (empty($day)) {
 			$day = strftime("%d");
 		}
-
-		if ( empty($hour) ) {
+	
+		if (empty($hour)) {
 			$hour = 0;
 		}
-
-		if ( empty($min) ) {
+	
+		if (empty($min)) {
 			$min = 0;
 		}
-
-		if ( empty($sec) ) {
+	
+		if (empty($sec)) {
 			$sec = 0;
 		}
-
-		//Use adodb time library to support dates earlier then 1970.
-		//require_once( Environment::getBasePath() .'classes/adodb/adodb-time.inc.php');
-
-		Debug::text('  - Year: '. $year .' Month: '. $month .' Day: '. $day .' Hour: '. $hour .' Min: '. $min .' Sec: '. $sec, __FILE__, __LINE__, __METHOD__, 10);
-
-		$epoch = adodb_mktime($hour,$min,$sec,$month,$day,$year);
-
-		Debug::text('Epoch: '. $epoch .' Date: '. self::getDate($epoch), __FILE__, __LINE__, __METHOD__, 10);
-
+	
+		Debug::text('  - Year: ' . $year . ' Month: ' . $month . ' Day: ' . $day . ' Hour: ' . $hour . ' Min: ' . $min . ' Sec: ' . $sec, __FILE__, __LINE__, __METHOD__, 10);
+	
+		$epoch = mktime($hour, $min, $sec, $month, $day, $year);
+	
+		Debug::text('Epoch: ' . $epoch . ' Date: ' . self::getDate($epoch), __FILE__, __LINE__, __METHOD__, 10);
+	
 		return $epoch;
 	}
-
 	public static function getDayDifference($start_epoch, $end_epoch) {
 		//FIXME: Be more accurate, take leap years in to account etc...
 		$days = ($end_epoch - $start_epoch) / 86400;

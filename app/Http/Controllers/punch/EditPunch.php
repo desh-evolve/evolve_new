@@ -149,18 +149,18 @@ class EditPunch extends Controller
 									'type_id' => $p_obj->getType(),
 									'station_id' => $p_obj->getStation(),
 									'station_data' => $station_data,
-									'time_stamp' => date('H:i', $p_obj->getTimeStamp()),
+									'time_stamp' => $p_obj->getTimeStamp(),
 									//Use this so the date is always insync with the time.
-									'date_stamp' => date('Y-m-d', $p_obj->getTimeStamp()),
-									'original_time_stamp' => date('H:i', $p_obj->getOriginalTimeStamp()),
-									'actual_time_stamp' => date('H:i', $p_obj->getActualTimeStamp()),
+									'date_stamp' => $p_obj->getTimeStamp(),
+									'original_time_stamp' => $p_obj->getOriginalTimeStamp(),
+									'actual_time_stamp' => $p_obj->getActualTimeStamp(),
 									'longitude' => $p_obj->getLongitude(),
 									'latitude' => $p_obj->getLatitude(),
 
-									'created_date' => date('Y-m-d H:i:s', $p_obj->getCreatedDate()),
+									'created_date' => $p_obj->getCreatedDate(),
 									'created_by' => $p_obj->getCreatedBy(),
 									'created_by_name' => (string)$ulf->getFullNameById( $p_obj->getCreatedBy() ),
-									'updated_date' => date('Y-m-d H:i:s', $p_obj->getUpdatedDate()),
+									'updated_date' => $p_obj->getUpdatedDate(),
 									'updated_by' => $p_obj->getUpdatedBy(),
 									'updated_by_name' => (string)$ulf->getFullNameById( $p_obj->getUpdatedBy() ),
 									'deleted_date' => $p_obj->getDeletedDate(),
@@ -199,9 +199,9 @@ class EditPunch extends Controller
 						'id' => $pc_obj->getId(),
 						'user_id' => $pc_obj->getUserDateObject()->getUser(),
 						'user_full_name' => $pc_obj->getUserDateObject()->getUserObject()->getFullName(),
-						'date_stamp' => date('Y-m-d', $date_stamp),
+						'date_stamp' => $date_stamp,
 						'user_date_id' => $pc_obj->getUserDateObject()->getId(),
-						'time_stamp' => date('H:i', $time_stamp),
+						'time_stamp' => $time_stamp,
 						'branch_id' => $pc_obj->getBranch(),
 						'department_id' => $pc_obj->getDepartment(),
 						'job_id' => $pc_obj->getJob(),
@@ -237,8 +237,8 @@ class EditPunch extends Controller
 					$pc_data = array (
 						'user_id' => $user_obj->getId(),
 						'user_full_name' => $user_obj->getFullName(),
-						'date_stamp' => date('Y-m-d', $date_stamp),
-						'time_stamp' => date('H:i', $time_stamp),
+						'date_stamp' => $date_stamp,
+						'time_stamp' => $time_stamp,
 						'status_id' => $status_id,
 						'branch_id' => $user_obj->getDefaultBranch(),
 						'department_id' => $user_obj->getDefaultDepartment(),
@@ -298,10 +298,16 @@ class EditPunch extends Controller
 				$p_obj->setEnableCalcUserDateTotal( TRUE );
 				$p_obj->setEnableCalcException( TRUE );
 				$res = $p_obj->Save();
+				if($res){
+					//return redirect(URLBuilder::getURL( array('refresh' => TRUE ), 'close_window'));
+					return response()->json(['success' => 'Punch Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Punch Deleted Failed.']);
+				}
 			}
 		}
 
-		return redirect(route('attendance.punchlist'));
+		
 
 	}
 
@@ -384,13 +390,13 @@ class EditPunch extends Controller
 				$pf->setActualTimeStamp( $time_stamp );
 				$pf->setOriginalTimeStamp( $pf->getTimeStamp() );
 			}
-
 			if ( $pf->isValid() == TRUE ) {
+				
+				if ( $pf->Save( FALSE )) {
 
-				if ( $pf->Save( FALSE ) == TRUE ) {
 					$pcf = new PunchControlFactory();
-					$pcf->setId( $pf->getPunchControlID() );
 					$pcf->setPunchObject( $pf );
+					$pcf->setId( $pf->getPunchControlID() );
 
 					if ( $i == 0 AND $pc_data['user_date_id'] != '' ) {
 						//This is important when editing a punch, without it there can be issues calculating exceptions
@@ -406,16 +412,16 @@ class EditPunch extends Controller
 						$pcf->setDepartment( $pc_data['department_id'] );
 					}
 					if ( isset($pc_data['job_id']) ) {
-						$pcf->setJob( $pc_data['job_id'] );
+						$pcf->setJob( $pc_data['job_id'] ?? 0 );
 					}
 					if ( isset($pc_data['job_item_id']) ) {
-						$pcf->setJobItem( $pc_data['job_item_id'] );
+						$pcf->setJobItem( $pc_data['job_item_id'] ?? 0  );
 					}
 					if ( isset($pc_data['quantity']) ) {
-						$pcf->setQuantity( $pc_data['quantity'] );
+						$pcf->setQuantity( $pc_data['quantity'] ?? 0  );
 					}
 					if ( isset($pc_data['bad_quantity']) ) {
-						$pcf->setBadQuantity( $pc_data['bad_quantity'] );
+						$pcf->setBadQuantity( $pc_data['bad_quantity'] ?? 0  );
 					}
 					if ( isset($pc_data['note']) ) {
 						$pcf->setNote( $pc_data['note'] );
@@ -444,7 +450,7 @@ class EditPunch extends Controller
 					$pcf->setEnableCalcWeeklySystemTotalTime( TRUE );
 					$pcf->setEnableCalcUserDateTotal( TRUE );
 					$pcf->setEnableCalcException( TRUE );
-
+					
 					if ( $pcf->isValid() == TRUE ) {
 						Debug::Text(' Punch Control is valid, saving...: ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -474,7 +480,7 @@ class EditPunch extends Controller
 			//$pf->FailTransaction();
 			$pf->CommitTransaction();
 
-			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), '/attendance/punchlist'));
+			return redirect(URLBuilder::getURL( array('refresh' => TRUE ), 'close_window'));
 		} else {
 			$pf->FailTransaction();
 		}

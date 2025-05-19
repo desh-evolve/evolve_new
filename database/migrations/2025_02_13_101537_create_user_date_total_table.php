@@ -40,7 +40,7 @@ return new class extends Migration
             $table->integer('actual_total_time')->default(0); // Actual total time (default 0)
             $table->integer('meal_policy_id')->nullable(); // Meal policy ID (nullable)
             $table->integer('break_policy_id')->default(0); // Break policy ID (default 0)
-            $table->string('comment_ot', 250); // Comment for overtime (required)
+            $table->string('comment_ot', 250)->nullable(); // Comment for overtime (required)
         });
     }
 

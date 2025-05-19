@@ -44,9 +44,8 @@ class EditUserPreference extends Controller
 
     }
 
-    public function index($user_id = null)
+    public function index(Request $request)
     {
-
         $current_company = $this->currentCompany;
         $current_user = $this->currentUser;
         $permission = $this->permission;
@@ -74,7 +73,6 @@ class EditUserPreference extends Controller
         // Fetch User Preferences
         $uplf = new UserPreferenceListFactory();
 		$uplf->getByUserIDAndCompanyID( $user_id, $current_company->getId() );
-
         $pref_data = [];
 
         // Check if user object exists and preferences are returned

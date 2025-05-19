@@ -2370,7 +2370,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$additional_order_fields = array(
 			'default_branch',
 			'default_department',
-			'sex',
+			'sex_id',
 			'user_group',
 			'title',
 			'currency',
@@ -2586,7 +2586,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order, $strict, $additional_order_fields);
 
 		//Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
-
+		//dd($ph);
 		if ($limit == NULL) {
 			$this->rs = DB::select($query, $ph);
 		} else {

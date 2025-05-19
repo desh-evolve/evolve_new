@@ -23,13 +23,15 @@
                     
                     {{-- ---------------------------------------------- --}}
 
-                    <form method="post" name="wage" action="/attendance/punch/edit_user_absence">
+                    <form method="POST" action="{{ route('attendance.punch.edit_user_absence') }}">
+                        @csrf
+
                         <div id="contentBoxTwoEdit">
                             @if (!$udtf->Validator->isValid())
                                 {{-- error list here --}}
                             @endif
             
-                            <table class="editTable table table-bordered">
+                            <table class="table table-bordered">
             
                                 <tr>
                                     <th>
@@ -42,10 +44,12 @@
                 
                                 <tr>
                                     <th>
-                                        <a href="javascript:toggleRowObject('advance');toggleImage(document.getElementById('advance_img'), '{$IMAGES_URL}/nav_bottom_sm.gif', '{$IMAGES_URL}/nav_top_sm.gif')"><img style="vertical-align: middle" id="advance_img" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a> Date:
+                                        <a href="javascript:toggleRowObject('advance');toggleIcon(document.getElementById('advance_img'))">
+                                            <i id="advance_img" class="ri-arrow-down-double-line" style="vertical-align: middle;"></i>
+                                        </a> Date:
                                     </th>
                                     <td>
-                                        {{$udt_data['date_stamp']}}
+                                        {{ getdate_helper('date', $udt_data['date_stamp']) }}
                                     </td>
                                 </tr>
                 
@@ -76,8 +80,8 @@
                                             @endforeach
                                         </select>
                                     
-                                        <input  type="text" id="total_time_text" size="8" name="udt_data[total_time]" value="{{$udt_data['total_time']}}">
-                                        ie:{{$udt_data['total_time']}} {{$current_user_prefs->getTimeUnitFormatExample()}}
+                                        <input  type="text" id="total_time_text" size="8" name="udt_data[total_time]" value="{{ gettimeunit_helper($udt_data['total_time'], '00:00') }}">
+                                        ie: {{$current_user_prefs->getTimeUnitFormatExample()}}
                                     </td>
                                 </tr>
                 
@@ -99,7 +103,7 @@
                                         <br>
                                         Accrual Policy: <span id="accrual_policy_name">None</span><br>
                                         Available Balance: <span id="accrual_policy_balance">N/A</span><br>
-                                        <input type="hidden" name="udt_data[old_absence_policy_id]" value="{$udt_data.absence_policy_id}">
+                                        <input type="hidden" name="udt_data[old_absence_policy_id]" value="{{$udt_data['absence_policy_id'] ?? ''}}">
                                     </td>
                                 </tr>
                 
@@ -156,9 +160,10 @@
                         </div>
                 
                         <div id="contentBoxFour">
-                            <input type="submit" class="btnSubmit" name="action:submit"  onClick="return singleSubmitHandler(this)">
+                            <input type="submit" class="btnSubmit btn btn-primary btn-sm" name="action" value="submit" onClick="return singleSubmitHandler(this)">
                             @if (!empty($udt_data['id']) AND ( $permission->Check('absence','delete') OR $permission->Check('absence','delete_own') OR $permission->Check('absence','delete_child') ))
-                                <input type="submit" class="btnDelete1" name="action:delete"   onClick="return singleSubmitHandler(this)">
+                                {{-- <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch_single/delete/{{ $pc_data['punch_id'] ?? '' }}', 'Punch', this, true)">Delete</button> --}}
+                                <input type="submit" class="btnDelete1" name="action" value="delete"  onclick="commonDeleteFunction('/attendance/punch/edit_user_absence', 'User Absence', this, true)">
                             @endif
                         </div>
                 
@@ -228,7 +233,7 @@
             document.getElementById('accrual_policy_balance').innerHTML = 'N/A';
 
             if ( document.getElementById('absence_policy_id').value != 0 ) {
-                remoteHW.getAbsencePolicyBalance( document.getElementById('absence_policy_id').value, {/literal}{$udt_data.user_id}{literal});
+                remoteHW.getAbsencePolicyBalance( document.getElementById('absence_policy_id').value, {{$udt_data['user_id']}});
                 remoteHW.getAbsencePolicyData( document.getElementById('absence_policy_id').value );
             }
         }
@@ -238,6 +243,16 @@
         function UpdateTotalLeaveTime() {  
             var selectedLeaveId = document.getElementById('leave_total_time').value;
             remoteHW.getAbsenceLeave(selectedLeaveId);  
+        }
+
+        function toggleIcon(icon) {
+            if (icon.classList.contains('ri-arrow-down-double-line')) {
+                icon.classList.remove('ri-arrow-down-double-line');
+                icon.classList.add('ri-arrow-up-double-line');
+            } else {
+                icon.classList.remove('ri-arrow-up-double-line');
+                icon.classList.add('ri-arrow-down-double-line');
+            }
         }
     </script>
 

@@ -62,14 +62,14 @@
 					</tr>
 				{/if}
 			</table>
-		</div>
+			</div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
-		</div>
+			<div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
+			</div>
 
-		<input type="hidden" name="data[id]" value="{$data.id}">
-		<input type="hidden" name="data[user_id]" value="{$data.user_id}">
+			<input type="hidden" name="data[id]" value="{$data.id}">
+			<input type="hidden" name="data[user_id]" value="{$data.user_id}">
 		</form>
 	</div>
 </div>

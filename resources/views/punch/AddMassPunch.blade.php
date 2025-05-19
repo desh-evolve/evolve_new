@@ -15,8 +15,8 @@
                     
                     <form 
                         method="POST"
-                        name="wage"
-                        action="{{ route('attendance.masspunch.submit') }}"
+                        name="mass_punch"
+                        action="{{ route('attendance.masspunch.add') }}"
                     >
                         @csrf
                         <div id="contentBoxTwoEdit">
@@ -50,7 +50,7 @@
                                     Time:
                                 </th>
                                 <td>
-                                    <input type="text" size="12" id="time_stamp" name="pc_data[time_stamp]" value="{{$pc_data['time_stamp']}}">
+                                    <input type="text" size="12" id="time_stamp" name="pc_data[time_stamp]" value="{{ getdate_helper('time', $pc_data['time_stamp']) }}">
                                     ie: {{$current_user_prefs->getTimeFormatExample()}}
                                 </td>
                             </tr>
@@ -61,9 +61,9 @@
                                         Actual Time:
                                     </th>
                                     <td>
-                                        {{ $pc_data['actual_time_stamp'] ?? '' }}
+                                        {{ getdate_helper('time', $pc_data['actual_time_stamp'], true) }}
                                         @if (!empty($pc_data['actual_time_stamp']))    
-                                            <input type="hidden" id="actual_time_stamp" name="actual_time_stamp" value="{{$pc_data['actual_time_stamp']}}">
+                                            <input type="hidden" id="actual_time_stamp" name="actual_time_stamp" value="{{ getdate_helper('time', $pc_data['actual_time_stamp']) }}">
                                             <input type="button" value="Use Actual Time" onClick="javascript: document.getElementById('time_stamp').value = document.getElementById('actual_time_stamp').value">
                                         @endif
                                     </td>
@@ -75,7 +75,7 @@
                                     Start Date:
                                 </th>
                                 <td>
-                                    <input type="date" id="start_date_stamp" name="pc_data[start_date_stamp]" value="{{$pc_data['start_date_stamp']}}">
+                                    <input type="date" id="start_date_stamp" name="pc_data[start_date_stamp]" value="{{ getdate_helper('date', $pc_data['start_date_stamp']) }}">
                                     ie: {{$current_user_prefs->getDateFormatExample()}}
                                 </td>
                             </tr>
@@ -84,7 +84,7 @@
                                     End Date:
                                 </th>
                                 <td>
-                                    <input type="date" id="end_date_stamp" name="pc_data[end_date_stamp]" value="{{$pc_data['end_date_stamp']}}">
+                                    <input type="date" id="end_date_stamp" name="pc_data[end_date_stamp]" value="{{ getdate_helper('date', $pc_data['end_date_stamp']) }}">
                                     ie: {{$current_user_prefs->getDateFormatExample()}}
                                 </td>
                             </tr>
@@ -297,7 +297,7 @@
                         </div>
             
                         <div id="contentBoxFour">
-                            <input type="submit" class="btn btn-primary btn-sm" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
+                            <input type="submit" class="btn btn-primary btn-sm" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
                         </div>
                     
                     </form>

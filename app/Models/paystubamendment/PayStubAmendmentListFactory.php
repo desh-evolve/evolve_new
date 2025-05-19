@@ -784,7 +784,7 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 					);
 
 		$query = '
-					select 	a.*
+					select 	a.*, b.last_name, b.first_name
 					from 	'. $this->getTable() .' as a
 						LEFT JOIN '. $uf->getTable() .' as b ON a.user_id = b.id
 						LEFT JOIN '. $psealf->getTable() .' as c ON a.pay_stub_entry_name_id  = c.id
@@ -797,6 +797,7 @@ class PayStubAmendmentListFactory extends PayStubAmendmentFactory implements Ite
 		if ( isset($filter_data['user_id']) AND isset($filter_data['user_id'][0]) AND !in_array(-1, (array)$filter_data['user_id']) ) {
 			$query  .=	' AND b.id in ('. $this->getListSQL($filter_data['user_id'], $ph) .') ';
 		}
+
 		if ( isset($filter_data['status_id']) AND isset($filter_data['status_id'][0]) AND !in_array(-1, (array)$filter_data['status_id']) ) {
 			$query  .=	' AND a.status_id in ('. $this->getListSQL($filter_data['status_id'], $ph) .') ';
 		}

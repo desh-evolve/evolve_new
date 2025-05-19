@@ -12,12 +12,17 @@ use App\Http\Controllers\Branch\BranchList;
 use App\Http\Controllers\Branch\EditBranch;
 use App\Http\Controllers\Branch\BranchBankAccountList;
 use App\Http\Controllers\Branch\EditBankAccount;
+use App\Http\Controllers\CloseWindow;
 use App\Http\Controllers\company\EditCompany;
 use App\Http\Controllers\company\EditCompanyDeduction;
 use App\Http\Controllers\company\EditOtherField;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
 use App\Http\Controllers\company\OtherFieldList;
+
+use App\Http\Controllers\hierarchy\HierarchyControlList;
+use App\Http\Controllers\hierarchy\EditHierarchyControl;
+
 use App\Http\Controllers\department\DepartmentList;
 use App\Http\Controllers\department\EditDepartment;
 use App\Http\Controllers\department\EditDepartmentBranchUser;
@@ -33,8 +38,10 @@ use App\Http\Controllers\policy\RecurringHolidayList;
 use App\Http\Controllers\policy\EditRecurringHoliday;
 
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\leaves\ApplyUserLeave;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\message\EditMessage;
+use App\Http\Controllers\message\EmbeddedMessageList;
 use App\Http\Controllers\message\UserMessageList;
 use App\Http\Controllers\message\ViewMessage;
 use App\Http\Controllers\pay_stub\EditPayStubEntryAccount;
@@ -105,6 +112,8 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\report\UserInformation;
+use App\Http\Controllers\report\UserDetail;
+use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
 use App\Http\Controllers\users\EditUserPhonePasswordNew;
@@ -206,6 +215,8 @@ Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->nam
 Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
 Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 'generate'])->name('report.daily_attendance.generate');
 
+Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index'])->name('report.user_detail');
+
 // ===============================================================================================================================
 // Payroll
 // ===============================================================================================================================
@@ -259,19 +270,7 @@ Route::delete('/payroll/company_deductions/delete/{id}', [CompanyDeductionList::
 // ===============================================================================================================================
 Route::get('/progress_bar_control', [ProgressBar::class, 'index'])->name('progress_bar_control');
 Route::get('/progress_bar', [ProgressBar::class, 'index'])->name('progress_bar');
-Route::get('/progress_bar/recalculate_employee', [ProgressBar::class, 'recalculate_employee'])->name('progress_bar.recalculate_employee');
-Route::get('/progress_bar/generate_paystubs', [ProgressBar::class, 'generate_paystubs'])->name('progress_bar.generate_paystubs');
-Route::get('/progress_bar/generate_paymiddle', [ProgressBar::class, 'generate_paymiddle'])->name('progress_bar.generate_paymiddle');
-Route::get('/progress_bar/recalculate_paystub_ytd', [ProgressBar::class, 'recalculate_paystub_ytd'])->name('progress_bar.recalculate_paystub_ytd');
-Route::get('/progress_bar/add_mass_punch', [ProgressBar::class, 'add_mass_punch'])->name('progress_bar.add_mass_punch');
-Route::get('/progress_bar/add_mass_schedule', [ProgressBar::class, 'add_mass_schedule'])->name('progress_bar.add_mass_schedule');
-Route::get('/progress_bar/add_mass_schedule_npvc', [ProgressBar::class, 'add_mass_schedule_npvc'])->name('progress_bar.add_mass_schedule_npvc');
-Route::get('/progress_bar/recalculate_accrual_policy', [ProgressBar::class, 'recalculate_accrual_policy'])->name('progress_bar.recalculate_accrual_policy');
-Route::get('/progress_bar/process_late_leave', [ProgressBar::class, 'process_late_leave'])->name('progress_bar.process_late_leave');
-Route::get('/progress_bar/generate_december_bonuses', [ProgressBar::class, 'generate_december_bonuses'])->name('progress_bar.generate_december_bonuses');
-Route::get('/progress_bar/generate_attendance_bonuses', [ProgressBar::class, 'generate_attendance_bonuses'])->name('progress_bar.generate_attendance_bonuses');
 // ===============================================================================================================================
-
 
 
 // ===============================================================================================================================
@@ -285,8 +284,16 @@ Route::get('/users/user_generic_status_list', [UserGenericStatusList::class, 'in
 // Compnay Information
 // ===============================================================================================================================
 Route::get('/company/company_information', [EditCompany::class, 'index'])->name('company.index');
-Route::get('/company/edit/{id?}', [EditCompany::class, 'index'])->name('company.edit');
+// Route::get('/company/edit/{id?}', [EditCompany::class, 'index'])->name('company.edit');
 Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save');
+Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name('company.logo');
+
+// ===============================================================================================================================
+// Hierarchy Information
+// ===============================================================================================================================
+
+Route::match(['get', 'delete'], '/company/hierarchy/list', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');
+Route::match(['get', 'post', 'delete'], '/company/hierarchy/add', [EditHierarchyControl::class, 'index'])->name('company.hierarchy.add');
 
 // ===============================================================================================================================
  // User jobhistory
@@ -375,9 +382,9 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  Route::get('/user/quick_punch_password/{id?}', [EditUserPhonePasswordNew::class, 'index'])->name('user.quick_punch_password.index');
  Route::post('/user/quick_punch_password/save/{id?}', [EditUserPhonePasswordNew::class, 'save'])->name('user.quick_punch_password.save');
 
- // ===============================================================================================================================
- // User Preference
- // ===============================================================================================================================
+// ===============================================================================================================================
+// User Preference
+// ===============================================================================================================================
  Route::get('/user/preference', [EditUserPreference::class, 'index'])->name('user_preference.index');
  Route::get('/user/preference/add/{id?}', [EditUserPreference::class, 'index'])->name('user_preference.add');
  Route::post('/user/preference/save/{id?}', [EditUserPreference::class, 'save'])->name('user_preference.save');
@@ -392,8 +399,8 @@ Route::post('/company/save', [EditCompany::class, 'save'])->name('company.save')
  Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
 
 // ===============================================================================================================================
- // User messages
- // ===============================================================================================================================
+// User messages
+// ===============================================================================================================================
  Route::get('/user/messages', [UserMessageList::class, 'index'])->name('user.messages.index');
  Route::get('/user/new_message', [UserMessageList::class, 'new_message'])->name('user.new_messages');
  Route::get('/user/messages/edit/{id?}', [EditMessage::class, 'index'])->name('user.messages.edit');
@@ -417,9 +424,7 @@ Route::post('/policy/absence_policies/submit/{id?}', [EditAbsencePolicy::class, 
 Route::delete('/policy/absence_policies/delete/{id}', [AbsencePolicyList::class, 'delete'])->name('policy.absence_policies.delete');
 
 Route::get('/policy/accrual_policies', [AccrualPolicyList::class, 'index'])->name('policy.accrual_policies');
-Route::get('/policy/accrual_policies/add/{id?}', [EditAccrualPolicy::class, 'index'])->name('policy.accrual_policies.add');
-Route::post('/policy/accrual_policies/submit/{id?}', [EditAccrualPolicy::class, 'submit'])->name('policy.accrual_policies.submit');
-Route::delete('/policy/accrual_policies/delete/{id}', [AccrualPolicyList::class, 'delete'])->name('policy.accrual_policies.delete');
+Route::match(['get', 'post', 'delete'],'/policy/accrual_policies/add', [EditAccrualPolicy::class, 'index'])->name('policy.accrual_policies.add');
 
 Route::get('/policy/schedule_policies', [SchedulePolicyList::class, 'index'])->name('policy.schedule_policies');
 Route::get('/policy/schedule_policies/add/{id?}', [EditSchedulePolicy::class, 'index'])->name('policy.schedule_policies.add');
@@ -447,14 +452,10 @@ Route::post('/policy/overtime_policies/submit/{id?}', [EditOverTimePolicy::class
 Route::delete('/policy/overtime_policies/delete/{id}', [OverTimePolicyList::class, 'delete'])->name('policy.overtime_policies.delete');
 
 Route::get('/policy/premium_policies', [PremiumPolicyList::class, 'index'])->name('policy.premium_policies');
-Route::get('/policy/premium_policies/add/{id?}', [EditPremiumPolicy::class, 'index'])->name('policy.premium_policies.add');
-Route::post('/policy/premium_policies/submit/{id?}', [EditPremiumPolicy::class, 'submit'])->name('policy.premium_policies.submit');
-Route::delete('/policy/premium_policies/delete/{id}', [PremiumPolicyList::class, 'delete'])->name('policy.premium_policies.delete');
+Route::match(['get', 'post'], '/policy/premium_policies/add', [EditPremiumPolicy::class, 'index'])->name('policy.premium_policies.add');
 
 Route::get('/policy/exception_policies', [ExceptionPolicyControlList::class, 'index'])->name('policy.exception_policies');
-Route::get('/policy/exception_policies/add/{id?}', [EditExceptionPolicyControl::class, 'index'])->name('policy.exception_policies.add');
-Route::post('/policy/exception_policies/submit/{id?}', [EditExceptionPolicyControl::class, 'submit'])->name('policy.exception_policies.submit');
-Route::delete('/policy/exception_policies/delete/{id}', [ExceptionPolicyControlList::class, 'delete'])->name('policy.exception_policies.delete');
+Route::match(['get', 'post'], '/policy/exception_policies/add', [EditExceptionPolicyControl::class, 'index'])->name('policy.exception_policies.add');
 
 Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->name('policy.holiday_policies');
 Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'index'])->name('policy.holiday_policies.add');
@@ -471,28 +472,38 @@ Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin
 Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
 Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name('admin.userlist.delete');
 
+// Route::post('/users/upload', [EditUser::class, 'uploadFile'])->name('uploadFile');
+// Route::get('/storage/{disk}/{path}', [App\Http\Controllers\users\EditUser::class, 'serveFile'])
+//     ->name('serveFile')
+//     ->where('path', '.*');
+Route::post('/users/delete-file', [EditUser::class, 'deleteFile'])->name('user.delete-file');
+Route::post('/users/upload', [EditUser::class, 'uploadFile'])->name('user.upload');
+Route::get('/storage/{disk}/{path}', [EditUser::class, 'serveFile'])->name('serveFile')->where('path', '.*');
+
 // ===============================================================================================================================
 // attendance functions
 // ===============================================================================================================================
 
 Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('attendance.timesheet');
+Route::get('/close_window', [CloseWindow::class, 'index'])->name('close_window');
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
 Route::get('/attendance/punch/userdate_totals', [UserDateTotalList::class, 'index'])->name('attendance.punch.userdate_totals');
 Route::get('/attendance/punch/edit_userdate_total', [EditUserDateTotal::class, 'index'])->name('attendance.punch.edit_userdate_total');
-Route::get('/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
+
+//when using switch case u can use like this
+Route::match(['get', 'post'], '/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
 
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
 Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete'])->name('attendance.punch_single.delete');
 
-Route::get('/attendance/masspunch/add', [AddMassPunch::class, 'index'])->name('attendance.masspunch.add');
-Route::post('/attendance/masspunch/submit', [AddMassPunch::class, 'submit'])->name('attendance.masspunch.submit');
+Route::match(['get', 'post'], '/attendance/masspunch/add', [AddMassPunch::class, 'index'])->name('attendance.masspunch.add');
 
 Route::get('/attendance/requests', [UserRequestList::class, 'index'])->name('attendance.requests');
-Route::get('/attendance/request/add/{id?}', [EditRequest::class, 'index'])->name('attendance.request.add');
-Route::post('/attendance/request/submit/{id?}', [EditRequest::class, 'submit'])->name('attendance.request.submit');
+Route::match(['get', 'post'], '/attendance/request/add', [EditRequest::class, 'index'])->name('attendance.request.add');
+Route::get('/attendance/request/view', [ViewRequest::class, 'index'])->name('attendance.request.view');
 Route::delete('/attendance/request/delete/{id}', [UserRequestList::class, 'delete'])->name('attendance.request.delete');
 
 Route::get('/attendance/accruals/{filter_user_id?}', [UserAccrualBalanceList::class, 'index'])->name('attendance.accruals');
@@ -505,6 +516,11 @@ Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name(
 
 Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
+Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class, 'index'])->name('attendance.apply_leaves');
+
 
 // ===============================================================================================================================
 
+// add view_schedule route
+
+// ===============================================================================================================================

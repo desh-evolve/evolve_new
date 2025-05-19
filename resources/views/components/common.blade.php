@@ -26,7 +26,7 @@
 
 <script>
 
-async function commonDeleteFunction(deleteUrl, itemName = 'Item', button) {
+async function commonDeleteFunction(deleteUrl, itemName = 'Item', button, closeView = false) {
     return new Promise((resolve) => {
         // Show confirmation modal
         $('#delete_item_name').text(itemName);
@@ -63,6 +63,11 @@ async function commonDeleteFunction(deleteUrl, itemName = 'Item', button) {
                 commonAlert(icon, msg);
                 console.error('Error deleting the item:', error.message);
                 resolve(false); // Resolve with false on error
+            } finally {
+                if(closeView == true){
+                    window.opener.location.reload();
+                    window.close();
+                }
             }
         });
 
