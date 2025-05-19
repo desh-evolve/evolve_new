@@ -144,9 +144,33 @@ class EmbeddedMessageList extends Controller
         $viewData['title'] = 'Message List';
         $mcf = new MessageControlFactory();
 
+		$current_user = $this->currentUser;
+
+		extract	(FormVariables::GetVariables(
+			array	(
+					'action',
+					'page',
+					'sort_column',
+					'sort_order',
+					'object_type_id',
+					'object_id',
+					'object_user_id',
+					'parent_id',
+					'message_data',
+					'template',
+					'close'
+					) ) );
+
 		if ( isset($object_type_id) AND isset($object_id) ) {
 			$mclf = new MessageControlListFactory();
 			$mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject( $current_user->getCompany(), $current_user->getId(), $object_type_id, $object_id );
+
+        if (isset($object_type_id) && isset($object_id)) {
+            $mclf = new MessageControlListFactory();
+            $mclf->getByCompanyIDAndUserIdAndObjectTypeAndObject(
+                $current_user->getCompany(), $current_user->getId(),
+                $object_type_id, $object_id
+            );
 
             if ($mclf->getRecordCount() > 0) {
                 $mark_read_message_ids = [];
@@ -222,6 +246,7 @@ class EmbeddedMessageList extends Controller
             return view('message/EmbeddedMessageList', $viewData);
         }
     }
+}
 
 	public function submit_message()
     {
