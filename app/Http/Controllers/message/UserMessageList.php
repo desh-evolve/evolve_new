@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\message;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models\Core\Environment;
 use App\Models\Core\Debug;
 use App\Models\Core\FormVariables;
@@ -12,7 +14,6 @@ use App\Models\Core\Pager;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
-use App\Models\Message\MessageControlFactory;
 use App\Models\Message\MessageControlListFactory;
 use App\Models\Message\MessageFactory;
 use App\Models\Message\MessageRecipientListFactory;
@@ -37,21 +38,21 @@ class UserMessageList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-        	/*
+
+    }
+
+    public function index() {
+		/*
         if ( !$permission->Check('message','enabled')
 				OR !( $permission->Check('message','view') OR $permission->Check('message','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
 
-    }
-
-
-    public function index()
-    {
         $current_user = $this->currentUser;
         $current_user_prefs = $this->userPrefs;
         $viewData['title'] = 'Message List';
+
 
 		$mf = new MessageFactory();
 		$mclf = new MessageControlListFactory();
@@ -59,7 +60,7 @@ class UserMessageList extends Controller
 		$folder_options = $mclf->getOptions('folder');
 
         // Initialize variables to avoid undefined errors
-        $filter_folder_id = request('filter_folder_id'); // or however you are getting it
+        $filter_folder_id = request('filter_folder_id');
         $require_ack = false;
         $show_ack_column = false;
         $messages = [];
@@ -75,7 +76,6 @@ class UserMessageList extends Controller
 
 		$mclf->getByCompanyIdAndUserIdAndFolder( $current_user->getCompany(), $current_user->getId(), $filter_folder_id, $current_user_prefs->getItemsPerPage() );
 
-
 		if ( $mclf->getRecordCount() > 0 ) {
 			$object_name_options = $mclf->getOptions('object_name');
 
@@ -86,7 +86,6 @@ class UserMessageList extends Controller
 				//Get user info
 				$user_id = NULL;
 				$user_full_name = NULL;
-
 				if ( $filter_folder_id == 10 ) { //Inbox
 					$user_id = $message->getColumn('from_user_id');
 					$user_full_name = Misc::getFullName( $message->getColumn('from_first_name'), $message->getColumn('from_middle_name'), $message->getColumn('from_last_name') );
@@ -120,7 +119,7 @@ class UserMessageList extends Controller
 			}
 		}
 
-
+        $messages = collect($messages)->sortByDesc('created_date')->values()->all();
 		$viewData['messages'] = $messages;
 		$viewData['require_ack'] = $require_ack;
 		$viewData['show_ack_column'] = $show_ack_column;
@@ -135,43 +134,70 @@ class UserMessageList extends Controller
     }
 
 
-	public function new_message()
-    {
-		Redirect::Page( URLBuilder::getURL( NULL, 'EditMessage.php', FALSE) );
+	public function new_message(){
+		// Redirect::Page( URLBuilder::getURL( NULL, 'EditMessage.php', FALSE) );
+        return redirect()->to(URLBuilder::getURL( null , '/user/messages/edit', false));
 	}
 
 
-	public function delete()
-    {
-		$mcf = new MessageControlFactory();
 
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
+    public function delete(Request $request, $ids)
+    {
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+
+		if (empty($ids)) {
+			return response()->json(['error' => 'No Tax / Deduction List selected.'], 400);
 		}
 
-		if ( is_array($ids) AND count($ids) > 0 AND ( $permission->Check('message','delete') OR $permission->Check('message','delete_own') ) ) {
+        $filter_folder_id = $request->query('filter_folder_id', 10);
+		$mcf = new MessageFactory();
+
+		if ( $permission->Check('message','delete') OR $permission->Check('message','delete_own') ) {
 			$mcf->StartTransaction();
 
 			Debug::text('Filter Folder ID: '. $filter_folder_id, __FILE__, __LINE__, __METHOD__,9);
-			if ( $filter_folder_id == 10 ) { //Inbox
-				$mrlf = new MessageRecipientListFactory();
-				$mrlf->getByCompanyIdAndUserIdAndMessageSenderId( $current_company->getId(), $current_user->getId(), $ids );
-				foreach ($mrlf->rs as $m_obj) {
-					$mrlf->data = (array)$m_obj;
-					$m_obj = $mrlf;
-					$m_obj->setDeleted($delete);
-					$m_obj->Save();
+
+            if ( $filter_folder_id == 10 ) { //Inbox
+
+                $mrlf = new MessageRecipientListFactory();
+				$inbox_message = $mrlf->getByCompanyIdAndUserIdAndMessageSenderId( $current_company->getId(), $current_user->getId(), $ids );
+
+                foreach ($inbox_message->rs as $m_obj) {
+					$inbox_message->data = (array)$m_obj;
+
+                    $inbox_message->setDeleted(true); // Set deleted flag to true
+
+                    if ($inbox_message->isValid()) {
+                        $res = $inbox_message->Save();
+
+                        if($res){
+                            return response()->json(['success' => 'Message deleted successfully.']);
+                        }else{
+                            return response()->json(['error' => 'Message deleted failed.']);
+                        }
+                    }
 				}
 			} else { //Sent
 				$mslf = new MessageSenderListFactory();
-				$mslf->getByCompanyIdAndUserIdAndId( $current_company->getId(), $current_user->getId(), $ids );
-				foreach ($mslf->rs as $m_obj) {
-					$mrlf->data = (array)$m_obj;
-					$m_obj = $mrlf;
-					$m_obj->setDeleted($delete);
-					$m_obj->Save();
+
+				$sent_message = $mslf->getByCompanyIdAndUserIdAndId( $current_company->getId(), $current_user->getId(), $ids );
+
+				foreach ($sent_message->rs as $m_obj) {
+					$sent_message->data = (array)$m_obj;
+
+                    $sent_message->setDeleted(true); // Set deleted flag to true
+
+                    if ($sent_message->isValid()) {
+                        $res = $sent_message->Save();
+
+                        if($res){
+                            return response()->json(['success' => 'Message deleted successfully.']);
+                        }else{
+                            return response()->json(['error' => 'Message deleted failed.']);
+                        }
+                    }
 				}
 			}
 			//$mcf->FailTransaction();
@@ -179,13 +205,10 @@ class UserMessageList extends Controller
 
 		}
 
-		Redirect::Page( URLBuilder::getURL( array('filter_folder_id' => $filter_folder_id ), 'UserMessageList.php') );
+		return response()->json(['success' => 'Operation completed successfully.']);
 	}
 
 
 }
-
-
-
 
 ?>

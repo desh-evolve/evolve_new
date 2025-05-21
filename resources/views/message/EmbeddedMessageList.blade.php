@@ -5,13 +5,13 @@
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
-                        <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">{{ $title }}</h4>
                     </div>
 
                     {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="#"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="card-body">
-                    
+
                     {{-- -------------------------------------------- --}}
 
                     <form method="get" action="#">
@@ -37,7 +37,7 @@
                                         </td>
                                     </tr>
                                 @endif
-                    
+
                                 <tr>
                                     <td style="text-align:left;">
                                         {{$message['from_user_full_name']}}
@@ -57,7 +57,7 @@
                                     </td>
                                 </tr>
                             @endforeach
-                    
+
                             @if ($permission->Check('message','add'))
                                 <tr>
                                     <td colspan="2">
@@ -70,7 +70,7 @@
                                                     New Message
                                                 </td>
                                             </tr>
-                            
+
                                             <tr>
                                                 <th style="width: 20%;">
                                                     Subject:
@@ -87,7 +87,7 @@
                                                     <textarea rows="5" cols="50" name="message_data[body]">{{$message_data['body']}}</textarea>
                                                 </td>
                                             </tr>
-                            
+
                                             <tr class="tblHeader">
                                                 <td colspan="2">
                                                     <input class="btn btn-primary" type="submit" name="action:Submit_Message" value="Submit Message">
@@ -97,7 +97,7 @@
                                     </td>
                                 </tr>
                             @endif
-                    
+
                             <input type="hidden" name="parent_id" value="{{$parent_id}}">
                             <input type="hidden" name="object_type_id" value="{{$object_type_id}}">
                             <input type="hidden" name="object_id" value="{{$object_id}}">

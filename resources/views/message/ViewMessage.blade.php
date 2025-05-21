@@ -1,165 +1,141 @@
 <x-app-layout :title="'Input Example'">
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Messages') }}</h4>
+    </x-slot>
 
-    <div class="d-flex justify-content-center">
+    <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header align-items-center d-flex justify-content-between">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <div>
-                        <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">{{ $title }}</h4>
                     </div>
 
-                    {{-- <div class="justify-content-md-end">
+                    <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
-                                href="#"
-                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
-                                Add <i class="ri-add-line"></i>
-                            </a>
+                            <a href="/user/messages" class="btn btn-primary">Message List <i class="ri-arrow-right-line"></i></a>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
 
                 <div class="card-body">
-                    
-                    {{-- -------------------------------------------- --}}
+                    <div>
+                        <div class="px-4 py-2">
 
-                    <form method="get" action="#">
-                        <table class="tblList" id="message_table">
-                            @if ($require_ack == TRUE)
-                                <tr class="tblDataError">
-                                    <td colspan="8">
-                                        NOTICE: This messages requires your acknowledgment.
-                                    </td>
-                                </tr>
+                            {{-- Show acknowledgment notice if required --}}
+                            @if ($require_ack == true)
+                                <div class="alert alert-warning">
+                                    NOTICE: This message requires your acknowledgment.
+                                </div>
                             @endif
-                    
+
+                            {{-- Sort messages by created_date Ascending --}}
+                            @php
+                                $messages = collect($messages)->sortBy('created_date')->values()->all();
+                            @endphp
+
+
                             @foreach ($messages as $message)
                                 @if ($loop->first)
-                                    <tr class="bg-primary text-white">
-                                        <td colspan="2">
-                                            Message
-                                        </td>
-                                    </tr>
-                                @endif
-                                
-                                <tr style="text-align:left; vertical-align: top;">
-                                    <th width="10%">
-                                        From:
-                                    </th>
-                                    <td>
-                                        {{$message['from_user_full_name']}}
-                                    </td>
-                                </tr>
-                                <tr style="text-align:left; vertical-align: top;">
-                                    <th>
-                                        To:
-                                    </th>
-                                    <td>
-                                        {{$message['to_user_full_name']}}
-                                    </td>
-                                </tr>
-                                <tr style="text-align:left; vertical-align: top;">
-                                    <th>
-                                        Date:
-                                    </th>
-                                    <td>
-                                        {{$message['created_date']}}
-                                    </td>
-                                </tr>
-                                <tr style="text-align:left; vertical-align: top;">
-                                    <th>
-                                        Subject:
-                                    </th>
-                                    <td>
-                                        {{$message['subject']}}
-                                    </td>
-                                </tr>
-                                <tr style="text-align:left; vertical-align: top;">
-                                    <th>
-                                        Body:
-                                    </th>
-                                    <td>
-                                        {{$message['body']}}
-                                    </td>
-                                </tr>
-                    
-                                <tr>
-                                    <td>
-                                    </td>
-                                </tr>
-                            @endforeach
-                    
-                            @if ($permission->Check('message','add') AND $filter_folder_id == 10)
-                                <tr>
-                                    <td colspan="2">
-                                        @if (!$mcf->isValid())
-                                            {{-- add error list here --}}
-                                        @endif
-                    
-                                        <table class="editTable">
-                                            <tr class="bg-primary text-white">
-                                                <td colspan="2">
-                                                    Reply
-                                                </td>
-                                            </tr>
-                    
-                                            <tr>
-                                                <th style="width: 20%;">
-                                                    <a name="form_start"></a>
-                                                    Subject:
-                                                </th>
-                                                <td>
-                                                    <input type="text" size="45" name="message_data[subject]" value="{if !empty($message_data.subject)}{$message_data.subject}{else}{$default_subject}{/if}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    Body:
-                                                </th>
-                                                <td>
-                                                    <textarea rows="5" cols="50" name="message_data[body]">{{$message_data['body']}}</textarea>
-                                                </td>
-                                            </tr>
-                        
-                                            <tr class="tblHeader">
-                                                <td colspan="2">
-                                                    <input class="btn btn-primary" type="submit" name="action:Submit_Message" value="Submit Message">
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            @endif
-                    
-                            <input type="hidden" name="id" value="{{$id}}">
-                            <input type="hidden" name="parent_id" value="{{$parent_id}}">
-                            <input type="hidden" name="object_type_id" value="{{$object_type_id}}">
-                            <input type="hidden" name="object_id" value="{{$object_id}}">
-                            <input type="hidden" name="filter_folder_id" value="{{$filter_folder_id}}">
-                            <input type="hidden" name="sort_column" value="{{$sort_column}}">
-                            <input type="hidden" name="sort_order" value="{{$sort_order}}">
-                            <input type="hidden" name="page" value="{{$paging_data['current_page']}}">
-                        </table>
-                    </form>
 
-                    {{-- -------------------------------------------- --}}
+                                @endif
+
+                                <div class="p-3 mb-4 border rounded" style="background-color: #f5f9f6;">
+                                    <div class="mb-2 d-flex">
+                                        <label class="fw-bold me-2">From:</label>
+                                        <div>{{ $message['from_user_full_name'] ?? '' }}</div>
+                                    </div>
+
+                                    <div class="mb-2 d-flex">
+                                        <label class="fw-bold me-2">To:</label>
+                                        <div>{{ $message['to_user_full_name'] ?? '' }}</div>
+                                    </div>
+
+                                    <div class="mb-2 d-flex">
+                                        <label class="fw-bold me-2">Date:</label>
+                                        <div>{{ \Carbon\Carbon::createFromTimestamp($message['created_date'])->format('M d, Y h:i A') }}</div>
+                                    </div>
+
+                                    <div class="mb-2 d-flex">
+                                        <label class="fw-bold me-2">Subject:</label>
+                                        <div>{{ $message['subject'] ?? '' }}</div>
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <label class="fw-bold me-2">Body:</label>
+                                        <div>{{ $message['body'] ?? '' }}</div>
+                                    </div>
+                                </div>
+
+                            @endforeach
+
+                        </div>
+
+                    {{-- Show reply form if allowed --}}
+                    @if ($permission->Check('message','add') && $filter_folder_id == 10)
+
+                        <form method="POST" action="{{ isset($message_data['id']) ? route('user.messages.view.save', $message_data['id']) : route('user.messages.view.save') }}">
+                            @csrf
+
+                            <div>
+                                 <h5 class="bg-primary text-white text-center p-2 mb-3">
+                                    Reply
+                                </h5>
+                                    <div class="px-4 py-2">
+
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul class="mb-0">
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+
+                                        {{-- SUBJECT FIELD --}}
+                                        <div class="row align-items-center mb-3">
+                                            <label for="subject" class="col-sm-2 col-form-label">Subject:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control w-75" id="subject" name="subject" value="{{ old('subject', $message_data['subject'] ?? $default_subject) }}">
+                                            </div>
+                                        </div>
+
+                                        {{-- BODY FIELD --}}
+                                        <div class="row mb-4">
+                                            <label for="body" class="col-sm-2 col-form-label">Body:</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control w-75" rows="7" name="body">{{ $data['body'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary">Submit Message</button>
+                                        </div>
+                                    </div>
+                            </div>
+
+                            {{-- Hidden Fields --}}
+                            <input type="hidden" name="id" value="{{ $message_data['id'] ?? '' }}">
+                            <input type="hidden" name="object_type_id" value="{{ old('object_type_id', $object_type_id ?? '') }}">
+                            <input type="hidden" name="object_id" value="{{ old('object_id', $object_id ?? '') }}">
+                            <input type="hidden" name="parent_id" value="{{ old('parent_id', $parent_id ?? 0) }}">
+                            <input type="hidden" name="to_user_id" value="{{ $messages[0]['from_user_id'] ?? '' }}">
+                            <input type="hidden" name="filter_folder_id" value="{{ old('filter_folder_id', $filter_folder_id ?? '') }}">
+                        </form>
+                    @endif
 
                 </div>
             </div>
         </div>
     </div>
 
-    <script	language=JavaScript>
+    <script>
         function toggleAckButton() {
-            button = document.getElementById('ack_button');
-            if ( button.disabled == true ) {
-                button.disabled = false;
-            } else {
-                button.disabled = true;
-            }
-        
+            const button = document.getElementById('ack_button');
+            button.disabled = !button.disabled;
             return true;
         }
     </script>
 </x-app-layout>
+

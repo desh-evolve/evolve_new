@@ -12,7 +12,7 @@
                         <div class="d-flex justify-content-end">
                             <a 
                                 type="button" 
-                                href="#"
+                                href="/company/hierarchy/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
                             </a>
@@ -24,17 +24,17 @@
                     
                     {{-- -------------------------------------------- --}}
 
-                    <form method="get" action="#">
+                    <form method="post" action="{{ route('/company/hierarchy/list') }}">
                         <table class="table table-bordered">
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Objects</th>
-                                <th>Functions</th>
-                            </tr>
                             @foreach ($hierarchy_controls as $i => $hierarchy_control)
-                                <tr>
+                                @php
+                                    if($hierarchy_control['deleted']){
+                                        $row_class = 'bg-warning text-white';
+                                    }else{
+                                        $row_class = '';
+                                    }
+                                @endphp
+                                <tr class="{{$row_class}}">
                                     <td>
                                         {{ $i+1 }}
                                     </td>
@@ -50,19 +50,23 @@
                                         @endforeach
                                     </td>
                                     <td>
+                                        {{--
+                                            @if ($permission->Check('hierarchy','view_own') OR $permission->Check('hierarchy','view'))
+                                                [ <a href="{urlbuilder script="HierarchyList.php" values="hierarchy_id=$hierarchy_control['id']" merge="FALSE"}">View</a> ]
+                                            @endif
+                                        --}}
                                         @if ($permission->Check('hierarchy','edit_own') OR $permission->Check('hierarchy','edit'))
-                                            [ <a href="#">Edit</a> ]
+                                            [<a href="{{ route('company.hierarchy.add', ['hierarchy_control_id' => $hierarchy_control['id'], 'merge' => 'FALSE']) }}">Edit</a>]
                                         @endif
                                         @if ($permission->Check('hierarchy','delete'))
-                                            [ <a href="#">Delete</a> ]
+                                            <input type="submit" name="action" value="Delete" onClick="return confirmSubmit()">
                                         @endif
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="checkbox" name="ids[]" value="{{$hierarchy_control['id']}}">
                                     </td>
                                 </tr>
                             @endforeach
-
-                            <input type="hidden" name="sort_column" value="{{$sort_column}}">
-                            <input type="hidden" name="sort_order" value="{{$sort_order}}">
-                            <input type="hidden" name="page" value="{{$paging_data['current_page']}}">
                         </table>
                     </form>
 

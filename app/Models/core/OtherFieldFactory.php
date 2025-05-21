@@ -198,6 +198,7 @@ class OtherFieldFactory extends Factory {
         return FALSE;
     }
 
+
 	function getType() {
 		if ( isset($this->data['type_id']) ) {
 			return $this->data['type_id'];

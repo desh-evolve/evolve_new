@@ -46,8 +46,6 @@ class EditUserPreference extends Controller
 
     public function index(Request $request)
     {
-        $user_id = $request->input('user_id');
-        // $id = $request->query('id');
         $current_company = $this->currentCompany;
         $current_user = $this->currentUser;
         $permission = $this->permission;

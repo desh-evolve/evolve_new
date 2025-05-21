@@ -2,6 +2,7 @@
 
 namespace App\Models\Message;
 
+use App\Models\Core\AuthorizationListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
 use App\Models\Core\Factory;
@@ -10,6 +11,9 @@ use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\TTMail;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyFactory;
+use App\Models\Request\RequestListFactory;
+use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceListFactory;
 
 class MessageControlFactory extends Factory {
@@ -265,7 +269,7 @@ class MessageControlFactory extends Factory {
 					$this->obj_handler = new RequestListFactory();
 					break;
 				case 90:
-					$this->obj_handler = new PayPeriodTimeSheetVerifyListFactory();
+					$this->obj_handler = new PayPeriodTimeSheetVerifyFactory();
 					break;
 			}
 
@@ -388,6 +392,7 @@ class MessageControlFactory extends Factory {
 
 		return FALSE;
 	}
+
 	function setBody($text) {
 		$text = trim($text);
 
@@ -466,6 +471,7 @@ class MessageControlFactory extends Factory {
 
 		$mrlf = new MessageRecipientListFactory();
 		$mrlf->getByCompanyIdAndUserIdAndMessageSenderIdAndStatus( $company_id, $user_id, $ids, 10 );
+
 		if ( $mrlf->getRecordCount() > 0 ) {
 			foreach( $mrlf->rs as $mr_obj ) {
 				$mrlf->data = (array)$mr_obj;
@@ -478,13 +484,14 @@ class MessageControlFactory extends Factory {
 		return TRUE;
 	}
 
+
 	function getEmailMessageAddresses() {
 		$user_ids = $this->getToUserId();
 		if ( isset($user_ids) AND is_array($user_ids) ) {
 			//Get user preferences and determine if they accept email notifications.
 			Debug::Arr($user_ids, 'Recipient User Ids: ', __FILE__, __LINE__, __METHOD__,10);
 
-			$uplf = new UserPreferenceListFactory(); 
+			$uplf = new UserPreferenceListFactory();
 			$uplf->getByUserId( $user_ids );
 			if ( $uplf->getRecordCount() > 0 ) {
 				foreach( $uplf->rs as $up_obj ) {
