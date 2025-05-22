@@ -42,7 +42,7 @@ class UserList extends Controller
 
     public function index() {
 		/*
-		
+
 		if ( !$permission->Check('user','enabled')
 				OR !( $permission->Check('user','view') OR $permission->Check('user','view_child')  ) ) {
 			$permission->Redirect( FALSE ); //Redirect
@@ -55,7 +55,7 @@ class UserList extends Controller
 		$current_user = $this->currentUser;
 
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-		$hlf = new HierarchyListFactory(); 
+		$hlf = new HierarchyListFactory();
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
 		$viewData['title'] = 'Employee List';
@@ -68,12 +68,12 @@ class UserList extends Controller
 		$clf = new CompanyListFactory();
 
 		if ( $permission->Check('company','view') ) {
-			$clf = new CompanyListFactory(); 
+			$clf = new CompanyListFactory();
 			$clf->getAll();
 		}
 
 		//Get title list,
-		$utlf = new UserTitleListFactory(); 
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
@@ -141,7 +141,7 @@ class UserList extends Controller
 							'termination_date' => TTDate::getDate('DATE', $u_obj->getTerminationDate() ),
 
 							'map_url' => $u_obj->getMapURL(),
-							
+
 							'is_owner' => $permission->isOwner( $u_obj->getCreatedBy(), $u_obj->getId() ),
 							'is_child' => $permission->isChild( $u_obj->getId(), $permission_children_ids ),
 							'deleted' => $u_obj->getDeleted(),
@@ -149,7 +149,8 @@ class UserList extends Controller
 		}
 
 		$viewData['users'] = $users;
-		
+        dd($viewData);
+
 		return view('users/UserList', $viewData);
 	}
 

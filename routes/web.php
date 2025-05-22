@@ -129,7 +129,17 @@ Route::get('/login', [Login::class, 'index'])->name('login');
 Route::get('/logout', [Login::class, 'index'])->name('logout');
 Route::post('/authenticate', [Login::class, 'login'])->name('authenticate');
 
+// ==================== Dashboard =====================================================================================
 Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+
+Route::get('/dashboard/user_count', [Dashboard::class, 'userCount'])->name('dashboard.user_count');
+Route::get('/dashboard/three_days_absenteeism', [Dashboard::class, 'threeDaysAbsenteeism'])->name('dashboard.absenteeism');
+Route::get('/dashboard/recent_messages', [Dashboard::class, 'recentMessges'])->name('dashboard.recent_messages');
+Route::get('/dashboard/recent_request', [Dashboard::class, 'recentRequest'])->name('dashboard.recent_request');
+Route::get('/dashboard/pending_request', [Dashboard::class, 'pendingRequest'])->name('dashboard.pending_request');
+Route::get('/dashboard/exception', [Dashboard::class, 'exception'])->name('dashboard.exception');
+Route::get('/dashboard/employement_confirmation_request', [Dashboard::class, 'employmentConfirmationRequest'])->name('dashboard.employement_confirmation_request');
+Route::post('/dashboard/search', [Dashboard::class, 'search'])->name('dashboard.search');
 
 // ==================== currency =====================================================================================
 Route::get('/currency', [CurrencyList::class, 'index'])->name('currency.index');
@@ -461,6 +471,11 @@ Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->nam
 Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'index'])->name('policy.holiday_policies.add');
 Route::post('/policy/holiday_policies/submit/{id?}', [EditHolidayPolicy::class, 'submit'])->name('policy.holiday_policies.submit');
 Route::delete('/policy/holiday_policies/delete/{id}', [HolidayPolicyList::class, 'delete'])->name('policy.holiday_policies.delete');
+
+Route::get('/policy/holidays/{id?}', [HolidayList::class, 'index'])->name('policy.holidays');
+Route::get('/policy/holidays/add/{holiday_policy_id}/{id?}', [EditHoliday::class, 'index'])->name('policy.holidays.add');
+Route::post('/policy/holidays/submit/{id?}', [EditHoliday::class, 'submit'])->name('policy.holidays.submit');
+Route::delete('/policy/holidays/delete/{holiday_policy_id}/{id}', [HolidayList::class, 'delete'])->name('policy.holidays.delete');
 
 
 // ===============================================================================================================================

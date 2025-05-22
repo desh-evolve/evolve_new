@@ -49,6 +49,8 @@ class HolidayList extends Controller
 
 		$hlf->getByCompanyIdAndHolidayPolicyId( $current_company->getId(), $id );
 
+        $rows = [];
+
 		if ( $hlf->getRecordCount() > 0 ) {
 			foreach ($hlf->rs as $h_obj) {
 				$hlf->data = (array)$h_obj;

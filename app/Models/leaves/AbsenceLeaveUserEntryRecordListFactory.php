@@ -3,6 +3,7 @@
 namespace App\Models\Leaves;
 
 use App\Models\Core\Misc;
+use App\Models\Policy\AbsencePolicyFactory;
 use App\Models\Policy\AccrualPolicyFactory;
 use App\Models\Users\UserFactory;
 use Illuminate\Support\Facades\DB;

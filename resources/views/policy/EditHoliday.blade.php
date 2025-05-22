@@ -1,29 +1,31 @@
 <x-app-layout :title="'Input Example'">
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Holiday List') }}</h4>
+    </x-slot>
 
     <div class="d-flex justify-content-center">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header align-items-center d-flex justify-content-between">
-                    <div>
+                    <div class="card-header align-items-center d-flex justify-content-between">
                         <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
+                        <a href="/policy/holiday_policies" class="btn btn-primary">Holiday Policy List <i class="ri-arrow-right-line"></i></a>
                     </div>
 
                     {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="/policy/policy_groups/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add Policy Group <i class="ri-add-line"></i>
                             </a>
                         </div>
                     </div> --}}
-                </div>
 
                 <div class="card-body">
-                   
+
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                     <form method="POST"
                         action="{{ isset($data['id']) ? route('policy.holidays.submit', $data['id']) : route('policy.holidays.submit') }}">
                         @csrf
@@ -35,42 +37,41 @@
                                 </ul>
                             </div>
                         @endif
-                        
+
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                name="data[name]" 
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="data[name]"
                                 value="{{ $data['name'] ?? '' }}"
-                                placeholder="Enter Schedule Policy Name"
+                                placeholder="Enter Holiday Name"
                             >
                         </div>
 
                         <div class="form-group">
                             <label for="date_stamp">Date</label>
-                            <input 
-                                type="date" 
-                                class="form-control" 
-                                name="data[date_stamp]" 
+                            <input
+                                type="date"
+                                class="form-control"
+                                name="data[date_stamp]"
                                 value="{{ $data['date_stamp'] ?? date('Y-m-d') }}"
                             >
                         </div>
-                        
-                        <div class="form-group">
+
+                        <div class="d-flex justify-content-end mt-4">
                             <input type="submit" class="btn btn-primary btnSubmit" name="action:submit" value="Submit">
                         </div>
-            
+
                         <input type="hidden" name="data[id]" value="{{!empty($data['id']) ? $data['id'] : ''}}">
 		                <input type="hidden" name="data[holiday_policy_id]" value="{{!empty($data['holiday_policy_id']) ? $data['holiday_policy_id'] : ''}}">
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->
         </div>
-        <!-- end col -->
     </div>
 </x-app-layout>

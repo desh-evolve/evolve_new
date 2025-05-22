@@ -29,16 +29,17 @@ class EditUserPasswordNew extends Controller
         $this->currentUser = View::shared('current_user');
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
+
+        // if ( !$permission->Check('user','enabled')
+        //     OR !( $permission->Check('user','edit') OR $permission->Check('user','edit_own_password') ) ) {
+        //     $permission->Redirect( FALSE ); //Redirect
+        // }
+        
     }
 
 
     public function index($id = null)
     {
-        // if ( !$permission->Check('user','enabled')
-        //     OR !( $permission->Check('user','edit') OR $permission->Check('user','edit_own_password') ) ) {
-        //     $permission->Redirect( FALSE ); //Redirect
-        // }
-
         $current_company = $this->currentCompany;
         $current_user = $this->currentUser;
         $permission = $this->permission;

@@ -42,7 +42,7 @@ class BreakPolicyList extends Controller
         $viewData['title'] = 'Break Policy List';
 		$current_company = $this->currentCompany;
 
-		$bplf = new BreakPolicyListFactory(); 
+		$bplf = new BreakPolicyListFactory();
 		$bplf->getByCompanyId( $current_company->getId() );
 
 		$type_options = $bplf->getOptions('type');
@@ -71,7 +71,7 @@ class BreakPolicyList extends Controller
 
 		$viewData['policies'] = $policies;
 		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
-		
+
         return view('policy/BreakPolicyList', $viewData);
 
     }
@@ -87,7 +87,7 @@ class BreakPolicyList extends Controller
 		$bplf = new BreakPolicyListFactory();
 		$bplf->getByIdAndCompanyId($id, $current_company->getId() );
 
-		foreach ($bplf as $bp_obj) {
+		foreach ($bplf->rs as $bp_obj) {
 			$bplf->data = (array)$bp_obj;
 			$bp_obj = $bplf;
 

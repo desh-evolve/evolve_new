@@ -10,8 +10,8 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="/policy/overtime_policies/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add Overtime Policy <i class="ri-add-line"></i>
@@ -21,9 +21,9 @@
                 </div>
 
                 <div class="card-body">
-                   
+
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                     <table class="table table-striped table-bordered">
                         @if ($show_no_policy_group_notice == TRUE)
                             <tr class="tblDataWarning">
@@ -53,14 +53,14 @@
                                 <td>{{ $policy['trigger_time'] }}</td>
                                 <td>
                                     <a class="btn btn-secondary btn-sm" href="{{ route('policy.overtime_policies.add', ['id' => $policy['id']]) }}">Edit</a>
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/overtime_policies/delete/{{ $policy['id'] }}', 'Absence Policy', this)">Delete</button>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/overtime_policies/delete/{{ $policy['id'] }}', 'OverTime Policy', this)">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
                     </table>
 
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->

@@ -47,14 +47,14 @@ class EditHoliday extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-		
+
 		$viewData['title'] = isset($id) ? 'Edit Holiday' : 'Add Holiday';
 
 		if ( isset($data['date_stamp'] ) ) {
 			$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 		}
-		
-		$hf = new HolidayFactory(); 
+
+		$hf = new HolidayFactory();
 
 		if ( !empty($id)) {
 
@@ -88,11 +88,12 @@ class EditHoliday extends Controller
 				'holiday_policy_id' => $holiday_policy_id
 			);
 		}
-		
+
 		$viewData['holiday_policy_id'] = $holiday_policy_id;
 		$viewData['data'] = $data;
 		$viewData['hf'] = $hf;
 
+        // dd($viewData);
         return view('policy/EditHoliday', $viewData);
 
     }

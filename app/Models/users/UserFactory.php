@@ -363,7 +363,7 @@ class UserFactory extends Factory {
     function getUserFilesUrl() {
 		// Initialize the array to prevent "undefined variable" error
 		$file_array = [];
-	
+
 		// GET THE TOTAL FILES INSIDE THE FOLDER
 		if ($handle = opendir($this->getUserFileStoragePathTest($this->getId()))) {
 			$x = 0;
@@ -375,10 +375,10 @@ class UserFactory extends Factory {
 			}
 			closedir($handle);
 		}
-	
+
 		return $file_array;
 	}
-	
+
 
 
 	 //ARSP EDIT - > get original storage path like --> C:\xampp\htdocs\evolvepayroll\storage\user_file\1
@@ -470,7 +470,7 @@ class UserFactory extends Factory {
 				function getUserIdCopyFileName() {
 					// Initialize $file_array to prevent "undefined variable" error
 					$file_array = [];
-				
+
 					if ($handle = opendir($this->getUserIdCopyStoragePath($this->getId()))) {
 						while (false !== ($entry = readdir($handle))) {
 							if ($entry != "." && $entry != "..") {
@@ -479,10 +479,10 @@ class UserFactory extends Factory {
 						}
 						closedir($handle);
 					}
-				
+
 					return $file_array;
 				}
-				
+
 
                 /**
                  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
@@ -803,7 +803,7 @@ class UserFactory extends Factory {
 		 function getFileName() {
 			// Initialize $file_array to prevent "undefined variable" error
 			$file_array = [];
-		
+
 			if ($handle = opendir($this->getUserFileStoragePathTest($this->getId()))) {
 				$x = 0;
 				while (false !== ($entry = readdir($handle))) {
@@ -814,10 +814,10 @@ class UserFactory extends Factory {
 				}
 				closedir($handle);
 			}
-		
+
 			return $file_array;
 		}
-		
+
 
 			                //FL EDIT --> ADD NEW CODE FOR GET PROBATION PERIOD 20160127
                 function getEmpBasisType()
@@ -1032,6 +1032,8 @@ class UserFactory extends Factory {
                 function getWarningBasisOfEmployment($users)
                 {
 
+                    $warning_employee = [];
+
                     foreach ($users as $u_obj) {
 
                         //print_r($u_obj);
@@ -1189,7 +1191,7 @@ class UserFactory extends Factory {
                 function getUserTemplateUrl() {
 					// Initialize $file_array to prevent "undefined variable" error
 					$file_array = [];
-				
+
 					if ($handle = opendir($this->getUserTemplateFileStoragePathTest($this->getId()))) {
 						$x = 0;
 						while (false !== ($entry = readdir($handle))) {
@@ -1200,10 +1202,10 @@ class UserFactory extends Factory {
 						}
 						closedir($handle);
 					}
-				
+
 					return $file_array;
 				}
-				
+
 
 
 
@@ -1226,7 +1228,7 @@ class UserFactory extends Factory {
 					function getTemplateName() {
 						// Initialize $file_array to prevent "undefined variable" error
 						$file_array = [];
-					
+
 						if ($handle = opendir($this->getUserTemplateFileStoragePathTest($this->getId()))) {
 							while (false !== ($entry = readdir($handle))) {
 								if ($entry != "." && $entry != "..") {
@@ -1235,10 +1237,10 @@ class UserFactory extends Factory {
 							}
 							closedir($handle);
 						}
-					
+
 						return $file_array;
 					}
-					
+
 
 
 
@@ -1738,25 +1740,25 @@ class UserFactory extends Factory {
 
 	function isUniqueUserName($user_name) {
 		$user_name = trim(strtolower($user_name));
-	
+
 		$query = 'SELECT id FROM '. $this->getTable() .' WHERE user_name = :user_name AND deleted = 0';
 		$ph = [':user_name' => $user_name];
-	
+
 		$result = DB::select($query, $ph);
-	
+
 		if (empty($result)) {
 			return TRUE; // No user with this username exists
 		}
-	
+
 		$foundId = $result[0]->id ?? null;
-	
+
 		if ($foundId == $this->getId()) {
 			return TRUE; // It's the same user — allow it
 		}
-	
+
 		return FALSE; // Another user has this username
 	}
-	
+
 
 	function getUserName() {
 		if ( isset($this->data['user_name']) ) {
@@ -1766,7 +1768,7 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 	function setUserName($user_name) {
-		
+
 		$user_name = trim(strtolower($user_name));
 
 		if 	(	$this->Validator->isRegEx(		'user_name',
@@ -2665,19 +2667,19 @@ class UserFactory extends Factory {
 		if ($this->getCompany() == FALSE) {
 			return FALSE;
 		}
-	
+
 		if ($id == 0) {
 			return FALSE;
 		}
-	
+
 		$ph = array(
 			':manual_id' => $id,
 			':company_id' => $this->getCompany(),
 			':default_branch_id' => $default_branch_id,
 		);
-	
+
 		$query = 'select id from '. $this->getTable() .' where employee_number_only = :manual_id AND company_id = :company_id AND default_branch_id = :default_branch_id AND deleted = 0';
-	
+
 		$id = DB::select($query, $ph);
 		if (empty($id) || $id === FALSE) {
 			$id = 0;
@@ -2685,7 +2687,7 @@ class UserFactory extends Factory {
 			$id = current(get_object_vars($id[0]));
 		}
 		Debug::Arr($id, 'Unique Employee Number Only: ' . $id, __FILE__, __LINE__, __METHOD__, 10);
-	
+
 		if (empty($id) || $id === FALSE) {
 			return TRUE;
 		} else {
@@ -2693,7 +2695,7 @@ class UserFactory extends Factory {
 				return TRUE;
 			}
 		}
-	
+
 		return FALSE;
 	}
 
@@ -4098,7 +4100,7 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 	function setRetirementDate($epoch) {
-		
+
 		if (!empty($epoch) || $epoch === 0) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
@@ -4828,7 +4830,7 @@ class UserFactory extends Factory {
 											('Default Branch must be specified for ACTIVE employees') );
 		}
 																																												if ( $this->isNew() == TRUE ) {
-																																													//  $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); } 
+																																													//  $obj_class = "\124\124\114\x69\x63\x65\x6e\x73\x65"; $obj_function = "\166\x61\154\x69\144\x61\164\145\114\x69\x63\145\x6e\x73\x65"; $obj_error_msg_function = "\x67\x65\x74\x46\x75\154\154\105\162\x72\x6f\x72\115\x65\x73\163\141\x67\x65"; @$obj = new $obj_class; $retval = $obj->{$obj_function}(); if ( $retval !== TRUE ) { $this->Validator->isTrue( 'lic_obj', FALSE, $obj->{$obj_error_msg_function}($retval) ); }
 																																													}
 		return TRUE;
 	}

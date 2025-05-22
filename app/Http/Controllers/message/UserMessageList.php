@@ -38,17 +38,17 @@ class UserMessageList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
 
-
-    }
-
-    public function index() {
-		/*
+        /*
         if ( !$permission->Check('message','enabled')
 				OR !( $permission->Check('message','view') OR $permission->Check('message','view_own') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
+    }
 
+    
+    public function index()
+    {
         $current_user = $this->currentUser;
         $current_user_prefs = $this->userPrefs;
         $viewData['title'] = 'Message List';
@@ -148,7 +148,7 @@ class UserMessageList extends Controller
         $permission = $this->permission;
 
 		if (empty($ids)) {
-			return response()->json(['error' => 'No Tax / Deduction List selected.'], 400);
+			return response()->json(['error' => 'No message selected.'], 400);
 		}
 
         $filter_folder_id = $request->query('filter_folder_id', 10);
