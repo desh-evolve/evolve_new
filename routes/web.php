@@ -113,6 +113,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
+use App\Http\Controllers\report\EmployeeNopayCountReport;
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
@@ -226,6 +227,8 @@ Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])-
 Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 'generate'])->name('report.daily_attendance.generate');
 
 Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index'])->name('report.user_detail');
+
+Route::match(['get', 'post'],'/report/employee_nopay_count_report', [EmployeeNopayCountReport::class, 'index'])->name('report.employee_nopay_count_report');
 
 // ===============================================================================================================================
 // Payroll
