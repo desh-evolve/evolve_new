@@ -313,11 +313,17 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$rs = DB::select($query, $ph);
 		//Debug::Text(' Rows: '. $rs->RecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
-		if ( $rs->RecordCount() > 0 ) {
-			foreach( $rs as $row ) {
-				$hierarchy_to_level_map[$row['hierarchy_control_id']][] = (int)$row['level'];
-				$hierarchy_to_object_type_map[$row['hierarchy_control_id']][] = (int)$row['object_type_id'];
-			}
+        if (count($rs) > 0) {
+            foreach( $rs as $row ) {
+                $hierarchy_to_level_map[$row->hierarchy_control_id][] = (int)$row->level;
+                $hierarchy_to_object_type_map[$row->hierarchy_control_id][] = (int)$row->object_type_id;
+            }
+
+		// if ( $rs->RecordCount() > 0 ) {
+		// 	foreach( $rs as $row ) {
+		// 		$hierarchy_to_level_map[$row['hierarchy_control_id']][] = (int)$row['level'];
+		// 		$hierarchy_to_object_type_map[$row['hierarchy_control_id']][] = (int)$row['object_type_id'];
+		// 	}
 			//Debug::Arr($hierarchy_to_level_map, ' Hierarchy To Level Map: ', __FILE__, __LINE__, __METHOD__,10);
 			//Debug::Arr($hierarchy_to_object_type_map, ' Hierarchy To Object Type Map: ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -350,6 +356,8 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 
 		return FALSE;
 	}
+
+
 
 	function getAPISearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
 		if ( $company_id == '') {

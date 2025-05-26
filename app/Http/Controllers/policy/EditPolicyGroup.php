@@ -54,11 +54,11 @@ class EditPolicyGroup extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-		
+
         $viewData['title'] = isset($id) ? 'Edit Policy Group' : 'Add Policy Group';
 		$current_company = $this->currentCompany;
-		
-		$pgf = new PolicyGroupFactory(); 
+
+		$pgf = new PolicyGroupFactory();
 
 		if ( isset($id) ) {
 			$pglf = new PolicyGroupListFactory();
@@ -152,11 +152,14 @@ class EditPolicyGroup extends Controller
 
     }
 
-	public function submit(Request $request){
+
+	public function submit(Request $request)
+    {
 		$pgf = new PolicyGroupFactory();
 		$current_company = $this->currentCompany;
 		$data = $request->data;
-		
+        // dd($request->data);
+
 		//print_r($data);exit;
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -170,6 +173,7 @@ class EditPolicyGroup extends Controller
 		$pgf->setExceptionPolicyControlID( $data['exception_policy_control_id'] );
 
 		if ( $pgf->isValid() ) {
+            $pgf->Save(FALSE);
 
 			if ( isset($data['user_ids'] ) ) {
 				$pgf->setUser( $data['user_ids'] );
@@ -230,6 +234,8 @@ class EditPolicyGroup extends Controller
 		}
 		$pgf->FailTransaction();
 	}
+
+
 }
 
 ?>

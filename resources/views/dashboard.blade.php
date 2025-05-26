@@ -170,10 +170,10 @@
             <div>
                 <div class="card rounded-0 h-100">
                     <div class="card-body p-0">
-                        <div class="p-2 bg-primary">
+                        {{-- <div class="p-2 bg-primary">
                             <h6 class="text-white mb-2 mt-1 text-uppercase fw-semibold fs-5">Employee Pending Confirmation</h6>
-                        </div>
-                        <div data-simplebar style="height: 244px;" class="p-3 pt-1">
+                        </div> --}}
+                        <div data-simplebar style="height: 292px;" class="p-3 pt-6 mt-4">
 
                             <form id="searchForm">
                                 <div class="mb-2">
@@ -198,7 +198,6 @@
                                 <!-- Buttons -->
                                 <div class="d-flex justify-content-between mt-4">
                                     <button type="button" class="btn btn-sm btn-warning w-100 me-1">Search</button>
-                                    <button type="button" class="btn btn-sm btn-secondary w-100 ms-1">Filter Export</button>
                                 </div>
 
                             </form>
@@ -651,7 +650,6 @@
         });
 
 
-        
     document.querySelector('.btn-warning').addEventListener('click', () => {
         const data = {
             start_date: document.getElementById('startDate').value,

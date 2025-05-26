@@ -16,6 +16,8 @@
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add Holiday <i class="ri-add-line"></i>
                             </a>
+
+                            <a href="/policy/holiday_policies" class="btn btn-danger">Back</a>
                         </div>
                     </div>
                 </div>
@@ -39,7 +41,12 @@
                                     <td>{{ $row['name'] }}</td>
                                     <td>
                                         <a class="btn btn-secondary btn-sm" href="{{ route('policy.holidays.add', [$holiday_policy_id, $row['id']]) }}">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/holidays/delete/{{ $row['id'] }}', 'Holiday', this)">Delete</button>
+                                        {{-- <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/holidays/delete/{{ $row['id'] }}', 'Holiday', this)">Delete</button> --}}
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="commonDeleteFunction('/policy/holidays/delete/{{ $row['id'] }}/{{ $holiday_policy_id }}', 'Holiday', this)">
+                                            Delete
+                                        </button>
+
                                     </td>
                                 </tr>
                             @endforeach

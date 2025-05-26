@@ -46,7 +46,8 @@ class EditSchedulePolicy extends Controller
 
     }
 
-    public function index($id = null) {
+    public function index($id = null)
+    {
         /*
         if ( !$permission->Check('schedule_policy','enabled')
 				OR !( $permission->Check('schedule_policy','edit') OR $permission->Check('schedule_policy','edit_own') ) ) {
@@ -60,7 +61,7 @@ class EditSchedulePolicy extends Controller
 		if ( isset($data['start_stop_window'] ) ) {
 			$data['start_stop_window'] = TTDate::parseTimeUnit($data['start_stop_window']);
 		}
-		
+
 		$spf = new SchedulePolicyFactory();
 
 		if ( isset($id) ) {
@@ -121,7 +122,9 @@ class EditSchedulePolicy extends Controller
 
     }
 
-	public function submit(Request $request){
+
+	public function submit(Request $request)
+    {
 		$spf = new SchedulePolicyFactory();
 		$data = $request->data;
 		$current_company = $this->currentCompany;
@@ -129,7 +132,7 @@ class EditSchedulePolicy extends Controller
 		if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $data['start_stop_window'])) {
 			dd("Invalid time format. Expected HH:MM (e.g., 05:00).");
 		}
-		
+
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
 		$spf->setId( $data['id'] );
@@ -154,6 +157,8 @@ class EditSchedulePolicy extends Controller
 
 		}
 	}
+
+    
 }
 
 ?>

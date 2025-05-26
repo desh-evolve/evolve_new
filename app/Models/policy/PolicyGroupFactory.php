@@ -12,6 +12,7 @@ use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Users\UserDefaultFactory;
 use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\DB;
 
 class PolicyGroupFactory extends Factory {
 	protected $table = 'policy_group';
@@ -80,7 +81,7 @@ class PolicyGroupFactory extends Factory {
 		if ( is_object($this->company_obj) ) {
 			return $this->company_obj;
 		} else {
-			$clf = new CompanyListFactory(); 
+			$clf = new CompanyListFactory();
 			$this->company_obj = $clf->getById( $this->getCompany() )->getCurrent();
 
 			return $this->company_obj;
@@ -112,7 +113,7 @@ class PolicyGroupFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
         //By thilini 2018-03-21 for aqua Fresh
         function getId() {
 		if ( isset($this->data['id']) ) {
@@ -121,7 +122,7 @@ class PolicyGroupFactory extends Factory {
 
 		return FALSE;
 	}
-        
+
 	function getName() {
 		if ( isset($this->data['name']) ) {
 			return $this->data['name'];

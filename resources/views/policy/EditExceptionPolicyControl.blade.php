@@ -4,6 +4,7 @@
             padding: 5px !important;
         }
     </style>
+
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -14,8 +15,8 @@
 
                     {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="/policy/policy_groups/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add Policy Group <i class="ri-add-line"></i>
@@ -25,11 +26,10 @@
                 </div>
 
                 <div class="card-body">
-                   
+
                     {{-- --------------------------------------------------------------------------- --}}
-                    
-                    <form method="POST"
-                        action="{{ route('policy.exception_policies.add') }}">
+
+                    <form method="POST" action="{{ route('policy.exception_policies.add') }}">
                         @csrf
 
                             <div id="contentBoxTwoEdit">
@@ -37,12 +37,10 @@
                                     {{-- {include file="form_errors.tpl" object="epcf"} --}}
                                     {{-- error list here --}}
                                 @endif
-                
+
                                 <table class="table table-bordered">
                                     <tr>
-                                        <td>
-                                            Name:
-                                        </td>
+                                        <td>Name:</td>
                                         <td class="cellRightEditTable">
                                             <input type="text" name="data[name]" value="{{$data['name'] ?? ''}}">
                                         </td>
@@ -51,61 +49,40 @@
                                         <td colspan="2">
                                             <table width="100%" class="table table-bordered">
                                                 <tr class="bg-primary text-white">
-                                                    <td>
-                                                        Active
-                                                    </td>
-                                                    <td>
-                                                        Code
-                                                    </td>
-                                                    <td>
-                                                        Name
-                                                    </td>
-                                                    <td>
-                                                        Severity
-                                                    </td>
-                                                    {{--
-                                                    <td>
-                                                        Demerits
-                                                    </td>
-                                                    --}}
-                                                    <td>
-                                                        Grace
-                                                    </td>
-                                                    <td>
-                                                        Watch Window
-                                                    </td>
-                                                    <td>
-                                                        Email Notification
-                                                    </td>
+                                                    <td>Active</td>
+                                                    <td>Code</td>
+                                                    <td>Name</td>
+                                                    <td>Severity</td>
+                                                    {{-- <td>Demerits</td> --}}
+                                                    <td>Grace</td>
+                                                    <td>Watch Window</td>
+                                                    <td>Email Notification</td>
                                                 </tr>
+
                                                 @foreach ($data['exceptions'] as $code => $exception)
                                                     <tr class="">
                                                         <td>
-                                                            <input 
-                                                                type="checkbox" 
-                                                                class="checkbox" 
-                                                                name="data[exceptions][{{$code}}][active]" 
-                                                                value="1" 
+                                                            <input
+                                                                type="checkbox"
+                                                                class="checkbox"
+                                                                name="data[exceptions][{{$code}}][active]"
+                                                                value="1"
                                                                 {{ (!empty($exception['active']) && $exception['active']) ? 'checked' : '' }}
                                                             >
+
                                                             <input type="hidden" name="data[exceptions][{{$code}}][id]" value="{{$exception['id']}}">
                                                         </td>
-                                                        <td>
-                                                            {{$code}}
-                                                        </td>
-                                                        <td>
-                                                            {{$exception['name']}}
-                                                        </td>
+                                                        <td>{{$code}}</td>
+                                                        <td>{{$exception['name']}}</td>
                                                         <td>
                                                             <select id="severity_id" name="data[exceptions][{{$code}}][severity_id]">
                                                                 {!! html_options(['options'=>$data['severity_options'], 'selected'=>$exception['severity_id']]) !!}
                                                             </select>
                                                         </td>
-                                                        {{--                                                     
-                                                        <td>
+                                                        
+                                                        {{-- <td>
                                                             <input type="text" size="4" name="data[exceptions][{$code}][demerit]" value="{$exception.demerit}">
-                                                        </td>
-                                                        --}}
+                                                        </td> --}}
                                                         <td>
                                                             @if ($exception['is_enabled_grace'])
                                                                 <input type="text" size="6" name="data[exceptions][{{$code}}][grace]" value="{{gettimeunit_helper($exception['grace'])}}">
@@ -134,16 +111,16 @@
                                     </tr>
                                 </table>
                             </div>
-                
+
                             <div id="contentBoxFour">
                                 <input type="submit" class="btnSubmit" name="action" value="Submit" onClick="return singleSubmitHandler(this)">
                             </div>
-                
+
                             <input type="hidden" name="data[id]" value="{{$data['id'] ?? ''}}">
                     </form>
-                        
+
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->

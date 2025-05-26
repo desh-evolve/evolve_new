@@ -10,8 +10,8 @@
 
                     {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="/policy/recurring_holidays/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add Recurring Holiday <i class="ri-add-line"></i>
@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="card-body">
-                   
+
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                     <table class="table table-striped table-bordered">
                         <thead class="bg-primary text-white">
                             <th>#</th>
@@ -46,14 +46,14 @@
                                 <td>{{ $row['next_date'] }}</td>
                                 <td>
                                     <a class="btn btn-secondary btn-sm" href="{{ route('policy.recurring_holidays.add', ['id' => $row['id']]) }}">Edit</a>
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/recurring_holidays/delete/{{ $row['id'] }}', 'Absence Policy', this)">Delete</button>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/policy/recurring_holidays/delete/{{ $row['id'] }}', 'Reccurring Holidays', this)">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
                     </table>
 
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->
@@ -73,7 +73,7 @@
                             'Content-Type': 'application/json'
                         }
                     });
-                
+
                     const data = await response.json();
                     if (response.ok) {
                         alert(data.success); // Display success message

@@ -40,7 +40,7 @@ class ExceptionPolicyControlList extends Controller
 
         $viewData['title'] = 'Exception Policy List';
 		$current_company = $this->currentCompany;
-		
+
 		$epclf = new ExceptionPolicyControlListFactory();
 		$epclf->getByCompanyId( $current_company->getId() );
 
@@ -63,7 +63,7 @@ class ExceptionPolicyControlList extends Controller
 
 		$viewData['policies'] = $policies;
 		$viewData['show_no_policy_group_notice'] = $show_no_policy_group_notice;
-		
+
         return view('policy/ExceptionPolicyControlList', $viewData);
 
     }
@@ -82,7 +82,7 @@ class ExceptionPolicyControlList extends Controller
 		foreach ($epclf->rs as $epc_obj) {
 			$epclf->data = (array)$epc_obj;
 			$epc_obj = $epclf;
-			
+
 			$epc_obj->setDeleted($delete);
 			if ( $epc_obj->isValid() ) {
 				$res = $epc_obj->Save();
@@ -98,6 +98,8 @@ class ExceptionPolicyControlList extends Controller
 		Redirect::Page( URLBuilder::getURL( NULL, 'ExceptionPolicyControlList') );
 
 	}
+
+    
 }
 
 
