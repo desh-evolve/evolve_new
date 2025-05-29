@@ -106,7 +106,7 @@ use App\Http\Controllers\users\UserEducation;
 use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserLifePromotion;
 use App\Http\Controllers\users\UserList;
-use App\Http\Controllers\users\UserWageListNew; 
+use App\Http\Controllers\users\UserWageListNew;
 use App\Http\Controllers\users\UserWorkExperionce;
 use Illuminate\Support\Facades\Route;
 
@@ -114,7 +114,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\report\EmployeeNopayCountReport;
-use App\Http\Controllers\report\GeneralLedgerSummary;
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
@@ -230,8 +229,6 @@ Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 
 Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index'])->name('report.user_detail');
 
 Route::match(['get', 'post'],'/report/employee_nopay_count_report', [EmployeeNopayCountReport::class, 'index'])->name('report.employee_nopay_count_report');
-
-Route::match(['get', 'post'],'/report/general_ledger_summary_report', [GeneralLedgerSummary::class, 'index'])->name('report.general_ledger_summary_report');
 
 // ===============================================================================================================================
 // Payroll
