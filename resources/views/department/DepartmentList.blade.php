@@ -21,7 +21,7 @@
                                 <th>{{ __('Code') }}</th>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Functions') }}</th>
-                                
+
                             </tr>
                         </thead>
                         <tbody>
@@ -38,7 +38,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $department['manual_id'] }}</td>
                                     <td>{{ $department['name'] }}</td>
-                                
+
 
                                     <td>
                                         <!-- Edit Button -->
@@ -63,7 +63,9 @@
     </div>
 
     <script>
-      async function deleteDepartment(departmentId) {
+
+        async function deleteDepartment(departmentId)
+        {
             if (confirm('Are you sure you want to delete this item?')) {
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -75,7 +77,7 @@
                             'Content-Type': 'application/json'
                         }
                     });
-                
+
                     const data = await response.json();
                     if (response.ok) {
                         alert(data.success); // Display success message
@@ -88,5 +90,6 @@
                 }
             }
         }
+
     </script>
 </x-app-layout>

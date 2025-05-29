@@ -10,8 +10,8 @@
 
                     {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="#"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
@@ -21,10 +21,14 @@
                 </div>
 
                 <div class="card-body">
-                    
+
                     {{-- -------------------------------------------- --}}
 
-                    <form method="post" action="{$smarty.server.SCRIPT_NAME}">
+                    <form method="POST"
+                        action="{{ route('company.hierarchy.add') }}"
+                        id="hierarchy_form" enctype="multipart/form-data">
+                        @csrf
+
                         <div id="contentBoxTwoEdit">
 
                             @if (!$hcf->Validator->isValid())
@@ -34,27 +38,27 @@
                                     </ul>
                                 </div>
                             @endif
-            
+
                             <table class="editTable">
-            
+
                             <tr>
                                 <th>
                                     Name:
                                 </th>
                                 <td>
-                                    <input type="text" name="hierarchy_control_data[name]" value="{{$hierarchy_control_data['name']}}">
+                                    <input type="text" name="hierarchy_control_data[name]" value="{{$hierarchy_control_data['name'] ?? '' }}">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Description:
                                 </th>
                                 <td>
-                                    <input type="text" name="hierarchy_control_data[description]" value="{{$hierarchy_control_data['description']}}">
+                                    <input type="text" name="hierarchy_control_data[description]" value="{{$hierarchy_control_data['description'] ?? '' }}">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Objects:
@@ -62,32 +66,28 @@
                                     (Select one or more)
                                 </th>
                                 <td>
-                                    <select 
-                                        name="hierarchy_control_data[object_type_ids][]" 
-                                        multiple
-                                    >
+                                    <select name="hierarchy_control_data[object_type_ids][]" multiple >
                                         @foreach ($hierarchy_control_data['object_type_options'] as $id => $name )
-                                        <option 
-                                            value="{{$id}}"
+                                        <option value="{{$id}}"
                                             @if(!empty($hierarchy_control_data['object_type_ids']) && in_array($id,$hierarchy_control_data['object_type_ids']))
                                                 selected
                                             @endif
-                                        >{{$name}}</option>
+                                            >{{$name}}</option>
                                         @endforeach
                                     </select>
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <td class="{isvalid object="ppsf" label="user" value="cellLeftEditTable"}" nowrap>
                                     <b>Subordinates:</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');filterUserCount();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
                                 </td>
                                 <td colspan="3">
                                     <div class="col-md-12">
-                                        <x-general.multiselect-php 
-                                            title="Employees" 
-                                            :data="$hierarchy_control_data['user_options']" 
-                                            :selected="!empty($hierarchy_control_data['user_ids']) ? array_values($hierarchy_control_data['user_ids']) : []" 
+                                        <x-general.multiselect-php
+                                            title="Employees"
+                                            :data="$hierarchy_control_data['user_options']"
+                                            :selected="!empty($hierarchy_control_data['user_ids']) ? array_values($hierarchy_control_data['user_ids']) : []"
                                             :name="'hierarchy_control_data[user_ids][]'"
                                             id="userSelector"
                                         />
@@ -130,7 +130,7 @@
                                     {foreach name="level" from=$hierarchy_level_data item=hierarchy_level}
                                       {assign var="hierarchy_level_id" value=$hierarchy_level.id}
                                       {cycle assign=row_class values="tblDataWhite,tblDataGrey"}
-            
+
                                       <tr class="{$row_class}">
                                         <td>
                                             <input type="hidden" name="hierarchy_level_data[{$hierarchy_level.id}][id]" value="{$hierarchy_level.id}">
@@ -157,7 +157,7 @@
                             </tr>
                             --}}
 
-                            
+
                             <tr>
                                 <td class="tblActionRow" colspan="3">
                                     <input type="submit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
@@ -165,10 +165,10 @@
                                     <input type="submit" name="action:delete_level" value="Delete Level" onClick="selectAll(document.getElementById('filter_user'))">
                                 </td>
                             </tr>
-            
+
                         </table>
                         </div>
-                        <input type="hidden" name="hierarchy_control_data[id]" value="{{$hierarchy_control_data['id']}}">
+                        <input type="hidden" name="hierarchy_control_data[id]" value="{{$hierarchy_control_data['id'] ?? '' }}">
                     </form>
 
                     {{-- -------------------------------------------- --}}

@@ -473,6 +473,7 @@
                 showProvince(); // Update province dropdown based on selected country
             }
         };
+        
     </script>
 
 </x-app-layout>

@@ -923,6 +923,7 @@ class CompanyFactory extends Factory {
 										'GS' => array( '00' => '--'),
 										'ES' => array( '00' => '--'),
 										'LK' => array(
+                                                        '00' => ('--'),
                                                         'NC' => ('North Central'),
                                                         'NE' => ('North Eastern'),
                                                         'NW' => ('North Western'),

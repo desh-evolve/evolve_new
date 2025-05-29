@@ -40,13 +40,13 @@ class EditDepartment extends Controller
 
 		$current_company = $this->currentCompany;
         $current_user_prefs = $this->userPrefs;
-        
+
         if ( !$this->permission->Check('department','enabled')
-				OR !( $$this->permission->Check('department','view') OR $this->permission->Check('department','view_own') ) ) {
+				OR !( $this->permission->Check('department','view') OR $this->permission->Check('department','view_own') ) ) {
 					$this->permission->Redirect( FALSE ); //Redirect
 		}
-        
-		
+
+
         $viewData['title'] = $id ? 'Edit Department' : 'Add Department';
 
 		if ( isset($id) ) {
@@ -91,14 +91,14 @@ class EditDepartment extends Controller
 		$df = new DepartmentFactory();
 		//Select box options;
 		$department_data['status_options'] = $df->getOptions('status');
-		$blf = new BranchListFactory(); 
+		$blf = new BranchListFactory();
 		$blf->getByCompanyId( $current_company->getId() );
 		$department_data['branch_list_options'] = $blf->getArrayByListFactory( $blf, FALSE);
 
 		//Get other field names
 		$oflf = new OtherFieldListFactory();
 		$department_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray( $current_company->getId(), 15 );
-		
+
 
 		$viewData = [
 			'title' => $id ? 'Edit Department' : 'Add Department',
@@ -116,18 +116,18 @@ class EditDepartment extends Controller
 
 	public function submit(Request $request , $id = null) {
 		$current_company = $this->currentCompany;
-		
+
 		// Get all data from the 'data' array
 		$department_data = $request->input('data'); // Use input() instead of direct property access
 		// dd($department_data); // Should now show your complete data array
-		
+
 		$df = new DepartmentFactory();
 		$df->setId($id ?? null);
 		$df->setCompany($current_company->getId());
 		$df->setStatus($department_data['status']);
 		$df->setName($department_data['name'] ?? '');
 		$df->setManualId($department_data['manual_id']);
-	
+
 		// Set other IDs (1-5)
 		for ($i = 1; $i <= 5; $i++) {
 			$field = 'other_id'.$i;
@@ -136,22 +136,23 @@ class EditDepartment extends Controller
 				$df->$setter($department_data[$field]);
 			}
 		}
-	
+
 		if ($df->isValid()) {
 			$df->Save(FALSE);
-			
+
 			if (isset($department_data['branch_list'])) {
 				$df->setBranch($department_data['branch_list']);
 				$df->Save(TRUE);
 			}
 			return redirect()->to(URLBuilder::getURL(null, '/department'))->with('success', 'Department saved successfully.');
-        
+
 			// return redirect()->route('departments.index'); // Use Laravel's redirect
 		}
-		
+
 		// Handle validation errors
 		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 	}
+
 }
 
 ?>

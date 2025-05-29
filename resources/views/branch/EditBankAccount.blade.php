@@ -25,7 +25,7 @@
         <div class="card w-50"> <!-- Adjust width as needed -->
             <div class="card-header align-items-center d-flex justify-content-between">
                 <h4 class="card-title mb-0 flex-grow-1">Bank {{ isset($bank_data['id']) ? 'Edit' : 'Add' }}</h4>
-                <a href="/bank" class="btn btn-primary">Bank List <i class="ri-arrow-right-line"></i></a>
+                <a href="/branch" class="btn btn-primary">Bank List <i class="ri-arrow-right-line"></i></a>
             </div>
 
             <div class="card-body">
@@ -78,7 +78,7 @@
                         <input type="hidden" name="id" value="{{ $bank_data['id'] ?? '' }}">
                         <input type="hidden" name="user_id" value="{{$user_id}}">
                         <input type="hidden" name="company_id" value="{{$company_id}}">
-                        
+
                         <input type="hidden" name="branch_id_new" value="{{ $branch_id_new ?? '' }}">
                         <input type="hidden" name="branch_id_saved" value="{{ $branch_id_saved ?? '' }}">
                         <input type="hidden" name="default_branch_id" value="{{ $bank_data['default_branch_id'] ?? '' }}">

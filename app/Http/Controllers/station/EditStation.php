@@ -151,18 +151,21 @@ class EditStation extends Controller
 		$uglf = new UserGroupListFactory();
 		$uglf->getByCompanyId($current_company->getId());
 		$group_options = $uglf->getArrayByListFactory($uglf, false, true);
-		$data['src_group_options'] = Misc::arrayDiffByKey((array)($data['group_ids'] ?? []), $group_options);
-		$data['selected_group_options'] = Misc::arrayIntersectByKey((array)($data['group_ids'] ?? []), $group_options);
+		// $data['src_group_options'] = Misc::arrayDiffByKey((array)($data['group_ids'] ?? []), $group_options);
+		// $data['selected_group_options'] = Misc::arrayIntersectByKey((array)($data['group_ids'] ?? []), $group_options);
+        $data['src_group_options'] = $group_options;
 
 		$ulf = new UserListFactory();
 		$ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), null);
 		$user_options = $ulf->getArrayByListFactory($ulf, false, true);
+		// $data['src_include_user_options'] = Misc::arrayDiffByKey((array)($data['include_user_ids'] ?? []), $user_options);
+		// $data['selected_include_user_options'] = Misc::arrayIntersectByKey((array)($data['include_user_ids'] ?? []), $user_options);
 
-		$data['src_include_user_options'] = Misc::arrayDiffByKey((array)($data['include_user_ids'] ?? []), $user_options);
-		$data['selected_include_user_options'] = Misc::arrayIntersectByKey((array)($data['include_user_ids'] ?? []), $user_options);
+		// $data['src_exclude_user_options'] = Misc::arrayDiffByKey((array)($data['exclude_user_ids'] ?? []), $user_options);
+		// $data['selected_exclude_user_options'] = Misc::arrayIntersectByKey((array)($data['exclude_user_ids'] ?? []), $user_options);
 
-		$data['src_exclude_user_options'] = Misc::arrayDiffByKey((array)($data['exclude_user_ids'] ?? []), $user_options);
-		$data['selected_exclude_user_options'] = Misc::arrayIntersectByKey((array)($data['exclude_user_ids'] ?? []), $user_options);
+        $data['src_include_user_options'] = $user_options;
+        $data['src_exclude_user_options'] = $user_options;
 
 		$data['group_selection_type_options'] = $sf->getOptions('group_selection_type');
 		$data['branch_selection_type_options'] = $sf->getOptions('branch_selection_type');
@@ -170,6 +173,7 @@ class EditStation extends Controller
 
 		$data['branch_options'] = Misc::prependArray([0 => '-- None --'], $branch_options);
 		$data['department_options'] = Misc::prependArray([0 => '-- None --'], $department_options);
+
 
 		// $upf = new UserPreferenceFactory();
 		$timezone_options = Misc::prependArray([0 => '-- None --'], $this->userPrefs->getOptions('time_zone'));
@@ -180,15 +184,17 @@ class EditStation extends Controller
 			'data' => $data,
 			'sf' => $sf
 		];
+
 		// dd($viewData);
+
 		return view('station.EditStation', $viewData);
 	}
 
+
 	public function submit(Request $request, $id = null)
 	{
-
 		$current_company = $this->company;
-		$data = $request->input('data', []); 
+		$data = $request->input('data', []);
 		$action = $request->input('action');
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
@@ -246,7 +252,6 @@ class EditStation extends Controller
 		if (isset($data['job_item_id'])) {
 			$sf->setDefaultJobItem($data['job_item_id']);
 		}
-
 		if (isset($data['time_zone_id'])) {
 			$sf->setTimeZone($data['time_zone_id']);
 		}
@@ -255,6 +260,7 @@ class EditStation extends Controller
 		$sf->setGroupSelectionType($data['group_selection_type_id'] ?? '');
 		$sf->setBranchSelectionType($data['branch_selection_type_id'] ?? '');
 		$sf->setDepartmentSelectionType($data['department_selection_type_id'] ?? '');
+
 		if ($sf->isValid()) {
 			$sf->Save(false);
 
@@ -274,6 +280,7 @@ class EditStation extends Controller
 		$sf->FailTransaction();
 		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 	}
+
 
 	protected function handleTimeClockCommand($data, $id)
 	{
@@ -391,4 +398,6 @@ class EditStation extends Controller
 			]);
 		}
 	}
+
+
 }

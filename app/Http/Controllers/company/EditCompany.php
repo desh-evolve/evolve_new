@@ -38,7 +38,6 @@ class EditCompany extends Controller
 
 	public function index($id = null)
 	{
-
 		// If ID is not provided, get the current company's ID
 		if (empty($id)) {
 			$current_company = $this->currentCompany;
@@ -82,7 +81,6 @@ class EditCompany extends Controller
 				$id = $current_company->getId();
 				$clf->GetByID($id, NULL, NULL, true);  // Force refresh here as well
 			}
-
 
 
 			foreach ($clf->rs as $company) {
@@ -179,18 +177,21 @@ class EditCompany extends Controller
 
 		return view('company/EditCompany', $viewData);
 	}
+
+
 	public function getLogo($company_id)
 	{
 		$cf = new CompanyFactory();
 		$logo_path = $cf->getLogoFileName($company_id, false);
-		
+
 		if (file_exists($logo_path)) {
 			return response()->file($logo_path);
 		}
-		
+
 		// Return default logo if no company logo exists
 		return response()->file(public_path('images/default-logo.png'));
 	}
+
 
 	public function save(Request $request)
 	{
@@ -338,7 +339,6 @@ class EditCompany extends Controller
 			$cf->CommitTransaction();
 
 			// Fetch the updated company data again
-			
 			return redirect()->to(URLBuilder::getURL(null, '/company/company_information'))->with('success', 'Company saved successfully.');
 		}
 
@@ -346,4 +346,5 @@ class EditCompany extends Controller
 		// If validation fails, return back with errors
 		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 	}
+
 }

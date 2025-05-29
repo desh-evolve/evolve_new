@@ -85,6 +85,7 @@ class DepartmentList extends Controller
 		Redirect::Page(URLBuilder::getURL(NULL, 'EditDepartment.php'));
 	}
 
+
 	public function delete($id)
 	{
 		$current_company = $this->currentCompany;
@@ -111,4 +112,5 @@ class DepartmentList extends Controller
 			}
 		}
 	}
+    
 }

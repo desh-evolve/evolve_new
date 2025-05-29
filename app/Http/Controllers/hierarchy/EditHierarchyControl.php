@@ -39,7 +39,8 @@ class EditHierarchyControl extends Controller
 
     }
 
-    public function index() {
+
+    public function index(Request $request) {
 
         /*
         if ( !$permission->Check('hierarchy','enabled')
@@ -49,8 +50,11 @@ class EditHierarchyControl extends Controller
         */
 
         $viewData['title'] = 'Edit Hierarchy List';
-		$hcf = new HierarchyControlFactory(); 
+		$hcf = new HierarchyControlFactory();
 		$hlf = new HierarchyLevelFactory();
+
+        $current_company = $this->currentCompany;
+        $action = $request->input('action');
 
 		if ( isset($hierarchy_control_id) ) {
 
@@ -76,7 +80,7 @@ class EditHierarchyControl extends Controller
 				);
 			}
 
-			$hllf = new HierarchyLevelListFactory(); 
+			$hllf = new HierarchyLevelListFactory();
 			$hllf->getByHierarchyControlId( $hierarchy_control_id );
 			if ( $hllf->getRecordCount() > 0 ) {
 				foreach( $hllf->rs as $hl_obj ) {
@@ -159,6 +163,7 @@ class EditHierarchyControl extends Controller
 		$hierarchy_control_data['level_user_options'] = Misc::prependArray( $prepend_array_option, $user_options);
 		$hierarchy_control_data['object_type_options'] = $hotlf->getOptions('object_type');
 
+        $filter_user_options = [];
 		if ( isset($hierarchy_control_data['user_ids']) AND is_array($hierarchy_control_data['user_ids']) ) {
 			$tmp_user_options = $user_options;
 			foreach( $hierarchy_control_data['user_ids'] as $user_id ) {
@@ -174,10 +179,11 @@ class EditHierarchyControl extends Controller
 		$viewData['hierarchy_level_data'] = $hierarchy_level_data;
 		$viewData['hcf'] = $hcf;
 		$viewData['hlf'] = $hlf;
-		
+
         return view('hierarchy/EditHierarchyControl', $viewData);
 
     }
+
 
 	public function submit(){
 		$hcf = new HierarchyControlFactory();
@@ -260,6 +266,7 @@ class EditHierarchyControl extends Controller
 		}
 		$hcf->FailTransaction();
 	}
+
 
 	public function delete_level(){
 

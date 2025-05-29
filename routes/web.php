@@ -106,7 +106,7 @@ use App\Http\Controllers\users\UserEducation;
 use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserLifePromotion;
 use App\Http\Controllers\users\UserList;
-use App\Http\Controllers\users\UserWageListNew;
+use App\Http\Controllers\users\UserWageListNew; 
 use App\Http\Controllers\users\UserWorkExperionce;
 use Illuminate\Support\Facades\Route;
 
