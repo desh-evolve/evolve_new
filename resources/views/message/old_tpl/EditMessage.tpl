@@ -29,7 +29,7 @@ function filterUserCount() {
 				<tbody id="filter_employees_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}To:{/t}</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');filterUserCount();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}To:{/t}</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');filterUserCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 
 						<td class="cellRightEditTable" align="center">
@@ -41,9 +41,9 @@ function filterUserCount() {
 							</select>
 						</td>
 						<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-							<a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+							<a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							<br>
-							<a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+							<a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							<br>
 							<br>
 							<br>
@@ -63,7 +63,7 @@ function filterUserCount() {
 				<tbody id="filter_employees_off">
 				<tr>
 					<td class="cellLeftEditTableHeader" nowrap>
-						<b>{t}To:{/t}</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}To:{/t}</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTableHeader" colspan="100">
 						<span id="filter_user_count">0</span> {t}Recipients Currently Selected, Click the arrow to modify.{/t}

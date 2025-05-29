@@ -316,7 +316,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_group_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="sf" label="group" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Employee Groups{/t}:</b><a href="javascript:toggleRowObject('filter_group_on');toggleRowObject('filter_group_off');filterCountSelect( 'filter_group' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Employee Groups{/t}:</b><a href="javascript:toggleRowObject('filter_group_on');toggleRowObject('filter_group_off');filterCountSelect( 'filter_group' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -349,9 +349,9 @@ if ( TTProductEdition == 20 ) {
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_group'), document.getElementById('filter_group')); uniqueSelect(document.getElementById('filter_group')); sortSelect(document.getElementById('filter_group'));resizeSelect(document.getElementById('src_filter_group'), document.getElementById('filter_group'), {select_size array=$data.src_group_options array2=$data.selected_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_group'), document.getElementById('filter_group')); uniqueSelect(document.getElementById('filter_group')); sortSelect(document.getElementById('filter_group'));resizeSelect(document.getElementById('src_filter_group'), document.getElementById('filter_group'), {select_size array=$data.src_group_options array2=$data.selected_group_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_group'), document.getElementById('src_filter_group')); uniqueSelect(document.getElementById('src_filter_group')); sortSelect(document.getElementById('src_filter_group'));resizeSelect(document.getElementById('src_filter_group'), document.getElementById('filter_group'), {select_size array=$data.src_group_options array2=$data.selected_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_group'), document.getElementById('src_filter_group')); uniqueSelect(document.getElementById('src_filter_group')); sortSelect(document.getElementById('src_filter_group'));resizeSelect(document.getElementById('src_filter_group'), document.getElementById('filter_group'), {select_size array=$data.src_group_options array2=$data.selected_group_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_group'))">
@@ -369,7 +369,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_group_off">
 				<tr>
 					<td class="{isvalid object="sf" label="group" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Employee Groups{/t}:</b><a href="javascript:toggleRowObject('filter_group_on');toggleRowObject('filter_group_off');uniqueSelect(document.getElementById('filter_group'), document.getElementById('src_filter_group')); sortSelect(document.getElementById('filter_group'));resizeSelect(document.getElementById('src_filter_group'), document.getElementById('filter_group'), {select_size array=$data.group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Employee Groups{/t}:</b><a href="javascript:toggleRowObject('filter_group_on');toggleRowObject('filter_group_off');uniqueSelect(document.getElementById('filter_group'), document.getElementById('src_filter_group')); sortSelect(document.getElementById('filter_group'));resizeSelect(document.getElementById('src_filter_group'), document.getElementById('filter_group'), {select_size array=$data.group_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_group_count">0</span> {t}Employee Groups Currently Selected, Click the arrow to modify.{/t}
@@ -380,7 +380,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_branch_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="sf" label="branch" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');filterCountSelect( 'filter_branch' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');filterCountSelect( 'filter_branch' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -413,9 +413,9 @@ if ( TTProductEdition == 20 ) {
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_branch'), document.getElementById('filter_branch')); uniqueSelect(document.getElementById('filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_branch'), document.getElementById('filter_branch')); uniqueSelect(document.getElementById('filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); uniqueSelect(document.getElementById('src_filter_branch')); sortSelect(document.getElementById('src_filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); uniqueSelect(document.getElementById('src_filter_branch')); sortSelect(document.getElementById('src_filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_branch'))">
@@ -433,7 +433,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_branch_off">
 				<tr>
 					<td class="{isvalid object="sf" label="branch" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');uniqueSelect(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.branch_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');uniqueSelect(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.branch_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_branch_count">0</span> {t}Branches Currently Selected, Click the arrow to modify.{/t}
@@ -444,7 +444,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_department_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="sf" label="department" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');filterCountSelect( 'filter_department' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');filterCountSelect( 'filter_department' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -477,9 +477,9 @@ if ( TTProductEdition == 20 ) {
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_department'), document.getElementById('filter_department')); uniqueSelect(document.getElementById('filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_department'), document.getElementById('filter_department')); uniqueSelect(document.getElementById('filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_department'), document.getElementById('src_filter_department')); uniqueSelect(document.getElementById('src_filter_department')); sortSelect(document.getElementById('src_filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_department'), document.getElementById('src_filter_department')); uniqueSelect(document.getElementById('src_filter_department')); sortSelect(document.getElementById('src_filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_department'))">
@@ -497,7 +497,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_department_off">
 				<tr>
 					<td class="{isvalid object="sf" label="department" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');uniqueSelect(document.getElementById('filter_department'), document.getElementById('src_filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.department_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');uniqueSelect(document.getElementById('filter_department'), document.getElementById('src_filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.department_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_department_count">0</span> {t}Departments Currently Selected, Click the arrow to modify.{/t}
@@ -508,7 +508,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_include_user_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="sf" label="include_user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Include Employees{/t}:</b><a href="javascript:toggleRowObject('filter_include_user_on');toggleRowObject('filter_include_user_off');filterCountSelect( 'filter_include_user' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Include Employees{/t}:</b><a href="javascript:toggleRowObject('filter_include_user_on');toggleRowObject('filter_include_user_off');filterCountSelect( 'filter_include_user' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -533,9 +533,9 @@ if ( TTProductEdition == 20 ) {
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user')); uniqueSelect(document.getElementById('filter_include_user')); sortSelect(document.getElementById('filter_include_user'));resizeSelect(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user'), {select_size array=$data.src_include_user_options array2=$data.selected_include_user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user')); uniqueSelect(document.getElementById('filter_include_user')); sortSelect(document.getElementById('filter_include_user'));resizeSelect(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user'), {select_size array=$data.src_include_user_options array2=$data.selected_include_user_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_include_user'), document.getElementById('src_filter_include_user')); uniqueSelect(document.getElementById('src_filter_include_user')); sortSelect(document.getElementById('src_filter_include_user'));resizeSelect(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user'), {select_size array=$data.src_include_user_options array2=$data.selected_include_user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_include_user'), document.getElementById('src_filter_include_user')); uniqueSelect(document.getElementById('src_filter_include_user')); sortSelect(document.getElementById('src_filter_include_user'));resizeSelect(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user'), {select_size array=$data.src_include_user_options array2=$data.selected_include_user_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_include_user'))">
@@ -553,7 +553,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_include_user_off">
 				<tr>
 					<td class="{isvalid object="sf" label="include_user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Include Employees{/t}:</b><a href="javascript:toggleRowObject('filter_include_user_on');toggleRowObject('filter_include_user_off');uniqueSelect(document.getElementById('filter_include_user'), document.getElementById('src_filter_include_user')); sortSelect(document.getElementById('filter_include_user'));resizeSelect(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user'), {select_size array=$data.include_user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Include Employees{/t}:</b><a href="javascript:toggleRowObject('filter_include_user_on');toggleRowObject('filter_include_user_off');uniqueSelect(document.getElementById('filter_include_user'), document.getElementById('src_filter_include_user')); sortSelect(document.getElementById('filter_include_user'));resizeSelect(document.getElementById('src_filter_include_user'), document.getElementById('filter_include_user'), {select_size array=$data.include_user_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_include_user_count">0</span> {t}Employees Currently Selected, Click the arrow to modify.{/t}
@@ -564,7 +564,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_exclude_user_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="sf" label="exclude_user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Exclude Employees{/t}:</b><a href="javascript:toggleRowObject('filter_exclude_user_on');toggleRowObject('filter_exclude_user_off');filterCountSelect( 'filter_exclude_user' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Exclude Employees{/t}:</b><a href="javascript:toggleRowObject('filter_exclude_user_on');toggleRowObject('filter_exclude_user_off');filterCountSelect( 'filter_exclude_user' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -589,9 +589,9 @@ if ( TTProductEdition == 20 ) {
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user')); uniqueSelect(document.getElementById('filter_exclude_user')); sortSelect(document.getElementById('filter_exclude_user'));resizeSelect(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user'), {select_size array=$data.src_exclude_user_options array2=$data.selected_exclude_user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user')); uniqueSelect(document.getElementById('filter_exclude_user')); sortSelect(document.getElementById('filter_exclude_user'));resizeSelect(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user'), {select_size array=$data.src_exclude_user_options array2=$data.selected_exclude_user_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_exclude_user'), document.getElementById('src_filter_exclude_user')); uniqueSelect(document.getElementById('src_filter_exclude_user')); sortSelect(document.getElementById('src_filter_exclude_user'));resizeSelect(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user'), {select_size array=$data.src_exclude_user_options array2=$data.selected_exclude_user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_exclude_user'), document.getElementById('src_filter_exclude_user')); uniqueSelect(document.getElementById('src_filter_exclude_user')); sortSelect(document.getElementById('src_filter_exclude_user'));resizeSelect(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user'), {select_size array=$data.src_exclude_user_options array2=$data.selected_exclude_user_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_exclude_user'))">
@@ -609,7 +609,7 @@ if ( TTProductEdition == 20 ) {
 				<tbody id="filter_exclude_user_off">
 				<tr>
 					<td class="{isvalid object="sf" label="exclude_user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Exclude Employees{/t}:</b><a href="javascript:toggleRowObject('filter_exclude_user_on');toggleRowObject('filter_exclude_user_off');uniqueSelect(document.getElementById('filter_exclude_user'), document.getElementById('src_filter_exclude_user')); sortSelect(document.getElementById('filter_exclude_user'));resizeSelect(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user'), {select_size array=$data.exclude_user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Exclude Employees{/t}:</b><a href="javascript:toggleRowObject('filter_exclude_user_on');toggleRowObject('filter_exclude_user_off');uniqueSelect(document.getElementById('filter_exclude_user'), document.getElementById('src_filter_exclude_user')); sortSelect(document.getElementById('filter_exclude_user'));resizeSelect(document.getElementById('src_filter_exclude_user'), document.getElementById('filter_exclude_user'), {select_size array=$data.exclude_user_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_exclude_user_count">0</span> {t}Employees Currently Selected, Click the arrow to modify.{/t}

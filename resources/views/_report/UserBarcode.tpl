@@ -82,7 +82,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_user_status_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Employee Status:{/t}</b><a href="javascript:hideReportCriteria('filter_user_status');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Employee Status:{/t}</b><a href="javascript:hideReportCriteria('filter_user_status');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -107,8 +107,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_user_status', 'filter_user_status', {select_size array=$filter_data.src_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_user_status', 'src_filter_user_status', {select_size array=$filter_data.src_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_user_status', 'filter_user_status', {select_size array=$filter_data.src_user_options} );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_user_status', 'src_filter_user_status', {select_size array=$filter_data.src_user_options} );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									</td>
 									<td class="cellRightEditTable" align="center">
 										<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_user_status'))">
@@ -126,7 +126,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_user_status_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Employee Status:{/t}</b><a href="javascript:showReportCriteria('filter_user_status')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Employee Status:{/t}</b><a href="javascript:showReportCriteria('filter_user_status')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_user_status_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}
@@ -137,7 +137,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_group_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Group:{/t}</b><a href="javascript:hideReportCriteria('filter_group');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Group:{/t}</b><a href="javascript:hideReportCriteria('filter_group');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -162,8 +162,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_group', 'filter_group', {select_size array=$filter_data.src_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_group', 'src_filter_group', {select_size array=$filter_data.src_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_group', 'filter_group', {select_size array=$filter_data.src_user_options} );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_group', 'src_filter_group', {select_size array=$filter_data.src_user_options} );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									</td>
 									<td class="cellRightEditTable" align="center">
 										<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_group'))">
@@ -181,7 +181,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_group_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Group:{/t}</b><a href="javascript:showReportCriteria('filter_group')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Group:{/t}</b><a href="javascript:showReportCriteria('filter_group')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_group_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}
@@ -192,7 +192,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_branch_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Default Branch:{/t}</b><a href="javascript:hideReportCriteria('filter_branch');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Default Branch:{/t}</b><a href="javascript:hideReportCriteria('filter_branch');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -217,8 +217,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_branch', 'filter_branch', {select_size array=$filter_data.src_branch_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_branch', 'src_filter_branch', {select_size array=$filter_data.src_branch_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_branch', 'filter_branch', {select_size array=$filter_data.src_branch_options} );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_branch', 'src_filter_branch', {select_size array=$filter_data.src_branch_options} );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									</td>
 									<td class="cellRightEditTable" align="center">
 										<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_branch'))">
@@ -236,7 +236,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_branch_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Default Branch:{/t}</b><a href="javascript:showReportCriteria('filter_branch')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Default Branch:{/t}</b><a href="javascript:showReportCriteria('filter_branch')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_branch_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}
@@ -248,7 +248,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_department_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Default Department:{/t}</b><a href="javascript:hideReportCriteria('filter_department');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Default Department:{/t}</b><a href="javascript:hideReportCriteria('filter_department');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -273,8 +273,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_department', 'filter_department', {select_size array=$filter_data.src_department_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_department', 'src_filter_department', {select_size array=$filter_data.src_department_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_department', 'filter_department', {select_size array=$filter_data.src_department_options} );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_department', 'src_filter_department', {select_size array=$filter_data.src_department_options} );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									</td>
 									<td class="cellRightEditTable" align="center">
 										<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_department'))">
@@ -292,7 +292,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_department_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Default Department:{/t}</b><a href="javascript:showReportCriteria('filter_department')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Default Department:{/t}</b><a href="javascript:showReportCriteria('filter_department')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_department_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}
@@ -304,7 +304,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_user_title_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Employee Title:{/t}</b><a href="javascript:hideReportCriteria('filter_user_title');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Employee Title:{/t}</b><a href="javascript:hideReportCriteria('filter_user_title');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -329,8 +329,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_user_title', 'filter_user_title', {select_size array=$filter_data.src_user_title_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_user_title', 'src_filter_user_title', {select_size array=$filter_data.src_user_title_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_user_title', 'filter_user_title', {select_size array=$filter_data.src_user_title_options} );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_user_title', 'src_filter_user_title', {select_size array=$filter_data.src_user_title_options} );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									</td>
 									<td class="cellRightEditTable" align="center">
 										<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_user_title'))">
@@ -348,7 +348,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_user_title_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Employee Title:{/t}</b><a href="javascript:showReportCriteria('filter_user_title')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Employee Title:{/t}</b><a href="javascript:showReportCriteria('filter_user_title')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_user_title_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}
@@ -359,7 +359,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_include_user_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Include Employees:{/t}</b><a href="javascript:hideReportCriteria('filter_include_user');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Include Employees:{/t}</b><a href="javascript:hideReportCriteria('filter_include_user');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -384,8 +384,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_include_user', 'filter_include_user', {select_size array=$filter_data.src_include_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_include_user', 'src_filter_include_user', {select_size array=$filter_data.src_include_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_include_user', 'filter_include_user', {select_size array=$filter_data.src_include_user_options} );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_include_user', 'src_filter_include_user', {select_size array=$filter_data.src_include_user_options} );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 										<br>
 										<br>
 										<br>
@@ -407,7 +407,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_include_user_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Include Employees:{/t}</b><a href="javascript:showReportCriteria('filter_include_user')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Include Employees:{/t}</b><a href="javascript:showReportCriteria('filter_include_user')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_include_user_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}
@@ -418,7 +418,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_exclude_user_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Exclude Employees:{/t}</b><a href="javascript:hideReportCriteria('filter_exclude_user');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Exclude Employees:{/t}</b><a href="javascript:hideReportCriteria('filter_exclude_user');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -443,8 +443,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_exclude_user', 'filter_exclude_user', {select_size array=$filter_data.src_exclude_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_exclude_user', 'src_filter_exclude_user', {select_size array=$filter_data.src_exclude_user_options} );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_exclude_user', 'filter_exclude_user', {select_size array=$filter_data.src_exclude_user_options} );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_exclude_user', 'src_filter_exclude_user', {select_size array=$filter_data.src_exclude_user_options} );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 										<br>
 										<br>
 										<br>
@@ -466,7 +466,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_exclude_user_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Exclude Employees:{/t}</b><a href="javascript:showReportCriteria('filter_exclude_user')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Exclude Employees:{/t}</b><a href="javascript:showReportCriteria('filter_exclude_user')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_exclude_user_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}
@@ -477,7 +477,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_column_on" style="display:none" >
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Columns:{/t}</b><a href="javascript:hideReportCriteria('filter_column');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Columns:{/t}</b><a href="javascript:hideReportCriteria('filter_column');"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -502,8 +502,8 @@ var report_criteria_elements = new Array(
 										</select>
 									</td>
 									<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-										<a href="javascript:moveReportCriteriaItems('src_filter_column', 'filter_column', {select_size array=$filter_data.src_column_options}, true, 'value' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
-										<a href="javascript:moveReportCriteriaItems('filter_column', 'src_filter_column', {select_size array=$filter_data.src_column_options}, true, 'value' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+										<a href="javascript:moveReportCriteriaItems('src_filter_column', 'filter_column', {select_size array=$filter_data.src_column_options}, true, 'value' );"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+										<a href="javascript:moveReportCriteriaItems('filter_column', 'src_filter_column', {select_size array=$filter_data.src_column_options}, true, 'value' );"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 										<br>
 										<br>
 										<br>
@@ -527,7 +527,7 @@ var report_criteria_elements = new Array(
 				<tbody id="filter_column_off">
 					<tr>
 						<td class="cellLeftEditTableHeader" nowrap>
-							<b>{t}Columns:{/t}</b><a href="javascript:showReportCriteria('filter_column')"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Columns:{/t}</b><a href="javascript:showReportCriteria('filter_column')"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTableHeader" colspan="3">
 							<span id="filter_column_count">{t}N/A{/t}</span> {t}currently selected, click the arrow to modify.{/t}

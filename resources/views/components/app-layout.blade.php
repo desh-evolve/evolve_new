@@ -47,6 +47,17 @@
         <!-- custom Css-->
         <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
+        <style>
+            .arrow-icon{
+                background-color: green;
+                color: white;
+                font-size: 16px;
+                border-radius: 50%;
+                padding: 5px;
+                align-items: center;
+                margin: 2px;
+            }
+        </style>
 
         <!-- jQuery -->
 	    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}" crossorigin="anonymous"></script>

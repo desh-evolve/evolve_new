@@ -4,6 +4,7 @@ namespace App\Models\Hierarchy;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\DB;
 
 class HierarchyUserFactory extends Factory {

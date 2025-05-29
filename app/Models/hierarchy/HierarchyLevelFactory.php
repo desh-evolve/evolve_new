@@ -8,6 +8,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Request\RequestFactory;
+use App\Models\Users\UserListFactory;
 
 class HierarchyLevelFactory extends Factory {
 	protected $table = 'hierarchy_level';
