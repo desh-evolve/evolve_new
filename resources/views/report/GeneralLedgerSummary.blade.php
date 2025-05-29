@@ -183,7 +183,8 @@
                             <input class="btn btn-primary btn-sm" type="button" id="export_report" name="action"
                                 value="{{ __('Export') }}"
                                 onClick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'Export'; this.form.submit();">
-                        </div>
+                        
+                    </div>
                     </form>
                 </div>
             </div>
