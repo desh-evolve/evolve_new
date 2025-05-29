@@ -132,6 +132,16 @@
                                     class="nav-link {{ request()->routeIs('report.daily_attendance') ? 'active' : '' }}">Daily Attendance Report
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.employee_nopay_count_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.employee_nopay_count_report') ? 'active' : '' }}">Employee Nopay Count Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.general_ledger_summary_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.general_ledger_summary_report') ? 'active' : '' }}">General Ledger Summary Report
+                                </a>
+                            </li>
                             {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}
                             <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
                         </ul>

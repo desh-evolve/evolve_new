@@ -111,11 +111,15 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		}
 
 		$strict = TRUE;
-		if ( $order == NULL ) {
-			$strict = FALSE;
-
-			$order = array( 'b.ps_order' => 'asc', 'abs(a.ytd_amount)' => 'asc', 'a.id' => 'asc' );
-		}
+		if ($order == NULL) {
+        $strict = FALSE;
+        $order = [
+            'b.ps_order' => 'asc',
+            'a.ytd_amount' => 'asc', // Raw expression
+            'a.id' => 'asc'
+			// 'raw:abs(a.ytd_amount)' => 'asc',
+        ];
+    }
 
 		//This is needed to ensure the proper order of entries for pay stubs
 		//VERY IMPORTANT!
@@ -129,11 +133,10 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$psealf = new PayStubEntryAccountListFactory();
 		$psalf = new PayStubAmendmentListFactory();
 
-		$ph = array(
-					':id' => $id,
-					':ytd_adjustment' => $this->toBool( $ytd_adjustment ),
-					);
-
+		$ph = [
+        ':id' => $id,
+        ':ytd_adjustment' => $this->toBool($ytd_adjustment),
+    ];
 		$query = '
 					select 	a.*
 					from	'. $this->getTable() .' as a
@@ -146,9 +149,9 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict );
+		
 
 		$this->rs = DB::select($query, $ph);
-
 		return $this;
 	}
 
