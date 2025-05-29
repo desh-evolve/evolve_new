@@ -58,13 +58,14 @@ class EditHierarchyControl extends Controller
 
 		// Get FORM variables
 		extract	(FormVariables::GetVariables(
-												array	(
-														'action',
-														'ids',
-														'hierarchy_control_id',
-														'hierarchy_control_data',
-														'hierarchy_level_data'
-														) ) );
+			array (
+				'action',
+				'ids',
+				'hierarchy_control_id',
+				'hierarchy_control_data',
+				'hierarchy_level_data'
+			) 
+		) );
 
 		$hcf = new HierarchyControlFactory();
 		$hlf = new HierarchyLevelFactory();
@@ -146,7 +147,7 @@ class EditHierarchyControl extends Controller
 					$hcf->Save( TRUE, TRUE );
 					$hcf->CommitTransaction();
 
-					Redirect::Page( URLBuilder::getURL( array(), 'HierarchyControlList.php') );
+					Redirect::Page( URLBuilder::getURL( array(), '/company/hierarchy/list') );
 
 					break;
 				}
@@ -205,17 +206,17 @@ class EditHierarchyControl extends Controller
 						foreach( $hllf->rs as $hl_obj ) {
 							$hllf->data = (array)$hl_obj;
 							$hl_obj = $hllf;
-							$hierarchy_level_data[] = array(
+							$hierarchy_level_data[] = 	array (
 															'id' => $hl_obj->getId(),
 															'level' => $hl_obj->getLevel(),
 															'user_id' => $hl_obj->getUser(),
-															);
+														);
 						}
 					} else {
-						$hierarchy_level_data[-1] = array(
+						$hierarchy_level_data[-1] = array (
 														'id' => -1,
 														'level' => 1,
-														);
+													);
 					}
 				} elseif ( $action == 'add_level' ) {
 					Debug::Text('Adding Blank Level', __FILE__, __LINE__, __METHOD__,10);

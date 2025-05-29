@@ -93,7 +93,7 @@ class HierarchyControlList extends Controller
 
 				$hclf = new HierarchyControlListFactory();
 
-				foreach ($ids as $id) {
+				//foreach ($ids as $id) {
 					//$dsclf->GetByIdAndUserId($id, $current_user->getId() );
 					$hclf->GetById($id);
 					foreach ($hclf->rs as $hierarchy_control) {
@@ -103,7 +103,7 @@ class HierarchyControlList extends Controller
 						$hierarchy_control->setDeleted($delete);
 						$hierarchy_control->Save();
 					}
-				}
+				//}
 
 				Redirect::Page( URLBuilder::getURL(NULL, '/company/hierarchy/list') );
 
