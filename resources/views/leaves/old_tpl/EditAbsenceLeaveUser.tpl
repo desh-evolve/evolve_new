@@ -163,7 +163,7 @@
 				<tbody id="filter_user_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="cdf" label="user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');filterUserCount();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');filterUserCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -188,9 +188,9 @@
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
 								<br>
 								<br>
@@ -212,7 +212,7 @@
 				<tbody id="filter_user_off">
 				<tr>
 					<td class="{isvalid object="cdf" label="user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_user_count">0</span> {t}Employees Currently Selected, Click the arrow to modify.{/t}

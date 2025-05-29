@@ -247,7 +247,7 @@
                                         <tbody id="filter_branch_on" style="display:none" >
                                             <tr>
                                                 <td nowrap>
-                                                    <b>Branches:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');filterCountSelect( 'filter_branch' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+                                                    <b>Branches:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');filterCountSelect( 'filter_branch' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                                 </td>
                                                 <td colspan="3">
                                                     <table class="table table-bordered">
@@ -301,9 +301,9 @@
                                                             </select>
                                                         </td>
                                                         <td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-                                                            <a href="javascript:moveItem(document.getElementById('src_filter_branch'), document.getElementById('filter_branch')); uniqueSelect(document.getElementById('filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {{select_size(['array'=>$data['src_branch_options'], 'array2'=>$data['selected_branch_options']])}})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+                                                            <a href="javascript:moveItem(document.getElementById('src_filter_branch'), document.getElementById('filter_branch')); uniqueSelect(document.getElementById('filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {{select_size(['array'=>$data['src_branch_options'], 'array2'=>$data['selected_branch_options']])}})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
                                                             <br>
-                                                            <a href="javascript:moveItem(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); uniqueSelect(document.getElementById('src_filter_branch')); sortSelect(document.getElementById('src_filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {{select_size(['array'=>$data['src_branch_options'], 'array2'=>$data['selected_branch_options']])}})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+                                                            <a href="javascript:moveItem(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); uniqueSelect(document.getElementById('src_filter_branch')); sortSelect(document.getElementById('src_filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {{select_size(['array'=>$data['src_branch_options'], 'array2'=>$data['selected_branch_options']])}})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
                                                         </td>
                                                         <td class="cellRightEditTable" width="49%" align="center">
                                                             <input type="button" name="Select All" value="Select All" onClick="selectAll(document.getElementById('filter_branch'))">
@@ -321,7 +321,7 @@
                                         <tbody id="filter_branch_off" style="display:none">
                                             <tr>
                                                 <td nowrap>
-                                                    <b>Branches:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');uniqueSelect(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {{select_size(['array'=>$data['branch_options'] ?? []])}})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+                                                    <b>Branches:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');uniqueSelect(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {{select_size(['array'=>$data['branch_options'] ?? []])}})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                                 </td>
                                                 <td class="cellRightEditTable" colspan="100">
                                                     <span id="filter_branch_count">0</span> Branches Currently Selected, Click the arrow to modify.
@@ -332,7 +332,7 @@
                                         <tbody id="filter_department_on" style="display:none" >
                                             <tr>
                                                 <td nowrap>
-                                                    <b>Departments:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');filterCountSelect( 'filter_department' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+                                                    <b>Departments:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');filterCountSelect( 'filter_department' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                                 </td>
                                                 <td colspan="3">
                                                     <table class="table table-bordered">
@@ -374,9 +374,9 @@
                                                             </select>
                                                         </td>
                                                         <td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-                                                            <a href="javascript:moveItem(document.getElementById('src_filter_department'), document.getElementById('filter_department')); uniqueSelect(document.getElementById('filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {{select_size(['array'=>$data['src_department_options'], 'array2'=>$data['selected_department_options']])}})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+                                                            <a href="javascript:moveItem(document.getElementById('src_filter_department'), document.getElementById('filter_department')); uniqueSelect(document.getElementById('filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {{select_size(['array'=>$data['src_department_options'], 'array2'=>$data['selected_department_options']])}})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
                                                             <br>
-                                                            <a href="javascript:moveItem(document.getElementById('filter_department'), document.getElementById('src_filter_department')); uniqueSelect(document.getElementById('src_filter_department')); sortSelect(document.getElementById('src_filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {{select_size(['array'=>$data['src_department_options'], 'array2'=>$data['selected_department_options']])}})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+                                                            <a href="javascript:moveItem(document.getElementById('filter_department'), document.getElementById('src_filter_department')); uniqueSelect(document.getElementById('src_filter_department')); sortSelect(document.getElementById('src_filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {{select_size(['array'=>$data['src_department_options'], 'array2'=>$data['selected_department_options']])}})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
                                                         </td>
                                                         <td class="cellRightEditTable" width="49%" align="center">
                                                             <input type="button" name="Select All" value="Select All" onClick="selectAll(document.getElementById('filter_department'))">
@@ -394,7 +394,7 @@
                                         <tbody id="filter_department_off" style="display:none">
                                             <tr>
                                                 <td nowrap>
-                                                    <b>Departments:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');uniqueSelect(document.getElementById('filter_department'), document.getElementById('src_filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {{select_size(['array'=>$data['department_options'] ?? [] ])}})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+                                                    <b>Departments:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');uniqueSelect(document.getElementById('filter_department'), document.getElementById('src_filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {{select_size(['array'=>$data['department_options'] ?? [] ])}})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                                 </td>
                                                 <td class="cellRightEditTable" colspan="100">
                                                     <span id="filter_department_count">0</span> Departments Currently Selected, Click the arrow to modify.

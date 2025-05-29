@@ -1,7 +1,7 @@
 <x-app-layout :title="'Input Example'">
     <style>
         th, td{
-            padding: 6px !important;
+            padding: 5px !important;
         }
 
         .arrow-icon{

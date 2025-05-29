@@ -296,7 +296,7 @@ function showAccrualRate() {
 				<tbody id="filter_branch_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="ppf" label="branch" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');filterCountSelect( 'filter_branch' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');filterCountSelect( 'filter_branch' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -331,9 +331,9 @@ function showAccrualRate() {
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_branch'), document.getElementById('filter_branch')); uniqueSelect(document.getElementById('filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_branch'), document.getElementById('filter_branch')); uniqueSelect(document.getElementById('filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); uniqueSelect(document.getElementById('src_filter_branch')); sortSelect(document.getElementById('src_filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); uniqueSelect(document.getElementById('src_filter_branch')); sortSelect(document.getElementById('src_filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.src_branch_options array2=$data.selected_branch_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_branch'))">
@@ -351,7 +351,7 @@ function showAccrualRate() {
 				<tbody id="filter_branch_off" style="display:none">
 				<tr>
 					<td class="{isvalid object="ppf" label="branch" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');uniqueSelect(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.branch_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Branches{/t}:</b><a href="javascript:toggleRowObject('filter_branch_on');toggleRowObject('filter_branch_off');uniqueSelect(document.getElementById('filter_branch'), document.getElementById('src_filter_branch')); sortSelect(document.getElementById('filter_branch'));resizeSelect(document.getElementById('src_filter_branch'), document.getElementById('filter_branch'), {select_size array=$data.branch_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_branch_count">0</span> {t}Branches Currently Selected, Click the arrow to modify.{/t}
@@ -362,7 +362,7 @@ function showAccrualRate() {
 				<tbody id="filter_department_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="ppf" label="department" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');filterCountSelect( 'filter_department' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');filterCountSelect( 'filter_department' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -397,9 +397,9 @@ function showAccrualRate() {
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_department'), document.getElementById('filter_department')); uniqueSelect(document.getElementById('filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_department'), document.getElementById('filter_department')); uniqueSelect(document.getElementById('filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_department'), document.getElementById('src_filter_department')); uniqueSelect(document.getElementById('src_filter_department')); sortSelect(document.getElementById('src_filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_department'), document.getElementById('src_filter_department')); uniqueSelect(document.getElementById('src_filter_department')); sortSelect(document.getElementById('src_filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.src_department_options array2=$data.selected_department_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_department'))">
@@ -417,7 +417,7 @@ function showAccrualRate() {
 				<tbody id="filter_department_off" style="display:none">
 				<tr>
 					<td class="{isvalid object="ppf" label="department" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');uniqueSelect(document.getElementById('filter_department'), document.getElementById('src_filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.department_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Departments{/t}:</b><a href="javascript:toggleRowObject('filter_department_on');toggleRowObject('filter_department_off');uniqueSelect(document.getElementById('filter_department'), document.getElementById('src_filter_department')); sortSelect(document.getElementById('filter_department'));resizeSelect(document.getElementById('src_filter_department'), document.getElementById('filter_department'), {select_size array=$data.department_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_department_count">0</span> {t}Departments Currently Selected, Click the arrow to modify.{/t}
@@ -429,7 +429,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_group_on" style="display:none" >
 					<tr>
 						<td class="{isvalid object="ppf" label="job_group" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Job Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_group_on');toggleRowObject('filter_job_group_off');filterCountSelect( 'filter_job_group' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Job Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_group_on');toggleRowObject('filter_job_group_off');filterCountSelect( 'filter_job_group' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -462,9 +462,9 @@ function showAccrualRate() {
 									</select>
 								</td>
 								<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-									<a href="javascript:moveItem(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group')); uniqueSelect(document.getElementById('filter_job_group')); sortSelect(document.getElementById('filter_job_group'));resizeSelect(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group'), {select_size array=$data.src_job_group_options array2=$data.selected_job_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group')); uniqueSelect(document.getElementById('filter_job_group')); sortSelect(document.getElementById('filter_job_group'));resizeSelect(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group'), {select_size array=$data.src_job_group_options array2=$data.selected_job_group_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									<br>
-									<a href="javascript:moveItem(document.getElementById('filter_job_group'), document.getElementById('src_filter_job_group')); uniqueSelect(document.getElementById('src_filter_job_group')); sortSelect(document.getElementById('src_filter_job_group'));resizeSelect(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group'), {select_size array=$data.src_job_group_options array2=$data.selected_job_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('filter_job_group'), document.getElementById('src_filter_job_group')); uniqueSelect(document.getElementById('src_filter_job_group')); sortSelect(document.getElementById('src_filter_job_group'));resizeSelect(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group'), {select_size array=$data.src_job_group_options array2=$data.selected_job_group_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								</td>
 								<td class="cellRightEditTable" width="49%" align="center">
 									<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_job_group'))">
@@ -482,7 +482,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_group_off">
 					<tr>
 						<td class="{isvalid object="ppf" label="job_group" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Job Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_group_on');toggleRowObject('filter_job_group_off');uniqueSelect(document.getElementById('filter_job_group'), document.getElementById('src_filter_job_group')); sortSelect(document.getElementById('filter_job_group'));resizeSelect(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group'), {select_size array=$data.src_job_group_options array2=$data.selected_job_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Job Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_group_on');toggleRowObject('filter_job_group_off');uniqueSelect(document.getElementById('filter_job_group'), document.getElementById('src_filter_job_group')); sortSelect(document.getElementById('filter_job_group'));resizeSelect(document.getElementById('src_filter_job_group'), document.getElementById('filter_job_group'), {select_size array=$data.src_job_group_options array2=$data.selected_job_group_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTable" colspan="100">
 							<span id="filter_job_group_count">0</span> {t}Job Groups Currently Selected, Click the arrow to modify.{/t}
@@ -493,7 +493,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_on" style="display:none" >
 					<tr>
 						<td class="{isvalid object="ppf" label="job" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Jobs{/t}:</b><a href="javascript:toggleRowObject('filter_job_on');toggleRowObject('filter_job_off');filterCountSelect( 'filter_job' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Jobs{/t}:</b><a href="javascript:toggleRowObject('filter_job_on');toggleRowObject('filter_job_off');filterCountSelect( 'filter_job' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -526,9 +526,9 @@ function showAccrualRate() {
 									</select>
 								</td>
 								<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-									<a href="javascript:moveItem(document.getElementById('src_filter_job'), document.getElementById('filter_job')); uniqueSelect(document.getElementById('filter_job')); sortSelect(document.getElementById('filter_job'));resizeSelect(document.getElementById('src_filter_job'), document.getElementById('filter_job'), {select_size array=$data.src_job_options array2=$data.selected_job_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('src_filter_job'), document.getElementById('filter_job')); uniqueSelect(document.getElementById('filter_job')); sortSelect(document.getElementById('filter_job'));resizeSelect(document.getElementById('src_filter_job'), document.getElementById('filter_job'), {select_size array=$data.src_job_options array2=$data.selected_job_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									<br>
-									<a href="javascript:moveItem(document.getElementById('filter_job'), document.getElementById('src_filter_job')); uniqueSelect(document.getElementById('src_filter_job')); sortSelect(document.getElementById('src_filter_job'));resizeSelect(document.getElementById('src_filter_job'), document.getElementById('filter_job'), {select_size array=$data.src_job_options array2=$data.selected_job_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('filter_job'), document.getElementById('src_filter_job')); uniqueSelect(document.getElementById('src_filter_job')); sortSelect(document.getElementById('src_filter_job'));resizeSelect(document.getElementById('src_filter_job'), document.getElementById('filter_job'), {select_size array=$data.src_job_options array2=$data.selected_job_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								</td>
 								<td class="cellRightEditTable" width="49%" align="center">
 									<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_job'))">
@@ -546,7 +546,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_off">
 					<tr>
 						<td class="{isvalid object="ppf" label="job" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Jobs{/t}:</b><a href="javascript:toggleRowObject('filter_job_on');toggleRowObject('filter_job_off');uniqueSelect(document.getElementById('filter_job'), document.getElementById('src_filter_job')); sortSelect(document.getElementById('filter_job'));resizeSelect(document.getElementById('src_filter_job'), document.getElementById('filter_job'), {select_size array=$data.job_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Jobs{/t}:</b><a href="javascript:toggleRowObject('filter_job_on');toggleRowObject('filter_job_off');uniqueSelect(document.getElementById('filter_job'), document.getElementById('src_filter_job')); sortSelect(document.getElementById('filter_job'));resizeSelect(document.getElementById('src_filter_job'), document.getElementById('filter_job'), {select_size array=$data.job_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTable" colspan="100">
 							<span id="filter_job_count">0</span> {t}Jobs Currently Selected, Click the arrow to modify.{/t}
@@ -557,7 +557,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_item_group_on" style="display:none" >
 					<tr>
 						<td class="{isvalid object="ppf" label="job_item_group" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Task Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_group_on');toggleRowObject('filter_job_item_group_off');filterCountSelect( 'filter_job_item_group' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Task Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_group_on');toggleRowObject('filter_job_item_group_off');filterCountSelect( 'filter_job_item_group' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -590,9 +590,9 @@ function showAccrualRate() {
 									</select>
 								</td>
 								<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-									<a href="javascript:moveItem(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group')); uniqueSelect(document.getElementById('filter_job_item_group')); sortSelect(document.getElementById('filter_job_item_group'));resizeSelect(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group'), {select_size array=$data.src_job_item_group_options array2=$data.selected_job_item_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group')); uniqueSelect(document.getElementById('filter_job_item_group')); sortSelect(document.getElementById('filter_job_item_group'));resizeSelect(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group'), {select_size array=$data.src_job_item_group_options array2=$data.selected_job_item_group_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									<br>
-									<a href="javascript:moveItem(document.getElementById('filter_job_item_group'), document.getElementById('src_filter_job_item_group')); uniqueSelect(document.getElementById('src_filter_job_item_group')); sortSelect(document.getElementById('src_filter_job_item_group'));resizeSelect(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group'), {select_size array=$data.src_job_item_group_options array2=$data.selected_job_item_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('filter_job_item_group'), document.getElementById('src_filter_job_item_group')); uniqueSelect(document.getElementById('src_filter_job_item_group')); sortSelect(document.getElementById('src_filter_job_item_group'));resizeSelect(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group'), {select_size array=$data.src_job_item_group_options array2=$data.selected_job_item_group_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								</td>
 								<td class="cellRightEditTable" width="49%" align="center">
 									<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_job_item_group'))">
@@ -610,7 +610,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_item_group_off">
 					<tr>
 						<td class="{isvalid object="ppf" label="job_item_group" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Task Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_group_on');toggleRowObject('filter_job_item_group_off');uniqueSelect(document.getElementById('filter_job_item_group'), document.getElementById('src_filter_job_item_group')); sortSelect(document.getElementById('filter_job_item_group'));resizeSelect(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group'), {select_size array=$data.job_item_group_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Task Groups{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_group_on');toggleRowObject('filter_job_item_group_off');uniqueSelect(document.getElementById('filter_job_item_group'), document.getElementById('src_filter_job_item_group')); sortSelect(document.getElementById('filter_job_item_group'));resizeSelect(document.getElementById('src_filter_job_item_group'), document.getElementById('filter_job_item_group'), {select_size array=$data.job_item_group_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTable" colspan="100">
 							<span id="filter_job_item_group_count">0</span> {t}Task Groups Currently Selected, Click the arrow to modify.{/t}
@@ -621,7 +621,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_item_on" style="display:none" >
 					<tr>
 						<td class="{isvalid object="ppf" label="job_item" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Tasks{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_on');toggleRowObject('filter_job_item_off');filterCountSelect( 'filter_job_item' );"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+							<b>{t}Tasks{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_on');toggleRowObject('filter_job_item_off');filterCountSelect( 'filter_job_item' );"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td colspan="3">
 							<table class="editTable">
@@ -654,9 +654,9 @@ function showAccrualRate() {
 									</select>
 								</td>
 								<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-									<a href="javascript:moveItem(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item')); uniqueSelect(document.getElementById('filter_job_item')); sortSelect(document.getElementById('filter_job_item'));resizeSelect(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item'), {select_size array=$data.src_job_item_options array2=$data.selected_job_item_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item')); uniqueSelect(document.getElementById('filter_job_item')); sortSelect(document.getElementById('filter_job_item'));resizeSelect(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item'), {select_size array=$data.src_job_item_options array2=$data.selected_job_item_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 									<br>
-									<a href="javascript:moveItem(document.getElementById('filter_job_item'), document.getElementById('src_filter_job_item')); uniqueSelect(document.getElementById('src_filter_job_item')); sortSelect(document.getElementById('src_filter_job_item'));resizeSelect(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item'), {select_size array=$data.src_job_item_options array2=$data.selected_job_item_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+									<a href="javascript:moveItem(document.getElementById('filter_job_item'), document.getElementById('src_filter_job_item')); uniqueSelect(document.getElementById('src_filter_job_item')); sortSelect(document.getElementById('src_filter_job_item'));resizeSelect(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item'), {select_size array=$data.src_job_item_options array2=$data.selected_job_item_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								</td>
 								<td class="cellRightEditTable" width="49%" align="center">
 									<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_job_item'))">
@@ -674,7 +674,7 @@ function showAccrualRate() {
 					<tbody id="filter_job_item_off">
 					<tr>
 						<td class="{isvalid object="ppf" label="job_item" value="cellLeftEditTable"}" nowrap>
-							<b>{t}Tasks{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_on');toggleRowObject('filter_job_item_off');uniqueSelect(document.getElementById('filter_job_item'), document.getElementById('src_filter_job_item')); sortSelect(document.getElementById('filter_job_item'));resizeSelect(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item'), {select_size array=$data.job_item_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+							<b>{t}Tasks{/t}:</b><a href="javascript:toggleRowObject('filter_job_item_on');toggleRowObject('filter_job_item_off');uniqueSelect(document.getElementById('filter_job_item'), document.getElementById('src_filter_job_item')); sortSelect(document.getElementById('filter_job_item'));resizeSelect(document.getElementById('src_filter_job_item'), document.getElementById('filter_job_item'), {select_size array=$data.job_item_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 						</td>
 						<td class="cellRightEditTable" colspan="100">
 							<span id="filter_job_item_count">0</span> {t}Tasks Currently Selected, Click the arrow to modify.{/t}

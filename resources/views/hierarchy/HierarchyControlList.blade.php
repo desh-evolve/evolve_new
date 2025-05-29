@@ -25,7 +25,17 @@
                     {{-- -------------------------------------------- --}}
 
                     <form method="post" action="{{ route('company.hierarchy.list') }}">
+                        @csrf
                         <table class="table table-bordered">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Objects</th>
+                                    <th>Functions</th>
+                                </tr>
+                            </thead>
                             @foreach ($hierarchy_controls as $i => $hierarchy_control)
                                 @php
                                     if($hierarchy_control['deleted']){
@@ -59,11 +69,8 @@
                                             [<a href="{{ route('company.hierarchy.add', ['hierarchy_control_id' => $hierarchy_control['id'], 'merge' => 'FALSE']) }}">Edit</a>]
                                         @endif
                                         @if ($permission->Check('hierarchy','delete'))
-                                            <input type="submit" name="action" value="Delete" onClick="return confirmSubmit()">
+                                            <button type="submit" name="action" value="Delete" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/company/hierarchy/list/{{ $hierarchy_control['id'] }}', 'Hierarchy', this)">Delete</button>
                                         @endif
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" class="checkbox" name="ids[]" value="{{$hierarchy_control['id']}}">
                                     </td>
                                 </tr>
                             @endforeach

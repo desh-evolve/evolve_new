@@ -232,7 +232,7 @@
 				<tbody id="filter_include_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="cdf" label="include_pay_stub_entry_account" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Include Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_include_on');toggleRowObject('filter_include_off');filterIncludeCount();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Include Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_include_on');toggleRowObject('filter_include_off');filterIncludeCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -266,9 +266,9 @@
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_include'), document.getElementById('filter_include')); uniqueSelect(document.getElementById('filter_include')); sortSelect(document.getElementById('filter_include'));resizeSelect(document.getElementById('src_filter_include'), document.getElementById('filter_include'), {select_size array=$data.pay_stub_entry_account_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_include'), document.getElementById('filter_include')); uniqueSelect(document.getElementById('filter_include')); sortSelect(document.getElementById('filter_include'));resizeSelect(document.getElementById('src_filter_include'), document.getElementById('filter_include'), {select_size array=$data.pay_stub_entry_account_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_include'), document.getElementById('src_filter_include')); uniqueSelect(document.getElementById('src_filter_include')); sortSelect(document.getElementById('src_filter_include'));resizeSelect(document.getElementById('src_filter_include'), document.getElementById('filter_include'), {select_size array=$data.pay_stub_entry_account_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_include'), document.getElementById('src_filter_include')); uniqueSelect(document.getElementById('src_filter_include')); sortSelect(document.getElementById('src_filter_include'));resizeSelect(document.getElementById('src_filter_include'), document.getElementById('filter_include'), {select_size array=$data.pay_stub_entry_account_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_include'))">
@@ -286,7 +286,7 @@
 				<tbody id="filter_include_off">
 				<tr>
 					<td class="{isvalid object="cdf" label="user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Include Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_include_on');toggleRowObject('filter_include_off');uniqueSelect(document.getElementById('filter_include'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_include'));resizeSelect(document.getElementById('src_filter_include'), document.getElementById('filter_include'), {select_size array=$data.pay_stub_entry_account_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Include Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_include_on');toggleRowObject('filter_include_off');uniqueSelect(document.getElementById('filter_include'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_include'));resizeSelect(document.getElementById('src_filter_include'), document.getElementById('filter_include'), {select_size array=$data.pay_stub_entry_account_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_include_count">0</span> {t}Included Pay Stub Accounts Currently Selected, Click the arrow to modify.{/t}
@@ -297,7 +297,7 @@
 				<tbody id="filter_exclude_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="cdf" label="exclude_pay_stub_entry_account" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Exclude Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_exclude_on');toggleRowObject('filter_exclude_off');filterExcludeCount();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Exclude Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_exclude_on');toggleRowObject('filter_exclude_off');filterExcludeCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -331,9 +331,9 @@
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude')); uniqueSelect(document.getElementById('filter_exclude')); sortSelect(document.getElementById('filter_exclude'));resizeSelect(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude'), {select_size array=$data.pay_stub_entry_account_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude')); uniqueSelect(document.getElementById('filter_exclude')); sortSelect(document.getElementById('filter_exclude'));resizeSelect(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude'), {select_size array=$data.pay_stub_entry_account_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_exclude'), document.getElementById('src_filter_exclude')); uniqueSelect(document.getElementById('src_filter_exclude')); sortSelect(document.getElementById('src_filter_exclude'));resizeSelect(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude'), {select_size array=$data.pay_stub_entry_account_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_exclude'), document.getElementById('src_filter_exclude')); uniqueSelect(document.getElementById('src_filter_exclude')); sortSelect(document.getElementById('src_filter_exclude'));resizeSelect(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude'), {select_size array=$data.pay_stub_entry_account_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 							</td>
 							<td class="cellRightEditTable" width="49%" align="center">
 								<input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_exclude'))">
@@ -351,7 +351,7 @@
 				<tbody id="filter_exclude_off">
 				<tr>
 					<td class="{isvalid object="cdf" label="user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Exclude Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_exclude_on');toggleRowObject('filter_exclude_off');uniqueSelect(document.getElementById('filter_exclude'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_exclude'));resizeSelect(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude'), {select_size array=$data.pay_stub_entry_account_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Exclude Pay Stub Accounts:{/t}</b><a href="javascript:toggleRowObject('filter_exclude_on');toggleRowObject('filter_exclude_off');uniqueSelect(document.getElementById('filter_exclude'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_exclude'));resizeSelect(document.getElementById('src_filter_exclude'), document.getElementById('filter_exclude'), {select_size array=$data.pay_stub_entry_account_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_exclude_count">0</span> {t}Excluded Pay Stub Accounts Currently Selected, Click the arrow to modify.{/t}
@@ -362,7 +362,7 @@
 				<tbody id="filter_user_on" style="display:none" >
 				<tr>
 					<td class="{isvalid object="cdf" label="user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');filterUserCount();"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_top_sm.gif"></a>
+						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');filterUserCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td colspan="3">
 						<table class="editTable">
@@ -387,9 +387,9 @@
 								</select>
 							</td>
 							<td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-								<a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_last.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
-								<a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_first.gif"></a>
+								<a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
 								<br>
 								<br>
 								<br>
@@ -411,7 +411,7 @@
 				<tbody id="filter_user_off">
 				<tr>
 					<td class="{isvalid object="cdf" label="user" value="cellLeftEditTable"}" nowrap>
-						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+						<b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_user_on');toggleRowObject('filter_user_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
 					</td>
 					<td class="cellRightEditTable" colspan="100">
 						<span id="filter_user_count">0</span> {t}Employees Currently Selected, Click the arrow to modify.{/t}
