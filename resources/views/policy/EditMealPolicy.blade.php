@@ -167,7 +167,7 @@
                                 <input
                                     type="checkbox"
                                     class="checkbox"
-                                    name="include_lunch_punch_time"
+                                    name="data[include_lunch_punch_time]"
                                     value="1"
                                     {{ isset($data['include_lunch_punch_time']) && $data['include_lunch_punch_time'] == 1 ? 'checked' : '' }}
                                 >

@@ -170,7 +170,7 @@ class OtherFieldFactory extends Factory {
 
 	// 	return FALSE;
 	// }
-	
+
 	function isUniqueType($type) {
         $ph = array(
                     ':company_id' => (int)$this->getCompany(),

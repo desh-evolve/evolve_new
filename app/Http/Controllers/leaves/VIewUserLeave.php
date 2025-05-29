@@ -33,7 +33,7 @@ class VIewUserLeave extends Controller
 
     }
 
-    public function index() {
+    public function index($id) {
 
         /*
         if ( !$permission->Check('accrual','view')
@@ -41,64 +41,64 @@ class VIewUserLeave extends Controller
 			$permission->Redirect( FALSE ); //Redirect
 		}
         */
-		
+
         $viewData['title'] = 'Apply Employee Leaves';
-		
+
 		$lrlf = new LeaveRequestListFactory();
 		$lrlf->getById($id);
-		
+
 		if($lrlf->getRecordCount() >0){
-			
+
 			  $lrf =  $lrlf->getCurrent();
-		
+
 			$aplf = new AccrualPolicyListFactory();
 			$aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
-		
+
 			$leave_options = array();
 			foreach($aplf as $apf){
 				$leave_options[$apf->getId()]=$apf->getName();
 			}
 			$leave_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $leave_options );
 			$data['leave_options'] = $leave_options;
-					
-					
-				
+
+
+
 			$ulf = new UserListFactory();
 			//$filter_data['default_branch_id'] = $current_user->getDefaultBranch();
 			$filter_data['exclude_id'] = 1;
-		
+
 			$ulf->getAPISearchByCompanyIdAndArrayCriteria( $current_company->getId(),$filter_data);
 			//$ulf->getAll();
-		
+
 			$user_options = array();
-		
+
 			foreach($ulf as $uf){
-				$user_options[$uf->getId()] = $uf->getPunchMachineUserID().'-'.$uf->getFullName() ; 
+				$user_options[$uf->getId()] = $uf->getPunchMachineUserID().'-'.$uf->getFullName() ;
 			}
-		
-		
+
+
 			$leaves =$lrf->getLeaveDates();
-		
+
 			$date_array = explode(',', $leaves);
 			$date_string = '';
 			foreach($date_array as $date){
-			$date_string .= "'".trim($date)."'," ; 
+			$date_string .= "'".trim($date)."'," ;
 			}
-		
-		
+
+
 			$user_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $user_options );
 			$data['users_cover_options'] = $user_options;
 			//$data['users_cover_options'] = $ulf;
 			$data['name'] =$lrf->getUserObject()->getFullName();
 			$data['title'] = $lrf->getDesignationObject()->getName();
 			$data['leave_type'] = $lrf->getAccuralPolicyObject()->getId();
-		
+
 			$method_options = $lrf->getOptions('leave_method');
 			$method_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $method_options );
-		
+
 			$data['method_options'] = $method_options;
 			$data['method_type'] = $lrf->getLeaveMethod();
-		
+
 			$data['no_days'] = $lrf->getAmount();
 			$data['leave_start_date'] = $lrf->getLeaveFrom();
 			$data['leave_end_date'] = $lrf->getLeaveTo();
@@ -109,9 +109,9 @@ class VIewUserLeave extends Controller
 			$data['appt_time']=$lrf->getLeaveTime();
 			$data['end_time']=$lrf->getLeaveEndTime();
 			$data['leave_dates']=$date_string;
-		
+
 		}
-		
+
 		$viewData['data'] = $data;
 		$viewData['user'] = $current_user;
 

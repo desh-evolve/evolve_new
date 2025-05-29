@@ -131,7 +131,17 @@ Route::get('/login', [Login::class, 'index'])->name('login');
 Route::get('/logout', [Login::class, 'index'])->name('logout');
 Route::post('/authenticate', [Login::class, 'login'])->name('authenticate');
 
+// ==================== Dashboard =====================================================================================
 Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+
+Route::get('/dashboard/user_count', [Dashboard::class, 'userCount'])->name('dashboard.user_count');
+Route::get('/dashboard/three_days_absenteeism', [Dashboard::class, 'threeDaysAbsenteeism'])->name('dashboard.absenteeism');
+Route::get('/dashboard/recent_messages', [Dashboard::class, 'recentMessges'])->name('dashboard.recent_messages');
+Route::get('/dashboard/recent_request', [Dashboard::class, 'recentRequest'])->name('dashboard.recent_request');
+Route::get('/dashboard/pending_request', [Dashboard::class, 'pendingRequest'])->name('dashboard.pending_request');
+Route::get('/dashboard/exception', [Dashboard::class, 'exception'])->name('dashboard.exception');
+Route::get('/dashboard/employement_confirmation_request', [Dashboard::class, 'employmentConfirmationRequest'])->name('dashboard.employement_confirmation_request');
+Route::post('/dashboard/search', [Dashboard::class, 'search'])->name('dashboard.search');
 
 // ==================== currency =====================================================================================
 Route::get('/currency', [CurrencyList::class, 'index'])->name('currency.index');
@@ -298,8 +308,8 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
 // Hierarchy Information
 // ===============================================================================================================================
 
-Route::match(['get', 'delete'], '/company/hierarchy/list', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');    
-Route::match(['get', 'post', 'delete'], '/company/hierarchy/add', [EditHierarchyControl::class, 'index'])->name('company.hierarchy.add');    
+Route::match(['get', 'delete'], '/company/hierarchy/list', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');
+Route::match(['get', 'post', 'delete'], '/company/hierarchy/add', [EditHierarchyControl::class, 'index'])->name('company.hierarchy.add');
 
 // ===============================================================================================================================
  // User jobhistory
@@ -430,7 +440,8 @@ Route::post('/policy/absence_policies/submit/{id?}', [EditAbsencePolicy::class, 
 Route::delete('/policy/absence_policies/delete/{id}', [AbsencePolicyList::class, 'delete'])->name('policy.absence_policies.delete');
 
 Route::get('/policy/accrual_policies', [AccrualPolicyList::class, 'index'])->name('policy.accrual_policies');
-Route::match(['get', 'post', 'delete'],'/policy/accrual_policies/add', [EditAccrualPolicy::class, 'index'])->name('policy.accrual_policies.add');
+Route::match(['get', 'post'],'/policy/accrual_policies/add', [EditAccrualPolicy::class, 'index'])->name('policy.accrual_policies.add');
+Route::delete('/policy/accrual_policies/delete/{id}', [AccrualPolicyList::class, 'delete'])->name('policy.accrual_policies.delete');
 
 Route::get('/policy/schedule_policies', [SchedulePolicyList::class, 'index'])->name('policy.schedule_policies');
 Route::get('/policy/schedule_policies/add/{id?}', [EditSchedulePolicy::class, 'index'])->name('policy.schedule_policies.add');
@@ -459,14 +470,21 @@ Route::delete('/policy/overtime_policies/delete/{id}', [OverTimePolicyList::clas
 
 Route::get('/policy/premium_policies', [PremiumPolicyList::class, 'index'])->name('policy.premium_policies');
 Route::match(['get', 'post'], '/policy/premium_policies/add', [EditPremiumPolicy::class, 'index'])->name('policy.premium_policies.add');
+Route::delete('/policy/premium_policies/delete/{id}', [PremiumPolicyList::class, 'delete'])->name('policy.premium_policies.delete');
 
 Route::get('/policy/exception_policies', [ExceptionPolicyControlList::class, 'index'])->name('policy.exception_policies');
 Route::match(['get', 'post'], '/policy/exception_policies/add', [EditExceptionPolicyControl::class, 'index'])->name('policy.exception_policies.add');
+Route::delete('/policy/exception_policies/delete/{id}', [ExceptionPolicyControlList::class, 'delete'])->name('policy.exception_policies.delete');
 
 Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->name('policy.holiday_policies');
 Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'index'])->name('policy.holiday_policies.add');
 Route::post('/policy/holiday_policies/submit/{id?}', [EditHolidayPolicy::class, 'submit'])->name('policy.holiday_policies.submit');
 Route::delete('/policy/holiday_policies/delete/{id}', [HolidayPolicyList::class, 'delete'])->name('policy.holiday_policies.delete');
+
+Route::get('/policy/holidays/{id?}', [HolidayList::class, 'index'])->name('policy.holidays');
+Route::get('/policy/holidays/add/{holiday_policy_id}/{id?}', [EditHoliday::class, 'index'])->name('policy.holidays.add');
+Route::post('/policy/holidays/submit/{id?}', [EditHoliday::class, 'submit'])->name('policy.holidays.submit');
+Route::delete('/policy/holidays/delete/{id}/{holiday_policy_id}', [HolidayList::class, 'delete'])->name('policy.holidays.delete');
 
 
 // ===============================================================================================================================
@@ -499,7 +517,7 @@ Route::get('/attendance/punch/userdate_totals', [UserDateTotalList::class, 'inde
 Route::get('/attendance/punch/edit_userdate_total', [EditUserDateTotal::class, 'index'])->name('attendance.punch.edit_userdate_total');
 
 //when using switch case u can use like this
-Route::match(['get', 'post'], '/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence'); 
+Route::match(['get', 'post'], '/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
 
 Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
 Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');

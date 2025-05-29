@@ -1468,12 +1468,12 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		return $this;
 	}
 
-			function getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+    function getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
 
-				//  echo '<pre>'; print_r($filter_data); echo '<pre>';  die;
-				if ( $company_id == '') {
-					return FALSE;
-				}
+        //  echo '<pre>'; print_r($filter_data); echo '<pre>';  die;
+        if ( $company_id == '') {
+            return FALSE;
+        }
 
 		if (!is_array($order)) {
 			//Use Filter Data ordering if its set.

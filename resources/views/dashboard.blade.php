@@ -13,12 +13,6 @@
     </x-slot>
 
 
-    <style>
-     .header{
-            position:sticky;
-            top: 0 ;
-        }
-    </style>
 
 
     <div class="row">
@@ -92,7 +86,7 @@
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <p class="fw-semibold text-white mb-0 fs-5">Employees</p>
-                                            <h2 class="mt-4 text-white fs-1 fw-semibold"><span class="employee-count">50</span></h2>
+                                            <h2 class="mt-4 text-white fs-1 fw-semibold"><span class="employee-count">0</span></h2>
                                         </div>
                                         <div>
                                             <div class="avatar-sm flex-shrink-0">
@@ -141,35 +135,17 @@
                                             <tr>
                                                 <th class="header" scope="col">#</th>
                                                 <th class="header" scope="col">From</th>
-                                                <th class="header" scope="col">Type</th>
                                                 <th class="header" scope="col">Subject</th>
                                                 <th class="header" scope="col">Date</th>
                                             </tr>
                                         </thead>
 
-                                        <tbody id="newMessage_table">
+                                        <tbody id="message_table_body">
                                             <tr>
-                                                <td>1</td>
-                                                <td>John Doe</td>
-                                                <td>Info</td>
-                                                <td>Welcome to the platform</td>
-                                                <td>May 15, 2025</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Jane Smith</td>
-                                                <td>Alert</td>
-                                                <td>Policy Update</td>
-                                                <td>May 14, 2025</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>System</td>
-                                                <td>Reminder</td>
-                                                <td>Timesheet Due</td>
-                                                <td>May 13, 2025</td>
+                                                <td colspan="4" class="text-center">Loading...</td>
                                             </tr>
                                         </tbody>
+
 
 
                                     </table>
@@ -177,140 +153,15 @@
                             </div>
 
                             <div class="mt-2 mb-3 text-center">
-                                <a href="/user/messages" class="text-info text-decoration-underline fs-6">View More</a>
+                                <a href="{{ route('user.messages.index') }}" class="text-info text-decoration-underline fs-6">View More</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-
-                <!-- New Request Table -->
-                <div class="col-xl-6">
-                    <div class="card" style="height: 355px">
-                        <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-1 pt-2 flex-grow-1">Recent Request</h4>
-                        </div>
-                        <div>
-                            <div data-simplebar style="height: 240px;" class="pt-3">
-                                <div class="table-card ps-3">
-                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-5">
-                                        <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 1;">
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Employee</th>
-                                                <th scope="col">Type</th>
-                                                <th scope="col">Date</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody id="request_table_body">
-
-                                            <tr>
-                                                <td colspan="4" class="text-center">No Recent Requests..</td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            {{-- view button --}}
-                            <div class="mt-2 mb-3 text-center">
-                                <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
 
-
-                <!-- New Leave Request Table -->
-                <div class="col-xl-6">
-                    <div class="card" style="height: 355px">
-                        <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-1 pt-2 flex-grow-1">New Leave Request</h4>
-                        </div>
-                        <div>
-                            <div data-simplebar style="height: 240px;" class="pt-3">
-                                <div class="table-card ps-3">
-                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-5">
-                                        <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 1;">
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Leave Type</th>
-                                                <th scope="col">Amount</th>
-                                                <th scope="col">Start Date</th>
-                                                <th scope="col">End Date</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody id="leave_request_table_body">
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Ali Khan</td>
-                                                <td>Annual Leave</td>
-                                                <td>5 Days</td>
-                                                <td>May 20, 2025</td>
-                                                <td>May 24, 2025</td>
-                                                <td><span class="badge bg-warning">Pending</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Fatima Noor</td>
-                                                <td>Sick Leave</td>
-                                                <td>2 Days</td>
-                                                <td>May 18, 2025</td>
-                                                <td>May 19, 2025</td>
-                                                <td><span class="badge bg-success">Approved</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Ahmed Raza</td>
-                                                <td>Casual Leave</td>
-                                                <td>1 Day</td>
-                                                <td>May 17, 2025</td>
-                                                <td>May 17, 2025</td>
-                                                <td><span class="badge bg-danger">Rejected</span></td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>4</td>
-                                                <td>Ahmed Raza</td>
-                                                <td>Casual Leave</td>
-                                                <td>1 Day</td>
-                                                <td>May 17, 2025</td>
-                                                <td>May 17, 2025</td>
-                                                <td><span class="badge bg-danger">Rejected</span></td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>5</td>
-                                                <td>Ahmed Raza</td>
-                                                <td>Casual Leave</td>
-                                                <td>1 Day</td>
-                                                <td>May 17, 2025</td>
-                                                <td>May 17, 2025</td>
-                                                <td><span class="badge bg-danger">Rejected</span></td>
-                                            </tr>
-
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-                             {{-- view button --}}
-                             <div class="mt-2 mb-3 text-center">
-                                <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
         </div>
 
 
@@ -319,98 +170,81 @@
             <div>
                 <div class="card rounded-0 h-100">
                     <div class="card-body p-0">
-                        <div class="p-3 bg-primary">
-                            <h6 class="text-white mb-2 mt-1 text-uppercase fw-semibold fs-5">Recent Activity</h6>
-                        </div>
-                        <div data-simplebar style="height: 414px;" class="p-3 pt-0">
+                        {{-- <div class="p-2 bg-primary">
+                            <h6 class="text-white mb-2 mt-1 text-uppercase fw-semibold fs-5">Employee Pending Confirmation</h6>
+                        </div> --}}
+                        <div data-simplebar style="height: 292px;" class="p-3 pt-6 mt-4">
 
-                            <!-- Activity Timeline -->
-                            <div class="acitivity-timeline acitivity-main mt-4">
-                                <div class="acitivity-item d-flex mb-4">
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1 lh-base">Purchase by James Price</h6>
-                                        <p class="text-muted mb-1">Product noise evolve smartwatch</p>
-                                        <small class="mb-0 text-muted">02:14 PM Today</small>
-                                    </div>
+                            <form id="searchForm">
+                                <div class="mb-2">
+                                    <label for="startDate" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control form-control-sm" id="startDate">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="endDate" class="form-label">End Date</label>
+                                    <input type="date" class="form-control form-control-sm" id="endDate">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="category" class="form-label">Category</label>
+                                    <select class="form-select form-select-sm" id="category">
+                                        <option value="1">Contract </option>
+                                        <option value="2">Training </option>
+                                        <option value="3">Permanent (With Probation) </option>
+                                        <option value="4">Permanent (Confirmed) </option>
+                                        <option value="5">Resign </option>
+                                    </select>
                                 </div>
 
-                                <hr>
-
-                                <div class="acitivity-item d-flex mb-4">
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1 lh-base">Purchase by James Price</h6>
-                                        <p class="text-muted mb-1">Product noise evolve smartwatch</p>
-                                        <small class="mb-0 text-muted">02:14 PM Today</small>
-                                    </div>
+                                <!-- Buttons -->
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-sm btn-warning w-100 me-1">Search</button>
                                 </div>
 
-                                <hr>
+                            </form>
 
-                                <div class="acitivity-item d-flex mb-4">
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1 lh-base">Purchase by James Price</h6>
-                                        <p class="text-muted mb-1">Product noise evolve smartwatch</p>
-                                        <small class="mb-0 text-muted">02:14 PM Today</small>
-                                    </div>
-                                </div>
+                            <!-- Results container -->
+                            <div id="resultsContainer" class="mt-4"></div>
 
-                                <hr>
-
-                                <div class="acitivity-item d-flex mb-4">
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1 lh-base">Purchase by James Price</h6>
-                                        <p class="text-muted mb-1">Product noise evolve smartwatch</p>
-                                        <small class="mb-0 text-muted">02:14 PM Today</small>
-                                    </div>
-                                </div>
-
-                                <hr>
-                            </div>
                         </div>
 
 
-                        <div class="p-0 mt-2">
-                            <div class="p-3 bg-primary">
-                                <h6 class="text-white mb-1 mt-1 text-uppercase fw-semibold fs-5">Exceptions</h6>
+                        {{-- current exception --}}
+                        <div class="mb-0 pb-0">
+                            <div class="p-2 bg-primary">
+                                <h6 class="text-white mb-1 mt-1 text-uppercase fw-semibold fs-5">Current Exceptions</h6>
                             </div>
 
-                            <div class="p-3">
-                                <ol class="ps-3 text-muted">
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Mobile & Accessories <span class="float-end">(10,294)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Desktop <span class="float-end">(6,256)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Electronics <span class="float-end">(3,479)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Home & Furniture <span class="float-end">(2,275)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Grocery <span class="float-end">(1,950)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Fashion <span class="float-end">(1,582)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Appliances <span class="float-end">(1,037)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Beauty, Toys & More <span class="float-end">(924)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Food & Drinks <span class="float-end">(701)</span></a>
-                                    </li>
-                                    <li class="py-1">
-                                        <a href="#" class="text-muted">Toys & Games <span class="float-end">(239)</span></a>
-                                    </li>
-                                </ol>
+                            <div>
+                                <table class="table table-sm align-middle mb-0 pb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="text-center px-3 py-2">Severity</th>
+                                            <th class="text-center px-3 py-2">Exceptions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="exceptions-table-body">
+                                        <tr id="row-high">
+                                            <td class="text-start px-4 py-1">High</td>
+                                            <td class="text-center px-3 py-1">
+                                                <a href="{{ route('dashboard.exception') }}" class="text-muted" id="high-value">(0)</a>
+                                            </td>
+                                        </tr>
+                                        <tr id="row-medium">
+                                            <td class="text-start px-4 py-1">Medium</td>
+                                            <td class="text-center px-3 py-1">
+                                                <a href="{{ route('dashboard.exception') }}" class="text-muted" id="medium-value">(0)</a>
+                                            </td>
+                                        </tr>
+                                        <tr id="row-low">
+                                            <td class="text-start px-4 py-1">Low</td>
+                                            <td class="text-center px-3 py-1">
+                                                <a href="{{ route('dashboard.exception') }}" class="text-muted" id="low-value">(0)</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-
                         </div>
-
 
                     </div>
                 </div>
@@ -418,15 +252,96 @@
         </div>
     </div>
 
+
+    <div class="row">
+
+        <!-- New Request Table -->
+        <div class="col-xl-6">
+            <div class="card" style="height: 315px">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-1 pt-1 flex-grow-1">Recent Request</h4>
+                </div>
+                <div>
+                    <div data-simplebar style="height: 200px;" class="pt-3">
+                        <div class="table-card ps-3">
+                            <table class="table table-borderless table-centered align-middle table-nowrap mb-5">
+                                <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 1;">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Employee</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Date</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="request_table_body">
+
+                                    <tr>
+                                        <td colspan="4" class="text-center">Loading...</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {{-- view button --}}
+                    <div class="mt-2 mb-3 text-center">
+                        <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pending Request Table -->
+        <div class="col-xl-6">
+            <div class="card" style="height: 315px">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-1 pt-1 flex-grow-1">Pending Requests</h4>
+                </div>
+                <div>
+                    <div data-simplebar style="height: 200px;" class="pt-3">
+                        <div class="table-card ps-3">
+                            <table class="table table-borderless table-centered align-middle table-nowrap mb-5">
+                                <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 1;">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Employee</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Date</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="pending_request_table_body">
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                        {{-- view button --}}
+                        <div class="mt-2 mb-3 text-center">
+                        <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
     <div class="row">
         <!-- Basis of Employment Confirmation Request Table -->
         <div class="col-xl-6">
-            <div class="card" style="height: 355px">
+            <div class="card" style="height: 315px">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-1 pt-2 flex-grow-1">Basis of Employment Confirmation Request</h4>
+                    <h4 class="card-title mb-1 pt-1 flex-grow-1">Basis of Employment Confirmation Request</h4>
                 </div>
                 <div>
-                    <div data-simplebar style="height: 240px;" class="pt-3">
+                    <div data-simplebar style="height: 200px;" class="pt-3">
                         <div class="table-card ps-3">
                             <table class="table table-borderless table-centered align-middle table-nowrap mb-5">
                                 <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 1;">
@@ -440,30 +355,9 @@
                                     </tr>
                                 </thead>
 
-                                <tbody id="table_body">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>EMP-00123</td>
-                                        <td>John Doe</td>
-                                        <td>May 30, 2025</td>
-                                        <td>Jan 01, 2024</td>
-                                        <td>Permanent</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>EMP-00456</td>
-                                        <td>Jane Smith</td>
-                                        <td>Jun 15, 2025</td>
-                                        <td>Mar 15, 2024</td>
-                                        <td>Contract</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>EMP-00789</td>
-                                        <td>Ali Khan</td>
-                                        <td>Jul 01, 2025</td>
-                                        <td>Apr 20, 2024</td>
-                                        <td>Probation</td>
+                                <tbody id="emp_confirmation_table_body">
+                                   <tr>
+                                        <td colspan="6" class="text-center">Loading...</td>
                                     </tr>
                                 </tbody>
 
@@ -483,12 +377,12 @@
 
         <!-- 3 Days Absenteeism Table -->
         <div class="col-xl-6">
-            <div class="card" style="height: 355px">
+            <div class="card" style="height: 315px">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-1 pt-2 flex-grow-1">3 Days Absenteeism</h4>
+                    <h4 class="card-title mb-1 pt-1 flex-grow-1">3 Days Absenteeism</h4>
                 </div>
                 <div>
-                    <div data-simplebar style="height: 240px;" class="pt-3">
+                    <div data-simplebar style="height: 200px;" class="pt-3">
                         <div class="table-card ps-3">
                             <table class="table table-borderless table-centered align-middle table-nowrap mb-5">
                                 <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 1;">
@@ -502,7 +396,7 @@
 
                                 <tbody id="absenteeism_table_body">
                                     <tr>
-                                        <td colspan="4" class="text-center">No Recent Data..</td>
+                                        <td colspan="4" class="text-center">Loading...</td>
                                     </tr>
                                 </tbody>
 
@@ -539,7 +433,250 @@
 
         var chart = new ApexCharts(document.querySelector("#store-visits-source"), options);
         chart.render();
-    });
-</script>
 
+
+        // dashboard user count
+        fetch('{{ route('dashboard.user_count') }}')
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.employee-count').textContent = data.user_count;
+            })
+            .catch(error => {
+                console.error('Error fetching user count:', error);
+                document.querySelector('.employee-count').textContent = 'N/A';
+            });
+
+
+        // 3 days absands details
+        fetch('{{ route('dashboard.absenteeism') }}')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('absenteeism_table_body');
+                tbody.innerHTML = ''; // Clear existing rows
+
+                if (data.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center">No Recent Data..</td></tr>`;
+                } else {
+                    data.data.forEach((employee, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${employee.full_name}</td>
+                                <td>${employee.default_branch}</td>
+                                <td>${employee.default_department}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching absentee data:', error);
+                const tbody = document.getElementById('absenteeism_table_body');
+                tbody.innerHTML = `<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>`;
+            });
+
+
+        // recent messages
+        fetch('{{ route('dashboard.recent_messages') }}')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('message_table_body');
+                tbody.innerHTML = ''; // Clear existing rows
+
+                if (data.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center">No Recent Messages..</td></tr>`;
+                } else {
+                    data.data.forEach((message, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${message.user_full_name}</td>
+                                <td>${message.subject}</td>
+                                <td>${message.created_date}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching message data:', error);
+                const tbody = document.getElementById('message_table_body');
+                tbody.innerHTML = `<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>`;
+            });
+
+
+        // recent request
+        fetch('{{ route('dashboard.recent_request') }}')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('request_table_body');
+                tbody.innerHTML = ''; // Clear existing rows
+
+                if (data.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center">No Recent Request..</td></tr>`;
+                } else {
+                    data.data.forEach((request, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${request.date_stamp}</td>
+                                <td>${request.status}</td>
+                                <td>${request.type}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching request data:', error);
+                const tbody = document.getElementById('request_table_body');
+                tbody.innerHTML = `<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>`;
+            });
+
+
+        // pending request
+        fetch('{{ route('dashboard.pending_request') }}')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('pending_request_table_body');
+                tbody.innerHTML = ''; // Clear existing rows
+
+                if (data.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center">No Pending Request..</td></tr>`;
+                } else {
+                    data.data.forEach((pendingRequests, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${pendingRequests.user_full_name}</td>
+                                <td>${pendingRequests.type}</td>
+                                <td>${pendingRequests.date_stamp}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching pending request data:', error);
+                const tbody = document.getElementById('pending_request_table_body');
+                tbody.innerHTML = `<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>`;
+            });
+
+
+        // Add this function above the fetch if not already present
+        const formatDate = (epoch) => {
+            if (!epoch || epoch === 0) return '-';
+            const date = new Date(epoch * 1000);
+            return date.toLocaleDateString();
+        };
+
+        fetch('{{ route('dashboard.employement_confirmation_request') }}')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('emp_confirmation_table_body');
+                tbody.innerHTML = ''; // Clear existing rows
+
+                if (data.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center">No Employment Confirmation Request..</td></tr>`;
+                } else {
+                    data.data.forEach((warning_employee1, index) => {
+
+                        let relevantDate = '-';
+                        if (warning_employee1.basis_of_employment == 5) {
+                            relevantDate = formatDate(warning_employee1.resign_date);
+                        } else {
+                            relevantDate = formatDate(warning_employee1.hire_date);
+                        }
+
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${warning_employee1.employee_number}</td>
+                                <td>${warning_employee1.full_name}</td>
+                                <td>${warning_employee1['0'] || '-'}</td>
+                                <td>${relevantDate}</td>
+                                <td>${warning_employee1['1'] || '-'}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching employment confirmation request data:', error);
+                const tbody = document.getElementById('emp_confirmation_table_body');
+                tbody.innerHTML = `<tr><td colspan="6" class="text-danger text-center">Failed to load data.</td></tr>`;
+            });
+
+
+    });
+
+
+    // Current Exception
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("{{ route('dashboard.exception') }}")
+            .then(response => response.json())
+            .then(result => {
+                const data = result.data || {};
+
+                // High
+                const high = data[30] ?? 0;
+                const highEl = document.querySelector('#high-exception a');
+                highEl.querySelector('span').textContent = `(${high})`;
+                if (high > 0) {
+                    highEl.classList.remove('text-muted');
+                    highEl.classList.add('text-danger', 'fw-bold');
+                    highEl.style.backgroundColor = 'red';
+                }
+
+                // Medium
+                const medium = data[20] ?? 0;
+                const mediumEl = document.querySelector('#medium-exception a');
+                mediumEl.querySelector('span').textContent = `(${medium})`;
+                if (medium > 0) {
+                    mediumEl.classList.remove('text-muted');
+                    mediumEl.classList.add('text-warning', 'fw-bold');
+                    mediumEl.style.backgroundColor = 'yellow';
+                }
+
+                // Low
+                const low = data[10] ?? 0;
+                const lowEl = document.querySelector('#low-exception a');
+                lowEl.querySelector('span').textContent = `(${low})`;
+            })
+            .catch(err => {
+                console.error('Error loading exceptions:', err);
+            });
+
+        });
+
+
+    document.querySelector('.btn-warning').addEventListener('click', () => {
+        const data = {
+            start_date: document.getElementById('startDate').value,
+            end_date: document.getElementById('endDate').value,
+            category: document.getElementById('category').value
+        };
+
+        fetch('/dashboard/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(res => {
+            let html = '<pre>' + JSON.stringify(res.data, null, 2) + '</pre>';
+            document.getElementById('resultsContainer').innerHTML = html;
+        })
+        .catch(err => {
+            console.error(err);
+        });
+
+    });
+
+
+
+</script>
 </x-app-layout>
