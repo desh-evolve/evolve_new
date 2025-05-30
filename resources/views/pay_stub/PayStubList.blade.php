@@ -22,6 +22,52 @@
 
                 <div class="card-body">
 
+                    <table class="table table-bordered">
+                        <form method="post" name="pay_stubs" action="/attendance/paystubs">
+                            <tr class="bg-primary text-white">
+                                <td>
+                                    #
+                                </td>
+                                @foreach ($columns as $column_id => $column)
+                                    <td>
+                                        {{$column}}
+                                    </td>
+                                @endforeach
+                                <td>
+                                    Functions
+                                </td>
+                            </tr>
+                            @foreach ($pay_stubs as $i => $pay_stub)
+                                <tr class="">
+                                    <td>
+                                        {{ $i+1 }}
+                                    </td>
+            
+                                    @foreach ($columns as $key => $column)
+                                        <td>
+                                            {{ $pay_stub[$key] ?? "--" }}
+                                        </td>
+                                    @endforeach
+            
+                                    <td>
+                                        @if ($permission->Check('pay_stub','view') OR ( $permission->Check('pay_stub','view_child') AND $pay_stub['is_child'] === TRUE ) OR ( $permission->Check('pay_stub','view_own') AND $pay_stub.is_owner === TRUE ))
+                                            [ <a href="paystub/view">View</a> ]
+                                        @endif
+                                        @if (( $pay_stub['status_id'] == 10 OR $pay_stub['status_id'] == 25) AND ( $permission->Check('pay_stub','edit') OR ( $permission->Check('pay_stub','edit_child') AND $pay_stub['is_child'] === TRUE ) OR ( $permission->Check('pay_stub','edit_own') AND $pay_stub['is_owner'] === TRUE ) ))
+                                            [ <a href="paystub/edit" >Edit</a> ]
+                                        @endif
+                                        @if ($permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child'))
+                                            <input type="submit" name="action:Mark_Paid" value="Mark Paid">
+                                            <input type="submit" name="action:Mark_UnPaid" value="Mark UnPaid">
+                                        @endif
+                                        @if ($permission->Check('pay_stub','delete') OR $permission->Check('pay_stub','delete_child'))
+                                            <input type="submit" name="action:delete" value="Delete" onClick="return confirmSubmit()">
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </form>
+                    </table>
 
                 </div><!-- end card -->
             </div>

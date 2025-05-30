@@ -17,19 +17,37 @@ use App\Models\Schedule\ScheduleFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserWageFactory;
 use App\Models\Users\UserWageListFactory;
+use Illuminate\Support\Facades\View;
 
 class AJAX_Server {
 
-	function getCurrentUserFullName() {
-		global $current_user;
+	protected $permission;
+    protected $current_user;
+    protected $current_company;
+    protected $current_user_prefs;
+    protected $config_vars;
 
-		return $current_user->getFullName();
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+        $this->permission = View::shared('permission');
+        $this->current_user = View::shared('current_user');
+        $this->current_company = View::shared('current_company');
+        $this->current_user_prefs = View::shared('current_user_prefs');
+
+    }
+
+	function getCurrentUserFullName() {
+
+		return $this->current_user->getFullName();
 	}
 
 	function getCurrentCompanyName() {
-		global $current_company;
 
-		return $current_company->getName();
+		return $this->current_company->getName();
 	}
 
 	function getProvinceOptions( $country ) {
@@ -89,10 +107,10 @@ class AJAX_Server {
 		return array();
 	}
 
+	/*
 	function getProvinceInvoiceDistrictOptions( $country, $province) {
-		global $current_company;
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
@@ -115,7 +133,7 @@ class AJAX_Server {
 		Debug::text('Country: '. $country .' Province: '. $province, __FILE__, __LINE__, __METHOD__, 10);
 
 		$idlf = new InvoiceDistrictListFactory();
-		$idlf->getByCompanyIdAndProvinceAndCountry( $current_company->getId(), $province, $country);
+		$idlf->getByCompanyIdAndProvinceAndCountry( $this->current_company->getId(), $province, $country);
 
 		$district_arr = $idlf->getArrayByListFactory($idlf, FALSE);
 
@@ -126,6 +144,7 @@ class AJAX_Server {
 
 		return array();
 	}
+	*/
 
 	function getHourlyRate( $wage, $weekly_hours, $wage_type_id = 10 ) {
 		if ( $wage == '' ) {
@@ -297,9 +316,8 @@ class AJAX_Server {
 	}
 
 	function getUserLaborBurdenPercent( $user_id ) {
-		global $current_company;
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
@@ -307,7 +325,7 @@ class AJAX_Server {
 			return '0.00';
 		}
 
-		$retval = UserWageFactory::calculateLaborBurdenPercent( $current_company->getId(), $user_id );
+		$retval = UserWageFactory::calculateLaborBurdenPercent( $this->current_company->getId(), $user_id );
 
 		if ( $retval == '' ) {
 			return '0.00';
@@ -316,33 +334,31 @@ class AJAX_Server {
 		return $retval;
 	}
 
+	/*
 	function getJobOptions( $user_id ) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
-		Debug::text('User ID: '. $user_id .' Company ID: '. $current_company->getId(), __FILE__, __LINE__, __METHOD__, 10);
+		Debug::text('User ID: '. $user_id .' Company ID: '. $this->current_company->getId(), __FILE__, __LINE__, __METHOD__, 10);
 
 		$jlf = new JobListFactory();
-		return $jlf->getByCompanyIdAndUserIdAndStatusArray( $current_company->getId(),  $user_id, array(10,20,30,40), TRUE );
+		return $jlf->getByCompanyIdAndUserIdAndStatusArray( $this->current_company->getId(),  $user_id, array(10,20,30,40), TRUE );
 	}
 
 	function getJobItemOptions( $job_id, $include_disabled = TRUE ) {
 		//Don't check for current company as this needs to work when we are not fully authenticated.
-		/*
-		global $current_company;
 
-		if ( !is_object($current_company) ) {
-			return FALSE;
-		}
-		*/
+		// if ( !is_object($this->current_company) ) {
+		// 	return FALSE;
+		// }
 
 		Debug::text('Job ID: '. $job_id .' Include Disabled: '. (int)$include_disabled, __FILE__, __LINE__, __METHOD__, 10);
 
 		$jilf = new JobItemListFactory();
-		//$jilf->getByCompanyIdAndJobId( $current_company->getId(), $job_id );
+		//$jilf->getByCompanyIdAndJobId( $this->current_company->getId(), $job_id );
 		$jilf->getByJobId( $job_id );
 		$job_item_options = $jilf->getArrayByListFactory( $jilf, TRUE, $include_disabled );
 		if ( $job_item_options != FALSE AND is_array($job_item_options) ) {
@@ -357,24 +373,24 @@ class AJAX_Server {
 	}
 
 	function getJobItemData( $job_item_id ) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
-		Debug::text('Job Item ID: '. $job_item_id .' Company ID: '. $current_company->getId(), __FILE__, __LINE__, __METHOD__, 10);
+		Debug::text('Job Item ID: '. $job_item_id .' Company ID: '. $this->current_company->getId(), __FILE__, __LINE__, __METHOD__, 10);
 
 		if ( $job_item_id == '' ) {
 			return FALSE;
 		}
 
-		if ( $current_company->getID() == '' ) {
+		if ( $this->current_company->getID() == '' ) {
 			return FALSE;
 		}
 
 		$jilf = new JobItemListFactory();
-		$jilf->getByIdAndCompanyId( $job_item_id, $current_company->getId() );
+		$jilf->getByIdAndCompanyId( $job_item_id, $this->current_company->getId() );
 		if ( $jilf->getRecordCount() > 0 ) {
 			foreach( $jilf as $item_obj ) {
 				$retarr = array(
@@ -416,14 +432,14 @@ class AJAX_Server {
 	}
 
 	function getProductQuantityUnitPrice( $product_id, $quantity, $currency_id ) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
 		$plf = new ProductListFactory();
-		$plf->getByIdAndCompanyId($product_id, $current_company->getId() );
+		$plf->getByIdAndCompanyId($product_id, $this->current_company->getId() );
 		if ( $plf->getRecordCount() > 0 ) {
 			$p_obj = $plf->getCurrent();
 
@@ -439,35 +455,35 @@ class AJAX_Server {
 		return $this->getProductData($product_id, $part_number, $product_name, $product_upc, $currency_id );
 	}
 	function getProductData( $product_id, $part_number = NULL, $product_name = NULL, $product_upc = NULL, $currency_id = NULL ) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
-		Debug::text('Product ID: '. $product_id .' Part Number: '. $part_number .' Product Name: '. $product_name .' UPC: '. $product_upc .' Company ID: '. $current_company->getId(), __FILE__, __LINE__, __METHOD__, 10);
+		Debug::text('Product ID: '. $product_id .' Part Number: '. $part_number .' Product Name: '. $product_name .' UPC: '. $product_upc .' Company ID: '. $this->current_company->getId(), __FILE__, __LINE__, __METHOD__, 10);
 
 		if ( $product_id == '' AND $part_number == '' AND $product_name == '' AND $product_upc == '') {
 			return FALSE;
 		}
 
-		if ( $current_company->getID() == '' ) {
+		if ( $this->current_company->getID() == '' ) {
 			return FALSE;
 		}
 
 		$plf = new ProductListFactory();
 
 		if ( $product_id != '' ) {
-			$plf->getByIdAndCompanyId($product_id, $current_company->getId() );
+			$plf->getByIdAndCompanyId($product_id, $this->current_company->getId() );
 		} elseif ( $part_number != '' ) {
 			Debug::text('Getting by Part Number ', __FILE__, __LINE__, __METHOD__, 10);
-			$plf->getByPartNumberAndCompanyId($part_number, $current_company->getId() );
+			$plf->getByPartNumberAndCompanyId($part_number, $this->current_company->getId() );
 		} elseif( $product_name != '' ) {
 			Debug::text('Getting by Name ', __FILE__, __LINE__, __METHOD__, 10);
-			$plf->getByNameAndCompanyId($product_name, $current_company->getId() );
+			$plf->getByNameAndCompanyId($product_name, $this->current_company->getId() );
 		} elseif( $product_upc != '' ) {
 			Debug::text('Getting by UPC ', __FILE__, __LINE__, __METHOD__, 10);
-			$plf->getByUPCAndCompanyId($product_upc, $current_company->getId() );
+			$plf->getByUPCAndCompanyId($product_upc, $this->current_company->getId() );
 		}
 
 		if ( $plf->getRecordCount() > 0 ) {
@@ -610,6 +626,7 @@ class AJAX_Server {
 
 		return FALSE;
 	}
+	*/
 
 	function getCurrencyData( $currency_id ) {
 		Debug::Text('Getting Currency Data for ID: '. $currency_id, __FILE__, __LINE__, __METHOD__, 10);
@@ -646,21 +663,21 @@ class AJAX_Server {
 	}
 
 	function getAbsencePolicyData( $absence_policy_id ) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
 		$aplf = new AbsencePolicyListFactory();
-		$aplf->getByIdAndCompanyId( $absence_policy_id, $current_company->getId() );
+		$aplf->getByIdAndCompanyId( $absence_policy_id, $this->current_company->getId() );
 		if ( $aplf->getRecordCount() > 0 ) {
 			$ap_obj = $aplf->getCurrent();
 
 			$ap_data = $ap_obj->getObjectAsArray();
 
 			$aplf = new AccrualPolicyListFactory();
-			$aplf->getByIdAndCompanyId( $ap_obj->getAccrualPolicyID(), $current_company->getId() );
+			$aplf->getByIdAndCompanyId( $ap_obj->getAccrualPolicyID(), $this->current_company->getId() );
 			if ( $aplf->getRecordCount() > 0 ) {
 				$ap_data['accrual_policy_name'] = $aplf->getCurrent()->getName();
 			} else {
@@ -677,14 +694,14 @@ class AJAX_Server {
             
           //  return $this->getLeaveBalance($absence_policy_id,$user_id);
             
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
 		$aplf = new AbsencePolicyListFactory();
-		$aplf->getByIdAndCompanyId( $absence_policy_id, $current_company->getId() );
+		$aplf->getByIdAndCompanyId( $absence_policy_id, $this->current_company->getId() );
 		if ( $aplf->getRecordCount() > 0 ) {
 			$ap_obj = $aplf->getCurrent();
 			if ( $ap_obj->getAccrualPolicyID() != '' ) { 
@@ -696,9 +713,9 @@ class AJAX_Server {
 	}
         
         function getLeaveBalance( $absence_policy_id, $user_id, $date = '', $repAbsence = 1) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 		if ($date == '') {
@@ -773,9 +790,9 @@ class AJAX_Server {
         
                 //FL ADDED 20160717
 	function getAbsenceLeaveMethod( $absence_policy_id ) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
                
@@ -798,9 +815,9 @@ class AJAX_Server {
         
         //FL ADDED 20160717
 	function getAbsenceLeave( $absence_policy_id ) {
-		global $current_company;
+		
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
                
@@ -897,11 +914,11 @@ class AJAX_Server {
 	}
 
 	function getNextPayStubAccountOrderByTypeId( $type_id ) {
-		global $current_company;
+		
 
 		Debug::Text('Type ID: '. $type_id, __FILE__, __LINE__, __METHOD__, 10);
 
-		if ( !is_object($current_company) ) {
+		if ( !is_object($this->current_company) ) {
 			return FALSE;
 		}
 
@@ -910,7 +927,7 @@ class AJAX_Server {
 		}
 
 		$psealf = new PayStubEntryAccountListFactory();
-		$psealf->getHighestOrderByCompanyIdAndTypeId( $current_company->getId(), $type_id );
+		$psealf->getHighestOrderByCompanyIdAndTypeId( $this->current_company->getId(), $type_id );
 		if ( $psealf->getRecordCount() > 0 ) {
 			foreach( $psealf->rs as $psea_obj ) {
 				$psealf->data = (array)$psea_obj;
@@ -963,4 +980,14 @@ class AJAX_Server {
 	}
 
 }
+
+// Handle AJAX request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['absence_policy_id'])) {
+    $server = new AJAX_Server();
+    // Set $current_company, e.g., $server->current_company = getCompanyFromSession();
+    $result = $server->getAbsenceLeaveMethod($_POST['absence_policy_id']);
+    echo $result;
+    exit;
+}
+
 ?>
