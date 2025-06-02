@@ -6,6 +6,7 @@ use App\Http\Controllers\accrual\ViewUserAccrualList;
 use App\Http\Controllers\bank_account\EditBankAccount as Bank_accountEditBankAccount;
 use App\Http\Controllers\company\CompanyDeductionList;
 use App\Http\Controllers\payperiod\ClosePayPeriod;
+
 use App\Http\Controllers\currency\CurrencyList;
 use App\Http\Controllers\currency\EditCurrency;
 use App\Http\Controllers\Branch\BranchList;
@@ -83,12 +84,18 @@ use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\timesheet\ViewUserTimeSheet;
 use App\Http\Controllers\progressbar\ProgressBar;
+
 use App\Http\Controllers\punch\AddMassPunch;
 use App\Http\Controllers\punch\EditPunch;
 use App\Http\Controllers\punch\EditUserAbsence;
 use App\Http\Controllers\punch\EditUserDateTotal;
 use App\Http\Controllers\punch\PunchList;
 use App\Http\Controllers\punch\UserDateTotalList;
+use App\Http\Controllers\punch\UserExceptionList;
+
+use App\Http\Controllers\authorization\AuthorizationList;
+
+
 use App\Http\Controllers\Report\DailyAttendanceReport;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
@@ -238,8 +245,8 @@ Route::match(['get', 'post'],'/report/general_ledger_summary_report', [GeneralLe
 // ===============================================================================================================================
 
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
-Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll.payroll_action');
-Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
+Route::get('/punch/user_exception', [UserExceptionList::class, 'index'])->name('punch.user_exception');
+
 
 Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
 Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
@@ -510,6 +517,7 @@ Route::get('/storage/{disk}/{path}', [EditUser::class, 'serveFile'])->name('serv
 
 Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('attendance.timesheet');
 Route::get('/close_window', [CloseWindow::class, 'index'])->name('close_window');
+Route::get('/authorization/authorization_list', [AuthorizationList::class, 'index'])->name('authorization.authorization_list');
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
