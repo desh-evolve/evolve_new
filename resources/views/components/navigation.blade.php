@@ -142,6 +142,11 @@
                                     class="nav-link {{ request()->routeIs('report.general_ledger_summary_report') ? 'active' : '' }}">General Ledger Summary Report
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.payroll_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.payroll_report') ? 'active' : '' }}">Payroll Report
+                                </a>
+                            </li>
                             {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}
                             <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
                         </ul>

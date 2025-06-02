@@ -115,6 +115,7 @@ use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\report\EmployeeNopayCountReport;
 use App\Http\Controllers\report\GeneralLedgerSummary;
+use App\Http\Controllers\report\PayStubSummary;
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
@@ -232,6 +233,8 @@ Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index']
 Route::match(['get', 'post'],'/report/employee_nopay_count_report', [EmployeeNopayCountReport::class, 'index'])->name('report.employee_nopay_count_report');
 
 Route::match(['get', 'post'],'/report/general_ledger_summary_report', [GeneralLedgerSummary::class, 'index'])->name('report.general_ledger_summary_report');
+
+Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, 'index'])->name('report.payroll_report');
 
 // ===============================================================================================================================
 // Payroll
