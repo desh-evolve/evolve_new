@@ -287,10 +287,8 @@ Route::delete('/payroll/paystub_accounts/delete/{id}', [PayStubEntryAccountList:
 Route::get('/payroll/paystub_account_link', [EditPayStubEntryAccountLink::class, 'index'])->name('payroll.paystub_account_link');
 Route::post('/payroll/paystub_account_link/submit', [EditPayStubEntryAccountLink::class, 'submit'])->name('payroll.paystub_account_link.submit');
 
-Route::get('/payroll/company_deductions', [CompanyDeductionList::class, 'index'])->name('payroll.company_deductions');
-Route::get('/payroll/company_deductions/add/{id?}', [EditCompanyDeduction::class, 'index'])->name('payroll.company_deductions.add');
-Route::post('/payroll/company_deductions/submit/{id?}', [EditCompanyDeduction::class, 'submit'])->name('payroll.company_deductions.submit');
-Route::delete('/payroll/company_deductions/delete/{id}', [CompanyDeductionList::class, 'delete'])->name('payroll.company_deductions.delete');
+Route::match(['get', 'post'], '/payroll/company_deductions', [CompanyDeductionList::class, 'index'])->name('payroll.company_deductions');
+Route::match(['get', 'post'], '/payroll/company_deductions/add', [EditCompanyDeduction::class, 'index'])->name('payroll.company_deductions.add');
 
 // ===============================================================================================================================
 // Progress Bar Functions
