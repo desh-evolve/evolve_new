@@ -1,6 +1,5 @@
 <!-- Start: Dynamic Form Fields -->
-{{-- @if (isset($page_type) && $page_type == 'mass_user') --}}
-@if($page_type == 'mass_user' && isset($data['users']) && is_array($data['users']))
+@if (isset($page_type) && $page_type == 'mass_user')
     <tr>
         <td colspan="2">
             <table width="100%">

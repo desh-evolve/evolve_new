@@ -197,9 +197,9 @@
 						{include file="pager.tpl" pager_data=$paging_data}
 					</td>
 				</tr>
-			<input type="hidden" name="sort_column" value="{$sort_column}">
-			<input type="hidden" name="sort_order" value="{$sort_order}">
-			<input type="hidden" name="page" value="{$paging_data.current_page}">
+				<input type="hidden" name="sort_column" value="{$sort_column}">
+				<input type="hidden" name="sort_order" value="{$sort_order}">
+				<input type="hidden" name="page" value="{$paging_data.current_page}">
 			</form>
 		</table>
 	</div>

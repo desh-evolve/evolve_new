@@ -259,7 +259,6 @@ class ProgressBar extends Controller
                         //Grab all users for pay period
                         $ppsulf = new PayPeriodScheduleUserListFactory();
                         $ppsulf->getByPayPeriodScheduleId( $pay_period_obj->getPayPeriodSchedule() );
-
                         $total_pay_stubs = $ppsulf->getRecordCount();
                         //echo "Total Pay Stubs: $total_pay_stubs - ". ceil(100 / $total_pay_stubs) ."<Br>\n";
 
@@ -274,6 +273,7 @@ class ProgressBar extends Controller
                         //delete pay stubs that are the same as what we're creating.
                         $pslf = new PayStubListFactory();
                         $pslf->getByPayPeriodId( $pay_period_obj->getId() );
+                        
                         foreach ( $pslf->rs as $pay_stub_obj ) {
                             $pslf->data = (array)$pay_stub_obj;
                             $pay_stub_obj = $pslf;
@@ -294,26 +294,26 @@ class ProgressBar extends Controller
                         }
 
                         $i=1;
+                        
                         foreach ($ppsulf->rs as $pay_period_schdule_user_obj) {
                             $ppsulf->data = (array)$pay_period_schdule_user_obj;
                             $pay_period_schdule_user_obj = $ppsulf;
                             Debug::text('Pay Period User ID: '. $pay_period_schdule_user_obj->getUser(), __FILE__, __LINE__, __METHOD__,10);
                             Debug::text('Total Pay Stubs: '. $total_pay_stubs .' - '. ceil( 1 / (100 / $total_pay_stubs) ) , __FILE__, __LINE__, __METHOD__,10);
 
-                            $profiler->startTimer( 'Calculating Pay Stub' );
+                            //$profiler->startTimer( 'Calculating Pay Stub' );
                             //Calc paystubs.
                             $cps = new CalculatePayStub();
                             $cps->setUser( $pay_period_schdule_user_obj->getUser() );
                             $cps->setPayPeriod( $pay_period_obj->getId() );
-                                            
-                                                $cps->removeTerminatePayStub();
-                                                $cps->calculateAllowance();
+                            $cps->removeTerminatePayStub();
+                            $cps->calculateAllowance();
                             $cps->calculate();
                             unset($cps);
-                            $profiler->stopTimer( 'Calculating Pay Stub' );
+                            //$profiler->stopTimer( 'Calculating Pay Stub' );
 
                             $this->initProgressBar( Misc::calculatePercent( $i, $total_pay_stubs ) );
-
+                            
                             $i++;
                         }
                         unset($ppsulf);
@@ -322,8 +322,9 @@ class ProgressBar extends Controller
                         $ugsf->setUser( $current_user->getId() );
                         $ugsf->setBatchID( $ugsf->getNextBatchId() );
                         $ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
-                        $ugsf->saveQueue();
-                        $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Generating Pay Stubs', 'batch_next_page' => $next_page), '../users/UserGenericStatusList.php');
+                        $x = $ugsf->saveQueue();
+                        //dd($ugsf->data);
+                        $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Generating Pay Stubs', 'batch_next_page' => $next_page), '/users/user_generic_status_list');
 
                         unset($ugsf);
                     }
@@ -426,7 +427,7 @@ class ProgressBar extends Controller
                         $ugsf->setBatchID( $ugsf->getNextBatchId() );
                         $ugsf->setQueue( UserGenericStatusFactory::getStaticQueue() );
                         $ugsf->saveQueue();
-                        $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Generating Mid Pay', 'batch_next_page' => $next_page), '../users/UserGenericStatusList.php');
+                        $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Generating Mid Pay', 'batch_next_page' => $next_page), '/users/user_generic_status_list');
 
                         unset($ugsf);
                     }
@@ -820,7 +821,7 @@ class ProgressBar extends Controller
 
                     $this->initProgressBar(100);
 
-                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Schedule', 'batch_next_page' => urlencode( URLBuilder::getURL( array('data' => $data, 'filter_user_id' => $filter_user_id ), '../schedule/AddMassSchedule.php' ) ) ), '../users/UserGenericStatusList.php');
+                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Schedule', 'batch_next_page' => urlencode( URLBuilder::getURL( array('data' => $data, 'filter_user_id' => $filter_user_id ), '../schedule/AddMassSchedule.php' ) ) ), '/users/user_generic_status_list');
                 }
 
                 break;
@@ -1053,7 +1054,7 @@ class ProgressBar extends Controller
 
                     $this->initProgressBar(100);
 
-                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Schedule', 'batch_next_page' => urlencode( URLBuilder::getURL( array('data' => $data, 'filter_user_id' => $filter_user_id ), '../schedule/AddMassScheduleNpvc.php' ) ) ), '../users/UserGenericStatusList.php');
+                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Schedule', 'batch_next_page' => urlencode( URLBuilder::getURL( array('data' => $data, 'filter_user_id' => $filter_user_id ), '../schedule/AddMassScheduleNpvc.php' ) ) ), '/users/user_generic_status_list');
 
                 }
 

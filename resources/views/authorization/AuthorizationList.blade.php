@@ -1,5 +1,9 @@
 <x-app-layout :title="'Input Example'">
-
+    <style>
+        td, th{
+            padding: 5px !important;
+        }
+    </style>
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -8,39 +12,27 @@
                         <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
                     </div>
 
-                    {{-- <div class="justify-content-md-end">
-                        <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
-                                href="#"
-                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
-                                Add <i class="ri-add-line"></i>
-                            </a>
-                        </div>
-                    </div> --}}
                 </div>
 
                 <div class="card-body">
-                    
-                    {{-- ----------------------------------------- --}}
+                   
+                    {{-- --------------------------------------------------------------------------- --}}
 
-                    
-
-                        <table class="tblList">
+                    <form method="get" action="/authorization/authorization_list">
+                        <table class="table table-bordered">
             
                             @if ($permission->Check('request','authorize'))
-                            
                                 {{-- Missed Punch: request_punch --}}
                                 @if (is_array($hierarchy_levels['request_punch']))
-                                    <tr>
-                                        <th colspan="5">
+                                    <tr class="bg-primary text-white">
+                                        <td colspan="5">
                                             Pending Requests: Missed Punch
                                             [ 
                                                 @foreach ($hierarchy_levels['request_punch'] as $request_level_display => $request_level)
                                                     @if ($selected_level_arr['request_punch'] == $request_level)
                                                         <span style="background-color:#33CCFF">
                                                     @endif
-                                                    <a href="{{ url('AuthorizationList.php') . '?selected_levels[request_punch]=' . urlencode($request_level_display) }}">Level {{$request_level_display}}</a>
+                                                    <a href="/authorization/authorization_list?selected_levels[request_punch]={{$request_level_display}}">Level {{$request_level_display}}</a>
                                                     @if ($selected_level_arr['request_punch'] == $request_level)
                                                         </span>
                                                     @endif
@@ -49,33 +41,49 @@
                                                     @endif
                                                 @endforeach
                                              ]
-                                        </th>
+                                        </td>
                                     </tr>
-
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Employee</th>
-                                        <th>Request Date</th>
-                                        <th>Submitted Date</th>
-                                        <th>Functions</th>
-                                    </tr>
-
-                                    @foreach ($requests['request_punch'] as $index => $request_punch)
-                                        <tr>
-                                            <td>
-                                                {{$request_punch['user_full_name']}}
-                                            </td>
-                                            <td>
-                                                {{$request_punch['date_stamp']}}
-                                            </td>
-                                            <td>
-                                                {{$request_punch['created_date']}}
-                                            </td>
-                                            <td>
-                                                <a href="javascript:viewRequest({{$request_punch.id}},{{$selected_levels.request_punch ?? 0}})">View</a>
+                                    @if (!empty($requests['request_punch']))
+                                        @foreach ($requests['request_punch'] as $request_punch)
+                                            @if ($loop->first)
+                                                <tr class="bg-primary text-white">
+                                                    <td>
+                                                        Employee
+                                                    </td>
+                                                    <td>
+                                                        Request Date
+                                                    </td>
+                                                    <td>
+                                                        Submitted Date
+                                                    </td>
+                                                    <td>
+                                                        Functions
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                            <tr class="">
+                                                <td>
+                                                    {{$request_punch['user_full_name']}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_punch['date_stamp'])}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_punch['created_date'])}}
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:viewRequest({{$request_punch['id']}},{{$selected_levels['request_punch'] ?? 0}})">View</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="tblDataWhite">
+                                            <td colspan="5">
+                                                0 Requests found.
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endif
+                                    
             
                                     <tr>
                                         <td colspan="6">
@@ -83,18 +91,20 @@
                                         </td>
                                     </tr>
                                 @endif
-
+            
+            
                                 {{-- Missed Punch: request_punch_adjust --}}
-                                @if (is_array($hierarchy_levels['request_punch_adjust']))
-                                    <tr>
-                                        <th colspan="5">
+                                @if (!empty($hierarchy_levels['request_punch_adjust']) && is_array($hierarchy_levels['request_punch_adjust']))
+                                    <tr class="bg-primary text-white">
+                                        <td colspan="5">
                                             Pending Requests: Punch Adjustment
-                                            [
+            
+                                            [ 
                                                 @foreach ($hierarchy_levels['request_punch_adjust'] as $request_level_display => $request_level)
                                                     @if ($selected_level_arr['request_punch_adjust'] == $request_level)
                                                         <span style="background-color:#33CCFF">
                                                     @endif
-                                                    <a href="#">Level {{$request_level_display}}</a>
+                                                    <a href="/authorization/authorization_list?selected_levels[request_punch_adjust]={{$request_level_display}}" >Level {{$request_level_display}}</a>
                                                     @if ($selected_level_arr['request_punch_adjust'] == $request_level)
                                                         </span>
                                                     @endif
@@ -103,33 +113,50 @@
                                                     @endif
                                                 @endforeach
                                             ]
-                                        </th>
+            
+                                        </td>
                                     </tr>
-
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Employee</th>
-                                        <th>Request Date</th>
-                                        <th>Submitted Date</th>
-                                        <th>Functions</th>
-                                    </tr>
-
-                                    @foreach ($requests['request_punch_adjust'] as $request_punch_adjust)
-                                        <tr>
-                                            <td>
-                                                {{$request_punch_adjust['user_full_name']}}
-                                            </td>
-                                            <td>
-                                                {{$request_punch_adjust['date_stamp']}}
-                                            </td>
-                                            <td>
-                                                {{$request_punch_adjust['created_date']}}
-                                            </td>
-                                            <td>
-                                                <a href="javascript:viewRequest({{$request_punch_adjust['id']}},{{$selected_levels['request_punch_adjust'] ?? 0}})">View</a>
+                                    @if (!empty($requests['request_punch_adjust']))
+                                        @foreach ($requests['request_punch_adjust'] as $request_punch_adjust)
+                                            @if ($loop->first)
+                                                <tr class="bg-primary text-white">
+                                                    <td>
+                                                        Employee
+                                                    </td>
+                                                    <td>
+                                                        Request Date
+                                                    </td>
+                                                    <td>
+                                                        Submitted Date
+                                                    </td>
+                                                    <td>
+                                                        Functions
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                            <tr class="">
+                                                <td>
+                                                    {{$request_punch_adjust['user_full_name']}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_punch_adjust['date_stamp'])}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_punch_adjust['created_date'])}}
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:viewRequest({{$request_punch_adjust['id']}},{{$selected_levels['request_punch_adjust'] ?? 0}})">View</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="tblDataWhite">
+                                            <td colspan="5">
+                                                0 Requests found.
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endif
+                                    
             
                                     <tr>
                                         <td colspan="6">
@@ -137,18 +164,18 @@
                                         </td>
                                     </tr>
                                 @endif
-
+            
                                 {{-- Missed Punch: request_absence --}}
                                 @if (is_array($hierarchy_levels['request_absence']))
-                                    <tr>
-                                        <th colspan="5">
+                                    <tr class="bg-primary text-white">
+                                        <td colspan="5">
                                             Pending Requests: Absence
                                             [ 
-                                                @foreach ($hierarchy_levels['request_absence']  as $request_level_display => $request_level)
+                                                @foreach ($hierarchy_levels['request_absence'] as $request_level_display => $request_level)
                                                     @if ($selected_level_arr['request_absence'] == $request_level)
                                                         <span style="background-color:#33CCFF">
                                                     @endif
-                                                    <a href="#">Level {{$request_level_display}}</a>
+                                                    <a href="/authorization/authorization_list?selected_levels[request_absence]={{$request_level_display}}">Level {{$request_level_display}}</a>
                                                     @if ($selected_level_arr['request_absence'] == $request_level)
                                                         </span>
                                                     @endif
@@ -157,53 +184,68 @@
                                                     @endif
                                                 @endforeach
                                             ]
-                                        </th>
+                                        </td>
                                     </tr>
-
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Employee</th>
-                                        <th>Request Date</th>
-                                        <th>Submitted Date</th>
-                                        <th>Functions</th>
-                                    </tr>
-                                    
-                                    @foreach ($requests['request_absence'] as $request_absence)
-                                        <tr>
-                                            <td>
-                                                {{$request_absence['user_full_name']}}
-                                            </td>
-                                            <td>
-                                                {{$request_absence['date_stamp']}}
-                                            </td>
-                                            <td>
-                                                {{$request_absence['created_date']}}
-                                            </td>
-                                            <td>
-                                                <a href="javascript:viewRequest({{$$request_absence['id']}},{{$selected_levels['request_absence'] ?? 0}})">View</a>
+                                    @if (!empty($requests['request_absence']))
+                                        @foreach ($requests['request_absence'] as $request_absence)
+                                            @if ($loop->first)
+                                                <tr class="bg-primary text-white">
+                                                    <td>
+                                                        Employee
+                                                    </td>
+                                                    <td>
+                                                        Request Date
+                                                    </td>
+                                                    <td>
+                                                        Submitted Date
+                                                    </td>
+                                                    <td>
+                                                        Functions
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                            <tr class="">
+                                                <td>
+                                                    {{$request_absence['user_full_name']}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_absence['date_stamp'])}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_absence['created_date'])}}
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:viewRequest({{$request_absence['id']}},{{$selected_levels['request_absence'] ?? 0}})">View</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="tblDataWhite">
+                                            <td colspan="5">
+                                                0 Requests found.
                                             </td>
                                         </tr>
-                                    @endforeach
-                
+                                    @endif
+                                    
+            
                                     <tr>
                                         <td colspan="6">
                                             <br>
                                         </td>
                                     </tr>
                                 @endif
-                                
-
+            
                                 {{-- Missed Punch: request_schedule --}}
                                 @if (is_array($hierarchy_levels['request_schedule']))
-                                    <tr>
-                                        <th colspan="5">
+                                    <tr class="bg-primary text-white">
+                                        <td colspan="5">
                                             Pending Requests: Schedule Adjustment
                                             [ 
                                                 @foreach ($hierarchy_levels['request_schedule'] as $request_level_display => $request_level)
                                                     @if ($selected_level_arr['request_schedule'] == $request_level)
                                                         <span style="background-color:#33CCFF">
                                                     @endif
-                                                    <a href="#">Level {{$request_level_display}}</a>
+                                                    <a href="/authorization/authorization_list?selected_levels[request_schedule]={{$request_level_display}}">Level {{$request_level_display}}</a>
                                                     @if ($selected_level_arr['request_schedule'] == $request_level)
                                                         </span>
                                                     @endif
@@ -212,34 +254,51 @@
                                                     @endif
                                                 @endforeach
                                             ]
-                                        </th>
+                                        </td>
                                     </tr>
-
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Employee</th>
-                                        <th>Request Date</th>
-                                        <th>Submitted Date</th>
-                                        <th>Functions</th>
-                                    </tr>
-
-                                    @foreach ($requests['request_schedule'] as $request_schedule)
-                                        <tr>
-                                            <td>
-                                                {{$request_schedule['user_full_name']}}
-                                            </td>
-                                            <td>
-                                                {{$request_schedule['date_stamp']}}
-                                            </td>
-                                            <td>
-                                                {{$request_schedule['created_date']}}
-                                            </td>
-                                            <td>
-                                                <a href="javascript:viewRequest({{$request_schedule['id']}},{{$selected_levels['request_schedule'] ?? 0}})">View</a>
+                                    @if (!empty($requests['request_schedule']))
+                                        @foreach ($requests['request_schedule'] as $request_schedule)
+                                            @if ($loop->first)
+                                                <tr class="bg-primary text-white">
+                                                    <td>
+                                                        Employee
+                                                    </td>
+                                                    <td>
+                                                        Request Date
+                                                    </td>
+                                                    <td>
+                                                        Submitted Date
+                                                    </td>
+                                                    <td>
+                                                        Functions
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                            
+                                            <tr class="">
+                                                <td>
+                                                    {{$request_schedule['user_full_name']}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_schedule['date_stamp'])}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_schedule['created_date'])}}
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:viewRequest({{$request_schedule['id']}},{{$selected_levels['request_schedule'] ?? 0}})">View</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="tblDataWhite">
+                                            <td colspan="5">
+                                                0 Requests found.
                                             </td>
                                         </tr>
-                                    @endforeach    
-
+                                    @endif
+                                    
+            
                                     <tr>
                                         <td colspan="6">
                                             <br>
@@ -247,10 +306,9 @@
                                     </tr>
                                 @endif
             
-
                                 {{-- Missed Punch: request_other --}}
                                 @if (is_array($hierarchy_levels['request_other']))
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="5">
                                             Pending Requests: Other
                                             [ 
@@ -258,7 +316,7 @@
                                                     @if ($selected_level_arr['request_other'] == $request_level)
                                                         <span style="background-color:#33CCFF">
                                                     @endif
-                                                    <a href="#">Level {{$request_level_display}}</a>
+                                                    <a href="/authorization/authorization_list?selected_levels[request_other]={{$request_level_display}}">Level {{$request_level_display}}</a>
                                                     @if ($selected_level_arr['request_other'] == $request_level)
                                                         </span>
                                                     @endif
@@ -269,52 +327,68 @@
                                             ]
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Employee</th>
-                                        <th>Request Date</th>
-                                        <th>Submitted Date</th>
-                                        <th>Functions</th>
-                                    </tr>
-
-                                    @foreach ($requests['request_other'] as $request_other)
-                                        <tr>
-                                            <td>
-                                                {{$request_other['user_full_name']}}
-                                            </td>
-                                            <td>
-                                                {{$request_other['date_stamp']}}
-                                            </td>
-                                            <td>
-                                                {{$request_other['created_date']}}
-                                            </td>
-                                            <td>
-                                                <a href="javascript:viewRequest({{$request_other['id']}},{{$selected_levels['request_other'] ?? 0}})">View</a>
+            
+                                    @if (!empty($requests['request_other']))
+                                        @foreach ($requests['request_other'] as $request_other)
+                                            @if ($loop->first)
+                                                <tr class="bg-primary text-white">
+                                                    <td>
+                                                        Employee
+                                                    </td>
+                                                    <td>
+                                                        Request Date
+                                                    </td>
+                                                    <td>
+                                                        Submitted Date
+                                                    </td>
+                                                    <td>
+                                                        Functions
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                            <tr class="">
+                                                <td>
+                                                    {{$request_other['user_full_name']}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_other['date_stamp'])}}
+                                                </td>
+                                                <td>
+                                                    {{getdate_helper('date', $request_other['created_date'])}}
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:viewRequest({{$request_other['id']}},{{$selected_levels['request_other'] ?? 0}})">View</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="tblDataWhite">
+                                            <td colspan="5">
+                                                0 Requests found.
                                             </td>
                                         </tr>
-                                    @endforeach
-
+                                    @endif
+            
                                     <tr>
                                         <td colspan="6">
                                             <br>
                                         </td>
                                     </tr>
                                 @endif
-
+            
                             @endif
-
+            
                             @if ($permission->Check('punch','authorize'))
                                 @if (is_array($hierarchy_levels['timesheet']))
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="5">
                                             Pending TimeSheets
-                                            [ 
+                                            [   
                                                 @foreach ($hierarchy_levels['timesheet'] as $timesheet_level_display => $timesheet_level)
                                                     @if ($selected_level_arr['timesheet'] == $timesheet_level)
                                                         <span style="background-color:#33CCFF">
                                                     @endif
-                                                    <a href="#">Level {{$timesheet_level_display}}</a>
+                                                    <a href="/authorization/authorization_list?selected_levels[timesheet]={{$timesheet_level_display}}">Level {{$timesheet_level_display}}</a>
                                                     @if ($selected_level_arr['timesheet'] == $timesheet_level)
                                                         </span>
                                                     @endif
@@ -325,27 +399,40 @@
                                             ]
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Employee</th>
-                                        <th colspan="2">Pay Period</th>
-                                        <th>Functions</th>
-                                    </tr>
-
-                                    @foreach ($timesheets as $timesheet)
-                                        <tr>
-                                            <td>
-                                                {{$timesheet['user_full_name']}}
-                                            </td>
-                                            <td colspan="2">
-                                                {{$timesheet['pay_period_start_date']}} - {{$timesheet['pay_period_end_date']}}
-                                            </td>
-                                            <td>
-                                                <a href="javascript:viewTimeSheetVerification({{$timesheet['id']}},{{$selected_levels['timesheet'] ?? 0}})">View</a>
+                                    @if (!empty($timesheets))
+                                        @foreach ($timesheets as $timesheet)
+                                            @if ($loop->first)
+                                                <tr class="bg-primary text-white">
+                                                    <td>
+                                                        Employee
+                                                    </td>
+                                                    <td colspan="2">
+                                                        Pay Period
+                                                    </td>
+                                                    <td>
+                                                        Functions
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                            <tr class="">
+                                                <td>
+                                                    {{$timesheet['user_full_name']}}
+                                                </td>
+                                                <td colspan="2">
+                                                    {{getdate_helper('date', $timesheet['pay_period_start_date'])}} - {{getdate_helper('date', $timesheet['pay_period_end_date'])}}
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:viewTimeSheetVerification({{$timesheet['id']}},{{$selected_levels['timesheet'] ?? 0}})">View</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="tblDataWhite">
+                                            <td colspan="5">
+                                                0 TimeSheets found.
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endif
                                 @endif
                             @endif
             
@@ -363,47 +450,36 @@
                             @endif
             
                         </table>
+                    </form>
+                            
+                    {{-- --------------------------------------------------------------------------- --}}
                     
-                    {{-- ----------------------------------------- --}}
-                    
-                </div>
+                </div><!-- end card -->
             </div>
+            <!-- end col -->
         </div>
+        <!-- end col -->
     </div>
 
-    <script>
-        function viewRequest(requestID, level) {
+
+    <script	language=JavaScript>
+
+        function viewRequest(requestID,level) {
             try {
-                let baseUrl = "{{ url('request/view_request') }}";
-                let url = baseUrl + '?id=' + encodeURIComponent(requestID) + '&selected_level=' + encodeURIComponent(level);
-                window.open(url, "Request_" + requestID, "toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
+                window.open('/attendance/request/view?id='+ encodeURI(requestID) +'&selected_level='+ encodeURI(level),"Request_"+ requestID,"toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
             } catch (e) {
                 //DN
             }
         }
-    
-        function viewTimeSheetVerification(timesheet_verify_id, level) {
+        function viewTimeSheetVerification(timesheet_verify_id,level) {
             try {
-                let baseUrl = "{{ url('timesheet/view_timesheet_verification') }}";
-                let url = baseUrl + '?id=' + encodeURIComponent(timesheet_verify_id) + '&selected_level=' + encodeURIComponent(level);
-                window.open(url, "TimeSheet_" + timesheet_verify_id, "toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
+                // check here - url is incorrect
+                //window.open('{/literal}{$BASE_URL}{literal}timesheet/ViewTimeSheetVerification.php?id='+ encodeURI(timesheet_verify_id) +'&selected_level='+ encodeURI(level),"TimeSheet_"+ timesheet_verify_ID,"toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
+                window.open('{/literal}{$BASE_URL}{literal}timesheet/ViewTimeSheetVerification.php?id='+ encodeURI(timesheet_verify_id) +'&selected_level='+ encodeURI(level),"TimeSheet_"+ timesheet_verify_id,"toolbar=0,status=1,menubar=0,scrollbars=1,fullscreen=no,width=580,height=470,resizable=1");
             } catch (e) {
                 //DN
             }
         }
-    
-        // Example usage with jQuery trigger
-        $(document).on('click', '.view-request-btn', function () {
-            let requestID = $(this).data('id');
-            let level = $(this).data('level');
-            viewRequest(requestID, level);
-        });
-    
-        $(document).on('click', '.view-timesheet-btn', function () {
-            let timesheetID = $(this).data('id');
-            let level = $(this).data('level');
-            viewTimeSheetVerification(timesheetID, level);
-        });
-    </script>
-    
+        
+        </script>
 </x-app-layout>
