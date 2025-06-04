@@ -199,7 +199,7 @@ class EditBranch extends Controller
                     ];
                 }
             }
-            
+
             // dd($data);
         } else {
             // Add mode: Set default values
@@ -216,7 +216,8 @@ class EditBranch extends Controller
 
         $cf = new CompanyFactory();
         $data['country_options'] = $cf->getOptions('country');
-        $data['province_options'] = $cf->getOptions('province', $data['country'] ?? null);
+        // $data['province_options'] = $cf->getOptions('province', $data['country'] ?? null);
+		$data['province_options'] = $cf->getOptions('province') ?? [];
 
         // Prepare view data
         $viewData = [
@@ -244,7 +245,7 @@ class EditBranch extends Controller
             'address1' => 'nullable|string',
             'address2' => 'nullable|string',
             'city' => 'nullable|string',
-            // 'province' => 'nullable|string',
+            'province' => 'nullable|string',
             'country' => 'nullable|string',
             'postal_code' => 'nullable|string',
             'work_phone' => 'nullable|string',
@@ -272,7 +273,10 @@ class EditBranch extends Controller
         $bf->setAddress2($validatedData['address2'] ?? null);
         $bf->setCity($validatedData['city'] ?? null);
         $bf->setCountry($validatedData['country'] ?? null);
-        $bf->setProvince($validatedData['province'] ?? '00');
+        // $bf->setProvince($validatedData['province'] ?? '00');
+        if (isset($validatedData['province'])) {
+			$bf->setProvince($validatedData['province']);
+		}
         $bf->setPostalCode($validatedData['postal_code'] ?? null);
         $bf->setWorkPhone($validatedData['work_phone'] ?? null);
         $bf->setFaxPhone($validatedData['fax_phone'] ?? null);
@@ -285,12 +289,14 @@ class EditBranch extends Controller
         if ($bf->isValid()) {
             $bf->Save();
             return redirect()->route('branch.index')->with('success', 'Branch saved successfully.');
-        } 
+        }
         else {
             // // If validation fails, return back with errors
             return redirect()->back()->withErrors(['error' => 'Invalid branch data.'])->withInput();
         }
     }
+
+
     public function delete($id)
     {
         $current_company = $this->company;

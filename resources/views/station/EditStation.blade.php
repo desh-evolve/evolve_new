@@ -55,7 +55,7 @@
         <div class="card w-75"> <!-- Wider card to accommodate more fields -->
             <div class="card-header align-items-center d-flex justify-content-between">
                 <h4 class="card-title mb-0 flex-grow-1">Station {{ isset($data['id']) ? 'Edit' : 'Add' }}</h4>
-                <a href="/stations" class="btn btn-primary">Station List <i class="ri-arrow-right-line"></i></a>
+                <a href="/station" class="btn btn-primary">Station List <i class="ri-arrow-right-line"></i></a>
             </div>
 
             <div class="card-body">
@@ -78,17 +78,6 @@
                 <form method="POST"
                     action="{{ isset($data['id']) ? route('station.save', $data['id']) : route('station.save') }}">
                     @csrf
-                 
-
-                    {{-- <div class="form-group">
-                        <label for="status">Status</label>
-                        <select name="data[status]" id="status" class="form-select">
-                            @foreach ($data['status_options'] as $value => $label)
-                                <option value="{{ $value }}" {{ $data['status'] == $value ? 'selected' : '' }}>
-                                    {{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
 
                     <div class="form-group">
                         <label for="status_id">Status</label>
@@ -153,9 +142,6 @@
                         <label for="department_id">Department</label>
                         <select name="data[department_id]" id="department_id" class="form-select">
                             @foreach ($data['department_options'] as $value => $label)
-                                {{-- <option value="{{ $value }}"
-                                    {{ $data['department_id'] == $value ? 'selected' : '' }}>{{ $label }}
-                                </option> --}}
                                 <option value="{{ $value }}"
                                     {{ (!isset($data['department_id']) && $loop->first) || (isset($data['department_id']) && $data['department_id'] == $value) ? 'selected' : '' }}>
                                     {{ $label }}
@@ -210,10 +196,6 @@
                             <label for="time_zone_id">Force Time Zone</label>
                             <select name="data[time_zone_id]" id="time_zone_id" class="form-select">
                                 @foreach ($data['time_zone_options'] as $value => $label)
-                                    {{-- <option value="{{ $value }}"
-                                    
-                                        {{ $data['time_zone_id'] == $value ? 'selected' : '' }}>{{ $label }}
-                                    </option> --}}
                                     <option value="{{ $value }}"
                                         {{ (!isset($data['time_zone_id']) && $loop->first) || (isset($data['time_zone_id']) && $data['time_zone_id'] == $value) ? 'selected' : '' }}>
                                         {{ $label }}
@@ -339,8 +321,12 @@
                     <div class="mt-3 mb-3">
                         <label for="user_ids">Employee Groups</label>
                         <div class="col-md-12">
-                            <x-general.multiselect-php title="Employee Groups" :data="$data['src_group_options']" :selected="!empty($data['group_ids']) ? array_values($data['group_ids']) : []"
-                                :name="'data[group_ids][]'" id="policySelector" />
+                            <x-general.multiselect-php
+                                title="Employee Groups"
+                                :data="$data['src_group_options']"
+                                :selected="array_values($data['group_ids'] ?? [])"
+                                :name="'data[group_ids][]'"
+                                id="groupSelector" />
                         </div>
                     </div>
 
@@ -348,28 +334,28 @@
                         <label for="user_ids">Branches</label>
                         <div class="col-md-12">
                             <x-general.multiselect-php title="Branches" :data="$data['branch_options']" :selected="!empty($data['branch_ids']) ? array_values($data['branch_ids']) : []"
-                                :name="'data[branch_ids][]'" id="policySelector" />
+                                :name="'data[branch_ids][]'" id="branchSelector" />
                         </div>
                     </div>
                     <div class="mt-3 mb-3">
                         <label for="user_ids">Departments</label>
                         <div class="col-md-12">
                             <x-general.multiselect-php title="Departments" :data="$data['department_options']" :selected="!empty($data['department_ids']) ? array_values($data['department_ids']) : []"
-                                :name="'data[department_ids][]'" id="policySelector" />
+                                :name="'data[department_ids][]'" id="departmentSelector" />
                         </div>
                     </div>
                     <div class="mt-3 mb-3">
                         <label for="user_ids">Include Employees</label>
                         <div class="col-md-12">
                             <x-general.multiselect-php title="Include Employees" :data="$data['src_include_user_options']" :selected="!empty($data['include_user_ids']) ? array_values($data['include_user_ids']) : []"
-                                :name="'data[include_user_ids][]'" id="policySelector" />
+                                :name="'data[include_user_ids][]'" id="includeUserSelector" />
                         </div>
                     </div>
                     <div class="mt-3 mb-3">
                         <label for="user_ids">Exclude Employees</label>
                         <div class="col-md-12">
                             <x-general.multiselect-php title="Exclude Employees" :data="$data['src_exclude_user_options']" :selected="!empty($data['exclude_user_ids']) ? array_values($data['exclude_user_ids']) : []"
-                                :name="'data[exclude_user_ids][]'" id="policySelector" />
+                                :name="'data[exclude_user_ids][]'" id="excludeUserSelector" />
                         </div>
                     </div>
                     {{-- @php

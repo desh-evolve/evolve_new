@@ -24,8 +24,8 @@
 
                     {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="#"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="card-body">
-                    
+
                     {{-- -------------------------------------------- --}}
 
                     <form method="post" action="{{ route('company.hierarchy.add') }}">
@@ -56,7 +56,7 @@
                                     <input type="text" name="hierarchy_control_data[name]" value="{{$hierarchy_control_data['name'] ?? ''}}">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <td>
                                     Description:
@@ -65,7 +65,7 @@
                                     <input type="text" name="hierarchy_control_data[description]" value="{{$hierarchy_control_data['description'] ?? ''}}">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <td>
                                     Objects:
@@ -190,7 +190,7 @@
                                     <input type="submit" name="action" value="Delete Level" onClick="selectAll(document.getElementById('filter_user'))">
                                 </td>
                             </tr>
-            
+
                         </table>
                         </div>
                         {{-- <div id="contentBoxFour">

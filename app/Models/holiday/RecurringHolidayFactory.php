@@ -9,6 +9,7 @@ use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Company\CompanyListFactory;
+use App\Models\Core\TTLog;
 use Illuminate\Support\Facades\DB;
 
 class RecurringHolidayFactory extends Factory {

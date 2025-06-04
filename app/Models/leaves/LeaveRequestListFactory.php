@@ -373,13 +373,13 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getSortSQL( $order );
 
 			$res = DB::select($query, $ph);
-			
-			if ( empty($res['count']) ) {
-				$row['count'] = 0;
-			}else{
-				$row['count'] = $res[0]->count;
-			}
 
+			if ( isset($res['count']) && !empty($res['count']) ) {
+				$row['count'] = $res[0]->count;
+			}else{
+				$row['count'] = 0;
+			}
+			
 			return $row;
         }
 

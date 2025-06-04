@@ -79,7 +79,7 @@
                                         <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('currency.add', ['id' => $currency['id'] ?? '']) }}'">
                                             {{ __('Edit') }}
                                         </button>
-                                    
+
                                         <!-- Delete Button -->
                                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteCurrency({{ $currency['id'] }})">
                                             {{ __('Delete') }}
@@ -93,7 +93,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    
+
 
                 </div><!-- end card -->
             </div>
@@ -101,6 +101,7 @@
         </div>
         <!-- end col -->
     </div>
+
     <script>
         async function deleteCurrency(currencyId) {
             if (confirm('Are you sure you want to delete this item?')) {
@@ -114,7 +115,7 @@
                             'Content-Type': 'application/json'
                         }
                     });
-                
+
                     const data = await response.json();
                     if (response.ok) {
                         alert(data.success); // Display success message
@@ -128,6 +129,5 @@
             }
         }
     </script>
-
 
 </x-app-layout>

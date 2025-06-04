@@ -70,7 +70,7 @@ class VIewUserLeave extends Controller
 			$ulf->getAPISearchByCompanyIdAndArrayCriteria( $current_company->getId(),$filter_data);
 			//$ulf->getAll();
 
-			$user_options = array();
+			$user_options = array(); 
 
 			foreach($ulf as $uf){
 				$user_options[$uf->getId()] = $uf->getPunchMachineUserID().'-'.$uf->getFullName() ;

@@ -149,7 +149,7 @@ class UserList extends Controller
 		}
 
 		$viewData['users'] = $users;
-        dd($viewData);
+        // dd($viewData);
 
 		return view('users/UserList', $viewData);
 	}

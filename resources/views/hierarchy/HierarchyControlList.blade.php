@@ -10,8 +10,8 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="/company/hierarchy/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="card-body">
-                    
+
                     {{-- -------------------------------------------- --}}
 
                     <form method="post" action="{{ route('company.hierarchy.list') }}">

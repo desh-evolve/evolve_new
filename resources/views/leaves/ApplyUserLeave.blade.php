@@ -122,7 +122,7 @@
                                         <tr>
                                             <th>Leave Method:</th>
                                             <td>
-                                                <select id="data[method_type]" name="data[method_type]" onChange="UpdateTotalLeaveTime();">
+                                                <select id="data[method_type]" name="data[method_type]" onChange="updateTotalLeaveTime();">
                                                     @foreach ($data['method_options'] as $id => $name )
                                                     <option 
                                                         value="{{$id}}"
@@ -230,7 +230,7 @@
                                                     
                                     <table class="table table-bordered">
                                         <tr id="row">
-                                            <thead id="row">
+                                            <thead id="row"  class="bg-primary text-white">
                                                 <th></th>
                                                 @foreach ($header_leave as $row)
                                                     <th>{{$row['name']}}</th>
@@ -262,7 +262,7 @@
                                                     
                         <div>
                             <table class="table table-bordered">
-                                    <tr id="row">
+                                    <tr id="row"  class="bg-primary text-white">
                                         <th>Name</th>
                                         <th>Leave Type</th>
                                         <th>Amount</th>
@@ -301,205 +301,122 @@
         </div>
     </div>
 
-    <script	language=JavaScript>
-    
-        var hwCallback = {
-          
-            getAbsenceLeaveMethod: function(result) {
-                if ( result == false ) {
-                    result = '0';
-                } 
-                              
-                var h = Math.floor(result / 3600);
-                var m = Math.floor(result % 3600 / 60);
-                
-                if(Math.floor(result ) == 28800){
-                    document.getElementById('no_days').value = '1';
-                }
-                else if(Math.floor(result ) == 14400){
-                    document.getElementById('no_days').value = '0.5';
-                }
-                else if(Math.floor(result ) == 5400){
-                    document.getElementById('no_days').value = '1';
-                }
-    
-            },
-              
-        }
-              
-              
-              
-        var remoteHW = new AJAX_Server(hwCallback);
-      
-        function UpdateTotalLeaveTime() {
-            var selectedLeaveId = document.getElementById('data[method_type]').value;
-            remoteHW.getAbsenceLeaveMethod(selectedLeaveId);
+
+    <script>
+
+        $(document).ready(() => {
+            @php
+            if (isset($msg)) {
+                echo 'alert("Alert", '.$msg.')';
+            }
+            @endphp
+        })
+
+        // Function to calculate absence duration in days based on policy ID
+        function getAbsenceLeaveMethod(absencePolicyId) {
+            const durations = {
+                1: 28800, // 8 hours
+                2: 14400, // 4 hours
+                3: 5400   // 1.5 hours
+            };
             
-            var ele = document.getElementById("appt-time");
-            var ele_end = document.getElementById("end-time");
+            const result = durations[absencePolicyId] || 0;
+            const hours = Math.floor(result / 3600);
+            const minutes = Math.floor((result % 3600) / 60);
             
-            if(selectedLeaveId == 3){
-                // ele.style.display = "block";
-                ele.disabled = false;
-                ele_end.disabled = false;
-                //ele.readonly = false;
-            }
-            else{
-                ele.disabled = true;
-                ele_end.disabled = true;
-                //ele.readonly = true;
-            }
+            const dayMapping = {
+                28800: '1',
+                14400: '0.5',
+                5400: '1'
+            };
+            
+            document.getElementById('no_days').value = dayMapping[result] || '';
         }
-      
-        window.onload = function() {
-            if ( window.history.replaceState ) {
-                window.history.replaceState( null, null, window.location.href );
-            // history.replaceState("", "", "/the/result/page");
-            }
+
+        // Function to update leave time controls
+        function updateTotalLeaveTime() {
+            const selectedLeaveId = parseInt(document.getElementById('data[method_type]').value);
+            getAbsenceLeaveMethod(selectedLeaveId);
+            
+            const startTimeInput = document.getElementById('appt-time');
+            const endTimeInput = document.getElementById('end-time');
+            
+            const isCustomTime = selectedLeaveId === 3;
+            startTimeInput.disabled = !isCustomTime;
+            endTimeInput.disabled = !isCustomTime;
         }
-      
-        $( document ).ready(function() {
-            $('#mdp-demo').multiDatesPicker({
-            //minDate: 0, // today
-            //maxDate: 30, // +30 days from today 
-                dateFormat: "yy-mm-dd",
-                altField: '#altField',
-                    onSelect: function() {
-                        var $this = $(this);
-                        var e = document.getElementById("no_days");
-                        
-                        var eMethod  = document.getElementById("data[method_type]");
-                        var strMethod = eMethod.options[eMethod.selectedIndex].value;
+
+        // Prevent form resubmission on page refresh
+        window.addEventListener('load', () => {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const noDaysInput = document.getElementById('no_days');
+            const submitButton = document.getElementById('btnSubmit');
+
+            // Handle number of days input
+            noDaysInput.addEventListener('keydown', (event) => {
+                const methodSelect = document.getElementById('data[method_type]');
+                const leaveTypeSelect = document.getElementById('data[leave_type]');
                 
-                    if(strMethod ==0){
-                            
-                            alert("Please select leave method");
-                            for(var i = 0; i < this.multiDatesPicker.dates.picked.length; i++)
-                    return this.multiDatesPicker.dates.picked.splice(i, 1).pop();
-                    }
-                    else if(strMethod ==1){
-                        e.value = this.multiDatesPicker.dates.picked.length;
-                    }
-                    else if(strMethod ==2 || strMethod ==3){
-                        
-                        if(this.multiDatesPicker.dates.picked.length >0){
-                        var pick_date = this.multiDatesPicker.dates.picked[0];
-                        
-                        for(var i = 0; i < this.multiDatesPicker.dates.picked.length; i++)
-                            return this.multiDatesPicker.dates.picked.splice(i, 1).pop();
-                                            
-                            this.multiDatesPicker.dates.picked.push(pick_date);
-                    }
-                    }
-                        
-                    }
+                const methodValue = methodSelect.value;
+                const leaveTypeValue = leaveTypeSelect.value;
+                
+                // Disable submit if required fields are not selected
+                if (leaveTypeValue === '0') {
+                    submitButton.disabled = true;
+                    alert('Please select leave type');
+                    return;
+                }
+                if (methodValue === '0') {
+                    submitButton.disabled = true;
+                    alert('Please select leave method');
+                    return;
+                }
+                
+                if (methodValue === '1') {
+                    submitButton.disabled = false;
+                    const value = parseFloat(noDaysInput.value);
+                    noDaysInput.value = isNaN(value) ? '' : Math.round(value);
+                }
             });
-            
-            
-            $( "#no_days" ).keydown(function(event ) {
-                
-                var e = document.getElementById("data[method_type]");
-                var strMethod = e.options[e.selectedIndex].value;
-                
-                var et = document.getElementById("data[leave_type]");
-                var strType = et.options[et.selectedIndex].value;
-                
-                var submit = document.getElementById("btnSubmit");
-                
-                if(strType == 0){
-                    
-                    submit.disabled = true;
-                    alert("Please select leave type");
-                }
-                else if(strMethod == 0){
-                    
-                    submit.disabled = true;
-                    alert("Please select leave method");
-                }
-                else if(strMethod == 1){
-                    submit.disabled = false;
-                    var num = event.value;
-                    var amt = parseFloat(this.value);
-                    if(isNaN(amt)) {
-                    $(this).val('');
+
+            // Form submission validation
+            document.getElementById('frmleave').addEventListener('submit', (event) => {
+                const fields = {
+                    methodType: document.getElementById('data[method_type]').value,
+                    leaveType: document.getElementById('data[leave_type]').value,
+                    coverDuty: document.getElementById('data[cover_duty]').value,
+                    supervisor: document.getElementById('data[supervisor]').value,
+                    noDays: document.getElementById('no_days').value,
+                    date: document.getElementById('altField').value,
+                    reason: document.getElementById('reason').value.trim()
+                };
+
+                const validationMessages = {
+                    methodType: 'Please select leave method',
+                    leaveType: 'Please select leave type',
+                    coverDuty: 'Please select leave cover duty',
+                    supervisor: 'Please select leave supervisor',
+                    noDays: 'Number of days is empty',
+                    date: 'Please select date',
+                    reason: 'Reason is empty'
+                };
+
+                for (const [field, value] of Object.entries(fields)) {
+                    if ((field !== 'reason' && value === '0') || 
+                        (field === 'reason' && value.length < 1) || 
+                        (['noDays', 'date'].includes(field) && value === '')) {
+                        alert(validationMessages[field]);
+                        event.preventDefault();
+                        return;
                     }
-                    else{
-                    $(this).val( amt.toFixed(0));
-                    }
-                    //$(this).val("");
-                    //$(this).val(num);
                 }
-                
-                
-            });
-            
-            
-            $( "#frmleave" ).submit(function( event ) {
-                
-                
-                
-                
-                var e = document.getElementById("data[method_type]");
-                var strMethod = e.options[e.selectedIndex].value;
-                
-                var et = document.getElementById("data[leave_type]");
-                var strType = et.options[et.selectedIndex].value;
-                
-                
-                var ecover = document.getElementById("data[cover_duty]");
-                var streCover = ecover.options[ecover.selectedIndex].value;
-                
-                var esupevisor = document.getElementById("data[supervisor]");
-                var strSupervisor = esupevisor.options[esupevisor.selectedIndex].value;
-                
-                var noDays = document.getElementById("no_days");
-                var selectDays = document.getElementById("altField");
-                var reason = $("#reason").val().trim().length;
-                
-                
-                if(strType == 0){
-                    
-                    
-                    alert("Please select leave type");
-                    event.preventDefault();
-                }
-                else if(strMethod == 0){
-                    
-                    alert("Please select leave method");
-                    event.preventDefault();
-                }
-                else if(noDays.value === ''){
-                    alert("Number Of Days Empty");
-                    event.preventDefault();
-                }
-                else if(selectDays.value === ''){
-                    alert("Please select date");
-                    event.preventDefault();
-                }
-                else if(reason < 1){
-                    
-                    alert("Reason is Empty");
-                    event.preventDefault();
-                }
-                else if(streCover == 0){
-                    
-                    alert("Please select leave cover duty");
-                    event.preventDefault();
-                }
-                else if(strSupervisor == 0){
-                    
-                    alert("Please select leave supervisor");
-                    event.preventDefault();
-                }
-                
-                    //$( "#btnSubmit" ).prop("disabled",true);
-                
-                
-                
-                
             });
         });
-      
     </script>
 
     {{-- calander functions start --}}
@@ -586,7 +503,7 @@
                     count++;
                 });
                 $('#altField').val(dates.trim().replace(/,$/, '')); // Use .val() for input fields
-                $('#numberOfDays').val(count);
+                $('#no_days').val(count);
             }
     
             // Change the month (prev or next)

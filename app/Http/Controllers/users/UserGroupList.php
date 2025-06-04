@@ -45,7 +45,6 @@ class UserGroupList extends Controller
 		$uglf = new UserGroupListFactory();
 		$nodes = FastTree::FormatArray($uglf->getByCompanyIdArray($current_company->getId()), 'HTML');
 
-
 		// Default case - show list
 		$uglf = new UserGroupListFactory();
 		$nodes = FastTree::FormatArray($uglf->getByCompanyIdArray($current_company->getId()), 'HTML');
@@ -96,12 +95,12 @@ class UserGroupList extends Controller
 
 			foreach ($user_group->rs as $g_obj) {
 				$user_group->data = (array)$g_obj; // added bcz currency data is null and it gives an error
-				
+
 				$user_group->setDeleted(true); // Set deleted flag to true
-	
+
 				if ($user_group->isValid()) {
 					$res = $user_group->Save();
-					
+
 					if($res){
 						return response()->json(['success' => 'Group deleted successfully.']);
 					}else{

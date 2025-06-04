@@ -102,34 +102,31 @@
 
                     <div class="form-group">
                         <label for="country">Country</label>
-                        <select name="country" id="country" class="form-select">
+                        <select name="country" id="country" class="form-select" onchange="showProvince()">
                             @foreach ($data['country_options'] as $value => $label)
                                 <option value="{{ $value }}" {{ isset($data['country']) && $data['country'] == $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
+
+                    {{-- <div class="form-group">
                         <label for="province">Province / State</label>
                         <select name="province" id="province" class="form-select">
                             @foreach ($data['province_options'] as $value => $label)
                                 <option value="{{ $value }}" {{ isset($data['province']) && $data['province'] == $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
+                    </div> --}}
+
+                    <div class="form-group">
+                        <label for="province">Province/State</label>
+                        <select name="province" class="form-select" id="province">
+
+                        </select>
+                        <input type="hidden" id="selected_province"
+                            value="{{ $data['province'] ?? '' }}">
                     </div>
 
-
-                    {{-- <div class="form-group">
-                        <label for="province">Province / State</label>
-                        <select name="province" id="province" class="form-select">
-                            @foreach ($data['data']['province_options'] ?? [] as $value => $label)
-                                <option value="{{ $value }}"
-                                    {{ isset($data['data']['province']) && $data['data']['province'] == $value ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" id="selected_province" value="{{ $data['province'] ?? '' }}">
-                    </div> --}}
 
                     <div class="form-group">
                         <label for="postal_code">Postal / ZIP Code</label>
@@ -224,6 +221,8 @@
     </div><!-- end center-container -->
 
     <script>
+
+        /*
         function showProvince() {
             var country = document.getElementById('country').value;
             var selectedProvince = document.getElementById('selected_province').value;
@@ -249,5 +248,52 @@
         document.addEventListener('DOMContentLoaded', function() {
             showProvince();
         });
+
+        */
+
+         // Assuming `province_options` is passed from the backend like below
+        var provinceOptions = @json($data['province_options']);
+
+        function showProvince() {
+            var country = document.getElementById('country').value; // Get selected country
+            var provinceDropdown = document.getElementById('province'); // Get province dropdown
+            var selectedProvince = document.getElementById('selected_province').value; // Get the selected province value
+
+            // Clear the current province options
+            provinceDropdown.innerHTML = '';
+
+            if (country in provinceOptions) {
+                // If provinces are available for the selected country
+                var provinces = provinceOptions[country];
+
+                // Loop through and add each province option
+                for (var provinceCode in provinces) {
+                    var option = document.createElement('option');
+                    option.value = provinceCode;
+                    option.text = provinces[provinceCode];
+
+                    // If the province is already selected, set it as selected
+                    if (provinceCode == selectedProvince) {
+                        option.selected = true;
+                    }
+
+                    provinceDropdown.appendChild(option);
+                }
+            }
+        }
+
+
+         // Function to populate the province dropdown when the page loads
+        window.onload = function() {
+            // Trigger showProvince on page load to set the initial provinces
+            showProvince();
+
+            // Set the initial selected country in the dropdown
+            var selectedCountry = document.getElementById('country').value;
+            if (selectedCountry) {
+                showProvince(); // Update province dropdown based on selected country
+            }
+        };
+
     </script>
 </x-app-layout>

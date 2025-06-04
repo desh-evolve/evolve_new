@@ -50,10 +50,10 @@ class CurrencyList extends Controller
         */
 
          // Initialize sort column and sort order with default values or from the request
-        $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'name'; // Default sort by 'name'
-        $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc'; // Default sort order 'asc'
-        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Default page is 1 if not set
-        // Example: Define $ids, assuming we are getting selected ids from the query string or any other source
+        // $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'name'; // Default sort by 'name'
+        // $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc'; // Default sort order 'asc'
+        // $page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Default page is 1 if not set
+        // // Example: Define $ids, assuming we are getting selected ids from the query string or any other source
         $ids = isset($_GET['ids']) ? $_GET['ids'] : []; // Fetch selected IDs from URL or set empty array if not provided
 
         // Debugging (if you need to debug $ids)
@@ -64,12 +64,10 @@ class CurrencyList extends Controller
 
         $viewData['title'] = 'Currency List';
 
-
         BreadCrumb::setCrumb('Currency List');
 
         $clf = new CurrencyListFactory();
-        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
-        $pager = new Pager($clf);
+        $clf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null);
         $iso_code_options = $clf->getISOCodesArray();
 
         $currencies = [];
@@ -97,9 +95,6 @@ class CurrencyList extends Controller
             'title' => 'Currency List',
             'currencies' => $currencies,
             'base_currency' => $base_currency,
-            'sort_column' => $sort_array['sort_column'] ?? '',
-            'sort_order' => $sort_array['sort_order'] ?? '',
-            'paging_data' => $pager->getPageVariables()
         ];
 
         return view('currency.CurrencyList', $viewData);

@@ -34,6 +34,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
+use App\Models\Core\TTLog;
 
 use Illuminate\Support\Facades\DB;
 
@@ -421,9 +422,8 @@ class PayStubFactory extends Factory {
 	}
 
 	function isValidTransactionDate($epoch) {
-
 		Debug::Text('Epoch: '. $epoch .' ( '. TTDate::getDate('DATE+TIME', $epoch) .' ) Pay Stub End Date: '. TTDate::getDate('DATE+TIME', $this->getEndDate() ) , __FILE__, __LINE__, __METHOD__,10);
-
+		
 		if ( $epoch >= $this->getEndDate() ) {
 
 			return TRUE;
@@ -1126,7 +1126,6 @@ class PayStubFactory extends Factory {
 			$this->ValidateEntries();
 
 		} else {
-
 			Debug::Text('Validating PayStub...', __FILE__, __LINE__, __METHOD__,10);
 
 			//We could re-check these after processEntries are validated,
@@ -1410,7 +1409,7 @@ class PayStubFactory extends Factory {
 
 	function getSumByEntriesArrayAndTypeIDAndPayStubAccountID( $ps_entries, $type_ids = NULL, $ps_account_ids = NULL) {
 		Debug::text('PS Entries: '. $ps_entries .' Type ID: '. $type_ids .' PS Account ID: '. $ps_account_ids, __FILE__, __LINE__, __METHOD__,10);
-
+		
 		if ( strtolower($ps_entries) == 'current' ) {
 			$entries = $this->tmp_data['current_pay_stub'];
 		} elseif ( strtolower($ps_entries) == 'previous' ) {
@@ -1438,11 +1437,12 @@ class PayStubFactory extends Factory {
 		}
 		
 		//Debug::Arr( $entries, 'Sum Entries Array: ', __FILE__, __LINE__, __METHOD__,10);
-
+		
 		if ( !is_array($entries) ) {
 			Debug::text('Returning FALSE...' , __FILE__, __LINE__, __METHOD__,10);
 			return FALSE;
 		}
+		
 
 		if ( $type_ids != '' AND !is_array($type_ids) ) {
 			$type_ids = array($type_ids);
@@ -1518,7 +1518,6 @@ class PayStubFactory extends Factory {
 			}
 
 		}
-
 		//Debug::Arr($retarr, 'SumByEntries RetArr: ', __FILE__, __LINE__, __METHOD__,10);
 		return $retarr;
 

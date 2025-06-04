@@ -728,6 +728,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 	}
 
 	function getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
+		
 		if ( $company_id == '') {
 			return FALSE;
 		}

@@ -102,17 +102,17 @@
 
                                     <td class="function-buttons">
                                         <a class="btn btn-secondary btn-sm"
-                                            href="{{ route('admin.userlist.add', ['id' => $user['id']]) }}">Edit</a>
-
-                                        <a class="btn btn-info btn-sm"
-                                            href="/admin/userlist/map/{{ $user['id'] }}">Map</a>
+                                            href="{{ route('admin.userlist.add', ['id' => $user['id']]) }}">
+                                            Edit
+                                        </a>
                                         <a class="btn btn-info btn-sm"
                                             href="/user/preference?user_id={{ $user['id'] }}">
                                             Prefs
                                         </a>
                                         <a class="btn btn-info btn-sm"
-                                            href="{{ route('user.jobhistory.index') }}?id={{ $user['id'] }}">Job
-                                            History</a>
+                                            href="{{ route('user.jobhistory.index', ['id' => $user['id']]) }}">
+                                            Job History
+                                        </a>
 
                                         <a class="btn btn-warning btn-sm"
                                             href="/admin/userlist/kpi/{{ $user['id'] }}">KPI</a>
@@ -123,7 +123,7 @@
                             @endforeach
                         </table>
                     </div>
-                    {{-- --------------------------------------------------------------------------- --}}
+                    {{-------------------------------------------------------------------------------}}
 
                 </div><!-- end card -->
             </div>
@@ -160,7 +160,6 @@
                         $functionCell.html(`
                             <a class="btn btn-secondary btn-sm" href="/admin/userlist/add?id=${userId}">Edit</a>
                             <a class="btn btn-info btn-sm" href="/user/preference?user_id=${userId}">Prefs</a>
-                            <a class="btn btn-info btn-sm" href="/admin/userlist/map/${userId}">Map</a>
                             <a class="btn btn-info btn-sm" href="/user/jobhistory/${userId}">Job History</a>
                             <a class="btn btn-warning btn-sm" href="/admin/userlist/kpi/${userId}">KPI</a>
                             <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/admin/userlist/delete/${userId}', 'User', this)">Delete</button>
