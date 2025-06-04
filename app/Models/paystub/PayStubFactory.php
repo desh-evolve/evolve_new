@@ -3859,8 +3859,7 @@ class PayStubFactory extends Factory {
 
 		}
 
-		if ( get_class( $pslf ) !== 'PayStubListFactory' ) {
-
+		if ( get_class( $pslf ) !== 'App\Models\PayStub\PayStubListFactory' ) {
 			return FALSE;
 
 		}

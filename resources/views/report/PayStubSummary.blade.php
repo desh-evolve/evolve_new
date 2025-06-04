@@ -87,7 +87,14 @@
                                             {{ $current_user_prefs->getDateFormatExample() ?? 'YYYY-MM-DD' }}</small>
                                     </td>
                                 </tr>
-
+                                <tr>
+                                    <td class="align-middle" rowspan="1">
+                                        <input type="radio" class="checkbox" id="date_type_pay_period"
+                                            name="filter_data[date_type]" value="pay_period_ids"
+                                            onclick="showReportDateType();"
+                                            {{ ($filter_data['date_type'] ?? 'transaction_date') == 'transaction_date' ? 'checked' : '' }}>
+                                    </td>
+                                </tr>
                                 {!! html_report_filter([
                                     'filter_data' => $filter_data,
                                     'label' => 'pay_period',
@@ -220,9 +227,9 @@
                             <input class="btn btn-primary btn-sm" type="button" id="display_report" name="action"
                                 value="{{ __('Display Report') }}"
                                 onclick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'Display Report'; this.form.submit();">
-                            <input class="btn btn-primary btn-sm" type="button" id="view_pay_stubs" name="action"
+                            {{-- <input class="btn btn-primary btn-sm" type="button" id="view_pay_stubs" name="action"
                                 value="{{ __('View Pay Stubs') }}"
-                                onclick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'View Pay Stubs'; this.form.submit();">
+                                onclick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'View Pay Stubs'; this.form.submit();"> --}}
                             <input class="btn btn-primary btn-sm" type="button" id="export_report" name="action"
                                 value="{{ __('Export') }}"
                                 onclick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'Export'; this.form.submit();">
@@ -233,23 +240,22 @@
         </div>
     </div>
 
-  <script language="JavaScript">
+    <script language="JavaScript">
         $(document).ready(function() {
             countAllReportCriteria();
         });
 
-            var report_criteria_elements = [
-                'filter_user_status',
-                'filter_group',
-                'filter_branch',
-                'filter_department',
-                'filter_user_title',
-                'filter_pay_period',
-                'filter_include_user',
-                'filter_exclude_user',
-                'filter_currency',
-                'filter_column'
-            ];
-
-        </script>
+        var report_criteria_elements = [
+            'filter_user_status',
+            'filter_group',
+            'filter_branch',
+            'filter_department',
+            'filter_user_title',
+            'filter_pay_period',
+            'filter_include_user',
+            'filter_exclude_user',
+            'filter_currency',
+            'filter_column'
+        ];
+    </script>
 </x-app-layout>
