@@ -5,7 +5,6 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Currency;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Core\Environment;
@@ -18,6 +17,7 @@ use App\Models\Core\FormVariables;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\URLBuilder;
@@ -88,8 +88,14 @@ class ClosePayPeriod extends Controller
 
         //$action = Misc::findSubmitButton();
 
-        $action = isset($_POST['action']) ? trim($_POST['action']) : '';
-		$action = !empty($action) ? strtolower($action) : '';
+        $action = '';
+        if (isset($_POST['action'])) {
+            $action = trim($_POST['action']);
+        } elseif (isset($_GET['action'])) {
+            $action = trim($_GET['action']);
+        }
+        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+
 
         switch ($action) {
             case 'close':
@@ -120,15 +126,17 @@ class ClosePayPeriod extends Controller
                 }
                 $pplf->CommitTransaction();
 
-                Redirect::Page( URLBuilder::getURL(NULL, 'ClosePayPeriod.php') );
+                return redirect('/payroll/payroll_processing');
+
 
                 break;
             
-                case 'generate_pay_stubs':
+            case 'generate_pay_stubs':
                 Debug::Text('Generate Pay Stubs ', __FILE__, __LINE__, __METHOD__,10);
                 //var_dump($pay_stub_pay_period_ids); die;
-                Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paystubs', 'pay_period_ids' => $pay_stub_pay_period_ids, 'next_page' => '../payperiod/ClosePayPeriod.php' ), '../progress_bar/ProgressBarControl.php') );
-
+                Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paystubs', 'pay_period_ids' => $pay_stub_pay_period_ids, 'next_page' => '/payroll/payroll_processing' ), '/progress_bar_control') );
+                
+                
                 break;
             default:
                 //Step 1, get all open pay periods that have ended and are before the transaction date.

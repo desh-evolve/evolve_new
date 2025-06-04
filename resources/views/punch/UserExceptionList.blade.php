@@ -37,9 +37,9 @@
                                 <th>
                                     Functions
                                 </th>
-                                <th>
+                                {{-- <th>
                                     <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
-                                </th>
+                                </th> --}}
                             </tr>
                             @if (!empty($rows))
                                 @foreach ($rows as $i => $row)
@@ -71,9 +71,9 @@
                                                 [ <a href="/attendance/timesheet?filter_data[user_id]={{$row['user_id']}}&filter_data[date]={{$row['date_stamp_epoch']}}">View</a> ]
                                             @endif
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <input type="checkbox" class="checkbox" name="ids[]" value="{{$request['id']}}">
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             @else

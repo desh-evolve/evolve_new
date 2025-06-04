@@ -79,11 +79,10 @@ class UserGenericStatusList extends Controller
 		}
 
 		Debug::Text('Next Page: '. urldecode( $batch_next_page ) , __FILE__, __LINE__, __METHOD__,10);
-		
 		if ( $batch_id != '' ) {
 			$ugslf = new UserGenericStatusListFactory();
 			$ugslf->getByUserIdAndBatchId( $current_user->getId(), $batch_id,  $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-
+			
 			Debug::Text('Record Count: '. $ugslf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 			//$pager = new Pager($ugslf);

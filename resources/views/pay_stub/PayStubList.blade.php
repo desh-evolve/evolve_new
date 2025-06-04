@@ -37,35 +37,42 @@
                                     Functions
                                 </td>
                             </tr>
-                            @foreach ($pay_stubs as $i => $pay_stub)
-                                <tr class="">
-                                    <td>
-                                        {{ $i+1 }}
-                                    </td>
-            
-                                    @foreach ($columns as $key => $column)
+                            @if (!empty($pay_stubs))
+                                 @foreach ($pay_stubs as $i => $pay_stub)
+                                    <tr class="">
                                         <td>
-                                            {{ $pay_stub[$key] ?? "--" }}
+                                            {{ $i+1 }}
                                         </td>
-                                    @endforeach
-            
-                                    <td>
-                                        @if ($permission->Check('pay_stub','view') OR ( $permission->Check('pay_stub','view_child') AND $pay_stub['is_child'] === TRUE ) OR ( $permission->Check('pay_stub','view_own') AND $pay_stub.is_owner === TRUE ))
-                                            [ <a href="paystub/view">View</a> ]
-                                        @endif
-                                        @if (( $pay_stub['status_id'] == 10 OR $pay_stub['status_id'] == 25) AND ( $permission->Check('pay_stub','edit') OR ( $permission->Check('pay_stub','edit_child') AND $pay_stub['is_child'] === TRUE ) OR ( $permission->Check('pay_stub','edit_own') AND $pay_stub['is_owner'] === TRUE ) ))
-                                            [ <a href="paystub/edit" >Edit</a> ]
-                                        @endif
-                                        @if ($permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child'))
-                                            <input type="submit" name="action:Mark_Paid" value="Mark Paid">
-                                            <input type="submit" name="action:Mark_UnPaid" value="Mark UnPaid">
-                                        @endif
-                                        @if ($permission->Check('pay_stub','delete') OR $permission->Check('pay_stub','delete_child'))
-                                            <input type="submit" name="action:delete" value="Delete" onClick="return confirmSubmit()">
-                                        @endif
-                                    </td>
+                
+                                        @foreach ($columns as $key => $column)
+                                            <td>
+                                                {{ $pay_stub[$key] ?? "--" }}
+                                            </td>
+                                        @endforeach
+                
+                                        <td>
+                                            @if ($permission->Check('pay_stub','view') OR ( $permission->Check('pay_stub','view_child') AND $pay_stub['is_child'] === TRUE ) OR ( $permission->Check('pay_stub','view_own') AND $pay_stub.is_owner === TRUE ))
+                                                [ <a href="paystub/view">View</a> ]
+                                            @endif
+                                            @if (( $pay_stub['status_id'] == 10 OR $pay_stub['status_id'] == 25) AND ( $permission->Check('pay_stub','edit') OR ( $permission->Check('pay_stub','edit_child') AND $pay_stub['is_child'] === TRUE ) OR ( $permission->Check('pay_stub','edit_own') AND $pay_stub['is_owner'] === TRUE ) ))
+                                                [ <a href="paystub/edit" >Edit</a> ]
+                                            @endif
+                                            @if ($permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child'))
+                                                <input type="submit" name="action:Mark_Paid" value="Mark Paid">
+                                                <input type="submit" name="action:Mark_UnPaid" value="Mark UnPaid">
+                                            @endif
+                                            @if ($permission->Check('pay_stub','delete') OR $permission->Check('pay_stub','delete_child'))
+                                                <input type="submit" name="action:delete" value="Delete" onClick="return confirmSubmit()">
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="100" align="center">No Pay Stubs Found</td>
                                 </tr>
-                            @endforeach
+                            @endif
+                           
                         </form>
                     </table>
 

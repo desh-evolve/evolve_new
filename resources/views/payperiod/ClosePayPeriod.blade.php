@@ -117,12 +117,13 @@
                                 <td colspan="2">
                                     <span style="white-space: nowrap;">[ <a href="/punch/user_exception">Exceptions</a> ]</span>
                                     <span style="white-space: nowrap;">[ <a href="/authorization/authorization_list">Requests</a> ]</span>
-                                    <span style="white-space: nowrap;">[ <a href="../report/TimesheetSummary.php" values="filter_data[pay_period_ids][0]=${{$pay_period['id']}},filter_data[columns][99]=verified_time_sheet,filter_data[primary_sort]=verified_time_sheet">Verifications</a> ]</span>
+                                    <span style="white-space: nowrap;">[ <a href="/report/timesheet_summary?filter_data[pay_period_ids][0]={{$pay_period['id']}}&filter_data[columns][99]=verified_time_sheet&filter_data[primary_sort]=verified_time_sheet">Verifications</a> ]</span>
                                 </td>
                             </tr>
                         @endforeach
     
                         <form method="get" action="/payroll/payroll_processing">
+                            @csrf
                             <tr>
                                 <td class="tblPagingLeft" colspan="10" align="right">
                                     <br>
@@ -196,7 +197,7 @@
                                         </td>
                                         <td>
                                             @if ($pay_period['id'])
-                                                [ <a href="ViewPayPeriod.php?pay_period_id={{$pay_period['id']}}">View</a> ]
+                                                [ <a href="/payroll/pay_periods/view/{{$pay_period['id']}}">View</a> ]
                                             @endif
                                         </td>
                                         <td>
@@ -210,8 +211,8 @@
                                         <br>
                                     </td>
                                     <td colspan="2" align="center">
-                                        <input type="submit" name="action:lock" value="Lock">
-                                        <input type="submit" name="action:unlock" value="UnLock">
+                                        <input type="submit" name="action" value="Lock">
+                                        <input type="submit" name="action" value="UnLock">
                                     </td>
                                 </tr>
                                 
@@ -258,7 +259,7 @@
                                             {{$pay_period['total_ps_amendments']}}
                                         </td>
                                         <td colspan="2">
-                                            [ <a href="../pay_stub_amendment/PayStubAmendmentList.php">View</a> ]
+                                            [ <a href="/payroll/pay_stub_amendment">View</a> ]
                                         </td>
                                     </tr>
                                 @endforeach
@@ -270,6 +271,7 @@
                                 </tr>
 
                                 <form method="get" action="/payroll/payroll_processing">
+                                    @csrf
                                     @foreach ($pay_periods as $pay_period)
                                         @if ($loop->first)
                                             <tr class="bg-primary text-white">
@@ -309,7 +311,7 @@
                                             </td>
                                             <td>
                                                 @if ($pay_period['id'])
-                                                    [ <a href="../pay_stub/PayStubList.php?filter_pay_period_id={{$pay_period['id']}}">View</a> ]
+                                                    [ <a href="/attendance/paystubs?filter_pay_period_id={{$pay_period['id']}}">View</a> ]
                                                     [ <a href="../report/PayStubSummary.php?pay_period_id={{$pay_period['id']}}">Summary</a> ]
                                                 @endif
                                             </td>
@@ -324,8 +326,8 @@
                                             <br>
                                         </td>
                                         <td colspan="2" align="center">
-                                                                        
-                                            <input type="submit" name="action:generate_pay_stubs" value="Generate Final Pay">
+                                            {{-- generate final pay button --}}
+                                            <input type="submit" name="action" value="Generate Pay Stubs"> 
                                         </td>
                                     </tr>
                                 </form>
@@ -337,6 +339,7 @@
                                 </tr>
 
                                 <form method="get" action="/payroll/payroll_processing">
+                                    @csrf
                                     @foreach ($pay_periods as $pay_period)
                                         @if ($loop->first)
                                             <tr class="bg-primary text-white">
@@ -393,7 +396,6 @@
                                             </td>
                                             <td>
                                                 @if ($pay_period['id'])
-                                                    {assign var="pay_period_id" value=$pay_period.id}
                                                     [ <a href="../pay_stub/PayStubList.php?filter_pay_period_id={{$pay_period['id']}}">View</a> ]
                                                     [ <a href="../report/PayStubSummary.php?pay_period_id={{$pay_period['id']}}">Summary</a> ]
                                                 @endif
@@ -412,6 +414,7 @@
                                 </tr>
 
                                 <form method="get" action="/payroll/payroll_processing">
+                                    @csrf
                                     @foreach ($pay_periods as $pay_period)
                                         @if ($loop->first)
                                             <tr class="bg-primary text-white">
@@ -469,8 +472,7 @@
                                             </td>
                                             <td>
                                                 @if ($pay_period['id'])
-                                                    {assign var="pay_period_id" value=}
-                                                    [ <a href="ViewPayPeriod.php?pay_period_id={{$pay_period['id']}}">View</a> ]
+                                                    [ <a href="/payroll/pay_periods/view/{{$pay_period['id']}}">View</a> ]
                                                 @endif
                                             </td>
                                             <td>
@@ -483,7 +485,7 @@
                                             <br>
                                         </td>
                                         <td colspan="2" align="center">
-                                            <input type="submit" name="action:close" value="Close">
+                                            <input type="submit" name="action" value="Close">
                                         </td>
                                     </tr>
                                 </form> 

@@ -82,7 +82,7 @@ class PayStubList extends Controller
 				'ids',
 			) 
 		) );
-
+		
 		$columns = array(
 			'-1010-first_name' => __('First Name'),
 			'-1020-middle_name' => __('Middle Name'),
