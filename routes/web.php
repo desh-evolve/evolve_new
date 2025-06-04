@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\accrual\EditUserAccrual;
 use App\Http\Controllers\accrual\UserAccrualBalanceList;
 use App\Http\Controllers\accrual\ViewUserAccrualList;
@@ -115,7 +117,11 @@ use App\Http\Controllers\users\UserLifePromotion;
 use App\Http\Controllers\users\UserList;
 use App\Http\Controllers\users\UserWageListNew;
 use App\Http\Controllers\users\UserWorkExperionce;
-use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\users\BonusCalc;
+use App\Http\Controllers\users\BonusList;
+use App\Http\Controllers\users\EditBonusCalc;
+
 
 
 use App\Http\Controllers\report\UserInformation;
@@ -553,6 +559,10 @@ Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name(
 Route::get('/attendance/paystubs', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
 Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class, 'index'])->name('attendance.apply_leaves');
+
+Route::match(['get', 'post'], '/users/bonus_calc', [BonusCalc::class, 'index'])->name('users.bonus_calc');
+Route::match(['get', 'post'], '/users/bonus_list', [BonusList::class, 'index'])->name('users.bonus_list');
+Route::match(['get', 'post'], '/users/edit_bonus_calc', [EditBonusCalc::class, 'index'])->name('users.edit_bonus_calc');
 
 
 // ===============================================================================================================================
