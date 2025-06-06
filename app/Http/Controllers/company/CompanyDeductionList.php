@@ -158,7 +158,8 @@ class CompanyDeductionList extends Controller
 				}
 				unset($tmp_cd_obj, $cd_obj);
 
-				Redirect::Page( URLBuilder::getURL( NULL, 'CompanyDeductionList.php') );
+				return redirect()->to(URLBuilder::getURL(null, '/payroll/company_deductions'))->with('success', 'Deleted successfully.');
+
 
 				break;
 			default:
