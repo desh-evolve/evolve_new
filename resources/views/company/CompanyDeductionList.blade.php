@@ -80,7 +80,7 @@
                                     <td>
                                         @if ($permission->Check('company_tax_deduction','edit'))
                                             [ <a href="/payroll/company_deductions/add?id={{$row['id']}}" >Edit</a> ]
-                                            [ <a href="/user/tax/edit/{{$row['id']}}">Employee Settings</a> ]
+                                            [ <a href="/user/tax/edit?id={{$row['id']}}">Employee Settings1</a> ]
                                         @endif
                                     </td>
                                     <td>
@@ -102,7 +102,10 @@
                                         <input type="submit" class="button" name="action" value="Add">
                                     @endif
                                     @if ($permission->Check('company_tax_deduction','add'))
-                                        <input type="submit" class="button" name="action" value="Copy">
+                                  
+                                                <input type="submit" class="button" name="action" value="Copy" >
+                                    
+                                        {{-- <input type="submit" class="button" name="action" value="Copy"> --}}
                                     @endif
                                     @if ($permission->Check('company_tax_deduction','delete'))
                                         <input type="submit" class="button" name="action" value="Delete" onClick="return confirmSubmit()">

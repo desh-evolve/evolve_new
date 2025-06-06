@@ -87,6 +87,7 @@ class CompanyDeductionList extends Controller
         $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
 		//==================================================================================
 		
+		
 
 		switch ($action) {
 			case 'add_presets':
@@ -122,7 +123,9 @@ class CompanyDeductionList extends Controller
 					}
 				}
 
-				Redirect::Page( URLBuilder::getURL( NULL, 'CompanyDeductionList.php') );
+				return redirect()->to(URLBuilder::getURL(null, '/payroll/company_deductions'))->with('success', 'Deleted successfully.');
+
+				// Redirect::Page( URLBuilder::getURL( NULL, 'CompanyDeductionList.php') );
 
 				break;
 			case 'copy':
@@ -139,6 +142,8 @@ class CompanyDeductionList extends Controller
 						$tmp_cd_obj->setId( FALSE );
 						$tmp_cd_obj->setName( Misc::generateCopyName( $cd_obj->getName() )  );
 						if ( $tmp_cd_obj->isValid() ) {
+							
+				
 							$tmp_cd_obj->Save( FALSE );
 
 							$tmp_cd_obj->setIncludePayStubEntryAccount( $cd_obj->getIncludePayStubEntryAccount() );
