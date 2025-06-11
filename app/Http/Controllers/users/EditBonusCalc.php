@@ -34,94 +34,100 @@ class EditBonusCalc extends Controller
 		$this->currentUser = View::shared('current_user');
 		$this->currentCompany = View::shared('current_company');
 		$this->userPrefs = View::shared('current_user_prefs');
-
 	}
 
-	public function index() {
+	public function index()
+	{
+
 		$permission = $this->permission;
 		$current_user = $this->currentUser;
 		$current_company = $this->currentCompany;
 		$current_user_prefs = $this->userPrefs;
 
-		if ( !$permission->Check('company','enabled')
-				OR !( $permission->Check('company','view') OR $permission->Check('company','view_own') OR $permission->Check('company','view_child') ) ) {
-			$permission->Redirect( FALSE ); //Redirect
+		if (
+			!$permission->Check('company', 'enabled')
+			or !($permission->Check('company', 'view') or $permission->Check('company', 'view_own') or $permission->Check('company', 'view_child'))
+		) {
+			$permission->Redirect(FALSE); //Redirect
 		}
 
 		$viewData['title'] = 'Bonus';
-		
 
-		extract	(FormVariables::GetVariables(
-			array (
+
+		extract(FormVariables::GetVariables(
+			array(
 				'action',
 				'id',
 				'view',
 				'data'
-			) 
-		) );
+			)
+		));
 
 
-		if ( isset($data) ) {
-			if ( isset($data['start_date']) ) {
-				$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );
+		if (isset($data)) {
+			if (isset($data['start_date'])) {
+				$data['start_date'] = TTDate::parseDateTime($data['start_date']);
 			}
-			if ( isset($data['end_date']) ) {
-				$data['end_date'] = TTDate::parseDateTime( $data['end_date'] );	
+			if (isset($data['end_date'])) {
+				$data['end_date'] = TTDate::parseDateTime($data['end_date']);
 			}
-				
 		}
 
-		$bdf = new BonusDecemberFactory(); 
+		$bdf = new BonusDecemberFactory();
 
 		//==================================================================================
 		$action = '';
-        if (isset($_POST['action'])) {
-            $action = trim($_POST['action']);
-        } elseif (isset($_GET['action'])) {
+		if (isset($_POST['action'])) {
+			$action = trim($_POST['action']);
+		} elseif (isset($_GET['action'])) {
 			$action = trim($_GET['action']);
-        }
-        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+		}
+		$action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
 		//==================================================================================
-
 		switch ($action) {
 			case 'submit':
 				//Debug::setVerbosity(11);
-				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
 
 				$bdf->StartTransaction();
-						
-				if ( $data['id'] == '' ) {
-					$bdf->setCompany( $current_company->getId() );
+
+				if ($data['id'] == '') {
+					$bdf->setCompany($current_company->getId());
 				} else {
 					$bdf->setId($data['id']);
 				}
 
 				$bdf->setStartDate($data['start_date']);
-				$bdf->setEndDate($data['end_date']+59);
-						$bdf->setYNumber($data['y_number']);
+				$bdf->setEndDate($data['end_date'] + 59);
+				$bdf->setYNumber($data['y_number']);
 
-				if ( $bdf->isValid() ) {
+				if ($bdf->isValid()) {
 					$bdf->Save();
 
 					$bdf->CommitTransaction();
-					Redirect::Page( URLBuilder::getURL( NULL, '/users/bonus_calc') );
+					Redirect::Page(URLBuilder::getURL(NULL, '/users/bonus_calc'));
 					break;
 				}
 
 				$bdf->FailTransaction();
-						
-				case 'generate_december_bonuses':
-					
-						Debug::Text('Generate Bonus!', __FILE__, __LINE__, __METHOD__,10);
 
-				Redirect::Page( URLBuilder::getURL( array('action' => 'generate_december_bonuses', 'filter_user_id' => $data['id'], 'next_page' => URLBuilder::getURL( array('dec_bo_id' => $data['id'] ), '/users/bonus_list') ), '/progress_bar_control') );
+			case 'generate_december_bonuses':
 
-					break;
+				Debug::Text('Generate Bonus!', __FILE__, __LINE__, __METHOD__, 10);
+
+				return redirect()->to('/progress_bar_control?' . http_build_query([
+						'action' => 'generate_december_bonuses',
+						'filter_user_id' => $data['id'],
+						'next_page' => url('/users/bonus_list') . '?dec_bo_id=' . $data['id'] . '&action=view'
+					]));
+
+				break;
+
 			default:
-				if ( isset($id) ) {
+				if (isset($id)) {
 
 					$bdlf = new BonusDecemberListFactory();
-					$bdlf->getByIdAndCompanyId($id, $current_company->getId() );
+					$bdlf->getByIdAndCompanyId($id, $current_company->getId());
 
 					foreach ($bdlf->rs as $bd_obj) {
 						$bdlf->data = (array)$bd_obj;
@@ -142,19 +148,22 @@ class EditBonusCalc extends Controller
 							'deleted_by' => $bd_obj->getDeletedBy()
 						);
 					}
-				}  
+				} elseif ($action != 'submit') {
+					$data = array(
+						'id' => '',
+						'start_date' => '',
+						'end_date' => '',
+						'y_number' => ''
 
+					);
+				}
 				$viewData['data'] = $data;
 
 				break;
 		}
 
-
-
 		$viewData['bdf'] = $bdf;
 		$viewData['view'] = $view;
-
 		return view('users/EditBonusCalc', $viewData);
 	}
 }
-

@@ -15,6 +15,7 @@ use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Users\BonusDecemberListFactory;
 use Illuminate\Support\Facades\View;
+use App\Models\Users\UserListFactory;
 
 class BonusCalc extends Controller
 {
@@ -33,90 +34,94 @@ class BonusCalc extends Controller
 		$this->currentUser = View::shared('current_user');
 		$this->currentCompany = View::shared('current_company');
 		$this->userPrefs = View::shared('current_user_prefs');
-
 	}
 
-	public function index() {
+	public function index()
+	{
 		$permission = $this->permission;
 		$current_user = $this->currentUser;
 		$current_company = $this->currentCompany;
 		$current_user_prefs = $this->userPrefs;
 
-		if ( !$permission->Check('company','enabled')
-				OR !( $permission->Check('company','view') OR $permission->Check('company','view_own') OR $permission->Check('company','view_child') ) ) {
-			$permission->Redirect( FALSE ); //Redirect
+		if (
+			!$permission->Check('company', 'enabled')
+			or !($permission->Check('company', 'view') or $permission->Check('company', 'view_own') or $permission->Check('company', 'view_child'))
+		) {
+			$permission->Redirect(FALSE); //Redirect
 		}
 
 		$viewData['title'] = 'Bonus Calculation';
 
-		extract	(FormVariables::GetVariables(
-												array	(
-														'action',
-														'page',
-														'sort_column',
-														'sort_order',
-														'filter_user_id',
-														'ids',
-														) ) );
+		extract(FormVariables::GetVariables(
+			array(
+				'action',
+				'page',
+				'sort_column',
+				'sort_order',
+				'filter_user_id',
+				'ids',
+			)
+		));
 
-		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-													array(
-															'filter_user_id' => $filter_user_id,
-															'sort_column' => $sort_column,
-															'sort_order' => $sort_order,
-															'page' => $page
-														) );
+		URLBuilder::setURL(
+			$_SERVER['SCRIPT_NAME'],
+			array(
+				'filter_user_id' => $filter_user_id,
+				'sort_column' => $sort_column,
+				'sort_order' => $sort_order,
+				'page' => $page
+			)
+		);
 
 
 		$sort_array = NULL;
-		if ( $sort_column != '' ) {
+		if ($sort_column != '') {
 			$sort_array = array($sort_column => $sort_order);
 		}
 
-		Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+		Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
 
-		//==================================================================================
-		$action = '';
-        if (isset($_POST['action'])) {
+	   $action = '';
+        if (isset($_POST['action:submit'])) {
+            $action = 'submit'; // Normalize to 'submit' for action:submit
+        } elseif (isset($_POST['action'])) {
             $action = trim($_POST['action']);
         } elseif (isset($_GET['action'])) {
-			$action = trim($_GET['action']);
+            $action = trim($_GET['action']);
         }
         $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+		
 		//==================================================================================
-
 		switch ($action) {
 			case 'add':
-				Redirect::Page( URLBuilder::getURL( NULL, '/users/edit_bonus_calc') );
+				Redirect::Page(URLBuilder::getURL(NULL, '/users/edit_bonus_calc'));
 				break;
-			
-			
-			default:
-					
-					$bdlf = new BonusDecemberListFactory(); 
-					$bdlf->getByCompanyId($current_company->getId());
-					$bonuses = array();
-					
-					foreach($bdlf->rs as $bd_obj){
-						$bdlf->data = (array)$bd_obj;
-						$bd_obj = $bdlf;
-						
-						$bonuses[] = array ( 
-							'id' => $bd_obj->getId(),
-							'company_id' => $bd_obj->getCompany(),
-							'y_number' => $bd_obj->getYNumber(),
-							'start_date' => $bd_obj->getStartDate(),
-							'end_date' => $bd_obj->getEndDate(),
-						);
-						
-					}
-					
-					$viewData['bonuses'] = $bonuses;
-					
-					break;
-		}
 
-		return view('users/bonusCalc', $viewData);		
+			default:
+
+				$bdlf = new BonusDecemberListFactory();
+				$bdlf->getByCompanyId($current_company->getId());
+				$bonuses = array();
+		
+				foreach ($bdlf->rs as $bd_obj) {
+					$bdlf->data = (array)$bd_obj;
+					$bd_obj = $bdlf;
+
+					$bonuses[] = array(
+						'id' => $bd_obj->getId(),
+						'company_id' => $bd_obj->getCompany(),
+						'y_number' => $bd_obj->getYNumber(),
+						'start_date' => $bd_obj->getStartDate(),
+						'end_date' => $bd_obj->getEndDate(),
+					);
+				}
+
+				$viewData['bonuses'] = $bonuses;
+
+				break;
+		}
+		$viewData['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
+
+		return view('users/bonusCalc', $viewData);
 	}
 }
-
