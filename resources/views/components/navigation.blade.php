@@ -459,8 +459,12 @@
                             class="nav-link {{ request()->routeIs('users.bonus_calc') ? 'active' : '' }}">December Bonus Calculation
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('users.attendance_bonus_calc') }}"
+                            class="nav-link {{ request()->routeIs('users.attendance_bonus_calc') ? 'active' : '' }}">Attendance Bonus Calculation
+                        </a>
+                    </li>
                     
-                    <li class="nav-item"><a href="#" class="nav-link">Attendance Bonus Calculation</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Gratuity Calculation</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Authorization</a></li>
