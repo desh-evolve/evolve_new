@@ -471,7 +471,12 @@
                     </li>
                     
                    <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Authorization</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('authorization.authorization_list') }}"
+                            class="nav-link {{ request()->routeIs('authorization.authorization_list') ? 'active' : '' }}">Authorization
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
         </li>
