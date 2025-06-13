@@ -126,6 +126,8 @@ use App\Http\Controllers\users\AttendanceBonusCalc;
 use App\Http\Controllers\users\AttendanceBonusList;
 use App\Http\Controllers\users\EditAttendanceBonusCalc;
 
+use App\Http\Controllers\users\GratuityCalc;
+
 
 
 use App\Http\Controllers\report\UserInformation;
@@ -572,6 +574,7 @@ Route::match(['get', 'post'], '/users/attendance_bonus_calc', [AttendanceBonusCa
 Route::match(['get', 'post'], '/users/attendance_bonus_list', [AttendanceBonusList::class, 'index'])->name('users.attendance_bonus_list');
 Route::match(['get', 'post'], '/users/edit_attendance_bonus_calc', [EditAttendanceBonusCalc::class, 'index'])->name('users.edit_attendance_bonus_calc');
 
+Route::match(['get', 'post'], '/users/gratuity_calc', [GratuityCalc::class, 'index'])->name('users.gratuity_calc');
 
 // ===============================================================================================================================
 
