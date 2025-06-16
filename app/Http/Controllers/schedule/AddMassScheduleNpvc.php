@@ -231,7 +231,7 @@ class AddMassScheduleNpvc extends Controller
 		
 							if ( $sf->Validator->isValid() ) {
 		
-						Redirect::Page( URLBuilder::getURL( array('action' => 'add_mass_schedule_npvc', 'filter_user_id' => $filter_user_id, 'data' => $data ), '../progress_bar/ProgressBarControl.php') );
+						Redirect::Page( URLBuilder::getURL( array('action' => 'add_mass_schedule_npvc', 'filter_user_id' => $filter_user_id, 'data' => $data ), '../progress_bar_control') );
 							}
 		
 			default:

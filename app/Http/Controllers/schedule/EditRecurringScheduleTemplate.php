@@ -214,7 +214,7 @@ class EditRecurringScheduleTemplate extends Controller
 						$rstcf->CommitTransaction();
 						//$rstcf->FailTransaction();
 
-						Redirect::Page( URLBuilder::getURL( NULL, 'RecurringScheduleTemplateControlList.php') );
+						Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_template_control_list') );
 
 						break;
 

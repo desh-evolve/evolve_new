@@ -153,7 +153,7 @@ class EditRecurringSchedule extends Controller
 					//$rscf->FailTransaction();
 					$rscf->CommitTransaction();
 		
-					Redirect::Page( URLBuilder::getURL( NULL, 'RecurringScheduleControlList.php') );
+					Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_control_list') );
 					break;
 				} else {
 					$rscf->FailTransaction();

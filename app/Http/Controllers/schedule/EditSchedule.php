@@ -134,7 +134,7 @@ class EditSchedule extends Controller
 					}
 				}
 		
-				Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+				Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '/close_window') );
 		
 				break;
 		
@@ -217,7 +217,7 @@ class EditSchedule extends Controller
 					//$sf->FailTransaction();
 					$sf->CommitTransaction();
 		
-					Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+					Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '/close_window') );
 					break;
 				} else {
 					$sf->FailTransaction();

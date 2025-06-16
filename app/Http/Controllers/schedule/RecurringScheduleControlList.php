@@ -8,13 +8,21 @@ use App\Models\Core\Debug;
 use Illuminate\Http\Request;
 
 use App\Models\Core\Environment;
+use App\Models\Core\FastTree;
 use App\Models\Core\FormVariables;
 use App\Models\Core\Misc;
 use App\Models\Core\Redirect;
 use App\Models\Core\TTDate;
 use App\Models\Core\URLBuilder;
 use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Schedule\RecurringScheduleControlListFactory;
 use App\Models\Schedule\RecurringScheduleTemplateControlListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
 use Illuminate\Support\Facades\View;
 
 class RecurringScheduleControlList extends Controller
@@ -49,7 +57,7 @@ class RecurringScheduleControlList extends Controller
 
 		//Debug::setVerbosity(11);
 
-		$smarty->assign('title', __($title = 'Recurring Schedule List')); // See index.php
+		$viewData['title'] = 'Recurring Schedule List';
 
 		/*
 		* Get FORM variables
@@ -94,11 +102,11 @@ class RecurringScheduleControlList extends Controller
 			}
 		}
 
-		$ugdlf = new UserGenericDataListFactory();
-		$ugdf = new UserGenericDataFactory();
+		$ugdlf = new UserGenericDataListFactory(); 
+		$ugdf = new UserGenericDataFactory(); 
 
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-		$hlf = new HierarchyListFactory();
+		$hlf = new HierarchyListFactory(); 
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -124,7 +132,7 @@ class RecurringScheduleControlList extends Controller
 		switch ($action) {
 			case 'add':
 
-				Redirect::Page( URLBuilder::getURL( NULL, 'EditRecurringSchedule.php', FALSE) );
+				Redirect::Page( URLBuilder::getURL( NULL, '/schedule/edit_recurring_schedule', FALSE) );
 
 				break;
 			case 'delete':
@@ -139,7 +147,9 @@ class RecurringScheduleControlList extends Controller
 
 				foreach ($ids as $id => $user_ids) {
 					$rsclf->getByIdAndCompanyId($id, $current_company->getId() );
-					foreach ($rsclf as $rsc_obj) {
+					foreach ($rsclf->rs as $rsc_obj) {
+						$rsclf->data = (array)$rsc_obj;
+						$rsc_obj = $rsclf;
 						//Get all users for this schedule.
 						$current_users = $rsc_obj->getUser();
 
@@ -163,7 +173,7 @@ class RecurringScheduleControlList extends Controller
 					}
 				}
 
-				Redirect::Page( URLBuilder::getURL( NULL, 'RecurringScheduleControlList.php') );
+				Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_control_list') );
 
 				break;
 			case 'search_form_delete':
@@ -176,7 +186,7 @@ class RecurringScheduleControlList extends Controller
 				$saved_search_id = UserGenericDataFactory::searchFormDataHandler( $action, $filter_data, URLBuilder::getURL(NULL, 'RecurringScheduleControlList.php') );
 			default:
 
-				extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, $sort_column ) );
+				//extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, $sort_column ) ); 
 				Debug::Text('Sort Column: '. $sort_column, __FILE__, __LINE__, __METHOD__,10);
 				Debug::Text('Saved Search ID: '. $saved_search_id, __FILE__, __LINE__, __METHOD__,10);
 
@@ -196,7 +206,7 @@ class RecurringScheduleControlList extends Controller
 																	'page' => $page
 																) );
 
-				$rsclf = new RecurringScheduleControlListFactory();
+				$rsclf = new RecurringScheduleControlListFactory(); 
 				$ulf = new UserListFactory();
 
 				if ( $permission->Check('recurring_schedule','view') == FALSE ) {
@@ -210,9 +220,7 @@ class RecurringScheduleControlList extends Controller
 
 				$rsclf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
-				$pager = new Pager($rsclf);
-
-				$utlf = new UserTitleListFactory();
+				$utlf = new UserTitleListFactory(); 
 				$utlf->getByCompanyId( $current_company->getId() );
 				$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
@@ -224,13 +232,15 @@ class RecurringScheduleControlList extends Controller
 				$dlf->getByCompanyId( $current_company->getId() );
 				$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-				$uglf = new UserGroupListFactory();
+				$uglf = new UserGroupListFactory(); 
 				$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
 				$rstclf = new RecurringScheduleTemplateControlListFactory();
 				$template_options = $rstclf->getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
 
 				foreach ($rsclf as $rsc_obj) {
+					$rsclf->data = (array)$rsc_obj;
+					$rsc_obj = $rsclf;
 					$user_id = $rsc_obj->getColumn('user_id');
 
 					$ulf = new UserListFactory();
@@ -291,21 +301,18 @@ class RecurringScheduleControlList extends Controller
 				}
 				unset($column_key);
 
-				$smarty->assign_by_ref('rows', $rows);
-
-				$smarty->assign_by_ref('filter_data', $filter_data);
-				$smarty->assign_by_ref('columns', $filter_columns );
-				$smarty->assign('total_columns', count($filter_columns)+3 );
-
-				$smarty->assign_by_ref('sort_column', $sort_column );
-				$smarty->assign_by_ref('sort_order', $sort_order );
-				$smarty->assign_by_ref('saved_search_id', $saved_search_id );
-
-				$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+				$viewData['rows'] = $rows;
+				$viewData['filter_data'] = $filter_data;
+				$viewData['columns'] = $filter_columns ;
+				$viewData['total_columns'] = count($filter_columns)+3 ;
+				$viewData['sort_column'] = $sort_column ;
+				$viewData['sort_order'] = $sort_order ;
+				$viewData['saved_search_id'] = $saved_search_id ;
+				$viewData['paging_data'] = $pager->getPageVariables() ;
 
 				break;
 		}
-		$smarty->display('schedule/RecurringScheduleControlList.tpl');
+		return view('schedule/RecurringScheduleControlList', $viewData);
 	}
 }
 
