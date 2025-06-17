@@ -18,102 +18,76 @@
                    
                     {{-- --------------------------------------------------------------------------- --}}
 
-                    <table class="tblList">
-                        {*
+                    <table class="table table-bordered">
+                        {{-- {*
                         If cases where people need to select many employees, the GET URL length can be exceeded. The problem though is
                         if we use POST, when editing schedules they can't refresh the page automatically without being prompted to re-submit form data.
-                        *}
+                        *} --}}
                         <form method="get" name="schedule" id="schedule_form">
                             <input type="hidden" id="tmp_action" name="do" value="">
             
                                 <div id="contentBoxTwoEdit">
-                                    {if !$ugdf->Validator->isValid()}
-                                        {include file="form_errors.tpl" object="ugdf"}
-                                    {/if}
+                                    {{-- @if (!$ugdf->Validator->isValid()) --}}
+                                        {{-- error list --}}
+                                        {{-- {include file="form_errors.tpl" object="ugdf"} --}}
+                                    {{-- @endif --}}
             
-                                    <table class="editTable">
+                                    <table class="table table-bordered">
             
-                                    {if $permission->Check('schedule','view') OR $permission->Check('schedule','view_child')}
-                                    <tr class="tblHeader">
+                                    <tr class="bg-primary text-white">
                                         <td colspan="3">
-                                            {t}Saved Schedules{/t}
+                                            Schedule Filter Criteria
                                         </td>
                                     </tr>
-                                    {htmlreportsave generic_data=$generic_data button_prefix="do" action_element_id="tmp_action" onclick="ViewTypeTarget()" object="ugdf"}
-                                    {/if}
-            
-                                    <tr class="tblHeader">
-                                        <td colspan="3">
-                                            {t}Schedule Filter Criteria{/t}
-                                        </td>
-                                    </tr>
-            
-                                    {if $permission->Check('schedule','view') OR $permission->Check('schedule','view_child')}
-                                    {capture assign=report_display_name}{t}Group{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Groups{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='group' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-            
-                                    {capture assign=report_display_name}{t}Default Branch{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Branches{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='default_branch' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-            
-                                    {capture assign=report_display_name}{t}Default Department{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Departments{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='default_department' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-            
-                                    {capture assign=report_display_name}{t}Scheduled Branch{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Branches{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='schedule_branch' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-            
-                                    {capture assign=report_display_name}{t}Scheduled Department{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Departments{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='schedule_department' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-            
-                                    {capture assign=report_display_name}{t}Employee Title{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Titles{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='user_title' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-            
-                                    {capture assign=report_display_name}{t}Include Employees{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Employees{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='include_user' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-            
-                                    {capture assign=report_display_name}{t}Exclude Employees{/t}{/capture}
-                                    {capture assign=report_display_plural_name}{t}Employees{/t}{/capture}
-                                    {htmlreportfilter filter_data=$filter_data label='exclude_user' display_name=$report_display_name display_plural_name=$report_display_plural_name}
-                                    {/if}
+                                    @if ($permission->Check('schedule','view') OR $permission->Check('schedule','view_child'))
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'group', 'display_name'=>'Group', 'display_plural_name'=>'Groups']) !!}
+                
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'default_branch', 'display_name'=> 'Branch', 'display_plural_name'=>'Branches']) !!}
+                
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'default_department', 'display_name'=> 'Department', 'display_plural_name'=>'Departments']) !!}
+                
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'schedule_branch', 'display_name'=> 'Branch', 'display_plural_name'=>'Branches']) !!}
+                
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'schedule_department', 'display_name'=> 'Department', 'display_plural_name'=>'Departments']) !!}
+                
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'user_title', 'display_name'=> 'Title', 'display_plural_name'=>'Titles']) !!}
+                
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'include_user', 'display_name'=> 'Employees', 'display_plural_name'=>'Employees']) !!}
+                
+                                        {!! html_report_filter([ 'filter_data'=>$filter_data, 'label'=>'exclude_user', 'display_name'=> 'Employees', 'display_plural_name'=>'Employees']) !!}
+                                    @endif
                                         <tr>
                                             <td class="cellLeftEditTableHeader" width="10%" colspan="2" nowrap>
-                                                <b>{t}Start Date:{/t}</b>
+                                                <b>Start Date:</b>
                                             </td>
                                             <td class="cellRightEditTable">
-                                                <input type="text" size="15" id="start_date" name="filter_data[start_date]" value="{getdate type="DATE" epoch=$filter_data.start_date}">
-                                                <img src="{$BASE_URL}/images/cal.gif" id="cal_start_date" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('start_date', 'cal_start_date', false);">
-                                                <b>{t}Show:{/t}</b>
+                                                <input type="date" id="start_date" name="filter_data[start_date]" value="{{ getdate_helper('date', $filter_data['start_date']) }}" >
+                                                <b>Show:</b>
                                                 <select name="filter_data[show_days]">
-                                                    {html_options options=$filter_data.show_days_options selected=$filter_data.show_days}
+                                                    {!! html_options([ 'options'=>$filter_data['show_days_options'], 'selected'=>$filter_data['show_days']]) !!}
                                                 </select>
                                             </td>
                                         </tr>
             
                                         <tr>
                                             <td class="cellLeftEditTableHeader" colspan="2" nowrap>
-                                                {t}View:{/t}
+                                                View:
                                             </td>
                                             <td class="cellRightEditTable">
                                                 <select name="filter_data[view_type_id]" id="filter_view_type">
-                                                    {html_options options=$filter_data.view_type_options selected=$filter_data.view_type_id}
+                                                    {!! html_options([ 'options'=>$filter_data['view_type_options'], 'selected'=>$filter_data['view_type_id'] ?? '']) !!}
                                                 </select>
                                             </td>
                                         </tr>
             
                                         <tr>
-                                            <td class="tblHeader" colspan="3">
+                                            <td class="bg-primary text-white" colspan="3">
                                                 <a name="schedule"></a>
-                                                <input type="submit" name="do:view_schedule" value="{t}View Schedule{/t}" onClick="ViewTypeTarget(document.getElementById('filter_view_type')); selectAllReportCriteria();">
-                                                <input type="submit" name="do:print_schedule" value="{t}Print Schedule{/t}" onClick="ViewTypeTarget('do:print_schedule'); selectAllReportCriteria();">
-                                                {if $permission->Check('schedule','view') OR $permission->Check('schedule','view_child')}
-                                                    {t}Group Schedule{/t}: <input type="checkbox" name="filter_data[group_schedule]" value="1">
-                                                {/if}
+                                                <input type="submit" name="do:view_schedule" value="View Schedule" onClick="ViewTypeTarget(document.getElementById('filter_view_type')); selectAllReportCriteria();">
+                                                <input type="submit" name="do:print_schedule" value="Print Schedule" onClick="ViewTypeTarget('do:print_schedule'); selectAllReportCriteria();">
+                                                @if ($permission->Check('schedule','view') OR $permission->Check('schedule','view_child'))
+                                                    Group Schedule: <input type="checkbox" name="filter_data[group_schedule]" value="1">
+                                                @endif
                                             </td>
                                         </tr>
                                     </table>

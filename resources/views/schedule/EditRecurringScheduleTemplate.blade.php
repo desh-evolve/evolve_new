@@ -20,177 +20,175 @@
 
                     <form method="post" name="wage" action="{$smarty.server.SCRIPT_NAME}">
                         <div id="contentBoxTwoEdit">
-                            {if !$rstcf->Validator->isValid() OR !$rstf->Validator->isValid()}
-                                {include file="form_errors.tpl" object="rstcf,rstf"}
-                            {/if}
+                            @if (!$rstcf->Validator->isValid() OR !$rstf->Validator->isValid())
+                                {{-- error list --}}
+                                {{-- {include file="form_errors.tpl" object="rstcf,rstf"} --}}
+                            @endif
             
-                            <table class="editTable">
+                            <table class="table table-bordered">
             
                             <tr>
-                                <td class="{isvalid object="rstcf" label="name" value="cellLeftEditTable"}">
-                                    {t}Name:{/t}
-                                </td>
+                                <th>
+                                    Name:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" name="data[name]" value="{$data.name}">
+                                    <input type="text" name="data[name]" value="{{$data['name']}}">
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="rstcf" label="description" value="cellLeftEditTable"}">
-                                    {t}Description:{/t}
-                                </td>
+                                <th>
+                                    Description:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" name="data[description]" value="{$data.description}">
+                                    <input type="text" name="data[description]" value="{{$data['description']}}">
                                 </td>
                             </tr>
             
                             <tr>
                                 <td colspan="2">
-                                    <table class="tblList">
-                                        <tr class="tblHeader">
+                                    <table class="table table-bordered">
+                                        <tr class="bg-primary text-white">
                                             <td colspan="15">
-                                                <b>{t}NOTE:{/t}</b> {t}To set different In/Out times for each day of the week, add additional weeks all with the same week number.{/t}
+                                                <b>NOTE:</b> To set different In/Out times for each day of the week, add additional weeks all with the same week number.
                                             </td>
                                         </tr>
-                                        <tr class="tblHeader">
+                                        <tr class="bg-primary text-white">
                                             <td>
-                                                {t}Week{/t}
+                                                Week
                                             </td>
                                             <td width="15">
-                                                {t}S{/t}
+                                                S
                                             </td>
                                             <td width="15">
-                                                {t}M{/t}
+                                                M
                                             </td>
                                             <td width="15">
-                                                {t}T{/t}
+                                                T
                                             </td>
                                             <td width="15">
-                                                {t}W{/t}
+                                                W
                                             </td>
                                             <td width="15">
-                                                {t}T{/t}
+                                                T
                                             </td>
                                             <td width="15">
-                                                {t}F{/t}
+                                                F
                                             </td>
                                             <td width="15">
-                                                {t}S{/t}
+                                                S
                                             </td>
                                             <td>
-                                                {t}In{/t}
+                                                In
                                             </td>
                                             <td>
-                                                {t}Out{/t}
+                                                Out
                                             </td>
                                             <td>
-                                                {t}Total{/t}
+                                                Total
                                             </td>
                                             <td>
-                                                {t}Schedule Policy{/t}
+                                                Schedule Policy
                                             </td>
                                             <td>
-                                                {t}Branch{/t}
+                                                Branch
                                             </td>
                                             <td>
-                                                {t}Department{/t}
+                                                Department
                                             </td>
                                             <td>
                                                 <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
                                             </td>
                                         </tr>
-                                        {foreach name="week" from=$week_rows item=week_row}
-                                            {assign var="week_row_id" value=$week_row.id}
-                                            {cycle assign=row_class values="tblDataWhite,tblDataGrey"}
-            
-                                            <tr class="{$row_class}">
-                                                <td id="{isvalid object="rstf" label="week$week_row_id" value="value"}">
-                                                    <input type="text" size="4" name="week_rows[{$week_row.id}][week]" value="{$week_row.week}">
-                                                    <input type="hidden" name="week_rows[{$week_row.id}][id]" value="{$week_row.id}">
-                                                    <input type="hidden" name="week_rows[{$week_row.id}][total_time]" value="{$week_row.total_time}">
+                                        @foreach ($week_rows as $week_row)
+                                            <tr class="">
+                                                <td>
+                                                    <input type="text" size="4" name="week_rows[{{$week_row['id']}}][week]" value="{$week_row.week}">
+                                                    <input type="hidden" name="week_rows[{{$week_row['id']}}][id]" value="{{$week_row['id']}}">
+                                                    <input type="hidden" name="week_rows[{{$week_row['id']}}][total_time]" value="{$week_row.total_time}">
                                                 </td>
                                                 <td width="15">
-                                                    <input type="checkbox" class="checkbox" name="week_rows[{$week_row.id}][sun]" value="1" {if $week_row.sun == TRUE}checked{/if}>
+                                                    <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][sun]" value="1" {{ $week_row['sun'] == TRUE ? 'checked' : '' }} >
                                                 </td>
                                                 <td width="15">
-                                                    <input type="checkbox" class="checkbox" name="week_rows[{$week_row.id}][mon]" value="1" {if $week_row.mon == TRUE}checked{/if}>
+                                                    <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][mon]" value="1" {{ $week_row['mon'] == TRUE ? 'checked' : '' }} >
                                                 </td>
                                                 <td width="15">
-                                                    <input type="checkbox" class="checkbox" name="week_rows[{$week_row.id}][tue]" value="1" {if $week_row.tue == TRUE}checked{/if}>
+                                                    <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][tue]" value="1" {{ $week_row['tue'] == TRUE ? 'checked' : '' }} >
                                                 </td>
                                                 <td width="15">
-                                                    <input type="checkbox" class="checkbox" name="week_rows[{$week_row.id}][wed]" value="1" {if $week_row.wed == TRUE}checked{/if}>
+                                                    <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][wed]" value="1" {{ $week_row['wed'] == TRUE ? 'checked' : '' }} >
                                                 </td>
                                                 <td width="15">
-                                                    <input type="checkbox" class="checkbox" name="week_rows[{$week_row.id}][thu]" value="1" {if $week_row.thu == TRUE}checked{/if}>
+                                                    <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][thu]" value="1" {{ $week_row['thu'] == TRUE ? 'checked' : '' }} >
                                                 </td>
                                                 <td width="15">
-                                                    <input type="checkbox" class="checkbox" name="week_rows[{$week_row.id}][fri]" value="1" {if $week_row.fri == TRUE}checked{/if}>
+                                                    <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][fri]" value="1" {{ $week_row['fri'] == TRUE ? 'checked' : '' }} >
                                                 </td>
                                                 <td width="15">
-                                                    <input type="checkbox" class="checkbox" name="week_rows[{$week_row.id}][sat]" value="1" {if $week_row.sat == TRUE}checked{/if}>
-                                                </td>
-                                                <td id="{isvalid object="rstf" label="start_time$week_row_id" value="value"}">
-                                                    <input type="text" size="10" id="start_time-{$week_row.id}" name="week_rows[{$week_row.id}][start_time]" value="{getdate type="TIME" epoch=$week_row.start_time}" onChange="getRecurringScheduleTotalTime({$week_row.id});">
-                                                </td>
-                                                <td id="{isvalid object="rstf" label="end_time$week_row_id" value="value"}">
-                                                    <input type="text" size="10" id="end_time-{$week_row.id}" name="week_rows[{$week_row.id}][end_time]" value="{getdate type="TIME" epoch=$week_row.end_time}" onChange="getRecurringScheduleTotalTime({$week_row.id});">
+                                                    <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][sat]" value="1" {{ $week_row['sat'] == TRUE ? 'checked' : '' }} >
                                                 </td>
                                                 <td>
-                                                    <span id="total_time-{$week_row.id}">
-                                                        {gettimeunit value=$week_row.total_time default=true}
+                                                    <input type="text" size="10" id="start_time-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][start_time]" value="{{getdate_helper('time', $week_row['start_time'])}}" onChange="getRecurringScheduleTotalTime({{$week_row['id']}});">
+                                                </td>
+                                                <td>
+                                                    <input type="text" size="10" id="end_time-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][end_time]" value="{{getdate_helper('time', $week_row['end_time'])}}" onChange="getRecurringScheduleTotalTime({{$week_row['id']}});">
+                                                </td>
+                                                <td>
+                                                    <span id="total_time-{{$week_row['id']}}">
+                                                        {{gettimeunit_helper($week_row['total_time'], true)}}
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <select id="schedule_policy_id-{$week_row.id}" name="week_rows[{$week_row.id}][schedule_policy_id]" onChange="getRecurringScheduleTotalTime({$week_row.id});">
-                                                        {html_options options=$data.schedule_options selected=$week_row.schedule_policy_id}
+                                                    <select id="schedule_policy_id-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][schedule_policy_id]" onChange="getRecurringScheduleTotalTime({{$week_row['id']}});">
+                                                        {{html_options([ 'options'=>$data['schedule_options'], 'selected'=>$week_row['schedule_policy_id']])}}
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select id="branch_id" name="week_rows[{$week_row.id}][branch_id]">
-                                                        {html_options options=$data.branch_options selected=$week_row.branch_id}
+                                                    <select id="branch_id" name="week_rows[{{$week_row['id']}}][branch_id]">
+                                                        {{html_options([ 'options'=>$data['branch_options'], 'selected'=>$week_row['branch_id']])}}
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select id="branch_id" name="week_rows[{$week_row.id}][department_id]">
-                                                        {html_options options=$data.department_options selected=$week_row.department_id}
+                                                    <select id="branch_id" name="week_rows[{{$week_row['id']}}][department_id]">
+                                                        {{html_options([ 'options'=>$data['department_options'], 'selected'=>$week_row['department_id']])}}
                                                     </select>
-                                                    {if $permission->Check('job','enabled') }
-                                                    <a href="javascript:toggleRowObject('job_row-{$week_row.id}');toggleImage(document.getElementById('job_row_img-{$week_row.id}'), '{$IMAGES_URL}/nav_bottom_sm.gif', '{$IMAGES_URL}/nav_top_sm.gif'); fixHeight(); "><img style="vertical-align: middle" id="job_row_img-{$week_row.id}" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
-                                                    {/if}
+                                                    @if ($permission->Check('job','enabled'))
+                                                        <a href="javascript:toggleRowObject('job_row-{{$week_row['id']}}');toggleImage(document.getElementById('job_row_img-{{$week_row['id']}}'), '{$IMAGES_URL}/nav_bottom_sm.gif', '{$IMAGES_URL}/nav_top_sm.gif'); fixHeight(); "><img style="vertical-align: middle" id="job_row_img-{{$week_row['id']}}" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
+                                                    @endif
                                                 </td>
                                                 <td>
-                                                    <input type="checkbox" class="checkbox" name="ids[]" value="{$week_row.id}">
+                                                    <input type="checkbox" class="checkbox" name="ids[]" value="{{$week_row['id']}}">
                                                 </td>
                                             </tr>
-                                            {if $permission->Check('job','enabled') }
-                                            <tbody id="job_row-{$week_row.id}" style="display:none">
-                                            <tr class="{$row_class}">
-                                                <td colspan="12" align="right">
-                                                    <b>{t}Job:{/t}</b>
-                                                    <select id="job_id-{$week_row.id}" name="week_rows[{$week_row.id}][job_id]">
-                                                        {html_options options=$data.job_options selected=$week_row.job_id}
-                                                    </select>
-                                                </td>
-                                                <td colspan="2" align="left">
-                                                    <b>{t}Task:{/t}</b>
-                                                    <select id="job_item_id-{$week_row.id}" name="week_rows[{$week_row.id}][job_item_id]">
-                                                        {html_options options=$data.job_item_options selected=$week_row.job_item_id}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <br>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                            {/if}
-                                        {/foreach}
+                                            @if ($permission->Check('job','enabled'))
+                                                <tbody id="job_row-{{$week_row['id']}}" style="display:none">
+                                                <tr class="">
+                                                    <td colspan="12" align="right">
+                                                        <b>Job:</b>
+                                                        <select id="job_id-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][job_id]">
+                                                            {{html_options([ 'options'=>$data['job_options'], 'selected'=>$week_row['job_id']])}}
+                                                        </select>
+                                                    </td>
+                                                    <td colspan="2" align="left">
+                                                        <b>Task:</b>
+                                                        <select id="job_item_id-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][job_item_id]">
+                                                            {{html_options([ 'options'=>$data['job_item_options'], 'selected'=>$week_row['job_item_id']])}}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <br>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            @endif
+                                        @endforeach
             
                                         <tr>
                                             <td class="tblActionRow" colspan="15">
-                                                <input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
-                                                <input type="submit" class="btnSubmit" name="action:add_week" value="{t}Add Week{/t}">
-                                                <input type="submit" class="btnSubmit" name="action:delete" value="{t}Delete{/t}" onClick="return confirmSubmit()">
+                                                <input type="submit" class="btnSubmit" name="action:submit" value="Submit" onClick="return singleSubmitHandler(this)">
+                                                <input type="submit" class="btnSubmit" name="action:add_week" value="Add Week">
+                                                <input type="submit" class="btnSubmit" name="action:delete" value="Delete" onClick="return confirmSubmit()">
                                             </td>
                                         </tr>
                                     </table>
@@ -203,7 +201,7 @@
                         <div id="contentBoxFour">
                         </div>
                         *}
-                        <input type="hidden" name="data[id]" value="{$data.id}">
+                        <input type="hidden" name="data[id]" value="{{$data['id']}}">
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}

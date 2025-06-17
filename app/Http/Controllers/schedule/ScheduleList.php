@@ -264,7 +264,8 @@ class ScheduleList extends Controller
 				$ulf = new UserListFactory();
 				$user_options = $ulf->getByCompanyIdArray( $current_company->getID(), FALSE );
 
-				foreach ($slf as $s_obj) {
+				$rows = [];
+				foreach ($slf->rs as $s_obj) {
 					$slf->data = (array)$s_obj;
 					$s_obj = $slf;
 
@@ -301,6 +302,7 @@ class ScheduleList extends Controller
 							);
 
 				}
+
 				$viewData['rows'] = $rows;
 
 				$all_array_option = array('-1' => _('-- Any --'));

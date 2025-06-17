@@ -20,191 +20,176 @@
 
                     <form method="post" name="wage" action="{$smarty.server.SCRIPT_NAME}">
                         <div id="contentBoxTwoEdit">
-                            {if !$sf->Validator->isValid()}
-                                {include file="form_errors.tpl" object="sf"}
-                            {/if}
+                            @if (!$sf->Validator->isValid())
+                                {{-- error list --}}
+                                {{-- {include file="form_errors.tpl" object="sf"} --}}
+                            @endif
             
-                            <table class="editTable">
-                            {if $data.pay_period_is_locked == TRUE}
+                            <table class="table table-bordered">
+                            @if ($data['pay_period_is_locked'] == TRUE)
                                 <tr class="tblDataError">
                                     <td colspan="2">
-                                        {t escape="no"}<b>NOTICE:</b> This pay period is currently locked, modifications are not permitted.{/t}
+                                        <b>NOTICE:</b> This pay period is currently locked, modifications are not permitted.
                                     </td>
                                 </tr>
-                            {/if}
+                            @endif
             
                             <tr>
-                                <td class="cellLeftEditTable">
-                                    {t}Employee:{/t}
-                                </td>
+                                <th>
+                                    Employee:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <select id="user_id" name="data[user_id]" onChange="TIMETREX.punch.showJob(); getAbsencePolicyBalance()">
-                                        {html_options options=$data.user_options selected=$data.user_id}
+                                        {{html_options([ 'options'=>$data['user_options'], 'selected'=>$data['user_id']])}}
                                     </select>
-                            {*
+                            {{-- {*
                                     {if $data.user_id == ''}
                                     {else}
                                         {$data.user_full_name}
                                         <input type="hidden" id="user_id" name="data[user_id]" value="{$data.user_id}">
                                         <input type="hidden" name="data[user_full_name]" value="{$data.user_full_name}">
                                     {/if}
-                            *}
+                            *} --}}
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="status" value="cellLeftEditTable"}">
-                                    {t}Status:{/t}
-                                </td>
+                                <th>
+                                    Status:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <select id="status_id" name="data[status_id]" onChange="showAbsencePolicy();">
-                                        {html_options options=$data.status_options selected=$data.status_id}
+                                        {{html_options([ 'options'=>$data['status_options'], 'selected'=>$data['status_id']])}}
                                     </select>
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="date_stamp" value="cellLeftEditTable"}">
+                                <td>
                                     <a href="javascript:toggleRowObject('repeat');toggleImage(document.getElementById('repeat_img'), '{$IMAGES_URL}/nav_bottom_sm.gif', '{$IMAGES_URL}/nav_top_sm.gif'); fixHeight(); "><img style="vertical-align: middle" id="repeat_img" src="{$IMAGES_URL}/nav_bottom_sm.gif"></a>
-                                    {t}Date:{/t}
+                                    Date:
                                 </td>
                                 <td class="cellRightEditTable">
                                     <input type="text" size="15" id="date" name="data[date_stamp]" value="{getdate type="DATE" epoch=$data.date_stamp}">
                                     <img src="{$BASE_URL}/images/cal.gif" id="cal_date" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('date', 'cal_date', false);">
-                                    {t}ie:{/t} {$current_user_prefs->getDateFormatExample()}
+                                    ie: {{$current_user_prefs->getDateFormatExample()}}
                                 </td>
                             </tr>
             
                             <tbody id="repeat" style="display:none">
                             <tr>
-                                <td class="{isvalid object="pcf" label="repeat" value="cellLeftEditTable"}">
-                                    {t}Repeat Schedule for:{/t}
-                                </td>
+                                <th>
+                                    Repeat Schedule for:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="3" id="time_stamp" name="data[repeat]" value="0"> {t}day(s) after above date.{/t}
+                                    <input type="text" size="3" id="time_stamp" name="data[repeat]" value="0"> day(s) after above date.
                                 </td>
                             </tr>
                             </tbody>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="start_time" value="cellLeftEditTable"}">
-                                    {t}In:{/t}
-                                </td>
+                                <th>
+                                    In:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="8" id="start_time" name="data[start_time]" value="{getdate type="TIME" epoch=$data.parsed_start_time}" onChange="getScheduleTotalTime();">
-                                    {t}ie:{/t} {$current_user_prefs->getTimeFormatExample()}
+                                    <input type="text" size="8" id="start_time" name="data[start_time]" value="{{ getdate_helper('time', $data['parsed_start_time']) }}" onChange="getScheduleTotalTime();">
+                                    ie: {{$current_user_prefs->getTimeFormatExample()}}
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="end_time" value="cellLeftEditTable"}">
-                                    {t}Out:{/t}
-                                </td>
+                                <th>
+                                    Out:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="8" id="end_time" name="data[end_time]" value="{getdate type="TIME" epoch=$data.parsed_end_time}" onChange="getScheduleTotalTime();">
-                                    {t}ie:{/t} {$current_user_prefs->getTimeFormatExample()}
+                                    <input type="text" size="8" id="end_time" name="data[end_time]" value="{{ getdate_helper('time', $data['parsed_end_time']) }}" onChange="getScheduleTotalTime();">
+                                    ie: {{$current_user_prefs->getTimeFormatExample()}}
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="total_time" value="cellLeftEditTable"}">
-                                    {t}Total:{/t}
-                                </td>
+                                <th>
+                                    Total:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <span id="total_time">
-                                        {gettimeunit value=$data.total_time default=true}
+                                        {{ gettimeunit_helper($data['total_time'], true) }}
                                     </span>
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="schedule_policy" value="cellLeftEditTable"}">
-                                    {t}Schedule Policy:{/t}
-                                </td>
+                                <th>
+                                    Schedule Policy:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <select id="schedule_policy_id" name="data[schedule_policy_id]" onChange="getScheduleTotalTime();">
-                                        {html_options options=$data.schedule_policy_options selected=$data.schedule_policy_id}
+                                        {{html_options([ 'options'=>$data['schedule_policy_options'], 'selected'=>$data['schedule_policy_id']])}}
                                     </select>
                                 </td>
                             </tr>
             
                             <tbody id="absence" style="display:none">
                             <tr>
-                                <td class="{isvalid object="sf" label="absence_policy" value="cellLeftEditTable"}">
-                                    {t}Absence Policy:{/t}
-                                </td>
+                                <th>
+                                    Absence Policy:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <select id="absence_policy_id" name="data[absence_policy_id]" onChange="getAbsencePolicyBalance();">
-                                        {html_options options=$data.absence_policy_options selected=$data.absence_policy_id}
+                                        {{html_options([ 'options'=>$data['absence_policy_options'], 'selected'=>$data['absence_policy_id']])}}
                                     </select>
                                     <br>
-                                    {t}Accrual Policy:{/t} <span id="accrual_policy_name">{t}None{/t}</span><br>
-                                    {t}Available Balance:{/t} <span id="accrual_policy_balance">{t}N/A{/t}</span><br>
+                                    Accrual Policy: <span id="accrual_policy_name">None</span><br>
+                                    Available Balance: <span id="accrual_policy_balance">N/A</span><br>
                                 </td>
                             </tr>
                             </tbody>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="branch" value="cellLeftEditTable"}">
-                                    {t}Branch:{/t}
-                                </td>
+                                <th>
+                                    Branch:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <select id="branch_id" name="data[branch_id]">
-                                        {html_options options=$data.branch_options selected=$data.branch_id}
+                                        {{html_options([ 'options'=>$data['branch_options'], 'selected'=>$data['branch_id']])}}
                                     </select>
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="sf" label="department" value="cellLeftEditTable"}">
-                                    {t}Department:{/t}
-                                </td>
+                                <th>
+                                    Department:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <select id="department_id" name="data[department_id]">
-                                        {html_options options=$data.department_options selected=$data.department_id}
+                                        {{html_options([ 'options'=>$data['department_options'], 'selected'=>$data['department_id']])}}
                                     </select>
                                 </td>
                             </tr>
             
-                            {if $permission->Check('job','enabled') }
-                            <tr>
-                                <td class="{isvalid object="sf" label="job" value="cellLeftEditTable"}">
-                                    {t}Job:{/t}
-                                </td>
-                                <td class="cellRightEditTable">
-                                    <input type="text" size="4" id="quick_job_id" onKeyUp="TIMETREX.punch.selectJobOption();">
-                                    <select id="job_id" name="data[job_id]" onChange="TIMETREX.punch.getJobManualId(); TIMETREX.punch.showJobItem();">
-                                        {html_options options=$data.job_options selected=$data.job_id}
-                                    </select>
-                                    <input type="hidden" id="selected_job" value="{$data.job_id}">
-                                </td>
-                            </tr>
-            
-                            <tr>
-                                <td class="{isvalid object="sf" label="job_item" value="cellLeftEditTable"}">
-                                    Task:
-                                </td>
-                                <td class="cellRightEditTable">
-                                    <input type="text" size="4" id="quick_job_item_id" onKeyUp="TIMETREX.punch.selectJobItemOption();">
-                                    <select id="job_item_id" name="data[job_item_id]" onChange="TIMETREX.punch.getJobItemManualId();">
-                                        {* {html_options options=$data.job_item_options selected=$data.job_item_id} *}
-                                    </select>
-                                    <input type="hidden" id="selected_job_item" value="{$data.job_item_id}">
-                                </td>
-                            </tr>
-                            {/if}
+                           {{-- job part removed --}}
             
                         </table>
                         </div>
             
                         <div id="contentBoxFour">
-                            <input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" {if $data.pay_period_is_locked == TRUE}disabled="true"{/if} onClick="return singleSubmitHandler(this)">
-                            {if $data.id != '' AND ( $permission->Check('schedule','delete') OR ( $permission->Check('schedule','delete_child') AND $data.is_child === TRUE ) OR ( $permission->Check('schedule','delete_own') AND $data.is_owner === TRUE ) )}
-                                <input type="submit" class="btnSubmit" name="action:delete" value="{t}Delete{/t}" {if $data.pay_period_is_locked == TRUE}disabled="true"{/if} onClick="return singleSubmitHandler(this)">
-                            {/if}
+                            <input type="submit" class="btnSubmit" name="action:submit" value="Submit"
+                                   @if ($data['pay_period_is_locked']) disabled @endif
+                                   onClick="return singleSubmitHandler(this)">
+                        
+                            @if ($data['id'] != '' &&
+                                ($permission->Check('schedule','delete') ||
+                                ($permission->Check('schedule','delete_child') && $data['is_child'] === TRUE) ||
+                                ($permission->Check('schedule','delete_own') && $data['is_owner'] === TRUE))
+                            )
+                                <input type="submit" class="btnSubmit" name="action:delete" value="Delete"
+                                       @if ($data['pay_period_is_locked']) disabled @endif
+                                       onClick="return singleSubmitHandler(this)">
+                            @endif
                         </div>
+                        
             
-                        <input type="hidden" name="data[id]" value="{$data.id}">
+                        <input type="hidden" name="data[id]" value="{{$data['id']}}">
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}

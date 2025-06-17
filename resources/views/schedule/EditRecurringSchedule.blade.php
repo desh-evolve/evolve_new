@@ -20,105 +20,104 @@
 
                     <form method="post" name="wage" action="{$smarty.server.SCRIPT_NAME}">
                         <div id="contentBoxTwoEdit">
-                            {if !$rscf->Validator->isValid()}
-                                {include file="form_errors.tpl" object="rscf"}
-                            {/if}
+                            @if (!$rscf->Validator->isValid())
+                                {{-- error list --}}
+                                {{-- {include file="form_errors.tpl" object="rscf"} --}}
+                            @endif
             
-                            <table class="editTable">
+                            <table class="table table-bordered">
             
                             <tr>
-                                <td class="{isvalid object="rscf" label="recurring_schedule_template_control_id" value="cellLeftEditTable"}">
-                                    {t}Template:{/t}
-                                </td>
+                                <th>
+                                    Template:
+                                </th>
                                 <td class="cellRightEditTable">
                                     <select id="template_id" name="data[template_id][]" multiple>
-                                        {html_options options=$data.template_options selected=$data.template_id}
+                                        {{html_options([ 'options'=>$data['template_options'], 'selected'=>$data['template_id']])}}
                                     </select>
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="rscf" label="start_week" value="cellLeftEditTable"}">
-                                    {t}Start Week:{/t}
-                                </td>
+                                <th>
+                                    Start Week:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="4" name="data[start_week]" value="{$data.start_week}">
+                                    <input type="text" size="4" name="data[start_week]" value="{{$data['start_week']}}">
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="rscf" label="start_date" value="cellLeftEditTable"}">
-                                    {t}Start Date:{/t}
-                                </td>
+                                <th>
+                                    Start Date:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="15" id="start_date" name="data[start_date]" value="{getdate type="DATE" epoch=$data.start_date}">
-                                    <img src="{$BASE_URL}/images/cal.gif" id="cal_start_date" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('start_date', 'cal_start_date', false);">
-                                    {t}ie:{/t} {$current_user_prefs->getDateFormatExample()}
+                                    <input type="text" size="15" id="start_date" name="data[start_date]" value="{{getdate_helper('date', $data['start_date'])}}">
+                                    ie: {{$current_user_prefs->getDateFormatExample()}}
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="rscf" label="end_date" value="cellLeftEditTable"}">
-                                    {t}End Date:{/t}
-                                </td>
+                                <th>
+                                    End Date:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="15" id="end_date" name="data[end_date]" value="{getdate type="DATE" epoch=$data.end_date}">
-                                    <img src="{$BASE_URL}/images/cal.gif" id="cal_end_date" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('end_date', 'cal_end_date', false);">
-                                    {t}ie:{/t} {$current_user_prefs->getDateFormatExample()} <b>{t}(Leave blank for no end date){/t}</b>
+                                    <input type="text" size="15" id="end_date" name="data[end_date]" value="{{getdate_helper('date', $data['end_date'])}}">
+                                    ie: {{$current_user_prefs->getDateFormatExample()}} <b>(Leave blank for no end date)</b>
                                 </td>
                             </tr>
             
                             <tr>
-                                <td class="{isvalid object="ripf" label="auto_fill" value="cellLeftEditTable"}">
-                                    {t}Auto-Pilot:{/t}
-                                </td>
+                                <th>
+                                    Auto-Pilot:
+                                </th>
                                 <td class="cellRightEditTable">
-                                    <input type="checkbox" class="checkbox" name="data[auto_fill]" value="1"{if $data.auto_fill == TRUE}checked{/if}>
+                                    <input type="checkbox" class="checkbox" name="data[auto_fill]" value="1" {{ $data['auto_fill'] ? 'checked' : '' }} >
                                 </td>
                             </tr>
             
                             <tbody id="filter_employees_on" style="display:none" >
                             <tr>
-                                <td class="{isvalid object="ppsf" label="user" value="cellLeftEditTable"}" nowrap>
-                                    <b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');filterUserCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
+                                <td nowrap>
+                                    <b>Employees:</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');filterUserCount();"><i class="ri-arrow-down-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                 </td>
                                 <td colspan="3">
-                                    <table class="editTable">
-                                    <tr class="tblHeader">
+                                    <table class="table table-bordered">
+                                    <tr class="bg-primary text-white">
                                         <td>
-                                            {t}UnAssigned Employees{/t}
+                                            UnAssigned Employees
                                         </td>
                                         <td>
                                             <br>
                                         </td>
                                         <td>
-                                            {t}Assigned Employees{/t}
+                                            Assigned Employees
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="cellRightEditTable" width="49%" align="center">
-                                            <input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('src_filter_user'))">
-                                            <input type="button" name="Un-Select" value="{t}Un-Select All{/t}" onClick="unselectAll(document.getElementById('src_filter_user'))">
+                                            <input type="button" name="Select All" value="Select All" onClick="selectAll(document.getElementById('src_filter_user'))">
+                                            <input type="button" name="Un-Select" value="Un-Select All" onClick="unselectAll(document.getElementById('src_filter_user'))">
                                             <br>
-                                            <select name="src_user_id" id="src_filter_user" style="width:200px;margin:5px 0 5px 0;" size="{select_size array=$data.user_options}" multiple>
-                                                {html_options options=$data.user_options}
+                                            <select name="src_user_id" id="src_filter_user" style="width:200px;margin:5px 0 5px 0;" size="{{select_size([ 'array'=>$data['user_options']])}}" multiple>
+                                                {{html_options([ 'options'=>$data['user_options']])}}
                                             </select>
                                         </td>
                                         <td class="cellRightEditTable" style="vertical-align: middle;" width="1">
-                                            <a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+                                            <a href="javascript:moveItem(document.getElementById('src_filter_user'), document.getElementById('filter_user')); uniqueSelect(document.getElementById('filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {{select_size([ 'array'=>$data['user_options']])}})"><i class="ri-arrow-right-double-fill arrow-icon" style="vertical-align: middle"></i></a>
                                             <br>
-                                            <a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
+                                            <a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {{select_size( 'array'=>$data['user_options'])}})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
                                             <br>
                                             <br>
                                             <br>
                                             <a href="javascript:UserSearch('src_filter_user','filter_user');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a>
                                         </td>
                                         <td class="cellRightEditTable" width="49%" align="center">
-                                            <input type="button" name="Select All" value="{t}Select All{/t}" onClick="selectAll(document.getElementById('filter_user'))">
-                                            <input type="button" name="Un-Select" value="{t}Un-Select All{/t}" onClick="unselectAll(document.getElementById('filter_user'))">
+                                            <input type="button" name="Select All" value="Select All" onClick="selectAll(document.getElementById('filter_user'))">
+                                            <input type="button" name="Un-Select" value="Un-Select All" onClick="unselectAll(document.getElementById('filter_user'))">
                                             <br>
-                                            <select name="data[user_ids][]" id="filter_user" style="width:200px;margin:5px 0 5px 0;" size="{select_size array=$filter_user_options}" multiple>
-                                                {html_options options=$filter_user_options selected=$data.user_ids}
+                                            <select name="data[user_ids][]" id="filter_user" style="width:200px;margin:5px 0 5px 0;" size="{{select_size([ 'array'=>$filter_user_options])}}" multiple>
+                                                {{html_options([ 'options'=>$filter_user_options, 'selected'=>$data['user_ids']])}}
                                             </select>
                                         </td>
                                     </tr>
@@ -128,11 +127,11 @@
                             </tbody>
                             <tbody id="filter_employees_off">
                             <tr>
-                                <td class="{isvalid object="ppsf" label="user" value="cellLeftEditTable"}" nowrap>
-                                    <b>{t}Employees:{/t}</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {select_size array=$data.user_options})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
+                                <td nowrap>
+                                    <b>Employees:</b><a href="javascript:toggleRowObject('filter_employees_on');toggleRowObject('filter_employees_off');uniqueSelect(document.getElementById('filter_user'), document.getElementById('src_filter_user')); sortSelect(document.getElementById('filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('filter_user'), {{select_size([ 'array'=>$data['user_options']])}})"><i class="ri-arrow-up-double-fill arrow-icon" style="vertical-align: middle" ></i></a>
                                 </td>
                                 <td class="cellRightEditTable" colspan="100">
-                                    <span id="filter_user_count">0</span> {t}Employees Currently Selected, Click the arrow to modify.{/t}
+                                    <span id="filter_user_count">0</span> Employees Currently Selected, Click the arrow to modify.
                                 </td>
                             </tr>
                             </tbody>
@@ -141,10 +140,10 @@
                         </div>
             
                         <div id="contentBoxFour">
-                            <input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('filter_user'))">
+                            <input type="submit" class="btnSubmit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
                         </div>
             
-                        <input type="hidden" name="data[id]" value="{$data.id}">
+                        <input type="hidden" name="data[id]" value="{{$data['id']}}">
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}

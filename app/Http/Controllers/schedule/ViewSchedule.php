@@ -272,6 +272,7 @@ class ViewSchedule extends Controller
 
 				break;
 		}
+
 		return view('schedule/ViewSchedule', $viewData);
 	}
 }
