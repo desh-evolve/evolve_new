@@ -59,6 +59,14 @@ class EditUserPreference extends Controller
         //     $permission_children_ids[] = $current_user->getId();
         // }
 
+        $user_id = $request->input('user_id');
+
+        // Fallback to current user if no user_id is provided
+        if (empty($user_id)) {
+            $user_id = $current_user->getId();
+        }
+
+
         // Default user selection
         if ( !isset($user_id) OR (isset($user_id) AND $user_id == '' ) ) {
 			$user_id = $current_user->getId();

@@ -54,7 +54,7 @@ class UserInformation extends Controller
 
     public function index(Request $request)
     {
-        // if (!$this->permission->Check('report', 'enabled') || 
+        // if (!$this->permission->Check('report', 'enabled') ||
         //     !$this->permission->Check('report', 'view_user_information')) {
         //     return Redirect::to('/')->with('error', 'Permission denied');
         // }
@@ -98,10 +98,11 @@ class UserInformation extends Controller
 
         return view('report.UserInformation', $viewData);
     }
+    
     public function generate(Request $request)
     {
         // dd($request->all());
-        // if (!$this->permission->Check('report', 'enabled') || 
+        // if (!$this->permission->Check('report', 'enabled') ||
         //     !$this->permission->Check('report', 'view_user_information')) {
         //     return Redirect::to('/')->with('error', 'Permission denied');
         // }

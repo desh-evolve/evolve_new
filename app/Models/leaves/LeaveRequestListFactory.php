@@ -72,7 +72,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 		$ph = array(
 					':id' => $id,
-                                        ':company_id'=>$company_id,
+                    ':company_id'=>$company_id,
 					);
 
 		$query = '
@@ -253,7 +253,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 
 
-        function checkUserHasLeaveTypeForDay($user_id,$leave_date,$leave_policy, $where = NULL, $order = NULL)
+    function checkUserHasLeaveTypeForDay($user_id,$leave_date,$leave_policy, $where = NULL, $order = NULL)
         {
                 if ( $leave_date == '') {
 			return FALSE;
@@ -287,22 +287,22 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 
 		return $this;
+    }
+
+
+
+
+    function getAllConfirmedLeave($id, $data,$where = NULL, $order = NULL) {
+        if ( $id == '') {
+            return FALSE;
         }
-
-
-
-
-          function getAllConfirmedLeave($id, $data,$where = NULL, $order = NULL) {
-		if ( $id == '') {
-			return FALSE;
-		}
-
 
 		/*
 			$ph = array(
-						'supervisor_id' => $id,
-						);
-*/
+				'supervisor_id' => $id,
+			);
+        */
+
 			$query = '
 						select 	*
 						from	'. $this->getTable() .'
@@ -373,7 +373,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$query .= $this->getSortSQL( $order );
 
 			$res = DB::select($query, $ph);
-			
+
 			if ( empty($res['count']) ) {
 				$row['count'] = 0;
 			}else{

@@ -1,68 +1,72 @@
 <x-app-layout :title="'Input Example'">
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Leaves') }}</h4>
+    </x-slot>
 
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
-                    </div>
-
-                    {{-- <div class="justify-content-md-end">
-                        <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
-                                href="#"
-                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
-                                Add <i class="ri-add-line"></i>
-                            </a>
-                        </div>
-                    </div> --}}
+                    <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
+                      <button type="button" onclick="history.back()" class="btn btn-primary">
+                        Back <i class="ri-arrow-left-line"></i>
+                    </button>
                 </div>
 
                 <div class="card-body">
-                    
+
                     {{-- -------------------------------------------- --}}
-
-                    <table class="tblList">
-                        <tr id="row">
-                            <thead id="row">
-                                <th></th>
-                                @foreach ($header_leave as $row)
-                                    <th>{{$row['name']}}</th>
-                                @endforeach
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="bg-primary text-white text-center">
+                                <tr>
+                                    <th class="center">Type</th>
+                                    @foreach ($header_leave as $row)
+                                        <th>{{ $row['name'] }}</th>
+                                    @endforeach
+                                </tr>
                             </thead>
-                        </tr>
-                        <tr id="row">
-                            <td class="">B/F from Last Year</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr id="row">
-                            <td class="">Leave Entitlement</td>
-                            @foreach ($total_asign_leave as $row)
-                                <td>{{$row['asign']}}</td>
-                            @endforeach
-                        </tr>
-                        <tr id="row">
-                            <td class="">Leave Taken</td>
-                            @foreach ($total_taken_leave as $row)
-                                <td>{{$row['taken']}}</td>
-                            @endforeach
-                        </tr>
-                        <tr id="row">
-                            <td >Balance</td>
-                            @foreach ($total_balance_leave as $row)
-                                <td>{{$row['balance']}}</td>
-                            @endforeach
-                        </tr>
-                    </table>
 
+                            <tbody id="table_body">
+
+                                <tr>
+                                    <td>B/F from Last Year</td>
+                                     @foreach ($header_leave as $row)
+                                        <td>-</td> {{-- Placeholder --}}
+                                    @endforeach
+                                </tr>
+
+                                <tr>
+                                    <td class="">Leave Entitlement</td>
+                                    @foreach ($total_asign_leave as $row)
+                                        <td>{{ number_format($row['asign'], 1) }}</td>
+                                    @endforeach
+                                </tr>
+
+                                <tr>
+                                    <td class="">Leave Taken</td>
+                                    @foreach ($total_taken_leave as $row)
+                                        <td>{{ number_format($row['taken'], 1) }}</td>
+                                    @endforeach
+                                </tr>
+
+                                <tr style="background-color: #c4c4c4; font-weight: bold;">
+                                    <td >Balance</td>
+                                    @foreach ($total_balance_leave as $row)
+                                        <td>{{ number_format($row['balance'], 1) }}</td>
+                                    @endforeach
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
                     {{-- -------------------------------------------- --}}
 
                 </div>
             </div>
         </div>
     </div>
+
 </x-app-layout>
+
+

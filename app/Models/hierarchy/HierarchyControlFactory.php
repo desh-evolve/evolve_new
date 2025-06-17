@@ -86,6 +86,7 @@ class HierarchyControlFactory extends Factory {
 	function getCompany() {
 		return $this->data['company_id'];
 	}
+    
 	function setCompany($id) {
 		$id = trim($id);
 

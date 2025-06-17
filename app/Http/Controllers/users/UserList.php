@@ -154,46 +154,101 @@ class UserList extends Controller
 		return view('users/UserList', $viewData);
 	}
 
-	public function delete(){
-		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-		$hlf = new HierarchyListFactory();
-		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
+	// public function delete($id)
+    // {
+    //     $current_company = $this->currentCompany;
+	// 	$permission = $this->permission;
+	// 	$current_user = $this->currentUser;
 
-		$delete = TRUE;
+	// 	//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
+	// 	$hlf = new HierarchyListFactory();
+	// 	$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
-		if ( DEMO_MODE == FALSE
-			AND ( $permission->Check('user','delete') OR $permission->Check('user','delete_own') OR $permission->Check('user','delete_child')  ) ) {
+	// 	$delete = TRUE;
 
-			if ( is_array($ids) ) {
-				$ulf = new UserListFactory();
-				$ulf->StartTransaction();
+	// 	if ( DEMO_MODE == FALSE
+	// 		AND ( $permission->Check('user','delete') OR $permission->Check('user','delete_own') OR $permission->Check('user','delete_child')  ) ) {
 
-				foreach ($ids as $id) {
-					if ( $id != $current_user->getId() ) {
-						$ulf->getByIdAndCompanyId($id, $current_company->getID() );
-						foreach ($ulf as $user) {
-							$is_owner = $permission->isOwner( $user->getCreatedBy(), $user->getID() );
-							$is_child = $permission->isChild( $user->getId(), $permission_children_ids );
+    //         $ulf = new UserListFactory();
+    //         $ulf->StartTransaction();
 
-							if ( $permission->Check('user','delete')
-									OR ( $permission->Check('user','delete_child') AND $is_child === TRUE )
-									OR ( $permission->Check('user','delete_own') AND $is_owner === TRUE ) ) {
-								$user->setDeleted($delete);
-								$user->Save();
-							}
-						}
-					}
-				}
+    //         $ulf->getByIdAndCompanyId($id, $current_company->getID() );
 
-				$ulf->CommitTransaction();
-			}
-		}
+    //         foreach ($ulf->rs as $user) {
+    //             $ulf->data = (array)$user;
 
-		Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id ), 'UserList.php') );
+    //             $is_owner = $permission->isOwner( $user->getCreatedBy(), $user->getID() );
+    //             $is_child = $permission->isChild( $user->getId(), $permission_children_ids );
+
+    //             if ( $permission->Check('user','delete')
+    //                     OR ( $permission->Check('user','delete_child') AND $is_child === TRUE )
+    //                     OR ( $permission->Check('user','delete_own') AND $is_owner === TRUE ) ) {
+    //                 $ulf->setDeleted($delete);
+    //                 // $user->Save();
+    //                 if ($ulf->isValid()) {
+    //                     $res = $ulf->Save();
+
+    //                     if($res){
+    //                         return response()->json(['success' => 'Currency deleted successfully.']);
+    //                     }else{
+    //                         return response()->json(['error' => 'Currency deleted failed.']);
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+
+    //         $ulf->CommitTransaction();
+
+	// 	}
+
+	// 	Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id ), 'UserList.php') );
+
+	// }
+
+
+    public function delete($id)
+    {
+        $current_company = $this->currentCompany;
+
+        if (empty($id)) {
+            return response()->json(['error' => 'No users selected.'], 400);
+        }
+
+        $ulf = new UserListFactory();
+        $ulf->StartTransaction();
+
+        $ulf->getByIdAndCompanyId($id, $current_company->getID() );
+
+        foreach ($ulf->rs as $user) {
+            $ulf->data = (array)$user;
+
+            $ulf->setDeleted(true);
+
+            if ($ulf->isValid()) {
+                $res = $ulf->Save();
+
+                if($res){
+                    return response()->json(['success' => 'User deleted successfully.']);
+                }else{
+                    return response()->json(['error' => 'User deleted failed.']);
+                }
+            }
+        }
+
+
+        $ulf->CommitTransaction();
+
+		// Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id ), 'UserList.php') );
 
 	}
 
-	public function search(){}
+
+	public function search()
+    {
+        //
+    }
+
 }
 
 ?>

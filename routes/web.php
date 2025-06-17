@@ -39,6 +39,11 @@ use App\Http\Controllers\policy\EditRecurringHoliday;
 
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\leaves\ApplyUserLeave;
+use App\Http\Controllers\leaves\ApprovedCoveredBy;
+use App\Http\Controllers\leaves\ApprovedSupervisedBy;
+use App\Http\Controllers\leaves\ConfirmedLeave;
+use App\Http\Controllers\leaves\VIewNumberOfLeave;
+use App\Http\Controllers\leaves\VIewUserLeave;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\message\EditMessage;
 use App\Http\Controllers\message\EmbeddedMessageList;
@@ -304,18 +309,19 @@ Route::get('/company/logo/{company_id}', [EditCompany::class, 'getLogo'])->name(
 // ===============================================================================================================================
 // Hierarchy Information
 // ===============================================================================================================================
+Route::match(['get', 'post'], '/company/hierarchy/edit', [EditHierarchyControl::class, 'index'])->name('company.hierarchy.edit');
 
-Route::match(['get', 'delete'], '/company/hierarchy/list', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');
-Route::match(['get', 'post', 'delete'], '/company/hierarchy/add', [EditHierarchyControl::class, 'index'])->name('company.hierarchy.add');
-
+Route::get('/company/hierarchy', [HierarchyControlList::class, 'index'])->name('company.hierarchy.list');
+Route::get('/company/hierarchy/add/{user_id?}', [HierarchyControlList::class, 'add'])->name('company.hierarchy.add');
+Route::delete('/company/hierarchy/delete/{id}', [HierarchyControlList::class, 'delete'])->name('company.hierarchy.delete');
 // ===============================================================================================================================
- // User jobhistory
- // ===============================================================================================================================
- Route::get('/user/jobhistory', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
- Route::get('/user/jobhistory/add/{user_id?}', [UserJobHistory::class, 'add'])->name('user.jobhistory.add');
- Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
- Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
- Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])->name('user.jobhistory.delete');
+// User jobhistory
+// ===============================================================================================================================
+Route::get('/user/jobhistory', [UserJobHistory::class, 'index'])->name('user.jobhistory.index');
+Route::get('/user/jobhistory/add/{user_id?}', [UserJobHistory::class, 'add'])->name('user.jobhistory.add');
+Route::get('/user/jobhistory/edit/{id?}', [EditUserJobHistory::class, 'index'])->name('user.jobhistory.edit');
+Route::post('/user/jobhistory/save/{id?}', [EditUserJobHistory::class, 'save'])->name('user.jobhistory.save');
+Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])->name('user.jobhistory.delete');
 
  // ===============================================================================================================================
  // User wage
@@ -325,7 +331,6 @@ Route::match(['get', 'post', 'delete'], '/company/hierarchy/add', [EditHierarchy
  Route::get('/user/wage/edit/{id?}', [EditUserWageNew::class, 'index'])->name('user.wage.edit');
  Route::post('/user/wage/save/{id?}', [EditUserWageNew::class, 'save'])->name('user.wage.save');
  Route::delete('/user/wage/delete/{id}', [UserWageListNew::class, 'delete'])->name('user.wage.delete');
-
 
  // ===============================================================================================================================
  // User census
@@ -539,9 +544,19 @@ Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attend
 
 Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class, 'index'])->name('attendance.apply_leaves');
 
+Route::get('/attendance/leaves/covered_aprooval', [ApprovedCoveredBy::class, 'index'])->name('attendance.leaves.covered_aprooval');
+
+Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
+Route::post('/attendance/leaves/supervise_aprooval/bulk-action', [ApprovedSupervisedBy::class, 'bulkAction'])->name('attendance.leaves.supervise_aprooval.bulkAction');
+
+Route::get('/attendance/leaves/view_user_leave/{id}', [VIewUserLeave::class, 'index'])->name('attendance.leaves.viewUserLeave');
+
+Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::class, 'index'])->name('attendance.leaves.viewNumberLeave');
+
+Route::get('/attendance/leaves/confirmed_leave', [ConfirmedLeave::class, 'index'])->name('attendance.leaves.confirmed_leave');
+Route::post('/attendance/leaves/confirmed_leave/search', [ConfirmedLeave::class, 'search'])->name('attendance.leaves.confirmed_leave.search');
+Route::delete('/attendance/confirmed_leave/delete/{id}', [ConfirmedLeave::class, 'delete'])->name('attendance.confirmed_leave.delete');
 
 // ===============================================================================================================================
-
 // add view_schedule route
-
 // ===============================================================================================================================

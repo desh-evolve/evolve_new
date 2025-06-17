@@ -17,9 +17,10 @@
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header align-items-center d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
+                <div>
+                    <div class="card-header align-items-center d-flex justify-content-between">
+                        <h4 class="card-title mb-0 flex-grow-1">{{ isset($hierarchy_control_data['id']) ? 'Edit' : 'Add' }} {{ $title }} </h4>
+                        <a href="/company/hierarchy" class="btn btn-primary">Hierarchy List <i class="ri-arrow-right-line"></i></a>
                     </div>
 
                     {{-- <div class="justify-content-md-end">
@@ -38,16 +39,16 @@
 
                     {{-- -------------------------------------------- --}}
 
-                    <form method="post" action="{{ route('company.hierarchy.add') }}">
+                    <form method="post" action="{{ route('company.hierarchy.edit') }}">
                         @csrf
                         <div id="contentBoxTwoEdit">
                             @if (!$hcf->Validator->isValid() OR !$hlf->Validator->isValid())
                                 {{-- {include file="form_errors.tpl" object="hcf,hlf"} --}}
                                 {{-- error list here --}}
                             @endif
-            
+
                             <table class="table table-bordered">
-            
+
                             <tr>
                                 <td>
                                     Name:
@@ -78,7 +79,7 @@
                                     </select>
                                 </td>
                             </tr>
-            
+
                             <tbody id="filter_employees_on" style="display:none" >
                             <tr>
                                 <td nowrap>
@@ -182,7 +183,7 @@
                                 </table>
                               </td>
                             </tr>
-            
+
                             <tr>
                                 <td class="tblActionRow text-end" colspan="3">
                                     <input type="submit" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
@@ -206,9 +207,15 @@
     </div>
 
     <script	language=JavaScript>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            filterUserCount(); // Update count on page load
+        });
+
         function filterUserCount() {
             total = countSelect(document.getElementById('filter_user'));
             writeLayer('filter_user_count', total);
         }
+        
     </script>
 </x-app-layout>

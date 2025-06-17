@@ -110,14 +110,18 @@
                                             Prefs
                                         </a>
                                         <a class="btn btn-info btn-sm"
-                                            href="{{ route('user.jobhistory.index', ['id' => $user['id']]) }}">
+                                            href="/user/jobhistory?user_id={{ $user['id'] }}">
                                             Job History
                                         </a>
 
                                         <a class="btn btn-warning btn-sm"
-                                            href="/admin/userlist/kpi/{{ $user['id'] }}">KPI</a>
+                                            href="/admin/userlist/kpi/{{ $user['id'] }}">
+                                            KPI
+                                        </a>
                                         <button type="button" class="btn btn-danger btn-sm"
-                                            onclick="commonDeleteFunction('/admin/userlist/delete/{{ $user['id'] }}', 'User', this)">Delete</button>
+                                            onclick="commonDeleteFunction('/admin/userlist/delete/{{ $user['id'] }}', 'User', this)">
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -160,13 +164,13 @@
                         $functionCell.html(`
                             <a class="btn btn-secondary btn-sm" href="/admin/userlist/add?id=${userId}">Edit</a>
                             <a class="btn btn-info btn-sm" href="/user/preference?user_id=${userId}">Prefs</a>
-                            <a class="btn btn-info btn-sm" href="/user/jobhistory/${userId}">Job History</a>
+                            <a class="btn btn-info btn-sm" href="/user/jobhistory?user_id=${userId}">Job History</a>
                             <a class="btn btn-warning btn-sm" href="/admin/userlist/kpi/${userId}">KPI</a>
                             <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/admin/userlist/delete/${userId}', 'User', this)">Delete</button>
                         `);
                     } else if (type === 'payroll') {
                         $functionCell.html(`
-                            <a class="btn btn-primary btn-sm" href="/user/wage/${userId}">Wage</a>
+                            <a class="btn btn-primary btn-sm" href="/user/wage?user_id=${userId}">Wage</a>
                             <a class="btn btn-success btn-sm" href="/user/tax?id=${userId}">Tax</a>
                             <a class="btn btn-info btn-sm" href="/payroll/pay_stub_amendment?id=${userId}">PS Amendments</a>
                             <a class="btn btn-warning btn-sm" href="/bank_account/user/${userId}">Bank</a>

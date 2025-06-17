@@ -39,22 +39,19 @@ class EditHierarchyControl extends Controller
 
     }
 
-    public function index() {
+    public function index()
+    {
 		$permission = $this->permission;
-		$current_user = $this->currentUser;
 		$current_company = $this->currentCompany;
-		$current_user_prefs = $this->userPrefs;
 
 		if ( !$permission->Check('hierarchy','enabled')
 				OR !( $permission->Check('hierarchy','edit') OR $permission->Check('hierarchy','edit_own') ) ) {
-
 			$permission->Redirect( FALSE ); //Redirect
-
 		}
 
 		//Debug::setVerbosity(11);
 
-		$viewData['title'] = 'Edit Hierarchy List';
+		$viewData['title'] = 'Hierarchy List';
 
 		// Get FORM variables
 		extract	(FormVariables::GetVariables(
@@ -64,7 +61,7 @@ class EditHierarchyControl extends Controller
 				'hierarchy_control_id',
 				'hierarchy_control_data',
 				'hierarchy_level_data'
-			) 
+			)
 		) );
 
 		$hcf = new HierarchyControlFactory();
@@ -147,7 +144,7 @@ class EditHierarchyControl extends Controller
 					$hcf->Save( TRUE, TRUE );
 					$hcf->CommitTransaction();
 
-					Redirect::Page( URLBuilder::getURL( array(), '/company/hierarchy/list') );
+					Redirect::Page( URLBuilder::getURL( array(), '/company/hierarchy') );
 
 					break;
 				}
@@ -304,7 +301,10 @@ class EditHierarchyControl extends Controller
 		$viewData['hlf'] = $hlf;
 
 		return view('hierarchy/EditHierarchyControl', $viewData);
+
 	}
+
+
 }
 
 

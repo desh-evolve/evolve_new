@@ -29,12 +29,12 @@ forceCacheHeaders( NULL, $authentication->getCreatedDate() );
 $pplf = new PayPeriodListFactory();
 $js_calendar_pay_period_dates = $pplf->getJSCalendarPayPeriodArray();
 
-$endDate = isset($js_calendar_pay_period_dates['end_date']) && is_array($js_calendar_pay_period_dates['end_date']) 
-    ? $js_calendar_pay_period_dates['end_date'] 
+$endDate = isset($js_calendar_pay_period_dates['end_date']) && is_array($js_calendar_pay_period_dates['end_date'])
+    ? $js_calendar_pay_period_dates['end_date']
     : [];
 
-$transactionDate = isset($js_calendar_pay_period_dates['transaction_date']) && is_array($js_calendar_pay_period_dates['transaction_date']) 
-    ? $js_calendar_pay_period_dates['transaction_date'] 
+$transactionDate = isset($js_calendar_pay_period_dates['transaction_date']) && is_array($js_calendar_pay_period_dates['transaction_date'])
+    ? $js_calendar_pay_period_dates['transaction_date']
     : [];
 
 ?>
@@ -85,7 +85,7 @@ function calendar_setup(input_field, button_id, show_time) {
 
 function jquery_calendar_setup() {
 
-	
+
 
 }
 
@@ -100,7 +100,7 @@ function Birthday_popups() {
 	//} catch (e) {
 		//DN
 	//}
-	
+
 }
 
 function timePunch() {
@@ -1231,7 +1231,7 @@ function Upload(obj_type, obj_id) {
 }
 
 
-// ARSP EDIT --> ADD NEW CODE FOR DELETE UPLOADED FILES 
+// ARSP EDIT --> ADD NEW CODE FOR DELETE UPLOADED FILES
  function deleteFiles(delete_file_name, delete_user_id,delete_file_type)
     {
    //alert(delete_file_type);
@@ -1239,14 +1239,14 @@ function Upload(obj_type, obj_id) {
    if(confirm("You are about to delete file, once file is deleted it can not be recovered. Are you sure you wish to continue?"))
    {
      window.location.href = '<?php echo Environment::getBaseURL();?>users/EditUser.php?delete_file_name='+ delete_file_name +'&delete_user_id='+ delete_user_id+'&delete_file_type='+ delete_file_type;
-   }      
-    
+   }
+
 //    var structure ="../storage/user_file/" + user_id +"/"+file_name;
 //    alert('Path: ' + structure);
 //        var myObject;
 //        myObject = new ActiveXObject("Scripting.FileSystemObject");
-//        
-//        
+//
+//
 //        var f = myObject.GetFile("C:/xampp/htdocs/evolvepayroll/storage/user_file/" + user_id +"/"+file_name);
 //        f.Delete();
 //        alert("File Deleted successfully");
@@ -1269,7 +1269,7 @@ function ImportCsvFile(object_type,object_id) {
 
 
 //ARSP Edit --> This Function Create me. Use to import the XL File (Only CSV format) to the deduction details
-function ImportEmployeeCsv() { 
+function ImportEmployeeCsv() {
 	try {
 		uS=window.open('<?php echo Environment::getBaseURL();?>upload/ImportEmployeeCsv.php',"File_Import","toolbar=0,status=1,menubar=0,scrollbars=2,fullscreen=no,width=400,height=250,resizable=1");
 		if (window.focus) {

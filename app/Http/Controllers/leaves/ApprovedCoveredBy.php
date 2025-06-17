@@ -31,39 +31,42 @@ class ApprovedCoveredBy extends Controller
 
     public function index() {
 
-        $current_user = $this->currentCompany;
+        $current_user = $this->currentUser;
 
         $viewData['title'] = 'Employee Leaves covered Aprooval';
-        
+
         $lrlf = new LeaveRequestListFactory();
         $lrlf->getByCoveredEmployeeId($current_user->getId());
-        
-        $data = array();
-        
-        $leave= array();
+
+        $leaves = [];
+
         if($lrlf->getRecordCount() >0){
-            
-           
-        foreach($lrlf->rs as $lrf_obj) {
-            $lrlf->data = (array)$lrf_obj;
-            $lrf_obj = $lrlf;
-        
-            $leave['id'] = $lrf_obj->getId();
-            $leave['user'] = $lrf_obj->getUserObject()->getFullName();
-            
-            $methord = $lrf_obj->getOptions('leave_method');
-            $leave['leave_method'] = $methord[$lrf_obj->getLeaveMethod()];
-            $leave['start_date'] = $lrf_obj->getLeaveFrom();
-            $leave['end_date'] = $lrf_obj->getLeaveTo();
-            $leave['is_covered_approved'] = $lrf_obj->getCoveredApproved();
-            
-            $data['leaves'][] =$leave;
+
+            foreach($lrlf->rs as $lrf_obj) {
+                $lrlf->data = (array)$lrf_obj;
+                $lrf_obj = $lrlf;
+
+                $methord = $lrf_obj->getOptions('leave_method');
+
+                $leaves [] = array(
+                    'id' => $lrf_obj->getId(),
+                    'user' => $lrf_obj->getUserObject()->getFullName(),
+                    'leave_method' => $methord[$lrf_obj->getLeaveMethod()],
+                    'start_date' => $lrf_obj->getLeaveFrom(),
+                    'end_date' => $lrf_obj->getLeaveTo(),
+                    'is_covered_approved' => $lrf_obj->getCoveredApproved(),
+
+                );
+
+            }
         }
-        }
-         
-        $viewData['data'] = $data;
+
+        $viewData['leaves'] = $leaves;
+        // dd($viewData);
 
         return view('leaves/ApprovedCoveredBy', $viewData);
 
     }
+
+
 }

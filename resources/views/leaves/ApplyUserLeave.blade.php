@@ -1,7 +1,7 @@
 <x-app-layout :title="'Input Example'">
     <style>
         th, td{
-           padding: 3px 10px !important; 
+           padding: 3px 10px !important;
         }
 
         .numonly {
@@ -46,7 +46,7 @@
             background-color: #e9ecef;
         }
     </style>
-    
+
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -57,8 +57,8 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="#"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="card-body">
-                    
+
                     {{-- -------------------------------------------- --}}
 
                     <form method="POST" id="frmleave" name="frmleave" action="{{ route('attendance.apply_leaves') }}">
@@ -94,7 +94,10 @@
                                         <tr>
                                             <th>Name:</th>
                                             <td>
-                                                <input type="text" size="30" name="data[name]" value="{{$data['name']}}" readonly="readonly">
+                                                {{-- <input type="text" size="30" name="data[name]" value="{{$data['name']}}" readonly="readonly"> --}}
+                                                @if (!empty($data['name']))
+                                                    <input type="text" size="30" name="data[name]" value="{{ $data['name'] }}" readonly="readonly">
+                                                @endif
                                             </td>
                                         </tr>
                                         <tr>
@@ -109,7 +112,7 @@
                                             <td>
                                                 <select id="data[leave_type]" name="data[leave_type]">
                                                     @foreach ($data['leave_options'] as $id => $name )
-                                                    <option 
+                                                    <option
                                                         value="{{$id}}"
                                                         @if(!empty($data['leave_type']) && $id == $data['leave_type'])
                                                             selected
@@ -122,9 +125,9 @@
                                         <tr>
                                             <th>Leave Method:</th>
                                             <td>
-                                                <select id="data[method_type]" name="data[method_type]" onChange="UpdateTotalLeaveTime();">
+                                                <select id="method_type" name="data[method_type]" onChange="UpdateTotalLeaveTime();">
                                                     @foreach ($data['method_options'] as $id => $name )
-                                                    <option 
+                                                    <option
                                                         value="{{$id}}"
                                                         @if(!empty($data['method_type']) && $id == $data['method_type'])
                                                             selected
@@ -149,7 +152,7 @@
                                                 <input type="text" size="30" id="altField" name="data[leave_start_date]" value="" readonly>
                                                 ie: {{$current_user_prefs->getDateFormatExample()}}
                                             </td>
-                                        </tr>     
+                                        </tr>
                                         <tr id="rwtime" style="" >
                                             <th>
                                                 Start Time:
@@ -157,7 +160,7 @@
                                             <td>
                                                 <input id="appt-time" disabled="disabled" type="time" name="data[appt-time]" value="{{$data['appt_time'] ?? ''}}">
                                             </td>
-                                        </tr>       
+                                        </tr>
                                         <tr id="rwendtime" style="" >
                                             <th>
                                                 End Time:
@@ -165,7 +168,7 @@
                                             <td>
                                                 <input id="end-time" disabled="disabled" type="time" name="data[end-time]" value="{{$data['end_time'] ?? ''}}">
                                             </td>
-                                        </tr>             
+                                        </tr>
                                         <tr>
                                             <th>
                                                 Reason:
@@ -182,7 +185,7 @@
                                                 <input type="text" size="30" name="data[address_tel]" value="{{$data['address_tel'] ?? ''}}">
                                             </td>
                                         </tr>
-                                                        
+
                                         <tr>
                                             <th>
                                                 Agreed to Cover Duties :
@@ -190,7 +193,7 @@
                                             <td>
                                                 <select id="data[cover_duty]"  name="data[cover_duty]">
                                                     @foreach ($data['users_cover_options'] as $id => $name )
-                                                    <option 
+                                                    <option
                                                         value="{{$id}}"
                                                         @if(!empty($data['cover_duty']) && $id == $data['cover_duty'])
                                                             selected
@@ -200,7 +203,7 @@
                                                 </select>
                                             </td>
                                         </tr>
-                                                        
+
                                         <tr>
                                             <th>
                                                 Supervisor  :
@@ -208,7 +211,7 @@
                                             <td>
                                                 <select id="data[supervisor]" name="data[supervisor]">
                                                     @foreach ($data['users_cover_options'] as $id => $name )
-                                                    <option 
+                                                    <option
                                                         value="{{$id}}"
                                                         @if(!empty($data['supervisor']) && $id == $data['supervisor'])
                                                             selected
@@ -218,16 +221,16 @@
                                                 </select>
                                             </td>
                                         </tr>
-                        
+
                                         <tr>
                                             <th></th>
                                             <td>
                                                 <input type="submit" class="btn btn-primary btn-sm" id="btnSubmit" name="action" value="Submit" onClick="">
                                             </td>
                                         </tr>
-                        
+
                                     </table>
-                                                    
+
                                     <table class="table table-bordered">
                                         <tr id="row">
                                             <thead id="row">
@@ -256,10 +259,10 @@
                                             @endforeach
                                         </tr>
                                     </table>
-                                </tr>    
+                                </tr>
                             </table>
                         </div>
-                                                    
+
                         <div>
                             <table class="table table-bordered">
                                     <tr id="row">
@@ -288,8 +291,8 @@
                                             </td>
                                         </tr>
                                     @endif
-                                    
-                            </table>                            
+
+                            </table>
                         </div>
                         <input type="hidden" id="id" name="data[id]" value="{{$data['id'] ?? ''}}">
                     </form>
@@ -302,77 +305,123 @@
     </div>
 
     <script	language=JavaScript>
-    
+
+        // var hwCallback = {
+
+        //     getAbsenceLeaveMethod: function(result) {
+        //         if ( result == false ) {
+        //             result = '0';
+        //         }
+
+        //         var h = Math.floor(result / 3600);
+        //         var m = Math.floor(result % 3600 / 60);
+
+        //         if(Math.floor(result ) == 28800){
+        //             document.getElementById('no_days').value = '1';
+        //         }
+        //         else if(Math.floor(result ) == 14400){
+        //             document.getElementById('no_days').value = '0.5';
+        //         }
+        //         else if(Math.floor(result ) == 5400){
+        //             document.getElementById('no_days').value = '1';
+        //         }
+
+        //     },
+
+        // }
+
         var hwCallback = {
-          
             getAbsenceLeaveMethod: function(result) {
-                if ( result == false ) {
-                    result = '0';
-                } 
-                              
-                var h = Math.floor(result / 3600);
-                var m = Math.floor(result % 3600 / 60);
-                
-                if(Math.floor(result ) == 28800){
-                    document.getElementById('no_days').value = '1';
+                let noDays = document.getElementById('no_days');
+                let leaveHours = Math.floor(result);
+
+                if (leaveHours === 28800) {
+                    noDays.value = '1';
+                } else if (leaveHours === 14400) {
+                    noDays.value = '0.5';
+                } else if (leaveHours === 5400) {
+                    noDays.value = '1';
+                } else {
+                    noDays.value = '';
                 }
-                else if(Math.floor(result ) == 14400){
-                    document.getElementById('no_days').value = '0.5';
-                }
-                else if(Math.floor(result ) == 5400){
-                    document.getElementById('no_days').value = '1';
-                }
-    
-            },
-              
-        }
-              
-              
-              
+            }
+        };
+
+
+
         var remoteHW = new AJAX_Server(hwCallback);
-      
+
+        // function UpdateTotalLeaveTime() {
+        //     var selectedLeaveId = document.getElementById('method_type').value;
+        //     remoteHW.getAbsenceLeaveMethod(selectedLeaveId);
+
+        //     const ele = document.getElementById("appt-time");
+        //     const ele_end = document.getElementById("end-time");
+        //     const noDays = document.getElementById("no_days");
+
+        //     if(selectedLeaveId == 3){
+        //         // ele.style.display = "block";
+        //         ele.disabled = false;
+        //         ele_end.disabled = false;
+        //         //ele.readonly = false;
+        //     }else{
+        //         ele.disabled = true;
+        //         ele_end.disabled = true;
+        //         //ele.readonly = true;
+        //     }
+        // }
+
         function UpdateTotalLeaveTime() {
-            var selectedLeaveId = document.getElementById('data[method_type]').value;
-            remoteHW.getAbsenceLeaveMethod(selectedLeaveId);
-            
-            var ele = document.getElementById("appt-time");
-            var ele_end = document.getElementById("end-time");
-            
-            if(selectedLeaveId == 3){
-                // ele.style.display = "block";
-                ele.disabled = false;
-                ele_end.disabled = false;
-                //ele.readonly = false;
-            }
-            else{
-                ele.disabled = true;
-                ele_end.disabled = true;
-                //ele.readonly = true;
+            const selectedLeaveId = parseInt(document.getElementById('method_type').value);
+
+            const startTime = document.getElementById("appt-time");
+            const endTime = document.getElementById("end-time");
+            const noDays = document.getElementById("no_days");
+
+            if (selectedLeaveId === 3) {
+                // Short Leave
+                startTime.disabled = false;
+                endTime.disabled = false;
+                noDays.readOnly = true; // let user choose in case of short leave
+                noDays.value = "1"; // allow manual input
+            } else {
+                // Full or Half Day Leave
+                startTime.disabled = true;
+                endTime.disabled = true;
+                noDays.readOnly = true;
+
+                if (selectedLeaveId === 1) {
+                    noDays.value = "1";
+                } else if (selectedLeaveId === 2) {
+                    noDays.value = "0.5";
+                } else {
+                    noDays.value = "1";
+                }
             }
         }
-      
+
         window.onload = function() {
             if ( window.history.replaceState ) {
                 window.history.replaceState( null, null, window.location.href );
             // history.replaceState("", "", "/the/result/page");
             }
         }
-      
+
         $( document ).ready(function() {
             $('#mdp-demo').multiDatesPicker({
             //minDate: 0, // today
-            //maxDate: 30, // +30 days from today 
+            //maxDate: 30, // +30 days from today
                 dateFormat: "yy-mm-dd",
                 altField: '#altField',
                     onSelect: function() {
                         var $this = $(this);
                         var e = document.getElementById("no_days");
-                        
-                        var eMethod  = document.getElementById("data[method_type]");
+
+                        var eMethod  = document.getElementById("method_type");
                         var strMethod = eMethod.options[eMethod.selectedIndex].value;
-                
+
                     if(strMethod ==0){
-                            
+
                             alert("Please select leave method");
                             for(var i = 0; i < this.multiDatesPicker.dates.picked.length; i++)
                     return this.multiDatesPicker.dates.picked.splice(i, 1).pop();
@@ -381,38 +430,38 @@
                         e.value = this.multiDatesPicker.dates.picked.length;
                     }
                     else if(strMethod ==2 || strMethod ==3){
-                        
+
                         if(this.multiDatesPicker.dates.picked.length >0){
                         var pick_date = this.multiDatesPicker.dates.picked[0];
-                        
+
                         for(var i = 0; i < this.multiDatesPicker.dates.picked.length; i++)
                             return this.multiDatesPicker.dates.picked.splice(i, 1).pop();
-                                            
+
                             this.multiDatesPicker.dates.picked.push(pick_date);
                     }
                     }
-                        
+
                     }
             });
-            
-            
+
+
             $( "#no_days" ).keydown(function(event ) {
-                
-                var e = document.getElementById("data[method_type]");
+
+                var e = document.getElementById("method_type");
                 var strMethod = e.options[e.selectedIndex].value;
-                
+
                 var et = document.getElementById("data[leave_type]");
                 var strType = et.options[et.selectedIndex].value;
-                
+
                 var submit = document.getElementById("btnSubmit");
-                
+
                 if(strType == 0){
-                    
+
                     submit.disabled = true;
                     alert("Please select leave type");
                 }
                 else if(strMethod == 0){
-                    
+
                     submit.disabled = true;
                     alert("Please select leave method");
                 }
@@ -429,42 +478,38 @@
                     //$(this).val("");
                     //$(this).val(num);
                 }
-                
-                
+
+
             });
-            
-            
+
+
             $( "#frmleave" ).submit(function( event ) {
-                
-                
-                
-                
-                var e = document.getElementById("data[method_type]");
+
+                var e = document.getElementById("method_type");
                 var strMethod = e.options[e.selectedIndex].value;
-                
+
                 var et = document.getElementById("data[leave_type]");
                 var strType = et.options[et.selectedIndex].value;
-                
-                
+
                 var ecover = document.getElementById("data[cover_duty]");
                 var streCover = ecover.options[ecover.selectedIndex].value;
-                
+
                 var esupevisor = document.getElementById("data[supervisor]");
                 var strSupervisor = esupevisor.options[esupevisor.selectedIndex].value;
-                
+
                 var noDays = document.getElementById("no_days");
                 var selectDays = document.getElementById("altField");
                 var reason = $("#reason").val().trim().length;
-                
-                
+
+
                 if(strType == 0){
-                    
-                    
+
+
                     alert("Please select leave type");
                     event.preventDefault();
                 }
                 else if(strMethod == 0){
-                    
+
                     alert("Please select leave method");
                     event.preventDefault();
                 }
@@ -477,29 +522,26 @@
                     event.preventDefault();
                 }
                 else if(reason < 1){
-                    
+
                     alert("Reason is Empty");
                     event.preventDefault();
                 }
                 else if(streCover == 0){
-                    
+
                     alert("Please select leave cover duty");
                     event.preventDefault();
                 }
                 else if(strSupervisor == 0){
-                    
+
                     alert("Please select leave supervisor");
                     event.preventDefault();
                 }
-                
+
                     //$( "#btnSubmit" ).prop("disabled",true);
-                
-                
-                
-                
+
             });
         });
-      
+
     </script>
 
     {{-- calander functions start --}}
@@ -509,16 +551,16 @@
         let currentMonth = new Date().getMonth();
 
         $(document).ready(function() {
-    
+
             // Function to generate the calendar for the current month and year
             function generateCalendar(year, month, selected_dates) {
                 $('#calendar').empty(); // Clear previous calendar content
-    
+
                 const firstDay = new Date(year, month, 1);
                 const lastDay = new Date(year, month + 1, 0);
-    
+
                 const monthsOfYear = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
-    
+
                 // Calendar Header (Year and Month Navigation)
                 const calendarHeader = `
                     <div class="calendar-header d-flex justify-content-between w-100">
@@ -528,21 +570,21 @@
                     </div>
                 `;
                 $('#calendar').append(calendarHeader);
-    
+
                 // Calendar Grid (Days of the Week + Days of the Month)
                 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 let grid = '<div class="calendar-grid d-grid grid-template-columns: repeat(7, 1fr); w-100">';
-                
+
                 // Days of the week
                 daysOfWeek.forEach(day => {
                     grid += `<div class="text-center">${day}</div>`;
                 });
-    
+
                 // Empty cells before the first day of the month
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     grid += `<div></div>`;
                 }
-    
+
                 // Days of the month
                 for (let i = 1; i <= lastDay.getDate(); i++) {
                     const formattedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
@@ -551,10 +593,10 @@
                         <div class="calendar-day text-center ${isSelected ? 'selected' : ''}" data-date="${formattedDate}">${i}</div>
                     `;
                 }
-    
+
                 grid += '</div>';
                 $('#calendar').append(grid);
-    
+
                 // Attach click event to the days
                 $('.calendar-day').click(function() {
                     const date = $(this).data('date');
@@ -563,20 +605,62 @@
                     }
                 });
             }
-    
+
             // Toggle date selection (highlight/deselect)
+            // function toggleDateSelection(date) {
+            //     if (selectedLeaveMethod === 1) {
+            //         if (selectedDates.has(date)) {
+            //             selectedDates.delete(date);
+            //             $(`.calendar-day[data-date="${date}"]`).removeClass('selected');
+            //         } else {
+            //             selectedDates.add(date);
+            //             $(`.calendar-day[data-date="${date}"]`).addClass('selected');
+            //         }
+            //     } else {
+            //         // Half Day / Short Leave — only one
+            //         selectedDates.clear();
+            //         selectedDates.add(date);
+            //     }
+            //     updateSelectedDates();
+            // }
+
             function toggleDateSelection(date) {
-                if (selectedDates.has(date)) {
-                    selectedDates.delete(date);
-                    $(`.calendar-day[data-date="${date}"]`).removeClass('selected');
-                } else {
+                const selectedLeaveId = parseInt($('#method_type').val());
+
+                if (selectedLeaveId === 2 || selectedLeaveId === 3) {
+                    // Half Day or Short Leave: Only one date allowed
+                    selectedDates.clear();
+                    $('.calendar-day').removeClass('selected');
                     selectedDates.add(date);
                     $(`.calendar-day[data-date="${date}"]`).addClass('selected');
+                } else {
+                    // Full Day: allow multiple selections
+                    if (selectedDates.has(date)) {
+                        selectedDates.delete(date);
+                        $(`.calendar-day[data-date="${date}"]`).removeClass('selected');
+                    } else {
+                        selectedDates.add(date);
+                        $(`.calendar-day[data-date="${date}"]`).addClass('selected');
+                    }
                 }
+
                 updateSelectedDates();
             }
-    
+
+
             // Update the selected dates list
+            // function updateSelectedDates() {
+            //     $('#altField').empty();
+            //     let count = 0;
+            //     let dates = '';
+            //     selectedDates.forEach(date => {
+            //         dates += date + ', ';
+            //         count++;
+            //     });
+            //     $('#altField').val(dates.trim().replace(/,$/, '')); // Use .val() for input fields
+            //     $('#no_days').val(count);
+            // }
+
             function updateSelectedDates() {
                 $('#altField').empty();
                 let count = 0;
@@ -585,10 +669,23 @@
                     dates += date + ', ';
                     count++;
                 });
-                $('#altField').val(dates.trim().replace(/,$/, '')); // Use .val() for input fields
-                $('#numberOfDays').val(count);
+
+                $('#altField').val(dates.trim().replace(/,$/, ''));
+
+                const selectedLeaveId = parseInt($('#method_type').val());
+                if (selectedLeaveId === 1) {
+                    // Full Day
+                    $('#no_days').val(count);
+                } else if (selectedLeaveId === 2) {
+                    // Half Day
+                    $('#no_days').val(0.5);
+                } else if (selectedLeaveId === 3) {
+                    // Short Leave — don't set no_days automatically
+                    $('#no_days').val('');
+                }
             }
-    
+
+
             // Change the month (prev or next)
             $(document).on('click', '#prevMonth', function() {
                 currentMonth--;
@@ -598,7 +695,7 @@
                 }
                 generateCalendar(currentYear, currentMonth, selectedDates);
             });
-    
+
             $(document).on('click', '#nextMonth', function() {
                 currentMonth++;
                 if (currentMonth > 11) {
@@ -607,7 +704,7 @@
                 }
                 generateCalendar(currentYear, currentMonth, selectedDates);
             });
-    
+
             // Initialize the calendar
             generateCalendar(currentYear, currentMonth, selectedDates);
         });

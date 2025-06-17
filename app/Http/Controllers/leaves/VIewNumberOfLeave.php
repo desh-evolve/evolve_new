@@ -32,75 +32,79 @@ class VIewNumberOfLeave extends Controller
 
     }
 
-    public function index() {
-
+    public function index($id)
+    {
       /*
       if ( !$permission->Check('accrual','view')
           OR (  $permission->Check('accrual','view_own') ) ) {
         $permission->Redirect( FALSE ); //Redirect
-      } 
+      }
       */
-      
-      $viewData['title'] = 'Apply Employee Leaves';
+        $current_user = $this->currentUser;
+        $current_company = $this->currentCompany;
+        $viewData['title'] = 'View Number of Leaves';
 
-      $header_leave = array();
-      $total_asign_leave = array();
-      $total_taken_leave = array();
-      $total_balance_leave = array();
-      
-      $alf = new AccrualListFactory();
-      
-      $lrlf = new LeaveRequestListFactory();
+        $header_leave = array();
+        $total_asign_leave = array();
+        $total_taken_leave = array();
+        $total_balance_leave = array();
 
-      $lrlf->getById($id);
-      
+        $alf = new AccrualListFactory();
+        $lrlf = new LeaveRequestListFactory();
+        $lrlf->getById($id);
+
         if($lrlf->getRecordCount() >0){
-      
+
           $arf = $lrlf->getCurrent();
-          
+
           $aplf = new AccrualPolicyListFactory();
           $aplf->getByCompanyIdAndTypeId($current_company->getId(),20);
-          
+
           foreach($aplf->rs as $apf){
             $aplf->data = (array)$apf;
             $apf = $aplf;
-          
-              $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($current_company->getId(),$arf->getUser(),$apf->getId(),30);
-              
-              $header_leave[]['name']=$apf->getName();
-                      
-              if($alf->getRecordCount() > 0) {
-                $af= $alf->getCurrent();
-                $total_asign_leave[]['asign'] =  $af->getAmount()/28800;
-              } else {
-                  $total_asign_leave[]['asign'] = 0;
-              }
-          
-              $ttotal =  $alf->getSumByUserIdAndAccrualPolicyId($arf->getUser(),$apf->getId());
-            
-              if($alf->getRecordCount() > 0) {
-                $af= $alf->getCurrent();
-                $total_taken_leave[]['taken'] =   ($af->getAmount()/28800)-($ttotal/28800);
-                $total_balance_leave[]['balance'] = ($ttotal/28800);
-              } else {
-                  $total_taken_leave[]['taken'] = 0;
-                  $total_balance_leave[]['balance'] = 0;
-              }
-              
-          } 
-      
+
+            $user_id = $arf->data['user_id'];
+            $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($current_company->getId(),$user_id,$apf->getId(),30);
+
+            $header_leave[]['name']=$apf->getName();
+
+            if($alf->getRecordCount() > 0) {
+            $af= $alf->getCurrent();
+            $total_asign_leave[]['asign'] =  $af->getAmount()/28800;
+            } else {
+                $total_asign_leave[]['asign'] = 0;
+            }
+
+            $ttotal =  $alf->getSumByUserIdAndAccrualPolicyId($user_id,$apf->getId());
+
+
+            if($alf->getRecordCount() > 0) {
+            $af= $alf->getCurrent();
+            $total_taken_leave[]['taken'] =   ($af->getAmount()/28800)-($ttotal/28800);
+            $total_balance_leave[]['balance'] = ($ttotal/28800);
+            } else {
+                $total_taken_leave[]['taken'] = 0;
+                $total_balance_leave[]['balance'] = 0;
+            }
+
+          }
+
         }
-      
+
         $viewData['total_asign_leave'] = $total_asign_leave;
         $viewData['total_taken_leave'] = $total_taken_leave;
         $viewData['total_balance_leave'] = $total_balance_leave;
         $viewData['header_leave'] = $header_leave;
-        $viewData['data'] = $data;
-        $viewData['user'] = $current_user;
+        // $viewData['data'] = $data;
+        $viewData['user'] = $user_id;
+
+        // dd($viewData);
 
         return view('leaves/VIewNumberOfLeave', $viewData);
 
     }
+
 }
 
 

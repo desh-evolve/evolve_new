@@ -39,7 +39,7 @@ class StationList extends Controller
     }
 
     public function index() {
-    
+
         $current_company = $this->company;
         $current_user_prefs = $this->userPrefs;
 
@@ -60,7 +60,7 @@ class StationList extends Controller
         Debug::Arr($ids, 'Selected Objects', __FILE__, __LINE__, __METHOD__, 10);
 
         BreadCrumb::setCrumb('Station List');
-// dd($current_user_prefs->getItemsPerPage());
+        // dd($current_user_prefs->getItemsPerPage());
         $slf = new StationListFactory();
         $slf->getByCompanyId($current_company->getId(), $current_user_prefs->getItemsPerPage() ?? null, $page, null, $sort_array);
         $pager = new Pager($slf);
@@ -101,17 +101,17 @@ class StationList extends Controller
         if (empty($id)) {
             return response()->json(['error' => 'No stations selected.'], 400);
         }
-        
+
         $slf = new StationListFactory();
         $station = $slf->getByIdAndCompanyId($id, $current_company->getId());
-        
+
         foreach ($station->rs as $s_obj) {
             $station->data = (array)$s_obj;
             $station->setDeleted(true);
 
             if ($station->isValid()) {
                 $res = $station->Save();
-                
+
                 if($res){
                     return response()->json(['success' => 'Station deleted successfully.']);
                 }else{

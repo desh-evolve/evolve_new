@@ -24,8 +24,6 @@
 
                     {{-- -------------------------------------------- --}}
 
-                    <form method="post" action="{{ route('company.hierarchy.list') }}">
-                        @csrf
                         <table class="table table-bordered">
                             <thead class="bg-primary text-white">
                                 <tr>
@@ -66,16 +64,15 @@
                                             @endif
                                         --}}
                                         @if ($permission->Check('hierarchy','edit_own') OR $permission->Check('hierarchy','edit'))
-                                            [<a href="{{ route('company.hierarchy.add', ['hierarchy_control_id' => $hierarchy_control['id'], 'merge' => 'FALSE']) }}">Edit</a>]
+                                            <a class="btn btn-secondary btn-sm" href="{{ route('company.hierarchy.edit', ['hierarchy_control_id' => $hierarchy_control['id'], 'merge' => 'FALSE']) }}">Edit</a>
                                         @endif
                                         @if ($permission->Check('hierarchy','delete'))
-                                            <button type="submit" name="action" value="Delete" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/company/hierarchy/list/{{ $hierarchy_control['id'] }}', 'Hierarchy', this)">Delete</button>
+                                            <button type="submit" name="action" value="Delete" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/company/hierarchy/delete/{{ $hierarchy_control['id'] }}', 'Hierarchy', this)">Delete</button>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </table>
-                    </form>
 
                     {{-- -------------------------------------------- --}}
 

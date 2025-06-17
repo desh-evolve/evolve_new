@@ -238,16 +238,16 @@ class Factory
 				return true;
 			}
 		}
-		
+
 		// Not new data (the record exists in the DB)
 		return false;
-		
+
 	}
 	*/
 
 	public function isNew($force_lookup = false)
     {
-		
+
         Log::debug('Checking if record is new', ['id' => $this->getId(), 'force_lookup' => $force_lookup]);
 
         if (empty($this->getId()) || $this->getId() === false) {
@@ -322,6 +322,7 @@ class Factory
 
 		return FALSE;
 	}
+    
 	function setId($id)
 	{
 		/*
@@ -1054,7 +1055,7 @@ class Factory
 				$column = $this->parseColumnName( $orig_column );
 
 				$expression = trim($expression);
-				
+
 				if ( in_array($column, $fields) ) {
 					$sql_chunks[] = $orig_column.' '.$expression;
 				}
@@ -1206,8 +1207,8 @@ class Factory
 					}
 				} else {
 					Debug::text('Invalid Sort Column/Order: ' . $column . ' Order: ' . $order, __FILE__, __LINE__, __METHOD__, 10);
-				}				
-				
+				}
+
 			}
 
 			if (isset($sql_chunks)) {
@@ -1236,11 +1237,11 @@ class Factory
 
 	// 	if (is_array($additional_fields)) {
 	// 		foreach ($additional_fields as $orig_column => $order) {
-	// 			if (is_numeric($orig_column)) { 
-	// 				$sql_chunks[] = trim($order) . ' ASC'; 
-	// 			} else { 
-	// 				$sql_chunks[] = "`" . $orig_column . "` " . strtoupper(trim($order)); 
-	// 			}				
+	// 			if (is_numeric($orig_column)) {
+	// 				$sql_chunks[] = trim($order) . ' ASC';
+	// 			} else {
+	// 				$sql_chunks[] = "`" . $orig_column . "` " . strtoupper(trim($order));
+	// 			}
 	// 		}
 	// 	}
 
@@ -1274,7 +1275,7 @@ class Factory
 	// 	}
 
 	// 	return false;
-	// }	
+	// }
 
 
 	/*
@@ -1408,7 +1409,7 @@ class Factory
 
 			if ($id == -1 and isset($config_vars['cache']['enable']) and $config_vars['cache']['enable'] == TRUE) {
 
-				
+
 				//Try to use Cache Lite instead of ADODB, to avoid cache write errors from causing a transaction rollback. It should be faster too.
 				//However I think there is some issues with storing the record set, as ADODB goes to great lengths to avoid straight serialize/unserialize.
 				//$cache_id = 'empty_rs_'. $this->table .'_'. $id;
@@ -1417,7 +1418,7 @@ class Factory
 				//	$rs = DB::select($query);
 				//	$this->saveCache($rs,$cache_id);
 				//}
-				
+
 				$save_error_handlers = $this->db->IgnoreErrors(); //Prevent a cache write error from causing a transaction rollback.
 				try {
 					$rs = $this->db->CacheExecute(604800, $query);
@@ -1517,7 +1518,7 @@ class Factory
 	}
 	*/
 
-	
+
 	public function getEmptyRecordSet(?int $id = null): object
     {
         Log::debug('Starting getEmptyRecordSet for table: ' . $this->getTable() . ', ID: ' . ($id ?? -1));
@@ -1535,7 +1536,7 @@ class Factory
 
             if ($id == -1 && config('cache.enabled', false)) {
                 $cache_id = "empty_rs_{$this->getTable()}_{$id}";
-                
+
                 // Try to get from cache
                 $rs = Cache::remember($cache_id, 604800, function () use ($query) {
                     try {
@@ -1569,7 +1570,7 @@ class Factory
         try {
             // Get existing record
             $rs = $this->getEmptyRecordSet($this->getId());
-            
+
             if (!$rs || empty((array)$rs)) {
                 Log::warning('No record found for ID: ' . $this->getId() . '. Consider inserting instead.');
                 return false;
@@ -1610,7 +1611,7 @@ class Factory
             }
 
             $query = "UPDATE {$table} SET " . implode(', ', $setClauses) . " WHERE id = " . (int)$this->getId();
-			
+
             Log::debug('Update query prepared', ['query' => $query]);
 
             return $query;
@@ -1669,7 +1670,7 @@ class Factory
             throw new \Exception('Error: ' . $e->getMessage());
         }
     }
-	
+
 
 	public function startTransaction()
 	{
@@ -1772,13 +1773,13 @@ class Factory
 				$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
 			}
 
-			
+
 			if ( method_exists($this,'addLog') ) {
 				//In some cases, like deleting users, this function will fail because the user is deleted before they are removed from other
 				//tables like PayPeriodSchedule, so addLog() can't get the user information.
 				$this->addLog( $log_action );
 			}
-			
+
 
 			// Clear the data if requested
 			if ($reset_data) {
@@ -1804,9 +1805,9 @@ class Factory
 		//$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 		//$caller = $backtrace[1] ?? [];
 		//dd($caller);
-		
+
 		$this->StartTransaction();
-		
+
 		//Run Pre-Save function
 		//This is called before validate so it can do extra calculations,etc before validation.
 		//Should this AND validate() NOT be called when delete flag is set?
@@ -1816,13 +1817,13 @@ class Factory
 				throw new GeneralError('preSave() failed.');
 			}
 		}
-		
+
 		//Don't validate when deleting, so we can delete records that may have some invalid options.
 		//However we can still manually call this function to check if we need too.
 		if ( $this->getDeleted() == FALSE AND $this->isValid() === FALSE ) {
 			throw new GeneralError('Invalid Data, not saving.');
 		}
-		
+
 
 		if ($this->isNew($force_lookup)) {
 			//Insert
@@ -1831,11 +1832,11 @@ class Factory
 			if ( empty($this->getCreatedDate()) ) {
 				$this->setCreatedDate($time);
 			}
-			
+
 			if ( empty($this->getCreatedBy()) ) {
 				$this->setCreatedBy();
 			}
-			
+
 			//Set updated date at the same time, so we can easily select last
 			//updated, or last created records.
 			$this->setUpdatedDate($time);
@@ -1850,19 +1851,19 @@ class Factory
 				Debug::text('Insert ID: '. $insert_id , __FILE__, __LINE__, __METHOD__, 9);
 				$this->setId($insert_id);
 			}
-			
+
 			try {
 				$query = $this->getInsertQuery();
 			} catch (Exception $e) {
 				dd($e);
 				throw new \Exception('Save failed.');
 			}
-			
+
 			$retval = (int)$insert_id;
 			$log_action = 10; // 'Add'
 		} else {
 			Debug::text(' Updating...' , __FILE__, __LINE__, __METHOD__,10);
-			
+
 			//Update
 			$query = $this->getUpdateQuery(); //Don't pass data, too slow
 
@@ -1879,7 +1880,7 @@ class Factory
 					// Execute the insert query
 					DB::statement($query);
 					Log::debug('Insert query executed', ['query' => $query]);
-					
+
 					// Get the inserted ID
 					//$insert_id = DB::getPdo()->lastInsertId();
 					//$this->setId((int)$insert_id);
@@ -1902,7 +1903,7 @@ class Factory
 				//tables like PayPeriodSchedule, so addLog() can't get the user information.
 				$this->addLog( $log_action );
 			}
-			
+
 			//Run postSave function.
 			if ( method_exists($this,'postSave') ) {
 				Debug::text('Calling postSave()' , __FILE__, __LINE__, __METHOD__,10);

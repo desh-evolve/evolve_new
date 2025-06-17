@@ -111,11 +111,11 @@ class UserTitleFactory extends Factory {
 		return FALSE;
 	}
 
-        
+
   //***** FL ADDED FOR CHILD FUND (OCCUPATION CLASSIFICATION ID)*************************/
-        
-	
-        
+
+
+
 	function getClassificationId() {
 		return $this->data['cl_name_id'];
 	}
@@ -131,11 +131,13 @@ class UserTitleFactory extends Factory {
 		return FALSE;
 	}
         //***** END FL ADDED FOR CHILD FUND (OCCUPATION CLASSIFICATION ID)*************************/
-        
-        
+
+
 	function getName() {
 		return $this->data['name'];
 	}
+
+
 	function setName($name) {
 		$name = trim($name);
 

@@ -81,10 +81,21 @@
                                     class="nav-link {{ request()->routeIs('attendance.apply_leaves') ? 'active' : '' }}">Apply Leaves
                                 </a>
                             </li>
-
-                            <li class="nav-item"><a href="#" class="nav-link">Leaves Cover View</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Leaves Supervisor Approval</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Leaves Confirmation Report</a></li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.leaves.covered_aprooval') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.leaves.covered_aprooval') ? 'active' : '' }}">Leaves Cover View
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.leaves.supervise_aprooval') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.leaves.supervise_aprooval') ? 'active' : '' }}">Leaves Supervisor Approval
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.leaves.confirmed_leave') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.leaves.confirmed_leave') ? 'active' : '' }}">Leaves Confirmation Report
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="{{ route('attendance.accruals') }}"
                                     class="nav-link {{ request()->routeIs('attendance.accruals') ? 'active' : '' }}">Accruals
@@ -137,11 +148,11 @@
                                     class="nav-link {{ request()->routeIs('report.employee_nopay_count_report') ? 'active' : '' }}">Employee Nopay Count Report
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="{{ route('report.general_ledger_summary_report') }}"
                                     class="nav-link {{ request()->routeIs('report.general_ledger_summary_report') ? 'active' : '' }}">General Ledger Summary Report
                                 </a>
-                            </li>
+                            </li> --}}
                             {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}
                             <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
                         </ul>

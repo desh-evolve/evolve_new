@@ -25,6 +25,7 @@ use App\Models\Leaves\LeaveRequestListFactory;
 use App\Models\PayPeriod\PayPeriodListFactory;
 use App\Models\Policy\AccrualPolicyListFactory;
 use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
 use DateTime;
 use Illuminate\Support\Facades\View;
 
@@ -82,7 +83,7 @@ class ApplyUserLeave extends Controller
                 'id',
                 'data',
                 'filter_data'
-            ) 
+            )
         ) );
 
 
@@ -113,29 +114,30 @@ class ApplyUserLeave extends Controller
             case 'submit':
                 Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
                 //Debug::setVerbosity(11);
-                    
+
                 //  $lrf = new LeaveRequestFactory();
-                    
+
                     //echo $data['leave_start_date'];
                     //exit();
-                    
+
                     $ablf = new AccrualBalanceListFactory();
                     $ablf->getByUserIdAndAccrualPolicyId($current_user->getId(),$data['leave_type']);
-                    
+
                     if( $ablf->getRecordCount() > 0){
-                        
+
                         $abf = $ablf->getCurrent();
-                        
+
                         $balance = $abf->getBalance();
-                        
-                        $amount = $data['no_days'];
-                                
+
+                        // $amount = $data['no_days'];
+                        $amount = isset($data['no_days']) ? floatval($data['no_days']) : 0;
+
                         $amount_taken =0;
-                        
+
                         if($data['method_type'] == 1){
                             $amount_taken = (($amount*8) * (28800/8));
                         }elseif($data['method_type'] == 2){
-                            
+
                             if($amount<1){
                                 $amount_taken = (($amount*8) * (28800/8));
                             }else{
@@ -143,55 +145,59 @@ class ApplyUserLeave extends Controller
                             }
                         }elseif($data['method_type'] == 3){
                             $amount_taken = 4320;
-                            
+
                             //  $start_date_stamp = TTDate::parseDateTime( $data['leave_start_date'].' '.$data['appt-time'] );
-                            
+
                             //  $end_date_stamp = TTDate::parseDateTime( $data['leave_start_date'].' '.$data['end-time'] );
-                            
+
                             $start_date_stamp= TTDate::parseTimeUnit($data['appt-time'] );
                             $end_date_stamp= TTDate::parseTimeUnit($data['end-time'] );
-                            
+
                             $time_diff = $end_date_stamp - $start_date_stamp;
-                            
+
                             if($time_diff <=3600){
                                 $time_diff = 3600;
                             }
-                            
-                            
+
+
                             if($time_diff >7200){
                                 $time_diff = 7200;
                             }
-                            
+
                             $amount_taken =$time_diff*0.8;
                         }
-                        
+
                         $amount_taken = -1 * abs($amount_taken);
-                        
+
                         $current_amount = abs($amount_taken);
-                                
+
                         if($current_amount <= $balance ){
-                            
+
                             $date_sh_array = explode(',', $data['leave_start_date']);
-                            
+
                             $udtlf_s = new UserDateListFactory();
                             $udtlf_s->getByUserIdAndDate($current_user->getId(), $date_sh_array[0]);
-                            
+
                             $udf_obj = $udtlf_s->getCurrent();
                             $pp_id = $udf_obj->getPayPeriod();
-                            
+
                             $pplf = new PayPeriodListFactory();
                             $pplf->getById($pp_id);
                             $pp_obj = $pplf->getCurrent();
-                            
+
                             $lrlf_s = new LeaveRequestListFactory();
+
+                            $pp_short_leave_count = 0;
                             $row = $lrlf_s->getPayperiodsShortLeaveCount($current_user->getId(), $data['leave_type'], $pp_obj->getStartDate(TRUE), $pp_obj->getEndDate(TRUE));
-                            
-                            $pp_short_leave_count = $row['count'];
-                            
+
+                            if (is_array($row) && isset($row['count'])) {
+                                    $pp_short_leave_count = $row['count'];
+                            }
+
                             if($pp_short_leave_count >= 2 && $data['leave_type'] == 8){
-                                $msg = "You can apply only two short leaves"; 
+                                $msg = "You can apply only two short leaves";
                             }else{
-                                
+
                                 $lrf = new LeaveRequestFactory;
 
                                 $lrf->setCompany($current_company->getId());
@@ -200,22 +206,22 @@ class ApplyUserLeave extends Controller
                                 $lrf->setAccuralPolicy($data['leave_type']);
                                 $lrf->setLeaveMethod($data['method_type']);
                                 $lrf->setAmount($data['no_days']);
-                                
+
                                 if ( isset($data['appt-time']) && $data['appt-time'] != '') {
                                     $lrf->setLeaveTime($data['appt-time']);
                                 }
-                                
+
                                 if ( isset($data['end-time']) && $data['end-time'] != '') {
                                     $lrf->setLeaveEndTime($data['end-time']);
                                 }
 
                                 $date_array = array();
                                 if(isset($data['leave_start_date'])){
-                                    
+
                                     $lrf->setLeaveDates(trim($data['leave_start_date']));
-                                    
+
                                     $date_array = explode(',', $data['leave_start_date']);
-                                
+
                                         $date_count = count($date_array);
 
                                         if($date_count == 1){
@@ -229,18 +235,18 @@ class ApplyUserLeave extends Controller
                                         } elseif ($date_count > 1) {
 
                                             $from_date =  new DateTime($date_array[0]);
-                                            
+
                                             $lrf->setLeaveFrom($from_date->format('Y-m-d'));
 
                                             $To_date =  new DateTime($date_array[$date_count-1]);
-                                            
+
                                             $lrf->setLeaveTo($To_date->format('Y-m-d'));
-                                        
+
                                         }
                                 }
 
                                 //  $from_date =  DateTime::createFromFormat('j-M-y', $data['leave_start_date']);
-                                
+
                                 // $To_date =  DateTime::createFromFormat('j-M-y', $data['leave_end_date']);
 
                                 $lrf->setReason($data['reason']);
@@ -263,9 +269,9 @@ class ApplyUserLeave extends Controller
 
                                 $lrlf_b = new LeaveRequestListFactory();
                                 $lrlf_b->checkUserHasLeaveTypeForDay($current_user->getId(), $from_date->format('Y-m-d'), $data['leave_type']);
-                                
+
                                 if($lrlf_b->getRecordCount()>0 && $data['leave_type'] == 8){
-                                    $msg = "You have This leave for the day";  
+                                    $msg = "You have This leave for the day";
                                 }else{
                                     $lrf->Save();
 
@@ -341,8 +347,8 @@ class ApplyUserLeave extends Controller
                                     $mailer->send($message);
                                     */
 
-                                    $msg = "You have successfully apply leave";  
-                                                                        
+                                    $msg = "You have successfully apply leave";
+
                                     //****************************************************************
                                 }
                             }
@@ -353,12 +359,12 @@ class ApplyUserLeave extends Controller
                             $msg = "You don't have this leave type";
                     }
 
-                    //dd($msg);
+                    // dd($msg);
 
                 break;
             default:
-                
-                
+
+
                 break;
         }
 
@@ -368,50 +374,48 @@ class ApplyUserLeave extends Controller
         $leave_request = array();
 
         if($lrlf->getRecordCount() > 0){
-            
+
         foreach ($lrlf->rs as $lrf) {
             $lrlf->data = (array)$lrf;
             $lrf = $lrlf;
-            
+
             $leave = array();
-        
+
             $leave['name'] = $lrf->getUserObject()->getFullName();
             $leave['from'] = $lrf->getLeaveFrom();
             $leave['to'] = $lrf->getLeaveTo();
             $leave['amount'] = $lrf->getAmount();
             $leave['leave_type'] = $lrf->getAccuralPolicyObject()->getName();
-            
             $leave['status'] = "Pending Aproovals";
-            
+
             if($lrf->getCoveredApproved() && $lrf->getStatus()==10 ){
                 $leave['status'] = "Pending for Authorization ";
             }
-            
+
             if (!$lrf->getCoveredApproved() && $lrf->getStatus()==20) {
                 $leave['status'] = "Cover Rejected";
-            
             }
-            
+
             if($lrf->getCoveredApproved() && $lrf->getSupervisorApproved() && $lrf->getStatus()==10 ){
                 $leave['status'] = "Supervisor Approved";
             }
-            
+
             if($lrf->getCoveredApproved() && !$lrf->getSupervisorApproved() && $lrf->getStatus()==30 ){
                     $leave['status'] = "Supervisor Rejected";
             }
-            
+
             if($lrf->getCoveredApproved() && $lrf->getSupervisorApproved() && $lrf->getHrApproved() && $lrf->getStatus()==10){
                 $leave['status'] = "HR Approved";
             }
-            
+
             if($lrf->getCoveredApproved() && $lrf->getSupervisorApproved() && !$lrf->getHrApproved() && $lrf->getStatus()==40){
                 $leave['status'] = "HR Rejected";
             }
-            
-            
+
+
             $leave_request[]= $leave;
         }
-            
+
         }
 
 
@@ -429,24 +433,24 @@ class ApplyUserLeave extends Controller
         foreach($aplf->rs as $apf){
             $aplf->data = (array)$apf;
             $apf = $aplf;
-            
+
             if($apf->getId() == 4 || $apf->getId() == 11){
                 continue;
             }
-        
+
             $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatusForLeave($current_company->getId(),$current_user->getId(),$apf->getId(),30);
-            
+
             $header_leave[]['name']=$apf->getName();
-                    
+
             if($alf->getRecordCount() > 0) {
                 $af= $alf->getCurrent();
                 $total_asign_leave[]['asign'] =  number_format($af->getAmount()/28800,2);
             } else {
                 $total_asign_leave[]['asign'] = 0;
             }
-            
+
             $ttotal =  $alf->getSumByUserIdAndAccrualPolicyId($current_user->getId(),$apf->getId());
-            
+
             if($alf->getRecordCount() > 0) {
                 $af= $alf->getCurrent();
                 $total_taken_leave[]['taken'] = number_format(($af->getAmount()/28800)-($ttotal/28800),2);
@@ -455,7 +459,7 @@ class ApplyUserLeave extends Controller
                 $total_taken_leave[]['taken'] = 0;
                 $total_balance_leave[]['balance'] = 0;
             }
-            
+ 
         }
 
         $leave_options = array();
@@ -465,16 +469,16 @@ class ApplyUserLeave extends Controller
 
             $leave_options[$apf->getId()]=$apf->getName();
             $alf->getByCompanyIdAndUserIdAndAccrualPolicyIdAndStatus($current_company->getId(),$current_user->getId(),$apf->getId(),30);
-            
+
         }
         $leave_options = Misc::prependArray( array( 0 => '-- Please Choose --' ), $leave_options );
         $data['leave_options'] = $leave_options;
-                
+
         $method_options = $lrlf->getOptions('leave_method');
-        
+
         $method_options = Misc::prependArray( array( 0 => '-- Please Choose --' ), $method_options );
         $data['method_options'] = $method_options;
-                
+
         $ulf = new UserListFactory();
         //$filter_data['default_branch_id'] = $current_user->getDefaultBranch();
         $filter_data['exclude_id'] = 1;
@@ -487,16 +491,18 @@ class ApplyUserLeave extends Controller
         foreach($ulf->rs as $uf){
             $ulf->data = (array)$uf;
             $uf = $ulf;
-            
-            $user_options[$uf->getId()] = $uf->getPunchMachineUserID().'-'.$uf->getFullName() ; 
+
+            $user_options[$uf->getId()] = $uf->getPunchMachineUserID().'-'.$uf->getFullName() ;
+
         }
 
         $user_options = Misc::prependArray( array( 0 => '-- Please Choose --' ), $user_options );
         $data['users_cover_options'] = $user_options;
         //$data['users_cover_options'] = $ulf;
         $data['name'] =$current_user->getFullName();
-        $data['title'] = '';//$current_user->getTitleObject()->getName();
-        $data['title_id'] = '';//$current_user->getTitleObject()->getId();
+        $data['title'] = $current_user->getTitleObject()->getName();
+        $data['title_id'] = $current_user->getTitleObject()->getId();
+
         $data['leave_start_date'] = '';
         //$data['reason']="";
 
@@ -512,10 +518,11 @@ class ApplyUserLeave extends Controller
         $viewData['data'] = $data;
         $viewData['user'] = $current_user;
 
-        //$current_user->getId() 
-        //dd($viewData);
+        //$current_user->getId()
+
+        // dd($viewData);
         return view('leaves/ApplyUserLeave', $viewData);
-        
+
     }
 }
 
