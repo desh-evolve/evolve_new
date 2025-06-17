@@ -1432,20 +1432,18 @@ class ProgressBar extends Controller
                 $abf_obj = $ablf->getCurrent();
                 
                 
-                
                 if($ulf->getRecordCount() >0){
-                    
                     
                     $user_count = $ulf->getRecordCount();
                     $percentage = 0;
                     $current = 0;
                     
-                    
-                    foreach($ulf as $uf_obj){
+                  foreach ($ulf->rs as $uf_obj){
+                        $ulf->data = (array)$uf_obj;
+                        $uf_obj = $ulf;
                         
                         $current++;
                     
-                        
                         $bdulf = new BonusDecemberUserListFactory();
                         $bdulf->getByUserIdAndBonusDecemberId($uf_obj->getId(), $abf_obj->getBonusDecember());
                         $bdf_obj = $bdulf->getCurrent();

@@ -129,7 +129,6 @@ class UserDeductionFactory extends Factory {
 		$id = trim($id);
 
 		$ulf = new UserListFactory();
-
 		if ( $this->Validator->isResultSetWithRows(	'user',
 															$ulf->getByID($id),
 															('Invalid User')

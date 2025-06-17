@@ -38,18 +38,20 @@ class EditCompanyDeduction extends Controller
 		$this->currentUser = View::shared('current_user');
 		$this->currentCompany = View::shared('current_company');
 		$this->userPrefs = View::shared('current_user_prefs');
-
 	}
 
-	public function index() {
+	public function index()
+	{
 		$permission = $this->permission;
 		$current_user = $this->currentUser;
 		$current_company = $this->currentCompany;
 		$current_user_prefs = $this->userPrefs;
 
-		if ( !$permission->Check('company_tax_deduction','enabled')
-				OR !( $permission->Check('company_tax_deduction','edit') OR $permission->Check('company_tax_deduction','edit_own') ) ) {
-			$permission->Redirect( FALSE ); //Redirect
+		if (
+			!$permission->Check('company_tax_deduction', 'enabled')
+			or !($permission->Check('company_tax_deduction', 'edit') or $permission->Check('company_tax_deduction', 'edit_own'))
+		) {
+			$permission->Redirect(FALSE); //Redirect
 		}
 
 		$viewData['title'] = 'Edit Tax / Deduction';
@@ -57,174 +59,203 @@ class EditCompanyDeduction extends Controller
 		/*
 		* Get FORM variables
 		*/
-		extract	(FormVariables::GetVariables(
-												array	(
-														'action',
-														'id',
-														'data'
-														) ) );
+		extract(FormVariables::GetVariables(
+			array(
+				'action',
+				'id',
+				'data'
+			)
+		));
+		// if (isset($data)) {
+		// 	if ($data['start_date'] != '') {
+		// 		$data['start_date'] = TTDate::parseDateTime($data['start_date']);
+		// 	}
+		// 	if ($data['end_date'] != '') {
+		// 		$data['end_date'] = TTDate::parseDateTime($data['end_date']);
+		// 	}
+		// }
 
-		if ( isset($data)) {
-			if ( $data['start_date'] != '' ) {
-				$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );
-			}
-			if ( $data['end_date'] != '' ) {
-				$data['end_date'] = TTDate::parseDateTime( $data['end_date'] );
-			}
-		}
+		if (isset($data)) {
+            if ($data['start_date'] != '') {
+                $timestamp = TTDate::parseDateTime($data['start_date']);
+                $data['start_date'] = $timestamp ? date('Y-m-d H:i:s', $timestamp) : null; // Convert to DATETIME format
+            }
+            if ($data['end_date'] != '') {
+                $timestamp = TTDate::parseDateTime($data['end_date']);
+                $data['end_date'] = $timestamp ? date('Y-m-d H:i:s', $timestamp) : null; // Convert to DATETIME format
+            }
+        }
 
 		$cdf = new CompanyDeductionFactory();
 
-		//==================================================================================
-		$action = '';
-        if (isset($_POST['action'])) {
+		// //==================================================================================
+		// $action = '';
+		// if (isset($_POST['action'])) {
+		// 	$action = trim($_POST['action']);
+		// } elseif (isset($_GET['action'])) {
+		// 	$action = trim($_GET['action']);
+		// }
+		// $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+		// //==================================================================================
+
+		// Capture the action
+        $action = '';
+        if (isset($_POST['action:submit'])) {
+            $action = 'submit'; // Normalize to 'submit' for action:submit
+        } elseif (isset($_POST['action'])) {
             $action = trim($_POST['action']);
         } elseif (isset($_GET['action'])) {
-			$action = trim($_GET['action']);
+            $action = trim($_GET['action']);
         }
         $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
-		//==================================================================================
+        //==================================================================================
 
+        // Debugging: Remove or replace with proper handling
 		switch ($action) {
 			case 'submit':
-				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__, 10);
 				//Debug::setVerbosity(11);
 
 				$cdf->StartTransaction();
 
-				$cdf->setId( $data['id'] );
-				$cdf->setCompany( $current_company->getId() );
-				$cdf->setStatus( $data['status_id'] );
-				$cdf->setType( $data['type_id'] );
-				$cdf->setName( $data['name'] );
-				$cdf->setCalculation( $data['calculation_id'] );
-				$cdf->setCalculationOrder( $data['calculation_order'] );
-
-				if ( isset($data['country']) ) {
+				$cdf->setId($data['id']);
+				$cdf->setCompany($current_company->getId());
+				$cdf->setStatus($data['status_id']);
+				$cdf->setType($data['type_id']);
+				$cdf->setName($data['name']);
+				$cdf->setCalculation($data['calculation_id']);
+				$cdf->setCalculationOrder($data['calculation_order']);
+// dd($cdf);
+				if (isset($data['country'])) {
 					$cdf->setCountry($data['country']);
 				}
 
-				if ( isset($data['province']) ) {
+				if (isset($data['province'])) {
 					$cdf->setProvince($data['province']);
 				} else {
 					$cdf->setProvince(NULL);
 				}
 
-				if ( isset($data['district']) ) {
+				if (isset($data['district'])) {
 					$cdf->setDistrict($data['district']);
 				} else {
 					$cdf->setDistrict(NULL);
 				}
 
-				if ( isset($data['company_value1']) ) {
-					$cdf->setCompanyValue1( $data['company_value1'] );
+				if (isset($data['company_value1'])) {
+					$cdf->setCompanyValue1($data['company_value1']);
 				}
-				if ( isset($data['company_value2']) ) {
-					$cdf->setCompanyValue2( $data['company_value2'] );
-				}
-
-				$cdf->setPayStubEntryAccount( $data['pay_stub_entry_account_id'] );
-				if ( isset($data['user_value1']) ) {
-					$cdf->setUserValue1( $data['user_value1'] );
-				}
-				if ( isset($data['user_value2']) ) {
-					$cdf->setUserValue2( $data['user_value2'] );
-				}
-				if ( isset($data['user_value3']) ) {
-					$cdf->setUserValue3( $data['user_value3'] );
-				}
-				if ( isset($data['user_value4']) ) {
-					$cdf->setUserValue4( $data['user_value4'] );
-				}
-				if ( isset($data['user_value5']) ) {
-					$cdf->setUserValue5( $data['user_value5'] );
-				}
-				if ( isset($data['user_value6']) ) {
-					$cdf->setUserValue6( $data['user_value6'] );
-				}
-				if ( isset($data['user_value7']) ) {
-					$cdf->setUserValue7( $data['user_value7'] );
-				}
-				if ( isset($data['user_value8']) ) {
-					$cdf->setUserValue8( $data['user_value8'] );
-				}
-				if ( isset($data['user_value9']) ) {
-					$cdf->setUserValue9( $data['user_value9'] );
-				}
-				if ( isset($data['user_value10']) ) {
-					$cdf->setUserValue10( $data['user_value10'] );
+				if (isset($data['company_value2'])) {
+					$cdf->setCompanyValue2($data['company_value2']);
 				}
 
-
-				if ( isset($data['start_date']) ) {
-					$cdf->setStartDate( $data['start_date'] );
+				$cdf->setPayStubEntryAccount($data['pay_stub_entry_account_id']);
+				if (isset($data['user_value1'])) {
+					$cdf->setUserValue1($data['user_value1']);
 				}
-				if ( isset($data['end_date']) ) {
-					$cdf->setEndDate( $data['end_date'] );
+				if (isset($data['user_value2'])) {
+					$cdf->setUserValue2($data['user_value2']);
 				}
-
-				if ( isset($data['minimum_length_of_service']) ) {
-					$cdf->setMinimumLengthOfService( $data['minimum_length_of_service'] );
-					$cdf->setMinimumLengthOfServiceUnit( $data['minimum_length_of_service_unit_id'] );
+				if (isset($data['user_value3'])) {
+					$cdf->setUserValue3($data['user_value3']);
 				}
-				if ( isset($data['maximum_length_of_service']) ) {
-					$cdf->setMaximumLengthOfService( $data['maximum_length_of_service'] );
-					$cdf->setMaximumLengthOfServiceUnit( $data['maximum_length_of_service_unit_id'] );
+				if (isset($data['user_value4'])) {
+					$cdf->setUserValue4($data['user_value4']);
 				}
-
-				if ( isset($data['minimum_user_age']) ) {
-					$cdf->setMinimumUserAge( $data['minimum_user_age'] );
+				if (isset($data['user_value5'])) {
+					$cdf->setUserValue5($data['user_value5']);
 				}
-				if ( isset($data['maximum_user_age']) ) {
-					$cdf->setMaximumUserAge( $data['maximum_user_age'] );
+				if (isset($data['user_value6'])) {
+					$cdf->setUserValue6($data['user_value6']);
 				}
-						
-						if ( isset($data['basis_of_employment']) ) {
-					$cdf->setBasisOfEmployment( $data['basis_of_employment'] );
+				if (isset($data['user_value7'])) {
+					$cdf->setUserValue7($data['user_value7']);
 				}
-
-				if ( isset($data['include_account_amount_type_id']) ) {
-					$cdf->setIncludeAccountAmountType( $data['include_account_amount_type_id'] );
+				if (isset($data['user_value8'])) {
+					$cdf->setUserValue8($data['user_value8']);
 				}
-				if ( isset($data['exclude_account_amount_type_id']) ) {
-					$cdf->setExcludeAccountAmountType( $data['exclude_account_amount_type_id'] );
+				if (isset($data['user_value9'])) {
+					$cdf->setUserValue9($data['user_value9']);
+				}
+				if (isset($data['user_value10'])) {
+					$cdf->setUserValue10($data['user_value10']);
 				}
 
-				if ( $cdf->isValid() ) {
+
+				if (isset($data['start_date'])) {
+					$cdf->setStartDate($data['start_date']);
+					
+					// dd($cdf);
+				}
+				if (isset($data['end_date'])) {
+					$cdf->setEndDate($data['end_date']);
+				}
+
+				if (isset($data['minimum_length_of_service'])) {
+					$cdf->setMinimumLengthOfService($data['minimum_length_of_service']);
+					$cdf->setMinimumLengthOfServiceUnit($data['minimum_length_of_service_unit_id']);
+				}
+				if (isset($data['maximum_length_of_service'])) {
+					$cdf->setMaximumLengthOfService($data['maximum_length_of_service']);
+					$cdf->setMaximumLengthOfServiceUnit($data['maximum_length_of_service_unit_id']);
+				}
+
+				if (isset($data['minimum_user_age'])) {
+					$cdf->setMinimumUserAge($data['minimum_user_age']);
+				}
+				if (isset($data['maximum_user_age'])) {
+					$cdf->setMaximumUserAge($data['maximum_user_age']);
+				}
+
+				if (isset($data['basis_of_employment'])) {
+					$cdf->setBasisOfEmployment($data['basis_of_employment']);
+				}
+
+				if (isset($data['include_account_amount_type_id'])) {
+					$cdf->setIncludeAccountAmountType($data['include_account_amount_type_id']);
+				}
+				if (isset($data['exclude_account_amount_type_id'])) {
+					$cdf->setExcludeAccountAmountType($data['exclude_account_amount_type_id']);
+				}
+
+				if ($cdf->isValid()) {
 					$cdf->Save(FALSE);
 
-					if ( isset($data['include_pay_stub_entry_account_ids']) ){
-						$cdf->setIncludePayStubEntryAccount( $data['include_pay_stub_entry_account_ids'] );
+					if (isset($data['include_pay_stub_entry_account_ids'])) {
+						$cdf->setIncludePayStubEntryAccount($data['include_pay_stub_entry_account_ids']);
 					} else {
-						$cdf->setIncludePayStubEntryAccount( array() );
+						$cdf->setIncludePayStubEntryAccount(array());
 					}
 
-					if ( isset($data['exclude_pay_stub_entry_account_ids']) ){
-						$cdf->setExcludePayStubEntryAccount( $data['exclude_pay_stub_entry_account_ids'] );
+					if (isset($data['exclude_pay_stub_entry_account_ids'])) {
+						$cdf->setExcludePayStubEntryAccount($data['exclude_pay_stub_entry_account_ids']);
 					} else {
-						$cdf->setExcludePayStubEntryAccount( array() );
+						$cdf->setExcludePayStubEntryAccount(array());
 					}
 
-					if ( isset($data['user_ids']) ){
-						$cdf->setUser( $data['user_ids'] );
+					if (isset($data['user_ids'])) {
+						$cdf->setUser($data['user_ids']);
 					} else {
-						$cdf->setUser( array() );
+						$cdf->setUser(array());
 					}
-
-					if ( $cdf->isValid() ) {
+					// dd('save');
+					if ($cdf->isValid()) {
 						$cdf->Save(TRUE);
 
 						$cdf->CommitTransaction();
-						Redirect::Page( URLBuilder::getURL( NULL, 'CompanyDeductionList.php') );
+
+						return redirect()->to(URLBuilder::getURL(null, '/payroll/company_deductions'))->with('success', 'Saved successfully.');
+
+						// Redirect::Page( URLBuilder::getURL( NULL, 'CompanyDeductionList.php') );
 
 						break;
-					}
+					} 
 				}
 			default:
-				if ( isset($id) ) {
+				if (isset($id)) {
 
 					$cdlf = new CompanyDeductionListFactory();
-					$cdlf->getByCompanyIdAndId( $current_company->getId(), $id );
+					$cdlf->getByCompanyIdAndId($current_company->getId(), $id);
 
 					foreach ($cdlf->rs as $cd_obj) {
 						$cdlf->data = (array)$cd_obj;
@@ -232,95 +263,95 @@ class EditCompanyDeduction extends Controller
 						//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 						$data = array(
-											'id' => $cd_obj->getId(),
-											'company_id' => $cd_obj->getCompany(),
-											'status_id' => $cd_obj->getStatus(),
-											'type_id' => $cd_obj->getType(),
-											'name' => $cd_obj->getName(),
+							'id' => $cd_obj->getId(),
+							'company_id' => $cd_obj->getCompany(),
+							'status_id' => $cd_obj->getStatus(),
+							'type_id' => $cd_obj->getType(),
+							'name' => $cd_obj->getName(),
 
-											'start_date' => $cd_obj->getStartDate(),
-											'end_date' => $cd_obj->getEndDate(),
+							'start_date' => $cd_obj->getStartDate(),
+							'end_date' => $cd_obj->getEndDate(),
 
-											'minimum_length_of_service' => $cd_obj->getMinimumLengthOfService(),
-											'minimum_length_of_service_unit_id' => $cd_obj->getMinimumLengthOfServiceUnit(),
-											'maximum_length_of_service' => $cd_obj->getMaximumLengthOfService(),
-											'maximum_length_of_service_unit_id' => $cd_obj->getMaximumLengthOfServiceUnit(),
-											'minimum_user_age' => $cd_obj->getMinimumUserAge(),
-											'maximum_user_age' => $cd_obj->getMaximumUserAge(),
+							'minimum_length_of_service' => $cd_obj->getMinimumLengthOfService(),
+							'minimum_length_of_service_unit_id' => $cd_obj->getMinimumLengthOfServiceUnit(),
+							'maximum_length_of_service' => $cd_obj->getMaximumLengthOfService(),
+							'maximum_length_of_service_unit_id' => $cd_obj->getMaximumLengthOfServiceUnit(),
+							'minimum_user_age' => $cd_obj->getMinimumUserAge(),
+							'maximum_user_age' => $cd_obj->getMaximumUserAge(),
 
-											'calculation_id' => $cd_obj->getCalculation(),
-											'calculation_order' => $cd_obj->getCalculationOrder(),
+							'calculation_id' => $cd_obj->getCalculation(),
+							'calculation_order' => $cd_obj->getCalculationOrder(),
 
-											'country' => $cd_obj->getCountry(),
-											'province' => $cd_obj->getProvince(),
-											'district' => $cd_obj->getDistrict(),
+							'country' => $cd_obj->getCountry(),
+							'province' => $cd_obj->getProvince(),
+							'district' => $cd_obj->getDistrict(),
 
-											'company_value1' => $cd_obj->getCompanyValue1(),
-											'company_value2' => $cd_obj->getCompanyValue2(),
+							'company_value1' => $cd_obj->getCompanyValue1(),
+							'company_value2' => $cd_obj->getCompanyValue2(),
 
-											'user_value1' => $cd_obj->getUserValue1(),
-											'user_value2' => $cd_obj->getUserValue2(),
-											'user_value3' => $cd_obj->getUserValue3(),
-											'user_value4' => $cd_obj->getUserValue4(),
-											'user_value5' => $cd_obj->getUserValue5(),
-											'user_value6' => $cd_obj->getUserValue6(),
-											'user_value7' => $cd_obj->getUserValue7(),
-											'user_value8' => $cd_obj->getUserValue8(),
-											'user_value9' => $cd_obj->getUserValue9(),
-											'user_value10' => $cd_obj->getUserValue10(),
+							'user_value1' => $cd_obj->getUserValue1(),
+							'user_value2' => $cd_obj->getUserValue2(),
+							'user_value3' => $cd_obj->getUserValue3(),
+							'user_value4' => $cd_obj->getUserValue4(),
+							'user_value5' => $cd_obj->getUserValue5(),
+							'user_value6' => $cd_obj->getUserValue6(),
+							'user_value7' => $cd_obj->getUserValue7(),
+							'user_value8' => $cd_obj->getUserValue8(),
+							'user_value9' => $cd_obj->getUserValue9(),
+							'user_value10' => $cd_obj->getUserValue10(),
 
-											'lock_user_value1' => $cd_obj->getLockUserValue1(),
-											'lock_user_value2' => $cd_obj->getLockUserValue2(),
-											'lock_user_value3' => $cd_obj->getLockUserValue3(),
-											'lock_user_value4' => $cd_obj->getLockUserValue4(),
-											'lock_user_value5' => $cd_obj->getLockUserValue5(),
-											'lock_user_value6' => $cd_obj->getLockUserValue6(),
-											'lock_user_value7' => $cd_obj->getLockUserValue7(),
-											'lock_user_value8' => $cd_obj->getLockUserValue8(),
-											'lock_user_value9' => $cd_obj->getLockUserValue9(),
-											'lock_user_value10' => $cd_obj->getLockUserValue10(),
-																				'basis_of_employment'=>$cd_obj->getBasisOfEmployment(),
+							'lock_user_value1' => $cd_obj->getLockUserValue1(),
+							'lock_user_value2' => $cd_obj->getLockUserValue2(),
+							'lock_user_value3' => $cd_obj->getLockUserValue3(),
+							'lock_user_value4' => $cd_obj->getLockUserValue4(),
+							'lock_user_value5' => $cd_obj->getLockUserValue5(),
+							'lock_user_value6' => $cd_obj->getLockUserValue6(),
+							'lock_user_value7' => $cd_obj->getLockUserValue7(),
+							'lock_user_value8' => $cd_obj->getLockUserValue8(),
+							'lock_user_value9' => $cd_obj->getLockUserValue9(),
+							'lock_user_value10' => $cd_obj->getLockUserValue10(),
+							'basis_of_employment' => $cd_obj->getBasisOfEmployment(),
 
-											'pay_stub_entry_account_id' => $cd_obj->getPayStubEntryAccount(),
+							'pay_stub_entry_account_id' => $cd_obj->getPayStubEntryAccount(),
 
-											'include_pay_stub_entry_account_ids' => $cd_obj->getIncludePayStubEntryAccount(),
-											'exclude_pay_stub_entry_account_ids' => $cd_obj->getExcludePayStubEntryAccount(),
+							'include_pay_stub_entry_account_ids' => $cd_obj->getIncludePayStubEntryAccount(),
+							'exclude_pay_stub_entry_account_ids' => $cd_obj->getExcludePayStubEntryAccount(),
 
-											'include_account_amount_type_id' => $cd_obj->getIncludeAccountAmountType(),
-											'exclude_account_amount_type_id' => $cd_obj->getExcludeAccountAmountType(),
+							'include_account_amount_type_id' => $cd_obj->getIncludeAccountAmountType(),
+							'exclude_account_amount_type_id' => $cd_obj->getExcludeAccountAmountType(),
 
-											'user_ids' => $cd_obj->getUser(),
+							'user_ids' => $cd_obj->getUser(),
 
-											'created_date' => $cd_obj->getCreatedDate(),
-											'created_by' => $cd_obj->getCreatedBy(),
-											'updated_date' => $cd_obj->getUpdatedDate(),
-											'updated_by' => $cd_obj->getUpdatedBy(),
-											'deleted_date' => $cd_obj->getDeletedDate(),
-											'deleted_by' => $cd_obj->getDeletedBy()
-										);
+							'created_date' => $cd_obj->getCreatedDate(),
+							'created_by' => $cd_obj->getCreatedBy(),
+							'updated_date' => $cd_obj->getUpdatedDate(),
+							'updated_by' => $cd_obj->getUpdatedBy(),
+							'deleted_date' => $cd_obj->getDeletedDate(),
+							'deleted_by' => $cd_obj->getDeletedBy()
+						);
 					}
-				} elseif ( $action != 'submit' ) {
+				} elseif ($action != 'submit') {
 					$data = array(
-								'country' => 0,
-								'province' => 0,
-								'district' => 0,
-								'user_value1' => 0,
-								'user_value2' => 0,
-								'user_value3' => 0,
-								'user_value4' => 0,
-								'user_value5' => 0,
-								'user_value6' => 0,
-								'user_value7' => 0,
-								'user_value8' => 0,
-								'user_value9' => 0,
-								'user_value10' => 0,
-								'minimum_length_of_service' => 0,
-								'maximum_length_of_service' => 0,
-								'minimum_user_age' => 0,
-								'maximum_user_age' => 0,
-														'basis_of_employment'=>1,
-								'calculation_order' => 100,
-								);
+						'country' => 0,
+						'province' => 0,
+						'district' => 0,
+						'user_value1' => 0,
+						'user_value2' => 0,
+						'user_value3' => 0,
+						'user_value4' => 0,
+						'user_value5' => 0,
+						'user_value6' => 0,
+						'user_value7' => 0,
+						'user_value8' => 0,
+						'user_value9' => 0,
+						'user_value10' => 0,
+						'minimum_length_of_service' => 0,
+						'maximum_length_of_service' => 0,
+						'minimum_user_age' => 0,
+						'maximum_user_age' => 0,
+						'basis_of_employment' => 1,
+						'calculation_order' => 100,
+					);
 				}
 
 				//Select box options;
@@ -330,13 +361,13 @@ class EditCompanyDeduction extends Controller
 				$data['account_amount_type_options'] = $cdf->getOptions('account_amount_type');
 
 				$cf = new CompanyFactory();
-				$data['country_options'] = Misc::prependArray( array( 0 => '--' ), $cf->getOptions('country') );
-				if ( isset($data['country']) ) {
-					$data['province_options'] = $cf->getOptions('province', $data['country'] );
+				$data['country_options'] = Misc::prependArray(array(0 => '--'), $cf->getOptions('country'));
+				if (isset($data['country'])) {
+					$data['province_options'] = $cf->getOptions('province', $data['country']);
 				}
-				if ( isset($data['district']) ) {
-					$district_options = $cf->getOptions('district', $data['country'] );
-					if ( isset($district_options[$data['province']]) ) {
+				if (isset($data['district'])) {
+					$district_options = $cf->getOptions('district', $data['country']);
+					if (isset($district_options[$data['province']])) {
 						$data['district_options'] = $district_options[$data['province']];
 					}
 				}
@@ -360,14 +391,14 @@ class EditCompanyDeduction extends Controller
 				$data['js_arrays'] = $cdf->getJavaScriptArrays();
 
 				$psealf = new PayStubEntryAccountListFactory();
-				$data['pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50), FALSE );
+				$data['pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray($current_company->getId(), 10, array(10, 20, 30, 50), FALSE);
 				//$data['pay_stub_entry_account_options'] = PayStubEntryAccountListFactory::getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(20,30), FALSE );
 
-				$data['include_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-				if ( isset($data['include_pay_stub_entry_account_ids']) AND is_array($data['include_pay_stub_entry_account_ids']) ) {
-					$tmp_psea_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-					foreach( $data['include_pay_stub_entry_account_ids'] as $include_psea_id ) {
-						if ( isset($tmp_psea_options[$include_psea_id]) ) {
+				$data['include_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray($current_company->getId(), 10, array(10, 20, 30, 40, 50), FALSE);
+				if (isset($data['include_pay_stub_entry_account_ids']) and is_array($data['include_pay_stub_entry_account_ids'])) {
+					$tmp_psea_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray($current_company->getId(), 10, array(10, 20, 30, 40, 50), FALSE);
+					foreach ($data['include_pay_stub_entry_account_ids'] as $include_psea_id) {
+						if (isset($tmp_psea_options[$include_psea_id])) {
 							$filter_include_options[$include_psea_id] = $tmp_psea_options[$include_psea_id];
 						}
 					}
@@ -375,10 +406,10 @@ class EditCompanyDeduction extends Controller
 				}
 				$viewData['filter_include_options'] = $filter_include_options ?? [];
 
-				$data['exclude_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-				if ( isset($data['exclude_pay_stub_entry_account_ids']) AND is_array($data['exclude_pay_stub_entry_account_ids']) ) {
-					$tmp_psea_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50), FALSE );
-					foreach( $data['exclude_pay_stub_entry_account_ids'] as $exclude_psea_id ) {
+				$data['exclude_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray($current_company->getId(), 10, array(10, 20, 30, 40, 50), FALSE);
+				if (isset($data['exclude_pay_stub_entry_account_ids']) and is_array($data['exclude_pay_stub_entry_account_ids'])) {
+					$tmp_psea_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray($current_company->getId(), 10, array(10, 20, 30, 40, 50), FALSE);
+					foreach ($data['exclude_pay_stub_entry_account_ids'] as $exclude_psea_id) {
 						$filter_exclude_options[$exclude_psea_id] = $tmp_psea_options[$exclude_psea_id];
 					}
 					unset($exclude_psea_id, $tmp_psea_options);
@@ -388,11 +419,11 @@ class EditCompanyDeduction extends Controller
 				//var_dump($data);
 
 				//Employee Selection Options
-				$data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
-				if ( isset($data['user_ids']) AND is_array($data['user_ids']) ) {
-					$tmp_user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
-					foreach( $data['user_ids'] as $user_id ) {
-						if ( isset($tmp_user_options[$user_id]) ) {
+				$data['user_options'] = UserListFactory::getByCompanyIdArray($current_company->getId(), FALSE, TRUE);
+				if (isset($data['user_ids']) and is_array($data['user_ids'])) {
+					$tmp_user_options = UserListFactory::getByCompanyIdArray($current_company->getId(), FALSE, TRUE);
+					foreach ($data['user_ids'] as $user_id) {
+						if (isset($tmp_user_options[$user_id])) {
 							$filter_user_options[$user_id] = $tmp_user_options[$user_id];
 						}
 					}
@@ -410,5 +441,3 @@ class EditCompanyDeduction extends Controller
 		return view('company/EditCompanyDeduction', $viewData);
 	}
 }
-
-?>

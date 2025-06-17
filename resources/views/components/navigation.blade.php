@@ -476,6 +476,24 @@
                     <li class="nav-item"><a href="#" class="nav-link">Gratuity Calculation</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Authorization</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('users.attendance_bonus_calc') }}"
+                            class="nav-link {{ request()->routeIs('users.attendance_bonus_calc') ? 'active' : '' }}">Attendance Bonus Calculation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('users.gratuity_calc') }}"
+                            class="nav-link {{ request()->routeIs('users.gratuity_calc') ? 'active' : '' }}">Gratuity Calculation
+                        </a>
+                    </li>
+
+                   <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('authorization.authorization_list') }}"
+                            class="nav-link {{ request()->routeIs('authorization.authorization_list') ? 'active' : '' }}">Authorization
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </li>

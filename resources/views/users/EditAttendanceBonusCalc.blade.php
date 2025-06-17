@@ -1,4 +1,4 @@
-<x-app-layout :title="'Input Example'">
+<x-app-layout :title="'Bonus'">
 
     <style>
         td,
@@ -17,78 +17,64 @@
                 </div>
 
                 <div class="card-body">
-
-                    {{-- --------------------------------------------------------------------------- --}}
-
-                    <form method="post" name="wage" action="{{ route('users.edit_bonus_calc') }}">
+                    <form method="post" name="wage" action="{{ route('users.edit_attendance_bonus_calc') }}">
                         @csrf
                         <div id="contentBoxTwoEdit">
-
-                            @if (!$bdf->Validator->isValid())
-                                {{-- error list here --}}
-                                {{-- {include file="form_errors.tpl" object="bdf"} --}}
+                            @if (!$abf->Validator->isValid())
+                                @include('form_errors', ['object' => 'abf'])
                             @endif
 
-                            <table class="table table-borderd">
-
+                            <table class="table table-bordered">
                                 @if (!isset($view))
-
                                     <tr>
                                         <th>
-                                            Start Date:
+                                            {{ __('Year:') }}
                                         </th>
                                         <td colspan="3">
-                                            <input type="date" id="start_date" name="data[start_date]"
-                                                value="{{ getdate_helper('date_time', $data['start_date'] ?? '') }}">
+                                            <input type="text" size="25" id="year"
+                                                onFocus="showHelpEntry('year')" name="data[year]"
+                                                value="{{ $data['year'] ?? '' }}">
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <th>
-                                            End Date:
+                                            {{ __('Bonus December:') }}
                                         </th>
                                         <td colspan="3">
-                                            <input type="date" id="end_date" onChange="setTransactionDate()"
-                                                name="data[end_date]"
-                                                value="{{ getdate_helper('date_time', $data['end_date']) }}">
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>
-                                            Y Number:
-                                        </th>
-                                        <td colspan="3">
-                                            <input type="text" size="25" id="y_number" name="data[y_number]"
-                                                value="{{ $data['y_number'] }}">
-
+                                            <select name="data[bonus_december_id]" id="filter_bonus_december">
+                                                @foreach ($bonus_december_options as $id => $name)
+                                                    <option value="{{ $id }}"
+                                                        @if (isset($data['bonus_december_id']) && $id == $data['bonus_december_id']) selected @endif>
+                                                        {{ $name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </td>
                                     </tr>
                                 @else
                                     <tr>
                                         <th>
-                                            Start Date:
+                                            {{ __('Year:') }}
                                         </th>
                                         <td colspan="3">
-                                            {{ getdate_helper('date_time', $data['start_date']) }}
+                                            <input type="text" size="25" id="year"
+                                                onFocus="showHelpEntry('year')" name="data[year]"
+                                                value="{{ $data['year'] ?? '' }}" readonly>
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <th>
-                                            End Date:
+                                            {{ __('Bonus December:') }}
                                         </th>
                                         <td colspan="3">
-                                            {{ getdate_helper('date_time', $data['end_date']) }}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>
-                                            Y Number:
-                                        </th>
-                                        <td colspan="3">
-                                            {{ $data['y_number'] }}
+                                            <select name="data[bonus_december_id]" id="filter_bonus_december" readonly>
+                                                @foreach ($bonus_december_options as $id => $name)
+                                                    <option value="{{ $id }}"
+                                                        @if (isset($data['bonus_december_id']) && $id == $data['bonus_december_id']) selected @endif>
+                                                        {{ $name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </td>
                                     </tr>
 
@@ -98,19 +84,15 @@
                                                 Actions:
                                             </th>
                                             <td colspan="3">
-                                                <div id="contentBoxFour" >
+                                                <div id="contentBoxFour">
                                                     <input type="submit" class="btnSubmit" name="action"
-                                                        value="Generate December Bonuses" onClick="return singleSubmitHandler(this)">
+                                                        value="Generate Attendance Bonuses"
+                                                        onClick="return singleSubmitHandler(this)">
                                                 </div>
-
-                                                {{-- <input type="submit" class="button"
-                                                    name="action:generate_december_bonuses"
-                                                    value="Generate December Bonuses"> --}}
                                             </td>
                                         </tr>
                                     @endif
                                 @endif
-
                             </table>
                         </div>
 
@@ -118,13 +100,9 @@
                             <input type="submit" class="btnSubmit" name="action" value="Submit"
                                 onClick="return singleSubmitHandler(this)">
                         </div>
-
                         <input type="hidden" name="data[id]" value="{{ $data['id'] ?? '' }}">
-
+                        <input type="hidden" name="data[company_id]" value="{{ $data['company_id'] ?? '' }}">
                     </form>
-
-                    {{-- --------------------------------------------------------------------------- --}}
-
                 </div><!-- end card -->
             </div>
             <!-- end col -->
@@ -134,9 +112,7 @@
 
     <script language="JavaScript">
         function setTransactionDate() {
-            if (document.getElementById('transaction_date').value == '') {
-                document.getElementById('transaction_date').value = document.getElementById('end_date').value;
-            }
+            // Placeholder function as in the original
         }
     </script>
 </x-app-layout>

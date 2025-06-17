@@ -127,6 +127,12 @@ use App\Http\Controllers\users\BonusCalc;
 use App\Http\Controllers\users\BonusList;
 use App\Http\Controllers\users\EditBonusCalc;
 
+use App\Http\Controllers\users\AttendanceBonusCalc;
+use App\Http\Controllers\users\AttendanceBonusList;
+use App\Http\Controllers\users\EditAttendanceBonusCalc;
+
+use App\Http\Controllers\users\GratuityCalc;
+
 
 
 use App\Http\Controllers\report\UserInformation;
@@ -581,6 +587,11 @@ Route::match(['get', 'post'], '/users/bonus_calc', [BonusCalc::class, 'index'])-
 Route::match(['get', 'post'], '/users/bonus_list', [BonusList::class, 'index'])->name('users.bonus_list');
 Route::match(['get', 'post'], '/users/edit_bonus_calc', [EditBonusCalc::class, 'index'])->name('users.edit_bonus_calc');
 
+Route::match(['get', 'post'], '/users/attendance_bonus_calc', [AttendanceBonusCalc::class, 'index'])->name('users.attendance_bonus_calc');
+Route::match(['get', 'post'], '/users/attendance_bonus_list', [AttendanceBonusList::class, 'index'])->name('users.attendance_bonus_list');
+Route::match(['get', 'post'], '/users/edit_attendance_bonus_calc', [EditAttendanceBonusCalc::class, 'index'])->name('users.edit_attendance_bonus_calc');
+
+Route::match(['get', 'post'], '/users/gratuity_calc', [GratuityCalc::class, 'index'])->name('users.gratuity_calc');
 
 // ===============================================================================================================================
 // add view_schedule route

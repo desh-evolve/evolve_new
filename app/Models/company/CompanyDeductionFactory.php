@@ -20,6 +20,8 @@ use App\Models\Core\TTLog;
 use App\Models\Core\TTDate;
 use Illuminate\Support\Facades\DB;
 
+use DateTime;
+
 class CompanyDeductionFactory extends Factory {
 	protected $table = 'company_deduction';
 	protected $pk_sequence_name = 'company_deduction_id_seq'; //PK Sequence name
@@ -658,28 +660,58 @@ class CompanyDeductionFactory extends Factory {
 
 		return FALSE;
 	}
+	// function setStartDate($epoch) {
+	// 	dd($epoch);
+	// 	$epoch = trim($epoch);
+
+	// 	if ( $epoch == '' ){
+	// 		$epoch = NULL;
+	// 	}
+
+	// 	if 	(
+	// 			$epoch == NULL
+	// 			OR
+	// 			$this->Validator->isDate(		'start_date',
+	// 											$epoch,
+	// 											('Incorrect start date'))
+	// 		) {
+
+	// 		$this->data['start_date'] = $epoch;
+
+	// 		return TRUE;
+	// 	}
+
+	// 	return FALSE;
+	// }
+
 	function setStartDate($epoch) {
-		$epoch = trim($epoch);
+    // Trim whitespace (if input is a string)
+    $epoch = is_string($epoch) ? trim($epoch) : $epoch;
 
-		if ( $epoch == '' ){
-			$epoch = NULL;
-		}
+    // Handle empty values
+    if ($epoch === '' || $epoch === null) {
+        $this->data['start_date'] = null;
+        return true;
+    }
 
-		if 	(
-				$epoch == NULL
-				OR
-				$this->Validator->isDate(		'start_date',
-												$epoch,
-												('Incorrect start date'))
-			) {
+    // If already a Unix timestamp (numeric), convert to MySQL datetime
+    if (is_numeric($epoch)) {
+        $mysqlDate = date('Y-m-d H:i:s', $epoch);
+        $this->data['start_date'] = $mysqlDate;
+        return true;
+    }
 
-			$this->data['start_date'] = $epoch;
-
-			return TRUE;
-		}
-
-		return FALSE;
-	}
+    // If it's a date string, validate and format for MySQL
+    try {
+        $dateTime = new DateTime($epoch);
+        $mysqlDate = $dateTime->format('Y-m-d H:i:s');
+        $this->data['start_date'] = $mysqlDate;
+        return true;
+    } catch (Exception $e) {
+        $this->Validator->Error('start_date', 'Incorrect start date');
+        return false;
+    }
+}
 
 	function getEndDate( $raw = FALSE ) {
 		if ( isset($this->data['end_date']) ) {
@@ -692,27 +724,56 @@ class CompanyDeductionFactory extends Factory {
 
 		return FALSE;
 	}
+	// function setEndDate($epoch) {
+	// 	$epoch = trim($epoch);
+
+	// 	if ( $epoch == '' ){
+	// 		$epoch = NULL;
+	// 	}
+
+	// 	if 	(	$epoch == NULL
+	// 			OR
+	// 			$this->Validator->isDate(		'end_date',
+	// 											$epoch,
+	// 											('Incorrect end date'))
+	// 		) {
+
+	// 		$this->data['end_date'] = $epoch;
+
+	// 		return TRUE;
+	// 	}
+
+	// 	return FALSE;
+	// }
+
 	function setEndDate($epoch) {
-		$epoch = trim($epoch);
+    // Trim whitespace (if input is a string)
+    $epoch = is_string($epoch) ? trim($epoch) : $epoch;
 
-		if ( $epoch == '' ){
-			$epoch = NULL;
-		}
+    // Handle empty values
+    if ($epoch === '' || $epoch === null) {
+        $this->data['end_date'] = null;
+        return true;
+    }
 
-		if 	(	$epoch == NULL
-				OR
-				$this->Validator->isDate(		'end_date',
-												$epoch,
-												('Incorrect end date'))
-			) {
+    // If already a Unix timestamp (numeric), convert to MySQL datetime
+    if (is_numeric($epoch)) {
+        $mysqlDate = date('Y-m-d H:i:s', $epoch);
+        $this->data['end_date'] = $mysqlDate;
+        return true;
+    }
 
-			$this->data['end_date'] = $epoch;
-
-			return TRUE;
-		}
-
-		return FALSE;
-	}
+    // If it's a date string, validate and format for MySQL
+    try {
+        $dateTime = new DateTime($epoch);
+        $mysqlDate = $dateTime->format('Y-m-d H:i:s');
+        $this->data['end_date'] = $mysqlDate;
+        return true;
+    } catch (Exception $e) {
+        $this->Validator->Error('end_date', 'Incorrect end date');
+        return false;
+    }
+}
 
 	//Check if this date is within the effective date range
 	function isActiveDate( $epoch ) {
