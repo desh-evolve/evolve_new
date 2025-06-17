@@ -233,7 +233,7 @@
 
                                     <table class="table table-bordered">
                                         <tr id="row">
-                                            <thead id="row">
+                                            <thead id="row"  class="bg-primary text-white">
                                                 <th></th>
                                                 @foreach ($header_leave as $row)
                                                     <th>{{$row['name']}}</th>
@@ -265,7 +265,7 @@
 
                         <div>
                             <table class="table table-bordered">
-                                    <tr id="row">
+                                    <tr id="row"  class="bg-primary text-white">
                                         <th>Name</th>
                                         <th>Leave Type</th>
                                         <th>Amount</th>

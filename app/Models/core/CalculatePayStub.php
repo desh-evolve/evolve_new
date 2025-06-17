@@ -189,8 +189,8 @@ class CalculatePayStub extends PayStubFactory {
 		if ( !is_object($obj) ) {
 			return FALSE;
 		}
-
-		if ( get_class($obj) == 'UserDeductionListFactory' ) {
+		
+		if ( get_class($obj) == 'App\Models\Users\UserDeductionListFactory' ) {
 			if ( !is_object( $obj->getCompanyDeductionObject() ) ) {
 				return FALSE;
 			}
@@ -241,7 +241,7 @@ class CalculatePayStub extends PayStubFactory {
 			$arr['affect_accounts'] = $obj->getCompanyDeductionObject()->getPayStubEntryAccount();
 
 			return $arr;
-		} elseif ( get_class($obj) == 'PayStubAmendmentListFactory' ) {
+		} elseif ( get_class($obj) == 'App\Models\PayStubAmendment\PayStubAmendmentListFactory' ) {
 			$arr['type'] = get_class( $obj );
 			$arr['obj_id'] = $obj->getId();
 			$arr['id'] = substr($arr['type'],0,1).$obj->getId();
@@ -404,7 +404,7 @@ class CalculatePayStub extends PayStubFactory {
 			Debug::text('User Termination Date is NOT set, assuming normal pay.', __FILE__, __LINE__, __METHOD__,10);
 			$pay_stub->setDefaultDates();
 		}
-
+		
 		//This must go after setting advance
 		if ( $this->getEnableCorrection() == FALSE AND $pay_stub->IsUniquePayStub() == FALSE ) {
 			Debug::text('Pay Stub already exists', __FILE__, __LINE__, __METHOD__,10);
@@ -460,10 +460,10 @@ class CalculatePayStub extends PayStubFactory {
 
                         $allf = new AllowanceListFactory();
                         $allf->getByUserIdAndPayperiodsId($this->getUser(), $this->getPayPeriod());
-                      
-                         if($allf->getRecordCount()>0){
+
+						$amount = 0;
+                        if($allf->getRecordCount()>0){
                           
-                             $amount = 0;
                              $alf_obj = $allf->getCurrent();
                              
                              if($pgplf->getId() == 1){
@@ -485,10 +485,11 @@ class CalculatePayStub extends PayStubFactory {
                                  
                              }
                              
-                         }
-                             if($amount > 0){
-                                 $pay_stub->addEntry( $pgplf->getPayStubEntryAccountId(), $amount, 2, 1 );
-                             }
+                        }
+
+						if($amount > 0){
+							$pay_stub->addEntry( $pgplf->getPayStubEntryAccountId(), $amount, 2, 1 );
+						}
                          
                     
                     }    

@@ -36,12 +36,12 @@ if (!function_exists('html_report_filter')) {
         if ($order) {
             $order_html = '<br><br><a href="javascript:select_item_move_up(document.getElementById(\'filter_' . $label . '\') );"><i class="ri-arrow-drop-up-fill arrow-icon" style="vertical-align: middle"></i></a><a href="javascript:select_item_move_down(document.getElementById(\'filter_' . $label . '\') );"><i class="ri-arrow-drop-down-fill arrow-icon" style="vertical-align: middle"></i></a>';
         }
-
+        
         // Date type radio button
         $retval = '<tr>';
         if ($date_type) {
             $colspan = 1;
-            $date_type_selected = ($filter_data['date_type'] === $label . '_ids') ? 'checked' : '';
+            $date_type_selected = (!empty($filter_data['date_type']) && $filter_data['date_type'] === $label . '_ids') ? 'checked' : '';
             $retval .= '<td class="cellReportRadioColumn">
                 <input type="radio" class="checkbox" id="date_type_' . $label . '" name="filter_data[date_type]" value="' . $label . '_ids" onClick="showReportDateType();" ' . $date_type_selected . '>
             </td>';

@@ -194,6 +194,11 @@ class ApplyUserLeave extends Controller
                                     $pp_short_leave_count = $row['count'];
                             }
 
+
+                            $row = $lrlf_s->getPayperiodsShortLeaveCount($current_user->getId(), $data['leave_type'], $pp_obj->getStartDate(TRUE), $pp_obj->getEndDate(TRUE));
+
+                            $pp_short_leave_count = isset($row['count']) ? (int)$row['count'] : 0;
+
                             if($pp_short_leave_count >= 2 && $data['leave_type'] == 8){
                                 $msg = "You can apply only two short leaves";
                             }else{

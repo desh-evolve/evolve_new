@@ -251,7 +251,6 @@ class GeneralLedgerSummary extends Controller
                                                 }
                                             }
                                         }
-                                        
                                     }
                                 }
                                 if (!empty($raw_je_records)) {
@@ -302,7 +301,6 @@ class GeneralLedgerSummary extends Controller
                                         $tmp_rows[] = $tmp_arr;
                                     }
                                 }
-                                
                             }
                         }
                         if (!empty($tmp_rows) && !empty($filter_data['primary_group_by']) && $filter_data['primary_group_by'] != '0') {
@@ -398,24 +396,46 @@ class GeneralLedgerSummary extends Controller
                                     $rows[] = $final_row_b;
                                 }
                             }
-                            
                         }
                     }
 
-                    if ($action == 'export') {
+              if ($action == 'export') {
                         if (!empty($rows) && !empty($gle) && !empty($filter_data['export_type'])) {
-                            if ($gle->compile() == TRUE) {
+                            if ($gle->compile() == true) {
                                 $data = $gle->getCompiledData();
-                                $file_name = 'general_ledger_' . str_replace(['/', ',', ' '], '_', TTDate::getDate('DATE', time())) .
+                                $file_name = 'general_ledger_' . str_replace(['/', ',', ' '], '_', now()->format('Y_m_d')) .
                                     ($filter_data['export_type'] == 'simply' ? '.txt' : '.csv');
 
-                                Misc::FileDownloadHeader($file_name, 'application/text', strlen($data));
-                                echo $data;
+                                $headers = [
+                                    'Content-Type' => 'text/csv; charset=utf-8',
+                                    'Content-Disposition' => 'attachment; filename="' . $file_name . '"',
+                                    'Content-Type' => 'application/octet-stream',
+                                    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                                    'Pragma' => 'no-cache',
+                                    'Expires' => '0',
+                                ];
+
+                                $rows = array_map('str_getcsv', explode("\n", trim($data)));
+                                $header = array_shift($rows);
+
+                                $callback = function () use ($header, $rows) {
+                                    $file = fopen('php://output', 'w');
+                                    fwrite($file, "\xEF\xBB\xBF");
+                                    fputcsv($file, $header);
+                                    foreach ($rows as $row) {
+                                        $row = array_pad($row, count($header), '');
+                                        fputcsv($file, $row);
+                                    }
+                                    fclose($file);
+                                };
+
+                                Misc::FileDownloadHeader($file_name, 'application/text', null);
+                                return response()->stream($callback, 200, $headers);
                             } else {
-                                echo "One or more journal entries did not balance!<br>\n";
+                                return redirect()->back()->with('error', 'One or more journal entries did not balance!');
                             }
                         } else {
-                            echo _("No Data To Export!") . "<br>\n";
+                            return redirect()->back()->with('error', 'No Data To Export!');
                         }
                     } else {
                         $viewData['generated_time'] = TTDate::getTime();
@@ -555,7 +575,7 @@ class GeneralLedgerSummary extends Controller
                 $filter_data['group_by_options'] = Misc::prependArray(['0' => _('No Grouping')], $static_columns);
                 $filter_data['export_type_options'] = [
                     'csv' => _('CSV (Excel)'),
-                    'simply' => _('Simply Accounting GL'),
+                    // 'simply' => _('Simply Accounting GL'),
                 ];
 
                 $saved_report_options = $ugdlf->getByUserIdAndScriptArray($current_user->getId(), $_SERVER['SCRIPT_NAME']);
@@ -568,4 +588,5 @@ class GeneralLedgerSummary extends Controller
                 return view('report/GeneralLedgerSummary', $viewData);
         }
     }
+
 }

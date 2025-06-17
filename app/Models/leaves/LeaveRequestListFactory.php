@@ -374,10 +374,10 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			$res = DB::select($query, $ph);
 
-			if ( empty($res['count']) ) {
-				$row['count'] = 0;
-			}else{
+			if ( isset($res['count']) && !empty($res['count']) ) {
 				$row['count'] = $res[0]->count;
+			}else{
+				$row['count'] = 0;
 			}
 
 			return $row;

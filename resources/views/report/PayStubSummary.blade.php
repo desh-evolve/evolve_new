@@ -1,4 +1,4 @@
-<x-app-layout :title="'General Ledger Summary Report'">
+<x-app-layout :title="'Pay Stub Summary Report'">
     <style>
         th,
         td {
@@ -15,6 +15,7 @@
             margin: 2px;
         }
     </style>
+
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -25,14 +26,20 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="post" name="report" action="{{ route('report.general_ledger_summary_report') }}"
-                        target="_self">
+
+                    <form method="post" name="report" action="{{ route('report.payroll_report') }}" target="_self">
                         @csrf
                         <input type="hidden" id="action" name="action" value="">
 
                         <div id="contentBoxTwoEdit">
-                            @if (!$ugdf->Validator->isValid())
-                                {{-- Include form errors here if needed --}}
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
 
                             <table class="table table-bordered">
@@ -50,6 +57,37 @@
                                     </td>
                                 </tr>
 
+                                <tr>
+                                    <td class="align-middle" rowspan="2" style="width: 50px;">
+                                        <input type="radio" class="checkbox" id="date_type_transaction_date"
+                                            name="filter_data[date_type]" value="transaction_date"
+                                            onclick="showReportDateType();"
+                                            {{ ($filter_data['date_type'] ?? 'transaction_date') == 'transaction_date' ? 'checked' : '' }}>
+                                    </td>
+                                    <td class="text-end" style="width: 200px;">
+                                        {{ __('Transaction Start Date:') }}
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control form-control-sm" id="start_date"
+                                            name="filter_data[transaction_start_date]"
+                                            value="{{ isset($filter_data['transaction_start_date']) ? date('Y-m-d', $filter_data['transaction_start_date']) : '' }}">
+                                        <small>{{ __('ie:') }}
+                                            {{ $current_user_prefs->getDateFormatExample() ?? 'YYYY-MM-DD' }}</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end">
+                                        {{ __('Transaction End Date:') }}
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control form-control-sm" id="end_date"
+                                            name="filter_data[transaction_end_date]"
+                                            value="{{ isset($filter_data['transaction_end_date']) ? date('Y-m-d', $filter_data['transaction_end_date']) : '' }}">
+                                        <small>{{ __('ie:') }}
+                                            {{ $current_user_prefs->getDateFormatExample() ?? 'YYYY-MM-DD' }}</small>
+                                    </td>
+                                </tr>
+
                                 {!! html_report_filter([
                                     'filter_data' => $filter_data,
                                     'label' => 'pay_period',
@@ -63,6 +101,13 @@
                                     'display_name' => 'Employee Status',
                                     'display_plural_name' => 'Employee Statuses',
                                 ]) !!}
+
+                                {{-- {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'user_status',
+                                    'display_name' => 'Employee Status',
+                                    'display_plural_name' => 'Employee Statuses',
+                                ]) !!} --}}
 
                                 {!! html_report_filter([
                                     'filter_data' => $filter_data,
@@ -113,30 +158,26 @@
                                     'display_plural_name' => 'Currencies',
                                 ]) !!}
 
-                                {{-- <tr onclick="showHelpEntry('group_by')">
-                                    <td colspan="2" class="text-end">
-                                        {{ __('Group By:') }}
-                                    </td>
-                                    <td class="cellRightEditTable">
-                                        <select id="columns" name="filter_data[primary_group_by]">
-                                            @foreach ($filter_data['group_by_options'] as $key => $value)
-                                                <option value="{{ $key }}"
-                                                    {{ $filter_data['primary_group_by'] == $key ? 'selected' : '' }}>
-                                                    {{ $value }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                </tr> --}}
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'column',
+                                    'display_name' => 'Columns',
+                                    'display_plural_name' => 'Columns',
+                                    'order' => true,
+                                ]) !!}
+
                                 <tr onclick="showHelpEntry('group_by')">
                                     <td colspan="2" class="text-end">
                                         {{ __('Group By:') }}
                                     </td>
-                                    <td class="cellRightEditTable">
-                                        <select id="columns" name="filter_data[primary_group_by]">
-                                            @foreach ($filter_data['group_by_options'] as $key => $value)
+                                    <td>
+                                        <select id="primary_group_by" name="filter_data[primary_group_by]"
+                                            class="form-select form-select-sm">
+                                            @foreach ($filter_data['group_by_options'] ?? [] as $key => $value)
                                                 <option value="{{ $key }}"
-                                                    {{ ($filter_data['primary_group_by'] ?? '0') == $key ? 'selected' : '' }}>
-                                                    {{ $value }}</option>
+                                                    {{ ($filter_data['primary_group_by'] ?? '') == $key ? 'selected' : '' }}>
+                                                    {{ $value }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -148,63 +189,67 @@
                                     <td colspan="2" class="text-end">
                                         {{ __('Export Format:') }}
                                     </td>
-                                    <td class="cellRightEditTable">
-                                        <select id="columns" name="filter_data[export_type]">
-                                            @foreach ($filter_data['export_type_options'] as $key => $value)
+                                    <td>
+                                        <select id="export_type" name="filter_data[export_type]"
+                                            class="form-select form-select-sm">
+                                            @foreach ($filter_data['export_type_options'] ?? [] as $key => $value)
                                                 <option value="{{ $key }}"
-                                                    {{ ($filter_data['export_type'] ?? '0') == $key ? 'selected' : '' }}>
-                                                    {{ $value }}</option>
+                                                    {{ ($filter_data['export_type'] ?? '') == $key ? 'selected' : '' }}>
+                                                    {{ $value }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </td>
                                 </tr>
 
-                                {{-- <tr onclick="showHelpEntry('group_by')">
+                                <tr onclick="showHelpEntry('hide_employer_rows')">
                                     <td colspan="2" class="text-end">
-                                        {{ __('Group By:') }}
+                                        {{ __('Hide Employer Contributions:') }}
                                     </td>
-                                    <td class="cellRightEditTable">
-                                        <select id="columns" name="filter_data[primary_group_by]">
-                                            @foreach ($filter_data['group_by_options'] as $key => $value)
-                                                <option value="{{ $key }}"
-                                                    {{ ($filter_data['primary_group_by'] ?? '0') == $key ? 'selected' : '' }}>
-                                                    {{ $value }}</option>
-                                            @endforeach
-                                        </select>
+                                    <td>
+                                        <input type="checkbox" class="checkbox" name="filter_data[hide_employer_rows]"
+                                            value="1"
+                                            {{ $filter_data['hide_employer_rows'] ?? false ? 'checked' : '' }}>
+                                        <small>{{ __('(Pay stub only)') }}</small>
                                     </td>
-                                </tr> --}}
+                                </tr>
                             </table>
                         </div>
 
-                        <div id="contentBoxFour">
+                        <div id="contentBoxFour" class="mt-3">
                             <input class="btn btn-primary btn-sm" type="button" id="display_report" name="action"
                                 value="{{ __('Display Report') }}"
-                                onClick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'Display Report'; this.form.submit();">
+                                onclick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'Display Report'; this.form.submit();">
+                            <input class="btn btn-primary btn-sm" type="button" id="view_pay_stubs" name="action"
+                                value="{{ __('View Pay Stubs') }}"
+                                onclick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'View Pay Stubs'; this.form.submit();">
                             <input class="btn btn-primary btn-sm" type="button" id="export_report" name="action"
                                 value="{{ __('Export') }}"
-                                onClick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'Export'; this.form.submit();">
-                        
-                    </div>
+                                onclick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'Export'; this.form.submit();">
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <script language="JavaScript">
+  <script language="JavaScript">
         $(document).ready(function() {
             countAllReportCriteria();
         });
-        var report_criteria_elements = new Array(
-            'filter_user_status',
-            'filter_group',
-            'filter_branch',
-            'filter_department',
-            'filter_user_title',
-            'filter_pay_period',
-            'filter_include_user',
-            'filter_exclude_user',
-            'filter_currency'
-        );
-    </script>
+
+            var report_criteria_elements = [
+                'filter_user_status',
+                'filter_group',
+                'filter_branch',
+                'filter_department',
+                'filter_user_title',
+                'filter_pay_period',
+                'filter_include_user',
+                'filter_exclude_user',
+                'filter_currency',
+                'filter_column'
+            ];
+
+        </script>
 </x-app-layout>

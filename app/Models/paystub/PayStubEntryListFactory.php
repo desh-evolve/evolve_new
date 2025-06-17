@@ -70,7 +70,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		if ( $order == NULL ) {
 			$strict = FALSE;
 
-			$order = array( 'b.ps_order' => 'asc', 'abs(a.ytd_amount)' => 'asc', 'a.id' => 'asc' );
+			$order = array( 'b.ps_order' => 'asc', 'a.id' => 'asc' );
 		}
 
 		//This is needed to ensure the proper order of entries for pay stubs

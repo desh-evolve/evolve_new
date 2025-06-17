@@ -101,7 +101,11 @@
                                     class="nav-link {{ request()->routeIs('attendance.accruals') ? 'active' : '' }}">Accruals
                                 </a>
                             </li>
-                            <li class="nav-item"><a href="#" class="nav-link">Pay Slips</a></li>
+                            <li class="nav-item">
+                                <a href="{{ route('attendance.paystubs') }}"
+                                    class="nav-link {{ request()->routeIs('attendance.paystubs') ? 'active' : '' }}">Pay Slips
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -153,6 +157,12 @@
                                     class="nav-link {{ request()->routeIs('report.general_ledger_summary_report') ? 'active' : '' }}">General Ledger Summary Report
                                 </a>
                             </li> --}}
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.payroll_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.payroll_report') ? 'active' : '' }}">Payroll Report
+                                </a>
+                            </li>
                             {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}
                             <li class="nav-item"><a href="#" class="nav-link">EPF Report</a></li>
                         </ul>
@@ -455,7 +465,13 @@
                         </a>
                     </li>
                     <li class="nav-item"><a href="#" class="nav-link">Census Infortion</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">December Bonus Calculation</a></li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('users.bonus_calc') }}"
+                            class="nav-link {{ request()->routeIs('users.bonus_calc') ? 'active' : '' }}">December Bonus Calculation
+                        </a>
+                    </li>
+
                     <li class="nav-item"><a href="#" class="nav-link">Attendance Bonus Calculation</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Gratuity Calculation</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Database Backup</a></li>

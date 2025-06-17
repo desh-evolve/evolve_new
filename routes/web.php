@@ -1,11 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\accrual\EditUserAccrual;
 use App\Http\Controllers\accrual\UserAccrualBalanceList;
 use App\Http\Controllers\accrual\ViewUserAccrualList;
 use App\Http\Controllers\bank_account\EditBankAccount as Bank_accountEditBankAccount;
 use App\Http\Controllers\company\CompanyDeductionList;
 use App\Http\Controllers\payperiod\ClosePayPeriod;
+
 use App\Http\Controllers\currency\CurrencyList;
 use App\Http\Controllers\currency\EditCurrency;
 use App\Http\Controllers\Branch\BranchList;
@@ -88,12 +91,18 @@ use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\timesheet\ViewUserTimeSheet;
 use App\Http\Controllers\progressbar\ProgressBar;
+
 use App\Http\Controllers\punch\AddMassPunch;
 use App\Http\Controllers\punch\EditPunch;
 use App\Http\Controllers\punch\EditUserAbsence;
 use App\Http\Controllers\punch\EditUserDateTotal;
 use App\Http\Controllers\punch\PunchList;
 use App\Http\Controllers\punch\UserDateTotalList;
+use App\Http\Controllers\punch\UserExceptionList;
+
+use App\Http\Controllers\authorization\AuthorizationList;
+
+
 use App\Http\Controllers\Report\DailyAttendanceReport;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
@@ -113,12 +122,19 @@ use App\Http\Controllers\users\UserLifePromotion;
 use App\Http\Controllers\users\UserList;
 use App\Http\Controllers\users\UserWageListNew;
 use App\Http\Controllers\users\UserWorkExperionce;
-use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\users\BonusCalc;
+use App\Http\Controllers\users\BonusList;
+use App\Http\Controllers\users\EditBonusCalc;
+
 
 
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\report\EmployeeNopayCountReport;
+use App\Http\Controllers\report\GeneralLedgerSummary;
+use App\Http\Controllers\report\TimesheetSummary;
+use App\Http\Controllers\report\PayStubSummary;
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
@@ -235,13 +251,19 @@ Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index']
 
 Route::match(['get', 'post'],'/report/employee_nopay_count_report', [EmployeeNopayCountReport::class, 'index'])->name('report.employee_nopay_count_report');
 
+Route::match(['get', 'post'],'/report/general_ledger_summary_report', [GeneralLedgerSummary::class, 'index'])->name('report.general_ledger_summary_report');
+
+
+Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
+Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, 'index'])->name('report.payroll_report');
+
 // ===============================================================================================================================
 // Payroll
 // ===============================================================================================================================
 
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
-Route::get('/payroll/payroll_action', [ClosePayPeriod::class, 'action'])->name('payroll.payroll_action');
-Route::get('/payroll/payroll_generate_pay_stubs', [ClosePayPeriod::class, 'generate_pay_stubs'])->name('payroll.generate_pay_stubs');
+Route::get('/punch/user_exception', [UserExceptionList::class, 'index'])->name('punch.user_exception');
+
 
 Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
 Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
@@ -278,10 +300,8 @@ Route::delete('/payroll/paystub_accounts/delete/{id}', [PayStubEntryAccountList:
 Route::get('/payroll/paystub_account_link', [EditPayStubEntryAccountLink::class, 'index'])->name('payroll.paystub_account_link');
 Route::post('/payroll/paystub_account_link/submit', [EditPayStubEntryAccountLink::class, 'submit'])->name('payroll.paystub_account_link.submit');
 
-Route::get('/payroll/company_deductions', [CompanyDeductionList::class, 'index'])->name('payroll.company_deductions');
-Route::get('/payroll/company_deductions/add/{id?}', [EditCompanyDeduction::class, 'index'])->name('payroll.company_deductions.add');
-Route::post('/payroll/company_deductions/submit/{id?}', [EditCompanyDeduction::class, 'submit'])->name('payroll.company_deductions.submit');
-Route::delete('/payroll/company_deductions/delete/{id}', [CompanyDeductionList::class, 'delete'])->name('payroll.company_deductions.delete');
+Route::match(['get', 'post'], '/payroll/company_deductions', [CompanyDeductionList::class, 'index'])->name('payroll.company_deductions');
+Route::match(['get', 'post'], '/payroll/company_deductions/add', [EditCompanyDeduction::class, 'index'])->name('payroll.company_deductions.add');
 
 // ===============================================================================================================================
 // Progress Bar Functions
@@ -512,6 +532,7 @@ Route::get('/storage/{disk}/{path}', [EditUser::class, 'serveFile'])->name('serv
 
 Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('attendance.timesheet');
 Route::get('/close_window', [CloseWindow::class, 'index'])->name('close_window');
+Route::get('/authorization/authorization_list', [AuthorizationList::class, 'index'])->name('authorization.authorization_list');
 
 Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
 Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
@@ -540,7 +561,7 @@ Route::delete('/attendance/user_accruals/delete/{id}', [ViewUserAccrualList::cla
 Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('user_accruals.add');
 
 
-Route::get('/attendance/paystubs/', [PayStubList::class, 'index'])->name('attendance.paystubs');
+Route::get('/attendance/paystubs', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
 Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class, 'index'])->name('attendance.apply_leaves');
 
@@ -556,6 +577,10 @@ Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::clas
 Route::get('/attendance/leaves/confirmed_leave', [ConfirmedLeave::class, 'index'])->name('attendance.leaves.confirmed_leave');
 Route::post('/attendance/leaves/confirmed_leave/search', [ConfirmedLeave::class, 'search'])->name('attendance.leaves.confirmed_leave.search');
 Route::delete('/attendance/confirmed_leave/delete/{id}', [ConfirmedLeave::class, 'delete'])->name('attendance.confirmed_leave.delete');
+Route::match(['get', 'post'], '/users/bonus_calc', [BonusCalc::class, 'index'])->name('users.bonus_calc');
+Route::match(['get', 'post'], '/users/bonus_list', [BonusList::class, 'index'])->name('users.bonus_list');
+Route::match(['get', 'post'], '/users/edit_bonus_calc', [EditBonusCalc::class, 'index'])->name('users.edit_bonus_calc');
+
 
 // ===============================================================================================================================
 // add view_schedule route

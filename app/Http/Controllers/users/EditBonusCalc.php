@@ -1,120 +1,160 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace App\Http\Controllers\users;
 
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
+use App\Http\Controllers\Controller;
 
-if ( !$permission->Check('company','enabled')
-		OR !( $permission->Check('company','view') OR $permission->Check('company','view_own') OR $permission->Check('company','view_child') ) ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+use App\Models\Core\Environment;
+use App\Models\Core\Debug;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Pager;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Users\BonusDecemberFactory;
+use App\Models\Users\BonusDecemberListFactory;
+use Illuminate\Support\Facades\View;
 
-//Debug::setVerbosity( 11 );
+class EditBonusCalc extends Controller
+{
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
 
-$smarty->assign('title', __($title = 'Bonus ')); // See index.php
-BreadCrumb::setCrumb($title);
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'id',
-                                                                                                'view',
-												'data'
-												) ) );
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
 
-
-if ( isset($data) ) {
-	if ( isset($data['start_date']) ) {
-		$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );
 	}
-	if ( isset($data['end_date']) ) {
-		$data['end_date'] = TTDate::parseDateTime( $data['end_date'] );
-                
-        }
-        
-}
 
-$bdf = new BonusDecemberFactory();
+	public function index() {
+		$permission = $this->permission;
+		$current_user = $this->currentUser;
+		$current_company = $this->currentCompany;
+		$current_user_prefs = $this->userPrefs;
 
-$action = Misc::findSubmitButton();
-$action = strtolower($action);
-
-switch ($action) {
-	case 'submit':
-		//Debug::setVerbosity(11);
-		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-
-		$bdf->StartTransaction();
-                
-                if ( $data['id'] == '' ) {
-			$bdf->setCompany( $current_company->getId() );
-			
-		} else {
-			$bdf->setId($data['id']);
+		if ( !$permission->Check('company','enabled')
+				OR !( $permission->Check('company','view') OR $permission->Check('company','view_own') OR $permission->Check('company','view_child') ) ) {
+			$permission->Redirect( FALSE ); //Redirect
 		}
 
-		$bdf->setStartDate($data['start_date']);
-		$bdf->setEndDate($data['end_date']+59);
-                $bdf->setYNumber($data['y_number']);
+		$viewData['title'] = 'Bonus';
+		
 
-		if ( $bdf->isValid() ) {
-			$bdf->Save();
+		extract	(FormVariables::GetVariables(
+			array (
+				'action',
+				'id',
+				'view',
+				'data'
+			) 
+		) );
 
-			$bdf->CommitTransaction();
-			Redirect::Page( URLBuilder::getURL( NULL, 'BonusCalc.php') );
-			break;
-		}
 
-		$bdf->FailTransaction();
-                
-        case 'generate_december_bonuses':
-            
-                Debug::Text('Generate Bonus!', __FILE__, __LINE__, __METHOD__,10);
-
-		Redirect::Page( URLBuilder::getURL( array('action' => 'generate_december_bonuses', 'filter_user_id' => $data['id'], 'next_page' => URLBuilder::getURL( array('dec_bo_id' => $data['id'] ), '../users/BonusList.php') ), '../progress_bar/ProgressBarControl.php') );
-
-            break;
-	default:
-		if ( isset($id) ) {
-			BreadCrumb::setCrumb($title);
-
-			$bdlf = new BonusDecemberListFactory();
-			$bdlf->getByIdAndCompanyId($id, $current_company->getId() );
-
-			foreach ($bdlf as $bd_obj) {
-				//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
-
-				$data = array(
-													'id' => $bd_obj->getId(),
-													'company_id' => $bd_obj->getCompany(),
-													'start_date' => $bd_obj->getStartDate(),
-													'end_date' => $bd_obj->getEndDate(),
-													'y_number' => $bd_obj->getYNumber(),
-													'deleted' => $bd_obj->getDeleted(),
-													'created_date' => $bd_obj->getCreatedDate(),
-													'created_by' => $bd_obj->getCreatedBy(),
-													'updated_date' => $bd_obj->getUpdatedDate(),
-													'updated_by' => $bd_obj->getUpdatedBy(),
-													'deleted_date' => $bd_obj->getDeletedDate(),
-													'deleted_by' => $bd_obj->getDeletedBy()
-												);
+		if ( isset($data) ) {
+			if ( isset($data['start_date']) ) {
+				$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );
 			}
-		}  
+			if ( isset($data['end_date']) ) {
+				$data['end_date'] = TTDate::parseDateTime( $data['end_date'] );	
+			}
+				
+		}
 
-		$smarty->assign_by_ref('data', $data);
+		$bdf = new BonusDecemberFactory(); 
 
-		break;
+		//==================================================================================
+		$action = '';
+        if (isset($_POST['action'])) {
+            $action = trim($_POST['action']);
+        } elseif (isset($_GET['action'])) {
+			$action = trim($_GET['action']);
+        }
+        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+		//==================================================================================
+
+		switch ($action) {
+			case 'submit':
+				//Debug::setVerbosity(11);
+				Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
+
+				$bdf->StartTransaction();
+						
+				if ( $data['id'] == '' ) {
+					$bdf->setCompany( $current_company->getId() );
+				} else {
+					$bdf->setId($data['id']);
+				}
+
+				$bdf->setStartDate($data['start_date']);
+				$bdf->setEndDate($data['end_date']+59);
+						$bdf->setYNumber($data['y_number']);
+
+				if ( $bdf->isValid() ) {
+					$bdf->Save();
+
+					$bdf->CommitTransaction();
+					Redirect::Page( URLBuilder::getURL( NULL, '/users/bonus_calc') );
+					break;
+				}
+
+				$bdf->FailTransaction();
+						
+				case 'generate_december_bonuses':
+					
+						Debug::Text('Generate Bonus!', __FILE__, __LINE__, __METHOD__,10);
+
+				Redirect::Page( URLBuilder::getURL( array('action' => 'generate_december_bonuses', 'filter_user_id' => $data['id'], 'next_page' => URLBuilder::getURL( array('dec_bo_id' => $data['id'] ), '/users/bonus_list') ), '/progress_bar_control') );
+
+					break;
+			default:
+				if ( isset($id) ) {
+
+					$bdlf = new BonusDecemberListFactory();
+					$bdlf->getByIdAndCompanyId($id, $current_company->getId() );
+
+					foreach ($bdlf->rs as $bd_obj) {
+						$bdlf->data = (array)$bd_obj;
+						$bd_obj = $bdlf;
+
+						$data = array(
+							'id' => $bd_obj->getId(),
+							'company_id' => $bd_obj->getCompany(),
+							'start_date' => $bd_obj->getStartDate(),
+							'end_date' => $bd_obj->getEndDate(),
+							'y_number' => $bd_obj->getYNumber(),
+							'deleted' => $bd_obj->getDeleted(),
+							'created_date' => $bd_obj->getCreatedDate(),
+							'created_by' => $bd_obj->getCreatedBy(),
+							'updated_date' => $bd_obj->getUpdatedDate(),
+							'updated_by' => $bd_obj->getUpdatedBy(),
+							'deleted_date' => $bd_obj->getDeletedDate(),
+							'deleted_by' => $bd_obj->getDeletedBy()
+						);
+					}
+				}  
+
+				$viewData['data'] = $data;
+
+				break;
+		}
+
+
+
+		$viewData['bdf'] = $bdf;
+		$viewData['view'] = $view;
+
+		return view('users/EditBonusCalc', $viewData);
+	}
 }
 
-
-
-$smarty->assign_by_ref('bdf', $bdf);
-$smarty->assign_by_ref('view', $view);
-
-
-$smarty->display('users/EditBonusCalc.tpl');
