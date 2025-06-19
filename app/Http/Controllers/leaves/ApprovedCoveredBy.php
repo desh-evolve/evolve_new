@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Core\Environment;
 use App\Models\Core\FormVariables;
 use App\Models\Leaves\LeaveRequestListFactory;
+use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
 class ApprovedCoveredBy extends Controller
@@ -47,10 +48,15 @@ class ApprovedCoveredBy extends Controller
                 $lrf_obj = $lrlf;
 
                 $methord = $lrf_obj->getOptions('leave_method');
+                $user_id = $lrf_obj->getUser();
+
+                $ulf = new UserListFactory();
+		        $user_obj = $ulf->getById($user_id)->getCurrent();
 
                 $leaves [] = array(
                     'id' => $lrf_obj->getId(),
-                    'user' => $lrf_obj->getUserObject()->getFullName(),
+                    'user' => $user_obj->getFullName(),
+                    'user_id' => $user_id,
                     'leave_method' => $methord[$lrf_obj->getLeaveMethod()],
                     'start_date' => $lrf_obj->getLeaveFrom(),
                     'end_date' => $lrf_obj->getLeaveTo(),

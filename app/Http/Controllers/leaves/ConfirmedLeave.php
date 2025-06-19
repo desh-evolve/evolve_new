@@ -129,10 +129,15 @@ class ConfirmedLeave extends Controller
                 $lrlf->data = (array) $lrf_obj;
                 $lrf_obj = $lrlf;
 
+                $user_id = $lrf_obj->getUser();
+
+                $ulf = new UserListFactory();
+		        $user_obj = $ulf->getById($user_id)->getCurrent();
+
                 $leaves[] = [
                     'id' => $lrf_obj->getId(),
-                    'user' => $lrf_obj->getUserObject()->getFullName(),
-                    'user_id' => $lrf_obj->getUser(),
+                    'user' => $user_obj->getFullName(),
+                    'user_id' => $user_id,
                     'leave_name' => $lrf_obj->getAccuralPolicyObject()->getName(),
                     'start_date' => $lrf_obj->getLeaveFrom(),
                     'end_date' => $lrf_obj->getLeaveTo(),
@@ -336,10 +341,6 @@ class ConfirmedLeave extends Controller
         Redirect::Page( URLBuilder::getURL( NULL, 'ConfirmedLeave') );
 
 	}
-
-
-
-
 
 
 }

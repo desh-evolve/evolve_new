@@ -25,8 +25,9 @@
 
                 <div class="card-body">
 
-                    <form action="{{ route('attendance.leaves.supervise_aprooval.bulkAction') }}" method="POST">
+                    <form id="leaveForm" method="POST">
                         @csrf
+
                         <div id="contentBoxTwoEdit">
                             <table class="table table-striped table-bordered">
                                 @if (isset($data['msg']) &&  $data['msg'] !='')
@@ -67,7 +68,8 @@
                                             <td>{{$row['end_date']}}</td>
                                             <td>{{$row['amount']}}</td>
                                             <td>
-                                                <input type="checkbox" size="10" name="data[leave_request][{{$row['id']}}]" value="{{$row['is_supervisor_approved']}}" {{ $row['is_supervisor_approved'] ? 'checked' : '' }}>
+                                                {{-- <input type="checkbox" size="10" name="data[leave_request][{{$row['id']}}]" value="{{$row['is_supervisor_approved']}}" {{ $row['is_supervisor_approved'] ? 'checked' : '' }}> --}}
+                                                <input type="checkbox" name="data[leave_request][{{$row['id']}}]" value="1">
                                             </td>
                                             <td>
                                                  <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url('/attendance/leaves/view_number_leave/' . $row['id']) }}'">
@@ -89,8 +91,9 @@
                             {{-- <input type="submit" class="btn btn-primary" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_include'));selectAll(document.getElementById('filter_exclude'));selectAll(document.getElementById('filter_user'));">
                             <input type="submit" class="btn btn-danger" name="action:rejected" value="Rejected" onClick="selectAll(document.getElementById('filter_include'));selectAll(document.getElementById('filter_exclude'));selectAll(document.getElementById('filter_user'));"> --}}
 
-                            <button type="submit" class="btn btn-primary" name="action" value="submit">Submit</button>
-                            <button type="submit" class="btn btn-danger" name="action" value="rejected">Reject</button>
+                            <button type="submit" class="btn btn-primary" onclick="submitForm('{{ route('attendance.leaves.supervise_aprooval.approved') }}')">Submit</button>
+                            <button type="submit" class="btn btn-danger" onclick="submitForm('{{ route('attendance.leaves.supervise_aprooval.reject') }}')">Reject</button>
+
 
                         </div>
 
@@ -113,5 +116,13 @@
             `;
             tableBody.appendChild(row);
         }
+
+
+        function submitForm(actionUrl) {
+            const form = document.getElementById('leaveForm');
+            form.action = actionUrl;
+            form.submit();
+        }
+
     </script>
 </x-app-layout>

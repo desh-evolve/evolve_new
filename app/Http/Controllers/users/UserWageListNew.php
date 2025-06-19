@@ -143,7 +143,7 @@ class UserWageListNew extends Controller
         $viewData['user_has_default_wage'] = $user_has_default_wage;
         $viewData['wages'] = $wages;
         $viewData['user_options'] = $user_options;
-        // dd($viewData);
+        dd($viewData);
 
         return view('users.UserWageList', $viewData);
 

@@ -46,7 +46,7 @@ class UserMessageList extends Controller
         */
     }
 
-    
+
     public function index()
     {
         $current_user = $this->currentUser;

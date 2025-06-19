@@ -575,6 +575,8 @@ Route::get('/attendance/leaves/covered_aprooval', [ApprovedCoveredBy::class, 'in
 
 Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
 Route::post('/attendance/leaves/supervise_aprooval/bulk-action', [ApprovedSupervisedBy::class, 'bulkAction'])->name('attendance.leaves.supervise_aprooval.bulkAction');
+Route::post('/attendance/leaves/supervise-approval/reject', [ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
+Route::post('/attendance/leaves/supervise-approval/approved', [ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
 
 Route::get('/attendance/leaves/view_user_leave/{id}', [VIewUserLeave::class, 'index'])->name('attendance.leaves.viewUserLeave');
 
@@ -583,6 +585,7 @@ Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::clas
 Route::get('/attendance/leaves/confirmed_leave', [ConfirmedLeave::class, 'index'])->name('attendance.leaves.confirmed_leave');
 Route::post('/attendance/leaves/confirmed_leave/search', [ConfirmedLeave::class, 'search'])->name('attendance.leaves.confirmed_leave.search');
 Route::delete('/attendance/confirmed_leave/delete/{id}', [ConfirmedLeave::class, 'delete'])->name('attendance.confirmed_leave.delete');
+
 Route::match(['get', 'post'], '/users/bonus_calc', [BonusCalc::class, 'index'])->name('users.bonus_calc');
 Route::match(['get', 'post'], '/users/bonus_list', [BonusList::class, 'index'])->name('users.bonus_list');
 Route::match(['get', 'post'], '/users/edit_bonus_calc', [EditBonusCalc::class, 'index'])->name('users.edit_bonus_calc');

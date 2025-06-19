@@ -517,7 +517,7 @@ class LeaveRequestFactory  extends Factory {
 
        function getSupervisorApproved(){
 
-            	if ( isset($this->data['is_supervisor_approved']) ) {
+            if ( isset($this->data['is_supervisor_approved']) ) {
 			return $this->data['is_supervisor_approved'];
 		}
 
