@@ -111,7 +111,7 @@ class ApprovedSupervisedBy extends Controller
             return redirect()->back()->with('error', 'No leave selected.');
         }
 
-        // dd($request->all());
+        dd($request->all());
 
         $lrlf = new LeaveRequestListFactory();
         $msg = "";
@@ -508,6 +508,36 @@ class ApprovedSupervisedBy extends Controller
         return redirect()->back()->with('success', 'Selected leaves have been submitted.');
     }
 
+// only supervisor approved not calculation
+// public function submit(Request $request)
+// {
+//     $leaveRequests = $request->input('data.leave_request', []);
+
+//     if (empty($leaveRequests)) {
+//         return redirect()->back()->with('error', 'No leave selected.');
+//     }
+
+//     foreach ($leaveRequests as $key => $val) {
+//         $lrlf = new LeaveRequestListFactory();
+//         $lrlf->getById($key);
+
+//         if ($lrlf->getRecordCount() > 0) {
+//             $lrf = $lrlf->getCurrent();
+
+//             // Only update supervisor approval
+//             $lrf->setSupervisorApproved(1);
+
+//             if ($lrf->isValid()) {
+//                 $lrf->save();
+//                 Log::info("Leave ID {$key} approved by supervisor.");
+//             }
+//         } else {
+//             Log::warning("Leave request ID {$key} not found.");
+//         }
+//     }
+
+//     return redirect()->back()->with('success', 'Selected leaves have been approved by supervisor.');
+// }
 
 
 
