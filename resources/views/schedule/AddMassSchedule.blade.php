@@ -50,7 +50,7 @@
                                                 <input type="button" name="Un-Select" value="Un-Select All" onClick="unselectAll(document.getElementById('src_filter_user'))">
                                                 <br>
                                                 <select name="src_user_id" id="src_filter_user" style="width:90%;margin:5px 0 5px 0;" size="{{select_size(['array'=>$user_options])}}" multiple>
-                                                    {{html_options(['options'=>$user_options])}}
+                                                    {!! html_options(['options'=>$user_options]) !!}
                                                 </select>
                                             </td>
                                             <td class="cellRightEditTable" style="vertical-align: middle;" width="1">
@@ -67,7 +67,7 @@
                                                 <input type="button" name="Un-Select" value="Un-Select All" onClick="unselectAll(document.getElementById('filter_user'))">
                                                 <br>
                                                 <select name="filter_user_id[]" id="filter_user" style="width:90%;margin:5px 0 5px 0;" size="{{select_size([ 'array'=>$user_options])}}" multiple>
-                                                    {{html_options([ 'options'=>$filter_user_options, 'selected'=>$filter_user_id])}}
+                                                    {!! html_options([ 'options'=>$filter_user_options, 'selected'=>$filter_user_id ?? '']) !!}
                                                 </select>
                                             </td>
                                         </tr>
@@ -81,7 +81,7 @@
                                 </th>
                                 <td class="cellRightEditTable">
                                     <select id="status_id" name="data[status_id]" onChange="showAbsencePolicy();">
-                                        {{html_options([ 'options'=>$data['status_options'], 'selected'=>$data['status_id']])}}
+                                        {!! html_options([ 'options'=>$data['status_options'], 'selected'=>$data['status_id'] ?? '']) !!}
                                     </select>
                                 </td>
                             </tr>
@@ -91,7 +91,7 @@
                                     In:
                                 </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="8" id="start_time" name="data[start_time]" value="{{getdate_helper('time', $data['parsed_start_time'])}}" onChange="getScheduleTotalTime();">
+                                    <input type="text" size="8" id="start_time" name="data[start_time]" value="{{getdate_helper('time', $data['parsed_start_time'] ?? '')}}" onChange="getScheduleTotalTime();">
                                     ie: {{$current_user_prefs->getTimeFormatExample()}}
                                 </td>
                             </tr>
@@ -101,7 +101,7 @@
                                     Out:
                                 </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="8" id="end_time" name="data[end_time]" value="{{getdate_helper('time', $data['parsed_end_time'])}}" onChange="getScheduleTotalTime();">
+                                    <input type="text" size="8" id="end_time" name="data[end_time]" value="{{getdate_helper('time', $data['parsed_end_time'] ?? '')}}" onChange="getScheduleTotalTime();">
                                     ie: {{$current_user_prefs->getTimeFormatExample()}}
                                 </td>
                             </tr>
@@ -112,7 +112,7 @@
                                 </th>
                                 <td class="cellRightEditTable">
                                     <span id="total_time">
-                                        {{gettimeunit_helper($data['total_time'], true)}}
+                                        {{gettimeunit_helper($data['total_time'] ?? '', true)}}
                                     </span>
                                 </td>
                             </tr>
@@ -122,9 +122,7 @@
                                     Start Date:
                                 </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="15" id="start_date_stamp" name="data[start_date_stamp]" value="{{getdate_helper('date', $data['start_date_stamp'])}}">
-                                    <img src="{$BASE_URL}/images/cal.gif" id="cal_start_date_stamp" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('start_date_stamp', 'cal_start_date_stamp', false);">
-                                    ie: {{$current_user_prefs->getDateFormatExample()}}
+                                    <input type="date" id="start_date_stamp" name="data[start_date_stamp]" value="{{getdate_helper('date', $data['start_date_stamp'])}}">
                                 </td>
                             </tr>
                             <tr>
@@ -132,9 +130,7 @@
                                     End Date:
                                 </th>
                                 <td class="cellRightEditTable">
-                                    <input type="text" size="15" id="end_date_stamp" name="data[end_date_stamp]" value="{{getdate_helper('date', $data['end_date_stamp'])}}">
-                                    <img src="{$BASE_URL}/images/cal.gif" id="cal_end_date_stamp" width="16" height="16" border="0" alt="Pick a date" onMouseOver="calendar_setup('end_date_stamp', 'cal_end_date_stamp', false);">
-                                    ie: {{$current_user_prefs->getDateFormatExample()}}
+                                    <input type="date"id="end_date_stamp" name="data[end_date_stamp]" value="{{getdate_helper('date', $data['end_date_stamp'])}}">
                                 </td>
                             </tr>
             
@@ -170,25 +166,25 @@
                                         </tr>
                                         <tr style="text-align:center;">
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][0]" value="1" {{$data['dow'][0] == TRUE ? 'checked' : ''}} >
+                                                <input type="checkbox" class="checkbox" name="data[dow][0]" value="1" {{!empty($data['dow']) && $data['dow'][0] ? 'checked' : ''}} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][1]" value="1" {{$data['dow'][1] == TRUE ? 'checked' : ''}} >
+                                                <input type="checkbox" class="checkbox" name="data[dow][1]" value="1" {{!empty($data['dow']) && $data['dow'][1] ? 'checked' : ''}} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][2]" value="1" {{$data['dow'][2] == TRUE ? 'checked' : ''}} >
+                                                <input type="checkbox" class="checkbox" name="data[dow][2]" value="1" {{!empty($data['dow']) && $data['dow'][2] ? 'checked' : ''}} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][3]" value="1" {{$data['dow'][3] == TRUE ? 'checked' : ''}} >
+                                                <input type="checkbox" class="checkbox" name="data[dow][3]" value="1" {{!empty($data['dow']) && $data['dow'][3] ? 'checked' : ''}} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][4]" value="1" {{$data['dow'][4] == TRUE ? 'checked' : ''}} >
+                                                <input type="checkbox" class="checkbox" name="data[dow][4]" value="1" {{!empty($data['dow']) && $data['dow'][4] ? 'checked' : ''}} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][5]" value="1" {{$data['dow'][5] == TRUE ? 'checked' : ''}} >
+                                                <input type="checkbox" class="checkbox" name="data[dow][5]" value="1" {{!empty($data['dow']) && $data['dow'][5] ? 'checked' : ''}} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][6]" value="1" {{$data['dow'][6] == TRUE ? 'checked' : ''}} >
+                                                <input type="checkbox" class="checkbox" name="data[dow][6]" value="1" {{!empty($data['dow']) && $data['dow'][6] ? 'checked' : ''}} >
                                             </td>
                                         </tr>
                                     </table>
@@ -201,7 +197,7 @@
                                 </th>
                                 <td class="cellRightEditTable">
                                     <select id="schedule_policy_id" name="data[schedule_policy_id]" onChange="getScheduleTotalTime();">
-                                        {{html_options([ 'options'=>$data['schedule_policy_options'], 'selected'=>$data['schedule_policy_id']])}}
+                                        {!! html_options([ 'options'=>$data['schedule_policy_options'], 'selected'=>$data['schedule_policy_id'] ?? '']) !!}
                                     </select>
                                 </td>
                             </tr>
@@ -213,7 +209,7 @@
                                 </th>
                                 <td class="cellRightEditTable">
                                     <select id="absence_policy_id" name="data[absence_policy_id]">
-                                        {{html_options( ['options'=>$data['absence_policy_options'], 'selected'=>$data['absence_policy_id']])}}
+                                        {!! html_options( ['options'=>$data['absence_policy_options'], 'selected'=>$data['absence_policy_id'] ?? '']) !!}
                                     </select>
                                 </td>
                             </tr>
@@ -226,7 +222,7 @@
                                     </th>
                                     <td class="cellRightEditTable">
                                         <select id="branch_id" name="data[branch_id]">
-                                            {{html_options([ 'options'=>$data['branch_options'], 'selected'=>$data['branch_id']])}}
+                                            {!! html_options([ 'options'=>$data['branch_options'], 'selected'=>$data['branch_id'] ?? '']) !!}
                                         </select>
                                     </td>
                                 </tr>
@@ -239,7 +235,7 @@
                                     </th>
                                     <td class="cellRightEditTable">
                                         <select id="department_id" name="data[department_id]">
-                                            {{html_options([ 'options'=>$data['department_options'], 'selected'=>$data['department_id']])}}
+                                            {!! html_options([ 'options'=>$data['department_options'], 'selected'=>$data['department_id'] ?? '']) !!}
                                         </select>
                                     </td>
                                 </tr>
@@ -252,7 +248,7 @@
                                     Overwrite Existing Shifts:
                                 </th>
                                 <td class="cellRightEditTable">
-                                    <input type="checkbox" class="checkbox" name="data[overwrite]" value="1" {{$data['overwrite'] == TRUE ? 'checked' : ''}} >
+                                    <input type="checkbox" class="checkbox" name="data[overwrite]" value="1" {{ !empty($data['overwrite']) && $data['overwrite'] ? 'checked' : ''}} >
                                 </td>
                             </tr>
                         </table>

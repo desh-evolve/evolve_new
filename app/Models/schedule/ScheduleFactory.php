@@ -4,6 +4,7 @@ namespace App\Models\Schedule;
 
 use App\Models\Company\BranchListFactory;
 use App\Models\Core\Debug;
+use App\Models\Core\Environment;
 use App\Models\Core\Factory;
 use App\Models\Core\Misc;
 use App\Models\Core\Option;
@@ -19,6 +20,7 @@ use App\Models\Policy\AbsencePolicyListFactory;
 use App\Models\Policy\SchedulePolicyListFactory;
 use App\Models\Users\UserFactory;
 use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\View;
 
 class ScheduleFactory extends Factory {
 	protected $table = 'schedule';
@@ -27,6 +29,24 @@ class ScheduleFactory extends Factory {
 	protected $user_date_obj = NULL;
 	protected $schedule_policy_obj = NULL;
 	protected $absence_policy_obj = NULL;
+
+	protected $permission;
+    protected $current_user;
+    protected $current_company;
+    protected $current_user_prefs;
+
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+		//require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
+
+        $this->permission = View::shared('permission');
+        $this->current_user = View::shared('current_user');
+        $this->current_company = View::shared('current_company');
+        $this->current_user_prefs = View::shared('current_user_prefs');
+    }
 
 	function _getFactoryOptions( $name ) {
 
@@ -712,7 +732,8 @@ class ScheduleFactory extends Factory {
 	}
 
 	function getScheduleArray( $filter_data )  {
-		global $current_user, $current_user_prefs;
+		$current_user = $this->current_user;
+		$current_user_prefs = $this->current_user_prefs;
 
 		//Get all schedule data by general filter criteria.
 		Debug::Arr($filter_data, 'Filter Data: ', __FILE__, __LINE__, __METHOD__, 10);
@@ -741,6 +762,7 @@ class ScheduleFactory extends Factory {
 
 		$slf = new ScheduleListFactory();
 		$slf->getSearchByCompanyIdAndArrayCriteria( $current_user->getCompany(), $filter_data );
+
 		Debug::text('Found Scheduled Rows: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		Debug::Arr($absence_policy_paid_type_options, 'Paid Absences: ', __FILE__, __LINE__, __METHOD__, 10);
 		if ( $slf->getRecordCount() > 0 ) {
@@ -1094,7 +1116,8 @@ class ScheduleFactory extends Factory {
 
 	//function getSchedule( $company_id, $user_ids, $start_date, $end_date, $start_week_day = 0, $group_schedule = FALSE ) {
 	function getSchedule( $filter_data, $start_week_day = 0, $group_schedule = FALSE ) {
-		global $current_user, $current_user_prefs;
+		$current_user = $this->current_user;
+		$current_user_prefs = $this->current_user_prefs;
 
 		//Individual is one schedule per employee, or all on one schedule.
 		if (!is_array($filter_data) ) {

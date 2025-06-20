@@ -40,7 +40,7 @@
                                 @foreach ($rows as $i => $row)
                                     <tr class="">
                                         <td>
-                                            {{ $i++ }}
+                                            {{ $i+1 }}
                                         </td>
                                         <td>
                                             {{$row['name']}}

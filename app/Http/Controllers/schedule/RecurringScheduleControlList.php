@@ -238,7 +238,9 @@ class RecurringScheduleControlList extends Controller
 				$rstclf = new RecurringScheduleTemplateControlListFactory();
 				$template_options = $rstclf->getByCompanyIdArray( $current_company->getId(), FALSE, TRUE );
 
-				foreach ($rsclf as $rsc_obj) {
+				$rows = [];
+
+				foreach ($rsclf->rs as $rsc_obj) {
 					$rsclf->data = (array)$rsc_obj;
 					$rsc_obj = $rsclf;
 					$user_id = $rsc_obj->getColumn('user_id');
@@ -308,7 +310,6 @@ class RecurringScheduleControlList extends Controller
 				$viewData['sort_column'] = $sort_column ;
 				$viewData['sort_order'] = $sort_order ;
 				$viewData['saved_search_id'] = $saved_search_id ;
-				$viewData['paging_data'] = $pager->getPageVariables() ;
 
 				break;
 		}

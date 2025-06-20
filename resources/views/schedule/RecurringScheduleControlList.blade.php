@@ -20,7 +20,7 @@
 
                     <table class="table table-bordered">
         
-                        <form method="get" name="search_form" action="{$smarty.server.SCRIPT_NAME}">
+                        <form method="get" name="search_form" action="#">
                             {{-- {include file="list_tabs.tpl" section="header"} --}}
                             <tr id="adv_search" class="tblSearch" style="display: none;">
                                 <td colspan="{{$total_columns}}" class="tblSearchMainRow">
@@ -34,7 +34,7 @@
                                                         </th>
                                                         <td class="cellRightEditTable">
                                                             <select id="filter_data_status_id" name="filter_data[status_id]">
-                                                                {{html_options([ 'options'=>$filter_data['status_options'], 'selected'=>$filter_data['status_id']])}}
+                                                                {!! html_options([ 'options'=>$filter_data['status_options'], 'selected'=>$filter_data['status_id'] ?? '']) !!}
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -44,7 +44,7 @@
                                                         </th>
                                                         <td class="cellRightEditTable">
                                                             <select name="filter_data[template_id]">
-                                                                {{html_options([ 'options'=>$filter_data['template_options'], 'selected'=>$filter_data['template_id']])}}
+                                                                {!! html_options([ 'options'=>$filter_data['template_options'], 'selected'=>$filter_data['template_id'] ?? '']) !!}
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -54,7 +54,7 @@
                                                         </th>
                                                         <td class="cellRightEditTable">
                                                             <select name="filter_data[user_id]">
-                                                                {{html_options([ 'options'=>$filter_data['user_options'], 'selected'=>$filter_data['user_id']])}}
+                                                                {!! html_options([ 'options'=>$filter_data['user_options'], 'selected'=>$filter_data['user_id'] ?? '']) !!}
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -68,7 +68,7 @@
                                                         </th>
                                                         <td class="cellRightEditTable">
                                                             <select name="filter_data[group_id]">
-                                                                {{html_options([ 'options'=>$filter_data['group_options'], 'selected'=>$filter_data['group_id']])}}
+                                                                {!! html_options([ 'options'=>$filter_data['group_options'], 'selected'=>$filter_data['group_id'] ?? '']) !!}
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -78,7 +78,7 @@
                                                         </th>
                                                         <td class="cellRightEditTable">
                                                             <select name="filter_data[default_branch_id]">
-                                                                {{html_options([ 'options'=>$filter_data['branch_options'], 'selected'=>$filter_data['default_branch_id']])}}
+                                                                {!! html_options([ 'options'=>$filter_data['branch_options'], 'selected'=>$filter_data['default_branch_id'] ?? '']) !!}
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -88,7 +88,7 @@
                                                         </th>
                                                         <td class="cellRightEditTable">
                                                             <select name="filter_data[default_department_id]">
-                                                                {{html_options([ 'options'=>$filter_data['department_options'], 'selected'=>$filter_data['default_department_id']])}}
+                                                                {!! html_options([ 'options'=>$filter_data['department_options'], 'selected'=>$filter_data['default_department_id'] ?? '']) !!}
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -98,7 +98,7 @@
                                                         </th>
                                                         <td class="cellRightEditTable">
                                                             <select name="filter_data[title_id]">
-                                                                {{html_options([ 'options'=>$filter_data['title_options'], 'selected'=>$filter_data['title_id']])}}
+                                                                {!! html_options([ 'options'=>$filter_data['title_options'], 'selected'=>$filter_data['title_id'] ?? '']) !!}
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -133,7 +133,7 @@
                         @foreach ($rows as $i => $row)
                             <tr class="">
                                 <td>
-                                    {{ $i++ }}
+                                    {{ $i+1 }}
                                 </td>
                                 @foreach ($columns as $key => $column)
                                     <td>
@@ -157,7 +157,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="checkbox" name="ids[{$row.id}][]" value="{{$row['user_id']}}">
+                                    <input type="checkbox" class="checkbox" name="ids[{{$row['id']}}][]" value="{{$row['user_id']}}">
                                 </td>
                             </tr>
                         @endforeach

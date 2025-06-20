@@ -122,6 +122,8 @@ class ViewScheduleMonth extends Controller
 			case 'view_schedule':
 			default:
 				$user_ids = array();
+				$schedule_shifts = array();
+				$schedule_shift_totals = array();
 
 				if ( $filter_data['start_date'] != '' AND $filter_data['show_days'] != '' ) {
 					$start_date = $filter_data['start_date'] = TTDate::getBeginWeekEpoch( $filter_data['start_date'], $current_user_prefs->getStartWeekDay() );
@@ -183,7 +185,7 @@ class ViewScheduleMonth extends Controller
 
 				$calendar_array = TTDate::getCalendarArray($start_date, $end_date, $current_user_prefs->getStartWeekDay(), FALSE);
 				//var_dump($calendar_array);
-				$smarty->assign_by_ref('calendar_array', $calendar_array);
+				$viewData['calendar_array'] = $calendar_array;
 
 				//Get column headers, taking in to account start_day_of_week.
 				$x=0;
@@ -213,7 +215,7 @@ class ViewScheduleMonth extends Controller
 
 				break;
 		}
-
+		//dd($viewData);
 		return view('schedule/ViewScheduleMonth', $viewData);
 	}
 }
