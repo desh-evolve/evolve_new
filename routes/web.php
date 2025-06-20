@@ -148,6 +148,22 @@ use App\Http\Controllers\users\EditUserPhonePasswordNew;
 use App\Http\Controllers\users\UserDeductionListNew;
 use App\Http\Controllers\users\UserJobHistory;
 
+
+use App\Http\Controllers\schedule\AddMassSchedule;
+use App\Http\Controllers\schedule\AddMassScheduleNpvc;
+use App\Http\Controllers\schedule\EditRecurringSchedule;
+use App\Http\Controllers\schedule\EditRecurringScheduleTemplate;
+use App\Http\Controllers\schedule\EditSchedule;
+use App\Http\Controllers\schedule\RecurringScheduleControlList;
+use App\Http\Controllers\schedule\RecurringScheduleTemplateControlList;
+use App\Http\Controllers\schedule\ScheduleList;
+use App\Http\Controllers\schedule\ViewSchedule;
+use App\Http\Controllers\schedule\ViewScheduleCalendar;
+use App\Http\Controllers\schedule\ViewScheduleDay;
+use App\Http\Controllers\schedule\ViewScheduleLinear;
+use App\Http\Controllers\schedule\ViewScheduleMonth;
+use App\Http\Controllers\schedule\ViewScheduleWeek;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -598,4 +614,19 @@ Route::match(['get', 'post'], '/users/gratuity_calc', [GratuityCalc::class, 'ind
 
 // ===============================================================================================================================
 // add view_schedule route
+Route::match(['get', 'post', 'delete'], '/schedule/add_mass_schedule', [AddMassSchedule::class, 'index'])->name('schedule.add_mass_schedule');
+Route::match(['get', 'post', 'delete'], '/schedule/add_mass_schedule_npvc', [AddMassScheduleNpvc::class, 'index'])->name('schedule.add_mass_schedule_npvc');
+Route::match(['get', 'post', 'delete'], '/schedule/edit_recurring_schedule', [EditRecurringSchedule::class, 'index'])->name('schedule.edit_recurring_schedule');
+Route::match(['get', 'post', 'delete'], '/schedule/edit_recurring_schedule_template', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template');
+Route::match(['get', 'post', 'delete'], '/schedule/edit_schedule', [EditSchedule::class, 'index'])->name('schedule.edit_schedule');
+Route::match(['get', 'post', 'delete'], '/schedule/recurring_schedule_control_list', [RecurringScheduleControlList::class, 'index'])->name('schedule.recurring_schedule_control_list');
+Route::match(['get', 'post', 'delete'], '/schedule/recurring_schedule_template_control_list', [RecurringScheduleTemplateControlList::class, 'index'])->name('schedule.recurring_schedule_template_control_list');
+Route::match(['get', 'post', 'delete'], '/schedule/schedule_list', [ScheduleList::class, 'index'])->name('schedule.schedule_list');
+Route::match(['get', 'post', 'delete'], '/schedule/view_schedule', [ViewSchedule::class, 'index'])->name('schedule.view_schedule');
+Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_calendar', [ViewScheduleCalendar::class, 'index'])->name('schedule.view_schedule_calendar');
+Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_day', [ViewScheduleDay::class, 'index'])->name('schedule.view_schedule_day');
+Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_linear', [ViewScheduleLinear::class, 'index'])->name('schedule.view_schedule_linear');
+Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_month', [ViewScheduleMonth::class, 'index'])->name('schedule.view_schedule_month');
+Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_week', [ViewScheduleWeek::class, 'index'])->name('schedule.view_schedule_week');
+
 // ===============================================================================================================================

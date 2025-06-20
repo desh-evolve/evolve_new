@@ -262,15 +262,16 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 	}
 
 	function getByPolicyGroupUserIdAndStartDateAndEndDate($user_id, $start_date, $end_date, $where = NULL, $order = NULL) {
-		if ( $user_id == '') {
+		
+		if (empty($user_id)) {
 			return FALSE;
 		}
 
-		if ( $start_date == '') {
+		if ( empty($start_date) ) {
 			return FALSE;
 		}
 
-		if ( $end_date == '') {
+		if ( empty($end_date) ) {
 			return FALSE;
 		}
 

@@ -219,12 +219,12 @@ function getRecurringScheduleTotalTime(this_week_row) {
 				</tr>
 
 			</table>
-		</div>
-{*
-		<div id="contentBoxFour">
-		</div>
-*}
-		<input type="hidden" name="data[id]" value="{$data.id}">
+			</div>
+			{*
+			<div id="contentBoxFour">
+			</div>
+			*}
+			<input type="hidden" name="data[id]" value="{$data.id}">
 		</form>
 	</div>
 </div>
