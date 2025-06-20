@@ -85,7 +85,7 @@ function editPunch(punchID,punchControlId,userID,date,statusID) {
 											</td>
 										</tr>
 
-{*
+												{*
 										<tr id="tab_row_adv_search">
 											<td class="cellLeftEditTable">
 												{t}Severity:{/t}
@@ -106,7 +106,7 @@ function editPunch(punchID,punchControlId,userID,date,statusID) {
 												</select>
 											</td>
 										</tr>
-*}
+								*}
 									</table>
 								</td>
 								<td valign="top" width="50%">
@@ -171,7 +171,7 @@ function editPunch(punchID,punchControlId,userID,date,statusID) {
 												</select>
 											</td>
 										</tr>
-{*
+										{*
 										<tr id="tab_row_adv_search">
 											<td class="cellLeftEditTable">
 												{t}Show Pre-Mature:{/t}
@@ -180,7 +180,7 @@ function editPunch(punchID,punchControlId,userID,date,statusID) {
 												<input type="checkbox" class="checkbox" name="filter_data[pre_mature]" value="1" {if $filter_data.pre_mature == 1}checked{/if}>
 											</td>
 										</tr>
-*}
+						*}
 									</table>
 								</td>
 							</tr>
@@ -271,7 +271,7 @@ function editPunch(punchID,punchControlId,userID,date,statusID) {
 			<input type="hidden" name="sort_order" value="{$sort_order}">
 			<input type="hidden" name="page" value="{$paging_data.current_page}">
 			</table>
-		</form>
-	</div>
+			</form>
+		</div>
 </div>
 {include file="footer.tpl"}

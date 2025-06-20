@@ -111,6 +111,9 @@
                 </li>
 
                 <!-- Schedule -->
+                @php
+                    $checkAttendancelNav = request()->routeIs('schedule.*');
+                @endphp
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#schedule" data-bs-toggle="collapse" role="button"
                         aria-expanded="false">
@@ -118,11 +121,30 @@
                     </a>
                     <div class="collapse menu-dropdown" id="schedule">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item"><a href="#" class="nav-link">My Schedule</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Scheduled Shifts</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Mass Schedule</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link">Recurring Schedule Templates</a>
+                            <li class="nav-item">
+                                <a href="{{ route('schedule.view_schedule') }}"
+                                    class="nav-link {{ request()->routeIs('schedule.view_schedule') ? 'active' : '' }}">My Schedule
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('schedule.schedule_list') }}"
+                                    class="nav-link {{ request()->routeIs('schedule.schedule_list') ? 'active' : '' }}">Scheduled Shifts
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('schedule.add_mass_schedule') }}"
+                                    class="nav-link {{ request()->routeIs('schedule.add_mass_schedule') ? 'active' : '' }}">Mass Schedule
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('schedule.recurring_schedule_control_list') }}"
+                                    class="nav-link {{ request()->routeIs('schedule.recurring_schedule_control_list') ? 'active' : '' }}">Recurring Schedule
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('schedule.recurring_schedule_template_control_list') }}"
+                                    class="nav-link {{ request()->routeIs('schedule.recurring_schedule_template_control_list') ? 'active' : '' }}">Recurring Schedule Templates
+                                </a>
                             </li>
                         </ul>
                     </div>

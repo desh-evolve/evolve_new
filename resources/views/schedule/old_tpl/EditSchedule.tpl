@@ -114,14 +114,14 @@ function getScheduleTotalTime() {
 						<select id="user_id" name="data[user_id]" onChange="TIMETREX.punch.showJob(); getAbsencePolicyBalance()">
 							{html_options options=$data.user_options selected=$data.user_id}
 						</select>
-{*
+				{*
 						{if $data.user_id == ''}
 						{else}
 							{$data.user_full_name}
 							<input type="hidden" id="user_id" name="data[user_id]" value="{$data.user_id}">
 							<input type="hidden" name="data[user_full_name]" value="{$data.user_full_name}">
 						{/if}
-*}
+				*}
 					</td>
 				</tr>
 
@@ -268,16 +268,16 @@ function getScheduleTotalTime() {
 				{/if}
 
 			</table>
-		</div>
+			</div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" {if $data.pay_period_is_locked == TRUE}disabled="true"{/if} onClick="return singleSubmitHandler(this)">
-			{if $data.id != '' AND ( $permission->Check('schedule','delete') OR ( $permission->Check('schedule','delete_child') AND $data.is_child === TRUE ) OR ( $permission->Check('schedule','delete_own') AND $data.is_owner === TRUE ) )}
-				<input type="submit" class="btnSubmit" name="action:delete" value="{t}Delete{/t}" {if $data.pay_period_is_locked == TRUE}disabled="true"{/if} onClick="return singleSubmitHandler(this)">
-			{/if}
-		</div>
+			<div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" {if $data.pay_period_is_locked == TRUE}disabled="true"{/if} onClick="return singleSubmitHandler(this)">
+				{if $data.id != '' AND ( $permission->Check('schedule','delete') OR ( $permission->Check('schedule','delete_child') AND $data.is_child === TRUE ) OR ( $permission->Check('schedule','delete_own') AND $data.is_owner === TRUE ) )}
+					<input type="submit" class="btnSubmit" name="action:delete" value="{t}Delete{/t}" {if $data.pay_period_is_locked == TRUE}disabled="true"{/if} onClick="return singleSubmitHandler(this)">
+				{/if}
+			</div>
 
-		<input type="hidden" name="data[id]" value="{$data.id}">
+			<input type="hidden" name="data[id]" value="{$data.id}">
 		</form>
 	</div>
 </div>

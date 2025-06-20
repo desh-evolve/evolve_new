@@ -290,7 +290,7 @@ class RecurringScheduleControlListFactory extends RecurringScheduleControlFactor
 		}
 		Debug::Arr($order,'aOrder Data:', __FILE__, __LINE__, __METHOD__,10);
 
-		$additional_order_fields = array('name', 'description', 'last_name', 'template_id');
+		$additional_order_fields = array('name', 'description', 'last_name');
 		if ( $order == NULL ) {
 			$order = array( 'last_name' => 'asc', 'd.id' => 'asc', 'a.start_date' => 'desc' );
 			$strict = FALSE;
@@ -393,9 +393,7 @@ class RecurringScheduleControlListFactory extends RecurringScheduleControlFactor
 			$query  .=	' AND a.start_date <= :end_date';
 		}
 
-		$query .= 	'
-						AND (a.deleted = 0 AND b.deleted = 0 AND d.deleted=0)
-					';
+		$query .= 	' AND (a.deleted = 0 AND b.deleted = 0 AND d.deleted=0) ';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 

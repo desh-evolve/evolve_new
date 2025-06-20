@@ -88,6 +88,7 @@ class ClosePayPeriod extends Controller
 
         //$action = Misc::findSubmitButton();
 
+        //===================================================================================
         $action = '';
         if (isset($_POST['action'])) {
             $action = trim($_POST['action']);
@@ -95,7 +96,7 @@ class ClosePayPeriod extends Controller
             $action = trim($_GET['action']);
         }
         $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
-
+        //===================================================================================
 
         switch ($action) {
             case 'close':

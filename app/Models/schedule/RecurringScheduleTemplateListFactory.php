@@ -125,7 +125,7 @@ class RecurringScheduleTemplateListFactory extends RecurringScheduleTemplateFact
 		//Debug::Arr($order,'aOrder Data:', __FILE__, __LINE__, __METHOD__,10);
 
 
-		$additional_order_fields = array('name', 'description', 'last_name');
+		$additional_order_fields = array('b.name', 'b.description', 'd.last_name');
 		if ( $order == NULL ) {
 			$order = array( 'c.start_date' => 'asc', 'cb.user_id' => 'asc', 'a.week' => 'asc' );
 			$strict = FALSE;
