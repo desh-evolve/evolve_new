@@ -796,7 +796,7 @@ function showProvince() {
 							{/if}
 
 
-//===========================desh check here==========================
+				//===========================desh check here==========================
 
 
 					{if $permission->Check('user','edit_advanced') AND ( $permission->Check('user','add') OR ( $permission->Check('user','edit') OR ($permission->Check('user','edit_child') AND $user_data.is_child === TRUE) OR ($permission->Check('user','edit_own') AND $user_data.is_owner === TRUE) ) )}
@@ -1631,37 +1631,37 @@ function showProvince() {
 				  </td>
 				</tr>
 			</table>
-		</div>
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
-		</div>
+			/div>
+			div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="return singleSubmitHandler(this)">
+			/div>
 
-		<input type="hidden" name="user_data[id]" value="{$user_data.id}">
-		<input type="hidden" name="incomplete" value="{$incomplete}">
-		<input type="hidden" name="saved_search_id" value="{$saved_search_id}">
-        <!-- ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON-->
-        <input type="hidden" id="branch_short_id1" name="user_data[branch_short_id]" value="{$user_data.branch_short_id}">
+			input type="hidden" name="user_data[id]" value="{$user_data.id}">
+			input type="hidden" name="incomplete" value="{$incomplete}">
+			input type="hidden" name="saved_search_id" value="{$saved_search_id}">
+        	!-- ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON-->
+        	input type="hidden" id="branch_short_id1" name="user_data[branch_short_id]" value="{$user_data.branch_short_id}">
 		</form>
 	</div>
 </div>
 {if $user_data.id != ''
 	AND $current_company->getProductEdition() == 20
 	AND ( $permission->Check('document','view') OR $permission->Check('document','view_own') OR $permission->Check('document','view_private') ) }
-<br>
-<br>
-<div id="rowContent">
-  <div id="titleTab"><div class="textTitle"><span class="textTitleSub">{t}Attachments{/t}</span></div>
-</div>
-<div id="rowContentInner">
-	<div id="contentBoxTwoEdit">
-		<table class="tblList">
-			<tr>
-				<td>
-					{embeddeddocumentattachmentlist object_type_id=100 object_id=$user_data.id}
-				</td>
-			</tr>
-		</table>
+	<br>
+	<br>
+	<div id="rowContent">
+	<div id="titleTab"><div class="textTitle"><span class="textTitleSub">{t}Attachments{/t}</span></div>
 	</div>
-</div>
+	<div id="rowContentInner">
+		<div id="contentBoxTwoEdit">
+			<table class="tblList">
+				<tr>
+					<td>
+						{embeddeddocumentattachmentlist object_type_id=100 object_id=$user_data.id}
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 {/if}
 {include file="footer.tpl"}

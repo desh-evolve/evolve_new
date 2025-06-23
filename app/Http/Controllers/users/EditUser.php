@@ -104,7 +104,6 @@ class EditUser extends Controller
         Strtotime sucks too much.
         */
 
-
         if ( isset($user_data) ) {
             if ( isset($user_data['hire_date']) AND $user_data['hire_date'] != '') {
                 $user_data['hire_date'] = TTDate::parseDateTime($user_data['hire_date']);
@@ -264,19 +263,6 @@ class EditUser extends Controller
                         $uf->setPhonePassword($user_data['phone_password']);
                     }
                 }
-
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
                         
                 if ( $user_data['id'] != $current_user->getID()
                         AND $permission->Check('user','edit_advanced') ) {
@@ -288,22 +274,22 @@ class EditUser extends Controller
                         $uf->setMiddleName($user_data['middle_name']);
                     }
                                 
-                                if ( isset($user_data['full_name']) ) {
+                    if ( isset($user_data['full_name']) ) {
                         $uf->setFullNameField($user_data['full_name']);
                     }
                                 
-                                if ( isset($user_data['calling_name']) ) {
+                    if ( isset($user_data['calling_name']) ) {
                         $uf->setCallingName($user_data['calling_name']);
                     }
                                 
                                 
-                                if ( isset($user_data['name_with_initials']) ) {
+                    if ( isset($user_data['name_with_initials']) ) {
                         $uf->setNameWithInitials($user_data['name_with_initials']);
                     }
                                 
                             
 
-                                $uf->setLastName($user_data['last_name']);
+                    $uf->setLastName($user_data['last_name']);
 
                     if ( isset($user_data['second_last_name']) ){
                         $uf->setSecondLastName($user_data['second_last_name']);
@@ -314,20 +300,20 @@ class EditUser extends Controller
                     }
                                 
                                 
-                                if ( !empty($user_data['sex']) ) {
+                    if ( !empty($user_data['sex']) ) {
                         $uf->setSex($user_data['sex']);
                     }
                                 
                                 
                                 
                                 
-                                if ( !empty($user_data['religion']) ) {
+                    if ( !empty($user_data['religion']) ) {
                         $uf->setReligion($user_data['religion']);
                     }
                                 
-                                if ( !empty($user_data['marital']) ) {
-                                    $uf->setMarital($user_data['marital']);
-                                }
+                    if ( !empty($user_data['marital']) ) {
+                        $uf->setMarital($user_data['marital']);
+                    }
 
                     if ( isset($user_data['address1']) ) {
                         $uf->setAddress1($user_data['address1']);
@@ -337,50 +323,50 @@ class EditUser extends Controller
                         $uf->setAddress2($user_data['address2']);
                     }
                                 
-                                if ( isset($user_data['address3']) ) {
+                    if ( isset($user_data['address3']) ) {
                         $uf->setAddress3($user_data['address3']);
                     }
-                                //ARSP EDIT CODE-----> ADD NEW CODE FOR N.I.C
-                                if ( isset($user_data['nic']) ) {
-                                                    $uf->setNic($user_data['nic']);
-                                            }
-                                            //ARSP EDIT CODE-----> ADD NEW CODE FOR probation
-                                if ( isset($user_data['probation']) ) {
-                                                    $uf->setProbation($user_data['probation']);
-                                            }
-                                            
-                                /**
-                                 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                                 */                        
-                                if ( isset($user_data['basis_of_employment']) ) {
-                        $uf->setBasisOfEmployment($user_data['basis_of_employment']);
+                    //ARSP EDIT CODE-----> ADD NEW CODE FOR N.I.C
+                    if ( isset($user_data['nic']) ) {
+                        $uf->setNic($user_data['nic']);
+                    }
+                                //ARSP EDIT CODE-----> ADD NEW CODE FOR probation
+                    if ( isset($user_data['probation']) ) {
+                        $uf->setProbation($user_data['probation']);
                     }
                                 
-                                /**
-                                 * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                                 */                         
-                                if ( isset($user_data['month']) ){
+                    /**
+                     * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                     */                        
+                    if ( isset($user_data['basis_of_employment']) ) {
+                        $uf->setBasisOfEmployment($user_data['basis_of_employment']);
+                    }
+                    
+                    /**
+                     * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                     */                         
+                    if ( isset($user_data['month']) ){
                         $uf->setMonth($user_data['month']);
                     }                                      
 
-                                            //ARSP EDIT CODE-----> ADD NEW CODE FOR EPF registration no
-                                if ( isset($user_data['epf_registration_no']) ) {
-                                                    $uf->setEpfRegistrationNo($user_data['epf_registration_no']);
-                                            }      
+                    //ARSP EDIT CODE-----> ADD NEW CODE FOR EPF registration no
+                    if ( isset($user_data['epf_registration_no']) ) {
+                        $uf->setEpfRegistrationNo($user_data['epf_registration_no']);
+                    }      
 
-                                //ARSP EDIT CODE-----> ADD NEW CODE FOR EPF membership no
-                                if ( isset($user_data['epf_membership_no']) ) {
-                                                    $uf->setEpfMembershipNo($user_data['epf_membership_no']);
-                                            } 	
+                    //ARSP EDIT CODE-----> ADD NEW CODE FOR EPF membership no
+                    if ( isset($user_data['epf_membership_no']) ) {
+                        $uf->setEpfMembershipNo($user_data['epf_membership_no']);
+                    } 	
                     
                     
                     /**
                      * ARSP NOTE -->
                      * I ADDED THIS CODE FOR THUNDER & NEON
                      */
-        //                        if ( isset($user_data['employee_number_only']) ) {
-        //				$uf->setEmployeeNumberOnly($user_data['employee_number_only']);
-        //			}			
+                //                        if ( isset($user_data['employee_number_only']) ) {
+                //				$uf->setEmployeeNumberOnly($user_data['employee_number_only']);
+                //			}			
 
                     if ( isset($user_data['city']) ) {
                         $uf->setCity($user_data['city']);
@@ -426,66 +412,63 @@ class EditUser extends Controller
                         $uf->setWorkEmail($user_data['work_email']);
                     }
                                 
-                                if ( isset($user_data['office_mobile']) ) {
+                    if ( isset($user_data['office_mobile']) ) {
                         $uf->setOfficeMobile($user_data['office_mobile']);
                     }
                                 
                                 
-                                if ( isset($user_data['personal_email']) ) {
+                    if ( isset($user_data['personal_email']) ) {
                         $uf->setPersonalEmail($user_data['personal_email']);
                     }
-                                
-                                
-                            
 
                     if ( isset($user_data['sin']) ) {
                         $uf->setSIN($user_data['sin']);
                     }
                                 
 
-                                        $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
-                                        
-                                        $date = new DateTime();
-                                        $date->setTimestamp($uf->getBirthDate());
-                                        $date->modify('+60 years');
-                                
-                                        $uf->setRetirementDate(  $date->getTimestamp()  );
-                                        $uf->setRetirementDate( $user_data['retirement_date']  );
+                    $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
+                    
+                    $date = new DateTime();
+                    $date->setTimestamp($uf->getBirthDate());
+                    $date->modify('+60 years');
+            
+                    $uf->setRetirementDate(  $date->getTimestamp()  );
+                    $uf->setRetirementDate( $user_data['retirement_date']  );
                 } else {
                     //Force them to update all fields.
 
                     $uf->setFirstName($user_data['first_name']);
                     $uf->setMiddleName($user_data['middle_name']);
-                                $uf->setFullNameField($user_data['full_name']);
-                                $uf->setCallingName($user_data['calling_name']);
-                                $uf->setNameWithInitials($user_data['name_with_initials']);
+                    $uf->setFullNameField($user_data['full_name']);
+                    $uf->setCallingName($user_data['calling_name']);
+                    $uf->setNameWithInitials($user_data['name_with_initials']);
                             
                     $uf->setLastName($user_data['last_name']);
                     if ( isset($user_data['second_last_name']) ) {
                         $uf->setSecondLastName($user_data['second_last_name']);
                     }
                     $uf->setSex($user_data['sex']);
-                                $uf->setMarital($user_data['marital']);
-                                $uf->setReligion($user_data['religion']);
+                    $uf->setMarital($user_data['marital']);
+                    $uf->setReligion($user_data['religion']);
                     $uf->setAddress1($user_data['address1']);
                     $uf->setAddress2($user_data['address2']);
-                                $uf->setAddress3($user_data['address3']);
-                                $uf->setNameTitle($user_data['title_name']);
+                    $uf->setAddress3($user_data['address3']);
+                    $uf->setNameTitle($user_data['title_name']);
                                 
 
-                                //ARSP EDIT CODE--->
-                                $uf->setNic($user_data['nic']);
+                    //ARSP EDIT CODE--->
+                    $uf->setNic($user_data['nic']);
 
-                                            //ARSP EDIT CODE---> ADD NEW CODE FOR PROBATION PERIOD
-                                $uf->setProbation($user_data['probation']);
+                    //ARSP EDIT CODE---> ADD NEW CODE FOR PROBATION PERIOD
+                    $uf->setProbation($user_data['probation']);
 
-                            //ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
-                                $uf->setEpfRegistrationNo($user_data['epf_registration_no']);
+                    //ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
+                    $uf->setEpfRegistrationNo($user_data['epf_registration_no']);
 
-                                //ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
-                                $uf->setEpfMembershipNo($user_data['epf_membership_no']);				
+                    //ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
+                    $uf->setEpfMembershipNo($user_data['epf_membership_no']);				
 
-                                $uf->setCity($user_data['city']);
+                    $uf->setCity($user_data['city']);
 
                     if ( isset($user_data['country']) ) {
                         $uf->setCountry($user_data['country']);
@@ -503,10 +486,10 @@ class EditUser extends Controller
                     $uf->setFaxPhone($user_data['fax_phone']);
                     $uf->setHomeEmail($user_data['home_email']);
                     $uf->setWorkEmail($user_data['work_email']);
-                                $uf->setOfficeMobile($user_data['office_mobile']);
-                                $uf->setPersonalEmail($user_data['personal_email']);
-                                $uf->setConfiremedDate( $user_data['confirmed_date'] );
-                                $uf->setResignDate( $user_data['resign_date'] );
+                    $uf->setOfficeMobile($user_data['office_mobile']);
+                    $uf->setPersonalEmail($user_data['personal_email']);
+                    $uf->setConfiremedDate( $user_data['confirmed_date'] );
+                    $uf->setResignDate( $user_data['resign_date'] );
                                 
                     if ( isset($user_data['sin']) ) {
                         $uf->setSIN($user_data['sin']);
@@ -514,42 +497,9 @@ class EditUser extends Controller
 
                     $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
                                 
-                                $uf->setRetirementDate( $user_data['retirement_date']  );
+                    $uf->setRetirementDate( $user_data['retirement_date']  );
                 }
 
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
                 if ( DEMO_MODE == FALSE
                     AND isset($user_data['permission_control_id'])
                     AND $uf->getPermissionLevel() <= $permission->getLevel()
@@ -562,13 +512,13 @@ class EditUser extends Controller
                 if ( isset($user_data['pay_period_schedule_id']) AND ( $permission->Check('pay_period_schedule','edit') OR $permission->Check('user','edit_pay_period_schedule') ) ) {
                     $uf->setPayPeriodSchedule( $user_data['pay_period_schedule_id'] );
                 } elseif ( isset($udf_obj) AND is_object($udf_obj) AND $uf->isNew() == TRUE ) {
-                                $uf->setPayPeriodSchedule( $udf_obj->getPayPeriodSchedule() );
+                    $uf->setPayPeriodSchedule( $udf_obj->getPayPeriodSchedule() );
                 }
 
                 if ( isset($user_data['policy_group_id']) AND ( $permission->Check('policy_group','edit') OR $permission->Check('user','edit_policy_group') ) ) {
                     $uf->setPolicyGroup( $user_data['policy_group_id'] );
                 } elseif ( isset($udf_obj) AND is_object($udf_obj) AND $uf->isNew() == TRUE) {
-                                $uf->setPolicyGroup( $udf_obj->getPolicyGroup() );
+                    $uf->setPolicyGroup( $udf_obj->getPolicyGroup() );
                 }
 
                 if ( isset($user_data['hierarchy_control']) AND ( $permission->Check('hierarchy','edit') OR $permission->Check('user','edit_hierarchy') ) ) {
@@ -578,7 +528,7 @@ class EditUser extends Controller
                 if ( isset($user_data['currency_id']) ) {
                     $uf->setCurrency( $user_data['currency_id'] );
                 } elseif ( isset($udf_obj) AND is_object($udf_obj) AND $uf->isNew() == TRUE ) {
-                                $uf->setCurrency( $udf_obj->getCurrency() );
+                    $uf->setCurrency( $udf_obj->getCurrency() );
                 }
 
                 if ( isset($user_data['hire_date']) ) {
@@ -701,13 +651,12 @@ class EditUser extends Controller
                         if ( isset($user_data['confirmed_date']) ) {
                     $uf->setConfiremedDate( $user_data['confirmed_date'] );
                 }    
-        //                var_dump($uf->isValid()); die;
-        //                echo '<pre>';                print_r($uf->getCurrent()); echo '<pre>'; die;
+                //                var_dump($uf->isValid()); die;
+                //                echo '<pre>';                print_r($uf->getCurrent()); echo '<pre>'; die;
 
                 if ( $uf->isValid() ) {
                     $uf->Save(FALSE);
-                                
-                                
+                    
                     $user_data['id'] = $uf->getId();
                     Debug::Text('Inserted ID: '. $user_data['id'], __FILE__, __LINE__, __METHOD__,10);
 
@@ -716,41 +665,13 @@ class EditUser extends Controller
                     break;
                 }
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
             default:
                 //Debug::Text('bCompany ID: '. $company_id, __FILE__, __LINE__, __METHOD__,10);
                 if ( $permission->Check('company','view') == FALSE OR $company_id == '' OR $company_id == '-1' ) {
                     $company_id = $current_company->getId();
                 }
                 //Debug::Text('cCompany ID: '. $company_id, __FILE__, __LINE__, __METHOD__,10);
-
+                
                 if ( isset($id) AND $action !== 'submit' ) {
                     //Debug::Text('ID IS set', __FILE__, __LINE__, __METHOD__,10);
 
@@ -761,7 +682,7 @@ class EditUser extends Controller
                         //$ulf->GetByIdAndCompanyId( $id, $company_id )->getCurrent();
                         $ulf->getByIdAndCompanyId($id, $company_id );
                     }
-
+                    
                     foreach ($ulf->rs as $user) {
                         $ulf->data = (array)$user;
                         $user = $ulf;
@@ -786,129 +707,114 @@ class EditUser extends Controller
                             }
 
                             $user_data = array(
-                                                'id' => $user->getId(),
-                                                'company_id' => $user->getCompany(),
-                                                'status' => $user->getStatus(),
-                                                'user_name' => $user->getUserName(),
-                                                'title_id' => $user->getTitle(),
-                /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/                  'job_skills' => $user->getJobSkills(),
-                                                'title' => $user_title,
-            //									'password' => $user->getPassword(),
-                                                'phone_id' => $user->getPhoneId(),
-                                                'phone_password' => $user->getPhonePassword(),
-                                                'ibutton_id' => $user->getIbuttonId(),
-                    /*ARSP NOTE --> I HIDE THIS CODE FOR THUNDER & NEON*/	//	'employee_number' => $user->getEmployeeNumber(),
-                    /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/              'employee_number_only' => $user->getEmployeeNumberOnly(),
-                    /*ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON*/  'punch_machine_user_id' => $user->getPunchMachineUserID(),			
-                    
-                    
-                                                                                        'title_name' => $user->getNameTitle(),
-                                                'first_name' => $user->getFirstName(),
-                                                'middle_name' => $user->getMiddleName(),
-                                                'full_name' => $user->getFullNameField(),
-                                                                                        'calling_name' => $user->getCallingName(),
-                                                                                        'name_with_initials' => $user->getNameWithInitials(),
-                                                                                        'last_name' => $user->getLastName(),
-                                                'second_last_name' => $user->getSecondLastName(),
-                                                                                        'religion' => $user->getReligion(),
-                                                'sex' => $user->getSex(),
-                                                                                        'marital' => $user->getMarital(),
-                                                'address1' => $user->getAddress1(),
-                                                'address2' => $user->getAddress2(),
-                                                                                        'address3' => $user->getAddress3(),
-                                                /*ARSP EDIT--> ADD CODE FOR NIC  */     'nic' =>$user->getNic(),
-                                                'city' => $user->getCity(),
-                                                'province' => $user->getProvince(),
-                                                'country' => $user->getCountry(),
-                                                'postal_code' => $user->getPostalCode(),
-                                                'work_phone' => $user->getWorkPhone(),
-                                                'work_phone_ext' => $user->getWorkPhoneExt(),
-                                                'home_phone' => $user->getHomePhone(),
-                                                'mobile_phone' => $user->getMobilePhone(),
-                                                                                        'office_mobile' => $user->getOfficeMobile(),
-                                                'fax_phone' => $user->getFaxPhone(),
-                                                'home_email' => $user->getHomeEmail(),
-                                                'work_email' => $user->getWorkEmail(),
-                                                                                        'personal_email' => $user->getPersonalEmail(),
-                                /* ARSP EDIT-> ADD CODE GET epf_registration_no  */ // 'epf_registration_no'=> $user->getEpfRegistrationNo(),
-                                                                                        'epf_registration_no'=>$current_company->getEpfNo(),
-                                /* ARSP EDIT-> ADD CODE GET epf_membership_no  */    'epf_membership_no'=> $user->getEpfMembershipNo(),		
-                                                'birth_date' => $user->getBirthDate(),
-                                                                                        'retirement_date' => $user->getRetirementDate(),
-                                                'hire_date' => $user->getHireDate(),
-                                                'termination_date' => $user->getTerminationDate(),
-                            /* ARSP EDIT --> I ADDED THIS CPDE FOR THUNDER & NEON  */ 'resign_date' => $user->getResignDate(), 
-                                                                                        'confirmed_date'=> $user->getConfiremedDate(), 
-                                                'sin' => $sin_number,
+                                'id' => $user->getId(),
+                                'company_id' => $user->getCompany(),
+                                'status' => $user->getStatus(),
+                                'user_name' => $user->getUserName(),
+                                'title_id' => $user->getTitle(),
+                                'job_skills' => $user->getJobSkills(),
+                                'title' => $user_title,
+                                'phone_id' => $user->getPhoneId(),
+                                'phone_password' => $user->getPhonePassword(),
+                                'ibutton_id' => $user->getIbuttonId(),
+                                'employee_number_only' => $user->getEmployeeNumberOnly(),
+                                'punch_machine_user_id' => $user->getPunchMachineUserID(),			
+                                'title_name' => $user->getNameTitle(),
+                                'first_name' => $user->getFirstName(),
+                                'middle_name' => $user->getMiddleName(),
+                                'full_name' => $user->getFullNameField(),
+                                'calling_name' => $user->getCallingName(),
+                                'name_with_initials' => $user->getNameWithInitials(),
+                                'last_name' => $user->getLastName(),
+                                'second_last_name' => $user->getSecondLastName(),
+                                'religion' => $user->getReligion(),
+                                'sex' => $user->getSex(),
+                                'marital' => $user->getMarital(),
+                                'address1' => $user->getAddress1(),
+                                'address2' => $user->getAddress2(),
+                                'address3' => $user->getAddress3(),
+                                'nic' =>$user->getNic(),
+                                'city' => $user->getCity(),
+                                'province' => $user->getProvince(),
+                                'country' => $user->getCountry(),
+                                'postal_code' => $user->getPostalCode(),
+                                'work_phone' => $user->getWorkPhone(),
+                                'work_phone_ext' => $user->getWorkPhoneExt(),
+                                'home_phone' => $user->getHomePhone(),
+                                'mobile_phone' => $user->getMobilePhone(),
+                                'office_mobile' => $user->getOfficeMobile(),
+                                'fax_phone' => $user->getFaxPhone(),
+                                'home_email' => $user->getHomeEmail(),
+                                'work_email' => $user->getWorkEmail(),
+                                'personal_email' => $user->getPersonalEmail(),
+                                'epf_registration_no'=>$current_company->getEpfNo(),
+                                'epf_membership_no'=> $user->getEpfMembershipNo(),		
+                                'birth_date' => $user->getBirthDate(),
+                                'retirement_date' => $user->getRetirementDate(),
+                                'hire_date' => $user->getHireDate(),
+                                'termination_date' => $user->getTerminationDate(),
+                                'resign_date' => $user->getResignDate(), 
+                                'confirmed_date'=> $user->getConfiremedDate(), 
+                                'sin' => $sin_number,
+                                'other_id1' => $user->getOtherID1(),
+                                'other_id2' => $user->getOtherID2(),
+                                'other_id3' => $user->getOtherID3(),
+                                'other_id4' => $user->getOtherID4(),
+                                'other_id5' => $user->getOtherID5(),
 
-                                                'other_id1' => $user->getOtherID1(),
-                                                'other_id2' => $user->getOtherID2(),
-                                                'other_id3' => $user->getOtherID3(),
-                                                'other_id4' => $user->getOtherID4(),
-                                                'other_id5' => $user->getOtherID5(),
+                                'note' => $user->getNote(),
+                                'hire_note' => $user->getHireNote(),
+                                'termination_note' => $user->getTerminationNote(),                       
+                                
+                                'immediate_contact_person' => $user->getImmediateContactPerson(),
+                                'immediate_contact_no' => $user->getImmediateContactNo(),                       
+                                    
+                                'bond_period' => $user->getBondPeriod(),
 
-                                                'note' => $user->getNote(),
-                            /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON  */ 'hire_note' => $user->getHireNote(),
-                            /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON  */ 'termination_note' => $user->getTerminationNote(),                       
-                                                
-                            /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON  */ 'immediate_contact_person' => $user->getImmediateContactPerson(),
-                            /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON  */ 'immediate_contact_no' => $user->getImmediateContactNo(),                       
-                                                    
-                            /* ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON  */ 'bond_period' => $user->getBondPeriod(),
-
-                                                'default_branch_id' => $user->getDefaultBranch(),
-                                                'default_department_id' => $user->getDefaultDepartment(),
-                                                'group_id' => $user->getGroup(),
-                                                                                        'currency_id' => $user->getCurrency(),
-                                                'permission_level' => $user->getPermissionLevel(),
-                                                'is_owner' => $is_owner,
-                                                'is_child' => $is_child,
-                                                'created_date' => $user->getCreatedDate(),
-                                                'created_by' => $user->getCreatedBy(),
-                                                'updated_date' => $user->getUpdatedDate(),
-                                                'updated_by' => $user->getUpdatedBy(),
-                                                'deleted_date' => $user->getDeletedDate(),
-                                                'deleted_by' => $user->getDeletedBy(),
-                                    //   /* ARSP EDIT-> Add CODE GET USER IMAGE  */     'logo_file_name' => $user->getUserImageFileName(NULL, FALSE),
-                                    /* ARSP EDIT-> ADD CODE GET USER FILES URL  */   'user_file'=> $user->getUserFilesUrl(),
-                                    /* ARSP EDIT-> ADD CODE GET USER FILES NAME  */  'file_name'=>$user->getFileName(),
-                        /* ARSP EDIT-> ADD CODE GET PROBATION PERIOD  */  'probation'=>$user->getProbation(),
-                                                    
-                                /* ARSP NOTE->I ADDED THIS CODE FOR THUNDER & NEON  */ 'basis_of_employment'=>$user->getBasisOfEmployment(),    
-                                /* ARSP EDIT->I ADDED THIS CODE FOR THUNDER & NEON  */ 'month'=>$user->getMonth(),    
-                                                    
-                                    /* ARSP EDIT-> ADD CODE GET TEMPLATE FILES URL*/ 'user_template_url'=>$user->getUserTemplateUrl(),
-                                    /* ARSP EDIT-> ADD CODE GET TEMPLATE FILES URL*/ 'user_template_name'=>$user->getTemplateName(),							   
-                                                                                                                
-                                                            
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_id_copy_url'=>$user->getUserIdCopyUrl(),
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_id_copy_name'=>$user->getUserIdCopyFileName(),
-                                                    
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_birth_certificate_url'=>$user->getUserBirthCertificateUrl(),
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_birth_certificate_name'=>$user->getUserBirthCertificateFileName(),
-                                                                                        
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_gs_letter_url'=>$user->getUserGsLetterUrl(),
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_gs_letter_name'=>$user->getUserGsLetterFileName(),
-                                                                                            
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_police_report_url'=>$user->getUserPoliceReportUrl(),
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_police_report_name'=>$user->getUserPoliceReportFileName(),
-
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_nda_url'=>$user->getUserNdaUrl(),
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'user_nda_name'=>$user->getUserNdaFileName(),
-                                                    
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'bond_url'=>$user->getBondUrl(),
-                                /* ARSP EDIT-> I ADDED THIS CODE FOR THUNDER & NEON*/ 'bond_name'=>$user->getBondFileName()
-                                                                                                                
-                                                                                        
-                                            );
-                                                //print_r($user_data);
-                                                
-                                                
+                                'default_branch_id' => $user->getDefaultBranch(),
+                                'default_department_id' => $user->getDefaultDepartment(),
+                                'group_id' => $user->getGroup(),
+                                'currency_id' => $user->getCurrency(),
+                                'permission_level' => $user->getPermissionLevel(),
+                                'is_owner' => $is_owner,
+                                'is_child' => $is_child,
+                                'created_date' => $user->getCreatedDate(),
+                                'created_by' => $user->getCreatedBy(),
+                                'updated_date' => $user->getUpdatedDate(),
+                                'updated_by' => $user->getUpdatedBy(),
+                                'deleted_date' => $user->getDeletedDate(),
+                                'deleted_by' => $user->getDeletedBy(),
+                                'user_file'=> $user->getUserFilesUrl(),
+                                'file_name'=>$user->getFileName(),
+                                'probation'=>$user->getProbation(),
+                                    
+                                'basis_of_employment'=>$user->getBasisOfEmployment(),    
+                                'month'=>$user->getMonth(),    
+                                    
+                                'user_template_url'=>$user->getUserTemplateUrl(),
+                                'user_template_name'=>$user->getTemplateName(),							   
+                                                                                                
                                             
-                                                
-                                                
-                                                
+                                'user_id_copy_url'=>$user->getUserIdCopyUrl(),
+                                'user_id_copy_name'=>$user->getUserIdCopyFileName(),
+                                    
+                                'user_birth_certificate_url'=>$user->getUserBirthCertificateUrl(),
+                                'user_birth_certificate_name'=>$user->getUserBirthCertificateFileName(),
+                                                                        
+                                'user_gs_letter_url'=>$user->getUserGsLetterUrl(),
+                                'user_gs_letter_name'=>$user->getUserGsLetterFileName(),
+                                                                            
+                                'user_police_report_url'=>$user->getUserPoliceReportUrl(),
+                                'user_police_report_name'=>$user->getUserPoliceReportFileName(),
 
+                                'user_nda_url'=>$user->getUserNdaUrl(),
+                                'user_nda_name'=>$user->getUserNdaFileName(),
+                                    
+                                'bond_url'=>$user->getBondUrl(),
+                                'bond_name'=>$user->getBondFileName()
+                                                                                
+                            );
+                                      
                             $pclfb = new PermissionControlListFactory();
                             $pclfb->getByCompanyIdAndUserId( $user->getCompany(), $id );
                             if ( $pclfb->getRecordCount() > 0 ) {
@@ -939,29 +845,24 @@ class EditUser extends Controller
                     
                     
                     
-        //START-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)----------------------------------------- 
-                                $uwlf = new UserWageListFactory();
-                                $uwlf->getByUserId($user_data['id']);                       
-                                
-                                foreach ($uwlf->rs as $wage) {        
-                                    $uwlf->data = (array)$wage;
-                                    $wage = $uwlf;
+                    //START-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)----------------------------------------- 
 
-                                    $wage_data = array(
-                                        'id' => $wage->getId(),
-                                        'user_id' => $wage->getUser(),										
-                                        'wage' => Misc::removeTrailingZeros( $wage->getWage() )									
-                                    );
-                                }
+                        $uwlf = new UserWageListFactory();
+                        $uwlf->getByUserId($user_data['id']);                       
+                        
+                        foreach ($uwlf->rs as $wage) {        
+                            $uwlf->data = (array)$wage;
+                            $wage = $uwlf;
 
-                                //print_r($wage_data);
-        //END-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)-----------------------------------------  
-                    
-                    
-                    
-                    
-                    
-                    
+                            $wage_data = array(
+                                'id' => $wage->getId(),
+                                'user_id' => $wage->getUser(),										
+                                'wage' => Misc::removeTrailingZeros( $wage->getWage() )									
+                            );
+                        }
+
+                    //END-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)-----------------------------------------  
+                     
                     
                 } elseif ( $action == 'submit') {
                     Debug::Text('ID Not set', __FILE__, __LINE__, __METHOD__,10);
@@ -1011,9 +912,7 @@ class EditUser extends Controller
                         if ( !isset( $user_data['company_id'] ) ) {
                             $user_data['company_id'] = $company_id;
                         }
-
                     }
-
 
                 } else {
                     Debug::Text('Adding new User.', __FILE__, __LINE__, __METHOD__,10);
@@ -1026,23 +925,23 @@ class EditUser extends Controller
                         $udf_obj = $udlf->getCurrent();
 
                         $user_data = array(
-                                        'company_id' => $company_id,
-                                        'title_id' => $udf_obj->getTitle(),
-                                        //'employee_number' => $udf_obj->getEmployeeNumber(),
-                                        'city' => $udf_obj->getCity(),
-                                        'province' => $udf_obj->getProvince(),
-                                        'country' => $udf_obj->getCountry(),
-                                        'work_phone' => $udf_obj->getWorkPhone(),
-                                        'work_phone_ext' => $udf_obj->getWorkPhoneExt(),
-                                        'work_email' => $udf_obj->getWorkEmail(),
-                                        'hire_date' => $udf_obj->getHireDate(),
-                                        'default_branch_id' => $udf_obj->getDefaultBranch(),
-                                        'default_department_id' => $udf_obj->getDefaultDepartment(),
-                                        'permission_control_id' => $udf_obj->getPermissionControl(),
-                                        'pay_period_schedule_id' => $udf_obj->getPayPeriodSchedule(),
-                                        'policy_group_id' => $udf_obj->getPolicyGroup(),
-                                                                        'currency_id' => $udf_obj->getCurrency(),
-                                    );
+                            'company_id' => $company_id,
+                            'title_id' => $udf_obj->getTitle(),
+                            //'employee_number' => $udf_obj->getEmployeeNumber(),
+                            'city' => $udf_obj->getCity(),
+                            'province' => $udf_obj->getProvince(),
+                            'country' => $udf_obj->getCountry(),
+                            'work_phone' => $udf_obj->getWorkPhone(),
+                            'work_phone_ext' => $udf_obj->getWorkPhoneExt(),
+                            'work_email' => $udf_obj->getWorkEmail(),
+                            'hire_date' => $udf_obj->getHireDate(),
+                            'default_branch_id' => $udf_obj->getDefaultBranch(),
+                            'default_department_id' => $udf_obj->getDefaultDepartment(),
+                            'permission_control_id' => $udf_obj->getPermissionControl(),
+                            'pay_period_schedule_id' => $udf_obj->getPayPeriodSchedule(),
+                            'policy_group_id' => $udf_obj->getPolicyGroup(),
+                            'currency_id' => $udf_obj->getCurrency(),
+                        );
                     }
 
                     if ( !isset($user_obj ) ) {
@@ -1057,67 +956,24 @@ class EditUser extends Controller
                         $user_data['country'] = 'CA';
                     }
 
-                    /**
-                    * ARSP NOTE-->
-                    * I HIDE THIS CODE FOR THUNDER AND NEON
-                    */   
-        /*			$ulf->getHighestEmployeeNumberByCompanyId( $company_id );
+                                   
+                    $ulf->getHighestEmployeeNumberOnlyByCompanyId( $company_id );                       
                     if ( $ulf->getRecordCount() > 0 ) {
                         Debug::Text('Highest Employee Number: '. $ulf->getCurrent()->getEmployeeNumber(), __FILE__, __LINE__, __METHOD__,10);
-                        if ( is_numeric( $ulf->getCurrent()->getEmployeeNumber() ) == TRUE ) {
-                            $user_data['next_available_employee_number'] = $ulf->getCurrent()->getEmployeeNumber()+1;
+                        if ( is_numeric( $ulf->getCurrent()->getEmployeeNumberOnly() ) == TRUE ) {                                
+                            $user_data['next_available_employee_number_only'] = $ulf->getCurrent()->getEmployeeNumberOnly()+1;
                         } else {
-                            Debug::Text('Highest Employee Number is not an integer.', __FILE__, __LINE__, __METHOD__,10);
-                            $user_data['next_available_employee_number'] = NULL;
-                        }
-                    } else {
-                        $user_data['next_available_employee_number'] = 1;
-                    }*/
-                    
-                    //$ulf->getHighestEmployeeNumberByCompanyId( $company_id ); ARSP NOTE -->  I HIDE THIS CODE FOR THUNDER AND NEON
-                                                        
-                    /**
-                    * ARSP NOTE-->
-                    * I HIDE ABOVE ORIGINAL CODE FOR THUNDER AND NEON I ADDED MODIFIED
-                    */                        
-                                $ulf->getHighestEmployeeNumberOnlyByCompanyId( $company_id );                       
-                    if ( $ulf->getRecordCount() > 0 ) {
-                        Debug::Text('Highest Employee Number: '. $ulf->getCurrent()->getEmployeeNumber(), __FILE__, __LINE__, __METHOD__,10);
-                        if ( is_numeric( $ulf->getCurrent()->getEmployeeNumberOnly() ) == TRUE ) {//ARSP NOTE --> I MODIFIED THIS CODE FOR THUNDER & NEON                                  
-                                                //ARSP NOTE--> I HIDE THIS CODE FOR THUNDER AND NEON
-                            //$user_data['next_available_employee_number'] = $ulf->getCurrent()->getEmployeeNumber()+1;
-                                            
-                                                /**
-                                                * ARSP NOTE-->
-                                                * I ADDED THIS CODE FOR THUNDER AND NEON
-                                                */                                      
-                                                $user_data['next_available_employee_number_only'] = $ulf->getCurrent()->getEmployeeNumberOnly()+1;
-                        } else {
-                            Debug::Text('Highest Employee Number is not an integer.', __FILE__, __LINE__, __METHOD__,10);
-                                                //$user_data['next_available_employee_number'] = NULL;
-                                                
-                                                /**
-                                                * ARSP NOTE-->
-                                                * I ADDED THIS CODE FOR THUNDER AND NEON
-                                                */                                           
+                            Debug::Text('Highest Employee Number is not an integer.', __FILE__, __LINE__, __METHOD__,10);                                           
                             $user_data['next_available_employee_number_only'] = NULL;
                         }
                     } else {
-                        //$user_data['next_available_employee_number'] = 1;
-                                        /**
-                                        * ARSP NOTE-->
-                                        * I ADDED THIS CODE FOR THUNDER AND NEON
-                                        */                                           
-                                        $user_data['next_available_employee_number_only'] = 1;                            
+                        $user_data['next_available_employee_number_only'] = 1;                            
                     }			
-                    
-                    
 
                     if ( !isset($user_data['hire_date']) OR $user_data['hire_date'] == '' ) {
                         $user_data['hire_date'] = time();
                     }
-                }
-                //var_dump($user_data);              
+                }           
 
                 //Select box options;
                 $blf = new BranchListFactory();
@@ -1127,7 +983,7 @@ class EditUser extends Controller
                 $department_options = $dlf->getByCompanyIdArray( $company_id );
 
                 $culf = new CurrencyListFactory();
-                        $culf->getByCompanyId( $company_id );
+                $culf->getByCompanyId( $company_id );
                 $currency_options = $culf->getArrayByListFactory( $culf, FALSE, TRUE );
 
                 $hotf = new HierarchyObjectTypeFactory();
@@ -1138,27 +994,24 @@ class EditUser extends Controller
                 $hierarchy_control_options = $hclf->getArrayByListFactory( $hclf, TRUE, TRUE );
                         
                         
-                        $clf = new CompanyListFactory();
-                        $clf->getById($company_id);
-                        
-                        $user_data['epf_registration_no'] =$current_company->getEpfNo();
+                $clf = new CompanyListFactory();
+                $clf->getById($company_id);
+                
+                $user_data['epf_registration_no'] =$current_company->getEpfNo();
 
                 //Select box options;
                 $user_data['branch_options'] = $branch_options;
                 $user_data['department_options'] = $department_options;
-                        $user_data['currency_options'] = $currency_options;
+                $user_data['currency_options'] = $currency_options;
 
                 $user_data['sex_options'] = $uf->getOptions('sex');
                         
-                        $user_data['title_name_options'] = $uf->getOptions('title');
+                $user_data['title_name_options'] = $uf->getOptions('title');
                 $user_data['status_options'] = $uf->getOptions('status');
-                        $user_data['religion_options'] = $uf->getOptions('religion');
+                $user_data['religion_options'] = $uf->getOptions('religion');
                         
-                        $user_data['marital_options'] = $uf->getOptions('marital');
+                $user_data['marital_options'] = $uf->getOptions('marital');
                 
-                        
-                        
-
                 $clf = new CompanyListFactory();
                 $user_data['country_options'] = $clf->getOptions('country');
                 $user_data['province_options'] = $clf->getOptions('province', $user_data['country'] );
@@ -1167,17 +1020,9 @@ class EditUser extends Controller
                 $user_titles = $utlf->getByCompanyIdArray( $company_id );
                 $user_data['title_options'] = $user_titles;
 
-                        /**
-                        * ARSP NOTE -->
-                        * I ADDED THIS CODE FOR THUNDER & NEON
-                        */
-                        $user_data['month_options'] = $uf->getOptions('month');
+                $user_data['month_options'] = $uf->getOptions('month');
         
-                        /**
-                        * ARSP NOTE -->
-                        * I ADDED THIS CODE FOR THUNDER & NEON
-                        */
-                        $user_data['bond_period_option'] = $uf->getOptions('bond_period'); 
+                $user_data['bond_period_option'] = $uf->getOptions('bond_period'); 
                         
                 //Get Permission Groups
                 $pclf = new PermissionControlListFactory();
@@ -1232,62 +1077,6 @@ class EditUser extends Controller
                         
         }
 
-
-
-
-        //echo $user_data.company_options[1];
-
-        // ARSP EDIT --> Appointment Letter (Word Doc) Generate
-
-        
-        //$PHPWord = new PHPWord();
-
-        //$document = $PHPWord->loadTemplate('../../storage/appointment_letter_template/Template.docx');
-
-        //$document->setValue('Value0', $user_data['first_name']);
-        //$document->setValue('Value1', $user_data['last_name']);
-        //$document->setValue('Value2', $user_data['address1']);
-        //$document->setValue('Value3', $user_data['address2']);
-
-
-        /*
-        * Example of $epoch 
-        $epoch = 1340000000;
-        echo date('r', $epoch); // output as RFC 2822 date - returns local time
-        echo gmdate('r', $epoch); // returns GMT/UTC time
-        * */
-        
-        //$hire_date = gmdate('M d Y', $user_data['hire_date']);
-
-        //$document->setValue('Value4', $hire_date);
-        //$document->setValue('Value5', $user_data['title']);
-        //$document->setValue('Value6', $wage_data['wage']);
-        //$document->setValue('Value7', $current_company->getName());
-        //$document->setValue('Value8', $user_data['probation']);
-
-        //$letter_path = $user_data['id'];
-        //echo $path = "../../storage/user_appointment_letter/".$letter_path."/outputfile.docx";
-        //$structure ="../../storage/user_appointment_letter/".$letter_path;
-        //rmdir($structure);
-        //mkdir($structure, 0755, true);
-
-        //$document->save('../../storage/appointment_letter_template/1/outputfile.docx');
-        //echo $p = Environment::getUserAppointmentLetterBasePath().'user_appointment_letter'.'/'.$letter_path.'/'.'outputfile.docx';
-        //$document->save($structure."/outputfile.docx");
-
-        //END --> Appointment Letter Word Doc Generate
-
-        ////ARSP EDIT --> ADD NEW CODE FOR DELETE USER UPLOADED FILES 
-        //if(isset($delete_file_name) && isset($delete_user_id ))
-        //{
-        //$deleteFile = new fileupload();
-        //$path ="../../storage/user_file/".$delete_user_id."/".$delete_file_name;
-        //$deleteFile->deleteFiles($path,$delete_user_id );
-        //}
-
-
-
-        //ARSP EDIT --> ADD NEW CODE FOR DELETE USER UPLOADED FILES 
         if(isset($delete_file_name) && isset($delete_user_id ) && isset($delete_file_type ))
         {
 
@@ -1349,8 +1138,6 @@ class EditUser extends Controller
             }     
         }
 
-
-        //ARSP EDIT --> ADD NEW CODE WARNING MESSAGES IF EXCEED THE PROBATION PERIOD 
         if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['probation']) && ($user_data['probation'] > 0) ) 
         {
             $probation_warning = $uf->getWarning($user_data['hire_date'], $user_data['probation']);    
@@ -1363,11 +1150,6 @@ class EditUser extends Controller
             
         }
 
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
-        //ARSP EDIT --> ADD NEW CODE WARNING MESSAGES IF EXCEED THE PROBATION PERIOD 
         if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['month']) && $user_data['month'] > 0 && ($user_data['basis_of_employment'] >0) && ($user_data['basis_of_employment'] != 4) && ($user_data['basis_of_employment'] != 6))  
         {
             //$warning_message;
@@ -1377,16 +1159,12 @@ class EditUser extends Controller
 
                 if($basis_of_employment_warning != "")
                 {
-                    //echo $warning_message;
                     $viewData['basis_of_employment_warning'] = $basis_of_employment_warning;//All files url
                 }        
             }
             
             if($user_data['basis_of_employment'] == 5 && $user_data['resign_date'] != '')
             {
-                //echo "ARSP RESIGN DATE = ".$user_data['resign_date'];
-                //var_dump($user_data['resign_date']);
-                //echo "<p/>";
                 $basis_of_employment_warning = $uf->getWarning1($user_data['resign_date'], 3, $user_data['basis_of_employment']);    
 
                 if($basis_of_employment_warning != "")
@@ -1398,20 +1176,11 @@ class EditUser extends Controller
             
         }
 
-
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
-        //ARSP EDIT --> I ADDED THIS CODE FOR BOND WARNING 
         if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['bond_period']) && $user_data['bond_period'] > 0) 
         {
             //$warning_message;   
             if($user_data['bond_period'] != 0 && $user_data['hire_date'] != '')
             {
-                //echo "ARSP Hire DATE = ".$user_data['hire_date'];
-                //var_dump($user_data['hire_date']);
-                //echo "<p/>";
                 $bond_warning = $uf->getWarning2($user_data['hire_date'], $user_data['bond_period']);    
 
                 if($bond_warning != "")
@@ -1423,9 +1192,6 @@ class EditUser extends Controller
             
         }
 
-
-
-        // ARSP ADD NEW SMARTY CODE TO SEND USER TEMPLATE FILE ARRAY       
         $viewData['user_template_url'] = $user_data['user_template_url'] ?? '';//All template files url
         $viewData['user_template_name'] = $user_data['user_template_name'] ?? [];// All template files name
         $count = is_array($user_data['user_template_name'] ?? '') ? count($user_data['user_template_name']) : 0 ;
@@ -1433,16 +1199,8 @@ class EditUser extends Controller
         $var1 = 1;
         $viewData['var1'] = $var1;
 
-
-
-        // ARSP ADD NEW SMARTY CODE TO SEND USER FILE ARRAY
-        //print_r($user_data['user_file']);
         $user_file_url = $user_data['user_file'] ?? '';
-        //echo '<pre>';
-        //print_r($test_user_file);
-        //echo '</pre>';
 
-        //print_r($file_name);
         $viewData['user_file_url'] = $user_file_url;//All files url
         $viewData['file_name'] = $user_data['file_name'] ?? [];// All files name
         $count = is_array(count($user_data['file_name'] ?? [])) ? count($user_data['file_name']):0;
@@ -1450,14 +1208,6 @@ class EditUser extends Controller
         $var = 1;//use to print the index
         $viewData['var'] = $var;
 
-
-
-
-
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
         $viewData['user_id_copy_url'] = $user_data['user_id_copy_url'] ?? '';//All template files url
         $viewData['user_id_copy_name'] = $user_data['user_id_copy_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_id_copy_name'] ?? [])) ? count($user_data['user_id_copy_name']) : 0;
@@ -1465,10 +1215,6 @@ class EditUser extends Controller
         $var2 = 1;
         $viewData['var2'] = $var2;
 
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
         $viewData['user_birth_certificate_url'] = $user_data['user_birth_certificate_url'] ?? '';//All template files url
         $viewData['user_birth_certificate_name'] = $user_data['user_birth_certificate_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_birth_certificate_name'] ?? [])) ? count($user_data['user_birth_certificate_name']) : 0;
@@ -1476,10 +1222,6 @@ class EditUser extends Controller
         $var3 = 1;
         $viewData['var3'] = $var3;
 
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
         $viewData['user_gs_letter_url'] = $user_data['user_gs_letter_url'] ?? '';//All template files url
         $viewData['user_gs_letter_name'] = $user_data['user_gs_letter_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_gs_letter_name'] ?? [])) ? count($user_data['user_gs_letter_name']) : 0;
@@ -1487,10 +1229,6 @@ class EditUser extends Controller
         $var4 = 1;
         $viewData['var4'] = $var4;
 
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
         $viewData['user_police_report_url'] = $user_data['user_police_report_url'] ?? '';//All template files url
         $viewData['user_police_report_name'] = $user_data['user_police_report_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_police_report_name'] ?? [])) ? count($user_data['user_police_report_name']) : 0;
@@ -1498,10 +1236,6 @@ class EditUser extends Controller
         $var5 = 1;
         $viewData['var5'] = $var5;
 
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
         $viewData['user_nda_url'] = $user_data['user_nda_url'] ?? '';//All template files url
         $viewData['user_nda_name'] = $user_data['user_nda_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_nda_name'] ?? [])) ? count($user_data['user_nda_name']) : 0;
@@ -1509,10 +1243,6 @@ class EditUser extends Controller
         $var6 = 1;
         $viewData['var6'] = $var6;
 
-
-        /**
-        * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-        */
         $viewData['bond_url'] = $user_data['bond_url'] ?? '';//All template files url
         $viewData['bond_name'] = $user_data['bond_name'] ?? [];// All template files name
         $count = is_array(count($user_data['bond_name'] ?? [])) ? count($user_data['bond_name']) : 0;
@@ -1520,12 +1250,6 @@ class EditUser extends Controller
         $var7 = 1;
         $viewData['var7'] = $var7;
 
-
-
-
-
-        //echo "Test ARsp code -->".count($test_user_file);
-        //END ARSP EDIT
         $viewData['uf'] = $uf;
         //dd($viewData);
         return view('users/EditUser', $viewData);

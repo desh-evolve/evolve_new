@@ -535,9 +535,12 @@ Route::delete('/policy/holidays/delete/{id}/{holiday_policy_id}', [HolidayList::
 // user functions
 // ===============================================================================================================================
 
+
+Route::match(['get', 'post'], '/admin/userlist/add', [EditUser::class, 'index'])->name('admin.userlist.add');
+
 Route::get('/admin/userlist', [UserList::class, 'index'])->name('admin.userlist');
-Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
-Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
+//Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
+//Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
 Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name('admin.userlist.delete');
 
 // Route::post('/users/upload', [EditUser::class, 'uploadFile'])->name('uploadFile');
