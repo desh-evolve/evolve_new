@@ -916,14 +916,14 @@ class EditUser extends Controller
 
                 } else {
                     Debug::Text('Adding new User.', __FILE__, __LINE__, __METHOD__,10);
-
+                    
                     //Get New Hire Defaults.
                     $udlf = new UserDefaultListFactory();
                     $udlf->getByCompanyId( $company_id );
                     if ( $udlf->getRecordCount() > 0 ) {
                         Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
                         $udf_obj = $udlf->getCurrent();
-
+                        
                         $user_data = array(
                             'company_id' => $company_id,
                             'title_id' => $udf_obj->getTitle(),
@@ -954,6 +954,10 @@ class EditUser extends Controller
 
                     if ( !isset( $user_data['country'] ) ) {
                         $user_data['country'] = 'CA';
+                    }
+
+                    if ( !isset( $user_data['status'] ) ) {
+                        $user_data['status'] = 10;
                     }
 
                                    
@@ -1192,14 +1196,14 @@ class EditUser extends Controller
             
         }
 
-        $viewData['user_template_url'] = $user_data['user_template_url'] ?? '';//All template files url
+        $viewData['user_template_url'] = $user_data['user_template_url'] ?? [];//All template files url
         $viewData['user_template_name'] = $user_data['user_template_name'] ?? [];// All template files name
         $count = is_array($user_data['user_template_name'] ?? '') ? count($user_data['user_template_name']) : 0 ;
         $viewData['user_template_array_size'] =  $count;
         $var1 = 1;
         $viewData['var1'] = $var1;
 
-        $user_file_url = $user_data['user_file'] ?? '';
+        $user_file_url = $user_data['user_file'] ?? [];
 
         $viewData['user_file_url'] = $user_file_url;//All files url
         $viewData['file_name'] = $user_data['file_name'] ?? [];// All files name
@@ -1208,42 +1212,42 @@ class EditUser extends Controller
         $var = 1;//use to print the index
         $viewData['var'] = $var;
 
-        $viewData['user_id_copy_url'] = $user_data['user_id_copy_url'] ?? '';//All template files url
+        $viewData['user_id_copy_url'] = $user_data['user_id_copy_url'] ?? [];//All template files url
         $viewData['user_id_copy_name'] = $user_data['user_id_copy_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_id_copy_name'] ?? [])) ? count($user_data['user_id_copy_name']) : 0;
         $viewData['user_id_copy_array_size'] =  $count;
         $var2 = 1;
         $viewData['var2'] = $var2;
 
-        $viewData['user_birth_certificate_url'] = $user_data['user_birth_certificate_url'] ?? '';//All template files url
+        $viewData['user_birth_certificate_url'] = $user_data['user_birth_certificate_url'] ?? [];//All template files url
         $viewData['user_birth_certificate_name'] = $user_data['user_birth_certificate_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_birth_certificate_name'] ?? [])) ? count($user_data['user_birth_certificate_name']) : 0;
         $viewData['user_birth_certificate_array_size'] =  $count;
         $var3 = 1;
         $viewData['var3'] = $var3;
 
-        $viewData['user_gs_letter_url'] = $user_data['user_gs_letter_url'] ?? '';//All template files url
+        $viewData['user_gs_letter_url'] = $user_data['user_gs_letter_url'] ?? [];//All template files url
         $viewData['user_gs_letter_name'] = $user_data['user_gs_letter_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_gs_letter_name'] ?? [])) ? count($user_data['user_gs_letter_name']) : 0;
         $viewData['user_gs_letter_array_size'] =  $count;
         $var4 = 1;
         $viewData['var4'] = $var4;
 
-        $viewData['user_police_report_url'] = $user_data['user_police_report_url'] ?? '';//All template files url
+        $viewData['user_police_report_url'] = $user_data['user_police_report_url'] ?? [];//All template files url
         $viewData['user_police_report_name'] = $user_data['user_police_report_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_police_report_name'] ?? [])) ? count($user_data['user_police_report_name']) : 0;
         $viewData['user_police_report_array_size'] =  $count;
         $var5 = 1;
         $viewData['var5'] = $var5;
 
-        $viewData['user_nda_url'] = $user_data['user_nda_url'] ?? '';//All template files url
+        $viewData['user_nda_url'] = $user_data['user_nda_url'] ?? [];//All template files url
         $viewData['user_nda_name'] = $user_data['user_nda_name'] ?? [];// All template files name
         $count = is_array(count($user_data['user_nda_name'] ?? [])) ? count($user_data['user_nda_name']) : 0;
         $viewData['user_nda_array_size'] =  $count;
         $var6 = 1;
         $viewData['var6'] = $var6;
 
-        $viewData['bond_url'] = $user_data['bond_url'] ?? '';//All template files url
+        $viewData['bond_url'] = $user_data['bond_url'] ?? [];//All template files url
         $viewData['bond_name'] = $user_data['bond_name'] ?? [];// All template files name
         $count = is_array(count($user_data['bond_name'] ?? [])) ? count($user_data['bond_name']) : 0;
         $viewData['bond_array_size'] =  $count;
