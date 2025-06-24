@@ -600,6 +600,7 @@ Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::clas
 
 Route::get('/attendance/leaves/confirmed_leave', [ConfirmedLeave::class, 'index'])->name('attendance.leaves.confirmed_leave');
 Route::post('/attendance/leaves/confirmed_leave/search', [ConfirmedLeave::class, 'search'])->name('attendance.leaves.confirmed_leave.search');
+Route::match(['get', 'post'],'/attendance/leaves/confirmed_leave/export', [ConfirmedLeave::class, 'export'])->name('attendance.leaves.confirmed_leave.export');
 Route::delete('/attendance/confirmed_leave/delete/{id}', [ConfirmedLeave::class, 'delete'])->name('attendance.confirmed_leave.delete');
 
 Route::match(['get', 'post'], '/users/bonus_calc', [BonusCalc::class, 'index'])->name('users.bonus_calc');
