@@ -181,6 +181,7 @@ class EditUser extends Controller
                 }
                 break;
             case 'submit':
+                dd($user_data);
                 //Debug::setVerbosity( 11 );
                 Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
                 unset($id); //Do this so it doesn't reload the data from the DB.
@@ -359,14 +360,6 @@ class EditUser extends Controller
                         $uf->setEpfMembershipNo($user_data['epf_membership_no']);
                     } 	
                     
-                    
-                    /**
-                     * ARSP NOTE -->
-                     * I ADDED THIS CODE FOR THUNDER & NEON
-                     */
-                //                        if ( isset($user_data['employee_number_only']) ) {
-                //				$uf->setEmployeeNumberOnly($user_data['employee_number_only']);
-                //			}			
 
                     if ( isset($user_data['city']) ) {
                         $uf->setCity($user_data['city']);
@@ -376,9 +369,9 @@ class EditUser extends Controller
                         $uf->setCountry($user_data['country']);
                     }
 
-                    if ( isset($user_data['province']) ) {
-                        $uf->setProvince($user_data['province']);
-                    }
+                    //if ( isset($user_data['province']) ) {
+                    //    $uf->setProvince($user_data['province']);
+                    //}
 
                     if ( isset($user_data['postal_code']) ) {
                         $uf->setPostalCode($user_data['postal_code']);
@@ -474,9 +467,9 @@ class EditUser extends Controller
                         $uf->setCountry($user_data['country']);
                     }
 
-                    if ( isset($user_data['province']) ) {
-                        $uf->setProvince($user_data['province']);
-                    }
+                    //if ( isset($user_data['province']) ) {
+                    //    $uf->setProvince($user_data['province']);
+                    //}
 
                     $uf->setPostalCode($user_data['postal_code']);
                     $uf->setWorkPhone($user_data['work_phone']);
@@ -584,7 +577,6 @@ class EditUser extends Controller
                 }
                 
                 /**
-                * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 * EMPLOYEE JOB SKILLS
                 */                
                 if ( isset($user_data['job_skills']) ) {                        
@@ -653,14 +645,14 @@ class EditUser extends Controller
                 }    
                 //                var_dump($uf->isValid()); die;
                 //                echo '<pre>';                print_r($uf->getCurrent()); echo '<pre>'; die;
-
+                
                 if ( $uf->isValid() ) {
                     $uf->Save(FALSE);
                     
                     $user_data['id'] = $uf->getId();
                     Debug::Text('Inserted ID: '. $user_data['id'], __FILE__, __LINE__, __METHOD__,10);
 
-                    Redirect::Page( URLBuilder::getURL( array('id' => $user_data['id'], 'saved_search_id' => $saved_search_id, 'company_id' => $company_id, 'data_saved' => TRUE), 'EditUser.php') );
+                    Redirect::Page( URLBuilder::getURL( array('id' => $user_data['id'], 'saved_search_id' => $saved_search_id, 'company_id' => $company_id, 'data_saved' => TRUE), '/admin/userlist/add') );
 
                     break;
                 }

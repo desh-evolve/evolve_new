@@ -90,7 +90,7 @@
                                                         </th>
                                                         
                                                         <td colspan="2" class="">
-                                                            <input type="text" size="15" name="user_data[punch_machine_user_id]" value="{{$user_data['punch_machine_user_id'] ?? ''}}" />
+                                                            <input type="text" size="15" name="user_data[punch_machine_user_id]" value="{{$user_data['punch_machine_user_id'] ?? '0'}}" />
                                                         </td>      
                                                             
                                                     </tr>	
@@ -543,14 +543,15 @@
                                                     </tr>
                                                                                    
                                                     <tr>
-                                                        <th>Employee Photo (.jpg):
+                                                        <th>
+                                                            Employee Photo (.jpg):
+                                                            <br>
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <a href="javascript:Upload('user_image','{{$user_data['id'] ?? ''}}');">
-                                                                <img src="{$IMAGES_URL}/nav_popup.gif" alt="" style="vertical-align: middle" /></a>
+                                                                <input type="file" name="user_data[user_image]" />
                                                             @endif
                                                         </th>
                                                         <td colspan="2" class=""><span id="no_logo" style="display:none">  </span>
-                                                            <img src="../../storage/user_image/{{$user_data['id'] ?? ''}}/user.jpg" style="width:auto; height:160px;" id="header_logo2" alt="{$APPLICATION_NAME}"/>
+                                                            <img src="../../storage/user_image/{{$user_data['id'] ?? ''}}/user.jpg" style="width:auto; height:160px;" id="header_logo2" alt="{{$APPLICATION_NAME}}"/>
                                                         </td>
                                                     </tr>
                         
@@ -893,9 +894,9 @@
                                         <tr>
                                         <th height="78" >
                                             Templates: 
+                                            <br>
                                             @if($permission->Check('user','edit_advanced'))
-                                                <a href="javascript:Upload('user_template_file','{{$user_data['id'] ?? ''}}');">
-                                                <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                <input type="file" name="user_data[user_template_file]" />
                                             @endif
                                         </th>
                                             
@@ -930,9 +931,9 @@
                                         <tr>
                                             <th height="78" >
                                                 Personal Files: 
+                                                <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <a href="javascript:Upload('user_file','{{$user_data['id'] ?? ''}}');">
-                                                    <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                    <input type="file" name="user_data[user_file]" />
                                                 @endif                    
                                             </td>
                                             
@@ -965,9 +966,9 @@
                                         <tr>
                                             <th height="78" >
                                                 ID Copy: 
+                                                <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <a href="javascript:Upload('user_id_copy','{{$user_data['id'] ?? ''}}');">
-                                                    <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                    <input type="file" name="user_data[user_id_copy]" />
                                                 @endif
                                             </th>
                                             
@@ -1003,9 +1004,9 @@
                                         <tr>
                                             <th height="78" >
                                                 Birth Certificate: 
+                                                <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <a href="javascript:Upload('user_birth_certificate','{{$user_data['id'] ?? ''}}');">
-                                                    <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                    <input type="file" name="user_data[user_birth_certificate]" />
                                                 @endif
                                             </th>
                                             
@@ -1041,9 +1042,9 @@
                                         <tr>
                                             <th height="78" >
                                                 GS Letter: 
+                                                <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <a href="javascript:Upload('user_gs_letter','{{$user_data['id'] ?? ''}}');">
-                                                    <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                    <input type="file" name="user_data[user_gs_letter]" />
                                                 @endif
                                             </th>
                                             
@@ -1080,9 +1081,9 @@
                                         <tr>
                                             <th height="78" >
                                                 Police Report: 
+                                                <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <a href="javascript:Upload('user_police_report','{{$user_data['id'] ?? ''}}');">
-                                                    <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                    <input type="file" name="user_data[user_police_report]" />
                                                 @endif
                                             </th>
                                             
@@ -1119,9 +1120,9 @@
                                         <tr>
                                             <th height="78">
                                                 NDA: 
+                                                <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <a href="javascript:Upload('user_nda','{{$user_data['id'] ?? ''}}');">
-                                                    <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                    <input type="file" name="user_data[user_nda]" />
                                                 @endif
                                             </th>
                                             
@@ -1159,9 +1160,9 @@
                                         <tr>
                                             <th height="78">
                                                 Bond: 
+                                                <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <a href="javascript:Upload('bond','{{$user_data['id'] ?? ''}}');">
-                                                    <img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a> 
+                                                    <input type="file" name="user_data[bond]" />
                                                 @endif
                                             </th>
                                             
@@ -1251,160 +1252,9 @@
             $(document).ready(function(){
                 formChangeDetect(); 
                 showProvince(); 
-                showFile(); 
-                showTemplateFile(); 
-                showLogo(); 
-                showUserIdCopy(); 
-                showUserBirthCertificate(); 
-                showUserGsLetter(); 
-                showUserPoliceReport(); 
-                showUserNda(); 
-                showBond(); 
                 getBranchShortId();
                 getNextHighestEmployeeNumberByBranch();
             })
-            
-            logo_file_name = {/literal}'{$user_data.logo_file_name}';{literal}
-            function showLogo() {
-                if ( logo_file_name != '' ) {
-                    document.getElementById('no_logo').style.display = 'none';
-
-                    document.getElementById('show_logo').className = '';
-                    document.getElementById('show_logo').style.display = '';
-                } else {
-                    document.getElementById('no_logo').className = '';
-                    document.getElementById('no_logo').style.display = '';
-                }
-            }
-
-            function setLogo() {
-                document.getElementById('logo').src = '{/literal}{$BASE_URL}{literal}/send_file.php?object_type=user_image&rand=123';
-
-                logo_file_name = true;
-
-                showLogo();
-            }
-
-
-
-
-
-            user_file_array = {/literal}'{$array_size}';{literal}
-            function showFile() {
-                if ( user_file_array != 0 ) {
-                    document.getElementById('no_file').style.display = 'none';
-
-                    document.getElementById('show_file').className = '';
-                    document.getElementById('show_file').style.display = '';
-                } else {
-                    document.getElementById('no_file').className = '';
-                    document.getElementById('no_file').style.display = '';
-                }
-            }
-
-
-            user_template_file_array = {/literal}'{$user_template_array_size}';{literal}
-            function showTemplateFile() {
-                if ( user_template_file_array != 0 ) {
-                    document.getElementById('no_file1').style.display = 'none';
-
-                    document.getElementById('show_file1').className = '';
-                    document.getElementById('show_file1').style.display = '';
-                } else {
-                    document.getElementById('no_file1').className = '';
-                    document.getElementById('no_file1').style.display = '';
-                }
-            }
-
-
-            <!--ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
-            user_id_copy_array = {/literal}'{$user_id_copy_array_size}';{literal}
-            function showUserIdCopy() {
-                if ( user_id_copy_array != 0 ) {
-                    document.getElementById('no_file2').style.display = 'none';
-
-                    document.getElementById('show_file2').className = '';
-                    document.getElementById('show_file2').style.display = '';
-                } else {
-                    document.getElementById('no_file2').className = '';
-                    document.getElementById('no_file2').style.display = '';
-                }
-            }
-
-
-            <!--ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
-            user_birth_certificate_array = {/literal}'{$user_birth_certificate_array_size}';{literal}
-            function showUserBirthCertificate() {
-                if ( user_birth_certificate_array != 0 ) {
-                    document.getElementById('no_file3').style.display = 'none';
-
-                    document.getElementById('show_file3').className = '';
-                    document.getElementById('show_file3').style.display = '';
-                } else {
-                    document.getElementById('no_file3').className = '';
-                    document.getElementById('no_file3').style.display = '';
-                }
-            }
-
-
-            <!--ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
-            user_gs_letter_array = {/literal}'{$user_gs_letter_array_size}';{literal}
-            function showUserGsLetter() {
-                if ( user_gs_letter_array != 0 ) {
-                    document.getElementById('no_file4').style.display = 'none';
-
-                    document.getElementById('show_file4').className = '';
-                    document.getElementById('show_file4').style.display = '';
-                } else {
-                    document.getElementById('no_file4').className = '';
-                    document.getElementById('no_file4').style.display = '';
-                }
-            }
-
-
-            <!--ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
-            user_police_report_array = {/literal}'{$user_police_report_array_size}';{literal}
-            function showUserPoliceReport() {
-                if ( user_police_report_array != 0 ) {
-                    document.getElementById('no_file5').style.display = 'none';
-
-                    document.getElementById('show_file5').className = '';
-                    document.getElementById('show_file5').style.display = '';
-                } else {
-                    document.getElementById('no_file5').className = '';
-                    document.getElementById('no_file5').style.display = '';
-                }
-            }
-
-
-            <!--ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
-            user_nda_array = {/literal}'{$user_nda_array_size}';{literal}
-            function showUserNda() {
-                if ( user_nda_array != 0 ) {
-                    document.getElementById('no_file6').style.display = 'none';
-
-                    document.getElementById('show_file6').className = '';
-                    document.getElementById('show_file6').style.display = '';
-                } else {
-                    document.getElementById('no_file6').className = '';
-                    document.getElementById('no_file6').style.display = '';
-                }
-            }
-
-
-            <!--ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON -->
-            bond_array = {/literal}'{$bond_array_size}';{literal}
-            function showBond() {
-                if ( bond_array != 0 ) {
-                    document.getElementById('no_file7').style.display = 'none';
-
-                    document.getElementById('show_file7').className = '';
-                    document.getElementById('show_file7').style.display = '';
-                } else {
-                    document.getElementById('no_file7').className = '';
-                    document.getElementById('no_file7').style.display = '';
-                }
-            }
 
 
 
