@@ -33,7 +33,7 @@ use App\Models\Hierarchy\HierarchyListFactory;
 use App\Models\users\UserWageListFactory;
 use App\Models\core\UserDateTotalListFactory;
 use App\Models\Core\TTPDF;
-use DateTime;
+use TCPDF;
 use PDF;
 
 class DailyAttendanceReport extends Controller
@@ -712,7 +712,7 @@ class DailyAttendanceReport extends Controller
 
 	private function generateTimesheetPDF($rows, $action, $filter_data)
 	{
-		$pdf = new TTPDF('P', 'mm', 'Letter');
+		$pdf = new TCPDF('P', 'mm', 'Letter');
 		$pdf->setMargins(10, 5);
 		$pdf->SetAutoPageBreak($action == 'display_detailed_timesheet');
 		$pdf->SetFont('freeserif', '', 10);

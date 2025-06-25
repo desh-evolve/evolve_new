@@ -621,7 +621,7 @@ switch ($action) {
 				$pdf_created_date = time();
 
 				//Page width: 205mm
-				$pdf = new TTPDF('P','mm','Letter');
+				$pdf = new TCPDF('P', 'mm', 'Letter', true, 'UTF-8', false);
 				$pdf->setMargins(10,5);
 				$pdf->SetAutoPageBreak(FALSE);
 				$pdf->SetFont('freeserif','',10);

@@ -220,7 +220,7 @@
                                 onclick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'Display Report'; this.form.submit();">
                                 {{ __('Display Report') }}
                             </button>
-                            {{-- <button type="button"
+                            <button type="button"
                                 class="btn btn-primary btn-sm {{ $hidden_elements['displayTimeSheet'] }}"
                                 id="display_timesheet"
                                 onclick="selectAllReportCriteria(); document.getElementById('action').value = 'Display TimeSheet'; this.form.submit();">
@@ -236,7 +236,7 @@
                                 id="export"
                                 onclick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'Export'; this.form.submit();">
                                 {{ __('Export') }}
-                            </button> --}}
+                            </button>
                         </div>
                     </form>
                 </div>

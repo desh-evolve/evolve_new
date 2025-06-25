@@ -225,9 +225,9 @@
 
                     <div class="form-group text-center mt-4">
                         <button type="submit" name="action" value="display_report" class="btn btn-primary" formtarget="_blank">Display Report</button>
-                        {{-- <button type="submit" name="action" value="display_timesheet" class="btn btn-primary" formtarget="_blank">Display TimeSheet</button>
+                        <button type="submit" name="action" value="display_timesheet" class="btn btn-primary" formtarget="_blank">Display TimeSheet</button>
                         <button type="submit" name="action" value="display_detailed_timesheet" class="btn btn-primary" formtarget="_blank">Display Detailed TimeSheet</button>
-                        <button type="submit" name="action" value="export" class="btn btn-success">Export</button> --}}
+                        <button type="submit" name="action" value="export" class="btn btn-success">Export</button>
                     </div>
                 </form>
             </div>

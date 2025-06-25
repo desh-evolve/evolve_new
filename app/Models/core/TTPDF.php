@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Models\Core;
-require_once(Environment::getBasePath() .'/classes/tcpdf/tcpdf.php');
 
-class TTPDF extends tcpdf {
+use TCPDF;
+
+class TTPDF extends TCPDF {
 	protected function _freadint($f) {
 		//Read a 4-byte integer from file
 		$a=unpack('Ni',fread($f,4));
