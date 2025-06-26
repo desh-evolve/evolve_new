@@ -5718,7 +5718,7 @@ class TimesheetDetailReport extends Report {
             $pdf->setLineWidth(0.20);
 
             //set table position
-            $adjust_x = 19;
+            $adjust_x = 10;
 
             $adjust_y = 10;
             $pdf->setXY(Misc::AdjustXY(1, $adjust_x), Misc::AdjustXY(50, $adjust_y));
@@ -5747,7 +5747,7 @@ class TimesheetDetailReport extends Report {
             array_multisort($employee_number, SORT_ASC, $rows); /**/
 
 
-            $pdf->SetFont('', 'B', 6.5);
+            $pdf->SetFont('', 'B', 8);
 
 
             $row_data_day_key = array();
@@ -5916,7 +5916,7 @@ class TimesheetDetailReport extends Report {
                         }
                         //echo $date_stamp;exit;
                     }
-                    
+
 
                     //if punch exists
                     if (!empty($pc_obj_arr)) {

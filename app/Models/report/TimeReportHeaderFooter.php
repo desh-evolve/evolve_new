@@ -23,13 +23,15 @@ class TimeReportHeaderFooter extends TTPDF {
     
     // Page header
     public function Header() {
+		
+        $headerData = $_SESSION['header_data'] ?? [];
         // Ensure session is started
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
         // Safely get header data with defaults
-        $headerData = $_SESSION['header_data'] ?? [];
+		
         $defaults = [
             'image_path' => '',
             'company_name' => '',
