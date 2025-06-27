@@ -16,7 +16,10 @@
                 <div class="card-body">
                     <form method="POST"
                         action="/admin/userlist/add"
-                        enctype="multipart/form-data" id="userForm" name="edituser">
+                        enctype="multipart/form-data"
+                        id="userForm" 
+                        name="edituser"
+                    >
                         @csrf
 
                         {{-- ===================================================================== --}}
@@ -551,7 +554,9 @@
                                                             @endif
                                                         </th>
                                                         <td colspan="2" class=""><span id="no_logo" style="display:none">  </span>
-                                                            <img src="../../storage/user_image/{{$user_data['id'] ?? ''}}/user.jpg" style="width:auto; height:160px;" id="header_logo2" alt="{{$APPLICATION_NAME}}"/>
+                                                            @if (!empty($user_data['id']))
+                                                                <img src="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_image.jpg']) }}" alt="User Image" style="width:auto; height:160px;" id="header_logo2" >
+                                                            @endif
                                                         </td>
                                                     </tr>
                         
@@ -1162,7 +1167,7 @@
                                                 Bond: 
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
-                                                    <input type="file" name="user_data[bond]" />
+                                                    <input type="file" name="user_data[bond]" id="bond_file" value="something"/>
                                                 @endif
                                             </th>
                                             

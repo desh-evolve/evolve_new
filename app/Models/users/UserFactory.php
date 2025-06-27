@@ -62,7 +62,7 @@ class UserFactory extends Factory {
 	protected $address_validator_regex = '/^[a-zA-Z0-9-,_\/\.\'#\ |\x{0080}-\x{FFFF}]{1,250}$/iu';
 	protected $city_validator_regex = '/^[a-zA-Z0-9-,_\.\'#\ |\x{0080}-\x{FFFF}]{1,250}$/iu';
 	//ARSP EDIT--> ADD NEW CODE FOR VALIDATE THE NIC
-        protected $nic_validator = '/^[0-9]{9,12}[0-9VvXx]$/';
+    protected $nic_validator = '/^[0-9]{9,12}[0-9VvXx]$/';
 
 	function _getFactoryOptions( $name ) {
 

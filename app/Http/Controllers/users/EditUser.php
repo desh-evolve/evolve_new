@@ -4,6 +4,8 @@ namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Company\BranchListFactory;
 use App\Models\Company\CompanyListFactory;
@@ -27,7 +29,6 @@ use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserTitleListFactory;
 use App\Models\Users\UserWageListFactory;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
 use App\Models\Core\FormVariables;
@@ -58,7 +59,7 @@ class EditUser extends Controller
 
     }
 
-    public function index() {
+    public function index(Request $request) {
         $permission = $this->permission;
         $current_user = $this->current_user;
         $current_company = $this->current_company;
@@ -181,7 +182,7 @@ class EditUser extends Controller
                 }
                 break;
             case 'submit':
-                dd($user_data);
+                
                 //Debug::setVerbosity( 11 );
                 Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
                 unset($id); //Do this so it doesn't reload the data from the DB.
@@ -645,11 +646,17 @@ class EditUser extends Controller
                 }    
                 //                var_dump($uf->isValid()); die;
                 //                echo '<pre>';                print_r($uf->getCurrent()); echo '<pre>'; die;
+
+
                 
-                if ( $uf->isValid() ) {
+                if ( $uf->isValid() && $imageStatus) {
                     $uf->Save(FALSE);
                     
                     $user_data['id'] = $uf->getId();
+
+                    $imageStatus = $this->uploadImages($_FILES, $user_data['id']);
+                    
+
                     Debug::Text('Inserted ID: '. $user_data['id'], __FILE__, __LINE__, __METHOD__,10);
 
                     Redirect::Page( URLBuilder::getURL( array('id' => $user_data['id'], 'saved_search_id' => $saved_search_id, 'company_id' => $company_id, 'data_saved' => TRUE), '/admin/userlist/add') );
@@ -1247,9 +1254,156 @@ class EditUser extends Controller
         $viewData['var7'] = $var7;
 
         $viewData['uf'] = $uf;
-        //dd($viewData);
         return view('users/EditUser', $viewData);
 
+    }
+
+    public function uploadImages($files, $user_id){
+        // Initialize response array
+        $response = [
+            'success' => [],
+            'errors' => []
+        ];
+
+        // Validate user_id
+        $user_id = intval($user_id); // Sanitize user_id
+        if ($user_id <= 0) {
+            return ['errors' => ['Invalid user ID']];
+        }
+
+        // Check if files are provided
+        if (!isset($files['user_data']) || !is_array($files['user_data'])) {
+            return ['errors' => ['No valid file data provided']];
+        }
+
+        $fileData = $files['user_data'];
+        $allowedFields = [
+            'user_image',
+            'user_template_file',
+            'user_file',
+            'user_id_copy',
+            'user_birth_certificate',
+            'user_gs_letter',
+            'user_police_report',
+            'user_nda',
+            'bond'
+        ];
+
+        // Define user directory
+        $userDir = "user_files/{$user_id}";
+
+        // Check if directory exists and create it if not
+        try {
+            if (!Storage::disk('public')->exists($userDir)) {
+                Storage::disk('public')->makeDirectory($userDir);
+                Log::info("Created directory for user {$user_id}: {$userDir}");
+
+                // Verify directory was created
+                if (!Storage::disk('public')->exists($userDir)) {
+                    return ['errors' => ["Failed to create directory: storage/app/public/{$user_id}"]];
+                }
+
+                // Set permissions (Unix-like systems)
+                $fullPath = storage_path("app/{$userDir}");
+                if (is_dir($fullPath)) {
+                    chmod($fullPath, 0775);
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to create directory for user {$user_id}: {$e->getMessage()}");
+            return ['errors' => ["Directory creation failed: {$e->getMessage()}"]];
+        }
+
+        foreach ($allowedFields as $field) {
+            // Skip if no file was uploaded (error code 4)
+            if ($fileData['error'][$field] !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            // Get file details
+            $originalFileName = $fileData['name'][$field];
+            $tmpName = $fileData['tmp_name'][$field];
+            $fileSize = $fileData['size'][$field];
+            $fileType = $fileData['type'][$field];
+
+            // Validate file size and type
+            if ($fileSize > 10 * 1024 * 1024) { // 10MB limit
+                $response['errors'][$field] = "File {$field} exceeds 10MB limit.";
+                continue;
+            }
+
+            if (!in_array($fileType, ['image/jpeg', 'image/png', 'image/gif'])) {
+                $response['errors'][$field] = "File {$field} must be a JPEG, PNG, or GIF.";
+                continue;
+            }
+
+            // Determine file extension
+            $extension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            if (empty($extension)) {
+                $extension = match ($fileType) {
+                    'image/jpeg' => 'jpg',
+                    'image/png' => 'png',
+                    'image/gif' => 'gif',
+                    default => null
+                };
+            }
+
+            if (!$extension) {
+                $response['errors'][$field] = "Invalid file extension for {$field}.";
+                continue;
+            }
+
+            // Define storage path: public/{$user_id}/[field_name].[extension]
+            $fileName = "{$field}.jpg";
+            $storagePath = "{$userDir}/{$fileName}";
+
+            try {
+                // Move the file from tmp to storage
+                $fileContents = file_get_contents($tmpName);
+                Storage::disk('public')->put($storagePath, $fileContents);
+
+                // Verify the file was stored
+                if (Storage::disk('public')->exists($storagePath)) {
+                    $response['success'][$field] = [
+                        'file_name' => $fileName,
+                        'path' => Storage::disk('public')->url($storagePath), // e.g., /storage/{$user_id}/user_police_report.png
+                    ];
+                    Log::info("File uploaded for user {$user_id}: {$fileName}", ['path' => $storagePath]);
+                } else {
+                    $response['errors'][$field] = "Failed to store file {$fileName}.";
+                }
+            } catch (\Exception $e) {
+                $response['errors'][$field] = "Error uploading {$fileName}: {$e->getMessage()}";
+                Log::error("File upload failed for user {$user_id}: {$fileName}", ['error' => $e->getMessage()]);
+            }
+        }
+
+        // Return response
+        if (empty($response['success']) && !empty($response['errors'])) {
+            return ['errors' => $response['errors']];
+        }
+
+        
+
+        return $response;
+    }
+
+    /**
+     * Serve a file from storage/app/public/{$user_id}/{$fileName}.
+     *
+     * @param int $user_id
+     * @param string $fileName
+     * @return \Illuminate\Http\Response
+     */
+    public function serveFile($user_id, $fileName)
+    {
+        $path = "user_files/{$user_id}/{$fileName}";
+
+        if (!Storage::disk('public')->exists($path)) {
+            abort(404, 'File not found');
+        }
+
+        return Storage::disk('public')->response($path);
     }
 }
 ?>

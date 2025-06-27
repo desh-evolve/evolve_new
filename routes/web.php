@@ -537,6 +537,7 @@ Route::delete('/policy/holidays/delete/{id}/{holiday_policy_id}', [HolidayList::
 
 
 Route::match(['get', 'post'], '/admin/userlist/add', [EditUser::class, 'index'])->name('admin.userlist.add');
+Route::get('/file/{user_id}/{fileName}', [EditUser::class, 'serveFile'])->name('serve.file');
 
 Route::get('/admin/userlist', [UserList::class, 'index'])->name('admin.userlist');
 //Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
