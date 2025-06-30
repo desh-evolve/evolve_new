@@ -1912,7 +1912,7 @@ class UserFactory extends Factory {
 													('Password is too weak, add additional numbers or special characters') );
 				}
 
-				if ( $this->getPasswordUpdatedDate() != '' AND $this->getPasswordUpdatedDate() >= time()-($c_obj->getPasswordMinimumAge()*86400) ) {
+				if ( !empty($this->getPasswordUpdatedDate()) AND $this->getPasswordUpdatedDate() >= time()-($c_obj->getPasswordMinimumAge()*86400) ) {
 					$update_password = FALSE;
 					$this->Validator->isTrue(		'password',
 													FALSE,

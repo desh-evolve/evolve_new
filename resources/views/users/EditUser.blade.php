@@ -555,7 +555,7 @@
                                                         </th>
                                                         <td colspan="2" class=""><span id="no_logo" style="display:none">  </span>
                                                             @if (!empty($user_data['id']))
-                                                                <img src="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_image.jpg']) }}" alt="User Image" style="width:auto; height:160px;" id="header_logo2" >
+                                                                <img src="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_image.jpg']) }}" alt="User Image" style="width:auto; height:160px;" id="" >
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -897,39 +897,18 @@
                                                     </tr>           
                                                     
                                         <tr>
-                                        <th height="78" >
-                                            Templates: 
-                                            <br>
-                                            @if($permission->Check('user','edit_advanced'))
-                                                <input type="file" name="user_data[user_template_file]" />
-                                            @endif
-                                        </th>
+                                            <th height="78" >
+                                                Appointment Letter: 
+                                                <br>
+                                                @if($permission->Check('user','edit_advanced'))
+                                                    <input type="file" name="user_data[user_template_file]" />
+                                                @endif
+                                            </th>
                                             
-                                        <td colspan="2" class="">
-                                            <div style="height:120px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;"> 
-                                            <span class="user_appointment">
-                                            <a href="../../storage/user_appointment_letter/{{$user_data['id'] ?? ''}}/outputfile.docx" target="_blank">Appointment Letter</p></a>					                    </span>            
-                                                <span id="show_file1" style="{{ $user_template_array_size == 0 ? 'display:none' : '' }}" >
-                                                
-                                                    @foreach ($user_template_url as $index => $p)
-                                                        <span class="user_file">
-                                                            <a  href="{{$p}}" target="_blank">{{$index++}}.{{$user_template_name[$index]}}</a>&nbsp;
-                                                        </span>
-                                                        @if($permission->Check('user','edit_advanced'))
-                                                            <span class="user_file_delete">                  
-                                                                <a  href="javascript:deleteFiles('{{$user_template_name[$index]}}','{{$user_data['id'] ?? ''}}','user_template');">Delete</a>
-                                                            </span>
-                                                        @endif
-                                                        </br>
-                                                    @endforeach
-                                                    
-                                                </span>
-                                                
-                                                <span id="no_file1"  style="display:none">
-                                                    <b>Click the "..." icon to upload a File.</b>  
-                                                </span>   
-                                            
-                                            </div>
+                                            <td colspan="2" class="">
+                                                @if (!empty($user_data['id']))
+                                                    <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_template_file.pdf']) }}" alt="Appointment Letter" style="width:auto; height:160px;" id="" >Download</a>
+                                                @endif
                                             </td>
                                         </tr>
 
@@ -944,24 +923,9 @@
                                             
                                             <td colspan="2" class="">
                                                 <div style="height:120px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
-                                                            
-                                                    <span id="show_file" style="{{ $array_size == 0 ? 'display: none' : '' }}">
-                                                        @foreach ($user_file_url as $index => $p )
-                                                            <span class="user_file">
-                                                                <a href="{{$p}}" target="_blank">{{$index++}}.{{$file_name[$index]}}</a>&nbsp;
-                                                            </span>
-                                                            @if($permission->Check('user','edit_advanced'))
-                                                                <span class="user_file_delete">
-                                                                    <a href="javascript:deleteFiles('{{$file_name[$index]}}','{{$user_data['id'] ?? ''}}','user_file');">Delete</a>
-                                                                </span>
-                                                            @endif
-                                                            </br>
-                                                        @endforeach                	 
-                                                    </span>
-                                                    
-                                                    <span id="no_file"  style="display:none">
-                                                        <b>Click the "..." icon to upload a File.</b> 
-                                                    </span>          
+                                                    @if (!empty($user_data['id']))
+                                                        <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_file.pdf']) }}" alt="Personal Files" style="width:auto; height:160px;" id="" >Download</a>
+                                                    @endif       
                                                 </div>
                                             </td>
                                         </tr>
@@ -979,26 +943,9 @@
                                             
                                             <td colspan="3" class="">
                                                 <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
-                                                            
-                                                    <span id="show_file2" style="{{ $user_id_copy_array_size == 0 ? 'display: none' : '' }}" >
-                                                
-                                                        @foreach ($user_id_copy_url as $index => $p)
-                                                            <span class="user_file">
-                                                                <a href="{{$p}}" target="_blank">{{$var2++}}.{{$user_id_copy_name[$index]}}</a>&nbsp;
-                                                            </span>
-                                                            
-                                                            @if ($permission->Check('user','edit_advanced'))
-                                                                <span class="user_file_delete">
-                                                                    <a href="javascript:deleteFiles('{{$user_id_copy_name[$index]}}','{{$user_data['id'] ?? ''}}','user_id_copy');">Delete</a>
-                                                                </span>
-                                                            @endif
-                                                            </br>
-                                                        @endforeach              	 
-                                                    </span>
-                                                        
-                                                    <span id="no_file2"  style="display:none">
-                                                        <b>Click the "..." icon to upload a File.</b> 
-                                                    </span>          
+                                                    @if (!empty($user_data['id']))
+                                                        <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_id_copy.pdf']) }}" alt="ID Copy" style="width:auto; height:160px;" id="" >Download</a>
+                                                    @endif          
                                                 </div>
                                             </td>
                                         </tr>                              
@@ -1017,25 +964,9 @@
                                             
                                             <td colspan="3" class="">
                                                 <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
-                                                            
-                                                    <span id="show_file3" style="{{ $user_birth_certificate_array_size == 0 ? 'display: none' : '' }}" >
-                                                        @foreach ($user_birth_certificate_url as $index => $p)
-                                                            <span class="user_file">
-                                                                <a href="{{$p}}" target="_blank">{{$index++}}.{{$user_birth_certificate_name[$index]}}</a>&nbsp;
-                                                            </span>
-                                                            
-                                                            @if($permission->Check('user','edit_advanced'))
-                                                                <span class="user_file_delete">
-                                                                    <a href="javascript:deleteFiles('{{$user_birth_certificate_name[$index]}}','{{$user_data['id'] ?? ''}}','user_birth_certificate');">Delete</a>
-                                                                </span>
-                                                            @endif
-                                                            </br>
-                                                        @endforeach
-                                                    </span>
-                                                    
-                                                    <span id="no_file3"  style="display:none">
-                                                        <b>Click the "..." icon to upload a File.</b> 
-                                                    </span>          
+                                                    @if (!empty($user_data['id']))
+                                                        <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_birth_certificate.pdf']) }}" alt="Birth Certificate" style="width:auto; height:160px;" id="" >Download</a>
+                                                    @endif           
                                                 </div>
                                             </td>
                                         </tr>       
@@ -1055,25 +986,9 @@
                                             
                                             <td colspan="3" class="">
                                                 <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
-                                                            
-                                                    <span id="show_file4" style="{{ $user_gs_letter_array_size == 0 ? 'display: none' : '' }}" >
-                                                        @foreach ($user_gs_letter_url as $index => $p)
-                                                            <span class="user_file">
-                                                            <a href="{{$p}}" target="_blank">{{$index++}}.{{$user_gs_letter_name[$index]}}</a>&nbsp;
-                                                            </span>
-                                                            
-                                                            @if($permission->Check('user','edit_advanced'))
-                                                                <span class="user_file_delete">
-                                                                    <a href="javascript:deleteFiles('{{$user_gs_letter_name[$index]}}','{{$user_data['id'] ?? ''}}','user_gs_letter');">Delete</a>
-                                                                </span>
-                                                            @endif
-                                                            </br>
-                                                        @endforeach             	 
-                                                    </span>
-                                                    
-                                                    <span id="no_file4"  style="display:none">
-                                                        <b>Click the "..." icon to upload a File.</b> 
-                                                    </span>          
+                                                    @if (!empty($user_data['id']))
+                                                        <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_gs_letter.pdf']) }}" alt="GS Letter" style="width:auto; height:160px;" id="" >Download</a>
+                                                    @endif         
                                                 </div>
                                             </td>
                                         </tr>       
@@ -1094,25 +1009,9 @@
                                             
                                             <td colspan="3" class="">
                                                 <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
-                                                            
-                                                    <span id="show_file5" style="{{ $user_police_report_array_size == 0 ? 'display:none' : '' }}" >
-                                                    @foreach ($user_police_report_url as $index => $p)
-                                                        <span class="user_file">
-                                                            <a href="{{$p}}" target="_blank">{{$index++}}.{{$user_police_report_name[$index]}}</a>&nbsp;
-                                                        </span>
-                                                        
-                                                        @if($permission->Check('user','edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a href="javascript:deleteFiles('{{$user_police_report_name[$index]}}','{{$user_data['id'] ?? ''}}','user_police_report');">Delete</a>
-                                                            </span>
-                                                        @endif
-                                                        </br>
-                                                    @endforeach            	 
-                                                </span>
-                                                    
-                                                    <span id="no_file5"  style="display:none">
-                                                        <b>Click the "..." icon to upload a File.</b> 
-                                                    </span>          
+                                                    @if (!empty($user_data['id']))
+                                                        <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_police_report.pdf']) }}" alt="Police Report" style="width:auto; height:160px;" id="" >Download</a>
+                                                    @endif         
                                                 </div>
                                             </td>
                                         </tr>       
@@ -1133,25 +1032,9 @@
                                             
                                             <td colspan="3" class="">
                                                 <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
-                                                            
-                                                    <span id="show_file6" style="{{ $user_nda_array_size == 0 ? 'display:none' : '' }}" >
-                                                        @foreach ($user_nda_url as $index => $p)
-                                                            <span class="user_file">
-                                                                <a href="{{$p}}" target="_blank">{{$index++}}.{{$user_nda_name[$index]}}</a>&nbsp;
-                                                            </span>
-                                                            
-                                                            @if($permission->Check('user','edit_advanced'))
-                                                                <span class="user_file_delete">
-                                                                    <a href="javascript:deleteFiles('{{$user_nda_name[$index]}}','{{$user_data['id'] ?? ''}}','user_nda');">Delete</a>
-                                                                </span>
-                                                            @endif
-                                                            </br>
-                                                        @endforeach              	 
-                                                    </span>
-                                                    
-                                                    <span id="no_file6"  style="display:none">
-                                                        <b>Click the "..." icon to upload a File.</b> 
-                                                    </span>          
+                                                    @if (!empty($user_data['id']))
+                                                        <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_nda.pdf']) }}" alt="NDA" style="width:auto; height:160px;" id="" >Download</a>
+                                                    @endif           
                                                 </div>
                                             </td>
                                         </tr>       
@@ -1173,24 +1056,9 @@
                                             
                                             <td class="">
                                                 <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
-                                                            
-                                                    <span id="show_file7" style="{{ $bond_array_size == 0 ? 'display:none' : '' }}" >
-                                                        @foreach ($bond_url as $index => $p)
-                                                            <span class="user_file">
-                                                                <a href="{{$p}}" target="_blank">{{$index++}}.{{$bond_name[$index]}}</a>&nbsp;
-                                                            </span>
-                                                            @if ($permission->Check('user','edit_advanced'))
-                                                            <span class="user_file_delete">
-                                                                <a href="javascript:deleteFiles('{{$bond_name[$index]}}','{{$user_data['id'] ?? ''}}','bond');">Delete</a>
-                                                            </span>
-                                                            @endif
-                                                            </br>
-                                                        @endforeach             	 
-                                                    </span>
-                                                    
-                                                    <span id="no_file7"  style="display:none">
-                                                        <b>Click the "..." icon to upload a File.</b> 
-                                                    </span>          
+                                                    @if (!empty($user_data['id']))
+                                                        <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'bond.pdf']) }}" alt="Bond" style="width:auto; height:160px;" id="" >Download</a>
+                                                    @endif          
                                                 </div>
                                             </td>
                                         </tr>

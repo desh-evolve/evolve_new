@@ -641,20 +641,20 @@ class EditUser extends Controller
                 }    
                         
                         
-                        if ( isset($user_data['confirmed_date']) ) {
+                if ( isset($user_data['confirmed_date']) ) {
                     $uf->setConfiremedDate( $user_data['confirmed_date'] );
                 }    
-                //                var_dump($uf->isValid()); die;
-                //                echo '<pre>';                print_r($uf->getCurrent()); echo '<pre>'; die;
 
 
                 
-                if ( $uf->isValid() && $imageStatus) {
+                if ( $uf->isValid()) {
+
+                    //dd($uf->data);
                     $uf->Save(FALSE);
                     
                     $user_data['id'] = $uf->getId();
 
-                    $imageStatus = $this->uploadImages($_FILES, $user_data['id']);
+                    $this->uploadImages($_FILES, $user_data['id']);
                     
 
                     Debug::Text('Inserted ID: '. $user_data['id'], __FILE__, __LINE__, __METHOD__,10);
@@ -783,34 +783,36 @@ class EditUser extends Controller
                                 'updated_by' => $user->getUpdatedBy(),
                                 'deleted_date' => $user->getDeletedDate(),
                                 'deleted_by' => $user->getDeletedBy(),
-                                'user_file'=> $user->getUserFilesUrl(),
-                                'file_name'=>$user->getFileName(),
                                 'probation'=>$user->getProbation(),
-                                    
+                                
                                 'basis_of_employment'=>$user->getBasisOfEmployment(),    
                                 'month'=>$user->getMonth(),    
+                                
+                                //'user_file'=> $user->getUserFilesUrl(),
+                                //'file_name'=>$user->getFileName(),
+
                                     
-                                'user_template_url'=>$user->getUserTemplateUrl(),
-                                'user_template_name'=>$user->getTemplateName(),							   
+                                //'user_template_url'=>$user->getUserTemplateUrl(),
+                                //'user_template_name'=>$user->getTemplateName(),							   
                                                                                                 
                                             
-                                'user_id_copy_url'=>$user->getUserIdCopyUrl(),
-                                'user_id_copy_name'=>$user->getUserIdCopyFileName(),
+                                //'user_id_copy_url'=>$user->getUserIdCopyUrl(),
+                                //'user_id_copy_name'=>$user->getUserIdCopyFileName(),
                                     
-                                'user_birth_certificate_url'=>$user->getUserBirthCertificateUrl(),
-                                'user_birth_certificate_name'=>$user->getUserBirthCertificateFileName(),
+                                //'user_birth_certificate_url'=>$user->getUserBirthCertificateUrl(),
+                                //'user_birth_certificate_name'=>$user->getUserBirthCertificateFileName(),
                                                                         
-                                'user_gs_letter_url'=>$user->getUserGsLetterUrl(),
-                                'user_gs_letter_name'=>$user->getUserGsLetterFileName(),
+                                //'user_gs_letter_url'=>$user->getUserGsLetterUrl(),
+                                //'user_gs_letter_name'=>$user->getUserGsLetterFileName(),
                                                                             
-                                'user_police_report_url'=>$user->getUserPoliceReportUrl(),
-                                'user_police_report_name'=>$user->getUserPoliceReportFileName(),
+                                //'user_police_report_url'=>$user->getUserPoliceReportUrl(),
+                                //'user_police_report_name'=>$user->getUserPoliceReportFileName(),
 
-                                'user_nda_url'=>$user->getUserNdaUrl(),
-                                'user_nda_name'=>$user->getUserNdaFileName(),
+                                //'user_nda_url'=>$user->getUserNdaUrl(),
+                                //'user_nda_name'=>$user->getUserNdaFileName(),
                                     
-                                'bond_url'=>$user->getBondUrl(),
-                                'bond_name'=>$user->getBondFileName()
+                                //'bond_url'=>$user->getBondUrl(),
+                                //'bond_name'=>$user->getBondFileName()
                                                                                 
                             );
                                       
@@ -1264,18 +1266,18 @@ class EditUser extends Controller
             'success' => [],
             'errors' => []
         ];
-
+    
         // Validate user_id
         $user_id = intval($user_id); // Sanitize user_id
         if ($user_id <= 0) {
             return ['errors' => ['Invalid user ID']];
         }
-
+    
         // Check if files are provided
         if (!isset($files['user_data']) || !is_array($files['user_data'])) {
             return ['errors' => ['No valid file data provided']];
         }
-
+    
         $fileData = $files['user_data'];
         $allowedFields = [
             'user_image',
@@ -1288,21 +1290,34 @@ class EditUser extends Controller
             'user_nda',
             'bond'
         ];
-
+    
+        // Define allowed file types for each field
+        $allowedFileTypes = [
+            'user_image' => ['image/jpeg', 'image/jpg', 'image/png'],
+            'user_template_file' => ['application/pdf'],
+            'user_file' => ['application/pdf'],
+            'user_id_copy' => ['application/pdf'],
+            'user_birth_certificate' => ['application/pdf'],
+            'user_gs_letter' => ['application/pdf'],
+            'user_police_report' => ['application/pdf'],
+            'user_nda' => ['application/pdf'],
+            'bond' => ['application/pdf']
+        ];
+    
         // Define user directory
         $userDir = "user_files/{$user_id}";
-
+    
         // Check if directory exists and create it if not
         try {
             if (!Storage::disk('public')->exists($userDir)) {
                 Storage::disk('public')->makeDirectory($userDir);
                 Log::info("Created directory for user {$user_id}: {$userDir}");
-
+    
                 // Verify directory was created
                 if (!Storage::disk('public')->exists($userDir)) {
                     return ['errors' => ["Failed to create directory: storage/app/public/{$user_id}"]];
                 }
-
+    
                 // Set permissions (Unix-like systems)
                 $fullPath = storage_path("app/{$userDir}");
                 if (is_dir($fullPath)) {
@@ -1313,60 +1328,63 @@ class EditUser extends Controller
             Log::error("Failed to create directory for user {$user_id}: {$e->getMessage()}");
             return ['errors' => ["Directory creation failed: {$e->getMessage()}"]];
         }
-
+    
         foreach ($allowedFields as $field) {
             // Skip if no file was uploaded (error code 4)
             if ($fileData['error'][$field] !== UPLOAD_ERR_OK) {
                 continue;
             }
-
+    
             // Get file details
             $originalFileName = $fileData['name'][$field];
             $tmpName = $fileData['tmp_name'][$field];
             $fileSize = $fileData['size'][$field];
             $fileType = $fileData['type'][$field];
-
-            // Validate file size and type
+    
+            // Validate file size
             if ($fileSize > 10 * 1024 * 1024) { // 10MB limit
                 $response['errors'][$field] = "File {$field} exceeds 10MB limit.";
                 continue;
             }
-
-            if (!in_array($fileType, ['image/jpeg', 'image/png', 'image/gif'])) {
-                $response['errors'][$field] = "File {$field} must be a JPEG, PNG, or GIF.";
+    
+            // Validate file type
+            if (!in_array($fileType, $allowedFileTypes[$field])) {
+                $allowedExt = $field === 'user_image' ? 'JPEG, JPG, PNG' : 'PDF';
+                $response['errors'][$field] = "File {$field} must be a {$allowedExt}.";
                 continue;
             }
-
+    
             // Determine file extension
             $extension = pathinfo($originalFileName, PATHINFO_EXTENSION);
             if (empty($extension)) {
                 $extension = match ($fileType) {
                     'image/jpeg' => 'jpg',
+                    'image/jpg' => 'jpg',
                     'image/png' => 'png',
-                    'image/gif' => 'gif',
+                    'application/pdf' => 'pdf',
                     default => null
                 };
             }
-
+    
             if (!$extension) {
                 $response['errors'][$field] = "Invalid file extension for {$field}.";
                 continue;
             }
-
-            // Define storage path: public/{$user_id}/[field_name].[extension]
-            $fileName = "{$field}.jpg";
+    
+            // Define storage path
+            $fileName = "{$field}.{$extension}";
             $storagePath = "{$userDir}/{$fileName}";
-
+    
             try {
                 // Move the file from tmp to storage
                 $fileContents = file_get_contents($tmpName);
                 Storage::disk('public')->put($storagePath, $fileContents);
-
+    
                 // Verify the file was stored
                 if (Storage::disk('public')->exists($storagePath)) {
                     $response['success'][$field] = [
                         'file_name' => $fileName,
-                        'path' => Storage::disk('public')->url($storagePath), // e.g., /storage/{$user_id}/user_police_report.png
+                        'path' => Storage::disk('public')->url($storagePath),
                     ];
                     Log::info("File uploaded for user {$user_id}: {$fileName}", ['path' => $storagePath]);
                 } else {
@@ -1377,17 +1395,15 @@ class EditUser extends Controller
                 Log::error("File upload failed for user {$user_id}: {$fileName}", ['error' => $e->getMessage()]);
             }
         }
-
+    
         // Return response
         if (empty($response['success']) && !empty($response['errors'])) {
             return ['errors' => $response['errors']];
         }
-
-        
-
+    
         return $response;
     }
-
+    
     /**
      * Serve a file from storage/app/public/{$user_id}/{$fileName}.
      *
@@ -1398,11 +1414,11 @@ class EditUser extends Controller
     public function serveFile($user_id, $fileName)
     {
         $path = "user_files/{$user_id}/{$fileName}";
-
+    
         if (!Storage::disk('public')->exists($path)) {
             abort(404, 'File not found');
         }
-
+    
         return Storage::disk('public')->response($path);
     }
 }
