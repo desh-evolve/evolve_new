@@ -585,22 +585,25 @@ Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name(
 
 Route::get('/attendance/paystubs', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
+// ===============================================================================================================================
+// User Leaves
+// ===============================================================================================================================
 Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class, 'index'])->name('attendance.apply_leaves');
 
 Route::get('/attendance/leaves/covered_aprooval', [ApprovedCoveredBy::class, 'index'])->name('attendance.leaves.covered_aprooval');
 
 Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
-Route::post('/attendance/leaves/supervise_aprooval/bulk-action', [ApprovedSupervisedBy::class, 'bulkAction'])->name('attendance.leaves.supervise_aprooval.bulkAction');
 Route::post('/attendance/leaves/supervise-approval/reject', [ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
 Route::post('/attendance/leaves/supervise-approval/approved', [ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
 
 Route::get('/attendance/leaves/view_user_leave/{id}', [VIewUserLeave::class, 'index'])->name('attendance.leaves.viewUserLeave');
-
 Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::class, 'index'])->name('attendance.leaves.viewNumberLeave');
 
 Route::get('/attendance/leaves/confirmed_leave', [ConfirmedLeave::class, 'index'])->name('attendance.leaves.confirmed_leave');
 Route::post('/attendance/leaves/confirmed_leave/search', [ConfirmedLeave::class, 'search'])->name('attendance.leaves.confirmed_leave.search');
 Route::delete('/attendance/confirmed_leave/delete/{id}', [ConfirmedLeave::class, 'delete'])->name('attendance.confirmed_leave.delete');
+
+// ===============================================================================================================================
 
 Route::match(['get', 'post'], '/users/bonus_calc', [BonusCalc::class, 'index'])->name('users.bonus_calc');
 Route::match(['get', 'post'], '/users/bonus_list', [BonusList::class, 'index'])->name('users.bonus_list');
@@ -614,14 +617,40 @@ Route::match(['get', 'post'], '/users/gratuity_calc', [GratuityCalc::class, 'ind
 
 // ===============================================================================================================================
 // add view_schedule route
+// ===============================================================================================================================
 Route::match(['get', 'post', 'delete'], '/schedule/add_mass_schedule', [AddMassSchedule::class, 'index'])->name('schedule.add_mass_schedule');
 Route::match(['get', 'post', 'delete'], '/schedule/add_mass_schedule_npvc', [AddMassScheduleNpvc::class, 'index'])->name('schedule.add_mass_schedule_npvc');
 Route::match(['get', 'post', 'delete'], '/schedule/edit_recurring_schedule', [EditRecurringSchedule::class, 'index'])->name('schedule.edit_recurring_schedule');
-Route::match(['get', 'post', 'delete'], '/schedule/edit_recurring_schedule_template', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template');
-Route::match(['get', 'post', 'delete'], '/schedule/edit_schedule', [EditSchedule::class, 'index'])->name('schedule.edit_schedule');
-Route::match(['get', 'post', 'delete'], '/schedule/recurring_schedule_control_list', [RecurringScheduleControlList::class, 'index'])->name('schedule.recurring_schedule_control_list');
-Route::match(['get', 'post', 'delete'], '/schedule/recurring_schedule_template_control_list', [RecurringScheduleTemplateControlList::class, 'index'])->name('schedule.recurring_schedule_template_control_list');
-Route::match(['get', 'post', 'delete'], '/schedule/schedule_list', [ScheduleList::class, 'index'])->name('schedule.schedule_list');
+
+Route::match(['get', 'post'], '/schedule/edit_schedule', [EditSchedule::class, 'index'])->name('schedule.edit_schedule');
+Route::delete('/schedule/edit_schedule/delete/{id}', [EditSchedule::class, 'delete'])->name('schedule.edit_schedule.delete');
+
+// ===============================================================================================================================
+// recurring_schedule_control
+// ===============================================================================================================================
+Route::match(['get', 'post'], '/schedule/recurring_schedule_control_list', [RecurringScheduleControlList::class, 'index'])->name('schedule.recurring_schedule_control_list');
+Route::get('/schedule/recurring_schedule_control/add', [RecurringScheduleControlList::class, 'add'])->name('schedule.recurring_schedule_control_list.add');
+Route::delete('/schedule/recurring_schedule_control/delete/{id}', [RecurringScheduleControlList::class, 'delete'])->name('schedule.recurring_schedule_control.delete');
+
+Route::get('/schedule/edit_recurring_schedule/add/{id?}', [EditRecurringSchedule::class, 'index'])->name('schedule.edit_recurring_schedule.add');
+Route::post('/schedule/edit_recurring_schedule/submit/{id?}', [EditRecurringSchedule::class, 'submit'])->name('schedule.edit_recurring_schedule.submit');
+
+// ===============================================================================================================================
+// recurring_schedule_template_control
+// ===============================================================================================================================
+Route::match(['get', 'post'], '/schedule/recurring_schedule_template_control_list', [RecurringScheduleTemplateControlList::class, 'index'])->name('schedule.recurring_schedule_template_control_list');
+Route::get('/schedule/recurring_schedule_template_control/add', [RecurringScheduleTemplateControlList::class, 'add'])->name('schedule.recurring_schedule_template_control.add');
+Route::delete('/schedule/recurring_schedule_template_control/delete/{id}', [RecurringScheduleTemplateControlList::class, 'delete'])->name('schedule.recurring_schedule_template_control.delete');
+
+Route::delete('/schedule/edit_recurring_schedule_template/delete/{id}', [EditRecurringScheduleTemplate::class, 'delete'])->name('schedule.edit_recurring_schedule_template.delete');
+Route::get('/schedule/edit_recurring_schedule_template/edit/{id?}', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template.edit');
+Route::post('/schedule/edit_recurring_schedule_template/submit/{id?}', [EditRecurringScheduleTemplate::class, 'submit'])->name('schedule.edit_recurring_schedule_template.submit');
+
+// ===============================================================================================================================
+// Schedule List
+// ===============================================================================================================================
+Route::match(['get', 'post'], '/schedule/schedule_list', [ScheduleList::class, 'index'])->name('schedule.schedule_list');
+Route::delete('/schedule/delete/{id}', [ScheduleList::class, 'delete'])->name('schedule.delete');
 Route::match(['get', 'post', 'delete'], '/schedule/view_schedule', [ViewSchedule::class, 'index'])->name('schedule.view_schedule');
 Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_calendar', [ViewScheduleCalendar::class, 'index'])->name('schedule.view_schedule_calendar');
 Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_day', [ViewScheduleDay::class, 'index'])->name('schedule.view_schedule_day');

@@ -1,9 +1,12 @@
 <x-app-layout :title="'Input Example'">
-    <style>
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Schedule') }}</h4>
+    </x-slot>
+    {{-- <style>
         td, th{
             padding: 5px !important;
         }
-    </style>
+    </style> --}}
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -12,14 +15,23 @@
                         <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
                     </div>
 
+                    <div class="justify-content-md-end">
+                        <div class="d-flex justify-content-end">
+                            @if ($permission->Check('recurring_schedule','add'))
+                                <a type="button" href="/schedule/recurring_schedule_control/add"
+                                    class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
+                                    id="add_new_btn">Add New <i class="ri-add-line"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card-body">
-                   
-                    {{-- --------------------------------------------------------------------------- --}}
 
-                    <table class="table table-bordered">
-        
+                    {{-- --------------------------------------------------------------------------- --}}
+                    <table>
                         <form method="get" name="search_form" action="#">
                             {{-- {include file="list_tabs.tpl" section="header"} --}}
                             <tr id="adv_search" class="tblSearch" style="display: none;">
@@ -111,79 +123,71 @@
                             {{-- {include file="list_tabs.tpl" section="saved_search"} --}}
                             {{-- {include file="list_tabs.tpl" section="global"} --}}
                         </form>
-        
-                        <form method="get" action="{$smarty.server.SCRIPT_NAME}">
-                        <tr class="bg-primary text-white">
-                            <td>
-                                #
-                            </td>
+                    </table>
+
+                    <table class="table table-bordered table-striped">
+
+                        <thead class="bg-primary text-white">
+                            <th>#</th>
                             @foreach ($columns as $column_id => $column)
-                                <td>
-                                    {{ $column }}
-                                </td>
+                                <th>{{ $column }}</th>
                             @endforeach
-        
-                            <td>
-                                Functions
-                            </td>
-                            <td>
-                                <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
-                            </td>
-                        </tr>
-                        @foreach ($rows as $i => $row)
-                            <tr class="">
-                                <td>
-                                    {{ $i+1 }}
-                                </td>
-                                @foreach ($columns as $key => $column)
-                                    <td>
-                                        @if ($key == 'start_date')
-                                            {{getdate_helper('date', $row['start_date'])}}
-                                        @elseif ($key == 'end_date')
-                                            @if ($row['end_date'] == NULL)
-                                                Never
+                            <th>Functions</th>
+                        </thead>
+
+                        <tbody id="table_body">
+                            @foreach ($rows as $i => $row)
+                                <tr class="">
+                                    <td>{{ $i+1 }}</td>
+                                    @foreach ($columns as $key => $column)
+                                        <td>
+                                            @if ($key == 'start_date')
+                                                {{getdate_helper('date', $row['start_date'])}}
+                                            @elseif ($key == 'end_date')
+                                                @if ($row['end_date'] == NULL)
+                                                    <span class="text-danger"><i class="ri-close-circle-line fs-17 align-middle"></i> Never</span>
+                                                @else
+                                                    {{ getdate_helper('date', $row['end_date']) }}
+                                                @endif
                                             @else
-                                                {{ getdate_helper('date', $row['end_date']) }}
+                                                {{$row[$key] ?? "--"}}
                                             @endif
-                                        @else
-                                            {{$row[$key] ?? "--"}}
+                                        </td>
+                                    @endforeach
+
+                                    <td>
+                                        @if ($permission->Check('recurring_schedule','edit') OR ( $permission->Check('recurring_schedule','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('recurring_schedule','edit_own') AND $row['is_owner'] === TRUE ))
+                                            <a href="{{ route('schedule.edit_recurring_schedule.add', ['id' => $row['id']]) }}" class="btn btn-secondary btn-sm">Edit</a>
+                                        @endif
+
+                                        @if ($permission->Check('recurring_schedule','delete') OR $permission->Check('recurring_schedule','delete_own') OR $permission->Check('recurring_schedule','delete_child'))
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/schedule/recurring_schedule_control/delete/{{ $row['id'] }}', 'Schedule', this)">
+                                                Delete
+                                            </button>
                                         @endif
                                     </td>
-                                @endforeach
-                                
-                                <td>
-                                    @if ($permission->Check('recurring_schedule','edit') OR ( $permission->Check('recurring_schedule','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('recurring_schedule','edit_own') AND $row['is_owner'] === TRUE ))
-                                        [ <a href="/schedule/edit_recurring_schedule?id={{$row['id']}}" >Edit</a> ]
-                                    @endif
-                                </td>
-                                <td>
-                                    <input type="checkbox" class="checkbox" name="ids[{{$row['id']}}][]" value="{{$row['user_id']}}">
-                                </td>
-                            </tr>
-                        @endforeach
-                        
-                        <tr>
-                            <td class="tblActionRow" colspan="{{$total_columns}}">
-                                @if ($permission->Check('recurring_schedule','add'))
-                                    <input type="submit" class="button" name="action:add" value="Add">
-                                @endif
-                                @if ($permission->Check('recurring_schedule','delete') OR $permission->Check('recurring_schedule','delete_own') OR $permission->Check('recurring_schedule','delete_child'))
-                                    <input type="submit" class="button" name="action:delete" value="Delete" onClick="return confirmSubmit()">
-                                @endif
-                                @if ($permission->Check('recurring_schedule','undelete'))
-                                    <input type="submit" class="button" name="action:undelete" value="UnDelete">
-                                @endif
-                            </td>
-                        </tr>
-                    </table>
-                </form>
+                                </tr>
+                            @endforeach
+                        </tbody>
 
-                    {{-- --------------------------------------------------------------------------- --}}
-                    
+
+                    </table>
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->
         </div>
         <!-- end col -->
     </div>
+
+    <script>
+        const tableBody = document.getElementById("table_body");
+        if (tableBody && tableBody.children.length === 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td colspan="10" class="text-center text-danger font-weight-bold">No Recurring Schedule.</td>
+            `;
+            tableBody.appendChild(row);
+        }
+    </script>
 </x-app-layout>

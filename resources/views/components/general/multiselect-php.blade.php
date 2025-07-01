@@ -54,7 +54,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('loading multiselect-php')
     const containers = document.querySelectorAll('.multi-selector-container');
-    
+
     containers.forEach(container => {
         const multiSelectorBody = container.querySelector('.multi-selector-body');
         const toggleArrow = container.querySelector('.toggle-arrow');
@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const updateSelection = () => {
             const selectedIds = Array.from(selectedList.querySelectorAll('option')).map(option => option.value);
-            
+
             // Update count message
             selectedCount.textContent = `${selectedIds.length} ${title} Currently Selected, Click the arrow to modify.`;
-            
+
             // Trigger callback if defined
             if (onSelectionChange && window[onSelectionChange]) {
                 window[onSelectionChange](selectedIds);

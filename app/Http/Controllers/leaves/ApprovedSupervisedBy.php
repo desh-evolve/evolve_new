@@ -103,441 +103,482 @@ class ApprovedSupervisedBy extends Controller
     }
 
     //new
-    public function submit(Request $request)
-    {
-        $leaveRequests = $request->input('data.leave_request', []);
+    // public function submit(Request $request)
+    // {
+    //     $leaveRequests = $request->input('data.leave_request', []);
 
-        if (empty($leaveRequests)) {
-            return redirect()->back()->with('error', 'No leave selected.');
-        }
+    //     if (empty($leaveRequests)) {
+    //         return redirect()->back()->with('error', 'No leave selected.');
+    //     }
 
-        dd($request->all());
+    //     dd($request->all());
 
-        $lrlf = new LeaveRequestListFactory();
-        $msg = "";
-        $user_date_id=0;
 
-        foreach ($leaveRequests as $key => $val) {
-            $lrlf->getById($key);
+    //     $msg = "";
+    //     $user_date_id=0;
 
-            if ($lrlf->getRecordCount() > 0) {
-                $lrf = $lrlf->getCurrent();
+    //     foreach ($leaveRequests as $key => $val) {
+    //         $lrlf = new LeaveRequestListFactory();
+    //         $lrlf->getById($key);
 
-                $ablf = new AccrualBalanceListFactory();
-                $ablf->getByUserIdAndAccrualPolicyId($lrf->getUser(), $lrf->getAccuralPolicy());
+    //         if ($lrlf->getRecordCount() > 0) {
+    //             $lrf = $lrlf->getCurrent();
 
-                    if ($ablf->getRecordCount() > 0) {
-                        $abf = $ablf->getCurrent();
-                        $balance = $abf->getBalance();
-                        $amount = $lrf->getAmount();
-                        $amount_taken = 0;
+    //             $ablf = new AccrualBalanceListFactory();
+    //             $ablf->getByUserIdAndAccrualPolicyId($lrf->getUser(), $lrf->getAccuralPolicy());
 
-                        // Calculate amount_taken based on leave method
-                        if($lrf->getLeaveMethod() == 1){
-                            $amount_taken = (($amount*8) * (28800/8));
-                        }
-                        elseif($lrf->getLeaveMethod()  == 2){
+    //                 if ($ablf->getRecordCount() > 0) {
+    //                     $abf = $ablf->getCurrent();
+    //                     $balance = $abf->getBalance();
+    //                     $amount = $lrf->getAmount();
+    //                     $amount_taken = 0;
 
-                            if($amount<1){
-                                $amount_taken = (($amount*8) * (28800/8));
-                            }
-                            else{
-                                $amount_taken = (($amount*8) * (28800/8));
-                            }
-                        }
-                        elseif($lrf->getLeaveMethod()  == 3){
+    //                     // Calculate amount_taken based on leave method
+    //                     if($lrf->getLeaveMethod() == 1){
+    //                         $amount_taken = (($amount*8) * (28800/8));
+    //                     }
+    //                     elseif($lrf->getLeaveMethod()  == 2){
 
-                            $start_date_stamp= TTDate::parseTimeUnit($lrf->getLeaveTime() );
-                            $end_date_stamp= TTDate::parseTimeUnit($lrf->getLeaveEndTime()  );
+    //                         if($amount<1){
+    //                             $amount_taken = (($amount*8) * (28800/8));
+    //                         }
+    //                         else{
+    //                             $amount_taken = (($amount*8) * (28800/8));
+    //                         }
+    //                     }
+    //                     elseif($lrf->getLeaveMethod()  == 3){
 
-                            $time_diff = $end_date_stamp - $start_date_stamp;
+    //                         $start_date_stamp= TTDate::parseTimeUnit($lrf->getLeaveTime() );
+    //                         $end_date_stamp= TTDate::parseTimeUnit($lrf->getLeaveEndTime()  );
 
-                            if($time_diff <3600){
-                                $time_diff = 3600;
-                            }
+    //                         $time_diff = $end_date_stamp - $start_date_stamp;
 
+    //                         if($time_diff <3600){
+    //                             $time_diff = 3600;
+    //                         }
 
-                            if($time_diff >7200){
-                                $time_diff = 7200;
-                            }
 
-                            $amount_taken =$time_diff*0.8;
-                        }
+    //                         if($time_diff >7200){
+    //                             $time_diff = 7200;
+    //                         }
 
-                        $amount_taken = -1 * abs($amount_taken);
-                        $current_balance = $balance -  abs($amount_taken);
-                        $abf->setBalance($current_balance);
+    //                         $amount_taken =$time_diff*0.8;
+    //                     }
 
-                        $leaves =$lrf->getLeaveDates();
-                        $date_array = explode(',', $leaves);
+    //                     $amount_taken = -1 * abs($amount_taken);
+    //                     $current_balance = $balance -  abs($amount_taken);
+    //                     $abf->setBalance($current_balance);
 
-                        foreach ($date_array as $date) {
+    //                     $leaves =$lrf->getLeaveDates();
+    //                     $date_array = explode(',', $leaves);
 
-                            $af = new AccrualFactory();
+    //                     foreach ($date_array as $date) {
 
-                            $af->setAccrualPolicyID($lrf->getAccuralPolicy());
-                            $af->setUser($lrf->getUser());
-                            $af->setType(55);
+    //                         $af = new AccrualFactory();
 
-                            $datestamp = new DateTime(trim($date) );
-                            $timestamp = $datestamp->getTimestamp();
-                            $af->setTimeStamp($timestamp);
+    //                         $af->setAccrualPolicyID($lrf->getAccuralPolicy());
+    //                         $af->setUser($lrf->getUser());
+    //                         $af->setType(55);
 
-                            if($lrf->getLeaveMethod() ==1){
-                                $af->setAmount(-28800);
-                                $amount_taken=-28800;
-                            }else{
-                                $af->setAmount($amount_taken);
-                            }
+    //                         $datestamp = new DateTime(trim($date) );
+    //                         $timestamp = $datestamp->getTimestamp();
+    //                         $af->setTimeStamp($timestamp);
 
-                            $af->setLeaveRequestId($lrf->getId());
-                            $af->setEnableCalcBalance(true);
-                            if ($af->isValid()) {
+    //                         if($lrf->getLeaveMethod() ==1){
+    //                             $af->setAmount(-28800);
+    //                             $amount_taken=-28800;
+    //                         }else{
+    //                             $af->setAmount($amount_taken);
+    //                         }
 
-                                $result = $af->save();
+    //                         $af->setLeaveRequestId($lrf->getId());
+    //                         $af->setEnableCalcBalance(true);
+    //                         if ($af->isValid()) {
 
-                                    if($lrf->getAccuralPolicy() == 9){
+    //                             $result = $af->save();
 
-                                        $udlf_a = new UserDateListFactory();
-                                        $udlf_a->getByUserIdAndDate($lrf->getUser(), $datestamp->format('Y-m-d'));
+    //                                 if($lrf->getAccuralPolicy() == 9){
 
-                                        if( $udlf_a->getRecordCount() > 0){
+    //                                     $udlf_a = new UserDateListFactory();
+    //                                     $udlf_a->getByUserIdAndDate($lrf->getUser(), $datestamp->format('Y-m-d'));
 
-                                            $user_date_id_a = $udlf_a->getCurrent()->getId();
+    //                                     if( $udlf_a->getRecordCount() > 0){
 
-                                            if(isset($user_date_id_a) && $user_date_id_a >0){
-                                                $ulf_a = new UserListFactory();
-                                                $ulf_a->getById($user_id);
+    //                                         $user_date_id_a = $udlf_a->getCurrent()->getId();
 
-                                                $user_a = $ulf_a->getCurrent();
+    //                                         if(isset($user_date_id_a) && $user_date_id_a >0){
+    //                                             $ulf_a = new UserListFactory();
+    //                                             $ulf_a->getById($user_id);
 
-                                                $udtlf_obj = new UserDateTotalListFactory();
-                                                $udtlf_obj->getByUserDateIdAndStatusAndType($user_date_id,30,10);
+    //                                             $user_a = $ulf_a->getCurrent();
 
-                                                if($udtlf_obj->getRecordCount() > 0){
-                                                    $udt_old_obj = $udtlf_obj->getCurrent();
-                                                    $udt_old_obj->setDeleted(1);
-                                                    $udt_old_obj->save();
+    //                                             $udtlf_obj = new UserDateTotalListFactory();
+    //                                             $udtlf_obj->getByUserDateIdAndStatusAndType($user_date_id,30,10);
 
-                                                }
+    //                                             if($udtlf_obj->getRecordCount() > 0){
+    //                                                 $udt_old_obj = $udtlf_obj->getCurrent();
+    //                                                 $udt_old_obj->setDeleted(1);
+    //                                                 $udt_old_obj->save();
 
-                                                $udt_obj_total = new UserDateTotalFactory();
+    //                                             }
 
+    //                                             $udt_obj_total = new UserDateTotalFactory();
 
-                                                $udt_obj_total->setUserDateID($user_date_id_a);
-                                                $udt_obj_total->setTotalTime(-1*$amount_taken);
-                                                $udt_obj_total->setStatus(10);
-                                                $udt_obj_total->setType(10);
-                                                //$udt_obj_total->setAbsencePolicyID(11);
-
-                                                $udt_obj_total->setBranch($user_a->getDefaultBranch());
-                                                $udt_obj_total->setDepartment($user_a->getDefaultDepartment());
-                                                $udt_obj_total->setActualTotalTime($amount_taken);
-
-                                                if ( $udt_obj_total->isValid() ){
-                                                    $udt_obj_total->Save();
-
-                                                    //  $af->setUserDateTotalID();
-                                                }
-
-                                                $udt_obj = new UserDateTotalFactory();
-
-                                                $udt_obj->setUserDateID($user_date_id_a);
-                                                $udt_obj->setTotalTime(-1*$amount_taken);
-                                                $udt_obj->setStatus(30);
-                                                $udt_obj->setType(10);
-                                                $udt_obj->setAbsencePolicyID(11);
-                                                $udt_obj->setOverride(TRUE);
-                                                $udt_obj->setBranch($user_a->getDefaultBranch());
-                                                $udt_obj->setDepartment($user_a->getDefaultDepartment());
-                                                $udt_obj->setActualTotalTime($amount_taken);
 
-                                                if ( $udt_obj->isValid() ){
+    //                                             $udt_obj_total->setUserDateID($user_date_id_a);
+    //                                             $udt_obj_total->setTotalTime(-1*$amount_taken);
+    //                                             $udt_obj_total->setStatus(10);
+    //                                             $udt_obj_total->setType(10);
+    //                                             //$udt_obj_total->setAbsencePolicyID(11);
 
-                                                    $udt_obj->Save();
+    //                                             $udt_obj_total->setBranch($user_a->getDefaultBranch());
+    //                                             $udt_obj_total->setDepartment($user_a->getDefaultDepartment());
+    //                                             $udt_obj_total->setActualTotalTime($amount_taken);
+
+    //                                             if ( $udt_obj_total->isValid() ){
+    //                                                 $udt_obj_total->Save();
+
+    //                                                 //  $af->setUserDateTotalID();
+    //                                             }
+
+    //                                             $udt_obj = new UserDateTotalFactory();
 
-                                                    //  $af->setUserDateTotalID();
-                                                }
-                                            }
-                                        }
-                                    }
-                            }
-                        }
-
-                        if($result){
-                            // save accrual balance
-                            // $abf->save();
-
-                            // $leave_request_id =  $lrf->getId();
-                            $leave_amount =   $lrf->getAmount();
-                            $leave_methord =   $lrf->getLeaveMethod();
-                            $leave_type =   $lrf->getAccuralPolicy();
-                            $user_id = $lrf->getUser();
-                            $from_date = $lrf->getLeaveFrom();
-                            $to_date = $lrf->getLeaveTo();
-                            $sueprvisor_id =$lrf->getSupervisorId();
-
-                            // Approve leave
-                            $lrf->setCoveredApproved(1);
-                            $lrf->setSupervisorApproved(1);
-                            $lrf->save();
-
-                            Log::info("Saved leave ID {$key} as approved.");
-
-                            if(($leave_methord == 1 && $leave_type == 12) || $leave_methord == 2 || $leave_methord == 3 ){
-
-                                // Update UserDateTotal
-                                $udlf = new UserDateListFactory();
-                                $udlf->getByUserIdAndDate($user_id, $from_date);
-
-                                if ($udlf->getRecordCount() == 1) {
-                                    $user_date_id = $udlf->getCurrent()->getId();
-
-                                if(isset($user_date_id) && $user_date_id > 0 ){
-                                    $ulf = new UserListFactory();
-                                    $ulf->getById($user_id);
-                                    $user = $ulf->getCurrent();
-
-                                    $udtlf = new UserDateTotalListFactory();
-                                    $udtlf->getByUserDateId($user_date_id);
-
-                                    // Delete existing records
-                                    $udtlf_obj = new UserDateTotalListFactory();
-                                    $udtlf_obj->getByUserDateIdAndStatusAndType($user_date_id, 30, 10);
-
-                                    if ($udtlf_obj->getRecordCount() > 0) {
-                                        $udt_old_obj = $udtlf_obj->getCurrent();
-                                        $udt_old_obj->setDeleted(1);
-                                        $udt_old_obj->save();
-                                    }
-
-                                    // Save new UserDateTotal
-                                    $udt_obj = new UserDateTotalFactory();
-
-                                    if($leave_methord == 1 && $leave_type = 9){
-                                        $amount_taken = $amount_taken * -1;
-                                        $leave_type =11;
-                                        $udt_obj->setOverride(TRUE);
-                                    }
-
-                                    if($leave_methord == 1 && $leave_type = 12){
-                                        $amount_taken = $amount_taken * -1;
-                                        $leave_type =9;
-                                        $udt_obj->setOverride(TRUE);
-                                    }
-
-                                    $udt_obj->setUserDateID($user_date_id);
-                                    $udt_obj->setTotalTime($amount_taken);
-                                    $udt_obj->setStatus(30);
-                                    $udt_obj->setType(10);
-                                    $udt_obj->setAbsencePolicyID($lrf->getAccuralPolicy());
-                                    $udt_obj->setBranch($user->getDefaultBranch());
-                                    $udt_obj->setDepartment($user->getDefaultDepartment());
-                                    $udt_obj->setActualTotalTime($amount_taken);
-                                    if ($udt_obj->isValid()) {
-                                        $udt_obj->Save();
-                                    }
-
-
-                                    if($udtlf->getRecordCount() > 0){
-
-                                        $udtlf->StartTransaction();
-                                        $udt_data_old = [];
-
-                                        foreach ($udtlf->rs as $udt_obj) {
-                                            $udtlf->data = (array)$udt_obj;
-                                            $udt_obj = $udtlf;
-
-                                            // $udt_obj->setDeleted(TRUE);
-
-                                            if ( $udt_obj->isValid() ) {
-
-
-                                                $udt_data_old[] = array(
-                                                    'id' => $udt_obj->getId(),
-                                                    'user_date_id' => $udt_obj->getUserDateId(),
-                                                    'date_stamp' => $udt_obj->getUserDateObject()->getDateStamp(),
-                                                    'user_id' => $udt_obj->getUserDateObject()->getUser(),
-                                                    'user_full_name' => $udt_obj->getUserDateObject()->getUserObject()->getFullName(),
-                                                    'status_id' => $udt_obj->getStatus(),
-                                                    'type_id' => $udt_obj->getType(),
-                                                    'total_time' => $udt_obj->getTotalTime(),
-                                                    'absence_policy_id' => $udt_obj->getAbsencePolicyID(),
-                                                    'absence_leave_id' => $absence_leave_id,
-                                                    'branch_id' => $udt_obj->getBranch(),
-                                                    'department_id' => $udt_obj->getDepartment(),
-                                                    'job_id' => $udt_obj->getJob(),
-                                                    'job_item_id' => $udt_obj->getJobItem(),
-                                                    'override' => $udt_obj->getOverride(),
-                                                    'created_date' => $udt_obj->getCreatedDate(),
-                                                    'created_by' => $udt_obj->getCreatedBy(),
-                                                    'updated_date' => $udt_obj->getUpdatedDate(),
-                                                    'updated_by' => $udt_obj->getUpdatedBy(),
-                                                    'deleted_date' => $udt_obj->getDeletedDate(),
-                                                    'deleted_by' => $udt_obj->getDeletedBy()
-                                                );
-                                                            //  $udt_obj->Save();
-                                            }
-
-                                        } // end foreach
-
-                                        $pclf_o = new PunchControlListFactory();
-                                        $pclf_o->getByUserDateId($user_date_id);
-
-                                        if($pclf_o->getRecordCount() > 0){
-
-                                            $pcf_o = $pclf_o->getCurrent();
-                                            $plf = new PunchListFactory();
-                                            $plf->getByPunchControlIdAndStatusId($pcf_o->getId(), 20);
-
-                                            if($plf->getRecordCount() >0){
-
-                                                $pf = $plf->getCurrent();
-                                                //$pf = new PunchFactory();
-                                                $out_time =$pf->getTimeStamp();
-
-                                                $out_date_time = new DateTime();
-                                                $out_date_time->setTimestamp($out_time);
-                                                $out_date = $out_date_time->format('Y-m-d');
-                                                $office_out_time_string = $out_date.' 16:45:00';
-
-                                                $office_out_time = DateTime::createFromFormat('Y-m-d H:i:s', $office_out_time_string);
-
-                                                $dateDiff  = $office_out_time->diff($out_date_time);
-                                                $over_time_minutes = intval($dateDiff->format("%R%I"));
-                                                $hours = $dateDiff->format("%R%H");
-
-                                                $group_id =$ulf->getCurrent()->getGroup();
-                                                $ulf->getCurrent()->getPolicyGroup();
-
-                                                $over_time_total = $dateDiff->format("%R%H")*3600 + $over_time_minutes*60 ;
-
-                                                if($over_time_total>0){
-                                                    if ($group_id == 3) {
-
-                                                        $udtlf_obj = new UserDateTotalListFactory();
-                                                        $udtlf_obj->getByUserDateIdAndStatusAndType($user_date_id,10,40);
-
-                                                        if($udtlf_obj->getRecordCount() > 0){
-                                                            $udt_old_obj = $udtlf_obj->getCurrent();
-                                                            $udt_old_obj->setDeleted(1);
-                                                            $udt_old_obj->save();
-
-                                                        }
-
-                                                        $pre_policy = new PremiumPolicyListFactory();
-                                                        $pre_policy->getByPolicyGroupUserId($user_id);
-                                                        $ppf =  $pre_policy->getCurrent();
-                                                        $premium_policy_id = $ppf->getId();
-
-
-                                                        $udt_obj = new UserDateTotalFactory();
-                                                        $udt_obj->setUserDateID($user_date_id);
-                                                        $udt_obj->setTotalTime($over_time_total);
-                                                        $udt_obj->setStatus(10);
-                                                        $udt_obj->setType(40);
-                                                        $udt_obj->setPremiumPolicyID($premium_policy_id);
-                                                        $udt_obj->setBranch($user->getDefaultBranch());
-                                                        $udt_obj->setDepartment($user->getDefaultDepartment());
-                                                        $udt_obj->setActualTotalTime($over_time_total);
-
-                                                        if ( $udt_obj->isValid() ){
-
-                                                            $udt_obj->Save();
-                                                        }
-                                                    } elseif ($group_id == 4 || $group_id == 6) {
-                                                        $oplf = new OverTimePolicyListFactory();
-                                                        $oplf->getByPolicyGroupUserId($user_id);
-                                                        $opf =  $oplf->getCurrent();
-                                                        $overtime_policy_id = $opf->getId();
-
-                                                        $udt_obj = new UserDateTotalFactory();
-
-                                                        $udt_obj->setUserDateID($user_date_id);
-                                                        $udt_obj->setTotalTime($over_time_total);
-                                                        $udt_obj->setStatus(10);
-                                                        $udt_obj->setType(30);
-                                                        $udt_obj->setOverTimePolicyID($overtime_policy_id);
-                                                        $udt_obj->setBranch($user->getDefaultBranch());
-                                                        $udt_obj->setDepartment($user->getDefaultDepartment());
-                                                        $udt_obj->setActualTotalTime($over_time_total);
-
-                                                        if ( $udt_obj->isValid() ){
-
-                                                            $udt_obj->Save();
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        foreach ($udt_data_old as $user_data){
-                                            $udtlf = new UserDateTotalFactory();
-                                        }
-
-                                        $udtlf->CommitTransaction();
-
-                                    }
-                                }
-
-                                }
-                            }
-
-                                $supervisors = new UserListFactory();
-                                $supervisors->getById(trim($sueprvisor_id));
-                                $supervisor_obj = $supervisors->getCurrent();
-
-                                $employeeLF = new UserListFactory();
-                                $employeeLF->getById(trim($user_id));
-                                $employee_obj = $employeeLF->getCurrent();
-
-                                $aplf = new AccrualPolicyListFactory();
-                                $aplf->getById($leave_type);
-
-
-                            } else {
-                                $msg = "Invalid accruals or you don't have permission";
-                            }
-
-                        } else {
-                            $msg = "Leave record not found.";
-                        }
-                    }
-        }
-
-        return redirect()->back()->with('success', 'Selected leaves have been submitted.');
-    }
+    //                                             $udt_obj->setUserDateID($user_date_id_a);
+    //                                             $udt_obj->setTotalTime(-1*$amount_taken);
+    //                                             $udt_obj->setStatus(30);
+    //                                             $udt_obj->setType(10);
+    //                                             $udt_obj->setAbsencePolicyID(11);
+    //                                             $udt_obj->setOverride(TRUE);
+    //                                             $udt_obj->setBranch($user_a->getDefaultBranch());
+    //                                             $udt_obj->setDepartment($user_a->getDefaultDepartment());
+    //                                             $udt_obj->setActualTotalTime($amount_taken);
+
+    //                                             if ( $udt_obj->isValid() ){
+
+    //                                                 $udt_obj->Save();
+
+    //                                                 //  $af->setUserDateTotalID();
+    //                                             }
+    //                                         }
+    //                                     }
+    //                                 }
+    //                         }
+    //                     }
+
+    //                     if($result){
+    //                         // save accrual balance
+    //                         // $abf->save();
+
+    //                         // $leave_request_id =  $lrf->getId();
+    //                         $leave_amount =   $lrf->getAmount();
+    //                         $leave_methord =   $lrf->getLeaveMethod();
+    //                         $leave_type =   $lrf->getAccuralPolicy();
+    //                         $user_id = $lrf->getUser();
+    //                         $from_date = $lrf->getLeaveFrom();
+    //                         $to_date = $lrf->getLeaveTo();
+    //                         $sueprvisor_id =$lrf->getSupervisorId();
+
+    //                         // Approve leave
+    //                         $lrf->setCoveredApproved(1);
+    //                         $lrf->setSupervisorApproved(1);
+    //                         $lrf->save();
+
+    //                         Log::info("Saved leave ID {$key} as approved.");
+
+    //                         if(($leave_methord == 1 && $leave_type == 12) || $leave_methord == 2 || $leave_methord == 3 ){
+
+    //                             // Update UserDateTotal
+    //                             $udlf = new UserDateListFactory();
+    //                             $udlf->getByUserIdAndDate($user_id, $from_date);
+
+    //                             if ($udlf->getRecordCount() == 1) {
+    //                                 $user_date_id = $udlf->getCurrent()->getId();
+
+    //                             if(isset($user_date_id) && $user_date_id > 0 ){
+    //                                 $ulf = new UserListFactory();
+    //                                 $ulf->getById($user_id);
+    //                                 $user = $ulf->getCurrent();
+
+    //                                 $udtlf = new UserDateTotalListFactory();
+    //                                 $udtlf->getByUserDateId($user_date_id);
+
+    //                                 // Delete existing records
+    //                                 $udtlf_obj = new UserDateTotalListFactory();
+    //                                 $udtlf_obj->getByUserDateIdAndStatusAndType($user_date_id, 30, 10);
+
+    //                                 if ($udtlf_obj->getRecordCount() > 0) {
+    //                                     $udt_old_obj = $udtlf_obj->getCurrent();
+    //                                     $udt_old_obj->setDeleted(1);
+    //                                     $udt_old_obj->save();
+    //                                 }
+
+    //                                 // Save new UserDateTotal
+    //                                 $udt_obj = new UserDateTotalFactory();
+
+    //                                 if($leave_methord == 1 && $leave_type = 9){
+    //                                     $amount_taken = $amount_taken * -1;
+    //                                     $leave_type =11;
+    //                                     $udt_obj->setOverride(TRUE);
+    //                                 }
+
+    //                                 if($leave_methord == 1 && $leave_type = 12){
+    //                                     $amount_taken = $amount_taken * -1;
+    //                                     $leave_type =9;
+    //                                     $udt_obj->setOverride(TRUE);
+    //                                 }
+
+    //                                 $udt_obj->setUserDateID($user_date_id);
+    //                                 $udt_obj->setTotalTime($amount_taken);
+    //                                 $udt_obj->setStatus(30);
+    //                                 $udt_obj->setType(10);
+    //                                 $udt_obj->setAbsencePolicyID($lrf->getAccuralPolicy());
+    //                                 $udt_obj->setBranch($user->getDefaultBranch());
+    //                                 $udt_obj->setDepartment($user->getDefaultDepartment());
+    //                                 $udt_obj->setActualTotalTime($amount_taken);
+    //                                 if ($udt_obj->isValid()) {
+    //                                     $udt_obj->Save();
+    //                                 }
+
+
+    //                                 if($udtlf->getRecordCount() > 0){
+
+    //                                     $udtlf->StartTransaction();
+    //                                     $udt_data_old = [];
+
+    //                                     foreach ($udtlf->rs as $udt_obj) {
+    //                                         $udtlf->data = (array)$udt_obj;
+    //                                         $udt_obj = $udtlf;
+
+    //                                         // $udt_obj->setDeleted(TRUE);
+
+    //                                         if ( $udt_obj->isValid() ) {
+
+
+    //                                             $udt_data_old[] = array(
+    //                                                 'id' => $udt_obj->getId(),
+    //                                                 'user_date_id' => $udt_obj->getUserDateId(),
+    //                                                 'date_stamp' => $udt_obj->getUserDateObject()->getDateStamp(),
+    //                                                 'user_id' => $udt_obj->getUserDateObject()->getUser(),
+    //                                                 'user_full_name' => $udt_obj->getUserDateObject()->getUserObject()->getFullName(),
+    //                                                 'status_id' => $udt_obj->getStatus(),
+    //                                                 'type_id' => $udt_obj->getType(),
+    //                                                 'total_time' => $udt_obj->getTotalTime(),
+    //                                                 'absence_policy_id' => $udt_obj->getAbsencePolicyID(),
+    //                                                 'absence_leave_id' => $absence_leave_id,
+    //                                                 'branch_id' => $udt_obj->getBranch(),
+    //                                                 'department_id' => $udt_obj->getDepartment(),
+    //                                                 'job_id' => $udt_obj->getJob(),
+    //                                                 'job_item_id' => $udt_obj->getJobItem(),
+    //                                                 'override' => $udt_obj->getOverride(),
+    //                                                 'created_date' => $udt_obj->getCreatedDate(),
+    //                                                 'created_by' => $udt_obj->getCreatedBy(),
+    //                                                 'updated_date' => $udt_obj->getUpdatedDate(),
+    //                                                 'updated_by' => $udt_obj->getUpdatedBy(),
+    //                                                 'deleted_date' => $udt_obj->getDeletedDate(),
+    //                                                 'deleted_by' => $udt_obj->getDeletedBy()
+    //                                             );
+    //                                                         //  $udt_obj->Save();
+    //                                         }
+
+    //                                     } // end foreach
+
+    //                                     $pclf_o = new PunchControlListFactory();
+    //                                     $pclf_o->getByUserDateId($user_date_id);
+
+    //                                     if($pclf_o->getRecordCount() > 0){
+
+    //                                         $pcf_o = $pclf_o->getCurrent();
+    //                                         $plf = new PunchListFactory();
+    //                                         $plf->getByPunchControlIdAndStatusId($pcf_o->getId(), 20);
+
+    //                                         if($plf->getRecordCount() >0){
+
+    //                                             $pf = $plf->getCurrent();
+    //                                             //$pf = new PunchFactory();
+    //                                             $out_time =$pf->getTimeStamp();
+
+    //                                             $out_date_time = new DateTime();
+    //                                             $out_date_time->setTimestamp($out_time);
+    //                                             $out_date = $out_date_time->format('Y-m-d');
+    //                                             $office_out_time_string = $out_date.' 16:45:00';
+
+    //                                             $office_out_time = DateTime::createFromFormat('Y-m-d H:i:s', $office_out_time_string);
+
+    //                                             $dateDiff  = $office_out_time->diff($out_date_time);
+    //                                             $over_time_minutes = intval($dateDiff->format("%R%I"));
+    //                                             $hours = $dateDiff->format("%R%H");
+
+    //                                             $group_id =$ulf->getCurrent()->getGroup();
+    //                                             $ulf->getCurrent()->getPolicyGroup();
+
+    //                                             $over_time_total = $dateDiff->format("%R%H")*3600 + $over_time_minutes*60 ;
+
+    //                                             if($over_time_total>0){
+    //                                                 if ($group_id == 3) {
+
+    //                                                     $udtlf_obj = new UserDateTotalListFactory();
+    //                                                     $udtlf_obj->getByUserDateIdAndStatusAndType($user_date_id,10,40);
+
+    //                                                     if($udtlf_obj->getRecordCount() > 0){
+    //                                                         $udt_old_obj = $udtlf_obj->getCurrent();
+    //                                                         $udt_old_obj->setDeleted(1);
+    //                                                         $udt_old_obj->save();
+
+    //                                                     }
+
+    //                                                     $pre_policy = new PremiumPolicyListFactory();
+    //                                                     $pre_policy->getByPolicyGroupUserId($user_id);
+    //                                                     $ppf =  $pre_policy->getCurrent();
+    //                                                     $premium_policy_id = $ppf->getId();
+
+
+    //                                                     $udt_obj = new UserDateTotalFactory();
+    //                                                     $udt_obj->setUserDateID($user_date_id);
+    //                                                     $udt_obj->setTotalTime($over_time_total);
+    //                                                     $udt_obj->setStatus(10);
+    //                                                     $udt_obj->setType(40);
+    //                                                     $udt_obj->setPremiumPolicyID($premium_policy_id);
+    //                                                     $udt_obj->setBranch($user->getDefaultBranch());
+    //                                                     $udt_obj->setDepartment($user->getDefaultDepartment());
+    //                                                     $udt_obj->setActualTotalTime($over_time_total);
+
+    //                                                     if ( $udt_obj->isValid() ){
+
+    //                                                         $udt_obj->Save();
+    //                                                     }
+    //                                                 } elseif ($group_id == 4 || $group_id == 6) {
+    //                                                     $oplf = new OverTimePolicyListFactory();
+    //                                                     $oplf->getByPolicyGroupUserId($user_id);
+    //                                                     $opf =  $oplf->getCurrent();
+    //                                                     $overtime_policy_id = $opf->getId();
+
+    //                                                     $udt_obj = new UserDateTotalFactory();
+
+    //                                                     $udt_obj->setUserDateID($user_date_id);
+    //                                                     $udt_obj->setTotalTime($over_time_total);
+    //                                                     $udt_obj->setStatus(10);
+    //                                                     $udt_obj->setType(30);
+    //                                                     $udt_obj->setOverTimePolicyID($overtime_policy_id);
+    //                                                     $udt_obj->setBranch($user->getDefaultBranch());
+    //                                                     $udt_obj->setDepartment($user->getDefaultDepartment());
+    //                                                     $udt_obj->setActualTotalTime($over_time_total);
+
+    //                                                     if ( $udt_obj->isValid() ){
+
+    //                                                         $udt_obj->Save();
+    //                                                     }
+    //                                                 }
+    //                                             }
+    //                                         }
+    //                                     }
+
+    //                                     foreach ($udt_data_old as $user_data){
+    //                                         $udtlf = new UserDateTotalFactory();
+    //                                     }
+
+    //                                     $udtlf->CommitTransaction();
+
+    //                                 }
+    //                             }
+
+    //                             }
+    //                         }
+
+    //                             $supervisors = new UserListFactory();
+    //                             $supervisors->getById(trim($sueprvisor_id));
+    //                             $supervisor_obj = $supervisors->getCurrent();
+
+    //                             $employeeLF = new UserListFactory();
+    //                             $employeeLF->getById(trim($user_id));
+    //                             $employee_obj = $employeeLF->getCurrent();
+
+    //                             $aplf = new AccrualPolicyListFactory();
+    //                             $aplf->getById($leave_type);
+
+
+    //                         } else {
+    //                             $msg = "Invalid accruals or you don't have permission";
+    //                         }
+
+    //                     } else {
+    //                         $msg = "Leave record not found.";
+    //                     }
+    //                 }
+    //     }
+
+    //     return redirect()->back()->with('success', 'Selected leaves have been submitted.');
+    // }
 
 // only supervisor approved not calculation
-// public function submit(Request $request)
-// {
-//     $leaveRequests = $request->input('data.leave_request', []);
+public function submit(Request $request)
+{
+    $leaveRequests = $request->input('data.leave_request', []);
 
-//     if (empty($leaveRequests)) {
-//         return redirect()->back()->with('error', 'No leave selected.');
-//     }
+    if (empty($leaveRequests)) {
+        return redirect()->back()->with('error', 'No leave selected.');
+    }
 
-//     foreach ($leaveRequests as $key => $val) {
-//         $lrlf = new LeaveRequestListFactory();
-//         $lrlf->getById($key);
+    foreach ($leaveRequests as $key => $val) {
+        $lrlf = new LeaveRequestListFactory();
+        $lrlf->getById($key);
 
-//         if ($lrlf->getRecordCount() > 0) {
-//             $lrf = $lrlf->getCurrent();
+        if ($lrlf->getRecordCount() > 0) {
+            $lrf = $lrlf->getCurrent();
 
-//             // Only update supervisor approval
-//             $lrf->setSupervisorApproved(1);
+            $ablf = new AccrualBalanceListFactory();
+            $ablf->getByUserIdAndAccrualPolicyId($lrf->getUser(), $lrf->getAccuralPolicy());
 
-//             if ($lrf->isValid()) {
-//                 $lrf->save();
-//                 Log::info("Leave ID {$key} approved by supervisor.");
-//             }
-//         } else {
-//             Log::warning("Leave request ID {$key} not found.");
-//         }
-//     }
+                if ($ablf->getRecordCount() > 0) {
+                    $abf = $ablf->getCurrent();
+                    $balance = $abf->getBalance();
+                    $amount = $lrf->getAmount();
+                    $amount_taken = 0;
 
-//     return redirect()->back()->with('success', 'Selected leaves have been approved by supervisor.');
-// }
+                    // Calculate amount_taken based on leave method
+                    if ($lrf->getLeaveMethod() == 1) {
+                        $amount_taken = (($amount * 8) * (28800 / 8));
+                    } elseif ($lrf->getLeaveMethod() == 2) {
+                        if($amount<1){
+                            $amount_taken = (($amount*8) * (28800/8));
+                        }else{
+                            $amount_taken = (($amount*8) * (28800/8));
+                        }
+                    } elseif ($lrf->getLeaveMethod() == 3) {
+                        $start_date_stamp = TTDate::parseTimeUnit($lrf->getLeaveTime());
+                        $end_date_stamp = TTDate::parseTimeUnit($lrf->getLeaveEndTime());
+
+                        $time_diff = $end_date_stamp - $start_date_stamp;
+
+                        if ($time_diff < 3600) {
+                            $time_diff = 3600;
+                        } elseif ($time_diff > 7200) {
+                            $time_diff = 7200;
+                        }
+
+                        $amount_taken = $time_diff * 0.8;
+                    }
+
+                    $amount_taken = -1 * abs($amount_taken);
+                    $current_balance = $balance - abs($amount_taken);
+                    $abf->setBalance($current_balance);
+
+                    $leaves = $lrf->getLeaveDates();
+                    $date_array = explode(',', $leaves);
+                }
+            // Only update supervisor approval
+            $lrf->setSupervisorApproved(1);
+
+            if ($lrf->isValid()) {
+                $lrf->save();
+                Log::info("Leave ID {$key} approved by supervisor.");
+            }
+        } else {
+            Log::warning("Leave request ID {$key} not found.");
+        }
+    }
+
+    return redirect()->back()->with('success', 'Selected leaves have been approved by supervisor.');
+}
 
 
 
@@ -1267,44 +1308,6 @@ class ApprovedSupervisedBy extends Controller
 
         return redirect()->back()->with('success', 'Selected leaves have been rejected.');
     }
-
-
-
-
-    // public function bulkAction(Request $request)
-    // {
-    //     $action = $request->input('action'); // 'submit' or 'rejected'
-    //     $leaveRequests = $request->input('data.leave_request', []);
-
-    //     if (empty($leaveRequests)) {
-    //         return redirect()->back()->with('error', 'No leaves selected.');
-    //     }
-
-    //     foreach ($leaveRequests as $leaveId => $isApproved) {
-
-    //         $lrlf = new LeaveRequestListFactory();
-    //         $lrlf->getById($leaveId);
-
-    //         if ($lrlf->getRecordCount() > 0) {
-    //             $lrf = $lrlf->getCurrent();
-
-    //             if ($action === 'submit') {
-    //                 $lrf->setStatus(20); // e.g., Approved
-    //             } elseif ($action === 'rejected') {
-    //                 $lrf->setStatus(30); // Rejected
-    //                 $this->sendRejectionEmail($lrf); // Use Laravel Mail
-    //             }
-
-    //             $lrf->save();
-    //         }
-    //     }
-
-    //     return redirect()->back()->with('success', 'Leave requests processed successfully.');
-    // }
-
-
-
-
 
 
 }

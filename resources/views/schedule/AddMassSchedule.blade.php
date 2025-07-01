@@ -15,18 +15,20 @@
                 </div>
 
                 <div class="card-body">
-                   
+
                     {{-- --------------------------------------------------------------------------- --}}
 
-                    <form method="post" name="mass_schedule" action="{$smarty.server.SCRIPT_NAME}">
+                    <form method="POST" name="mass_schedule" action="{{ route('schedule.add_mass_schedule') }}">
+                        @csrf
+
                         <div id="contentBoxTwoEdit">
-                            @if (!$sf->Validator->isValid())
+                            {{-- @if (!$sf->Validator->isValid()) --}}
                                 {{-- error list here --}}
                                 {{-- {include file="form_errors.tpl" object="sf"} --}}
-                            @endif
-            
+                            {{-- @endif --}}
+
                             <table class="table table-bordered">
-            
+
                             <tr>
                                 <th>
                                     Employee(s):
@@ -74,7 +76,7 @@
                                     </table>
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Status:
@@ -85,7 +87,7 @@
                                     </select>
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     In:
@@ -95,7 +97,7 @@
                                     ie: {{$current_user_prefs->getTimeFormatExample()}}
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Out:
@@ -105,7 +107,7 @@
                                     ie: {{$current_user_prefs->getTimeFormatExample()}}
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Total:
@@ -116,7 +118,7 @@
                                     </span>
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Start Date:
@@ -133,7 +135,7 @@
                                     <input type="date"id="end_date_stamp" name="data[end_date_stamp]" value="{{getdate_helper('date', $data['end_date_stamp'])}}">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Only These Day(s):
@@ -166,31 +168,38 @@
                                         </tr>
                                         <tr style="text-align:center;">
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][0]" value="1" {{!empty($data['dow']) && $data['dow'][0] ? 'checked' : ''}} >
+                                                {{-- <input type="checkbox" class="checkbox" name="data[dow][0]" value="1" {{!empty($data['dow']) && $data['dow'][0] ? 'checked' : ''}} > --}}
+                                                <input type="checkbox" class="checkbox" name="data[dow][0]" value="1" {{ isset($data['dow'][0]) && $data['dow'][0] ? 'checked' : '' }} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][1]" value="1" {{!empty($data['dow']) && $data['dow'][1] ? 'checked' : ''}} >
+                                                {{-- <input type="checkbox" class="checkbox" name="data[dow][1]" value="1" {{!empty($data['dow']) && $data['dow'][1] ? 'checked' : ''}} > --}}
+                                                <input type="checkbox" class="checkbox" name="data[dow][1]" value="1" {{ isset($data['dow'][1]) && $data['dow'][1] ? 'checked' : '' }} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][2]" value="1" {{!empty($data['dow']) && $data['dow'][2] ? 'checked' : ''}} >
+                                                {{-- <input type="checkbox" class="checkbox" name="data[dow][2]" value="1" {{!empty($data['dow']) && $data['dow'][2] ? 'checked' : ''}} > --}}
+                                                <input type="checkbox" class="checkbox" name="data[dow][2]" value="1" {{ isset($data['dow'][2]) && $data['dow'][2] ? 'checked' : '' }} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][3]" value="1" {{!empty($data['dow']) && $data['dow'][3] ? 'checked' : ''}} >
+                                                {{-- <input type="checkbox" class="checkbox" name="data[dow][3]" value="1" {{!empty($data['dow']) && $data['dow'][3] ? 'checked' : ''}} > --}}
+                                                <input type="checkbox" class="checkbox" name="data[dow][3]" value="1" {{ isset($data['dow'][3]) && $data['dow'][3] ? 'checked' : '' }} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][4]" value="1" {{!empty($data['dow']) && $data['dow'][4] ? 'checked' : ''}} >
+                                                {{-- <input type="checkbox" class="checkbox" name="data[dow][4]" value="1" {{!empty($data['dow']) && $data['dow'][4] ? 'checked' : ''}} > --}}
+                                                <input type="checkbox" class="checkbox" name="data[dow][4]" value="1" {{ isset($data['dow'][4]) && $data['dow'][4] ? 'checked' : '' }} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][5]" value="1" {{!empty($data['dow']) && $data['dow'][5] ? 'checked' : ''}} >
+                                                {{-- <input type="checkbox" class="checkbox" name="data[dow][5]" value="1" {{!empty($data['dow']) && $data['dow'][5] ? 'checked' : ''}} > --}}
+                                                <input type="checkbox" class="checkbox" name="data[dow][5]" value="1" {{ isset($data['dow'][5]) && $data['dow'][5] ? 'checked' : '' }} >
                                             </td>
                                             <td >
-                                                <input type="checkbox" class="checkbox" name="data[dow][6]" value="1" {{!empty($data['dow']) && $data['dow'][6] ? 'checked' : ''}} >
+                                                {{-- <input type="checkbox" class="checkbox" name="data[dow][6]" value="1" {{!empty($data['dow']) && $data['dow'][6] ? 'checked' : ''}} > --}}
+                                                <input type="checkbox" class="checkbox" name="data[dow][6]" value="1" {{ isset($data['dow'][6]) && $data['dow'][6] ? 'checked' : '' }} >
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Schedule Policy:
@@ -201,7 +210,7 @@
                                     </select>
                                 </td>
                             </tr>
-            
+
                             <tbody id="absence" style="display:none">
                             <tr>
                                 <th>
@@ -214,7 +223,7 @@
                                 </td>
                             </tr>
                             </tbody>
-            
+
                             @if (count($data['branch_options']) > 1 OR $data['branch_id'] != 0)
                                 <tr>
                                     <th>
@@ -227,7 +236,7 @@
                                     </td>
                                 </tr>
                             @endif
-            
+
                             @if (count($data['department_options']) > 1 OR $data['department_id'] != 0)
                                 <tr>
                                     <th>
@@ -240,9 +249,9 @@
                                     </td>
                                 </tr>
                             @endif
-                            
+
                             {{-- job part removed --}}
-            
+
                             <tr>
                                 <th>
                                     Overwrite Existing Shifts:
@@ -253,15 +262,18 @@
                             </tr>
                         </table>
                         </div>
-            
+
                         <div id="contentBoxFour">
-                            <input type="submit" class="btnSubmit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
+                            {{-- <input type="submit" class="btnSubmit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))"> --}}
+                            <input type="hidden" name="action" value="submit">
+                            <input type="submit" class="btnSubmit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
+
                         </div>
-            
+
                     </form>
-                            
+
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->
@@ -272,12 +284,12 @@
     <script language="JavaScript">
 
         $(document).ready(function(){
-            showAbsencePolicy(); 
-            getScheduleTotalTime(); 
-            // getJobManualId(); 
+            showAbsencePolicy();
+            getScheduleTotalTime();
+            // getJobManualId();
             // getJobItemManualId();
         })
-        
+
         function showAbsencePolicy() {
             status_obj = document.getElementById('status_id');
             absence_obj = document.getElementById('absence');
@@ -289,7 +301,7 @@
                 absence_obj.style.display = '';
             }
         }
-        
+
         var loading = false;
         var hwCallback = {
             getScheduleTotalTime: function(result) {
@@ -311,20 +323,20 @@
                 loading = false;
             }
         }
-        
+
         var remoteHW = new AJAX_Server(hwCallback);
-        
+
         function getScheduleTotalTime() {
             start_time = document.getElementById('start_time').value;
             end_time = document.getElementById('end_time').value;
             schedule_policy_obj = document.getElementById('schedule_policy_id');
             schedule_policy_id = schedule_policy_obj[schedule_policy_obj.selectedIndex].value;
-        
-        
+
+
             if ( start_time != '' && end_time != '' ) {
                 remoteHW.getScheduleTotalTime( start_time, end_time, schedule_policy_id );
             }
         }
-        
+
     </script>
 </x-app-layout>

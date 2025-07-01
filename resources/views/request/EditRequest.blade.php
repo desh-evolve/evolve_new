@@ -7,6 +7,7 @@
             padding: 10px !important;
         }
     </style>
+    
     <div class="">
         <div class="col-lg-12">
             <div class="card">
@@ -25,9 +26,9 @@
                             @if (!$rf->Validator->isValid())
                                 {{-- show error list here --}}
                             @endif
-            
+
                             <table class="table table-bordered">
-            
+
                                 <tr>
                                     <td>
                                         Employee:
@@ -36,7 +37,7 @@
                                         {{$data['user_full_name']}}
                                     </td>
                                 </tr>
-                
+
                                 <tr>
                                     <td>
                                         Date:
@@ -46,7 +47,7 @@
                                         ie: {{$current_user_prefs->getDateFormatExample()}}
                                     </td>
                                 </tr>
-                
+
                                 <tr>
                                     <td>
                                         Type:
@@ -79,11 +80,11 @@
                                 @endif
                         </table>
                         </div>
-            
+
                         <div id="contentBoxFour">
                             <input type="submit" class="btn btn-primary btn-sm" name="action" value="Submit">
                         </div>
-            
+
                         <input type="hidden" name="data[id]" value="{{$data['id'] ?? ''}}">
                         <input type="hidden" name="data[user_id]" value="{{$data['user_id'] ?? ''}}">
                     </form>

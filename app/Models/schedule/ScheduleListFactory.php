@@ -66,6 +66,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 	function getByIdAndCompanyId( $id, $company_id ) {
 		return $this->getByCompanyIDAndId($company_id, $id);
 	}
+
+    
 	function getByCompanyIDAndId($company_id, $id) {
 		if ( $company_id == '' ) {
 			return FALSE;
@@ -116,10 +118,10 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$ph = array(
 					':user_date_id' => $id,
 					);
-                
+
                 //FL CHANGED THE QUERY FOR NPVC 20160812
                 $spf = new SchedulePolicyFactory();
-                  
+
 		$query = '
 					select 	a.*, b.name as shedule_policy_name
 					from	'. $this->getTable() .' a
@@ -130,8 +132,8 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-                
-             
+
+
 		return $this;
 	}
 
@@ -374,6 +376,10 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 			return FALSE;
 		}
 
+        // Convert to proper Carbon string only if not a UNIX timestamp
+        $start_date = is_numeric($start_date) ? date('Y-m-d H:i:s', $start_date) : $start_date;
+        $end_date = is_numeric($end_date) ? date('Y-m-d H:i:s', $end_date) : $end_date;
+
 		//MySQL is picky when it comes to timestamp filters on datestamp columns.
 		$start_datestamp = Carbon::parse( $start_date )->toDateString();
 		$end_datestamp = Carbon::parse( $end_date )->toDateString();
@@ -382,21 +388,21 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$end_timestamp = Carbon::parse( $end_date )->toDateTimeString();
 
 		$udf = new UserDateFactory();
-/*
-	This doesn't allow matching start/end times. SO it doesn't work with
-	scheduling job transfers.
-						(
-							(start_time >= '. $start_date .' AND end_time <= '. $end_date .')
-							OR
-							(start_time >= '. $start_date .' AND start_time <= '. $end_date .')
-							OR
-							(end_time >= '. $start_date .' AND end_time <= '. $end_date .')
-							OR
-							(start_time <= '. $start_date .' AND end_time >= '. $end_date .')
-						)
+        /*
+            This doesn't allow matching start/end times. SO it doesn't work with
+            scheduling job transfers.
+                                (
+                                    (start_time >= '. $start_date .' AND end_time <= '. $end_date .')
+                                    OR
+                                    (start_time >= '. $start_date .' AND start_time <= '. $end_date .')
+                                    OR
+                                    (end_time >= '. $start_date .' AND end_time <= '. $end_date .')
+                                    OR
+                                    (start_time <= '. $start_date .' AND end_time >= '. $end_date .')
+                                )
 
 
-*/
+        */
 
 		$ph = array(
 					':user_id' => $user_id,
@@ -1053,7 +1059,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 	// 				';
 	// 	$query .= $this->getWhereSQL( $where );
 	// 	$query .= $this->getSortSQL( $order );
-		
+
 	// 	$this->rs = DB::select($query, $ph);
 
 	// 	return $this;
@@ -1062,26 +1068,26 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		if ($company_id == '') {
 			return FALSE;
 		}
-	
+
 		if (isset($filter_data['branch_ids'])) {
 			$filter_data['branch_id'] = $filter_data['branch_ids'];
 		}
 		if (isset($filter_data['department_ids'])) {
 			$filter_data['department_id'] = $filter_data['department_ids'];
 		}
-	
+
 		if (isset($filter_data['punch_branch_ids'])) {
 			$filter_data['punch_branch_id'] = $filter_data['punch_branch_ids'];
 		}
 		if (isset($filter_data['punch_department_ids'])) {
 			$filter_data['punch_department_id'] = $filter_data['punch_department_ids'];
 		}
-	
+
 		$udf = new UserDateFactory();
 		$uf = new UserFactory();
-	
+
 		$ph = array(':company_id' => $company_id);
-	
+
 		$query = '
 			select  b.user_id as user_id,
 					b.pay_period_id as pay_period_id,
@@ -1098,22 +1104,22 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 				AND b.user_id = c.id
 				AND c.company_id = :company_id
 		';
-	
+
 		if (isset($filter_data['include_user_ids']) && isset($filter by_data['include_user_ids'][0]) && !in_array(-1, (array)$filter_data['include_user_ids'])) {
 			$query .= ' AND b.user_id in ('. $this->getListSQL($filter_data['include_user_ids'], $ph) .') ';
 		}
-	
+
 		if (isset($filter_data['pay_period_ids']) && isset($filter_data['pay_period_ids'][0]) && !in_array(-1, (array)$filter_data['pay_period_ids'])) {
 			$query .= ' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_ids'], $ph) .') ';
 		}
-	
+
 		if (isset($filter_data['punch_branch_id']) && isset($filter_data['punch_branch_id'][0]) && !in_array(-1, (array)$filter_data['punch_branch_id'])) {
 			$query .= ' AND a.branch_id in ('. $this->getListSQL($filter_data['punch_branch_id'], $ph) .') ';
 		}
 		if (isset($filter_data['punch_department_id']) && isset($filter_data['punch_department_id'][0]) && !in_array(-1, (array)$filter_data['punch_department_id'])) {
 			$query .= ' AND a.department_id in ('. $this->getListSQL($filter_data['punch_department_id'], $ph) .') ';
 		}
-	
+
 		if (isset($filter_data['start_date']) && trim($filter_data['start_date']) != '') {
 			$ph[':start_date'] = Carbon::parse($filter_data['start_date'])->toDateString();
 			$query .= ' AND b.date_stamp >= :start_date';
@@ -1122,16 +1128,16 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 			$ph[':end_date'] = Carbon::parse($filter_data['end_date'])->toDateString();
 			$query .= ' AND b.date_stamp <= :end_date';
 		}
-	
+
 		$query .= '
 			AND ( a.deleted = 0 AND b.deleted = 0 AND c.deleted = 0)
 			GROUP BY b.user_id, b.pay_period_id, b.date_stamp, a.status_id, a.schedule_policy_id, a.start_time, a.end_time
 		';
 		$query .= $this->getWhereSQL($where);
 		$query .= $this->getSortSQL($order);
-	
+
 		$this->rs = DB::select($query, $ph);
-	
+
 		return $this;
 	}
 

@@ -27,7 +27,7 @@ class ProgressBarControl extends Controller
 
 		//Don't stop execution if user hits their stop button on their browser!
 		ignore_user_abort(TRUE);
-    
+
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
@@ -47,7 +47,7 @@ class ProgressBarControl extends Controller
 				'filter_user_id',
 				'pay_stub_ids',
 				'data',
-			) 
+			)
 		));
 
 		$action = strtolower($action);

@@ -45,7 +45,7 @@ class ScheduleList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
     }
-	
+
     public function index() {
 		$permission = $this->permission;
 		$current_user = $this->currentUser;
@@ -62,9 +62,7 @@ class ScheduleList extends Controller
 
 		$viewData['title'] = 'Scheduled Shifts List';
 
-		/*
-		* Get FORM variables
-		*/
+
 		extract	(FormVariables::GetVariables(
 												array	(
 														'action',
@@ -147,46 +145,12 @@ class ScheduleList extends Controller
 			$action = strtolower($action);
 		}
 		switch ($action) {
-			case 'delete':
-			case 'undelete':
-				//Debug::setVerbosity( 11 );
-				if ( strtolower($action) == 'delete' ) {
-					$delete = TRUE;
-				} else {
-					$delete = FALSE;
-				}
-
-				if ( DEMO_MODE == FALSE
-					AND ( $permission->Check('schedule','delete') OR $permission->Check('schedule','delete_own') OR $permission->Check('schedule','delete_child')  ) ) {
-					$slf = new ScheduleListFactory();
-					$slf->StartTransaction();
-
-					$slf->getByCompanyIdAndId($current_company->getID(), $ids );
-					if ( $slf->getRecordCount() > 0 ) {
-						foreach($slf->rs as $s_obj) {
-							$slf->data = (array)$s_obj;
-							$s_obj = $slf;
-
-							$s_obj->setDeleted(TRUE);
-							if ( $s_obj->isValid() ) {
-								$s_obj->setEnableReCalculateDay(TRUE); //Need to remove absence time when deleting a schedule.
-								$s_obj->Save();
-							}
-						}
-					}
-					//$plf->FailTransaction();
-					$slf->CommitTransaction();
-				}
-
-				Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id ), '/schedule/schedule_list') );
-
-				break;
 			case 'search_form_delete':
 			case 'search_form_update':
 			case 'search_form_save':
 			case 'search_form_clear':
 			case 'search_form_search':
-				Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10); 
+				Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
 
 				//$saved_search_id = UserGenericDataFactory::searchFormDataHandler( $action, $filter_data, URLBuilder::getURL(NULL, 'ScheduleList.php') );
 			default:
@@ -222,7 +186,7 @@ class ScheduleList extends Controller
 					}
 				}
 
-				$pplf = new PayPeriodListFactory(); 
+				$pplf = new PayPeriodListFactory();
 				$pplf->getByCompanyId( $current_company->getId() );
 				$pay_period_options = $pplf->getArrayByListFactory( $pplf, FALSE, FALSE );
 				$pay_period_ids = array_keys((array)$pay_period_options);
@@ -243,7 +207,7 @@ class ScheduleList extends Controller
 
 				$schedule_status_options = $slf->getOptions('status');
 
-				$splf = new SchedulePolicyListFactory(); 
+				$splf = new SchedulePolicyListFactory();
 				$schedule_policy_options = $splf->getByCompanyIdArray( $current_company->getId(), FALSE );
 
 				$utlf = new UserTitleListFactory();
@@ -339,7 +303,7 @@ class ScheduleList extends Controller
 				$viewData['filter_data'] = $filter_data;
 				$viewData['columns'] = $filter_columns ;
 				$viewData['total_columns'] = count($filter_columns)+3 ;
-
+                // dd($viewData);
 
 				break;
 		}
@@ -347,6 +311,48 @@ class ScheduleList extends Controller
 		return view('schedule/ScheduleList', $viewData);
 
 	}
+
+
+    public function delete($id)
+    {
+        $current_company = $this->currentCompany;
+
+        if (empty($id)) {
+			return response()->json(['error' => 'No schedule List selected.'], 400);
+		}
+
+        $delete = TRUE;
+		$slf = new ScheduleListFactory();
+        // $slf->StartTransaction();
+
+        $slf->getByCompanyIdAndId($current_company->getID(), $id );
+
+        if ( $slf->getRecordCount() > 0 ) {
+
+            foreach($slf->rs as $s_obj) {
+                $slf->data = (array)$s_obj;
+                $s_obj = $slf;
+
+                $s_obj->setDeleted($delete);
+                if ( $s_obj->isValid() ) {
+                    // $s_obj->setEnableReCalculateDay(TRUE); //Need to remove absence time when deleting a schedule.
+                    $res = $s_obj->Save();
+
+                    if($res){
+                        return response()->json(['success' => 'Schedule Deleted Successfully.']);
+                    }else{
+                        return response()->json(['error' => 'Schedule Deleted Failed.']);
+                    }
+                }
+            }
+        }
+        //$plf->FailTransaction();
+        // $slf->CommitTransaction();
+
+		return response()->json(['success' => 'Operation completed successfully.']);
+
+    }
+
 }
 
 ?>

@@ -23,7 +23,7 @@ class UserGenericStatusList extends Controller
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
-    
+
         $this->userPrefs = View::shared('current_user_prefs');
         $this->company = View::shared('current_company');
         $this->permission = View::shared('permission');
@@ -45,6 +45,7 @@ class UserGenericStatusList extends Controller
 		$current_user_prefs = $this->userPrefs;
 		$viewData = [];
 		$rows = [];
+        $status_count_arr = [];
 
 		$viewData['title'] = 'Status Report';
 
@@ -58,7 +59,7 @@ class UserGenericStatusList extends Controller
 				'page',
 				'sort_column',
 				'sort_order',
-			) 
+			)
 		) );
 
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
@@ -69,7 +70,7 @@ class UserGenericStatusList extends Controller
 				'batch_id' => $batch_id,
 				'batch_title' => $batch_title,
 				'batch_next_page' => $batch_next_page
-			) 
+			)
 		);
 
 		$sort_array = NULL;
@@ -82,7 +83,7 @@ class UserGenericStatusList extends Controller
 		if ( $batch_id != '' ) {
 			$ugslf = new UserGenericStatusListFactory();
 			$ugslf->getByUserIdAndBatchId( $current_user->getId(), $batch_id,  $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-			
+
 			Debug::Text('Record Count: '. $ugslf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
 			//$pager = new Pager($ugslf);
@@ -112,15 +113,15 @@ class UserGenericStatusList extends Controller
 			}
 		}
 
-		$viewData['rows'] = $rows;	
-		$viewData['status_count'] = $status_count_arr;	
+		$viewData['rows'] = $rows;
+		$viewData['status_count'] = $status_count_arr;
 		$viewData['batch_title'] = $batch_title;
 		$viewData['batch_next_page'] = $batch_next_page;
 		$viewData['sort_column'] = $sort_column;
 		$viewData['sort_order'] = $sort_order;
 
 		//dd($viewData);
-		
+
 		return view('users.UserGenericStatusList', $viewData);
 	}
 

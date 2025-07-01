@@ -33,7 +33,7 @@ class RecurringScheduleTemplateControlList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
     }
-	
+
     public function index() {
 		$permission = $this->permission;
 		$current_user = $this->currentUser;
@@ -82,25 +82,22 @@ class RecurringScheduleTemplateControlList extends Controller
 		//===================================================================================
 
 		switch ($action) {
-			case 'add':
-
-				Redirect::Page( URLBuilder::getURL( NULL, '/schedule/edit_recurring_schedule_template', FALSE) );
-
-				break;
 			case 'copy':
-				$rstf = new RecurringScheduleTemplateFactory(); 
+				$rstf = new RecurringScheduleTemplateFactory();
 				$rstlf = new RecurringScheduleTemplateListFactory();
 				$rstclf = new RecurringScheduleTemplateControlListFactory();
 
 				foreach ($ids as $id) {
 					$rstclf->getByIdAndCompanyId($id, $current_company->getId() );
-					foreach ($rstclf->rs as $rstc_obj) {
+
+                    foreach ($rstclf->rs as $rstc_obj) {
 						$rstclf->data = (array)$rstc_obj;
 						$rstc_obj = $rstclf;
 						$rstc_obj->StartTransaction();
 
 						//Get week data
 						$rstlf->getByRecurringScheduleTemplateControlId( $rstc_obj->getId() );
+
 						if ( $rstlf->getRecordCount() > 0 ) {
 							foreach( $rstlf->rs as $rst_obj) {
 								$rstlf->data = (array)$rst_obj;
@@ -181,32 +178,6 @@ class RecurringScheduleTemplateControlList extends Controller
 				Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_template_control_list') );
 
 				break;
-			case 'delete':
-			case 'undelete':
-				if ( strtolower($action) == 'delete' ) {
-					$delete = TRUE;
-				} else {
-					$delete = FALSE;
-				}
-
-				$rstclf = new RecurringScheduleTemplateControlListFactory();
-
-				foreach ($ids as $id) {
-					$rstclf->getByIdAndCompanyId($id, $current_company->getId() );
-					foreach ($rstclf->rs as $rstc_obj) {
-						$rstclf->data = (array)$rstc_obj;
-						$rstc_obj = $rstclf;
-
-						$rstc_obj->setDeleted($delete);
-						if ( $rstc_obj->isValid() ) {
-							$rstc_obj->Save();
-						}
-					}
-				}
-
-				Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_template_control_list') );
-
-				break;
 
 			default:
 				$rstclf = new RecurringScheduleTemplateControlListFactory();
@@ -236,17 +207,49 @@ class RecurringScheduleTemplateControlList extends Controller
 
 				}
 				$viewData['rows'] = $rows;
-				/*
-				$smarty->assign_by_ref('sort_column', $sort_column );
-				$smarty->assign_by_ref('sort_order', $sort_order );
-				$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
-				*/
 
-				break;
+			break;
 		}
 
 		return view('schedule/RecurringScheduleTemplateControlList', $viewData);
 
 	}
+
+
+    public function delete($id)
+    {
+        $current_company = $this->currentCompany;
+        $rstclf = new RecurringScheduleTemplateControlListFactory();
+        $delete = TRUE;
+
+        $rstclf->getByIdAndCompanyId($id, $current_company->getId() );
+
+            foreach ($rstclf->rs as $rstc_obj) {
+                $rstclf->data = (array)$rstc_obj;
+                $rstc_obj = $rstclf;
+
+                $rstc_obj->setDeleted($delete);
+                if ( $rstc_obj->isValid() ) {
+                    $res = $rstc_obj->Save();
+
+                    if($res){
+                        return response()->json(['success' => 'Recurring Schedule Template Deleted Successfully.']);
+                    }else{
+                        return response()->json(['error' => 'Recurring Schedule Template Deleted Failed.']);
+                    }
+                }
+            }
+
+        Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_template_control_list') );
+
+    }
+
+
+    public function add()
+    {
+		Redirect::Page( URLBuilder::getURL( NULL, '/schedule/edit_recurring_schedule_template/edit', FALSE) );
+    }
+
+
 }
 ?>

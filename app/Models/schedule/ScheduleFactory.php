@@ -35,18 +35,18 @@ class ScheduleFactory extends Factory {
     protected $current_company;
     protected $current_user_prefs;
 
-    public function __construct()
-    {
-        $basePath = Environment::getBasePath();
-        require_once($basePath . '/app/Helpers/global.inc.php');
-        require_once($basePath . '/app/Helpers/Interface.inc.php');
-		//require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
+    // public function __construct()
+    // {
+    //     $basePath = Environment::getBasePath();
+    //     require_once($basePath . '/app/Helpers/global.inc.php');
+    //     require_once($basePath . '/app/Helpers/Interface.inc.php');
+	// 	//require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
 
-        $this->permission = View::shared('permission');
-        $this->current_user = View::shared('current_user');
-        $this->current_company = View::shared('current_company');
-        $this->current_user_prefs = View::shared('current_user_prefs');
-    }
+    //     $this->permission = View::shared('permission');
+    //     $this->current_user = View::shared('current_user');
+    //     $this->current_company = View::shared('current_company');
+    //     $this->current_user_prefs = View::shared('current_user_prefs');
+    // }
 
 	function _getFactoryOptions( $name ) {
 
@@ -186,7 +186,7 @@ class ScheduleFactory extends Factory {
 		if ( is_object($this->schedule_policy_obj) ) {
 			return $this->schedule_policy_obj;
 		} else {
-			$splf = new SchedulePolicyListFactory(); 
+			$splf = new SchedulePolicyListFactory();
 			$splf->getById( $this->getSchedulePolicyID() );
 			if ( $splf->getRecordCount() > 0 ) {
 				$this->schedule_policy_obj = $splf->getCurrent();
@@ -201,7 +201,7 @@ class ScheduleFactory extends Factory {
 		if ( is_object($this->absence_policy_obj) ) {
 			return $this->absence_policy_obj;
 		} else {
-			$aplf = new AbsencePolicyListFactory(); 
+			$aplf = new AbsencePolicyListFactory();
 			$aplf->getById( $this->getAbsencePolicyID() );
 			if ( $aplf->getRecordCount() > 0 ) {
 				$this->absence_policy_obj = $aplf->getCurrent();
@@ -234,7 +234,7 @@ class ScheduleFactory extends Factory {
 	function setUser($id) {
 		$id = (int)trim($id);
 
-		$ulf = new UserListFactory(); 
+		$ulf = new UserListFactory();
 
 		if ( $id > 0 AND
 				$this->Validator->isResultSetWithRows(	'user_id',
@@ -280,7 +280,7 @@ class ScheduleFactory extends Factory {
 	}
 
 	function setUserDate($user_id, $date) {
-		$user_date_id = UserDateFactory::findOrInsertUserDate( $user_id, $date); 
+		$user_date_id = UserDateFactory::findOrInsertUserDate( $user_id, $date);
 		Debug::text(' User Date ID: '. $user_date_id, __FILE__, __LINE__, __METHOD__,10);
 		if ( $user_date_id != '' ) {
 			$this->setUserDateID( $user_date_id );
@@ -358,6 +358,7 @@ class ScheduleFactory extends Factory {
 
 		return FALSE;
 	}
+
 	function setStartTime($epoch) {
 		$epoch = trim($epoch);
 
@@ -450,6 +451,7 @@ class ScheduleFactory extends Factory {
 
 		return FALSE;
 	}
+
 	function setSchedulePolicyID($id) {
 		$id = trim($id);
 
@@ -514,7 +516,7 @@ class ScheduleFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 
-		$blf = new BranchListFactory(); 
+		$blf = new BranchListFactory();
 
 		if (  $id == 0
 				OR
@@ -540,7 +542,7 @@ class ScheduleFactory extends Factory {
 	function setDepartment($id) {
 		$id = trim($id);
 
-		$dlf = new DepartmentListFactory(); 
+		$dlf = new DepartmentListFactory();
 
 		if (  $id == 0
 				OR
@@ -757,7 +759,7 @@ class ScheduleFactory extends Factory {
 		//$department_options = $dlf->getByCompanyIdArray( $current_user->getCompany(), FALSE );
 		$department_options = array(); //No longer needed, use SQL instead.
 
-		$apf = new AbsencePolicyFactory(); 
+		$apf = new AbsencePolicyFactory();
 		$absence_policy_paid_type_options = $apf->getOptions('paid_type');
 
 		$slf = new ScheduleListFactory();
@@ -1552,7 +1554,7 @@ class ScheduleFactory extends Factory {
 		if ( $this->getEnableReCalculateDay() == TRUE ) {
 			//Calculate total time. Mainly for docked.
 			//Calculate entire week as Over Schedule (Weekly) OT policy needs to be reapplied if the schedule changes.
-			UserDateTotalFactory::smartReCalculate( $this->getUserDateObject()->getUser(), $this->getUserDateID(), TRUE, FALSE ); 
+			UserDateTotalFactory::smartReCalculate( $this->getUserDateObject()->getUser(), $this->getUserDateID(), TRUE, FALSE );
 			//UserDateTotalFactory::reCalculateDay( $this->getUserDateID(), TRUE, FALSE );
 		}
 
@@ -1645,7 +1647,7 @@ class ScheduleFactory extends Factory {
 	}
 
 	function getObjectAsArray( $include_columns = NULL, $permission_children_ids = FALSE  ) {
-		$uf = new UserFactory(); 
+		$uf = new UserFactory();
 
 		$variable_function_map = $this->getVariableToFunctionMap();
 		if ( is_array( $variable_function_map ) ) {

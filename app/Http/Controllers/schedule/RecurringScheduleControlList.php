@@ -43,7 +43,7 @@ class RecurringScheduleControlList extends Controller
         $this->currentCompany = View::shared('current_company');
         $this->userPrefs = View::shared('current_user_prefs');
     }
-	
+
     public function index() {
 		$permission = $this->permission;
 		$current_user = $this->currentUser;
@@ -59,9 +59,6 @@ class RecurringScheduleControlList extends Controller
 
 		$viewData['title'] = 'Recurring Schedule List';
 
-		/*
-		* Get FORM variables
-		*/
 		extract	(FormVariables::GetVariables(
 												array	(
 														'action',
@@ -102,11 +99,11 @@ class RecurringScheduleControlList extends Controller
 			}
 		}
 
-		$ugdlf = new UserGenericDataListFactory(); 
-		$ugdf = new UserGenericDataFactory(); 
+		$ugdlf = new UserGenericDataListFactory();
+		$ugdf = new UserGenericDataFactory();
 
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-		$hlf = new HierarchyListFactory(); 
+		$hlf = new HierarchyListFactory();
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -130,52 +127,6 @@ class RecurringScheduleControlList extends Controller
 		Debug::Text('Action: '. $action, __FILE__, __LINE__, __METHOD__,10);
 		Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
 		switch ($action) {
-			case 'add':
-
-				Redirect::Page( URLBuilder::getURL( NULL, '/schedule/edit_recurring_schedule', FALSE) );
-
-				break;
-			case 'delete':
-			case 'undelete':
-				if ( strtolower($action) == 'delete' ) {
-					$delete = TRUE;
-				} else {
-					$delete = FALSE;
-				}
-
-				$rsclf = new RecurringScheduleControlListFactory();
-
-				foreach ($ids as $id => $user_ids) {
-					$rsclf->getByIdAndCompanyId($id, $current_company->getId() );
-					foreach ($rsclf->rs as $rsc_obj) {
-						$rsclf->data = (array)$rsc_obj;
-						$rsc_obj = $rsclf;
-						//Get all users for this schedule.
-						$current_users = $rsc_obj->getUser();
-
-						$user_diff_arr = array_diff( (array)$current_users, (array)$user_ids );
-						//Debug::Arr($user_diff_arr,'User Diff:', __FILE__, __LINE__, __METHOD__,10);
-
-						if ( is_array($user_diff_arr) AND count($user_diff_arr) == 0 ) {
-							Debug::Text('No more users assigned to schedule, deleting...', __FILE__, __LINE__, __METHOD__,10);
-
-							//No more users assigned to this schedule, delete the whole thing.
-							$rsc_obj->setDeleted($delete);
-						} elseif ( is_array($user_diff_arr) AND count($user_diff_arr) > 0 ) {
-							Debug::Text('Still more users assigned to schedule, removing users only...', __FILE__, __LINE__, __METHOD__,10);
-							//Still users assigned to this schedule, remove users from it.
-							$rsc_obj->setUser( $user_diff_arr );
-						}
-
-						if ( $rsc_obj->isValid() ) {
-							$rsc_obj->Save();
-						}
-					}
-				}
-
-				Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_control_list') );
-
-				break;
 			case 'search_form_delete':
 			case 'search_form_update':
 			case 'search_form_save':
@@ -186,7 +137,7 @@ class RecurringScheduleControlList extends Controller
 				$saved_search_id = UserGenericDataFactory::searchFormDataHandler( $action, $filter_data, URLBuilder::getURL(NULL, 'RecurringScheduleControlList.php') );
 			default:
 
-				//extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, $sort_column ) ); 
+				//extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, $sort_column ) );
 				Debug::Text('Sort Column: '. $sort_column, __FILE__, __LINE__, __METHOD__,10);
 				Debug::Text('Saved Search ID: '. $saved_search_id, __FILE__, __LINE__, __METHOD__,10);
 
@@ -206,7 +157,7 @@ class RecurringScheduleControlList extends Controller
 																	'page' => $page
 																) );
 
-				$rsclf = new RecurringScheduleControlListFactory(); 
+				$rsclf = new RecurringScheduleControlListFactory();
 				$ulf = new UserListFactory();
 
 				if ( $permission->Check('recurring_schedule','view') == FALSE ) {
@@ -220,7 +171,7 @@ class RecurringScheduleControlList extends Controller
 
 				$rsclf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
-				$utlf = new UserTitleListFactory(); 
+				$utlf = new UserTitleListFactory();
 				$utlf->getByCompanyId( $current_company->getId() );
 				$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
@@ -232,7 +183,7 @@ class RecurringScheduleControlList extends Controller
 				$dlf->getByCompanyId( $current_company->getId() );
 				$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-				$uglf = new UserGroupListFactory(); 
+				$uglf = new UserGroupListFactory();
 				$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
 				$rstclf = new RecurringScheduleTemplateControlListFactory();
@@ -243,6 +194,7 @@ class RecurringScheduleControlList extends Controller
 				foreach ($rsclf->rs as $rsc_obj) {
 					$rsclf->data = (array)$rsc_obj;
 					$rsc_obj = $rsclf;
+
 					$user_id = $rsc_obj->getColumn('user_id');
 
 					$ulf = new UserListFactory();
@@ -313,8 +265,51 @@ class RecurringScheduleControlList extends Controller
 
 				break;
 		}
+        // dd($viewData);
 		return view('schedule/RecurringScheduleControlList', $viewData);
 	}
+
+
+    public function delete($id)
+    {
+        $current_company = $this->currentCompany;
+        $rsclf = new RecurringScheduleControlListFactory();
+        $delete = TRUE;
+
+        // foreach ($ids as $id => $user_ids) {
+
+            $rsclf->getByIdAndCompanyId($id, $current_company->getId() );
+
+            foreach ($rsclf->rs as $rsc_obj) {
+                $rsclf->data = (array)$rsc_obj;
+                $rsc_obj = $rsclf;
+
+                //No more users assigned to this schedule, delete the whole thing.
+                $rsc_obj->setDeleted($delete);
+
+                if ( $rsc_obj->isValid() ) {
+                    $res = $rsc_obj->Save();
+
+                    if($res){
+                        return response()->json(['success' => 'Recurring Schedule Deleted Successfully.']);
+                    }else{
+                        return response()->json(['error' => 'Recurring Schedule Deleted Failed.']);
+                    }
+                }
+            }
+        // }
+
+        Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_control_list') );
+
+    }
+
+
+    public function add()
+    {
+		Redirect::Page( URLBuilder::getURL( NULL, '/schedule/edit_recurring_schedule/add', FALSE) );
+    }
+
+
 }
 
 ?>

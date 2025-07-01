@@ -15,11 +15,11 @@
                 </div>
 
                 <div class="card-body">
-                   
+
                     {{-- --------------------------------------------------------------------------- --}}
 
                     <table class="table table-bordered">
-            
+
                         @if ($permission->Check('punch','view') OR $permission->Check('punch','view_child'))
                         <form method="get" name="search_form" action="{$smarty.server.SCRIPT_NAME}">
                             {{-- {include file="list_tabs.tpl" section="header"} --}}
@@ -79,7 +79,7 @@
                                                             </select>
                                                         </td>
                                                     </tr>
-            
+
                                                             {{-- {*
                                                     <tr id="tab_row_adv_search">
                                                         <td class="cellLeftEditTable">
@@ -186,86 +186,81 @@
                             {include file="list_tabs.tpl" section="global"} --}}
                         </form>
                         @endif
-            
-                        <form method="get" action="{$smarty.server.SCRIPT_NAME}">
-                            <tr class="bg-primary text-white">
-                                <td>
-                                    #
-                                </td>
-                                @foreach ($columns as $column_id => $column)
-                                    <td>
-                                        {{ $column }}
-                                    </td>
-                                @endforeach
-                                <td>
-                                    Functions
-                                </td>
-                                <td>
-                                    <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
-                                </td>
-                            </tr>
-                            @if (!empty($rows))
-                                @foreach ($rows as $i => $row)
-                                    <tr class="">
-                                        <td>
-                                            {{ $i+1 }}
-                                        </td>
-                
-                                        @foreach ($columns as $key => $column)
-                                            <td 
-                                                @if ($key == 'severity')
-                                                    @if ($row['severity_id'] == 20)
-                                                        id="yellow"
-                                                    @elseif ($row['severity_id'] == 30)
-                                                        id="error"
-                                                    @endif
-                                                @endif
-                                            >
-                                                @if ($key == 'exception_policy_type_id')
-                                                    <span style="color: {{ $row['exception_color'] }}">
-                                                        <strong>{{ $row[$key] ?? '--' }}</strong>
-                                                    </span>
-                                                @else
-                                                    @if ($key == 'severity')<strong>@endif
-                                                        {{ $row[$key] ?? '--' }}
-                                                    @if ($key == 'severity')</strong>@endif
-                                                @endif
-                                            </td>
+
+                        <form method="POST" action="{{ route('schedule.schedule_list') }}">
+                            <table class="table table-striped table-bordered">
+
+                                <thead class="bg-primary text-white">
+                                    <tr>
+                                        <th>#</th>
+                                        @foreach ($columns as $column_id => $column)
+                                            <th>{{ $column }}</th>
                                         @endforeach
-                                        <td>
-                                            @if ($permission->Check('schedule','view') OR ( $permission->Check('schedule','view_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('schedule','view_own') AND $row['is_owner'] === TRUE ))
-                                                [ <a href="/schedule/view_schedule?filter_data[include_user_ids][]={{$row['user_id']}}&filter_data[start_date]={{$row['start_time']}}" >View</a> ]
-                                            @endif
-                                            @if ($permission->Check('schedule','edit') OR ( $permission->Check('schedule','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('schedule','edit_own') AND $row['is_owner'] === TRUE ))
-                                                [ <a href="/schedule/edit_schedule?id={{$row['id']}}">Edit</a> ]
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" class="checkbox" name="ids[]" value="{{$row['id']}}">
-                                        </td>
+                                        <th>Functions</th>
                                     </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td class="bg-primary text-white" colspan="{{$total_columns}}">
-                                        No Scheduled Shifts Found
-                                    </td>
-                                </tr>
-                            @endif
-                            
-                            <tr>
-                                <td class="tblActionRow" colspan="{{$total_columns}}">
-                                    @if ($permission->Check('punch','delete') OR $permission->Check('punch','delete_own') OR $permission->Check('punch','delete_child'))
-                                        <input type="submit" name="action:delete" value="Delete" onClick="return confirmSubmit()">
+                                </thead>
+
+                                <tbody id="table_body">
+                                    @if (!empty($rows))
+                                        @foreach ($rows as $i => $row)
+                                            <tr class="">
+                                                <td>
+                                                    {{ $i+1 }}
+                                                </td>
+
+                                                @foreach ($columns as $key => $column)
+                                                    <td
+                                                        @if ($key == 'severity')
+                                                            @if ($row['severity_id'] == 20)
+                                                                id="yellow"
+                                                            @elseif ($row['severity_id'] == 30)
+                                                                id="error"
+                                                            @endif
+                                                        @endif
+                                                    >
+                                                        @if ($key == 'exception_policy_type_id')
+                                                            <span style="color: {{ $row['exception_color'] }}">
+                                                                <strong>{{ $row[$key] ?? '--' }}</strong>
+                                                            </span>
+                                                        @else
+                                                            @if ($key == 'severity')<strong>@endif
+                                                                {{ $row[$key] ?? '--' }}
+                                                            @if ($key == 'severity')</strong>@endif
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                                <td>
+                                                    @if ($permission->Check('schedule','view') OR ( $permission->Check('schedule','view_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('schedule','view_own') AND $row['is_owner'] === TRUE ))
+                                                        <a href="/schedule/view_schedule?filter_data[include_user_ids][]={{$row['user_id']}}&filter_data[start_date]={{$row['start_time']}}" class="btn btn-secondary btn-sm">View</a>
+                                                    @endif
+
+                                                    @if ($permission->Check('schedule','edit') OR ( $permission->Check('schedule','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('schedule','edit_own') AND $row['is_owner'] === TRUE ))
+                                                        <a href="/schedule/edit_schedule?id={{$row['id']}}" class="btn btn-warning btn-sm">Edit</a>
+                                                    @endif
+
+                                                    @if ($permission->Check('schedule','delete') OR $permission->Check('schedule','delete_own') OR $permission->Check('schedule','delete_child'))
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/schedule/delete/{{ $row['id'] }}', 'Schedule', this)">
+                                                            Delete
+                                                        </button>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td class="bg-primary text-white" colspan="{{$total_columns}}">
+                                                No Scheduled Shifts Found
+                                            </td>
+                                        </tr>
                                     @endif
-                                </td>
-                            </tr>
-                        </table>
+                                </tbody>
+                            </table>
+
                         </form>
                     </div>
 
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->
@@ -285,6 +280,6 @@
                 //DN
             }
         }
-        
+
     </script>
 </x-app-layout>
