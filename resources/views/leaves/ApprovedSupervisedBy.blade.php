@@ -68,11 +68,11 @@
                                             <td>{{$row['end_date']}}</td>
                                             <td>{{$row['amount']}}</td>
                                             <td>
-                                                {{-- <input type="checkbox" size="10" name="data[leave_request][{{$row['id']}}]" value="{{$row['is_supervisor_approved']}}" {{ $row['is_supervisor_approved'] ? 'checked' : '' }}> --}}
-                                                <input type="checkbox" name="data[leave_request][{{$row['id']}}]" value="1">
+                                                <input type="checkbox" size="10" name="data[leave_request][{{$row['id']}}]" value="{{$row['is_supervisor_approved']}}" {{ $row['is_supervisor_approved'] ? 'checked' : '' }}>
+                                                {{-- <input type="checkbox" name="data[leave_request][{{$row['id']}}]" value="1"> --}}
                                             </td>
                                             <td>
-                                                 <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url('/attendance/leaves/view_number_leave/' . $row['id']) }}'">
+                                                <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url('/attendance/leaves/view_number_leave/' . $row['id']) }}'">
                                                     Leave
                                                 </button>
                                                 <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ url('/attendance/leaves/view_user_leave/' . $row['id']) }}'">
@@ -100,7 +100,6 @@
 
 
                     </form>
-                    {{-- -------------------------------------------- --}}
 
                 </div>
             </div>

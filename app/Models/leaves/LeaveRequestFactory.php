@@ -49,7 +49,7 @@ class LeaveRequestFactory  extends Factory {
 										10 => ('ACTIVE'),
 										20 => ('COVER REJECTED'),
 										30 => ('SUPERVISOR REJECTED'),
-                                                                                40 => ('HR REJECTED'),
+                                        40 => ('HR REJECTED'),
 
 									);
 				break;
