@@ -123,20 +123,20 @@
 
 				{/if}
 			</table>
-		</div>
+			</div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('filter_include'))">
-		</div>
+			<div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('filter_include'))">
+			</div>
 
-		<input type="hidden" id="id" name="data[id]" value="{$data.id}">
-		<input type="hidden" name="data[user_id]" value="{$data.user_id}">
-		<input type="hidden" name="saved_search_id" value="{$saved_search_id}">
-		<input type="hidden" name="company_deduction_id" value="{$company_deduction_id}">
-		<input type="hidden" id="calculation_id" value="{$data.calculation_id}">
-		<input type="hidden" id="combined_calculation_id" value="{$data.combined_calculation_id}">
-		<input type="hidden" id="country_id" value="{$data.country_id}">
-		<input type="hidden" id="province_id" value="{$data.province_id}">
+			<input type="hidden" id="id" name="data[id]" value="{$data.id}">
+			<input type="hidden" name="data[user_id]" value="{$data.user_id}">
+			<input type="hidden" name="saved_search_id" value="{$saved_search_id}">
+			<input type="hidden" name="company_deduction_id" value="{$company_deduction_id}">
+			<input type="hidden" id="calculation_id" value="{$data.calculation_id}">
+			<input type="hidden" id="combined_calculation_id" value="{$data.combined_calculation_id}">
+			<input type="hidden" id="country_id" value="{$data.country_id}">
+			<input type="hidden" id="province_id" value="{$data.province_id}">
 		</form>
 	</div>
 </div>

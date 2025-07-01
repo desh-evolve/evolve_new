@@ -142,9 +142,11 @@ use App\Http\Controllers\report\GeneralLedgerSummary;
 use App\Http\Controllers\report\TimesheetSummary;
 use App\Http\Controllers\report\PayStubSummary;
 use App\Http\Controllers\request\ViewRequest;
+use App\Http\Controllers\users\EditUserDeduction;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
 use App\Http\Controllers\users\EditUserPhonePasswordNew;
+use App\Http\Controllers\users\UserDeductionList;
 use App\Http\Controllers\users\UserDeductionListNew;
 use App\Http\Controllers\users\UserJobHistory;
 
@@ -452,11 +454,16 @@ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])
  // ===============================================================================================================================
  // User tax/deduction
  // ===============================================================================================================================
- Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
- Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
- Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
- Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
- Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
+
+
+ Route::match(['get', 'post', 'delete'], '/user/tax', [UserDeductionList::class, 'index'])->name('user.tax.index');
+ Route::match(['get', 'post', 'delete'],'/user/tax/add', [EditUserDeduction::class, 'index'])->name('user.tax.add');
+ 
+ //Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
+ //Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
+ //Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
+ //Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
+ //Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
 
 // ===============================================================================================================================
 // User messages

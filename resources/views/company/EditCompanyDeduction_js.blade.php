@@ -1,5 +1,3 @@
-
-
 <script	language=JavaScript>
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -101,8 +99,11 @@
             : '';
     @endphp
 
-    old_id = {{!! isset($data['calculation_id']) ? "fields['$res']" : ""; !!}};
-
+    @if(isset($data['calculation_id']))
+        let old_id = fields['{{ $res }}'];
+    @else
+        let old_id = '';
+    @endif
 
     function showCalculation( type ) {
         if ( document.getElementById('id').value == '' ) {
@@ -111,7 +112,6 @@
     
         calculation_id = document.getElementById('calculation_id').value;
         country_id = document.getElementById('country_id').value;
-    
         province_id = document.getElementById('province_id').value;
     
         if ( isCountryCalculationID() == true
