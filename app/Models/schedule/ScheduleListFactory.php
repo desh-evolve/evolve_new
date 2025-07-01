@@ -1108,7 +1108,6 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		if (isset($filter_data['include_user_ids']) && isset($filter by_data['include_user_ids'][0]) && !in_array(-1, (array)$filter_data['include_user_ids'])) {
 			$query .= ' AND b.user_id in ('. $this->getListSQL($filter_data['include_user_ids'], $ph) .') ';
 		}
-
 		if (isset($filter_data['pay_period_ids']) && isset($filter_data['pay_period_ids'][0]) && !in_array(-1, (array)$filter_data['pay_period_ids'])) {
 			$query .= ' AND b.pay_period_id in ('. $this->getListSQL($filter_data['pay_period_ids'], $ph) .') ';
 		}
@@ -1135,7 +1134,6 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		';
 		$query .= $this->getWhereSQL($where);
 		$query .= $this->getSortSQL($order);
-
 		$this->rs = DB::select($query, $ph);
 
 		return $this;

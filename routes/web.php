@@ -103,7 +103,7 @@ use App\Http\Controllers\punch\UserExceptionList;
 use App\Http\Controllers\authorization\AuthorizationList;
 
 
-use App\Http\Controllers\Report\DailyAttendanceReport;
+// use App\Http\Controllers\Report\DailyAttendanceReport;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\CensusInfo;
@@ -133,8 +133,7 @@ use App\Http\Controllers\users\EditAttendanceBonusCalc;
 
 use App\Http\Controllers\users\GratuityCalc;
 
-
-
+use App\Http\Controllers\report\DailyAttendanceReport;
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\report\EmployeeNopayCountReport;
@@ -142,9 +141,11 @@ use App\Http\Controllers\report\GeneralLedgerSummary;
 use App\Http\Controllers\report\TimesheetSummary;
 use App\Http\Controllers\report\PayStubSummary;
 use App\Http\Controllers\request\ViewRequest;
+use App\Http\Controllers\users\EditUserDeduction;
 use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
 use App\Http\Controllers\users\EditUserPhonePasswordNew;
+use App\Http\Controllers\users\UserDeductionList;
 use App\Http\Controllers\users\UserDeductionListNew;
 use App\Http\Controllers\users\UserJobHistory;
 
@@ -266,7 +267,8 @@ Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employe
 Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
 
 
-Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
+// Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
+Route::match(['get', 'post'],'/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
 Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 'generate'])->name('report.daily_attendance.generate');
 
 Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index'])->name('report.user_detail');
@@ -452,11 +454,16 @@ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])
  // ===============================================================================================================================
  // User tax/deduction
  // ===============================================================================================================================
- Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
- Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
- Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
- Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
- Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
+
+
+ Route::match(['get', 'post', 'delete'], '/user/tax', [UserDeductionList::class, 'index'])->name('user.tax.index');
+ Route::match(['get', 'post', 'delete'],'/user/tax/add', [EditUserDeduction::class, 'index'])->name('user.tax.add');
+ 
+ //Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
+ //Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
+ //Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
+ //Route::post('/user/tax/save/{id?}', [EditUserDeductionNew::class, 'save'])->name('user.tax.save');
+ //Route::delete('/user/tax/delete/{id}', [UserDeductionListNew::class, 'delete'])->name('user.tax.delete');
 
 // ===============================================================================================================================
 // User messages
@@ -535,9 +542,13 @@ Route::delete('/policy/holidays/delete/{id}/{holiday_policy_id}', [HolidayList::
 // user functions
 // ===============================================================================================================================
 
+
+Route::match(['get', 'post'], '/admin/userlist/add', [EditUser::class, 'index'])->name('admin.userlist.add');
+Route::get('/file/{user_id}/{fileName}', [EditUser::class, 'serveFile'])->name('serve.file');
+
 Route::get('/admin/userlist', [UserList::class, 'index'])->name('admin.userlist');
-Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
-Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
+//Route::get('/admin/userlist/add/{id?}', [EditUser::class, 'index'])->name('admin.userlist.add');
+//Route::post('/admin/userlist/submit/{id?}', [EditUser::class, 'submit'])->name('admin.userlist.submit');
 Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name('admin.userlist.delete');
 
 // Route::post('/users/upload', [EditUser::class, 'uploadFile'])->name('uploadFile');
@@ -601,6 +612,7 @@ Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::clas
 
 Route::get('/attendance/leaves/confirmed_leave', [ConfirmedLeave::class, 'index'])->name('attendance.leaves.confirmed_leave');
 Route::post('/attendance/leaves/confirmed_leave/search', [ConfirmedLeave::class, 'search'])->name('attendance.leaves.confirmed_leave.search');
+Route::match(['get', 'post'],'/attendance/leaves/confirmed_leave/export', [ConfirmedLeave::class, 'export'])->name('attendance.leaves.confirmed_leave.export');
 Route::delete('/attendance/confirmed_leave/delete/{id}', [ConfirmedLeave::class, 'delete'])->name('attendance.confirmed_leave.delete');
 
 // ===============================================================================================================================

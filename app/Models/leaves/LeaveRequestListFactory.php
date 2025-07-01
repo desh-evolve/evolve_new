@@ -296,7 +296,6 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
         if ( $id == '') {
             return FALSE;
         }
-
 		/*
 			$ph = array(
 				'supervisor_id' => $id,
@@ -321,7 +320,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 
                          if(isset($data['end_date']) && !empty($data['end_date'])){
-                               $query .= "  AND leave_from < '".$data['end_date']."'";
+                               $query .= "  AND leave_to < '".$data['end_date']."'";
                         }
 
 
@@ -331,7 +330,6 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			$query .= $this->getWhereSQL( $where );
 			$query .= $this->getSortSQL( $order );
-
 			$this->rs = DB::select($query, isset($ph) ? $ph : []);
 
 			$this->saveCache($this->rs,$id);

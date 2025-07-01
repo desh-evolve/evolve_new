@@ -28,8 +28,8 @@ return new class extends Migration
             $table->string('last_name', 250)->nullable();
             $table->string('address1', 250)->nullable();
             $table->string('address2', 250)->nullable();
-            $table->string('address3', 250);
-            $table->string('nic', 12);
+            $table->string('address3', 250)->nullable();
+            $table->string('nic', 12)->nullable();
             $table->string('city', 250)->nullable();
             $table->string('province', 250)->nullable();
             $table->string('country', 250)->nullable();
@@ -47,9 +47,9 @@ return new class extends Migration
             $table->string('epf_membership_no', 50);
             $table->integer('birth_date')->nullable();
             $table->integer('hire_date')->nullable();
-            $table->integer('probation');
-            $table->integer('basis_of_employment');
-            $table->integer('month');
+            $table->integer('probation')->default(0);
+            $table->integer('basis_of_employment')->nullable();
+            $table->integer('month')->nullable();
             $table->string('bond_period', 250)->nullable();
             $table->string('sin', 250)->nullable();
             $table->unsignedBigInteger('sex_id')->nullable();
@@ -63,7 +63,7 @@ return new class extends Migration
             $table->string('ibutton_id', 250)->nullable();
             $table->integer('labor_standard_industry')->default(0);
             $table->unsignedBigInteger('title_id')->nullable();
-            $table->string('job_skills', 500);
+            $table->string('job_skills', 500)->nullable();
             $table->unsignedBigInteger('default_branch_id')->nullable();
             $table->unsignedBigInteger('default_department_id')->nullable();
             $table->string('employee_number', 250)->nullable();
@@ -97,15 +97,15 @@ return new class extends Migration
             $table->string('last_name_metaphone', 250)->nullable();
             $table->integer('password_updated_date')->nullable();
             $table->integer('last_login_date')->nullable();
-            $table->string('full_name', 500);
-            $table->string('calling_name', 150);
-            $table->string('name_with_initials', 250);
-            $table->string('religion', 50);
-            $table->unsignedBigInteger('marital_id');
-            $table->string('retirement_date', 25);
-            $table->string('personal_email', 250);
-            $table->string('office_mobile', 20);
-            $table->unsignedBigInteger('user_name_title_id');
+            $table->string('full_name', 500)->nullable();
+            $table->string('calling_name', 150)->nullable();
+            $table->string('name_with_initials', 250)->nullable();
+            $table->string('religion', 50)->nullable();
+            $table->unsignedBigInteger('marital_id')->nullable();
+            $table->string('retirement_date', 25)->nullable();
+            $table->string('personal_email', 250)->nullable();
+            $table->string('office_mobile', 20)->nullable();
+            $table->unsignedBigInteger('user_name_title_id')->nullable();
         });
     }
 

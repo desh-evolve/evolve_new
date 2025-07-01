@@ -303,11 +303,12 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 						AND a.user_id = c.id
 						AND ( c.deleted = 0	AND a.deleted = 0)
 				';
-
 		$this->rs = DB::select($query, $ph);
 
 		return $this;
 	}
+		
+
 
 	function getWageByUserIdAndPayPeriodEndDate($user_id, $pay_period_end_date) {
 		if ( $user_id == '') {

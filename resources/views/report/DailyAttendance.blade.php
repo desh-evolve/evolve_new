@@ -1,264 +1,273 @@
-<x-app-layout :title="$title">
+<x-app-layout :title="'Report'">
     <style>
-        .form-group {
-            margin-bottom: 10px;
+        th,
+        td {
+            padding: 6px !important;
         }
 
-        label {
-            margin-bottom: 0 !important;
-        }
-
-        .center-container {
-            display: flex;
-            justify-content: center;
+        .arrow-icon {
+            background-color: green;
+            color: white;
+            font-size: 16px;
+            border-radius: 50%;
+            padding: 5px;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        .tblHeader {
-            background-color: #f8f9fa;
-            font-weight: bold;
-            padding: 8px 12px;
-            margin-bottom: 15px;
-        }
-
-        .select2-container {
-            width: 100% !important;
+            margin: 2px;
         }
     </style>
-
-    <x-slot name="header">
-        <h4 class="mb-sm-0">{{ $title }}</h4>
-    </x-slot>
-
-    <div class="center-container">
-        <div class="card w-75">
-            <div class="card-header align-items-center d-flex justify-content-between">
-                <h4 class="card-title mb-0 flex-grow-1">Daily Attendance Report Filters</h4>
-                <a href="/reports" class="btn btn-primary">Report List <i class="ri-arrow-right-line"></i></a>
-            </div>
-
-            <div class="card-body">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+    <div class="d-flex justify-content-center">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header align-items-center d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title mb-0 flex-grow-1">{{ __($title) }}</h4>
                     </div>
-                @endif
+                </div>
 
-                <form method="POST" action="{{ route('report.daily_attendance.generate') }}" id="reportForm">
-                    @csrf
+                <div class="card-body">
+                    <form method="post" name="report" action="{{ route('report.daily_attendance') }}" target="_self">
+                        @csrf
+                        <input type="hidden" id="action" name="action" value="">
 
-                    <div class="tblHeader">
-                        <h5 class="mb-0">Date Criteria</h5>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Date Range</label>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" id="date_type_date" name="filter_data[date_type]" value="date" onclick="showReportDateType();" {{ ($filterData['date_type'] ?? 'date') == 'date' ? 'checked' : '' }}>
-                                <label class="form-check-label" for="date_type_date">{{ __('Date Range') }}</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" id="date_type_pay_period" name="filter_data[date_type]" value="pay_period" onclick="showReportDateType();" {{ ($filterData['date_type'] ?? 'date') == 'pay_period' ? 'checked' : '' }}>
-                                <label class="form-check-label" for="date_type_pay_period">{{ __('Pay Period') }}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Start Date</label>
-                            <input type="date" class="form-control" id="start_date" name="filter_data[start_date]" value="{{ isset($filterData['start_date']) ? date('Y-m-d', $filterData['start_date']) : '' }}">
-                            
-                            <label class="mt-2">End Date</label>
-                            <input type="date" class="form-control" id="end_date" name="filter_data[end_date]" value="{{ isset($filterData['end_date']) ? date('Y-m-d', $filterData['end_date']) : '' }}">
-                            
-                            <label class="mt-2">Pay Period</label>
-                            <select name="filter_data[pay_period_ids][]" id="filter_pay_period" class="form-select select2" multiple>
-                                @foreach ($data['pay_period_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['pay_period_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="tblHeader mt-4">
-                        <h5 class="mb-0">Employee Criteria</h5>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Employee Status</label>
-                            <select name="filter_data[user_status_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_user_status_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['user_status_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Groups</label>
-                            <select name="filter_data[group_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_group_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['group_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Default Branches</label>
-                            <select name="filter_data[branch_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_branch_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['branch_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Default Departments</label>
-                            <select name="filter_data[department_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_department_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['department_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Punch Branches</label>
-                            <select name="filter_data[punch_branch_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_punch_branch_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['punch_branch_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Branch</label>
-                            <select name="filter_data[punch_branch_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_punch_branch_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['punch_branch_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 form-group">
-                            <label>Punch Departments</label>
-                            <select name="filter_data[punch_department_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_punch_department_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['punch_department_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Employee Titles</label>
-                            <select name="filter_data[user_title_ids][]" class="form-select select2" multiple>
-                                @foreach ($data['src_user_title_options'] as $id => $name)
-                                    <option value="{{ $id }}" {{ in_array($id, $filterData['user_title_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                        <div class="tblHeader mt-4">
-                            <h5 class="mb-0">Employee Selection</h5>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Include Employees</label>
-                                <select name="filter_data[include_user_ids][]" class="form-select select2" multiple>
-                                    @foreach ($data['src_include_user_options'] as $id => $name)
-                                        <option value="{{ $id }}" {{ in_array($id, $filterData['include_user_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
+                        <div id="contentBoxTwoEdit">
+                            {{-- @if (!$ugdf->Validator->isValid())
+                                <div class="alert alert-danger">
+                                    @foreach ($ugdf->Validator->getErrors() as $error)
+                                        <div>{{ $error }}</div>
                                     @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Exclude Employees</label>
-                                <select name="filter_data[exclude_user_ids][]" class="form-select select2" multiple>
-                                    @foreach ($data['src_exclude_user_options'] as $id => $name)
-                                        <option value="{{ $id }}" {{ in_array($id, $filterData['exclude_user_ids'] ?? []) ? 'selected' : '' }}>{{ $name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="tblHeader mt-4">
-                            <h5 class="mb-0">Report Configuration</h5>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Columns</label>
-                                <select name="filter_data[column_ids][]" class="form-select select2" multiple required>
-                                    @foreach ($data['src_column_options'] as $key => $label)
-                                        <option value="{{ $key }}" {{ in_array($key, $filterData['column_ids'] ?? []) ? 'selected' : '' }}>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
-                            <div class="col-md-3 form-group">
-                                <label>Primary Sort</label>
-                                <select name="filter_data[primary_sort]" class="form-select">
-                                    @foreach ($data['sort_options'] as $key => $label)
-                                        <option value="{{ $key }}" {{ ($filterData['primary_sort'] ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                                        <option value="-{{ $key }}" {{ ($filterData['primary_sort'] ?? '') == '-'.$key ? 'selected' : '' }}>{{ $label }} (Desc)</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label>Secondary Sort</label>
-                                <select name="filter_data[secondary_sort]" class="form-select">
-                                    <option value="">-- None --</option>
-                                    @foreach ($data['sort_options'] as $key => $label)
-                                        <option value="{{ $key }}" {{ ($filterData['secondary_sort'] ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                                        <option value="-{{ $key }}" {{ ($filterData['secondary_sort'] ?? '') == '-'.$key ? 'selected' : '' }}>{{ $label }} (Desc)</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Export Format</label>
-                                <select name="filter_data[export_type]" class="form-select">
-                                    @foreach ($data['export_type_options'] as $key => $label)
-                                        <option value="{{ $key }}" {{ ($filterData['export_type'] ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                                </div>
+                            @endif --}}
 
-                    <div class="form-group text-center mt-4">
-                        <button type="submit" name="action" value="display_report" class="btn btn-primary" formtarget="_blank">Display Report</button>
-                        {{-- <button type="submit" name="action" value="display_timesheet" class="btn btn-primary" formtarget="_blank">Display TimeSheet</button>
-                        <button type="submit" name="action" value="display_detailed_timesheet" class="btn btn-primary" formtarget="_blank">Display Detailed TimeSheet</button>
-                        <button type="submit" name="action" value="export" class="btn btn-success">Export</button> --}}
-                    </div>
-                </form>
+                            <table class="table table-bordered">
+                                <tr class="bg-primary text-white">
+                                    <td colspan="3">
+                                        {{ __('Saved Reports') }}
+                                    </td>
+                                </tr>
+
+                                {!! html_report_save(['generic_data' => $generic_data, 'object' => 'ugdf']) !!}
+
+                                <tr class="bg-primary text-white">
+                                    <td colspan="3">
+                                        {{ __('Report Filter Criteria') }}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="cellReportRadioColumn" rowspan="2">
+                                        <input type="radio" class="form-check-input" id="date_type_date"
+                                            name="filter_data[date_type]" value="date"
+                                            onchange="showReportDateType();"
+                                            {{ !isset($filter_data['date_type']) || $filter_data['date_type'] == 'date' ? 'checked' : '' }}>
+                                    </td>
+                                    <td class="text-end">
+                                        {{ __('Date:') }}
+                                    </td>
+                                    <td class="cellRightEditTable">
+                                        <input type="date" id="start_date" name="filter_data[start_date]"
+                                            value="{{ getdate_helper('DATE', $filter_data['start_date'] ?? '') }}">
+                                        <img src="{{ $BASE_URL }}/images/cal.gif" id="cal_start_date" width="16"
+                                            height="16" border="0" alt="{{ __('Pick a date') }}"
+                                            onmouseover="calendar_setup('start_date', 'cal_start_date', false);">
+                                        {{ __('ie:') }} {{ $current_user_prefs->getDateFormatExample() }}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-end">
+                                        {{ __('End Date:') }}
+                                    </td>
+                                    <td class="cellRightEditTable">
+                                        <input type="date" id="end_date" name="filter_data[end_date]"
+                                            value="{{ getdate_helper('DATE', $filter_data['end_date'] ?? '') }}">
+                                        <img src="{{ $BASE_URL }}/images/cal.gif" id="cal_end_date" width="16"
+                                            height="16" border="0" alt="{{ __('Pick a date') }}"
+                                            onmouseover="calendar_setup('start_date', 'cal_end_date', false);">
+                                        {{ __('ie:') }} {{ $current_user_prefs->getDateFormatExample() }}
+                                    </td>
+                                </tr>
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'date_type' => true,
+                                    'label' => 'pay_period',
+                                    'display_name' => 'Pay Period',
+                                    'display_plural_name' => 'Pay Periods',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'user_status',
+                                    'display_name' => 'Employee Status',
+                                    'display_plural_name' => 'Employee Statuses',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'group',
+                                    'display_name' => 'Group',
+                                    'display_plural_name' => 'Groups',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'branch',
+                                    'display_name' => 'Default Branch',
+                                    'display_plural_name' => 'Branches',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'department',
+                                    'display_name' => 'Default Department',
+                                    'display_plural_name' => 'Departments',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'punch_branch',
+                                    'display_name' => 'Punch Branch',
+                                    'display_plural_name' => 'Branches',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'punch_department',
+                                    'display_name' => 'Punch Department',
+                                    'display_plural_name' => 'Departments',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'user_title',
+                                    'display_name' => 'Employee Title',
+                                    'display_plural_name' => 'Titles',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'include_user',
+                                    'display_name' => 'Include Employees',
+                                    'display_plural_name' => 'Employees',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'exclude_user',
+                                    'display_name' => 'Exclude Employees',
+                                    'display_plural_name' => 'Employees',
+                                ]) !!}
+
+                                {!! html_report_filter([
+                                    'filter_data' => $filter_data,
+                                    'label' => 'column',
+                                    'order' => true,
+                                    'display_name' => 'Columns',
+                                    'display_plural_name' => 'Columns',
+                                ]) !!}
+
+                                {!! html_report_sort(['filter_data' => $filter_data]) !!}
+
+                                <tr>
+                                    <td colspan="2" class="text-end">
+                                        {{ __('Export Format:') }}
+                                    </td>
+                                    <td class="cellRightEditTable">
+                                        <select id="export_type" name="filter_data[export_type]" class="form-select">
+                                            @foreach ($filter_data['export_type_options'] ?? [] as $key => $value)
+                                                <option value="{{ $key }}"
+                                                    {{ isset($filter_data['export_type']) && $filter_data['export_type'] === $key ? 'selected' : '' }}>
+                                                    {{ $value }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div id="contentBoxFour" class="mt-3">
+                            {{-- <button type="button"
+                                class="btn btn-primary btn-sm {{ $hidden_elements['displayReport'] }}"
+                                id="display_report"
+                                onclick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'Display Report'; this.form.submit();">
+                                {{ __('Display Report') }}
+                            </button>
+                             --}}
+                            <button type="button"
+                                class="btn btn-primary btn-sm {{ $hidden_elements['displayReport'] }}"
+                                id="display_report"
+                                onclick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'display_timesheet'; console.log('Action set to: ' + document.getElementById('action').value); this.form.submit();">
+                                {{ __('Display Report 00') }}
+                            </button>
+                            <button type="button"
+                                class="btn btn-primary btn-sm {{ $hidden_elements['displayTimeSheet'] }}"
+                                id="display_timesheet"
+                                onclick="selectAllReportCriteria(); this.form.target = '_blank'; document.getElementById('action').value = 'display_timesheet'; console.log('Action set to: ' + document.getElementById('action').value); this.form.submit();">
+                                {{ __('Display TimeSheet') }}
+                            </button>
+                            <button type="button"
+                                class="btn btn-primary btn-sm {{ $hidden_elements['displayDetailedTimeSheet'] }}"
+                                id="display_detailed_timesheet"
+                                onclick="selectAllReportCriteria(); document.getElementById('action').value = 'Display Detailed TimeSheet'; this.form.submit();">
+                                {{ __('Display Detailed TimeSheet') }}
+                            </button>
+                            <button type="button"
+                                class="btn btn-primary btn-sm {{ $hidden_elements['export'] }}"
+                                id="export"
+                                onclick="selectAllReportCriteria(); document.getElementById('action').value = 'Export'; this.form.submit();">
+                                {{ __('Export') }}
+                            </button>
+                            {{-- <button type="button" class="btn btn-primary btn-sm {{ $hidden_elements['export'] }}"
+                                id="export"
+                                onclick="selectAllReportCriteria(); this.form.target = '_self'; document.getElementById('action').value = 'Export'; this.form.submit();">
+                                {{ __('Export') }}
+                            </button> --}}
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    @push('scripts')
     <script>
         $(document).ready(function() {
-            $('.select2').select2({
-                placeholder: 'Select options',
-                allowClear: true
-            });
-
-            function showReportDateType() {
-                const dateTypeDate = document.getElementById('date_type_date').checked;
-                document.getElementById('start_date').disabled = !dateTypeDate;
-                document.getElementById('end_date').disabled = !dateTypeDate;
-                document.getElementById('filter_pay_period').disabled = dateTypeDate;
-            }
-
-            $('#reportForm').on('submit', function(e) {
-                if (!$('select[name="filter_data[column_ids][]"]').val()) {
-                    e.preventDefault();
-                    alert('Please select at least one column');
-                    return false;
-                }
-            });
-
+            countAllReportCriteria();
             showReportDateType();
         });
+
+        var report_criteria_elements = [
+            'filter_user_status',
+            'filter_group',
+            'filter_branch',
+            'filter_department',
+            'filter_punch_branch',
+            'filter_punch_department',
+            'filter_user_title',
+            'filter_pay_period',
+            'filter_include_user',
+            'filter_exclude_user',
+            'filter_column'
+        ];
+
+        var report_date_type_elements = {
+            'date_type_date': ['start_date', 'end_date'],
+            'date_type_pay_period': ['src_filter_pay_period', 'filter_pay_period']
+        };
+
+        function showReportDateType() {
+            for (var key in report_date_type_elements) {
+                var element = document.getElementById(key);
+                if (element) {
+                    var className = element.checked ? '' : 'DisableFormElement';
+                    report_date_type_elements[key].forEach(function(id) {
+                        var field = document.getElementById(id);
+                        if (field) {
+                            field.className = className;
+                        }
+                    });
+                }
+            }
+        }
     </script>
-    @endpush
 </x-app-layout>

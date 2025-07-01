@@ -60,7 +60,7 @@
                                     <!-- Added Employee and Payroll buttons -->
                                     <button class="btn btn-sm btn-light function-type active"
                                         data-type="employee">Employee</button>
-                                    <button class="btn btn-sm btn-light function-type"
+                                    <button class="btn btn-sm btn-primary function-type"
                                         data-type="payroll">Payroll</button>
                                 </th>
                             </thead>
@@ -152,8 +152,8 @@
             // Added: Update Functions column buttons based on type
             $('.function-type').on('click', function() {
                 var type = $(this).data('type');
-                $('.function-type').removeClass('active').addClass('btn-light');
-                $(this).addClass('active').removeClass('btn-light').addClass('btn-primary');
+                $('.function-type').removeClass('active').removeClass('btn-light').addClass('btn-primary');
+                $(this).addClass('active').addClass('btn-light');
 
                 $('#userlist_table tbody tr').each(function() {
                     var $row = $(this);

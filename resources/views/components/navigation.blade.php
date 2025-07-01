@@ -437,7 +437,6 @@
                             Messages
                         </a>
                     </li>
-                    <li class="nav-item"><a href="#" class="nav-link">Contact Information</a></li>
                     <li class="nav-item">
                         <a href="{{ route('user_preference.index') }}"
                             class="nav-link  {{ request()->routeIs('user_preference.index') ? 'active' : '' }}">

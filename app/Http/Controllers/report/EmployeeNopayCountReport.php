@@ -397,6 +397,8 @@ class EmployeeNopayCountReport extends Controller
                         $plf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
                         if ($plf->getRecordCount() > 0) {
                             foreach ($plf->rs as $p_obj) {
+                                $plf->data = (array)$p_obj;
+                                $p_obj = $plf;
                                 $punch_rows[$p_obj->getColumn('pay_period_id')][$p_obj->getColumn('user_id')][TTDate::strtotime($p_obj->getColumn('date_stamp'))][$p_obj->getPunchControlID()][$p_obj->getStatus()] = [
                                     'status_id' => $p_obj->getStatus(),
                                     'type_id' => $p_obj->getType(),
@@ -487,7 +489,7 @@ class EmployeeNopayCountReport extends Controller
                                     }
 
                                     $trimmed_static_columns = array_keys(Misc::trimSortPrefix($static_columns));
-                       
+
                                     foreach ($tmp_sub_rows as $sub_row) {
                                         // foreach ($sub_row as $column => $column_data) {
                                         //     if (!in_array($action, ['display_timesheet', 'display_detailed_timesheet'])) {
