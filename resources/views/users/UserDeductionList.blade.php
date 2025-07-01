@@ -1,7 +1,9 @@
 <x-app-layout :title="'Input Example'">
-    <x-slot name="header">
-        <h4 class="mb-sm-0">{{ __('Employee Tax / Deduction List') }}</h4>
-    </x-slot>
+    <style>
+        th, td{
+            padding: 5px !important;
+        }
+    </style>
 
     <div class="row">
         <div class="col-lg-12">
@@ -13,9 +15,11 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button" href=" "
-                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
-                                id="add_new_btn">New Tax / Deduction <i class="ri-add-line"></i></a>
+                            @if ($permission->Check('user_tax_deduction','add') AND ( $permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ) ))
+                                {{-- <a type="button" href="{{ route('user.tax.add', ['user_id' => $user_id]) }}" class="btn btn-primary waves-effect waves-light material-shadow-none me-1">
+                                    New Tax / Deduction <i class="ri-add-line"></i>
+                                </a> --}}
+                            @endif
                         </div>
 
 
@@ -25,126 +29,104 @@
                 <div class="card-body">
                     <div class="card-body">
 
-                        <div class="row mb-4">
-                            <div class="col-lg-2">
-                                <label for="filter_user_id" class="form-label mb-1 req">{{ __('Employee Name') }}</label>
-                            </div>
+                    {{-- -------------------------------------------------------- --}}
 
-                            <div class="col-lg-10">
-                                <form method="GET" action="{{ route('user.tax.index') }}">
-                                    <select name="user_id" id="filter_user" class="form-select" onChange="this.form.submit()">
-                                        @foreach($user_options as $value => $label)
-                                            <option value ="{{ $value }}"
-                                                {{ $value == $user_id ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-
-                                    <input type="hidden" id="old_filter_user" value="{{ $user_id }}">
-                                </form>
-                            </div>
-                        </div>
-
+                    <form method="get" name="userdeduction" action="{{ route('user.tax.index') }}">
+                        @csrf
                         <table class="table table-bordered">
-                            <thead class="bg-primary text-white">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Calculation</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="table_body">
-                                @foreach ($rows as $row)
-                                    @php
-                                        $row_class = isset($row['deleted']) && $row['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
-                                    @endphp
-                                    <tr class="{{ $row_class }}">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $row['type'] ?? '' }}</td>
-                                        <td>{{ $row['name'] ?? '' }}</td>
-                                        <td>{{ $row['calculation'] ?? '' }}</td>
-
+            
+                            <tr class="tblHeader">
+                                <td colspan="10">
+                                    Employee:
+                                    <a class="ps-3 pe-3" href="javascript: submitModifiedForm('filter_user', 'prev', document.userdeduction);">
+                                        <<
+                                    </a>
+                                    <select name="user_id" id="filter_user" onChange="submitModifiedForm('filter_user', '', document.userdeduction);">
+                                        {!! html_options([ 'options'=>$user_options, 'selected'=>$user_id]) !!}
+                                    </select>
+                                    <input type="hidden" id="old_filter_user" value="{{$user_id}}">
+                                    <a class="ps-3 pe-3" href="javascript: submitModifiedForm('filter_user', 'next', document.userdeduction);">
+                                        >>
+                                    </a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>
+                            </tr>
+            
+                            <tr class="tblHeader">
+                                <td>
+                                    #
+                                </td>
+                                <td>
+                                    Type
+                                </td>
+                                <td>
+                                    Name
+                                </td>
+                                <td>
+                                    Calculation
+                                </td>
+            
+                                <td>
+                                    Functions
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
+                                </td>
+                            </tr>
+                            @if (!empty($rows))
+                                @foreach ($rows as $i => $row)
+                                    <tr class="">
                                         <td>
-                                            <!-- Edit Button -->
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ route('user.tax.edit', ['id' => $row['id'] ?? '']) }}'">
-                                                {{ __('Edit') }}
-                                            </button>
-
-                                            <!-- Delete Button -->
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteTaxDeduction({{ $row['id'] }})">
-                                                {{ __('Delete') }}
-                                            </button>
-
+                                            {{ $i+1 }}
+                                        </td>
+                                        <td>
+                                            {{$row['type']}}
+                                        </td>
+                                        <td>
+                                            {{$row['name']}}
+                                        </td>
+                                        <td>
+                                            {{$row['calculation']}}
+                                        </td>
+                                        <td>
+                                            @if ($permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ))
+                                                [ <a href="{{ route('user.tax.add', ['id' => $row['id'], 'saved_search_id' => $saved_search_id]) }}">Edit</a> ]
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="checkbox" name="ids[]" value="{{$row['id']}}">
                                         </td>
                                     </tr>
                                 @endforeach
-                            </tbody>
+                                <tr>
+                                    <td class="tblActionRow text-end" colspan="7">
+                                        @if ($permission->Check('user_tax_deduction','add') AND ( $permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ) ))
+                                            <input type="submit" class="button" name="action" value="Add">
+                                        @endif
+                                        @if($permission->Check('user_tax_deduction','delete') OR ( $permission->Check('user_tax_deduction','delete_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','delete_own') AND $row['is_owner'] === TRUE ))
+                                        <input type="submit" class="button" name="action" value="Delete" onClick="return confirmSubmit()">
+                                        @endif
+                                    </td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td class="tblActionRow" colspan="7" align="center">
+                                        No Data
+                                    </td>
+                                </tr>
+                            @endif
+                            
+                            
                         </table>
+                    </form>
+
+                    {{-- -------------------------------------------------------- --}}
+
                     </div>
-                </div><!-- end card -->
+                </div>
+
             </div>
-            <!-- end col -->
         </div>
-        <!-- end col -->
     </div>
-
-    <script>
-
-        const tableBody = document.getElementById("table_body");
-        if (tableBody && tableBody.children.length === 0) {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td colspan="7" class="text-center text-danger font-weight-bold">No Tax / Deduction.</td>
-            `;
-            tableBody.appendChild(row);
-        }
-
-        //add button
-        document.getElementById('add_new_btn').addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const userSelect = document.getElementById('filter_user');
-            const selectedUserId = userSelect.value;
-
-            if (!selectedUserId) {
-                alert('Please select an employee first.');
-                return;
-            }
-
-            window.location.href = "{{ route('user.tax.add', '') }}/" + selectedUserId;
-
-        });
-
-        // delete item
-        async function deleteTaxDeduction(taxId) {
-            if (confirm('Are you sure you want to delete this item?')) {
-                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                try {
-                    const response = await fetch(`/user/tax/delete/${taxId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert(data.success); // Display success message
-                        window.location.reload(); // Reload the page to reflect changes
-                    } else {
-                        console.error(`Error deleting item ID ${taxId}:`, data.error);
-                    }
-                } catch (error) {
-                    console.error(`Error deleting item ID ${taxId}:`, error);
-                }
-            }
-        }
-
-    </script>
 </x-app-layout>
+                    

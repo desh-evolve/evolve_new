@@ -17,7 +17,9 @@ class FormVariables {
 						}
 						break;
 					case 'POST':
-						if ( isset($_POST[$variable_name]) ) {
+						if (isset($_FILES[$variable_name])) {
+							$retarr[$variable_name] = $_FILES[$variable_name];
+						} elseif ( isset($_POST[$variable_name]) ) {
 							$retarr[$variable_name] = $_POST[$variable_name];
 						}
 					default:
@@ -25,6 +27,8 @@ class FormVariables {
 							$retarr[$variable_name] = $_GET[$variable_name];
 						} elseif ( isset($_POST[$variable_name]) ) {
 							$retarr[$variable_name] = $_POST[$variable_name];
+						} elseif (isset($_FILES[$variable_name])) {
+							$retarr[$variable_name] = $_FILES[$variable_name];
 						}
 				}
 

@@ -42,6 +42,7 @@
                                         @endif
                                     </th>
                                 @elseif ($data['combined_calculation_id'] == 17 OR $data['combined_calculation_id'] == 19)
+                                    
                                     <th>
                                         Percent
                                         @if (!empty($data['default_user_value1']))
