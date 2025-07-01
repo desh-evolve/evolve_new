@@ -10,6 +10,7 @@ use App\Models\PayPeriod\PayPeriodListFactory;
 use App\Models\Users\UserGroupListFactory;
 use App\Models\Punch\PunchControlListFactory;
 use App\Models\Accrual\AccrualListFactory;
+use App\Models\Leaves\AbsenceLeaveUserEntryRecordListFactory;
 use App\Models\Holiday\HolidayListFactory;
 use App\Models\Schedule\ScheduleListFactory;
 use DateTime;
@@ -5166,8 +5167,10 @@ class TimesheetDetailReport extends Report {
             'department_ids' => $filter_data['department_ids'],
             'pay_period_ids' => $filter_data['pay_period_ids']
         );
-
         foreach ($filter_header_data as $fh_key => $filter_header) {
+            
+            $br_strng = '';
+            $dep_strng = '';
             $dlf = new DepartmentListFactory();
             if ($fh_key == 'department_ids') {
                 foreach ($filter_header as $dep_id) {
@@ -5184,7 +5187,7 @@ class TimesheetDetailReport extends Report {
                 $br_strng = implode(', ', $branch_list);
             }
 
-            $br_strng = $blf->getNameById($br_id);
+            // $br_strng = $blf->getNameById($br_id);
             if ($br_strng == null) {
                 $company_name = $current_company->getName();
                 $addrss1 = $current_company->getAddress1();
@@ -5233,7 +5236,7 @@ class TimesheetDetailReport extends Report {
 
         $list_start_date = date('d', $pay_period_start);
         $list_end_date = date('d', $pay_period_end);
-
+// dd($list_start_date,$list_end_date);
         $list_count = ($list_end_date - $list_start_date) + 1;
 
         while ($current <= $last) {
@@ -5303,6 +5306,7 @@ class TimesheetDetailReport extends Report {
 
             //set table position
             $adjust_x = 19;
+            $adjust_y = 19;
 
             $pdf->setXY(Misc::AdjustXY(1, $adjust_x), Misc::AdjustXY(44, $adjust_y));
 
@@ -5347,7 +5351,6 @@ class TimesheetDetailReport extends Report {
             foreach ($rows as $row) {
 
                 foreach ($row['data'] as $row1) {
-
                     if ($row1['date_stamp'] != '') {
                         $row_dt = str_replace('/', '-', $row1['date_stamp']);
 
@@ -5357,7 +5360,7 @@ class TimesheetDetailReport extends Report {
 
                         //                        $row_data_day_key[$dat_day]['total_OT'] = $tot_ot_hours;                             
                     } else {
-                        $tot_ot_hours_data = $row1['over_time'];
+                        $tot_ot_hours_data = $row1['over_time'] ?? [];
                         $tot_worked_actual_hours_data = $row1['actual_time'];
                         $tot_worked_hours_data = explode(':', $row1['worked_time']);
                         $tot_worked_sec_data = ($tot_worked_hours_data[0] * 60 * 60) + ($tot_worked_hours_data[1] * 60);
@@ -5371,14 +5374,16 @@ class TimesheetDetailReport extends Report {
                 } else {
                     $html = $html . '<tr style ="text-align:center" bgcolor="WHITE" nobr="true">';
                 }
-
-
+// dd();
+  $key = sprintf("%02d", $list_start_date);
                 //$html = $html.'<tr style ="text-align:center" nobr="true" >';
                 $html = $html . '<td height="25" align="left"  width="10%">' . $row['employee_number'] . '</td>';
                 $html = $html . '<td align="left"  width="35%" >' . $row['first_name'] . ' ' . $row['last_name'] . '</td>';
-                $html = $html . '<td align="center" width="10%">' . $row_data_day_key[sprintf("%02d", $list_start_date)]['min_punch_time_stamp'] . '</td>';
-                $html = $html . '<td align="center" width="10%">' . $row_data_day_key[sprintf("%02d", $list_start_date)]['max_punch_time_stamp'] . '</td>';
+             
 
+// HTML output
+                $html .= '<td align="center" width="10%">' . (isset($row_data_day_key[$key]['min_punch_time_stamp']) && $row_data_day_key[$key]['min_punch_time_stamp'] !== false ? $row_data_day_key[$key]['min_punch_time_stamp'] : '--') . '</td>';
+                $html .= '<td align="center" width="10%">' . (isset($row_data_day_key[$key]['max_punch_time_stamp']) && $row_data_day_key[$key]['max_punch_time_stamp'] !== false ? $row_data_day_key[$key]['max_punch_time_stamp'] : '--') . '</td>';
                 $udlf = new UserDateListFactory();
                 $slf = new ScheduleListFactory();
 
@@ -5398,7 +5403,6 @@ class TimesheetDetailReport extends Report {
 
                 $udlf = new UserDateListFactory();
                 $slf = new ScheduleListFactory();
-
                 $udlf->getByUserIdAndDate($row['user_id'], date('Y-m-d', strtotime($list_start_date . '-' . $date_month)));
                 $udlf_obj = $udlf->getCurrent();
 
@@ -5414,11 +5418,23 @@ class TimesheetDetailReport extends Report {
                 }
                 $html = $html . '<td align="center" width="10%">' . $early . '</td>';
 
-
                 $status1 = '';
-                $lateSec = strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['shedule_start_time']) - strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['min_punch_time_stamp']);
-                $earlySec = strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['shedule_end_time']) - strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['max_punch_time_stamp']);
+                // $lateSec = strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['shedule_start_time']) - strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['min_punch_time_stamp']);
+                // $earlySec = strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['shedule_end_time']) - strtotime($row_data_day_key[sprintf("%02d", $list_start_date)]['max_punch_time_stamp']);
+                $lateSec = null;
+                $earlySec = null;
 
+                if (isset($row_data_day_key[$key]) && 
+                    isset($row_data_day_key[$key]['shedule_start_time']) && $row_data_day_key[$key]['shedule_start_time'] !== '' && 
+                    isset($row_data_day_key[$key]['min_punch_time_stamp']) && $row_data_day_key[$key]['min_punch_time_stamp'] !== false && $row_data_day_key[$key]['min_punch_time_stamp'] !== '') {
+                    $lateSec = strtotime($row_data_day_key[$key]['shedule_start_time']) - strtotime($row_data_day_key[$key]['min_punch_time_stamp']);
+                }
+
+                if (isset($row_data_day_key[$key]) && 
+                    isset($row_data_day_key[$key]['shedule_end_time']) && $row_data_day_key[$key]['shedule_end_time'] !== '' && 
+                    isset($row_data_day_key[$key]['max_punch_time_stamp']) && $row_data_day_key[$key]['max_punch_time_stamp'] !== false && $row_data_day_key[$key]['max_punch_time_stamp'] !== '') {
+                    $earlySec = strtotime($row_data_day_key[$key]['shedule_end_time']) - strtotime($row_data_day_key[$key]['max_punch_time_stamp']);
+                }
                 $udlf = new UserDateListFactory();
                 $pclf = new PunchControlListFactory();
                 $elf = new ExceptionListFactory(); //--Add code eranda
@@ -5475,7 +5491,8 @@ class TimesheetDetailReport extends Report {
                         $status1 = substr($leaveName_arr[0], 0, 1) . substr($leaveName_arr[1], 0, 1);
                     } else {
                         //Check Holidays
-                        $hlf = new HolidayListFactory();
+                         for ($i1 = $list_start_date; $i1 <= $list_end_date; $i1++) {
+                             $hlf = new HolidayListFactory();
                         $hlf->getByPolicyGroupUserIdAndDate($row['user_id'], date('Y-m-d', strtotime($i1 . '-' . $date_month)));
                         $hday_obj_arr = $hlf->getCurrent()->data;
 
@@ -5499,6 +5516,8 @@ class TimesheetDetailReport extends Report {
                                 }
                             }
                         }
+                            }
+                       
                     }
                 }
 

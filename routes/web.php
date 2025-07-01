@@ -103,7 +103,7 @@ use App\Http\Controllers\punch\UserExceptionList;
 use App\Http\Controllers\authorization\AuthorizationList;
 
 
-use App\Http\Controllers\Report\DailyAttendanceReport;
+// use App\Http\Controllers\Report\DailyAttendanceReport;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
 use App\Http\Controllers\users\CensusInfo;
@@ -133,8 +133,7 @@ use App\Http\Controllers\users\EditAttendanceBonusCalc;
 
 use App\Http\Controllers\users\GratuityCalc;
 
-
-
+use App\Http\Controllers\report\DailyAttendanceReport;
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\report\EmployeeNopayCountReport;
@@ -266,7 +265,8 @@ Route::get('/employee_detail', [UserInformation::class, 'index'])->name('employe
 Route::get('/employee_detail/report', [UserInformation::class, 'generate'])->name('employee_detail.report');
 
 
-Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
+// Route::get('/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
+Route::match(['get', 'post'],'/report/daily_attendance', [DailyAttendanceReport::class, 'index'])->name('report.daily_attendance');
 Route::post('/report/daily_attendance/generate', [DailyAttendanceReport::class, 'generate'])->name('report.daily_attendance.generate');
 
 Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index'])->name('report.user_detail');

@@ -418,7 +418,7 @@ class UserGenericDataFactory extends Factory {
 		return $retarr;
 	}
 
-	function reportFormDataHandler( $action, $filter_data, $generic_data,  $redirect_url ) {
+	static function reportFormDataHandler( $action, $filter_data, $generic_data,  $redirect_url ) {
 		$current_company = $this->current_company;
 		$current_user = $this->current_user;
 
