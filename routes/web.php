@@ -288,11 +288,13 @@ Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, '
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
 Route::get('/punch/user_exception', [UserExceptionList::class, 'index'])->name('punch.user_exception');
 
+Route::match(['get', 'post', 'delete'], '/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
+Route::match(['get', 'post', 'delete'], '/payroll/pay_stub_amendment/add', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
 
-Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
-Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
-Route::post('/payroll/pay_stub_amendment/submit/{id?}', [EditPayStubAmendment::class, 'submit'])->name('payroll.pay_stub_amendment.submit');
-Route::delete('/payroll/pay_stub_amendment/delete/{id}', [PayStubAmendmentList::class, 'delete'])->name('payroll.pay_stub_amendment.delete');
+//Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
+//Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
+//Route::post('/payroll/pay_stub_amendment/submit/{id?}', [EditPayStubAmendment::class, 'submit'])->name('payroll.pay_stub_amendment.submit');
+//Route::delete('/payroll/pay_stub_amendment/delete/{id}', [PayStubAmendmentList::class, 'delete'])->name('payroll.pay_stub_amendment.delete');
 
 Route::get('/payroll/recurring_pay_stub_amendment', [RecurringPayStubAmendmentList::class, 'index'])->name('payroll.recurring_pay_stub_amendment');
 Route::get('/payroll/recurring_pay_stub_amendment/add/{id?}', [EditRecurringPayStubAmendment::class, 'index'])->name('payroll.recurring_pay_stub_amendment.add');
