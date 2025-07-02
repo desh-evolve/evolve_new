@@ -594,7 +594,7 @@ Route::delete('/attendance/user_accruals/delete/{id}', [ViewUserAccrualList::cla
 Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('user_accruals.add');
 
 
-Route::get('/attendance/paystubs', [PayStubList::class, 'index'])->name('attendance.paystubs');
+Route::match(['get', 'post'], '/attendance/paystubs', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
 // ===============================================================================================================================
 // User Leaves

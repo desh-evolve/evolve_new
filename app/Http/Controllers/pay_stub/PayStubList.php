@@ -82,7 +82,11 @@ class PayStubList extends Controller
 				'ids',
 			) 
 		) );
-		
+		   
+		$filter_data =  $_GET['filter_data'] ?? [];
+        $action = $_GET['action'] ?? '';
+        $action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
+		// dd($filter_data,$action);
 		$columns = array(
 			'-1010-first_name' => __('First Name'),
 			'-1020-middle_name' => __('Middle Name'),
@@ -129,10 +133,11 @@ class PayStubList extends Controller
 
 		Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
 		//Handle different actions for different forms.
-
-		$action = isset($_POST['action']) ? trim($_POST['action']) : '';
-		$action = !empty($action) ? strtolower($action) : '';
+		// dd($_POST['action']);
+		// $action = isset($_POST['action']) ? trim($_POST['action']) : '';
+		// $action = !empty($action) ? strtolower($action) : '';
 		
+		// dd($action);
 		switch ($action) {
 			case 'export':
 				//Debug::setVerbosity(11);
