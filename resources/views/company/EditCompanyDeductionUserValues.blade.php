@@ -2,11 +2,11 @@
 @if (isset($page_type) && $page_type == 'mass_user')
     <tr>
         <td colspan="2">
-            <table width="100%">
+            <table width="100%" class="table table-bordered">
                 {{-- @if (isset($data['users']) && is_array($data['users']) && count($data['users']) > 0) --}}
                     @foreach ($data['users'] as $index => $row)
                         @if($loop->first)
-                            <tr class="tblHeader">
+                            <tr class="bg-primary text-white">
                                 <th>#</th>
                                 <th>Employee</th>
 

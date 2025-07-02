@@ -80,7 +80,7 @@ class UserDefaultFactory extends Factory {
 
 			$utlf = new UserTitleListFactory();
 			$utlf->getById( $this->getTitle() );
-
+			
 			if ( $utlf->getRecordCount() == 1 ) {
 				$this->title_obj = $utlf->getCurrent();
 

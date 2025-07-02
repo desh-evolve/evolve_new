@@ -115,8 +115,9 @@ class CompanyDeductionList extends Controller
 					foreach ($cdlf->rs as $cd_obj) {
 						$cdlf->data = (array)$cd_obj;
 						$cd_obj = $cdlf;
-
+						
 						$cd_obj->setDeleted($delete);
+						
 						if ( $cd_obj->isValid() ) {
 							$cd_obj->Save();
 						}

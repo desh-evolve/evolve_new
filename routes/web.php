@@ -142,7 +142,6 @@ use App\Http\Controllers\report\TimesheetSummary;
 use App\Http\Controllers\report\PayStubSummary;
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
-use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
 use App\Http\Controllers\users\EditUserPhonePasswordNew;
 use App\Http\Controllers\users\UserDeductionList;
@@ -605,9 +604,11 @@ Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class
 
 Route::get('/attendance/leaves/covered_aprooval', [ApprovedCoveredBy::class, 'index'])->name('attendance.leaves.covered_aprooval');
 
-Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
-Route::post('/attendance/leaves/supervise-approval/reject', [ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
-Route::post('/attendance/leaves/supervise-approval/approved', [ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
+Route::match(['get', 'post', 'delete'], '/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
+
+//Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
+//Route::post('/attendance/leaves/supervise-approval/reject', [ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
+//Route::post('/attendance/leaves/supervise-approval/approved', [ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
 
 Route::get('/attendance/leaves/view_user_leave/{id}', [VIewUserLeave::class, 'index'])->name('attendance.leaves.viewUserLeave');
 Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::class, 'index'])->name('attendance.leaves.viewNumberLeave');

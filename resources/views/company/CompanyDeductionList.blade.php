@@ -52,9 +52,9 @@
                                     Functions
                                 </td>
                                 <!-- ARSP ADD NEW CODE FOR EXPORT CSV -->
-                                <td>
+                                {{-- <td>
                                     Import(CSV)
-                                </td>
+                                </td> --}}
                                 <td>
                                     <input type="checkbox" class="checkbox" name="select_all"
                                         onClick="CheckAll(this)" />
@@ -81,17 +81,17 @@
                                         @if ($permission->Check('company_tax_deduction', 'edit'))
                                             [ <a href="/payroll/company_deductions/add?id={{ $row['id'] }}">Edit</a>
                                             ]
-                                            [ <a href="/user/tax/edit?id={{ $row['id'] }}">Employee Settings1</a> ]
+                                            [ <a href="/user/tax/add?company_deduction_id={{ $row['id'] }}">Employee Settings</a> ]
                                         @endif
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         @if ($row['calculation_id'] == '20')
                                             <a
                                                 href="javascript:ImportCsvFile('{{ $row['name'] }}','{{ $row['id'] }}');"><img
                                                     src="{$IMAGES_URL}/nav_popup.gif" alt=""
                                                     style="vertical-align: middle" /></a>
                                         @endif
-                                    </td>
+                                    </td> --}}
 
 
                                     <td>
