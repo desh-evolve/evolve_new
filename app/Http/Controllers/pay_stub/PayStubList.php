@@ -82,11 +82,17 @@ class PayStubList extends Controller
 				'ids',
 			) 
 		) );
-		   
-		$filter_data =  $_GET['filter_data'] ?? [];
-        $action = $_GET['action'] ?? '';
-        $action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
-		// dd($filter_data,$action);
+		$action = '';
+		$filter_data = [];
+        if (isset($_POST['action'])) {
+            $action = trim($_POST['action']);
+			$filter_data =  $_POST['filter_data'] ?? [];
+        } elseif (isset($_GET['action'])) {
+            $action = trim($_GET['action']);
+			$filter_data =  $_GET['filter_data'] ?? [];
+        }
+        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+		
 		$columns = array(
 			'-1010-first_name' => __('First Name'),
 			'-1020-middle_name' => __('Middle Name'),
@@ -293,7 +299,9 @@ class PayStubList extends Controller
 				if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
 					if ( is_array( $ids ) AND count($ids) > 0 ) {
 						foreach ($ids as $id) {
+							
 							$pslf->getById($id);
+							
 							foreach ($pslf->rs as $pay_stub_obj) {
 								$pslf->data = (array)$pay_stub_obj;
 								$pay_stub_obj = $pslf;
@@ -307,7 +315,6 @@ class PayStubList extends Controller
 						}
 					}
 				}
-
 				//Redirect::Page( URLBuilder::getURL(NULL, 'PayStubList.php') );
 				Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
 
