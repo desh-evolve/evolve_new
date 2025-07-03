@@ -458,7 +458,7 @@ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])
 
  Route::match(['get', 'post', 'delete'], '/user/tax', [UserDeductionList::class, 'index'])->name('user.tax.index');
  Route::match(['get', 'post', 'delete'],'/user/tax/add', [EditUserDeduction::class, 'index'])->name('user.tax.add');
- 
+
  //Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
  //Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
  //Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
@@ -654,9 +654,7 @@ Route::match(['get', 'post'], '/schedule/recurring_schedule_template_control_lis
 Route::get('/schedule/recurring_schedule_template_control/add', [RecurringScheduleTemplateControlList::class, 'add'])->name('schedule.recurring_schedule_template_control.add');
 Route::delete('/schedule/recurring_schedule_template_control/delete/{id}', [RecurringScheduleTemplateControlList::class, 'delete'])->name('schedule.recurring_schedule_template_control.delete');
 
-Route::delete('/schedule/edit_recurring_schedule_template/delete/{id}', [EditRecurringScheduleTemplate::class, 'delete'])->name('schedule.edit_recurring_schedule_template.delete');
-Route::get('/schedule/edit_recurring_schedule_template/edit/{id?}', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template.edit');
-Route::post('/schedule/edit_recurring_schedule_template/submit/{id?}', [EditRecurringScheduleTemplate::class, 'submit'])->name('schedule.edit_recurring_schedule_template.submit');
+Route::match(['get', 'post'], '/schedule/edit_recurring_schedule_template/edit', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template.edit');
 
 // ===============================================================================================================================
 // Schedule List

@@ -102,7 +102,7 @@ class RecurringScheduleControlFactory extends Factory {
 	function setCompany($id) {
 		$id = trim($id);
 
-		$clf = new CompanyListFactory(); 
+		$clf = new CompanyListFactory();
 
 		if ( $this->Validator->isResultSetWithRows(	'company',
 													$clf->getByID($id),
@@ -176,6 +176,7 @@ class RecurringScheduleControlFactory extends Factory {
 
 		return FALSE;
 	}
+    
 	function setStartDate($epoch) {
 		$epoch = trim($epoch);
 
@@ -184,9 +185,22 @@ class RecurringScheduleControlFactory extends Factory {
 												('Incorrect start date'))
 			) {
 
+
+            if 	( $epoch > 0 ) {
+				$this->data['start_date'] = date('Y-m-d',$epoch);
+
+				return TRUE;
+			} else {
+				$this->Validator->isTRUE(		'start_date',
+												FALSE,
+												('Incorrect start date'));
+			}
+
+            /*
 			$this->data['start_date'] = $epoch;
 
 			return TRUE;
+            */
 		}
 
 		return FALSE;
@@ -203,6 +217,9 @@ class RecurringScheduleControlFactory extends Factory {
 
 		return FALSE;
 	}
+
+
+    /*
 	function setEndDate($epoch) {
 		$epoch = trim($epoch);
 
@@ -224,6 +241,34 @@ class RecurringScheduleControlFactory extends Factory {
 
 		return FALSE;
 	}
+    */
+
+    function setEndDate($epoch) {
+        $epoch = trim($epoch);
+
+        if ($epoch === '' || $epoch === null) {
+            $this->data['end_date'] = null;
+            return TRUE;
+        }
+
+        if ($this->Validator->isDate(       'end_date',
+                                            $epoch,
+                                            'Incorrect end date')
+            ) {
+
+            if ($epoch > 0) {
+                $this->data['end_date'] = date('Y-m-d', $epoch);
+
+                return TRUE;
+            } else {
+                $this->Validator->isTRUE(       'end_date',
+                                                FALSE,
+                                                'Incorrect end date');
+            }
+        }
+
+        return FALSE;
+    }
 
 	function getAutoFill() {
 		if ( isset($this->data['auto_fill']) ) {
@@ -285,7 +330,7 @@ class RecurringScheduleControlFactory extends Factory {
 			}
 
 			//Insert new mappings.
-			$ulf = new UserListFactory(); 
+			$ulf = new UserListFactory();
 
 			foreach ($ids as $id) {
 				if ( isset($ids) AND !in_array($id, $tmp_ids) ) {

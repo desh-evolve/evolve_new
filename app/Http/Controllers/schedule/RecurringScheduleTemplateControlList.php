@@ -47,9 +47,6 @@ class RecurringScheduleTemplateControlList extends Controller
 
 		$viewData['title'] = 'Recurring Schedule Template List';
 
-		/*
-		* Get FORM variables
-		*/
 		extract	(FormVariables::GetVariables(
 												array	(
 														'action',
@@ -93,6 +90,7 @@ class RecurringScheduleTemplateControlList extends Controller
                     foreach ($rstclf->rs as $rstc_obj) {
 						$rstclf->data = (array)$rstc_obj;
 						$rstc_obj = $rstclf;
+
 						$rstc_obj->StartTransaction();
 
 						//Get week data
@@ -102,6 +100,7 @@ class RecurringScheduleTemplateControlList extends Controller
 							foreach( $rstlf->rs as $rst_obj) {
 								$rstlf->data = (array)$rst_obj;
 								$rst_obj = $rstlf;
+
 								$week_rows[$rst_obj->getId()] = array(
 													'id' => $rst_obj->getId(),
 													'week' => $rst_obj->getWeek(),
