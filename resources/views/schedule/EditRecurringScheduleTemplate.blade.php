@@ -22,7 +22,7 @@
 
                     {{-- --------------------------------------------------------------------------- --}}
 
-                    <form method="POST" action="{{ isset($data['id']) ? route('schedule.edit_recurring_schedule_template.submit', $data['id']) : route('schedule.edit_recurring_schedule_template.submit') }}">
+                    <form method="post" action="{{ route('schedule.edit_recurring_schedule_template.edit') }}">
                         @csrf
 
                         <div id="contentBoxTwoEdit">
@@ -83,7 +83,7 @@
                                                         <input type="hidden" name="week_rows[{{$week_row['id']}}][total_time]" value="{{$week_row['total_time']}}">
                                                     </td>
                                                     <td width="15">
-                                                        <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][sun]" value="1" {{ $week_row['sun'] == TRUE ? 'checked' : '' }} >
+                                                        <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][sun]" value="1" {{ ($week_row['sun'] ?? false) == true ? 'checked' : '' }}>
                                                     </td>
                                                     <td width="15">
                                                         <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][mon]" value="1" {{ $week_row['mon'] == TRUE ? 'checked' : '' }} >
@@ -101,13 +101,21 @@
                                                         <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][fri]" value="1" {{ $week_row['fri'] == TRUE ? 'checked' : '' }} >
                                                     </td>
                                                     <td width="15">
-                                                        <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][sat]" value="1" {{ $week_row['sat'] == TRUE ? 'checked' : '' }} >
+                                                        <input type="checkbox" class="checkbox" name="week_rows[{{$week_row['id']}}][sat]" value="1" {{ ($week_row['sat'] ?? false) == true ? 'checked' : '' }}>
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-control form-control-sm" size="10" id="start_time-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][start_time]" value="{{getdate_helper('time', $week_row['start_time'])}}" onChange="getRecurringScheduleTotalTime({{$week_row['id']}});">
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-sm"
+                                                            size="10"
+                                                            id="start_time-{{$week_row['id']}}"
+                                                            name="week_rows[{{$week_row['id']}}][start_time]"
+                                                            value="{{ getdate_helper('time', $week_row['start_time'] ?? '' )}}"
+                                                            onChange="getRecurringScheduleTotalTime({{$week_row['id']}});"
+                                                        >
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-control form-control-sm" size="10" id="end_time-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][end_time]" value="{{getdate_helper('time', $week_row['end_time'])}}" onChange="getRecurringScheduleTotalTime({{$week_row['id']}});">
+                                                        <input type="text" class="form-control form-control-sm" size="10" id="end_time-{{$week_row['id']}}" name="week_rows[{{$week_row['id']}}][end_time]" value="{{ getdate_helper('time', $week_row['end_time'] ?? '' )}}" onChange="getRecurringScheduleTotalTime({{$week_row['id']}});">
                                                     </td>
                                                     <td>
                                                         <span id="total_time-{{$week_row['id']}}" class="form-control form-control-sm">
@@ -172,16 +180,10 @@
                                                 @endif
                                             @endforeach
 
-                                            {{-- <tr>
-                                                <td class="tblActionRow" colspan="15">
-                                                    <input type="submit" class="btnSubmit" name="action:submit" value="Submit" onClick="return singleSubmitHandler(this)">
-                                                    <input type="submit" class="btnSubmit" name="action:add_week" value="Add Week">
-                                                    <input type="submit" class="btnSubmit" name="action:delete" value="Delete" onClick="return confirmSubmit()">
-                                                </td>
-                                            </tr> --}}
                                             <tr>
                                                 <td class="tblActionRow text-end" colspan="15">
-                                                    <input type="submit" class="btn btn-sm btn-secondary" name="action:add_week" value="Add Week">
+                                                    <input type="submit" class="btn btn-sm btn-secondary" name="action" value="Add Week">
+                                                    <input type="submit" class="btn btn-sm btn-danger" name="action" value="Delete" onClick="return confirmSubmit()">
                                                 </td>
                                             </tr>
 
@@ -192,16 +194,16 @@
                             </table>
                         </div>
 
-                        <div class="d-flex justify-content-end gap-2 mt-2">
+                        <div class="d-flex justify-content-end mt-2">
                             <input type="hidden" name="data[id]" id="schedule_id" value="{{ $data['id'] ?? '' }}">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <input type="submit" class="btn btn-danger" name="delete" value="Delete" onClick="return confirmSubmit()">
+                            <input type="submit" class="btn btn-primary" name="action" value="Submit" onClick="return singleSubmitHandler(this)">
                         </div>
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}
 
-                </div><!-- end card -->
+                </div>
+
             </div>
             <!-- end col -->
         </div>
