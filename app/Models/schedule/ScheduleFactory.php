@@ -281,6 +281,7 @@ class ScheduleFactory extends Factory {
 
 	function setUserDate($user_id, $date) {
 		$user_date_id = UserDateFactory::findOrInsertUserDate( $user_id, $date);
+		
 		Debug::text(' User Date ID: '. $user_date_id, __FILE__, __LINE__, __METHOD__,10);
 		if ( $user_date_id != '' ) {
 			$this->setUserDateID( $user_date_id );
@@ -368,7 +369,7 @@ class ScheduleFactory extends Factory {
 
 			) {
 
-			$this->data['start_time'] = $epoch;
+			$this->data['start_time'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -392,7 +393,7 @@ class ScheduleFactory extends Factory {
 
 			) {
 
-			$this->data['end_time'] = $epoch;
+			$this->data['end_time'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}

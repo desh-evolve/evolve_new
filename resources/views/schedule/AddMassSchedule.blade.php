@@ -60,9 +60,6 @@
                                                 <br>
                                                 <a href="javascript:moveItem(document.getElementById('filter_user'), document.getElementById('src_filter_user')); uniqueSelect(document.getElementById('src_filter_user')); sortSelect(document.getElementById('src_filter_user'));resizeSelect(document.getElementById('src_filter_user'), document.getElementById('src_filter_user'), {{select_size([ 'array'=>$filter_user_options])}})"><i class="ri-arrow-left-double-fill arrow-icon" style="vertical-align: middle"></i></a>
                                                 <br>
-                                                <br>
-                                                <br>
-                                                <a href="javascript:UserSearch('src_filter_user','filter_user');"><img style="vertical-align: middle" src="{$IMAGES_URL}/nav_popup.gif"></a>
                                             </td>
                                             <td class="cellRightEditTable" width="50%"  align="center">
                                                 <input type="button" name="Select All" value="Select All" onClick="selectAll(document.getElementById('filter_user'))">
@@ -264,10 +261,7 @@
                         </div>
 
                         <div id="contentBoxFour">
-                            {{-- <input type="submit" class="btnSubmit" name="action:submit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))"> --}}
-                            <input type="hidden" name="action" value="submit">
-                            <input type="submit" class="btnSubmit" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
-
+                            <input type="submit" class="btnSubmit" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_user'))">
                         </div>
 
                     </form>

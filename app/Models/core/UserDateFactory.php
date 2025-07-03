@@ -160,7 +160,7 @@ class UserDateFactory extends Factory {
 	static function findOrInsertUserDate($user_id, $date, $timezone = NULL ) {
 
 		$date = TTDate::getMiddleDayEpoch( $date ); //Use mid day epoch so the timezone conversion across DST doesn't affect the date.
-
+		
 
 		if ( $timezone == NULL ) {
 			//Find the employees preferred timezone, base the user date off that instead of the pay period timezone,

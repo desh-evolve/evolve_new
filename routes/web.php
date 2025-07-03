@@ -91,6 +91,7 @@ use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\timesheet\ViewUserTimeSheet;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\progressbar\ProgressBarControl;
 
 use App\Http\Controllers\punch\AddMassPunch;
 use App\Http\Controllers\punch\EditPunch;

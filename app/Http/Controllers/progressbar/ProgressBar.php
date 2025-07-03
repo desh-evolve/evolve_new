@@ -694,6 +694,7 @@ class ProgressBar extends Controller
                     $fail_transaction = FALSE;
 
                     $x=0;
+                    
                     while ( $time_stamp <= $data['end_full_time_stamp'] ) {
                         if ( isset($data['dow'][TTDate::getDayOfWeek( $time_stamp )]) AND $data['dow'][TTDate::getDayOfWeek( $time_stamp )] == 1 ) {
                             foreach( $filter_user_id as $user_id ) {
@@ -737,7 +738,7 @@ class ProgressBar extends Controller
                                     }
                                 }
                                 unset($slf, $s_obj);
-
+                                
                                 $ulf->getByIdAndCompanyId($user_id,  $current_company->getId() );
                                 if ( $ulf->getRecordCount() == 1 ) {
                                     $user_obj = $ulf->getCurrent();
@@ -749,11 +750,13 @@ class ProgressBar extends Controller
                                     $user_obj = NULL;
                                     $user_generic_status_label = 'N/A @ '. TTDate::getDate('DATE', $start_time) .': '. TTDate::getDate('TIME', $start_time) .' - '. TTDate::getDate('TIME', $end_time);
                                 }
-
+                               
                                 //Re-initialize schedule factory here so we clear any errors preventing the next schedule from being inserted.
                                 $sf = new ScheduleFactory();
                                 //$sf->setUserDateId( $user_date_id  );
+                                //dd($time_stamp);
                                 $sf->setUserDate($user_id, $time_stamp);
+                                
                                 $sf->setStatus( $data['status_id'] );
                                 $sf->setSchedulePolicyID( $data['schedule_policy_id'] );
                                 $sf->setAbsencePolicyID( $data['absence_policy_id'] );
@@ -779,9 +782,10 @@ class ProgressBar extends Controller
 
                                 $sf->setStartTime( $start_time );
                                 $sf->setEndTime( $end_time );
-
+                               
                                 if ( $sf->isValid() ) {
                                     $sf->setEnableReCalculateDay(TRUE);
+                                    
                                     if ( $sf->Save() != TRUE ) {
                                         UserGenericStatusFactory::queueGenericStatus( $user_generic_status_label, 10, $sf->Validator->getTextErrors(), NULL );
                                         $fail_transaction = TRUE;
@@ -796,7 +800,7 @@ class ProgressBar extends Controller
                                     UserGenericStatusFactory::queueGenericStatus( $user_generic_status_label, 10, $sf->Validator->getTextErrors(), NULL );
                                     $fail_transaction = TRUE;
                                 }
-
+                                
                                 //Debug::Text('Setting Percent: '. Misc::calculatePercent( $x, $total_shifts ), __FILE__, __LINE__, __METHOD__,10);
                                 $this->initProgressBar( Misc::calculatePercent( $x, $total_shifts ));
 
@@ -809,7 +813,7 @@ class ProgressBar extends Controller
                         }
                         $time_stamp = $time_stamp + 86400;
                     }
-
+                    
                     //$sf->FailTransaction();
                     $sf->CommitTransaction();
 
@@ -821,7 +825,7 @@ class ProgressBar extends Controller
 
                     $this->initProgressBar(100);
 
-                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Schedule', 'batch_next_page' => urlencode( URLBuilder::getURL( array('data' => $data, 'filter_user_id' => $filter_user_id ), '../schedule/AddMassSchedule.php' ) ) ), '/users/user_generic_status_list');
+                    $next_page = URLBuilder::getURL( array('batch_id' => $ugsf->getBatchID(), 'batch_title' => 'Mass Schedule', 'batch_next_page' => urlencode( URLBuilder::getURL( array('data' => $data, 'filter_user_id' => $filter_user_id ), '/schedule/add_mass_schedule' ) ) ), '/users/user_generic_status_list');
                 }
 
                 break;
