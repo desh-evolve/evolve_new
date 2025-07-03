@@ -182,7 +182,6 @@ class ViewScheduleMonth extends Controller
 					}
 				}
 				//var_dump($tmp_schedule_shifts);
-
 				$calendar_array = TTDate::getCalendarArray($start_date, $end_date, $current_user_prefs->getStartWeekDay(), FALSE);
 				//var_dump($calendar_array);
 				$viewData['calendar_array'] = $calendar_array;
@@ -215,7 +214,7 @@ class ViewScheduleMonth extends Controller
 
 				break;
 		}
-		//dd($viewData);
+		
 		return view('schedule/ViewScheduleMonth', $viewData);
 	}
 }

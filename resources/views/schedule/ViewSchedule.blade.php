@@ -18,12 +18,12 @@
                    
                     {{-- --------------------------------------------------------------------------- --}}
 
-                    <table class="table table-bordered">
-                        {{-- {*
-                        If cases where people need to select many employees, the GET URL length can be exceeded. The problem though is
-                        if we use POST, when editing schedules they can't refresh the page automatically without being prompted to re-submit form data.
-                        *} --}}
-                        <form method="get" name="schedule" id="schedule_form">
+                    {{-- {*
+                    If cases where people need to select many employees, the GET URL length can be exceeded. The problem though is
+                    if we use POST, when editing schedules they can't refresh the page automatically without being prompted to re-submit form data.
+                    *} --}}
+                    <form method="get" name="schedule" id="schedule_form">
+                        <table class="table table-bordered">
                             @csrf
                             <input type="hidden" id="tmp_action" name="action" value="">
             
@@ -84,7 +84,7 @@
                                         <tr>
                                             <td class="bg-primary text-white" colspan="3">
                                                 <a name="schedule"></a>
-                                                <input type="button" name="action" value="View Schedule" onClick="viewTypeTarget(document.getElementById('filter_view_type')); selectAllReportCriteria();">
+                                                <input type="submit" name="action" value="View Schedule" onClick="viewTypeTarget(document.getElementById('filter_view_type')); selectAllReportCriteria();">
                                                 <input type="button" name="action" value="Print Schedule" onClick="viewTypeTarget('action:print_schedule'); selectAllReportCriteria();">
                                                 @if ($permission->Check('schedule','view') OR $permission->Check('schedule','view_child'))
                                                     Group Schedule: <input type="checkbox" name="filter_data[group_schedule]" value="1">
@@ -97,7 +97,7 @@
             
                             <tr>
                                 <td colspan="10">
-                                    <iframe style="width:100%; height:0px; border: 5px" id="schedule_layer" name="Schedule" src="blank.html"></iframe>
+                                    <iframe style="width:100%; min-height: 500px !important; border: 5px" id="schedule_layer" name="Schedule" src="blank.html"></iframe>
                                 </td>
                             </tr>
                         </table>
@@ -106,7 +106,6 @@
 
                     {{-- --------------------------------------------------------------------------- --}}
                     
-                </div><!-- end card -->
             </div>
             <!-- end col -->
         </div>
@@ -126,83 +125,44 @@
                                             'filter_schedule_department',
                                             'filter_user_title',
                                             'filter_include_user',
-                                            'filter_exclude_user' );
+                                            'filter_exclude_user' 
+                                        );
         
-                                            /*
+    
         function viewTypeTarget(obj) {
-            console.log('obj: ', obj);
 
-            if ( typeof obj !== 'undefined' ) {
-                if ( obj.value == 10 ) { //Month
+            let action = '/schedule/view_schedule';
+            let isPrintAction = obj === 'action:print_schedule';
+
+            if (typeof obj !== 'undefined' && !isPrintAction) {
+                let val = obj.value;
+                if (val == 10) {
                     action = '/schedule/view_schedule_month';
-                } else if ( obj.value == 20 ) { //Week
+                } else if (val == 20) {
                     action = '/schedule/view_schedule_week';
-                } else if ( obj.value == 30 ) { //Day
+                } else if (val == 30) {
                     action = '/schedule/view_schedule_linear';
-                } else if ( obj == 'action:print_schedule' ) {
-                    action = '/schedule/view_schedule';
-                } else {
-                    action = '/schedule/view_schedule';
                 }
-            } else {
-                action = '/schedule/view_schedule';
-            }
-        
-            //alert('aValue: '+ obj.value +' Action:'+ action);
-            document.getElementById('schedule_form').action = action;
-        
-            if ( obj == 'action:print_schedule' ) {
-                document.getElementById('schedule_form').target = '';
-            } else {
-                document.getElementById('schedule_form').target = 'Schedule';
             }
 
-            $.get('action', function(res) => {
-                $('#schedule_layer').html(res);
-            })
-        
-            //alert('bSrc:'+document.getElementById('schedule_layer').src);
+            $('#schedule_form').attr('action', action);
+
+            if (isPrintAction) {
+                $('#schedule_form').attr('target', '');
+            } else {
+                $('#schedule_form').attr('target', 'Schedule');
+                $('#schedule_layer').attr('src', action);
+            }
+
+            // $.get(action, function (res) {
+            //     console.log('res', res)
+            //     $('#schedule_layer').html(res);
+            // });
+
+            // alert('bSrc:' + document.getElementById('schedule_layer').src);
         }
-*/
-        function viewTypeTarget(obj) {
-            console.log('obj:', obj);
 
-            let action;
-
-            // Case when obj is a string (e.g. 'action:print_schedule')
-            if (typeof obj === 'string' && obj === 'action:print_schedule') {
-                action = '/schedule/view_schedule';
-                document.getElementById('schedule_form').target = '';
-            }
-            // Case when obj is an element with a `value` property
-            else if (typeof obj !== 'undefined' && obj !== null && typeof obj.value !== 'undefined') {
-                switch (parseInt(obj.value)) {
-                    case 10:
-                        action = '/schedule/view_schedule_month';
-                        break;
-                    case 20:
-                        action = '/schedule/view_schedule_week';
-                        break;
-                    case 30:
-                        action = '/schedule/view_schedule_linear';
-                        break;
-                    default:
-                        action = '/schedule/view_schedule';
-                }
-                document.getElementById('schedule_form').target = 'Schedule';
-            } else {
-                action = '/schedule/view_schedule';
-                document.getElementById('schedule_form').target = 'Schedule';
-            }
-
-            // Set the form's action
-            document.getElementById('schedule_form').action = action;
-
-            // Load updated content
-            $.get(action, function(res) {
-                $('#schedule_layer').html(res);
-            });
-        }
+    
 
     </script>
 </x-app-layout>

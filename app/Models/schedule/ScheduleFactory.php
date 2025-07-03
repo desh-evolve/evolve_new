@@ -35,18 +35,18 @@ class ScheduleFactory extends Factory {
     protected $current_company;
     protected $current_user_prefs;
 
-    // public function __construct()
-    // {
-    //     $basePath = Environment::getBasePath();
-    //     require_once($basePath . '/app/Helpers/global.inc.php');
-    //     require_once($basePath . '/app/Helpers/Interface.inc.php');
-	// 	//require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
+    public function __construct()
+    {
+        $basePath = Environment::getBasePath();
+        require_once($basePath . '/app/Helpers/global.inc.php');
+        require_once($basePath . '/app/Helpers/Interface.inc.php');
+		//require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
 
-    //     $this->permission = View::shared('permission');
-    //     $this->current_user = View::shared('current_user');
-    //     $this->current_company = View::shared('current_company');
-    //     $this->current_user_prefs = View::shared('current_user_prefs');
-    // }
+        $this->permission = View::shared('permission');
+        $this->current_user = View::shared('current_user');
+        $this->current_company = View::shared('current_company');
+        $this->current_user_prefs = View::shared('current_user_prefs');
+    }
 
 	function _getFactoryOptions( $name ) {
 
