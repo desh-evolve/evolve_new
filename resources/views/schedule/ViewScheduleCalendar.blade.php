@@ -3,6 +3,12 @@
         td, th{
             padding: 5px !important;
         }
+        .main-content {
+            margin: 0;
+        }
+        .page-content {
+			padding-top: 25px !important;
+		}
     </style>
 
     <script	language=JavaScript>

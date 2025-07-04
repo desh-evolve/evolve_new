@@ -3,6 +3,12 @@
         td, th{
             padding: 5px !important;
         }
+		.main-content {
+            margin: 0;
+        }
+		.page-content {
+			padding-top: 25px !important;
+		}
     </style>
 
 
@@ -67,38 +73,40 @@ function showScheduleDay(epoch) {
 							</tr>
 							@endif
 
-                            @foreach ($schedule_shifts[$calendar['date_stamp']] as $shifts)
-								@if( $shifts['start_time'])
-									@if( $shifts['branch_id'] != 0)
-									<tr>
-										<td colspan="2" class="bg-primary text-white">
-											{{$shifts['branch']}}
-										</td>
-									</tr>
+							@if (!empty($schedule_shifts[$calendar['date_stamp']]))
+								@foreach ($schedule_shifts[$calendar['date_stamp']] as $shifts)
+									@if( $shifts['start_time'])
+										@if( $shifts['branch_id'] != 0)
+										<tr>
+											<td colspan="2" class="bg-primary text-white">
+												{{$shifts['branch']}}
+											</td>
+										</tr>
+										@endif
+										@if( $shifts['department_id'] != 0)
+										<tr>
+											<td colspan="2" class="bg-primary text-white">
+												{{$shifts['department']}}
+											</td>
+										</tr>
+										@endif
+										<tr>
+											<td colspan="2" align="center" nowrap>
+												@if( isset($shifts['id']) AND ( $permission->Check('schedule','edit') OR $permission->Check('schedule','edit_own') OR $permission->Check('schedule','edit_child')) )
+													<a href="javascript:schedule.editSchedule({{$shifts['id']}},{{$shifts['user_id']}},{{$calendar['epoch']}})">
+												@endif
+												@if( $shifts['status_id'] == 20)
+													<span color="red">{{$shifts['absence_policy'] ?? "N/A"}}</span>
+												@else
+													{{getdate_helper('time', $shifts['start_time'])}}-{{getdate_helper('time', $shifts['end_time'])}}
+												@endif
+												@if( isset($shifts['id']) AND ( $permission->Check('schedule','edit') OR $permission->Check('schedule','edit_own') OR $permission->Check('schedule','edit_child') ) )</a>
+												@else [R]@endif
+											</td>
+										<tr>
 									@endif
-									@if( $shifts['department_id'] != 0)
-									<tr>
-										<td colspan="2" class="bg-primary text-white">
-											{{$shifts['department']}}
-										</td>
-									</tr>
-									@endif
-									<tr>
-										<td colspan="2" align="center" nowrap>
-											@if( isset($shifts['id']) AND ( $permission->Check('schedule','edit') OR $permission->Check('schedule','edit_own') OR $permission->Check('schedule','edit_child')) )
-												<a href="javascript:schedule.editSchedule({{$shifts['id']}},{{$shifts['user_id']}},{{$calendar['epoch']}})">
-											@endif
-											@if( $shifts['status_id'] == 20)
-                                                <span color="red">{{$shifts['absence_policy'] ?? "N/A"}}</span>
-                                            @else
-                                                {{getdate_helper('time', $shifts['start_time'])}}-{{getdate_helper('time', $shifts['end_time'])}}
-                                            @endif
-											@if( isset($shifts['id']) AND ( $permission->Check('schedule','edit') OR $permission->Check('schedule','edit_own') OR $permission->Check('schedule','edit_child') ) )</a>
-                                            @else [R]@endif
-										</td>
-									<tr>
-								@endif
-							@endforeach
+								@endforeach
+							@endif
 						</table>
 						@else
 							<br>
