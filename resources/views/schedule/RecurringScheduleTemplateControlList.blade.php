@@ -7,6 +7,7 @@
             padding: 5px !important;
         }
     </style> --}}
+
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -30,47 +31,56 @@
 
                 <div class="card-body">
 
-                    <table class="table table-striped table-bordered">
-                        <thead class="bg-primary text-white">
-                            <th>#</th>
-                            <th>Name </th>
-                            <th>Description</th>
-                            <th>Functions</th>
-                        </thead>
-                        <tbody id="table_body">
-                            @foreach ($rows as $i => $row)
-                                <tr>
-                                    <td>{{ $i+1 }}</td>
-                                    <td>{{$row['name']}}</td>
-                                    <td>{{$row['description']}}</td>
-                                    <td>
-                                        @if ($permission->Check('recurring_schedule_template','edit') OR ($permission->Check('recurring_schedule_template','edit_own') AND $row.is_owner === TRUE))
-                                            {{-- [ <a href="/schedule/edit_recurring_schedule_template?id={{$row['id']}}" >Edit</a> ] --}}
-                                            <a href="{{ route('schedule.edit_recurring_schedule_template.edit', ['id' => $row['id']]) }}" class="btn btn-secondary btn-sm">Edit</a>
-                                        @endif
-                                        @if ($permission->Check('recurring_schedule','view') OR ($permission->Check('recurring_schedule','view_own') ))
-                                            <a href="/schedule/recurring_schedule_control_list?filter_template_id={{$row['id']}}" class="btn btn-warning btn-sm">Recurring Schedules</a>
-                                            {{-- <a href="{{ route('schedule.edit_recurring_schedule.add', ['id' => $row['id']]) }}" class="btn btn-warning btn-sm">Recurring Schedules</a> --}}
-                                        @endif
+                    <form method="post" action="{{ route('schedule.recurring_schedule_template_control_list') }}">
+                        @csrf
+                        <table class="table table-striped table-bordered">
+                            <thead class="bg-primary text-white">
+                                <th>#</th>
+                                <th>Name </th>
+                                <th>Description</th>
+                                <th>Functions</th>
+                                <td>
+                                    <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
+                                </td>
+                            </thead>
+                            <tbody id="table_body">
+                                @foreach ($rows as $i => $row)
+                                    <tr>
+                                        <td>{{ $i+1 }}</td>
+                                        <td>{{$row['name']}}</td>
+                                        <td>{{$row['description']}}</td>
+                                        <td>
+                                            <div class="d-flex gap-3">
+                                                @if ($permission->Check('recurring_schedule_template','edit') OR ($permission->Check('recurring_schedule_template','edit_own') AND $row.is_owner === TRUE))
+                                                 <a href="{{ route('schedule.edit_recurring_schedule_template.edit', ['id' => $row['id']]) }}" class="text-decoration-underline">[ Edit ]</a>
+                                                @endif
+                                                @if ($permission->Check('recurring_schedule','view') OR ($permission->Check('recurring_schedule','view_own') ))
+                                                 <a href="/schedule/recurring_schedule_control_list?filter_template_id={{$row['id']}}" class="text-decoration-underline">[ Recurring Schedules ]</a>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="checkbox" name="ids[]" value="{{$row['id']}}">
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
 
-                                        @if ($permission->Check('recurring_schedule_template','delete') OR $permission->Check('recurring_schedule_template','delete_own'))
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/schedule/recurring_schedule_template_control/delete/{{ $row['id'] }}', 'Recurring Schedule', this)">
-                                                Delete
-                                            </button>
+                            <tr>
+                                <td class="tblActionRow" colspan="15">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        @if ($permission->Check('recurring_schedule_template','add'))
+                                            <input type="submit" class="btn btn-primary" name="action" value="Copy">
                                         @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                        <tr>
-                            <td class="tblActionRow" colspan="7">
-                                @if ($permission->Check('recurring_schedule_template','add'))
-                                    <input type="submit" class="button" name="action:add" value="Add">
-                                    <input type="submit" class="button" name="action:copy" value="Copy">
-                                @endif
-                            </td>
-                        </tr>
-                    </table>
+                                        @if ($permission->Check('recurring_schedule_template','delete') OR $permission->Check('recurring_schedule_template','delete_own'))
+                                            <input type="submit" class="btn btn-danger" name="action" value="Delete" onClick="return confirmSubmit()">
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>

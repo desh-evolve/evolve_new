@@ -66,7 +66,7 @@
                                                 size="15"
                                                 id="start_date"
                                                 name="data[start_date]"
-                                                value="{{ isset($data['start_date']) ? date('Y-m-d', $data['start_date']) : '' }}"
+                                                value="{{ getdate_helper('date', $data['start_date'] ?? '' )}}"
                                             >
                                             <span>ie: {{ $current_user_prefs->getDateFormatExample() }}</span>
                                         </div>
@@ -86,7 +86,7 @@
                                                 size="15"
                                                 id="end_date"
                                                 name="data[end_date]"
-                                                value="{{ (!empty($data['end_date']) && is_numeric($data['end_date'])) ? date('Y-m-d', $data['end_date']) : '' }}"
+                                                value="{{ getdate_helper('date', $data['end_date'] ?? '' )}}"
                                             >
 
                                             ie: {{$current_user_prefs->getDateFormatExample()}} <b>(Leave blank for no end date)</b>
