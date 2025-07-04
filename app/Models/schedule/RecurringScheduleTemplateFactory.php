@@ -271,7 +271,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 
 		return FALSE;
 	}
-    
+
 	function setStartTime($epoch) {
 		$epoch = trim($epoch);
 
@@ -283,7 +283,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 
 			) {
 
-			$this->data['start_time'] = $epoch;
+			$this->data['start_time'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -311,7 +311,7 @@ class RecurringScheduleTemplateFactory extends Factory {
 
 			) {
 
-			$this->data['end_time'] = $epoch;
+			$this->data['end_time'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}

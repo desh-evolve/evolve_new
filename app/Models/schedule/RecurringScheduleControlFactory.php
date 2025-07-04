@@ -176,7 +176,7 @@ class RecurringScheduleControlFactory extends Factory {
 
 		return FALSE;
 	}
-    
+
 	function setStartDate($epoch) {
 		$epoch = trim($epoch);
 
@@ -186,21 +186,10 @@ class RecurringScheduleControlFactory extends Factory {
 			) {
 
 
-            if 	( $epoch > 0 ) {
-				$this->data['start_date'] = date('Y-m-d',$epoch);
-
-				return TRUE;
-			} else {
-				$this->Validator->isTRUE(		'start_date',
-												FALSE,
-												('Incorrect start date'));
-			}
-
-            /*
-			$this->data['start_date'] = $epoch;
+			$this->data['start_date'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
-            */
+
 		}
 
 		return FALSE;
@@ -256,15 +245,9 @@ class RecurringScheduleControlFactory extends Factory {
                                             'Incorrect end date')
             ) {
 
-            if ($epoch > 0) {
-                $this->data['end_date'] = date('Y-m-d', $epoch);
+            $this->data['end_date'] = date('Y-m-d H:i:s', $epoch);
 
-                return TRUE;
-            } else {
-                $this->Validator->isTRUE(       'end_date',
-                                                FALSE,
-                                                'Incorrect end date');
-            }
+			return TRUE;
         }
 
         return FALSE;

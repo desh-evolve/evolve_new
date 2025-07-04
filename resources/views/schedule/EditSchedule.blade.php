@@ -94,7 +94,7 @@
                                 <tr>
                                     <th>In: </th>
                                     <td class="cellRightEditTable">
-                                        <input type="text" size="8" id="start_time" name="data[start_time]" value="{{ getdate_helper('time', $data['parsed_start_time']) }}" onChange="getScheduleTotalTime();">
+                                        <input type="text" size="8" id="start_time" name="data[start_time]" value="{{ getdate_helper('time', $data['parsed_start_time'] ?? '' )}}" onChange="getScheduleTotalTime();">
                                         ie: {{$current_user_prefs->getTimeFormatExample()}}
                                     </td>
                                 </tr>
@@ -102,7 +102,7 @@
                                 <tr>
                                     <th>Out: </th>
                                     <td class="cellRightEditTable">
-                                        <input type="text" size="8" id="end_time" name="data[end_time]" value="{{ getdate_helper('time', $data['parsed_end_time']) }}" onChange="getScheduleTotalTime();">
+                                        <input type="text" size="8" id="end_time" name="data[end_time]" value="{{ getdate_helper('time', $data['parsed_end_time'] ?? '' )}}" onChange="getScheduleTotalTime();">
                                         ie: {{$current_user_prefs->getTimeFormatExample()}}
                                     </td>
                                 </tr>
@@ -196,7 +196,7 @@
 
                         </div>
                     </form>
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->

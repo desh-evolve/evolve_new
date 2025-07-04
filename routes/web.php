@@ -654,9 +654,8 @@ Route::post('/schedule/edit_recurring_schedule/submit/{id?}', [EditRecurringSche
 // ===============================================================================================================================
 // recurring_schedule_template_control
 // ===============================================================================================================================
-Route::match(['get', 'post'], '/schedule/recurring_schedule_template_control_list', [RecurringScheduleTemplateControlList::class, 'index'])->name('schedule.recurring_schedule_template_control_list');
+Route::match(['get', 'post', 'delete'], '/schedule/recurring_schedule_template_control_list', [RecurringScheduleTemplateControlList::class, 'index'])->name('schedule.recurring_schedule_template_control_list');
 Route::get('/schedule/recurring_schedule_template_control/add', [RecurringScheduleTemplateControlList::class, 'add'])->name('schedule.recurring_schedule_template_control.add');
-Route::delete('/schedule/recurring_schedule_template_control/delete/{id}', [RecurringScheduleTemplateControlList::class, 'delete'])->name('schedule.recurring_schedule_template_control.delete');
 
 Route::match(['get', 'post'], '/schedule/edit_recurring_schedule_template/edit', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template.edit');
 
