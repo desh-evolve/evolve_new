@@ -68,14 +68,11 @@
 
                                 <tr>
                                     <th>
-                                        <a href="javascript:toggleRowObject('repeat');toggleImage(document.getElementById('repeat_img'), '{{ $IMAGES_URL }}/nav_bottom_sm.gif', '{{ $IMAGES_URL }}/nav_top_sm.gif'); fixHeight();">
-                                            <img style="vertical-align: middle" id="repeat_img" src="{{ $IMAGES_URL }}/nav_bottom_sm.gif">
-                                        </a>
                                         Date:
                                     </th>
                                     <td class="cellRightEditTable">
-                                        <input type="date" size="15" id="date" name="data[date_stamp]"
-                                            value="{{ $data['date_stamp'] ? \Carbon\Carbon::createFromTimestamp($data['date_stamp'])->format('Y-m-d') : ''}}">
+                                        <input type="date" id="date" name="data[date_stamp]"
+                                            value="{{ $data['date_stamp'] ? date('Y-m-d', $data['date_stamp']) : date('Y-m-d') }}">
 
                                         ie: {{ $current_user_prefs->getDateFormatExample() }}
                                     </td>
@@ -178,7 +175,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end gap-2 mt-2">
-                            <input type="hidden" name="data[id]" value="{{$data['id']}}">
+                            <input type="hidden" name="data[id]" value="{{$data['id'] ?? ''}}">
                             <input type="submit" class="btn btn-primary" name="action" value="Submit" @if ($data['pay_period_is_locked']) disabled @endif
                                 onClick="return singleSubmitHandler(this)">
 

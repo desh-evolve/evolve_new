@@ -160,8 +160,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':company_id' => $company_id,
-                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
-                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+                    ':end_date' => date('Y-m-d', $end_date),
 					);
 
 		$query = '
@@ -233,7 +233,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
+                    ':date' => date('Y-m-d', $date),
 					);
 
 		$query = '
@@ -251,6 +251,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 	}
 
 	function getByUserIdAndDate($user_id, $date) {
+		
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
@@ -263,7 +264,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-                    ':date' => $date,
+                    ':date' => date('Y-m-d', $date),
 				);
 
 		$query = '
@@ -306,8 +307,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
-                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+                    ':end_date' => date('Y-m-d', $end_date),
 					);
 
 		$query = '
@@ -350,8 +351,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
-                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+                    ':end_date' => date('Y-m-d', $end_date),
 					);
 
 		$query = '
@@ -578,7 +579,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
+                    ':date' => date('Y-m-d', $date),
 					':deleted' => (int)$deleted
 					);
 
