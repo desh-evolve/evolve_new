@@ -21,7 +21,7 @@ class PayStubMiddlePayListFactory extends PayStubMiddlePayFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
         
@@ -45,7 +45,7 @@ class PayStubMiddlePayListFactory extends PayStubMiddlePayFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
         
@@ -85,7 +85,7 @@ class PayStubMiddlePayListFactory extends PayStubMiddlePayFactory implements Ite
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

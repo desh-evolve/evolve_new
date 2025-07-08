@@ -24,7 +24,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -51,7 +51,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -86,7 +86,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -120,6 +120,8 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByPolicyGroupUserId($user_id, $where = NULL, $order = NULL) {
@@ -159,7 +161,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 /*
@@ -308,7 +310,7 @@ class PremiumPolicyListFactory extends PremiumPolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

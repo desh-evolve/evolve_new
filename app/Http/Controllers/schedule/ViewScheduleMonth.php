@@ -214,7 +214,7 @@ class ViewScheduleMonth extends Controller
 
 				break;
 		}
-		
+		//dd($viewData);
 		return view('schedule/ViewScheduleMonth', $viewData);
 	}
 }

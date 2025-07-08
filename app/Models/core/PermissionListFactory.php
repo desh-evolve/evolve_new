@@ -20,7 +20,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -74,7 +74,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -118,7 +118,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -153,7 +153,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 				';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

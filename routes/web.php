@@ -169,6 +169,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/blank', function () {
+    return view('blank');
+});
+
 
 Route::get('/login', [Login::class, 'index'])->name('login');
 Route::get('/logout', [Login::class, 'index'])->name('logout');
@@ -672,3 +676,4 @@ Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_month', [ViewSc
 Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_week', [ViewScheduleWeek::class, 'index'])->name('schedule.view_schedule_week');
 
 // ===============================================================================================================================
+

@@ -25,7 +25,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -48,7 +48,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -80,7 +80,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -109,7 +109,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -140,7 +140,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -173,7 +173,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -439,7 +439,7 @@ class HierarchyLevelListFactory extends HierarchyLevelFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

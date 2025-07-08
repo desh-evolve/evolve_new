@@ -22,7 +22,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -44,7 +44,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -71,7 +71,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -138,6 +138,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 			// Handle pagination if needed
 			$this->rs = DB::select($query, $ph);
 		}
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -165,7 +166,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -266,7 +267,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		if ( $this->getRecordCount() > 0 ) {
 			Debug::text('Rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 
@@ -357,7 +358,7 @@ class OtherFieldListFactory extends OtherFieldFactory implements IteratorAggrega
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

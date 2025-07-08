@@ -22,7 +22,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -49,7 +49,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -76,7 +76,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -106,7 +106,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -137,7 +137,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -175,7 +175,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -241,7 +241,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -278,7 +278,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -299,7 +299,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -332,7 +332,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -365,7 +365,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -408,7 +408,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -441,7 +441,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -471,6 +471,8 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+
 		if ( $this->getRecordCount() > 0 ) {
 			Debug::text('User Identification rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 			return TRUE;
@@ -553,7 +555,7 @@ class UserIdentificationListFactory extends UserIdentificationFactory implements
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

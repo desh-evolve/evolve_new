@@ -20,7 +20,7 @@ class HolidayPolicyRecurringHolidayListFactory extends HolidayPolicyRecurringHol
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class HolidayPolicyRecurringHolidayListFactory extends HolidayPolicyRecurringHol
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;$this->data = $this->rs;
 		return $this;
 	}
 
@@ -67,7 +67,7 @@ class HolidayPolicyRecurringHolidayListFactory extends HolidayPolicyRecurringHol
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

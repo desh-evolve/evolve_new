@@ -28,7 +28,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -50,7 +50,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -203,7 +203,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -290,7 +290,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -390,7 +390,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -456,7 +456,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -694,7 +694,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -779,7 +779,7 @@ class MessageControlListFactory extends MessageControlFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

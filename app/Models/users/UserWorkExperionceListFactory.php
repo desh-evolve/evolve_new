@@ -31,7 +31,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -58,7 +58,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 			$this->rs = DB::select($query, $ph);
 
 
-
+			$this->data = $this->rs;
 		return $this;
 	}
 
@@ -105,7 +105,7 @@ class UserWorkExperionceListFactory  extends UserWorkExperionceFactory  implemen
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

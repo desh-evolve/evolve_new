@@ -23,7 +23,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -45,7 +45,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -79,7 +79,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -107,7 +107,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -136,6 +136,8 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByPolicyGroupUserIdAndTypeAndActive($user_id, $type_id, $active = TRUE, $where = NULL, $order = NULL) {
@@ -181,7 +183,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -223,7 +225,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -325,7 +327,7 @@ class ExceptionPolicyListFactory extends ExceptionPolicyFactory implements Itera
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

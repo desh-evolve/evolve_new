@@ -24,6 +24,7 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query);
 		}
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -45,7 +46,7 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -73,7 +74,7 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -107,6 +108,8 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByPolicyGroupUserId($user_id, $where = NULL, $order = NULL) {
@@ -145,7 +148,7 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -240,7 +243,7 @@ class HolidayPolicyListFactory extends HolidayPolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

@@ -22,7 +22,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -44,7 +44,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -75,7 +75,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -116,7 +116,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -201,7 +201,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -265,7 +265,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 		Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -374,7 +374,7 @@ class LogListFactory extends LogFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

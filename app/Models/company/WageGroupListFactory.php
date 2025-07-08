@@ -22,7 +22,7 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -44,7 +44,7 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -78,7 +78,7 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -105,7 +105,7 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -209,7 +209,7 @@ class WageGroupListFactory extends WageGroupFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

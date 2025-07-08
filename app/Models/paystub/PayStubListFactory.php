@@ -34,7 +34,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -61,7 +61,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -106,7 +106,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -140,7 +140,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -169,7 +169,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -191,7 +191,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -236,7 +236,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -292,7 +292,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -329,7 +329,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -368,7 +368,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -407,7 +407,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -452,7 +452,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -496,7 +496,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -518,7 +518,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -540,7 +540,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -588,7 +588,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		}
 
 		//$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 /*
@@ -655,7 +655,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -682,7 +682,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
         
@@ -723,7 +723,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -878,7 +878,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1038,7 +1038,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
         
@@ -1076,7 +1076,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 			} else {
 				$this->rs = DB::select($query, $ph);
 			}
-
+			$this->data = $this->rs;
             return $this;
                 
                 
@@ -1120,7 +1120,7 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
             return $this;
                 
                 

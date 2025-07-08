@@ -14,24 +14,6 @@ use Illuminate\Support\Facades\View;
 
 class UserGenericDataFactory extends Factory {
 
-	protected $permission;
-    protected $current_user;
-    protected $current_company;
-    protected $current_user_prefs;
-
-    public function __construct()
-    {
-        $basePath = Environment::getBasePath();
-        require_once($basePath . '/app/Helpers/global.inc.php');
-        require_once($basePath . '/app/Helpers/Interface.inc.php');
-
-        $this->permission = View::shared('permission');
-        $this->current_user = View::shared('current_user');
-        $this->current_company = View::shared('current_company');
-        $this->current_user_prefs = View::shared('current_user_prefs');
-
-    }
-
 	protected $table = 'user_generic_data';
 	protected $pk_sequence_name = 'user_generic_data_id_seq'; //PK Sequence name
 
@@ -278,8 +260,8 @@ class UserGenericDataFactory extends Factory {
 
 	function getSearchFormData( $saved_search_id, $sort_column ) {
 
-		$current_company = $this->current_company;
-		$current_user = $this->current_user;
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
 
 		$retarr = array();
 
@@ -312,8 +294,8 @@ class UserGenericDataFactory extends Factory {
 
 
 	function searchFormDataHandler( $action, $filter_data, $redirect_url ) {
-		$current_company = $this->current_company;
-		$current_user = $this->current_user;
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
 
 		if ( $action == '' ) {
 			return FALSE;
@@ -393,8 +375,8 @@ class UserGenericDataFactory extends Factory {
 	}
 
 	function getReportFormData( $saved_search_id ) {
-		$current_company = $this->current_company;
-		$current_user = $this->current_user;
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
 
 		$retarr = array();
 
@@ -419,8 +401,8 @@ class UserGenericDataFactory extends Factory {
 	}
 
 	static function reportFormDataHandler( $action, $filter_data, $generic_data,  $redirect_url ) {
-		$current_company = $this->current_company;
-		$current_user = $this->current_user;
+		$current_company = $this->currentCompany;
+		$current_user = $this->currentUser;
 
 		if ( $action == '' ) {
 			return FALSE;

@@ -33,7 +33,7 @@ function showScheduleDay(epoch) {
 					@endforeach
 					@if( $total_users > 1)
 						<td width="30%" rowspan="100" valign="middle" height="100%">
-							<iframe style="width:100%; height:100%; border: 5px" id="day_schedule" name="day_schedule" src="/blank.html"></iframe>
+							<iframe style="width:100%; height:100%; border: 5px" id="day_schedule" name="day_schedule" src="/blank"></iframe>
 						</td>
 					@endif
 				</tr>
@@ -116,13 +116,14 @@ function showScheduleDay(epoch) {
 					<td id="cursor-hand" onClick="showScheduleDay({{$calendar['epoch']}})"
 							class="
                                 @if( $calendar['day_of_month'] == NULL)}
-                                cellHL
+                                	cellHL
                                 @else
-                                    @if( $calendar['epoch'] == $current_epoch) 
-                                    bg-warning text-white
-                                    @else
+                                    @if( !empty($current_epoch) && $calendar['epoch'] == $current_epoch) 
+                                    	bg-warning text-white
                                     @endif
-                                @endif"
+                                @endif
+								cursor-pointer
+								"
 							valign="top">
 						@if ($calendar['day_of_month'] != NULL)
 							<table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -149,7 +150,7 @@ function showScheduleDay(epoch) {
 										<span style="white-space:nowrap;">
 										Absent: {{$schedule_shift_totals[$calendar['date_stamp']]['total_absent_users'] ?? 0}}<br>
 										Scheduled: {{$schedule_shift_totals[$calendar['date_stamp']]['total_users'] ?? 0}}<br>
-										Total: {{gettimeunit_helper($schedule_shift_totals[$calendar['date_stamp']]['total_time'], 0)}}
+										Total: {{gettimeunit_helper($schedule_shift_totals[$calendar['date_stamp']]['total_time'] ?? '', 0)}}
 										</span>
 									</td>
 								</tr>

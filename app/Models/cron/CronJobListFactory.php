@@ -28,7 +28,7 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -55,7 +55,7 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -83,7 +83,7 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -105,7 +105,7 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -120,7 +120,7 @@ class CronJobListFactory extends CronJobFactory implements IteratorAggregate {
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

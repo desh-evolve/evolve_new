@@ -25,7 +25,7 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -47,7 +47,7 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -75,7 +75,7 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -109,6 +109,8 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByCompanyId($id, $where = NULL, $order = NULL) {
@@ -148,6 +150,8 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByPolicyGroupUserId($user_id, $where = NULL, $order = NULL) {
@@ -187,7 +191,7 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -234,7 +238,7 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -373,7 +377,7 @@ class AccrualPolicyListFactory extends AccrualPolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

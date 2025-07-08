@@ -23,7 +23,7 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -45,7 +45,7 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -73,7 +73,7 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -106,7 +106,7 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -188,7 +188,7 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -281,7 +281,7 @@ class RecurringScheduleTemplateControlListFactory extends RecurringScheduleTempl
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

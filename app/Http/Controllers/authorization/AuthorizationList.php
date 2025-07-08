@@ -114,7 +114,9 @@ class AuthorizationList extends Controller
 					if ( is_array($selected_level_arr['request_punch']) ) {
 						$rlf = new RequestListFactory();
 						$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_punch'], 10, 30, NULL, NULL, NULL, $sort_array ); //Missed Punch
-						foreach( $rlf as $r_obj) {
+						foreach( $rlf->rs as $r_obj) {
+							$rlf->data = (array)$r_obj;
+							$r_obj = $rlf; 
 							//Grab authorizations for this object.
 							$requests['request_punch'][] = array(
 																'id' => $r_obj->getId(),
@@ -151,7 +153,9 @@ class AuthorizationList extends Controller
 					if ( is_array($selected_level_arr['request_punch_adjust']) ) {
 						$rlf = new RequestListFactory();
 						$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_punch_adjust'], 20, 30, NULL, NULL, NULL, $sort_array ); //Punch Adjust
-						foreach( $rlf as $r_obj) {
+						foreach( $rlf->rs as $r_obj) {
+							$rlf->data = (array)$r_obj;
+							$r_obj = $rlf; 
 							//Grab authorizations for this object.
 							$requests['request_punch_adjust'][] = array(
 																'id' => $r_obj->getId(),
@@ -188,7 +192,9 @@ class AuthorizationList extends Controller
 					if ( is_array($selected_level_arr['request_absence']) ) {
 						$rlf = new RequestListFactory();
 						$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_absence'], 30, 30, NULL, NULL, NULL, $sort_array ); //Absence
-						foreach( $rlf as $r_obj) {
+						foreach( $rlf->rs as $r_obj) {
+							$rlf->data = (array)$r_obj;
+							$r_obj = $rlf; 
 							//Grab authorizations for this object.
 							$requests['request_absence'][] = array(
 																'id' => $r_obj->getId(),
@@ -225,7 +231,9 @@ class AuthorizationList extends Controller
 					if ( is_array($selected_level_arr['request_schedule']) ) {
 						$rlf = new RequestListFactory();
 						$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_schedule'], 40, 30, NULL, NULL, NULL, $sort_array ); //Schedule
-						foreach( $rlf as $r_obj) {
+						foreach( $rlf->rs as $r_obj) {
+							$rlf->data = (array)$r_obj;
+							$r_obj = $rlf; 
 							//Grab authorizations for this object.
 							$requests['request_schedule'][] = array(
 																'id' => $r_obj->getId(),
@@ -261,7 +269,9 @@ class AuthorizationList extends Controller
 					if ( is_array($selected_level_arr['request_other']) ) {
 						$rlf = new RequestListFactory();
 						$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($selected_level_arr['request_other'], 100, 30, NULL, NULL, NULL, $sort_array ); //Other
-						foreach( $rlf as $r_obj) {
+						foreach( $rlf->rs as $r_obj) {
+							$rlf->data = (array)$r_obj;
+							$r_obj = $rlf; 
 							//Grab authorizations for this object.
 							$requests['request_other'][] = array(
 																'id' => $r_obj->getId(),
@@ -304,7 +314,9 @@ class AuthorizationList extends Controller
 					if ( is_array($selected_level_arr['timesheet']) ) {
 						$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 						$pptsvlf->getByHierarchyLevelMapAndStatusAndNotAuthorized($selected_level_arr['timesheet'], 30, NULL, NULL, NULL, $sort_array );
-						foreach( $pptsvlf as $pptsv_obj) {
+						foreach( $pptsvlf->rs as $pptsv_obj) {
+							$pptsvlf->data = (array)$pptsv_obj;
+							$pptsv_obj = $pptsvlf;
 							//Grab authorizations for this object.
 							$timesheets[] = array(
 													'id' => $pptsv_obj->getId(),

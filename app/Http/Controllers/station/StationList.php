@@ -67,6 +67,8 @@ class StationList extends Controller
 
         $stations = [];
         foreach ($slf->rs as $s_obj) {
+            $slf->data = (array)$s_obj;
+            $s_obj = $slf;
 			// dd($s_obj);
             $stations[] = [
                 'id' => $s_obj->id,

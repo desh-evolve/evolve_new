@@ -97,7 +97,7 @@
             
                             <tr>
                                 <td colspan="10">
-                                    <iframe style="width:100%; min-height: 500px !important; border: 5px" id="schedule_layer" name="Schedule" src="blank.html"></iframe>
+                                    <iframe style="width:100%; min-height: 500px !important; border: 5px" id="schedule_layer" name="Schedule" src="/blank"></iframe>
                                 </td>
                             </tr>
                         </table>

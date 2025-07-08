@@ -23,7 +23,7 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -51,7 +51,7 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -79,7 +79,7 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -108,6 +108,8 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getAPISearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
@@ -203,7 +205,7 @@ class SchedulePolicyListFactory extends SchedulePolicyFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

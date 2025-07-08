@@ -35,7 +35,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -57,7 +57,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -101,7 +101,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -152,6 +152,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -216,7 +217,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -298,7 +299,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1087,7 +1088,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1113,7 +1114,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1168,7 +1169,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1222,7 +1223,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1299,7 +1300,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1350,7 +1351,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1532,7 +1533,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1683,7 +1684,7 @@ class PayStubEntryListFactory extends PayStubEntryFactory implements IteratorAgg
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

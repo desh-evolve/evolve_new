@@ -20,7 +20,7 @@ class StationDepartmentListFactory extends StationDepartmentFactory implements I
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class StationDepartmentListFactory extends StationDepartmentFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -68,7 +68,7 @@ class StationDepartmentListFactory extends StationDepartmentFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

@@ -37,7 +37,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -59,7 +59,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -99,7 +99,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -133,7 +133,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 
 		$this->rs = DB::select($query, $ph);
 
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -164,7 +164,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -211,7 +211,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -324,7 +324,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -357,7 +357,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -447,7 +447,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -533,7 +533,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -838,7 +838,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -872,7 +872,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -943,7 +943,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -984,7 +984,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1135,7 +1135,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		$query .= $this->getWhereSQL($where);
 		$query .= $this->getSortSQL($order);
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1430,7 +1430,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1733,7 +1733,7 @@ class ScheduleListFactory extends ScheduleFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

@@ -20,7 +20,7 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -65,7 +65,7 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -90,7 +90,7 @@ class CompanyDeductionPayStubEntryAccountListFactory extends CompanyDeductionPay
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

@@ -20,7 +20,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -64,7 +64,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -89,7 +89,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -134,7 +134,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		$this->rs = DB::select($query, $ph);
-		
+		$this->data = $this->rs;
 		return $this;
 	}
 /*
@@ -164,7 +164,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -195,7 +195,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -226,7 +226,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 */
@@ -246,7 +246,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -271,7 +271,7 @@ class CompanyGenericTagMapListFactory extends CompanyGenericTagMapFactory implem
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

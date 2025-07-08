@@ -22,7 +22,7 @@ class PayStubEntryAccountLinkListFactory extends PayStubEntryAccountLinkFactory 
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class PayStubEntryAccountLinkListFactory extends PayStubEntryAccountLinkFactory 
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -71,7 +71,7 @@ class PayStubEntryAccountLinkListFactory extends PayStubEntryAccountLinkFactory 
 
 			$this->saveCache($this->rs,$company_id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

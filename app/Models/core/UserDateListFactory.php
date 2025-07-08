@@ -26,7 +26,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -54,7 +54,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -74,7 +74,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -100,7 +100,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -131,7 +131,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -179,7 +179,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -200,7 +200,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -221,7 +221,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -246,7 +246,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -279,7 +279,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$this->rs = DB::select($query, $ph);
 
-
+		$this->data = $this->rs;
 
 		return $this;
 	}
@@ -324,7 +324,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -369,7 +369,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -404,7 +404,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -448,7 +448,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -558,7 +558,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		*/
 		
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -593,7 +593,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -656,7 +656,7 @@ and udt.deleted = 0";
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
         }
 
@@ -707,7 +707,7 @@ and udt.deleted = 0";
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
         }
 

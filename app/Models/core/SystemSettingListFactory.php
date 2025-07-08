@@ -23,7 +23,7 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 			//$this->rs = DB::select($query);
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -45,7 +45,7 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -67,7 +67,7 @@ class SystemSettingListFactory extends SystemSettingFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
