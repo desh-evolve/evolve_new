@@ -1467,7 +1467,6 @@ class DailyAttendanceReport extends Controller
                             return view('report/DailyAttendance', $viewData);
                     }
                     
-                            dd($action);
                 }
             }
         }

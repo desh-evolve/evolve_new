@@ -140,6 +140,7 @@ use App\Http\Controllers\report\EmployeeNopayCountReport;
 use App\Http\Controllers\report\GeneralLedgerSummary;
 use App\Http\Controllers\report\TimesheetSummary;
 use App\Http\Controllers\report\PayStubSummary;
+use App\Http\Controllers\report\EmployeeTimeSheetReport;
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
 use App\Http\Controllers\users\EditUserDeductionNew;
@@ -276,6 +277,8 @@ Route::match(['get', 'post'],'/report/user_detail', [UserDetail::class, 'index']
 Route::match(['get', 'post'],'/report/employee_nopay_count_report', [EmployeeNopayCountReport::class, 'index'])->name('report.employee_nopay_count_report');
 
 Route::match(['get', 'post'],'/report/general_ledger_summary_report', [GeneralLedgerSummary::class, 'index'])->name('report.general_ledger_summary_report');
+
+Route::match(['get', 'post'],'/report/employee_timesheet_report', [EmployeeTimeSheetReport::class, 'index'])->name('report.employee_timesheet_report');
 
 
 Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
