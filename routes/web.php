@@ -134,6 +134,7 @@ use App\Http\Controllers\users\EditAttendanceBonusCalc;
 use App\Http\Controllers\users\GratuityCalc;
 
 use App\Http\Controllers\report\DailyAttendanceReport;
+use App\Http\Controllers\report\DepartmentAttendanceReport;
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\report\EmployeeNopayCountReport;
@@ -279,6 +280,8 @@ Route::match(['get', 'post'],'/report/employee_nopay_count_report', [EmployeeNop
 Route::match(['get', 'post'],'/report/general_ledger_summary_report', [GeneralLedgerSummary::class, 'index'])->name('report.general_ledger_summary_report');
 
 Route::match(['get', 'post'],'/report/employee_timesheet_report', [EmployeeTimeSheetReport::class, 'index'])->name('report.employee_timesheet_report');
+
+Route::match(['get', 'post'],'/report/department_attendance_report', [DepartmentAttendanceReport::class, 'index'])->name('report.department_attendance_report');
 
 
 Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
