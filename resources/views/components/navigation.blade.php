@@ -180,6 +180,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('report.daily_Absence_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.daily_Absence_report') ? 'active' : '' }}">Head Count & Absence Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('report.employee_nopay_count_report') }}"
                                     class="nav-link {{ request()->routeIs('report.employee_nopay_count_report') ? 'active' : '' }}">Employee Nopay Count Report
                                 </a>

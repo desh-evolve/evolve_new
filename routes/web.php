@@ -142,6 +142,8 @@ use App\Http\Controllers\report\GeneralLedgerSummary;
 use App\Http\Controllers\report\TimesheetSummary;
 use App\Http\Controllers\report\PayStubSummary;
 use App\Http\Controllers\report\EmployeeTimeSheetReport;
+use App\Http\Controllers\report\DailyAbsenceReport;
+
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
 use App\Http\Controllers\users\EditUserDeductionNew;
@@ -283,8 +285,11 @@ Route::match(['get', 'post'],'/report/employee_timesheet_report', [EmployeeTimeS
 
 Route::match(['get', 'post'],'/report/department_attendance_report', [DepartmentAttendanceReport::class, 'index'])->name('report.department_attendance_report');
 
+Route::match(['get', 'post'],'/report/daily_Absence_report', [DailyAbsenceReport::class, 'index'])->name('report.daily_Absence_report');
+
 
 Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
+
 Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, 'index'])->name('report.payroll_report');
 
 // ===============================================================================================================================
