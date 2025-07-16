@@ -18,6 +18,7 @@ use App\Models\Users\UserDefaultFactory;
 use App\Models\Users\UserDefaultListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserPreferenceFactory;
+use TimeTrexSoapClient;
 use App\Models\Core\TTLog;
 
 class CompanyFactory extends Factory {
@@ -2203,18 +2204,19 @@ class CompanyFactory extends Factory {
 	//based on geographical region.
 	//This shouldn't be called unless the user requests auto update notification.
 	function remoteSave() {
-		$ttsc = new TimeTrexSoapClient();
+		// $ttsc = new TimeTrexSoapClient();
 
-		if ( ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL OR $ttsc->isUpdateNotifyEnabled() == TRUE )
-				AND PRODUCTION == TRUE
-				AND DEMO_MODE == FALSE ) {
-			$ttsc->sendCompanyData( $this->getId() );
-			$ttsc->sendCompanyVersionData( $this->getId() );
+		// if ( ( getTTProductEdition() == TT_PRODUCT_PROFESSIONAL OR $ttsc->isUpdateNotifyEnabled() == TRUE )
+		// 		AND PRODUCTION == TRUE
+		// 		AND DEMO_MODE == FALSE ) {
+		// 	$ttsc->sendCompanyData( $this->getId() );
+		// 	$ttsc->sendCompanyVersionData( $this->getId() );
 
-			return TRUE;
-		}
+		// 	return TRUE;
+		// }
 
-		return FALSE;
+		// return FALSE;
+		return TRUE;
 	}
 
 	/*

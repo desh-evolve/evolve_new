@@ -39,6 +39,7 @@ class BranchBankAccountList extends Controller
 	 */
 	public function index(Request $request)
 	{
+
 		$current_company = $this->company;
 		$current_user_prefs = $this->userPrefs;
 		// // Permission check
@@ -71,9 +72,8 @@ class BranchBankAccountList extends Controller
 		$sort_array = $sort_column != '' ? [Misc::trimSortPrefix($sort_column) => $sort_order] : NULL;
 
 		$bbalf = new BranchBankAccountListFactory();
-		// dd($current_user_prefs);
-		$bbalf->getByBranchId($current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array);
-
+		
+		$bbalf->getByBranchId($id, $current_user_prefs->getItemsPerPage(),$page, NULL, $sort_array );
 		$pager = new Pager($bbalf);
 
 		$bankAccounts = [];
