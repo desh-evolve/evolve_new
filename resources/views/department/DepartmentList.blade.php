@@ -64,32 +64,59 @@
 
     <script>
 
-        async function deleteDepartment(departmentId)
-        {
-            if (confirm('Are you sure you want to delete this item?')) {
-                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        // async function deleteDepartment(departmentId)
+        // {
+        //     if (confirm('Are you sure you want to delete this item?')) {
+        //         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                try {
-                    const response = await fetch(`/department/delete/${departmentId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json'
+        //         try {
+        //             const response = await fetch(`/department/delete/${departmentId}`, {
+        //                 method: 'DELETE',
+        //                 headers: {
+        //                     'X-CSRF-TOKEN': token,
+        //                     'Content-Type': 'application/json'
+        //                 }
+        //             });
+
+        //             const data = await response.json();
+        //             if (response.ok) {
+        //                 alert(data.success); // Display success message
+        //                 window.location.reload(); // Reload the page to reflect changes
+        //             } else {
+        //                 console.error(`Error deleting item ID ${departmentId}:`, data.error);
+        //             }
+        //         } catch (error) {
+        //             console.error(`Error deleting item ID ${departmentId}:`, error);
+        //         }
+        //     }
+        // }
+
+        async function deleteDepartment(departmentId) {
+                if (confirm('{{ __("Are you sure you want to delete this item?") }}')) {
+                    try {
+                        const response = await fetch(`/department/delete/${departmentId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        const data = await response.json();
+                        
+                        if (response.ok) {
+                            alert(data.message || '{{ __("Title deleted successfully") }}');
+                            window.location.reload();
+                        } else {
+                            alert(data.message || '{{ __("Failed to delete title") }}');
                         }
-                    });
-
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert(data.success); // Display success message
-                        window.location.reload(); // Reload the page to reflect changes
-                    } else {
-                        console.error(`Error deleting item ID ${departmentId}:`, data.error);
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('{{ __("An error occurred while deleting the title") }}');
                     }
-                } catch (error) {
-                    console.error(`Error deleting item ID ${departmentId}:`, error);
                 }
             }
-        }
 
     </script>
 </x-app-layout>

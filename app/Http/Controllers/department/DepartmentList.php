@@ -86,31 +86,35 @@ class DepartmentList extends Controller
 	}
 
 
-	public function delete($id)
+	public function delete($id, $delete = true)
 	{
 		$current_company = $this->currentCompany;
 
 		if (empty($id)) {
-			return response()->json(['error' => 'No department selected.'], 400);
+			return response()->json(['error' => 'No Department selected.'], 400);
 		}
 
 		$dlf = new DepartmentListFactory();
 
-		$dlf->GetByIdAndCompanyId($id, $current_company->getId());
-		foreach ($dlf->rs as $department) {
-			$dlf->data = (array)$department;
-			$department = $dlf;
+			$departments = $dlf->GetByIdAndCompanyId($id, $current_company->getId());
 
-			$department->setDeleted(TRUE);
-			$res = $department->Save();
-
-
-			if ($res) {
-				return response()->json(['success' => 'Department deleted successfully.']);
-			} else {
-				return response()->json(['error' => 'Department deleted failed.']);
+			foreach ($departments->rs as $d_obj) {
+				$departments->data = (array)$d_obj; // added bcz currency data is null and it gives an error
+				
+				$departments->setDeleted(true); // Set deleted flag to true
+	
+				if ($departments->isValid()) {
+					$res = $departments->Save();
+				
+					if($res){
+						return response()->json(['success' => 'departments deleted successfully.']);
+					}else{
+						return response()->json(['error' => 'departments deleted failed.']);
+					}
+				}
 			}
-		}
+
+		return response()->json(['success' => 'Operation completed successfully.']);
 	}
     
 }

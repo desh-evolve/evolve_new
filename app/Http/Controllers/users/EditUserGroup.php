@@ -128,7 +128,6 @@ class EditUserGroup extends Controller
 		$data = [];
 		if ($id) {
 
-
 			$ft = new FastTree();
 			$ft->setTree($current_company->getID());
 			$uglf->getById($id);
@@ -177,8 +176,9 @@ class EditUserGroup extends Controller
 		$ugf->setName($data['name'] ?? '');
 
 		if ($ugf->isValid()) {
+			
             $ugf->Save();
-            return redirect()->to(URLBuilder::getURL(null, '/user_group'))->with('success', 'User group saved successfully.');
+            // return redirect()->to(URLBuilder::getURL(null, '/user_group'))->with('success', 'User group saved successfully.');
         }
 		// If validation fails, return back with errors
 		return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();

@@ -11,8 +11,17 @@ use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
+use App\Models\Schedule\ScheduleFactory;
+use App\Models\Schedule\RecurringScheduleTemplateFactory;
+use App\Models\Core\StationDepartmentFactory;
+use App\Models\Core\StationFactory;
+use App\Models\Core\UserDateTotalFactory;
 use App\Models\Company\CompanyListFactory;
+use App\Models\Punch\PunchControlFactory;
+use App\Models\Users\UserFactory;
+use App\Models\Users\UserDefaultFactory;
 use Illuminate\Support\Facades\DB;
+
 
 class DepartmentFactory extends Factory
 {
