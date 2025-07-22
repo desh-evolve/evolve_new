@@ -135,12 +135,16 @@ use App\Http\Controllers\users\EditAttendanceBonusCalc;
 use App\Http\Controllers\users\GratuityCalc;
 
 use App\Http\Controllers\report\DailyAttendanceReport;
+use App\Http\Controllers\report\DepartmentAttendanceReport;
 use App\Http\Controllers\report\UserInformation;
 use App\Http\Controllers\report\UserDetail;
 use App\Http\Controllers\report\EmployeeNopayCountReport;
 use App\Http\Controllers\report\GeneralLedgerSummary;
 use App\Http\Controllers\report\TimesheetSummary;
 use App\Http\Controllers\report\PayStubSummary;
+use App\Http\Controllers\report\EmployeeTimeSheetReport;
+use App\Http\Controllers\report\DailyAbsenceReport;
+
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
 use App\Http\Controllers\users\EditUserJobHistory;
@@ -277,8 +281,15 @@ Route::match(['get', 'post'],'/report/employee_nopay_count_report', [EmployeeNop
 
 Route::match(['get', 'post'],'/report/general_ledger_summary_report', [GeneralLedgerSummary::class, 'index'])->name('report.general_ledger_summary_report');
 
+Route::match(['get', 'post'],'/report/employee_timesheet_report', [EmployeeTimeSheetReport::class, 'index'])->name('report.employee_timesheet_report');
+
+Route::match(['get', 'post'],'/report/department_attendance_report', [DepartmentAttendanceReport::class, 'index'])->name('report.department_attendance_report');
+
+Route::match(['get', 'post'],'/report/daily_Absence_report', [DailyAbsenceReport::class, 'index'])->name('report.daily_Absence_report');
+
 
 Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
+
 Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, 'index'])->name('report.payroll_report');
 
 // ===============================================================================================================================
@@ -596,7 +607,7 @@ Route::delete('/attendance/user_accruals/delete/{id}', [ViewUserAccrualList::cla
 Route::get('/user_accruals/add/{id?}', [EditUserAccrual::class, 'index'])->name('user_accruals.add');
 
 
-Route::get('/attendance/paystubs', [PayStubList::class, 'index'])->name('attendance.paystubs');
+Route::match(['get', 'post'], '/attendance/paystubs', [PayStubList::class, 'index'])->name('attendance.paystubs');
 
 // ===============================================================================================================================
 // User Leaves

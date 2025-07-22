@@ -27,6 +27,7 @@ use App\Models\Users\UserGenericDataFactory;
 use App\Models\Users\UserGenericDataListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserTitleListFactory;
+use App\Models\Company\BranchListFactory;
 
 use App\Models\Core\Debug;
 use App\Models\Core\Environment;
@@ -4971,6 +4972,10 @@ class PayStubFactory extends Factory {
             
             $border = 0;
 
+            $net_income = 0;
+			$performance_Incentive = 0;
+			 $early_payment_amount = 0;
+			 $other_from_incentive = 0;
             if ( $pslf->getRecordCount() > 0 ) {
 
                 $pdf = new TTPDF('P', 'mm', 'A4'); //----@widanage change code here----17.04.2013
@@ -4980,6 +4985,8 @@ class PayStubFactory extends Factory {
                 $pdf->SetAutoPageBreak(FALSE);
 
                 $pdf->SetFont('freeserif', '', 10);
+
+				
 
                 $i = 0;
                 
@@ -5001,6 +5008,7 @@ class PayStubFactory extends Factory {
                     $udtlf->getByUserIdAndPayPeriodIdAndEndDate( $pay_stub_obj->getUser(), $pay_stub_obj->getPayPeriod(), $pay_stub_obj->getPayPeriodObject()->getEndDate() );
                     $normal_OT = 0;
                     $holiday_OT = 0;
+					
                 foreach( $udtlf->rs as $udt_obj ) {
 					$udtlf->data = (array)$udt_obj;
 					$udt_obj = $udtlf;
@@ -5035,7 +5043,7 @@ class PayStubFactory extends Factory {
                 
                 $normal_OT_formatted =$this->convertMinutesToHourFormat($normal_OT/60) ;
                 $holiday_OT_formatted =$this->convertMinutesToHourFormat($holiday_OT/60) ;
-
+				$nopay_days = 0; 
                 if (isset($absence_policy_id)){
                     
                     $udlf = new UserDateListFactory();
@@ -5098,7 +5106,7 @@ class PayStubFactory extends Factory {
 //                echo '<br> pp_start_date::'.$pp_start_date;
 //                echo '<br> pp_end_date::'.$pp_end_date;
                 $plf->getByCompanyIDAndUserIdAndStartDateAndEndDate($company_obj->getId(), $pay_stub_obj->getUser(), $pp_start_date,$pp_end_date );
-
+ 				$punch_date_array = [];
                  foreach( $plf->rs as $plf_obj ) {
 					$plf->data = (array)$plf_obj;
 					$plf_obj = $plf;
@@ -5151,7 +5159,7 @@ class PayStubFactory extends Factory {
                     $pdf->setLineWidth(0.75);
                     $adjust_y -= 4; //fl added for rosen 
                     $pdf->Line(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(20, $adjust_y), Misc::AdjustXY(96, $adjust_y), Misc::AdjustXY(20, $adjust_y));//0,20 - 22,1 -193,1 - 22,1, (2nd and 4th should be the same for a line)
-
+				 	
                     $pdf->SetFont('', 'B', 12);
 //                    $adjust_y -= 2; //fl added for rosen 
                     $pdf->setXY(Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(22, $adjust_y));//0,20 - 26,-1
@@ -5275,11 +5283,11 @@ class PayStubFactory extends Factory {
                     //Earnings
                     //
                     
-                    $performance_Incentive;
+                    $performance_Incentive = 0;
                     
 //                    echo '<pre>';
 //                    print_r($pay_stub_entries);die;
-//                    
+                   $duplicate_array = [];
                     if (isset($pay_stub_entries[10])) {//description availability check
                         for($z=0; $z<count($pay_stub_entries[10]); $z++){
                             if(in_array($pay_stub_entries[10][$z]['pay_stub_entry_name_id'], $duplicate_array)){
@@ -5291,9 +5299,10 @@ class PayStubFactory extends Factory {
                             }
                         }
 
-                        $column_widths['amount'] = 55;
+                        $column_widths['amount'] = 80;
 
-                        $column_widths['name'] = 40;
+                        $column_widths['name'] = 110;
+
 
                         //Employee Details
 
@@ -5471,8 +5480,7 @@ class PayStubFactory extends Factory {
                     // Deductions
                     //
                     
-                    $net_income;
-                    
+                    $net_income = 0;
 //                    echo '<pre> here type 20 array::';
 //                        print_r($pay_stub_entries[20]); die;
 
@@ -5795,7 +5803,7 @@ class PayStubFactory extends Factory {
                     //
 
                     $block_adjust_y = 90;
-
+					
                     //Line
 
                     $pdf->setLineWidth(1);
@@ -5833,7 +5841,9 @@ class PayStubFactory extends Factory {
                 }
                 
                 //Salary Receipt
-                    
+                      $block_adjust_y = 90;
+                    $column_widths['amount'] = 110 ;
+                    $column_widths['name'] = 80 ;
                     $pdf->setLineWidth(0.05);
                     
                     $style = array('width' => 0.2, 'cap' => 'butt', 'join' => 'miter', 'dash' => '2,1,2,1', 'phase' => 10);

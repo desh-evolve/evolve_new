@@ -151,8 +151,10 @@ class HierarchyObjectTypeFactory extends Factory {
 	}
 
 	function postSave() {
-		$cache_id = $this->getHierarchyControlObject()->getCompany().$this->getObjectType();
-		$this->removeCache( $cache_id );
+		// $cache_id = $this->getHierarchyControlObject()->getCompany().$this->getObjectType();
+		// $this->removeCache( $cache_id );
+
+		$this->removeCache( $this->getId() );
 
 		return TRUE;
 	}

@@ -82,6 +82,16 @@ class PayStubList extends Controller
 				'ids',
 			) 
 		) );
+		$action = '';
+		$filter_data = [];
+        if (isset($_POST['action'])) {
+            $action = trim($_POST['action']);
+			$filter_data =  $_POST['filter_data'] ?? [];
+        } elseif (isset($_GET['action'])) {
+            $action = trim($_GET['action']);
+			$filter_data =  $_GET['filter_data'] ?? [];
+        }
+        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
 		
 		$columns = array(
 			'-1010-first_name' => __('First Name'),
@@ -129,10 +139,11 @@ class PayStubList extends Controller
 
 		Debug::Text('Form: '. $form, __FILE__, __LINE__, __METHOD__,10);
 		//Handle different actions for different forms.
-
-		$action = isset($_POST['action']) ? trim($_POST['action']) : '';
-		$action = !empty($action) ? strtolower($action) : '';
+		// dd($_POST['action']);
+		// $action = isset($_POST['action']) ? trim($_POST['action']) : '';
+		// $action = !empty($action) ? strtolower($action) : '';
 		
+		// dd($action);
 		switch ($action) {
 			case 'export':
 				//Debug::setVerbosity(11);
@@ -288,7 +299,9 @@ class PayStubList extends Controller
 				if ( $permission->Check('pay_stub','edit') OR $permission->Check('pay_stub','edit_child') ) {
 					if ( is_array( $ids ) AND count($ids) > 0 ) {
 						foreach ($ids as $id) {
+							
 							$pslf->getById($id);
+							
 							foreach ($pslf->rs as $pay_stub_obj) {
 								$pslf->data = (array)$pay_stub_obj;
 								$pay_stub_obj = $pslf;
@@ -302,7 +315,6 @@ class PayStubList extends Controller
 						}
 					}
 				}
-
 				//Redirect::Page( URLBuilder::getURL(NULL, 'PayStubList.php') );
 				Redirect::Page( URLBuilder::getURL( array('saved_search_id' => $saved_search_id, 'filter_pay_period_id' => $filter_pay_period_id, 'filter_user_id' => $filter_user_id), 'PayStubList.php') );
 

@@ -354,8 +354,7 @@
                                     <label for="ldap_authentication_type_id" class="form-label mb-1 col-md-3">LDAP
                                         Authentication</label>
                                     <div class="col-md-9">
-                                        <select name="ldap_authentication_type_id" class="form-select w-50"
-                                            id="ldap_authentication_type_id">
+                                        <select name="ldap_authentication_type_id" class="form-select w-50" id="ldap_authentication_type_id" disabled>
                                             @foreach ($company_data['ldap_authentication_type_options'] as $value => $label)
                                                 <option value="{{ $value }}"
                                                     {{ isset($company_data['ldap_authentication_type_id']) && $company_data['ldap_authentication_type_id'] == $value ? 'selected' : '' }}>
