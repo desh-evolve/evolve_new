@@ -1060,7 +1060,7 @@ class DailyAttendanceReport extends Controller
                                                         $pdf->Cell($column_widths['out_punch_time_stamp'], $line_h, '', 1, 0, 'C', 1);
                                                     }
 
-                       // Preprocess $data to convert "--" to 0 for calculations
+                                    // Preprocess $data to convert "--" to 0 for calculations
                                                         $data['worked_time'] = is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
                                                         $data['paid_time'] = ($data['paid_time'] === "--") ? 0 : $data['paid_time'];
                                                         $data['regular_time'] = ($data['regular_time'] === "--") ? 0 : $data['regular_time'];
@@ -1467,7 +1467,6 @@ class DailyAttendanceReport extends Controller
                             return view('report/DailyAttendance', $viewData);
                     }
                     
-                            dd($action);
                 }
             }
         }
