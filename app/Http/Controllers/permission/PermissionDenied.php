@@ -19,37 +19,38 @@ use Illuminate\Support\Facades\View;
 
 class PermissionDenied extends Controller
 {
-    protected $permission;
-    protected $currentUser;
-    protected $currentCompany;
-    protected $userPrefs;
+	protected $permission;
+	protected $current_user;
+	protected $current_company;
+	protected $current_user_prefs;
 
-    public function __construct()
-    {
-        $basePath = Environment::getBasePath();
-        require_once($basePath . '/app/Helpers/global.inc.php');
-        require_once($basePath . '/app/Helpers/Interface.inc.php');
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-        $this->permission = View::shared('permission');
-        $this->currentUser = View::shared('current_user');
-        $this->currentCompany = View::shared('current_company');
-        $this->userPrefs = View::shared('current_user_prefs');
-
-    }
+		$this->permission = View::shared('permission');
+		$this->current_user = View::shared('current_user');
+		$this->current_company = View::shared('current_company');
+		$this->current_user_prefs = View::shared('current_user_prefs');
+	}
 
     public function index() {
-        /*
-        if ( $permission->Check('accrual','view') OR $permission->Check('accrual','view_child')) {
-            $user_id = $user_id;
-        } else {
-            $user_id = $current_user->getId();
-        }
-        */
-
+        
         $viewData['title'] = 'Permission Denied';
 
-        return view('permission/PermissionDenied', $viewData);
-
+        /*
+         * Get FORM variables
+         */
+        extract	(FormVariables::GetVariables(
+                                                array	(
+                                                        'action',
+                                                        'id',
+                                                        'data'
+                                                        ) ) );
+        
+        return view('permission/PermissionDenied');
     }
 }
 

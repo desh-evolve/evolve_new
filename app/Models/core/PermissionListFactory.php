@@ -79,6 +79,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 	}
 
 	function getByCompanyIdAndPermissionControlIdAndSectionAndName($company_id, $permission_control_id, $section, $name, $where = NULL, $order = NULL) {
+		
 		if ( $company_id == '') {
 			return FALSE;
 		}
@@ -94,14 +95,14 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 		if ( $name == '') {
 			return FALSE;
 		}
-
+		$name = ["login", "system", "other"];
 		$ph = array(
 					':company_id' => $company_id,
 					':permission_control_id' => $permission_control_id,
 					':section' => $section,
 					//'name' => $name, //Allow a list of names.
 					);
-
+					
 		$pcf = new PermissionControlFactory();
 
 		$query = '
@@ -116,7 +117,7 @@ class PermissionListFactory extends PermissionFactory implements IteratorAggrega
 						AND ( a.deleted = 0 AND b.deleted = 0)';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
-
+		
 		$this->rs = DB::select($query, $ph);
 		$this->data = $this->rs;
 		return $this;

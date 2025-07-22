@@ -242,14 +242,14 @@ function filterUserCount() {
 				</tr>
 				</tbody>
 			</table>
-		</div>
+			</div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('src_filter_user')); selectAll(document.getElementById('filter_user')); return singleSubmitHandler(this)">
-		</div>
+			<div id="contentBoxFour">
+				<input type="submit" class="btnSubmit" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('src_filter_user')); selectAll(document.getElementById('filter_user')); return singleSubmitHandler(this)">
+			</div>
 
-		<input type="hidden" name="data[id]" value="{$data.id}">
-		<input type="hidden" name="id" value="{$data.id}">
+			<input type="hidden" name="data[id]" value="{$data.id}">
+			<input type="hidden" name="id" value="{$data.id}">
 		</form>
 	</div>
 </div>

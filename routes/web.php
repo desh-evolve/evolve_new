@@ -255,11 +255,11 @@ Route::get('/station/add/{id?}', [EditStation::class, 'index'])->name('station.a
 Route::post('/station/save/{id?}', [EditStation::class, 'submit'])->name('station.save');
 Route::delete('/station/delete/{id}', [StationList::class, 'delete'])->name('station.delete');
 // ==================== Permission Control =====================================================================================
-Route::get('/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+Route::match(['get', 'post', 'delete'], '/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+Route::match(['get', 'post', 'delete'], '/permission_control/add', [EditPermissionControl::class, 'index'])->name('permission_control.add');
 
-Route::get('/permission_control/add/{id?}', [EditPermissionControl::class, 'index'])->name('permission_control.add');
-Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
-Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
+//Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
+//Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
 // ==================== Permission Control =====================================================================================
 Route::get('/recurring_holidays', [RecurringHolidayList::class, 'index'])->name('recurring_holidays.index');
 
