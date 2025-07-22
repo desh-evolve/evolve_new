@@ -1841,7 +1841,13 @@ class TimesheetDetailReport extends Report {
                     $branch_list[] = $blf->getNameById($br_id);
                 }
                 $br_strng = implode(', ', $branch_list);
-            }
+            } elseif (isset($br_id)) {
+                // Handle single branch ID for dynamic header (if $br_id is provided)
+                $br_strng = $blf->getNameById($br_id);
+            } else {
+                // Fallback: Set a default value or handle the case where no branch ID is available
+                $br_strng = '';
+            }//eranda add code dynamic header data report
 
             if ($br_strng == null) {
                 $company_name = $current_company->getName();
@@ -1893,8 +1899,8 @@ class TimesheetDetailReport extends Report {
         $ignore_last_row = TRUE;
         $include_header = TRUE;
         $eol = "\n";
-
         if (is_array($data) AND count($data) > 0 AND is_array($columns) AND count($columns) > 0) {
+            
             $rows = $data;
             if ($ignore_last_row === TRUE) {
                 $last_row = array_pop($data); //ARSP EDIT --> THIS FUNCTION USE TO REMOVE THE LAST ELEMENT OF THEAT ARRAY
@@ -1947,6 +1953,7 @@ class TimesheetDetailReport extends Report {
             $pdf->setLineWidth(0.20);
 
             //set table position
+            $adjust_y = 15;
             $adjust_x = 19;
 
             $pdf->setXY(Misc::AdjustXY(1, $adjust_x), Misc::AdjustXY(44, $adjust_y));
@@ -1984,8 +1991,6 @@ class TimesheetDetailReport extends Report {
 
             foreach ($rows as $row) {
 
-
-
                 $udlf = new UserDateListFactory();
                 $udlf->getByUserIdAndDate($row['user_id'], date('Y-m-d', $pay_period_start));
                 $udlf_obj = $udlf->getCurrent();
@@ -2009,7 +2014,6 @@ class TimesheetDetailReport extends Report {
                 // var_dump($pc_obj_arr);
                 // exit();
                 // if(empty($pc_obj_arr))
-
                 if (empty($pc_obj_arr)) {
                     //$present_mark = '&#x2713;';
 
@@ -2053,7 +2057,7 @@ class TimesheetDetailReport extends Report {
 
                 //}                     
                 // }
-            }//die;
+            }
 
 
             $html = $html . '</tbody>';
@@ -2078,7 +2082,6 @@ class TimesheetDetailReport extends Report {
             $output = $pdf->Output('', 'S');
 
             //exit;  
-
             if (isset($output)) {
                 return $output;
             }
@@ -8608,9 +8611,13 @@ class TimesheetDetailReport extends Report {
                     $branch_list[] = $blf->getNameById($br_id);
                 }
                 $br_strng = implode(', ', $branch_list);
-            }
-
-            $br_strng = $blf->getNameById($br_id); //eranda add code dynamic header data report
+            } elseif (isset($br_id)) {
+                // Handle single branch ID for dynamic header (if $br_id is provided)
+                $br_strng = $blf->getNameById($br_id);
+            } else {
+                // Fallback: Set a default value or handle the case where no branch ID is available
+                $br_strng = '';
+            }//eranda add code dynamic header data report
 
             if ($br_strng == null) {
                 $company_name = $current_company->getName();
@@ -8727,6 +8734,8 @@ class TimesheetDetailReport extends Report {
 
             //set table position
             $adjust_x = 19;
+            
+            $adjust_y = 19;
 
             $pdf->setXY(Misc::AdjustXY(1, $adjust_x), Misc::AdjustXY(50, $adjust_y));
 
@@ -8754,7 +8763,7 @@ class TimesheetDetailReport extends Report {
             array_multisort($employee_number, SORT_ASC, $rows); /**/
 
 
-            $pdf->SetFont('', 'B', 6.5);
+            $pdf->SetFont('', 'B', 7);
 
 
             $row_data_day_key = array();
@@ -8807,9 +8816,9 @@ class TimesheetDetailReport extends Report {
                  $date_month_y = date('M-y', $pp_month_year);
                  
                 $html = $html . '<td height="17" width = "6%">'.$date_month_y.'</td>';
-                
+                // dd($rows);
                 foreach ($rows as $emp_row) {
-                   
+                   if (isset($emp_row['data'][$pp_id])) {
                     
                     $pay_periods_data = $emp_row['data'][$pp_id];
                    // if($emp_row['user_id'] ==798){ echo '<pre>';print_r($pay_periods_data); exit;}
@@ -8824,11 +8833,16 @@ class TimesheetDetailReport extends Report {
                             
                             $day = strtotime($pp_date['date_stamp']);
 
-                            $Hr_date = DateTime::createFromFormat('d/m/Y', $pp_date['date_stamp']);
-                            $date_stamp = $Hr_date->format('Y-m-d');
+                    
+                            if (!empty($pp_date['date_stamp']) && is_string($pp_date['date_stamp'])) {
+                            $Hr_date = DateTime::createFromFormat('d/m/Y', trim($pp_date['date_stamp']));
                             
-
-
+                            if ($Hr_date instanceof DateTime) {
+                                $date_stamp = $Hr_date->format('Y-m-d');
+                            } else {
+                                $date_stamp = null; // Or a default value like '0000-00-00'
+                             }
+                        }
 
 
 
@@ -9002,9 +9016,9 @@ class TimesheetDetailReport extends Report {
                         }
                         
                     }
-                    
+                } 
 
-                }
+            }
                 
                 $total_late_time  = gmdate("H:i", abs($total_late_time ));
                 

@@ -165,8 +165,23 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('report.employee_timesheet_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.employee_timesheet_report') ? 'active' : '' }}">Attendance Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('report.daily_attendance') }}"
                                     class="nav-link {{ request()->routeIs('report.daily_attendance') ? 'active' : '' }}">Daily Attendance Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.department_attendance_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.department_attendance_report') ? 'active' : '' }}">Department Attendance Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.daily_Absence_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.daily_Absence_report') ? 'active' : '' }}">Head Count & Absence Report
                                 </a>
                             </li>
                             <li class="nav-item">

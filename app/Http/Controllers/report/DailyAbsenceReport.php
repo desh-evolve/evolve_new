@@ -34,7 +34,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
-use TCPDF;
+use App\Models\Core\BreadCrumb;
+use App\Models\Core\TTPDF;
 
 class DailyAbsenceReport extends Controller
 {
@@ -60,6 +61,10 @@ class DailyAbsenceReport extends Controller
 
 
 		$viewData['title'] = 'Head Count & Absence Report';
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+        $current_user_prefs = $this->userPrefs;
 		// $smarty->assign('title', __($title = 'Head Count & Absence Report')); // See index.php
 
 		//Debug::setVerbosity(11);
@@ -74,21 +79,21 @@ class DailyAbsenceReport extends Controller
 			)
 		));
 
-		if (isset($filter_data['print_timesheet']) and $filter_data['print_timesheet'] >= 1) {
-			if (
-				!$permission->Check('punch', 'enabled')
-				or !($permission->Check('punch', 'view') or $permission->Check('punch', 'view_own') or $permission->Check('punch', 'view_child'))
-			) {
-				$permission->Redirect(FALSE); //Redirect
-			}
-		} else {
-			if (
-				!$permission->Check('report', 'enabled')
-				or !$permission->Check('report', 'view_timesheet_summary')
-			) {
-				$permission->Redirect(FALSE); //Redirect
-			}
-		}
+		// if (isset($filter_data['print_timesheet']) and $filter_data['print_timesheet'] >= 1) {
+		// 	if (
+		// 		!$permission->Check('punch', 'enabled')
+		// 		or !($permission->Check('punch', 'view') or $permission->Check('punch', 'view_own') or $permission->Check('punch', 'view_child'))
+		// 	) {
+		// 		$permission->Redirect(FALSE); //Redirect
+		// 	}
+		// } else {
+		// 	if (
+		// 		!$permission->Check('report', 'enabled')
+		// 		or !$permission->Check('report', 'view_timesheet_summary')
+		// 	) {
+		// 		$permission->Redirect(FALSE); //Redirect
+		// 	}
+		// }
 
 		URLBuilder::setURL(
 			$_SERVER['SCRIPT_NAME'],
@@ -134,7 +139,9 @@ class DailyAbsenceReport extends Controller
 		$otplf = new OverTimePolicyListFactory();
 		$otplf->getByCompanyId($current_company->getId());
 		if ($otplf->getRecordCount() > 0) {
-			foreach ($otplf as $otp_obj) {
+				foreach ($otplf->rs as $otp_obj) { 
+                    $otplf->data = (array)$otp_obj;
+                    $otp_obj = $otplf;
 				$otp_columns['over_time_policy-' . $otp_obj->getId()] = $otp_obj->getName();
 			}
 
@@ -145,7 +152,9 @@ class DailyAbsenceReport extends Controller
 		$pplf = new PremiumPolicyListFactory();
 		$pplf->getByCompanyId($current_company->getId());
 		if ($pplf->getRecordCount() > 0) {
-			foreach ($pplf as $pp_obj) {
+				foreach ($pplf->rs as $pp_obj) { 
+                    $pplf->data = (array)$pp_obj;
+                    $pp_obj = $pplf;
 				$pp_columns['premium_policy-' . $pp_obj->getId()] = $pp_obj->getName();
 			}
 
@@ -157,7 +166,9 @@ class DailyAbsenceReport extends Controller
 		$aplf = new AbsencePolicyListFactory();
 		$aplf->getByCompanyId($current_company->getId());
 		if ($aplf->getRecordCount() > 0) {
-			foreach ($aplf as $ap_obj) {
+			foreach ($aplf->rs as $ap_obj) { 
+                $aplf->data = (array)$ap_obj;
+                $ap_obj = $aplf;
 				$ap_columns['absence_policy-' . $ap_obj->getId()] = $ap_obj->getName();
 			}
 
@@ -170,7 +181,10 @@ class DailyAbsenceReport extends Controller
 		$pplf->getByCompanyId($current_company->getId());
 		if ($pplf->getRecordCount() > 0) {
 			$pp = 0;
-			foreach ($pplf as $pay_period_obj) {
+			foreach ($pplf->rs as $pay_period_obj) { 
+                $pplf->data = (array)$pay_period_obj;
+                $pay_period_obj = $pplf;
+
 				$pay_period_ids[] = $pay_period_obj->getId();
 				$pay_period_end_dates[$pay_period_obj->getId()] = $pay_period_obj->getEndDate();
 
@@ -228,7 +242,8 @@ class DailyAbsenceReport extends Controller
 		$ugdlf = new UserGenericDataListFactory();
 		$ugdf = new UserGenericDataFactory();
 
-		$action = Misc::findSubmitButton();
+		$action = $_POST['action'] ?? '';
+        $action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
 		switch ($action) {
 			case 'export':
 			case 'display_report':
@@ -264,19 +279,6 @@ class DailyAbsenceReport extends Controller
 						'column_ids' => $static_columns
 					);
 				}
-				/*
-	protected $status_options = array(
-										10 => 'System',
-										20 => 'Worked',
-										30 => 'Absence'
-									);
-
-	protected $type_options = array(
-										10 => 'Total',
-										20 => 'Regular',
-										30 => 'Overtime'
-									);
-*/
 
 				$ulf = new UserListFactory();
 				$ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
@@ -288,9 +290,11 @@ class DailyAbsenceReport extends Controller
 						unset($filter_data['pay_period_ids']);
 					}
 
-					foreach ($ulf as $u_obj) {
-						$filter_data['user_id'][] = $u_obj->getId();
-					}
+					foreach ($ulf->rs as $u_obj) {
+                        $ulf->data = (array)$u_obj;
+                        $u_obj = $ulf;
+                        $filter_data['user_id'][] = $u_obj->getId();
+                    }
 
 					if (isset($filter_data['pay_period_ids'])) {
 						//Trim sort prefix from selected pay periods.
@@ -326,7 +330,6 @@ class DailyAbsenceReport extends Controller
 						$end_date = $filter_data['end_date'];
 					}
 
-
 					//Make sure we account for wage permissions.
 					if ($permission->Check('wage', 'view') == TRUE) {
 						$wage_filter_data['permission_children_ids'] = $filter_data['user_id'];
@@ -351,7 +354,9 @@ class DailyAbsenceReport extends Controller
 						$slf->getDayReportByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
 					}
 					if ($slf->getRecordCount() > 0) {
-						foreach ($slf as $s_obj) {
+						foreach ($slf->rs as $s_obj) {
+                        $slf->data = (array)$s_obj;
+                        $s_obj = $slf;
 							$user_id = $s_obj->getColumn('user_id');
 							$status_id = $s_obj->getColumn('status_id');
 							$status = strtolower(Option::getByKey($status_id, $s_obj->getOptions('status')));
@@ -364,9 +369,10 @@ class DailyAbsenceReport extends Controller
 							unset($user_id, $status_id, $status, $pay_period_id, $date_stamp);
 						}
 					}
-					//echo '<pre>'; print_r($schedule_rows); echo'<pre>';
+					foreach ($udtlf->rs as $udt_obj) {
+                        $udtlf->data = (array)$udt_obj;
+                        $udt_obj = $udtlf;
 
-					foreach ($udtlf as $udt_obj) {
 						$user_id = $udt_obj->getColumn('id');
 						$pay_period_id = $udt_obj->getColumn('pay_period_id');
 						$date_stamp = TTDate::strtotime($udt_obj->getColumn('date_stamp'));
@@ -501,8 +507,11 @@ class DailyAbsenceReport extends Controller
 					if ($action == 'display_detailed_timesheet') {
 						$plf = new PunchListFactory();
 						$plf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
+					
 						if ($plf->getRecordCount() > 0) {
-							foreach ($plf as $p_obj) {
+							foreach ($plf->rs as $p_obj) {
+                        		$plf->data = (array)$p_obj;
+                        		$p_obj = $plf;
 								$punch_rows[$p_obj->getColumn('pay_period_id')][$p_obj->getColumn('user_id')][TTDate::strtotime($p_obj->getColumn('date_stamp'))][$p_obj->getPunchControlID()][$p_obj->getStatus()] = array('status_id' => $p_obj->getStatus(), 'type_id' => $p_obj->getType(), 'type_code' => $p_obj->getTypeCode(), 'time_stamp' => $p_obj->getTimeStamp());
 							}
 						}
@@ -530,6 +539,7 @@ class DailyAbsenceReport extends Controller
 						$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 						$pptsvlf->getByPayPeriodIdAndCompanyId($filter_data['pay_period_ids'][0], $current_company->getId());
 						if ($pptsvlf->getRecordCount() > 0) {
+							dd($pptsvlf);
 							foreach ($pptsvlf as $pptsv_obj) {
 								$verified_time_sheets[$pptsv_obj->getUser()][$pptsv_obj->getPayPeriod()] = array(
 									'status_id' => $pptsv_obj->getStatus(),
@@ -658,7 +668,7 @@ class DailyAbsenceReport extends Controller
 						$pdf_created_date = time();
 
 						//Page width: 205mm
-						$pdf = new TCPDF('P', 'mm', 'Letter');
+						$pdf = new TTPDF('P', 'mm', 'Letter');
 						$pdf->setMargins(10, 5);
 						$pdf->SetAutoPageBreak(FALSE);
 						$pdf->SetFont('freeserif', '', 10);
@@ -922,8 +932,8 @@ class DailyAbsenceReport extends Controller
 						$pdf_created_date = time();
 
 						//Page width: 205mm
-						$pdf = new TCPDF('P', 'mm', 'Letter');
-						$pdf->setMargins(10, 5);
+						$pdf = new TTPDF('P', 'mm', 'Letter');
+						$pdf->setMargins(5, 5);
 						$pdf->SetAutoPageBreak(TRUE, 10);
 						$pdf->SetFont('freeserif', '', 10);
 
@@ -1129,10 +1139,13 @@ class DailyAbsenceReport extends Controller
 											$pdf->Cell($column_widths['in_punch_time_stamp'], $line_h, '', 1, 0, 'C', 1);
 											$pdf->Cell($column_widths['out_punch_time_stamp'], $line_h, '', 1, 0, 'C', 1);
 										}
+										$worked_time = is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                                        $regular_time = is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                                        $paid_time = is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
 
-										$pdf->Cell($column_widths['worked_time'], $line_h, TTDate::getTimeUnit($data['worked_time']), 1, 0, 'C', 1);
-										$pdf->Cell($column_widths['paid_time'], $line_h,  TTDate::getTimeUnit($data['paid_time']), 1, 0, 'C', 1);
-										$pdf->Cell($column_widths['regular_time'], $line_h, TTDate::getTimeUnit($data['regular_time']), 1, 0, 'C', 1);
+										$pdf->Cell($column_widths['worked_time'], $line_h, TTDate::getTimeUnit($worked_time), 1, 0, 'C', 1);
+										$pdf->Cell($column_widths['paid_time'], $line_h,  TTDate::getTimeUnit($paid_time), 1, 0, 'C', 1);
+										$pdf->Cell($column_widths['regular_time'], $line_h, TTDate::getTimeUnit($regular_time), 1, 0, 'C', 1);
 
 										if ($data['over_time'] > 0 and isset($data['categorized_time']['over_time_policy'])) {
 											$pre_over_time_x = $pdf->getX();
@@ -1150,7 +1163,8 @@ class DailyAbsenceReport extends Controller
 
 											$pdf->SetFont('', '', 9);
 										} else {
-											$pdf->Cell($column_widths['over_time'], $line_h, TTDate::getTimeUnit($data['over_time']), 1, 0, 'C', 1);
+											$over_time = is_numeric($data['over_time']) ? $data['over_time'] : 0;
+											$pdf->Cell($column_widths['over_time'], $line_h, TTDate::getTimeUnit($over_time), 1, 0, 'C', 1);
 										}
 
 										if ($data['absence_time'] > 0 and isset($data['categorized_time']['absence_policy'])) {
@@ -1168,7 +1182,9 @@ class DailyAbsenceReport extends Controller
 
 											$pdf->SetFont('', '', 9);
 										} else {
-											$pdf->Cell($column_widths['absence_time'], $line_h, TTDate::getTimeUnit($data['absence_time']), 1, 0, 'C', 1);
+											
+											$absence_time = is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+											$pdf->Cell($column_widths['absence_time'], $line_h, TTDate::getTimeUnit($absence_time), 1, 0, 'C', 1);
 										}
 
 										$pdf->Ln();
@@ -1176,17 +1192,17 @@ class DailyAbsenceReport extends Controller
 										unset($day_punch_data);
 									}
 
-									$totals['worked_time'] += $data['worked_time'];
-									$totals['paid_time'] += $data['paid_time'];
-									$totals['absence_time'] += $data['absence_time'];
-									$totals['regular_time'] += $data['regular_time'];
-									$totals['over_time'] += $data['over_time'];
+									$totals['worked_time'] += is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                                    $totals['paid_time'] += is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+                                    $totals['absence_time'] += is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+                                    $totals['regular_time'] += is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                                    $totals['over_time'] += is_numeric($data['over_time']) ? $data['over_time'] : 0;
 
-									$week_totals['worked_time'] += $data['worked_time'];
-									$week_totals['paid_time'] += $data['paid_time'];
-									$week_totals['absence_time'] += $data['absence_time'];
-									$week_totals['regular_time'] += $data['regular_time'];
-									$week_totals['over_time'] += $data['over_time'];
+                                    $week_totals['worked_time'] += is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                                    $week_totals['paid_time'] += is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+                                    $week_totals['absence_time'] += is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+                                    $week_totals['regular_time'] += is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                                    $week_totals['over_time'] += is_numeric($data['over_time']) ? $data['over_time'] : 0;
 
 									if ($x % 7 == 0 or $i == $max_i) {
 										//Show Week Total.
@@ -1365,12 +1381,14 @@ class DailyAbsenceReport extends Controller
 				$generic_data['id'] = UserGenericDataFactory::reportFormDataHandler($action, $filter_data, $generic_data, URLBuilder::getURL(NULL, $_SERVER['SCRIPT_NAME']));
 				unset($generic_data['name']);
 			default:
-				BreadCrumb::setCrumb($title);
+				BreadCrumb::setCrumb($viewData['title']);
 
 				if ($action == 'load') {
 					Debug::Text('Loading Report!', __FILE__, __LINE__, __METHOD__, 10);
 
-					extract(UserGenericDataFactory::getReportFormData($generic_data['id']));
+					$ugdf = new UserGenericDataFactory();
+					$ugdf->getReportFormData($generic_data['id']);
+
 				} elseif ($action == '') {
 					//Check for default saved report first.
 					$ugdlf->getByUserIdAndScriptAndDefault($current_user->getId(), $_SERVER['SCRIPT_NAME']);
@@ -1418,7 +1436,7 @@ class DailyAbsenceReport extends Controller
 											'paid_time',
 											'regular_time'
 												);
-*/
+						*/
 					}
 				}
 				$filter_data = Misc::preSetArrayValues($filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'punch_branch_ids', 'punch_department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids'), NULL);

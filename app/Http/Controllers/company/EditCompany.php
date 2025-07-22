@@ -136,7 +136,7 @@ class EditCompany extends Controller
 			}
 
 			// Ensure ldap_authentication_type_options is always set
-			$company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type') ?? [];
+			$company_data['ldap_authentication_type_options'] = ['Disabled'];
 			$company_data['status_options'] = $cf->getOptions('status') ?? [];
 			$company_data['country_options'] = $cf->getOptions('country') ?? [];
 			$company_data['industry_options'] = $cf->getOptions('industry') ?? [];
@@ -162,7 +162,8 @@ class EditCompany extends Controller
 			$company_data['other_field_names'] = $oflf->getByCompanyIdAndTypeIdArray($current_company->getID(), 2);
 
 			// Ensure ldap_authentication_type_options is set
-			$company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type') ?? [];
+			// $company_data['ldap_authentication_type_options'] = $cf->getOptions('ldap_authentication_type') ?? [];
+			$company_data['ldap_authentication_type_options'] =  ['Disabled'];
 
 			if (!isset($id) && isset($company_data['id'])) {
 				$id = $company_data['id'];
