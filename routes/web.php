@@ -235,11 +235,12 @@ Route::post('/department_branch_user/save/{id?}', [EditDepartmentBranchUser::cla
 
 
 // ==================== wage group =====================================================================================
-Route::get('/user_group', [UserGroupList::class, 'index'])->name('user_group.index');
+Route::match(['get', 'post', 'delete'], '/user_group', [UserGroupList::class, 'index'])->name('user_group.index');
+Route::match(['get', 'post', 'delete'], '/user_group/add', [EditUserGroup::class, 'index'])->name('user_group.add');
 
-Route::get('/user_group/add/{id?}', [EditUserGroup::class, 'index'])->name('user_group.add');
-Route::post('/user_group/save/{id?}', [EditUserGroup::class, 'submit'])->name('user_group.save');
-Route::delete('/user_group/delete/{id}', [UserGroupList::class, 'delete'])->name('user_group.delete');
+//Route::get('/user_group/add/{id?}', [EditUserGroup::class, 'index'])->name('user_group.add');
+//Route::post('/user_group/save/{id?}', [EditUserGroup::class, 'submit'])->name('user_group.save');
+//Route::delete('/user_group/delete/{id}', [UserGroupList::class, 'delete'])->name('user_group.delete');
 
 // ==================== user title =====================================================================================
 Route::get('/user_title', [UserTitleList::class, 'index'])->name('user_title.index');

@@ -1,94 +1,81 @@
-<x-app-layout :title="'Edit User Group'">
+<x-app-layout :title="'Input Example'">
     <style>
-        .form-group {
-            margin-bottom: 10px;
-        }
-        label {
-            margin-bottom: 0 !important;
-        }
-        .center-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        td, th{
+            padding: 5px !important;
         }
     </style>
-
-    <x-slot name="header">
-        <h4 class="mb-sm-0">{{ __('Employee Groups') }}</h4>
-    </x-slot>
-
-    <div class="center-container">
-        <div class="card w-50">
-            <div class="card-header align-items-center d-flex justify-content-between">
-                <h4 class="card-title mb-0 flex-grow-1">Employee Group {{ isset($data['id']) ? 'Edit' : 'Add' }}</h4>
-                <a href="/user_group" class="btn btn-primary">Employee Group List <i class="ri-arrow-right-line"></i></a>
-            </div>
-
-            <div class="card-body">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+    <div class="d-flex justify-content-center">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header align-items-center d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
                     </div>
-                @endif
 
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                    {{-- <div class="justify-content-md-end">
+                        <div class="d-flex justify-content-end">
+                            <a 
+                                type="button" 
+                                href="/payroll/paystub_accounts/add"
+                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
+                                Add <i class="ri-add-line"></i>
+                            </a>
+                        </div>
+                    </div> --}}
+                </div>
 
-                <form method="POST" 
-                      action="{{ isset($data['id']) ? route('user_group.save', $data['id']) : route('user_group.save') }}"
-                      id="userGroupForm">
+                <div class="card-body">
+                   
+                    {{-- --------------------------------------------------------------------------- --}}
+
+                    <form method="get" action="/user_group/add">
                     @csrf
-                    @if(isset($data['id']))
-                        @method('POST')
-                    @endif
 
-                    <div class="form-group">
-                        <label for="parent_id">Parent Group</label>
-                        <select name="parent_id" id="parent_id" class="form-select">
-                            <option value="">-- Select Parent --</option>
-                            @foreach ($data['parent_list_options'] as $value => $label)
-                                <option value="{{ $value }}" {{ isset($data['parent_id']) && $data['parent_id'] == $value ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                        <div id="contentBoxTwoEdit">
+                            @if( !$ugf->Validator->isValid())
+                                {{-- {include file="form_errors.tpl" object="ugf"} --}}
+                            @endif
+            
+                            <table class="table table-bordered">
+            
+                                <tr>
+                                    <th>
+                                        Parent:
+                                    </th>
+                                    <td class="cellRightEditTable">
+                                        <select name="data[parent_id]">
+                                            {!! html_options([ 'options'=>$parent_list_options, 'selected'=>$data['parent_id'] ?? '']) !!}
+                                        </select>
+                                    </td>
+                                </tr>
+            
+                                <tr>
+                                    <th>
+                                        Name:
+                                    </th>
+                                    <td class="cellRightEditTable">
+                                        <input type="text" name="data[name]" value="{{$data['name'] ?? ''}}">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+            
+                        <div id="contentBoxFour">
+                            <input type="submit" class="btnSubmit" name="action" value="Submit" onClick="return singleSubmitHandler(this)">
+                        </div>
+            
+                        <input type="hidden" name="data[id]" value="{{$data['id'] ?? ''}}">
+                        <input type="hidden" name="previous_parent_id" value="{{$data['previous_parent_id'] ?? ''}}">
 
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" name="name" id="name" class="form-control" value="{{ $data['name'] ?? '' }}">
-                    </div>
+                    </form>
 
-                    <div class="form-group text-center">
-                        <input type="hidden" name="id" id="user_group_id" value="{{ $data['id'] ?? '' }}">
-                        <input type="hidden" name="previous_parent_id" value="{{ $data['previous_parent_id'] ?? '' }}">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div><!-- end card-body -->
-        </div><!-- end card -->
-    </div><!-- end center-container -->
+                    {{-- --------------------------------------------------------------------------- --}}
+                
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
 
-    <script>
-        document.getElementById('userGroupForm').addEventListener('submit', function(e) {
-            // Basic validation example
-            const nameField = document.getElementById('name');
-            if (!nameField.value.trim()) {
-                e.preventDefault();
-                alert('Group name is required');
-                nameField.focus();
-                return false;
-            }
-            // Add any additional validation here
-            return true;
-        });
-    </script>
 </x-app-layout>

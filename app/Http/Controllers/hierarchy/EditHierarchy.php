@@ -109,7 +109,7 @@ class EditHierarchy extends Controller
 
 	public function submit(){
 
-		$ft = new FastTree($fast_tree_options);
+		$ft = new FastTree(['table' => 'hierarchy_tree']);
 		$ft->setTree( $hierarchy_id );
 
 		$hf = new HierarchyFactory();
