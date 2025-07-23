@@ -17,7 +17,7 @@
                     <form method="POST"
                         action="/admin/userlist/add"
                         enctype="multipart/form-data"
-                        id="userForm" 
+                        id="userForm"
                         name="edituser"
                     >
                         @csrf
@@ -30,7 +30,7 @@
                                     {{-- error list here --}}
                                     {{-- {include file="form_errors.tpl" object="uf"} --}}
                                 @endif
-                        
+
                                     <table class="table table-bordered">
                                         <tr>
                                             <td valign="top">
@@ -40,7 +40,7 @@
                                                             Employee Identification
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th>
                                                             Company:
@@ -53,9 +53,9 @@
                                                             @endif
                                                         </td>
                                                     </tr>
-                        
+
                                                     @if ($permission->Check('user','edit_advanced'))
-                                                        
+
                                                     <tr>
                                                         <th>
                                                             Status:
@@ -77,26 +77,26 @@
                                                     </tr>
                                                     <tr>
                                                         <th>
-                                                            Employee Number:		
+                                                            Employee Number:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','add') OR $permission->Check('user','edit') OR ($permission->Check('user','edit_child') AND $user_data['is_child'] === TRUE) OR ($permission->Check('user','edit_own') AND $user_data['is_owner'] === TRUE))
                                                                 <input type="text"  id="employee_number_only" size="10" name="user_data[employee_number_only]" value="{{$user_data['employee_number_only'] ?? ''}}">
                                                                 @if (empty($user_data['employee_number_only']) && $user_data['default_branch_id'] > 0)
-                                                                    Next available:<span id="next_available_employee_number_only2" ></span>                    					
+                                                                    Next available:<span id="next_available_employee_number_only2" ></span>
                                                                 @endif
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th>
-                                                            Punch Machine User ID:	
+                                                            Punch Machine User ID:
                                                         </th>
-                                                        
+
                                                         <td colspan="2" class="">
                                                             <input type="text" size="15" name="user_data[punch_machine_user_id]" value="{{$user_data['punch_machine_user_id'] ?? '0'}}" />
-                                                        </td>      
-                                                            
-                                                    </tr>	
+                                                        </td>
+
+                                                    </tr>
                                                     <tr>
                                                         <th>
                                                             Location:
@@ -107,7 +107,7 @@
                                                                 {!! html_options(['options'=>$user_data['branch_options'], 'selected'=>$user_data['default_branch_id']]) !!}
                                                             </select>
                                                         </td>
-                                                    </tr>                    
+                                                    </tr>
                                                     <tr>
                                                         <th>
                                                             Department:
@@ -117,7 +117,7 @@
                                                                 {!! html_options(['options'=>$user_data['department_options'], 'selected'=>$user_data['default_department_id']]) !!}
                                                             </select>
                                                         </td>
-                                                    </tr>                  
+                                                    </tr>
                                                     <tr>
                                                         <th>
                                                             Division:
@@ -127,7 +127,7 @@
                                                                 {!! html_options(['options'=>$user_data['department_options'], 'selected'=>$user_data['default_department_id']]) !!}
                                                             </select>
                                                         </td>
-                                                    </tr>               
+                                                    </tr>
                                                     <tr>
                                                         <th>
                                                             Designation:
@@ -141,7 +141,7 @@
                                                                 {{ $user_data['title'] ?? "N/A" }}
                                                             @endif
                                                         </td>
-                                                    </tr>                 
+                                                    </tr>
                                                     <tr>
                                                         <th>
                                                             Employement Title:
@@ -151,15 +151,15 @@
                                                                 {!! html_options(['options'=>$user_data['group_options'], 'selected'=>$user_data['group_id']  ?? '']) !!}
                                                             </select>
                                                         </td>
-                                                    </tr>               
+                                                    </tr>
                                                     <tr>
                                                         <th>
-                                                            Job Skills:								
+                                                            Job Skills:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             <input type="text" size="40" name="user_data[job_skills]" value="{{$user_data['job_skills'] ?? ''}}"> &nbsp;Ex:- driver, electrician
                                                         </td>
-                                                    </tr>               
+                                                    </tr>
                                                     <tr>
                                                         <th>
                                                             Policy Group:
@@ -174,7 +174,7 @@
                                                                 <input type="hidden" name="user_data[policy_group_id]" value="{{$user_data['policy_group_id']}}">
                                                             @endif
                                                         </td>
-                                                    </tr>                      
+                                                    </tr>
                                                     <tr>
                                                         <th>
                                                             Appoinment Date:
@@ -184,18 +184,18 @@
                                                             ie: {{$current_user_prefs->getDateFormatExample()}}
                                                         </td>
                                                     </tr>
-                                                @endif                           
+                                                @endif
                                                     @if ($permission->Check('user','edit_advanced'))
                                                     <tr>
                                                         <th>
-                                                            Appoinment Note:								
+                                                            Appoinment Note:
                                                         </th>
                                                         <td colspan="2" class="">
-                                                            <textarea rows="5" cols="45" name="user_data[hire_note]">{{$user_data['hire_note'] ?? ''}}</textarea>                                
+                                                            <textarea rows="5" cols="45" name="user_data[hire_note]">{{$user_data['hire_note'] ?? ''}}</textarea>
                                                         </td>
                                                     </tr>
                                                     @endif
-                                                                                
+
                                                     <tr>
                                                         <th>
                                                             Termination Date:
@@ -205,28 +205,28 @@
                                                             ie: {{$current_user_prefs->getDateFormatExample()}}
                                                         </td>
                                                     </tr>
-                                                    
+
                                                     @if ($permission->Check('user','edit_advanced'))
                                                     <tr>
                                                         <th>
-                                                            Termination Note:								
+                                                            Termination Note:
                                                         </th>
                                                         <td colspan="2" class="">
-                                                            <textarea rows="5" cols="45" name="user_data[termination_note]">{{$user_data['termination_note'] ?? ''}}</textarea> 
-                                                        </td>                           
+                                                            <textarea rows="5" cols="45" name="user_data[termination_note]">{{$user_data['termination_note'] ?? ''}}</textarea>
+                                                        </td>
                                                     </tr>
                                                     @endif
-                                                                                
+
                                                     <tr>
                                                         <th rowspan="2" >
-                                                            Basis of Employment: 									                
+                                                            Basis of Employment:
                                                         </th>
                                                         <td class="">
-                                                            <input type="radio"  name="user_data[basis_of_employment]" value="1" {{ !empty($user_data['basis_of_employment']) && $user_data['basis_of_employment'] =="1" ? 'checked' : '' }} > Contract <br /> 
-                                                            
-                                                            <input type="radio"  name="user_data[basis_of_employment]" value="2" {{ !empty($user_data['basis_of_employment']) && $user_data['basis_of_employment'] =="2" ? 'checked' : '' }} /> 
+                                                            <input type="radio"  name="user_data[basis_of_employment]" value="1" {{ !empty($user_data['basis_of_employment']) && $user_data['basis_of_employment'] =="1" ? 'checked' : '' }} > Contract <br />
+
+                                                            <input type="radio"  name="user_data[basis_of_employment]" value="2" {{ !empty($user_data['basis_of_employment']) && $user_data['basis_of_employment'] =="2" ? 'checked' : '' }} />
                                                             Training <br />
-                                                            
+
                                                             <input type="radio"  name="user_data[basis_of_employment]" value="3" {{ !empty($user_data['basis_of_employment']) && $user_data['basis_of_employment'] =="3" ? 'checked' : '' }} > Permanent (With Probation)<br/>
                                                         </td>
                                                         <td class="">
@@ -242,41 +242,41 @@
                                                         <!-- <input type="radio"  name="user_data[basis_of_employment]" value="6"  {if $user_data.basis_of_employment =="6"}  checked="checked"  {/if} />
                                                         Consultant<br/> -->
                                                         <input type="radio"  name="user_data[basis_of_employment]" value="5" {{ !empty($user_data['basis_of_employment']) && $user_data['basis_of_employment'] =="5" ? 'checked' : '' }}  />
-                                                        Resign 
+                                                        Resign
                                                     </td>
-                                                    </tr> 
-                                        
+                                                    </tr>
+
                                                     <tr>
                                                         <th>
-                                                            Date Confirmed:								
+                                                            Date Confirmed:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             <input type="date" id="confirmed_date" name="user_data[confirmed_date]" value="{{ getdate_helper('date', $user_data['confirmed_date'] ?? '' ) }}">
-                                                            ie: {{$current_user_prefs->getDateFormatExample()}}                                    								
+                                                            ie: {{$current_user_prefs->getDateFormatExample()}}
                                                         </td>
-                                                    </tr>   
+                                                    </tr>
                                             </td>
-                                        </tr> 
-                                                                                
+                                        </tr>
+
                                         <tr>
                                             <th>
-                                                Resign Date:								
+                                                Resign Date:
                                             </td>
                                             <td colspan="2" class="">
                                                 <input type="date" id="resign_date" name="user_data[resign_date]" value="{{ getdate_helper('date', $user_data['resign_date'] ?? '') }}">
-                                                ie: {{$current_user_prefs->getDateFormatExample()}}                                    								
+                                                ie: {{$current_user_prefs->getDateFormatExample()}}
                                             </td>
-                                        </tr>   
-                                                                    
+                                        </tr>
+
                                         <tr>
                                             <th>
-                                                Date Retirment:								
+                                                Date Retirment:
                                             </th>
                                             <td colspan="2" class="">
                                                 <input type="text" size="10" id="retirement_date" readonly name="user_data[retirement_date]" value="{{$user_data['retirement_date'] ?? ''}}">
                                             </td>
-                                        </tr> 
-                                                                    
+                                        </tr>
+
                                         <tr>
                                             <th>
                                                 Currency:
@@ -292,7 +292,7 @@
                                                 @endif
                                             </td>
                                         </tr>
-                                                                    
+
                                         <tr>
                                             <th>
                                                 Pay Period Schedule:
@@ -308,7 +308,7 @@
                                                 @endif
                                             </td>
                                         </tr>
-            
+
                                         <tr>
                                             <th>
                                                 Permission Group:
@@ -331,9 +331,9 @@
                                                 @endif
                                             </td>
                                         </tr>
-                        
+
                                                      @endif
-                        
+
                                                     <tr>
                                                         <th>
                                                             @if ($permission->Check('user','edit_advanced'))
@@ -349,7 +349,7 @@
                                                             @endif
                                                         </td>
                                                     </tr>
-                        
+
                                                     @if ($permission->Check('user','edit_advanced'))
                                                     <tr>
                                                         <th>
@@ -361,7 +361,7 @@
                                                             <input type="password" name="user_data[password]" value="{{$user_data['password'] ?? ''}}">
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th>
                                                             @if ($permission->Check('user','edit_advanced'))
@@ -372,18 +372,18 @@
                                                             <input type="password" name="user_data[password2]" value="{{$user_data['password2'] ?? ''}}">
                                                         </td>
                                                     </tr>
-                                                    
+
                                                     @if (isset($user_data['other_field_names']['other_id1']))
                                                         <tr>
                                                             <th height="42">
-                                                                {{$user_data['other_field_names']['other_id1']}}:									
+                                                                {{$user_data['other_field_names']['other_id1']}}:
                                                             </th>
                                                             <td colspan="2" class="">
                                                                 <input type="text" name="user_data[other_id1]" value="{{$user_data['other_id1'] ?? ''}}">
                                                             </td>
                                                         </tr>
                                                     @endif
-                                                    
+
                                                     @if (isset($user_data['other_field_names']['other_id2']))
                                                         <tr>
                                                             <th>
@@ -394,7 +394,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-                                                    
+
                                                     @if (isset($user_data['other_field_names']['other_id3']))
                                                         <tr>
                                                             <th>
@@ -405,7 +405,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-                                                    
+
                                                     @if (isset($user_data['other_field_names']['other_id4']))
                                                         <tr>
                                                             <th>
@@ -416,7 +416,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-                                                    
+
                                                     @if (isset($user_data['other_field_names']['other_id5']))
                                                         <tr>
                                                             <th>
@@ -427,7 +427,7 @@
                                                             </td>
                                                         </tr>
                                                     @endif
-                                                    
+
                                                     @if (is_array($user_data['hierarchy_control_options']) AND count($user_data['hierarchy_control_options']) > 0)
                                                         <tr>
                                                             <td class="bg-primary text-white" colspan="3">
@@ -452,40 +452,40 @@
                                                             </tr>
                                                         @endforeach
                                                     @endif
-                        
+
                                                 @endif
-                        
+
                                             @if ($permission->Check('user','edit_advanced') AND ( $permission->Check('user','add') OR ( $permission->Check('user','edit') OR ($permission->Check('user','edit_child') AND $user_data['is_child'] === TRUE) OR ($permission->Check('user','edit_own') AND $user_data['is_owner'] === TRUE) ) ))
-                                                
+
                                                 </table>
                                         </td>
                                             <td valign="top">
                                                 <table class="table table-bordered">
                                                 @endif
-                        
+
                                                     <tr class="bg-primary text-white">
                                                         <td colspan="3">
-                                                            Contact Information								
+                                                            Contact Information
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th>
-                                                            Title:								
+                                                            Title:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             <select name="user_data[title_name]">
                                                                 {!! html_options(['options'=>$user_data['title_name_options'], 'selected'=>$user_data['title_name'] ?? '']) !!}
-                                                            </select>								
+                                                            </select>
                                                         </td>
                                                     </tr>
-                                                             
+
                                                     <tr>
                                                         <th>
                                                             @if ($permission->Check('user','edit_advanced'))
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            Calling Name:								
+                                                            Calling Name:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
@@ -493,58 +493,58 @@
                                                             @else
                                                                 {{$user_data['first_name']}}
                                                                 <input type="hidden" name="user_data[first_name]" value="{{$user_data['first_name'] ?? ''}}">
-                                                            @endif                   
+                                                            @endif
                                                         </td>
                                                     </tr>
-                                                                 
+
                                                     <tr>
                                                         <th>
                                                             @if ($permission->Check('user','edit_advanced'))
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            Surname:								
+                                                            Surname:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" name="user_data[last_name]" value="{{$user_data['last_name'] ?? ''}}">	
+                                                                <input type="text" name="user_data[last_name]" value="{{$user_data['last_name'] ?? ''}}">
                                                             @else
                                                                 {{$user_data['last_name']}}
                                                                 <input type="hidden" name="user_data[last_name]" value="{{$user_data['last_name'] ?? ''}}">
-                                                            @endif			
+                                                            @endif
                                                         </td>
                                                     </tr>
-                                                                                
+
                                                     <tr>
                                                         <th>
                                                             @if ($permission->Check('user','edit_advanced'))
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            Name with intials:								
+                                                            Name with intials:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" name="user_data[name_with_initials]" value="{{$user_data['name_with_initials'] ?? ''}}">	
+                                                                <input type="text" name="user_data[name_with_initials]" value="{{$user_data['name_with_initials'] ?? ''}}">
                                                             @else
                                                                 {{$user_data['name_with_initials']}}
                                                                 <input type="hidden" name="user_data[name_with_initials]" value="{{$user_data['name_with_initials'] ?? ''}}">
                                                             @endif
                                                         </td>
                                                     </tr>
-                                                                                 
+
                                                     <tr>
                                                         <th>
-                                                            Full Name:								
+                                                            Full Name:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" name="user_data[full_name]" value="{{$user_data['full_name'] ?? ''}}">	
+                                                                <input type="text" name="user_data[full_name]" value="{{$user_data['full_name'] ?? ''}}">
                                                             @else
                                                                 {{$user_data['full_name']}}
                                                                 <input type="hidden" name="user_data[full_name]" value="{{$user_data['full_name'] ?? ''}}">
-                                                            @endif		
+                                                            @endif
                                                         </td>
                                                     </tr>
-                                                                                   
+
                                                     <tr>
                                                         <th>
                                                             Employee Photo (.jpg):
@@ -559,11 +559,11 @@
                                                             @endif
                                                         </td>
                                                     </tr>
-                        
+
                                                     @if ($current_company->getEnableSecondLastName() == TRUE)
                                                         <tr>
                                                             <th>
-                                                                Second Surname:									
+                                                                Second Surname:
                                                             </td>
                                                             <td colspan="2" class="">
                                                                 @if ($permission->Check('user','edit_advanced'))
@@ -571,53 +571,53 @@
                                                                 @else
                                                                     {{$user_data['second_last_name']}}
                                                                     <input type="hidden" name="user_data[second_last_name]" value="{{$user_data['second_last_name']}}">
-                                                                @endif		
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endif
-                        
-                                                                                
+
+
                                                     <tr>
                                                         <th> N.I.C: </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" name="user_data[nic]" value="{{$user_data['nic'] ?? ''}}" size="30" maxlength="12">	
+                                                                <input type="text" name="user_data[nic]" value="{{$user_data['nic'] ?? ''}}" size="30" maxlength="12">
                                                             @else
                                                                 {{$user_data['nic']}}
                                                                 <input type="hidden" name="user_data[nic]" value="{{$user_data['nic'] ?? ''}}" size="30" maxlength="12">
                                                             @endif
                                                         </td>
                                                     </tr>
-                                                        
+
                                                     <tr>
                                                         <th>
-                                                            Date of Birth:								
+                                                            Date of Birth:
                                                         </th>
                                                         <td colspan="2" class="">
-                                                            <input type="date" name="user_data[birth_date]" value="{{$user_data['birth_date'] ?? ''}}">						
+                                                            <input type="date" name="user_data[birth_date]" value="{{$user_data['birth_date'] ?? ''}}">
                                                         </td>
                                                     </tr>
-                                                        
-                                                        
+
+
                                                     @if($permission->Check('user','edit_advanced'))
                                                     <tr>
                                                         <th>
-                                                            Note:								
+                                                            Note:
                                                         </td>
                                                         <td colspan="2" class="">
-                                                            <textarea rows="5" cols="45" name="user_data[note]">{{$user_data['note'] ?? ''}}</textarea>		
+                                                            <textarea rows="5" cols="45" name="user_data[note]">{{$user_data['note'] ?? ''}}</textarea>
                                                         </td>
                                                     </tr>
                                                     @endif
-                                                        
+
                                                     <tr>
                                                         <th>
-                                                            Gender:								
+                                                            Gender:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             <select name="user_data[sex]">
                                                                 {!! html_options(['options'=>$user_data['sex_options'], 'selected'=>$user_data['sex'] ?? '']) !!}
-                                                            </select>								
+                                                            </select>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -625,44 +625,44 @@
                                                             @if ($permission->Check('user','edit_advanced'))
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            Religion:								
+                                                            Religion:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             <select name="user_data[religion]">
                                                                 {!! html_options(['options'=>$user_data['religion_options'], 'selected'=>$user_data['religion'] ?? '']) !!}
-                                                            </select>	
+                                                            </select>
                                                         </td>
                                                     </tr>
-                                                                                
+
                                                     <tr>
                                                         <th>
-                                                            Marital Status:								
+                                                            Marital Status:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             <select name="user_data[marital]">
                                                                 {!! html_options([ 'options'=>$user_data['marital_options'], 'selected'=>$user_data['marital'] ?? '']) !!}
-                                                            </select>								
+                                                            </select>
                                                         </td>
                                                     </tr>
-                                                                                
-                        
+
+
                                                     <tr>
                                                         <th>
                                                             @if ($incomplete == 1)
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            Home Address (Line 1):								
+                                                            Home Address (Line 1):
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
                                                                 <input type="text" name="user_data[address1]" value="{{$user_data['address1'] ?? ''}}">
                                                             @else
                                                                 {{$user_data['address1']}}
-                                                                <input type="hidden" name="user_data[address1]" value="{{$user_data['address1'] ?? ''}}"> 
+                                                                <input type="hidden" name="user_data[address1]" value="{{$user_data['address1'] ?? ''}}">
                                                             @endif
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th></th>
                                                         <td colspan="2" class="">
@@ -691,60 +691,60 @@
                                                             @if ($incomplete == 1)
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            Postal / ZIP Code:								
+                                                            Postal / ZIP Code:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" name="user_data[postal_code]" value="{{$user_data['postal_code'] ?? ''}}" >	
+                                                                <input type="text" name="user_data[postal_code]" value="{{$user_data['postal_code'] ?? ''}}" >
                                                             @else
                                                                 {{$user_data['postal_code']}}
                                                                 <input type="hidden" name="user_data[postal_code]" value="{{$user_data['postal_code'] ?? ''}}" >
-                                                            @endif		
+                                                            @endif
                                                         </td>
                                                     </tr>
-                                                                                
-                                                                                
+
+
                                                     <tr>
                                                         <th>
                                                             @if ($incomplete == 1)
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            Home Phone:								
+                                                            Home Phone:
                                                         </th>
                                                         <td colspan="2" class="">
-                                                            <input type="text" name="user_data[home_phone]" value="{{$user_data['home_phone'] ?? ''}}">								
+                                                            <input type="text" name="user_data[home_phone]" value="{{$user_data['home_phone'] ?? ''}}">
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th>
-                                                            Mobile Phone:								
+                                                            Mobile Phone:
                                                         </th>
                                                         <td colspan="2" class="">
-                                                            <input type="text" name="user_data[mobile_phone]" value="{{$user_data['mobile_phone'] ?? ''}}">								
+                                                            <input type="text" name="user_data[mobile_phone]" value="{{$user_data['mobile_phone'] ?? ''}}">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th>
-                                                            Personal Email:								
+                                                            Personal Email:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" size="30" name="user_data[personal_email]" value="{{$user_data['personal_email'] ?? ''}}" >	
+                                                                <input type="text" size="30" name="user_data[personal_email]" value="{{$user_data['personal_email'] ?? ''}}" >
                                                             @else
                                                                 {{$user_data['personal_email']}}
                                                                 <input type="hidden" size="30" name="user_data[personal_email]" value="{{$user_data['personal_email'] ?? ''}}" >
-                                                            @endif			
+                                                            @endif
                                                         </td>
                                                     </tr>
-                                                                                
+
                                                     <tr>
                                                         <th>
-                                                            Office Phone:								
+                                                            Office Phone:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" name="user_data[work_phone]" value="{{$user_data['work_phone'] ?? ''}}" >	
+                                                                <input type="text" name="user_data[work_phone]" value="{{$user_data['work_phone'] ?? ''}}" >
                                                             @else
                                                                 {{$user_data['work_phone']}}
                                                                 <input type="hidden" name="user_data[work_phone]" value="{{$user_data['work_phone'] ?? ''}}" >
@@ -752,12 +752,12 @@
                                                             Ext: <input type="text" name="user_data[work_phone_ext]" value="{{$user_data['work_phone_ext'] ?? ''}}" size="6">
                                                             </td>
                                                     </tr>
-                                                                                
-                                                                                
-                                                                                
+
+
+
                                                     <tr>
                                                         <th>
-                                                            Office Mobile:								
+                                                            Office Mobile:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
@@ -768,42 +768,42 @@
                                                             @endif
                                                         </td>
                                                     </tr>
-                                                                                
-                                                                                
+
+
                                                     <tr>
                                                         <th>
-                                                            Offiece Email:								
+                                                            Offiece Email:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" size="30" name="user_data[work_email]" value="{{$user_data['work_email'] ?? ''}}" >	
+                                                                <input type="text" size="30" name="user_data[work_email]" value="{{$user_data['work_email'] ?? ''}}" >
                                                             @else
                                                                 {{$user_data['work_email']}}
                                                                 <input type="hidden" size="30" name="user_data[work_email]" value="{{$user_data['work_email'] ?? ''}}" >
                                                             @endif
                                                         </td>
                                                     </tr>
-                                                                                
+
                                                     <tr>
                                                         <th>
-                                                            Fax:								
+                                                            Fax:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
-                                                                <input type="text" name="user_data[fax_phone]" value="{{$user_data['fax_phone'] ?? ''}}" >	
+                                                                <input type="text" name="user_data[fax_phone]" value="{{$user_data['fax_phone'] ?? ''}}" >
                                                             @else
                                                                 {{$user_data['fax_phone']}}
                                                                 <input type="hidden" name="user_data[fax_phone]" value="{{$user_data['fax_phone'] ?? ''}}" >
                                                             @endif
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th>
                                                             @if ($incomplete == 1)
                                                                 <span class="text-danger">*</span>
                                                             @endif
-                                                            City:								
+                                                            City:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if ($permission->Check('user','edit_advanced'))
@@ -814,10 +814,10 @@
                                                             @endif
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th>
-                                                            Country:								
+                                                            Country:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if($permission->Check('user','edit_advanced'))
@@ -827,13 +827,13 @@
                                                             @else
                                                                 {{$user_data['country_options'][$user_data['country'] ?? '']}}
                                                                 <input type="hidden" name="user_data[country]" value="{{$user_data['country'] ?? ''}}">
-                                                            @endif								
+                                                            @endif
                                                         </td>
                                                     </tr>
-                        
+
                                                     <tr>
                                                         <th>
-                                                            Province / State:								
+                                                            Province / State:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if($permission->Check('user','edit_advanced'))
@@ -844,67 +844,67 @@
                                                                 {{$user_data['province_options'][$user_data['province'] ?? '']}}
                                                                 <input type="hidden" name="user_data[province]" value="{{$user_data['province'] ?? ''}}">
                                                             @endif
-                                                            <input type="hidden" id="selected_province" value="{{$user_data['province'] ?? ''}}">								
+                                                            <input type="hidden" id="selected_province" value="{{$user_data['province'] ?? ''}}">
                                                         </td>
                                                     </tr>
-                                                    
+
                                                     <tr>
                                                         <th>
-                                                            EPF Registration No:								
+                                                            EPF Registration No:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if($permission->Check('user','edit_advanced'))
-                                                                <input type="text" size="30" name="user_data[epf_registration_no]" value="{{$user_data['epf_registration_no'] ?? ''}}" >	
+                                                                <input type="text" size="30" name="user_data[epf_registration_no]" value="{{$user_data['epf_registration_no'] ?? ''}}" >
                                                             @else
                                                                 {{$user_data['epf_registration_no']}}
                                                                 <input type="hidden" size="30" name="user_data[epf_registration_no]" value="{{$user_data['epf_registration_no'] ?? ''}}" >
                                                             @endif
                                                         </td>
                                                     </tr>
-                                                    
+
                                                     <tr>
                                                         <th>
-                                                            EPF Membership No:								
+                                                            EPF Membership No:
                                                         </th>
                                                         <td colspan="2" class="">
                                                             @if($permission->Check('user','edit_advanced'))
-                                                                <input type="text" size="30" name="user_data[epf_membership_no]" value="{{$user_data['epf_membership_no'] ?? ''}}" >	
+                                                                <input type="text" size="30" name="user_data[epf_membership_no]" value="{{$user_data['epf_membership_no'] ?? ''}}" >
                                                             @else
                                                                 {{$user_data['epf_membership_no']}}
                                                                 <input type="hidden" size="30" name="user_data[epf_membership_no]" value="{{$user_data['epf_membership_no'] ?? ''}}" >
                                                             @endif
                                                         </td>
-                                                    </tr>  
-                                                    
-                                                    
+                                                    </tr>
+
+
                                                     <tr>
                                                         <th>
-                                                            Emergency Contact Person:								
+                                                            Emergency Contact Person:
                                                         </th>
                                                         <td colspan="3" class="">
-                                                            <input type="text" name="user_data[immediate_contact_person]" value="{{$user_data['immediate_contact_person'] ?? ''}}">													                                
+                                                            <input type="text" name="user_data[immediate_contact_person]" value="{{$user_data['immediate_contact_person'] ?? ''}}">
                                                         </td>
-                                                    </tr>                            
-                                                    
-                                                    
+                                                    </tr>
+
+
                                                     <tr>
                                                         <th>
-                                                            Emergency Contact No:								
+                                                            Emergency Contact No:
                                                         </th>
                                                         <td colspan="3" class="">
-                                                            <input type="text" name="user_data[immediate_contact_no]" value="{{$user_data['immediate_contact_no'] ?? ''}}">													                                
+                                                            <input type="text" name="user_data[immediate_contact_no]" value="{{$user_data['immediate_contact_no'] ?? ''}}">
                                                         </td>
-                                                    </tr>           
-                                                    
+                                                    </tr>
+
                                         <tr>
                                             <th height="78" >
-                                                Appointment Letter: 
+                                                Appointment Letter:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[user_template_file]" />
                                                 @endif
                                             </th>
-                                            
+
                                             <td colspan="2" class="">
                                                 @if (!empty($user_data['id']))
                                                     <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_template_file.pdf']) }}" alt="Appointment Letter" style="width:auto; height:160px;" id="" >Download</a>
@@ -914,151 +914,151 @@
 
                                         <tr>
                                             <th height="78" >
-                                                Personal Files: 
+                                                Personal Files:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[user_file]" />
-                                                @endif                    
+                                                @endif
                                             </td>
-                                            
+
                                             <td colspan="2" class="">
-                                                <div style="height:120px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
+                                                <div style="height:120px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
                                                     @if (!empty($user_data['id']))
                                                         <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_file.pdf']) }}" alt="Personal Files" style="width:auto; height:160px;" id="" >Download</a>
-                                                    @endif       
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
-                                        
-                                        
-                                        <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
+
+
+                                        <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->
                                         <tr>
                                             <th height="78" >
-                                                ID Copy: 
+                                                ID Copy:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[user_id_copy]" />
                                                 @endif
                                             </th>
-                                            
+
                                             <td colspan="3" class="">
-                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
+                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
                                                     @if (!empty($user_data['id']))
                                                         <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_id_copy.pdf']) }}" alt="ID Copy" style="width:auto; height:160px;" id="" >Download</a>
-                                                    @endif          
+                                                    @endif
                                                 </div>
                                             </td>
-                                        </tr>                              
-                                        
-                                        
+                                        </tr>
+
+
                                         <!-------------------------BIRTH CERTIFICATE---------------------------------------------->
-                        
+
                                         <tr>
                                             <th height="78" >
-                                                Birth Certificate: 
+                                                Birth Certificate:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[user_birth_certificate]" />
                                                 @endif
                                             </th>
-                                            
+
                                             <td colspan="3" class="">
-                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
+                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
                                                     @if (!empty($user_data['id']))
                                                         <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_birth_certificate.pdf']) }}" alt="Birth Certificate" style="width:auto; height:160px;" id="" >Download</a>
-                                                    @endif           
+                                                    @endif
                                                 </div>
                                             </td>
-                                        </tr>       
-                                        
+                                        </tr>
+
                                         <!-------------------------BIRTH CERTIFICATE---------------------------------------------->
-                        
+
                                         <!-------------------------GS LETTER---------------------------------------------->
-                        
+
                                         <tr>
                                             <th height="78" >
-                                                GS Letter: 
+                                                GS Letter:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[user_gs_letter]" />
                                                 @endif
                                             </th>
-                                            
+
                                             <td colspan="3" class="">
-                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
+                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
                                                     @if (!empty($user_data['id']))
                                                         <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_gs_letter.pdf']) }}" alt="GS Letter" style="width:auto; height:160px;" id="" >Download</a>
-                                                    @endif         
+                                                    @endif
                                                 </div>
                                             </td>
-                                        </tr>       
-                                        
+                                        </tr>
+
                                         <!-------------------------GS LETTER---------------------------------------------->
-                        
+
                                         <!-------------------------Police Report---------------------------------------------->
-                        
-                                        <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
+
+                                        <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->
                                         <tr>
                                             <th height="78" >
-                                                Police Report: 
+                                                Police Report:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[user_police_report]" />
                                                 @endif
                                             </th>
-                                            
+
                                             <td colspan="3" class="">
-                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
+                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
                                                     @if (!empty($user_data['id']))
                                                         <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_police_report.pdf']) }}" alt="Police Report" style="width:auto; height:160px;" id="" >Download</a>
-                                                    @endif         
+                                                    @endif
                                                 </div>
                                             </td>
-                                        </tr>       
-                                        
+                                        </tr>
+
                                         <!-------------------------Police Report---------------------------------------------->
-                        
+
                                         <!-------------------------NDA---------------------------------------------->
-                        
-                                        <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->     
+
+                                        <!--ARSP NOTE-> THIS CODE ADDED BY ME FOR THUNDER & NEON-->
                                         <tr>
                                             <th height="78">
-                                                NDA: 
+                                                NDA:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[user_nda]" />
                                                 @endif
                                             </th>
-                                            
+
                                             <td colspan="3" class="">
-                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
+                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
                                                     @if (!empty($user_data['id']))
                                                         <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_nda.pdf']) }}" alt="NDA" style="width:auto; height:160px;" id="" >Download</a>
-                                                    @endif           
+                                                    @endif
                                                 </div>
                                             </td>
-                                        </tr>       
-                                        
+                                        </tr>
+
                                         <!-------------------------NDA---------------------------------------------->
-                                        
-                                        
-                                        
+
+
+
                                         <!-------------------------BOND---------------------------------------------->
-                        
+
                                         <tr>
                                             <th height="78">
-                                                Bond: 
+                                                Bond:
                                                 <br>
                                                 @if($permission->Check('user','edit_advanced'))
                                                     <input type="file" name="user_data[bond]" id="bond_file" value="something"/>
                                                 @endif
                                             </th>
-                                            
+
                                             <td class="">
-                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">  
+                                                <div style="height:60px;width:auto;border:1px solid #7f9db9; padding-left:4px; overflow:auto;">
                                                     @if (!empty($user_data['id']))
                                                         <a target="_blank" href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'bond.pdf']) }}" alt="Bond" style="width:auto; height:160px;" id="" >Download</a>
-                                                    @endif          
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
@@ -1067,16 +1067,16 @@
                                             Bond Period :
                                             <select name="user_data[bond_period]">
                                                 {!! html_options(['options'=>$user_data['bond_period_option'], 'selected'=>$user_data['bond_period'] ?? '']) !!}
-                                            </select>                    
-                                                            
+                                            </select>
+
                                         </td>
-                                        </tr>       
-                                        
-                                        <!-------------------------BOND---------------------------------------------->                
-                                        
+                                        </tr>
+
+                                        <!-------------------------BOND---------------------------------------------->
+
                                                 </table>
                                         </td>
-                                    </tr>						
+                                    </tr>
                                             </table>
                                         </td>
                                         </tr>
@@ -1085,13 +1085,13 @@
                             <div id="contentBoxFour">
                                 <input type="submit" class="btnSubmit" name="action" value="Submit" onClick="return singleSubmitHandler(this)">
                             </div>
-                        
+
                             <input type="hidden" name="user_data[id]" value="{{$user_data['id'] ?? ''}}">
                             <input type="hidden" name="incomplete" value="{{$incomplete}}">
                             <input type="hidden" name="saved_search_id" value="{{$saved_search_id}}">
                             <!-- ARSP NOTE -> I ADDED THIS CODE FOR THUNDER & NEON-->
                             <input type="hidden" id="branch_short_id1" name="user_data[branch_short_id]" value="{{$user_data['branch_short_id'] ?? ''}}">
-                                
+
                         </div>
                         @if(!empty($user_data['id'])
                             AND $current_company->getProductEdition() == 20
@@ -1123,8 +1123,8 @@
 
         <script>
             $(document).ready(function(){
-                formChangeDetect(); 
-                showProvince(); 
+                formChangeDetect();
+                showProvince();
                 getBranchShortId();
                 getNextHighestEmployeeNumberByBranch();
             })
@@ -1134,24 +1134,24 @@
             //------------------------ARPS NOTE START---------------------------------------
 
             //ARPS NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-            var hwCallbackBranchShortId = {	
-                    getBranchShortId: function(result) {			
+            var hwCallbackBranchShortId = {
+                    getBranchShortId: function(result) {
                         /**
                          * ARSP NOTE -->
-                         * IF WE NEED TO DISPLAY SAME VALUE FOR DIFFERENT PLACES WE MUST USE DIFFERENT ID 
+                         * IF WE NEED TO DISPLAY SAME VALUE FOR DIFFERENT PLACES WE MUST USE DIFFERENT ID
                          */
                         document.getElementById('branch_short_id').innerHTML = result;
                         document.getElementById('branch_short_id1').value = result;
-                        
+
                     }
                 }
-                
+
             //ARPS NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
             var ajaxObj = new AJAX_Server(hwCallbackBranchShortId);
 
             //ARPS NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
             //WE NEED TO CALL THIS FUNCTION FROM DEFAULT BRANCH FIELD
-            function getBranchShortId() {	
+            function getBranchShortId() {
                 //alert('Branch ID: '+ document.getElementById('branch_short_id').value);
                 if ( document.getElementById('default_branch_id').value != '' ) {
                     ajaxObj.getBranchShortId( document.getElementById('default_branch_id').value);//ARSP NOTE --> THIS IS AJAX FUNCTION
@@ -1166,22 +1166,22 @@
             //------------------------ARPS NOTE GET NEXT HIGHEST EMPLOYEE ID BRANCH WISE ---------------------------------------
 
             //ARPS NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-            var hwCallbackTest1 = {	
+            var hwCallbackTest1 = {
                     getNextHighestEmployeeNumberByBranch: function(result) {
                         /**
                          * ARSP NOTE -->
-                         * IF WE NEED TO DISPLAY SAME VALUE FOR DIFFERENT PLACES WE MUST USE DIFFERENT ID 
-                         */			
+                         * IF WE NEED TO DISPLAY SAME VALUE FOR DIFFERENT PLACES WE MUST USE DIFFERENT ID
+                         */
                         document.getElementById('next_available_employee_number_only2').innerHTML = result;
                         document.getElementById('next_available_employee_number_only3').value = result;
                     }
                 }
-                
+
             //ARPS NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
             var remoteHWTest1 = new AJAX_Server(hwCallbackTest1);
 
             //ARPS NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-            function getNextHighestEmployeeNumberByBranch() {	
+            function getNextHighestEmployeeNumberByBranch() {
                 //alert('Branch ID: '+ document.getElementById('default_branch_id').value);
                 if ( document.getElementById('default_branch_id').value != '' ) {
                     remoteHWTest1.getNextHighestEmployeeNumberByBranch( document.getElementById('default_branch_id').value);

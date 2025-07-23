@@ -179,7 +179,9 @@ class AccrualBalanceFactory extends Factory {
 	}
 
 	static function calcBalance( $user_id, $accrual_policy_id = NULL ) {
-		$profiler = Factory::getProfiler();
+		// $profiler = Factory::getProfiler();
+        $factory = new Factory();
+        $profiler = $factory->getProfiler();
 		$profiler->startTimer( "AccrualBalanceFactory::calcBalance()");
 
 		$alf = new AccrualListFactory();

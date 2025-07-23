@@ -138,7 +138,7 @@ class AddMassSchedule extends Controller
 
         switch ($action) {
             case 'submit':
-                
+
                 //Debug::setVerbosity(11);
                 Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -158,7 +158,7 @@ class AddMassSchedule extends Controller
                         AND $data['start_full_time_stamp'] >= (time()-86400*365) AND $data['end_full_time_stamp'] <= (time()+86400*365) ) ) {
                     $sf->Validator->isTrue('date_stamp', FALSE, 'Start or End dates are invalid' );
                 }
-                
+
                 if ( $sf->Validator->isValid() ) {
                     Redirect::Page( URLBuilder::getURL( array('action' => 'add_mass_schedule', 'filter_user_id' => $filter_user_id, 'data' => $data ), '/progress_bar_control') );
                 }
@@ -192,7 +192,7 @@ class AddMassSchedule extends Controller
                         'dow' => array(1 => TRUE, 2 => TRUE, 3 => TRUE, 4 => TRUE, 5 => TRUE)
                     );
                 }
-                
+
 
                 $ulf = new UserListFactory();
                 $ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
@@ -245,12 +245,12 @@ class AddMassSchedule extends Controller
                 $data['department_options'] = $department_options;
 
                 $viewData['data'] = $data;
-
+                // dd($viewData);
                 break;
         }
 
         $viewData['sf'] = $sf;
-        
+
         return view('schedule/AddMassSchedule', $viewData);
 
     }

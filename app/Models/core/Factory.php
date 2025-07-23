@@ -322,7 +322,7 @@ class Factory
 
 		return FALSE;
 	}
-    
+
 	function setId($id)
 	{
 		/*
@@ -1824,7 +1824,7 @@ class Factory
 			throw new GeneralError('Invalid Data, not saving.');
 		}
 
-		
+
 		if ($this->isNew($force_lookup)) {
 			//Insert
 			$time = TTDate::getTime();
@@ -1866,7 +1866,7 @@ class Factory
 
 			//Update
 			$query = $this->getUpdateQuery(); //Don't pass data, too slow
-			
+
 			// Return true to indicate success
 			$retval = true;
 			$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
@@ -1903,7 +1903,7 @@ class Factory
 				//tables like PayPeriodSchedule, so addLog() can't get the user information.
 				$this->addLog( $log_action );
 			}
-			
+
 			//Run postSave function.
 			if ( method_exists($this,'postSave') ) {
 				Debug::text('Calling postSave()' , __FILE__, __LINE__, __METHOD__,10);
@@ -2039,6 +2039,7 @@ class Factory
 	{
 		return $this->profiler;
 	}
+
 	public function getUserPrefs()
 	{
 		return $this->userPrefs;

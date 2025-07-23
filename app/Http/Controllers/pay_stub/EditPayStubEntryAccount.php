@@ -92,7 +92,8 @@ class EditPayStubEntryAccount extends Controller
 
     }
 
-	public function submit(Request $request){
+	public function submit(Request $request)
+    {
 		$pseaf = new PayStubEntryAccountFactory();
 		$current_company = $this->currentCompany;
 		$data = $request->data;
@@ -116,6 +117,7 @@ class EditPayStubEntryAccount extends Controller
 		}
 
 	}
+    
 }
 
 ?>

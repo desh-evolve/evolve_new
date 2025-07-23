@@ -46,55 +46,6 @@ class ConfirmedLeave extends Controller
 		$this->userPrefs = View::shared('current_user_prefs');
 	}
 
-	// public function index()
-	// {
-	//     $current_user = $this->currentUser;
-	//     $viewData['title'] = 'Confiremed Leave';
-
-	// 	if(!isset($filter_data)){
-	// 	   $filter_data = array();
-	// 	}
-
-	// 	if ( isset($filter_data['start_date']) && $filter_data['start_date'] !='' ) {
-	// 		$from_date =  DateTime::createFromFormat('d/m/Y', $filter_data['start_date']);
-	// 		$filter_data['start_date'] =  $from_date->format('Y-m-d');
-	// 	}
-
-	// 	if ( isset($filter_data['end_date']) && $filter_data['end_date'] !='' ) {
-	// 		$from_date =  DateTime::createFromFormat('d/m/Y', $filter_data['end_date']);
-	// 		$filter_data['end_date'] =  $from_date->format('Y-m-d');
-	// 	}
-
-	// 	$lrlf = new LeaveRequestListFactory();
-
-	// 	$lrlf->getAllConfirmedLeave($current_user->getId(),$filter_data);
-	//    	$leaves = [];
-
-	//    	if($lrlf->getRecordCount() >0){
-
-	// 		foreach($lrlf->rs as $lrf_obj) {
-	// 			$lrlf->data = (array)$lrf_obj;
-	// 			$lrf_obj = $lrlf;
-
-	//             $leaves [] = array(
-	//                 'id' => $lrf_obj->getId(),
-	//                 'user' => $lrf_obj->getUserObject()->getFullName(),
-	//                 'user_id' => $lrf_obj->getUser(),
-	//                 'leave_name' => $lrf_obj->getAccuralPolicyObject()->getName(),
-	//                 'start_date' => $lrf_obj->getLeaveFrom(),
-	//                 'end_date' => $lrf_obj->getLeaveTo(),
-	//                 'amount' => $lrf_obj->getAmount(),
-	//                 'is_hr_approved' => $lrf_obj->getHrApproved()
-	//             );
-	// 		}
-	//    	}
-
-	//     $viewData['leaves'] = $leaves;
-	//     // dd($viewData);
-
-	//     return view('leaves/ConfirmedLeave', $viewData);
-	// }
-
 
 	public function index(Request $request)
 	{
@@ -168,7 +119,7 @@ class ConfirmedLeave extends Controller
     // {
     //     // Handle filter input
 	// 	//   <button type="button"  onclick="window.location.href='{{ url('/attendance/leaves/confirmed_leave/export') }}'" class="btn btn-secondary">Filler Export</button>
-                           
+
 	// 	$viewData['title'] = 'Confirmed Leave';
 	// 	$current_user = $this->currentUser;
 
@@ -346,7 +297,7 @@ class ConfirmedLeave extends Controller
 
             // Table data
             $k = 1;
-			
+
             foreach ($lrlf->rs as $lrf_obj) {
                 $lrlf->data = (array) $lrf_obj;
                 $lrf_obj = $lrlf;
@@ -381,68 +332,6 @@ class ConfirmedLeave extends Controller
         ], 404);
     }
 
-
-	// public function search()
-	// {
-	//     $viewData['title'] = 'Confiremed Leave';
-	// 	$current_user = $this->currentUser;
-
-	//     if(!isset($filter_data)){
-	//         $filter_data = array();
-	//     }
-
-	//     if ( isset($filter_data['start_date']) && $filter_data['start_date'] !='' ) {
-	//         //$filter_data['start_date'] = TTDate::parseDateTime($filter_data['start_date']);
-
-	//             // $from_date =  DateTime::createFromFormat('j-M-y', $filter_data['start_date']);
-	//             // $from_date =  DateTime::createFromFormat('d/m/Y', $filter_data['start_date']);
-	//             $from_date = DateTime::createFromFormat('Y-m-d', $filter_data['start_date']);
-	//             $filter_data['start_date'] =  $from_date->format('Y-m-d');
-	//     }
-
-	//     if ( isset($filter_data['end_date']) && $filter_data['end_date'] !='' ) {
-	//         //$filter_data['end_date'] = TTDate::parseDateTime($filter_data['end_date']);
-
-	//         // $from_date =  DateTime::createFromFormat('j-M-y', $filter_data['start_date']);
-	//             // $from_date =  DateTime::createFromFormat('d/m/Y', $filter_data['end_date']);
-	//             $from_date = DateTime::createFromFormat('Y-m-d', $filter_data['end_date']);
-	//             $filter_data['end_date'] =  $from_date->format('Y-m-d');
-	//     }
-
-
-	// 	$lrlf = new LeaveRequestListFactory();
-
-	// 	$lrlf->getAllConfirmedLeave($current_user->getId(),$filter_data);
-
-	// 	//echo $current_user->getRecordCount();
-	// 	$leaves = [];
-
-	// 	if($lrlf->getRecordCount() >0){
-
-	// 		foreach($lrlf->rs as $lrf_obj) {
-	// 			$lrlf->data = (array)$lrf_obj;
-	// 			$lrf_obj = $lrlf;
-
-	//             $leaves [] = array(
-	//                 'id' => $lrf_obj->getId(),
-	//                 'user' => $lrf_obj->getUserObject()->getFullName(),
-	//                 'user_id' => $lrf_obj->getUser(),
-	//                 'leave_name' => $lrf_obj->getAccuralPolicyObject()->getName(),
-	//                 'start_date' => $lrf_obj->getLeaveFrom(),
-	//                 'end_date' => $lrf_obj->getLeaveTo(),
-	//                 'amount' => $lrf_obj->getAmount(),
-	//                 'is_hr_approved' => $lrf_obj->getHrApproved()
-	//             );
-
-	// 		}
-	// 	}
-
-	//     $viewData['leaves'] = $leaves;
-	//     dd($viewData);
-
-	//     return view('leaves/ConfirmedLeave', $viewData);
-
-	// }
 
 
 	public function search(Request $request)
@@ -542,6 +431,7 @@ class ConfirmedLeave extends Controller
 			$leave_obj = $lrlf;
 
 			$leave_obj->setDeleted($delete);
+
 			if ($leave_obj->isValid()) {
 				$res = $leave_obj->Save();
 
@@ -552,6 +442,8 @@ class ConfirmedLeave extends Controller
 				}
 			}
 		}
-		Redirect::Page(URLBuilder::getURL(NULL, 'ConfirmedLeave'));
+		// Redirect::Page(URLBuilder::getURL(NULL, 'ConfirmedLeave'));
+        return response()->json(['success' => 'Operation completed successfully.']);
 	}
+
 }

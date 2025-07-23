@@ -36,7 +36,7 @@ class EditPayStubAmendment extends Controller
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
-    
+
         $this->permission = View::shared('permission');
         $this->current_user = View::shared('current_user');
         $this->current_company = View::shared('current_company');
@@ -74,7 +74,7 @@ class EditPayStubAmendment extends Controller
             }
         }
 
-        $psaf = new PayStubAmendmentFactory(); 
+        $psaf = new PayStubAmendmentFactory();
 
         //===================================================================================
         $action = '';
@@ -141,7 +141,7 @@ class EditPayStubAmendment extends Controller
                     //$pf->FailTransaction();
                     $psaf->CommitTransaction();
 
-                    Redirect::Page( URLBuilder::getURL( array('filter_user_id' => $user_id), '/payroll/pay_stub_amendment') );
+                    Redirect::Page( URLBuilder::getURL( array('user_id' => $user_id), '/payroll/pay_stub_amendment') );
                     break;
                 } else {
                     $psaf->FailTransaction();
@@ -221,7 +221,7 @@ class EditPayStubAmendment extends Controller
                 $status_options = Option::getByArray( $status_options_filter, $psaf->getOptions('status') );
                 $pay_stub_amendment_data['status_options'] = $status_options;
 
-                $pseallf = new PayStubEntryAccountLinkListFactory(); 
+                $pseallf = new PayStubEntryAccountLinkListFactory();
                 $pseallf->getByCompanyId( $current_company->getId() );
                 if ( $pseallf->getRecordCount() > 0 ) {
                     $net_pay_psea_id = $pseallf->getCurrent()->getTotalNetPay();

@@ -480,7 +480,7 @@ class UserWageFactory extends Factory {
 												('Incorrect Effective Date'))
 			) {
 
-			$this->data['effective_date'] = $epoch;
+			$this->data['effective_date'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}

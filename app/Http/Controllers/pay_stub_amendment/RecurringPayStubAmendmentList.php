@@ -77,20 +77,30 @@ class RecurringPayStubAmendmentList extends Controller
 
     }
 
-	public function delete($id){
+	public function delete($id)
+    {
 		$delete = TRUE;
 
 		$rpsalf = new RecurringPayStubAmendmentListFactory();
 		$rpsalf->getById( $id );
+
 		foreach ($rpsalf->rs as $recurring_pay_stub_amendment) {
 			$rpsalf->data = (array)$recurring_pay_stub_amendment;
 			$recurring_pay_stub_amendment = $rpsalf;
 
 			$recurring_pay_stub_amendment->setDeleted($delete);
-			$recurring_pay_stub_amendment->Save();
+			$res = $recurring_pay_stub_amendment->Save();
+
+            if($res){
+                return response()->json(['success' => 'recurring_pay_stub_amendment deleted successfully.']);
+            }else{
+                return response()->json(['error' => 'recurring_pay_stub_amendment deleted failed.']);
+            }
+
 		}
 
 		unset($recurring_pay_stub_amendment);
+
 		return redirect(URLBuilder::getURL( NULL, '/payroll/recurring_pay_stub_amendment', TRUE));
 	}
 

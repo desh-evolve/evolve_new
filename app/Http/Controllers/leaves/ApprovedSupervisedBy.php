@@ -42,7 +42,7 @@ class ApprovedSupervisedBy extends Controller
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
-    
+
         $this->permission = View::shared('permission');
         $this->current_user = View::shared('current_user');
         $this->current_company = View::shared('current_company');
@@ -50,11 +50,9 @@ class ApprovedSupervisedBy extends Controller
 
     }
 
-	public function index(){
-		$permission = $this->permission;
+	public function index()
+    {
         $current_user = $this->current_user;
-        $current_company = $this->current_company;
-        $current_user_prefs = $this->current_user_prefs;
 
         //global $config_vars;
 
@@ -72,7 +70,7 @@ class ApprovedSupervisedBy extends Controller
 
         //$lrlf = new LeaveRequestListFactory();
         $msg = "";
-        $lrlf = new LeaveRequestListFactory(); 
+        $lrlf = new LeaveRequestListFactory();
 
         //===================================================================================
         $action = '';
@@ -85,60 +83,60 @@ class ApprovedSupervisedBy extends Controller
         //===================================================================================
 
         switch ($action) {
-            case 'submit': 
-                
-                /*  
+            case 'submit':
+
+                /*
                 foreach ($data['leave_request'] as $key => $val){
                     $lrlf->getById($key);
-                    
+
                     if($lrlf->getRecordCount() >0){
                         $lrf = $lrlf->getCurrent();
                         $lrf->setCoveredApproved(1);
                         $lrf->setSupervisorApproved(1);
                         $lrf->save();
-                        
+
                     }
                 }
                 */
                 $user_date_id=0;
 
                 $leave_request = isset($_POST['data']['leave_request']) ? $_POST['data']['leave_request'] : [];
-                    
+
                 foreach ( $leave_request as $key => $val){
-                
-                
+
+
                     $lrlf->getById($key);
-                    
+
                     if($lrlf->getRecordCount() >0){
-                        
+
                         $lrf = $lrlf->getCurrent();
-                        
+
                     // echo $lrf->getUser();
                     // print_r($lrf);
-                        
-                        $ablf = new AccrualBalanceListFactory(); 
+
+                        $ablf = new AccrualBalanceListFactory();
                         $ablf->getByUserIdAndAccrualPolicyId($lrf->getUser(),$lrf->getAccuralPolicy());
-                        
+
                     //  echo $ablf->getRecordCount();
-                        
+
                     // print_r($ablf);
-                    
-                        
-                    
+
+
+
                         if( $ablf->getRecordCount() > 0){
                             $abf = $ablf->getCurrent();
-                            
+
                             $balance = $abf->getBalance();
-                            
+
                             $amount = $lrf->getAmount();
-                            
+
                             $amount_taken =0;
-                            
+
                             if($lrf->getLeaveMethod() == 1){
                                 $amount_taken = (($amount*8) * (28800/8));
                             }
                             elseif($lrf->getLeaveMethod()  == 2){
-                                
+
                                 if($amount<1){
                                     $amount_taken = (($amount*8) * (28800/8));
                                 }
@@ -147,38 +145,38 @@ class ApprovedSupervisedBy extends Controller
                                 }
                             }
                             elseif($lrf->getLeaveMethod()  == 3){
-                                
+
                                 $start_date_stamp= TTDate::parseTimeUnit($lrf->getLeaveTime() );
                                 $end_date_stamp= TTDate::parseTimeUnit($lrf->getLeaveEndTime()  );
-                                
+
                                 $time_diff = $end_date_stamp - $start_date_stamp;
-                                
+
                                 if($time_diff <3600){
                                     $time_diff = 3600;
                                 }
-                                
-                                
+
+
                                 if($time_diff >7200){
                                     $time_diff = 7200;
                                 }
-                                
+
                                 $amount_taken =$time_diff*0.8;
                             }
-                            
-                            
-                            
+
+
+
                             $amount_taken = -1 * abs($amount_taken);
-                            
+
                             $current_balance = $balance -  abs($amount_taken);
                             $abf->setBalance($current_balance);
-                            
+
                             $leaves =$lrf->getLeaveDates();
 
                             $date_array = explode(',', $leaves);
                             // $abf->save();
                             foreach($date_array as $date){
 
-                                        $af = new AccrualFactory(); 
+                                        $af = new AccrualFactory();
 
                                         $af->setAccrualPolicyID($lrf->getAccuralPolicy());
                                         $af->setUser($lrf->getUser());
@@ -203,16 +201,16 @@ class ApprovedSupervisedBy extends Controller
 
                                         $af->setEnableCalcBalance(TRUE);
 
-                                        if ( $af->isValid() ) { 
+                                        if ( $af->isValid() ) {
 
 
                                             //save accurals
                                         $result =   $af->save();
-                                        
-                                        
+
+
                                                 if($lrf->getAccuralPolicy() == 9){
-                                                    
-                                                $udlf_a = new UserDateListFactory(); 
+
+                                                $udlf_a = new UserDateListFactory();
                                                 $udlf_a->getByUserIdAndDate($lrf->getUser(), $datestamp->format('Y-m-d'));
 
                                                 if( $udlf_a->getRecordCount() > 0){
@@ -221,7 +219,7 @@ class ApprovedSupervisedBy extends Controller
 
                                                     if(isset($user_date_id_a) && $user_date_id_a >0){
                                                             $ulf_a = new UserListFactory();
-                                                            $ulf_a->getById($user_id); 
+                                                            $ulf_a->getById($user_id);
 
                                                             $user_a = $ulf_a->getCurrent();
 
@@ -237,7 +235,7 @@ class ApprovedSupervisedBy extends Controller
 
                                                                             }
 
-                                                                            $udt_obj_total = new UserDateTotalFactory(); 
+                                                                            $udt_obj_total = new UserDateTotalFactory();
 
 
                                                                             $udt_obj_total->setUserDateID($user_date_id_a);
@@ -245,7 +243,7 @@ class ApprovedSupervisedBy extends Controller
                                                                             $udt_obj_total->setStatus(10);
                                                                             $udt_obj_total->setType(10);
                                                                             //$udt_obj_total->setAbsencePolicyID(11);
-                                                                            
+
                                                                             $udt_obj_total->setBranch($user_a->getDefaultBranch());
                                                                             $udt_obj_total->setDepartment($user_a->getDefaultDepartment());
                                                                             $udt_obj_total->setActualTotalTime($amount_taken);
@@ -256,7 +254,7 @@ class ApprovedSupervisedBy extends Controller
 
                                                                                 //  $af->setUserDateTotalID();
                                                                             }
-                                                                            
+
 
                                                                             $udt_obj = new UserDateTotalFactory();
 
@@ -283,13 +281,13 @@ class ApprovedSupervisedBy extends Controller
                                                 }
                                         }
                             }
-                            
+
                             if($result){
-                                
-                                
+
+
                                 // save accrual balance
                                 // $abf->save();
-                            
+
                                     // $leave_request_id =  $lrf->getId();
                                     $leave_amount =   $lrf->getAmount();
                                     $leave_methord =   $lrf->getLeaveMethod();
@@ -298,18 +296,18 @@ class ApprovedSupervisedBy extends Controller
                                     $from_date = $lrf->getLeaveFrom();
                                     $to_date = $lrf->getLeaveTo();
                                     $sueprvisor_id =$lrf->getSupervisorId();
-                            
-                            
-                            
+
+
+
                                     $lrf->setCoveredApproved(1);
                                     $lrf->setSupervisorApproved(1);
                                 //  $lrf->setHrApproved(1);
                                     $lrf->save();
-                            
+
                                     if(($leave_methord == 1 && $leave_type == 12) || $leave_methord == 2 || $leave_methord == 3 ){
 
 
-                                    // echo $leave_type;exit; 
+                                    // echo $leave_type;exit;
 
                                         $udlf = new UserDateListFactory();
                                         $udlf->getByUserIdAndDate($user_id, $from_date);
@@ -317,7 +315,7 @@ class ApprovedSupervisedBy extends Controller
                                         if ( $udlf->getRecordCount() == 1 ) {
                                         $user_date_id = $udlf->getCurrent()->getId();
 
-                                    
+
 
                                         if(isset($user_date_id) && $user_date_id > 0 ){
 
@@ -339,16 +337,16 @@ class ApprovedSupervisedBy extends Controller
                                                                         $udt_old_obj->save();
 
                                                                     }
-                                                                    
-                                                                
+
+
                                                                     $udt_obj = new UserDateTotalFactory();
-                                                                    
+
                                                                     if($leave_methord == 1 && $leave_type = 9){
                                                                         $amount_taken = $amount_taken * -1;
                                                                         $leave_type =11;
                                                                         $udt_obj->setOverride(TRUE);
                                                                     }
-                                                                    
+
                                                                     if($leave_methord == 1 && $leave_type = 12){
                                                                         $amount_taken = $amount_taken * -1;
                                                                         $leave_type =9;
@@ -412,19 +410,19 @@ class ApprovedSupervisedBy extends Controller
                                                             'deleted_date' => $udt_obj->getDeletedDate(),
                                                             'deleted_by' => $udt_obj->getDeletedBy()
                                                         );
-                                                    
+
                                                     }
 
-                                                } // end foreach 
+                                                } // end foreach
 
-                                                $pclf_o = new PunchControlListFactory(); 
+                                                $pclf_o = new PunchControlListFactory();
                                                 $pclf_o->getByUserDateId($user_date_id);
                                                 if($pclf_o->getRecordCount() > 0){
 
 
                                                 $pcf_o = $pclf_o->getCurrent();
 
-                                                $plf = new PunchListFactory(); 
+                                                $plf = new PunchListFactory();
                                                 $plf->getByPunchControlIdAndStatusId($pcf_o->getId(), 20);
 
 
@@ -522,7 +520,7 @@ class ApprovedSupervisedBy extends Controller
                                                                     }
 
 
-                                                                    $pre_policy = new PremiumPolicyListFactory(); 
+                                                                    $pre_policy = new PremiumPolicyListFactory();
                                                                     $pre_policy->getByPolicyGroupUserId($user_id);
                                                                     $ppf =  $pre_policy->getCurrent();
                                                                     $premium_policy_id = $ppf->getId();
@@ -547,7 +545,7 @@ class ApprovedSupervisedBy extends Controller
                                                                 }
                                                                 elseif($group_id == 4 || $group_id == 6) {
 
-                                                                    $oplf = new OverTimePolicyListFactory(); 
+                                                                    $oplf = new OverTimePolicyListFactory();
                                                                     $oplf->getByPolicyGroupUserId($user_id);
                                                                     $opf =  $oplf->getCurrent();
                                                                     $overtime_policy_id = $opf->getId();
@@ -588,23 +586,19 @@ class ApprovedSupervisedBy extends Controller
 
                                     }
 
-                                    }// end of if that leave method check 
-                                    
-                                    
-                                    
-                                    
-                                    
-                                        
+                                    }// end of if that leave method check
+
+
                                         $supervisors = new UserListFactory();
                                         $supervisors->getById(trim($sueprvisor_id));
                                         $supervisor_obj = $supervisors->getCurrent();
-                                        
-                                    
+
+
                                         $employeeLF = new UserListFactory();
                                         $employeeLF->getById(trim($user_id));
                                         $employee_obj = $employeeLF->getCurrent();
-                                        
-                                        
+
+
                                         if ( $supervisor_obj->getWorkEmail() != FALSE ) {
                                                     $supervisor_primary_email = $supervisor_obj->getWorkEmail();
                                                     if ( $supervisor_obj->getHomeEmail() != FALSE ) {
@@ -616,11 +610,8 @@ class ApprovedSupervisedBy extends Controller
                                                     $supervisor_primary_email = $supervisor_obj->getHomeEmail();
                                                     $supervisor_secondary_email = NULL;
                                         }
-                                        
-                                        
-                                        
-                                        
-                                        
+
+
                                         if ( $employee_obj->getWorkEmail() != FALSE ) {
                                                     $employee_primary_email = $employee_obj->getWorkEmail();
                                                     if ( $employee_obj->getHomeEmail() != FALSE ) {
@@ -632,22 +623,20 @@ class ApprovedSupervisedBy extends Controller
                                                     $employee_primary_email = $employee_obj->getHomeEmail();
                                                     $employee_secondary_email = NULL;
                                         }
-                                        
+
                                         //echo $user_id.'hko'. $employee_primary_email;exit;
-                                $aplf = new AccrualPolicyListFactory(); 
+                                $aplf = new AccrualPolicyListFactory();
                                 $aplf->getById($leave_type);
-                                    
+
                             //****************************************************************
-                                
-                            
+
+
                             /*
                             // Create the mail transport configuration
                             $transport = Swift_MailTransport::newInstance();
                             $transporter = Swift_SmtpTransport::newInstance($config_vars['mail']['smtp_host'], $config_vars['mail']['smtp_port'], 'ssl')
                             ->setUsername($config_vars['mail']['smtp_username'])
                             ->setPassword($config_vars['mail']['smtp_password']);
-
-                            
 
                             // Create the message
                             $message = Swift_Message::newInstance();
@@ -670,37 +659,37 @@ class ApprovedSupervisedBy extends Controller
                             // Send the email
                             $mailer = Swift_Mailer::newInstance($transporter);
                             $mailer->send($message);
-                            */                
-                            
-                                    
-                                    
+                            */
+
+
+
                             }
                             else{
                                     $msg = "Invalied accurals or you don't have permission";
                             }
                         }
                         else{
-                            
+
                             $msg = "you don't have assign leave";
-                            
+
                         }
-                        
-                        
+
+
                     }
                 }
-                
+
                 break;
-                    
-            case 'rejected': 
-                
+
+            case 'rejected':
+
                 foreach ($_POST['data']['leave_request'] as $key => $val){
-                
-                
+
+
                     $lrlf->getById($key);
-                    
+
                     if($lrlf->getRecordCount() >0){
                         $lrf = $lrlf->getCurrent();
-                        
+
                         $leave_amount =   $lrf->getAmount();
                         $leave_methord =   $lrf->getLeaveMethod();
                         $leave_type =   $lrf->getAccuralPolicy();
@@ -708,27 +697,22 @@ class ApprovedSupervisedBy extends Controller
                         $from_date = $lrf->getLeaveFrom();
                         $to_date = $lrf->getLeaveTo();
                         $sueprvisor_id =$lrf->getSupervisorId();
-                                    
-                    
+
+
                         $lrf->setStatus(30);
                         $lrf->save();
-                        
-                        
-                        
-                                
-                                    
-                                        
-                                        
+
+
                                         $supervisors = new UserListFactory();
                                         $supervisors->getById(trim($sueprvisor_id));
                                         $supervisor_obj = $supervisors->getCurrent();
-                                        
-                                        
+
+
                                         $employeeLF = new UserListFactory();
                                         $employeeLF->getById(trim($user_id));
                                         $employee_obj = $employeeLF->getCurrent();
-                                        
-                                        
+
+
                                         if ( $supervisor_obj->getWorkEmail() != FALSE ) {
                                                     $supervisor_primary_email = $supervisor_obj->getWorkEmail();
                                                     if ( $supervisor_obj->getHomeEmail() != FALSE ) {
@@ -740,11 +724,8 @@ class ApprovedSupervisedBy extends Controller
                                                     $supervisor_primary_email = $supervisor_obj->getHomeEmail();
                                                     $supervisor_secondary_email = NULL;
                                         }
-                                        
-                                        
-                                        
-                                        
-                                        
+
+
                                         if ( $employee_obj->getWorkEmail() != FALSE ) {
                                                     $employee_primary_email = $employee_obj->getWorkEmail();
                                                     if ( $employee_obj->getHomeEmail() != FALSE ) {
@@ -756,21 +737,19 @@ class ApprovedSupervisedBy extends Controller
                                                     $employee_primary_email = $employee_obj->getHomeEmail();
                                                     $employee_secondary_email = NULL;
                                         }
-                                        
-                                        
+
+
                                 $aplf = new AccrualPolicyListFactory();
                                 $aplf->getById($leave_type);
-                                    
+
                             //****************************************************************
-                                
+
                             /*
                             // Create the mail transport configuration
                             $transport = Swift_MailTransport::newInstance();
                             $transporter = Swift_SmtpTransport::newInstance($config_vars['mail']['smtp_host'], $config_vars['mail']['smtp_port'], 'ssl')
                             ->setUsername($config_vars['mail']['smtp_username'])
                             ->setPassword($config_vars['mail']['smtp_password']);
-
-                            
 
                             // Create the message
                             $message = Swift_Message::newInstance();
@@ -793,14 +772,14 @@ class ApprovedSupervisedBy extends Controller
                             // Send the email
                             $mailer = Swift_Mailer::newInstance($transporter);
                             $mailer->send($message);
-                                            
+
                             */
-                        
+
                     }
                 }
-                
+
                 break;
-                    
+
         }
 
         $lrlf->getBySupervisorEmployeeId($current_user->getId());
@@ -808,14 +787,21 @@ class ApprovedSupervisedBy extends Controller
         $data = array();
         //echo $current_user->getRecordCount();
         $leave= array();
+
         if($lrlf->getRecordCount() >0){
+
             foreach($lrlf->rs as $lrf_obj) {
                 $lrlf->data = (array)$lrf_obj;
                 $lrf_obj = $lrlf;
 
+                $user_id = $lrf_obj->getUser();
+
+                $ulf = new UserListFactory();
+		        $user_obj = $ulf->getById($user_id)->getCurrent();
+
                 $leave['id'] = $lrf_obj->getId();
-                $leave['user'] = $lrf_obj->getUserObject()->getFullName();
-                $leave['user_id'] = $lrf_obj->getUser();
+                $leave['user'] = $user_obj->getFullName();
+                $leave['user_id'] = $user_id;
                 $leave['leave_name'] = $lrf_obj->getAccuralPolicyObject()->getName();
                 $methord = $lrf_obj->getOptions('leave_method');
                 $leave['leave_method'] = $methord[$lrf_obj->getLeaveMethod()];
@@ -823,19 +809,19 @@ class ApprovedSupervisedBy extends Controller
                 $leave['end_date'] = $lrf_obj->getLeaveTo();
                 $leave['amount'] = $lrf_obj->getAmount();
                 $leave['is_supervisor_approved'] = $lrf_obj->getSupervisorApproved();
-                
+
                 $data['leaves'][] =$leave;
             }
         }
-        $data['msg'] = $msg;
-        
 
+        $data['msg'] = $msg;
         $viewData['data'] = $data;
-                
+        // dd($viewData);
+
         return view('leaves/ApprovedSupervisedBy', $viewData);
 
     }
-    
+
     function returnBetweenDates( $startDate, $endDate ){
         $startStamp = strtotime(  $startDate );
         $endStamp   = strtotime(  $endDate );
@@ -848,10 +834,11 @@ class ApprovedSupervisedBy extends Controller
                 $startStamp = strtotime( ' +1 day ', $startStamp );
 
             }
-            return $dateArr;    
+            return $dateArr;
         }else{
             return $startDate;
         }
 
     }
+
 }

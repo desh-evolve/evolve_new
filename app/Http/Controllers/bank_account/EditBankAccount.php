@@ -258,6 +258,7 @@ class EditBankAccount extends Controller
         $current_company = $this->company;
         $current_user = $this->currentUser;
         $permission = $this->permission;
+        // dd($request->all());
 
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 		Debug::Text('User ID: '. $bank_data['user_id'] .' Company ID: '. $bank_data['company_id'], __FILE__, __LINE__, __METHOD__,10);

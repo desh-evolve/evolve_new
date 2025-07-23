@@ -90,7 +90,7 @@ class BonusCalc extends Controller
             $action = trim($_GET['action']);
         }
         $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
-		
+
 		//==================================================================================
 		switch ($action) {
 			case 'add':
@@ -102,7 +102,7 @@ class BonusCalc extends Controller
 				$bdlf = new BonusDecemberListFactory();
 				$bdlf->getByCompanyId($current_company->getId());
 				$bonuses = array();
-		
+
 				foreach ($bdlf->rs as $bd_obj) {
 					$bdlf->data = (array)$bd_obj;
 					$bd_obj = $bdlf;
@@ -117,11 +117,12 @@ class BonusCalc extends Controller
 				}
 
 				$viewData['bonuses'] = $bonuses;
-
+                // dd($viewData);
 				break;
 		}
 		$viewData['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
 
 		return view('users/bonusCalc', $viewData);
 	}
+
 }

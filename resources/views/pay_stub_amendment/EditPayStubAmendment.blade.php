@@ -4,54 +4,72 @@
         function showPercent() {
             if ( document.getElementById('type_id').value == 20 ) {
                 document.getElementById('type_id-10').style.display = 'none';
-        
+
                 document.getElementById('type_id-20').className = '';
                 document.getElementById('type_id-20').style.display = '';
             } else {
                 document.getElementById('type_id-20').style.display = 'none';
-        
+
                 document.getElementById('type_id-10').className = '';
                 document.getElementById('type_id-10').style.display = '';
             }
         }
-        
+
         function calcAmount() {
             //Round rate and units to 2 decimals
             rate = document.getElementById('rate').value;
             units = document.getElementById('units').value;
-        
+
             if ( ( document.getElementById('rate').value != '' && rate > 0 )
                     || ( document.getElementById('units').value != '' && units > 0 ) ) {
                 document.getElementById('amount').disabled = true;
-        
+
                 amount = rate * units;
                 document.getElementById('amount').value = MoneyFormat( amount );
             } else {
                 document.getElementById('amount').disabled = false;
             }
         }
-        
-        var hwCallback = {
-                getUserHourlyRate: function(result) {
-                    document.getElementById('rate').value = result;
-                    calcAmount();
-                }
-            }
-        
-        var remoteHW = new AJAX_Server(hwCallback);
-        
+
+        // var hwCallback = {
+        //         getUserHourlyRate: function(result) {
+        //             document.getElementById('rate').value = result;
+        //             calcAmount();
+        //         }
+        //     }
+
+        // var remoteHW = new AJAX_Server(hwCallback);
+
+        // function getHourlyRate() {
+        //     if ( document.getElementById('filter_user').options.length == 1 ) {
+        //         user_id = document.getElementById('filter_user').options[0].value
+        //         remoteHW.getUserHourlyRate( user_id, document.getElementById('effective_date').value);
+        //     } else if ( document.getElementById('filter_user').options.length > 1) {
+        //         document.getElementById('rate').value = '';
+        //         alert('{/literal}Unable to obtain rate when multiple employees are selected.{literal}');
+        //     } else {
+        //         document.getElementById('rate').value = '';
+        //         alert('{/literal}Unable to obtain rate when no employee is selected.{literal}');
+        //     }
+        // }
+
         function getHourlyRate() {
-            if ( document.getElementById('filter_user').options.length == 1 ) {
-                user_id = document.getElementById('filter_user').options[0].value
-                remoteHW.getUserHourlyRate( user_id, document.getElementById('effective_date').value);
-            } else if ( document.getElementById('filter_user').options.length > 1) {
-                document.getElementById('rate').value = '';
-                alert('{/literal}Unable to obtain rate when multiple employees are selected.{literal}');
+            const userSelect = document.getElementById('filter_user');
+            const rateInput = document.getElementById('rate');
+            const effectiveDate = document.getElementById('effective_date').value;
+
+            if (userSelect.options.length === 1) {
+                const user_id = userSelect.options[0].value;
+                remoteHW.getUserHourlyRate(user_id, effectiveDate);
+            } else if (userSelect.options.length > 1) {
+                rateInput.value = '';
+                alert('Unable to obtain rate when multiple employees are selected.');
             } else {
-                document.getElementById('rate').value = '';
-                alert('{/literal}Unable to obtain rate when no employee is selected.{literal}');
+                rateInput.value = '';
+                alert('Unable to obtain rate when no employee is selected.');
             }
         }
+
     </script>
 
     <div class="d-flex justify-content-center">
@@ -64,8 +82,8 @@
 
                     {{-- <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a 
-                                type="button" 
+                            <a
+                                type="button"
                                 href="/payroll/pay_stub_amendment/add"
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
                                 Add <i class="ri-add-line"></i>
@@ -81,13 +99,13 @@
                     <form method="post" action="{{route('payroll.pay_stub_amendment.add')}}">
                         @csrf
                         <div id="contentBoxTwoEdit">
-            
+
                             @if (!$psaf->Validator->isValid())
                                 {{-- {include file="form_errors.tpl" object="psaf"} --}}
                             @endif
-            
+
                             <table class="table table-bordered">
-            
+
                             <tr>
                                 <th>
                                     Employee(s):
@@ -153,7 +171,7 @@
                                     </select>
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Pay Stub Account:
@@ -164,13 +182,13 @@
                                     </select>
                                 </td>
                             </tr>
-            
+
                             <tr class="bg-primary text-white">
                                 <td colspan="2">
                                     Amount
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Amount Type:
@@ -181,9 +199,9 @@
                                     </select>
                                 </td>
                             </tr>
-            
+
                             <tbody id="type_id-10" >
-            
+
                             <tr>
                                 <th>
                                     Rate:
@@ -193,7 +211,7 @@
                                     <input type="button" name="getUserHourlyRate" value="Get Employee Rate" onclick="getHourlyRate(); return false;"/>
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Units:
@@ -202,7 +220,7 @@
                                     <input type="text" size="15" name="pay_stub_amendment_data[units]" id="units" value="{{$pay_stub_amendment_data['units'] ?? ''}}" onKeyUp="calcAmount()">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Amount:
@@ -212,7 +230,7 @@
                                 </td>
                             </tr>
                             </tbody>
-            
+
                             <tbody id="type_id-20" style="display:none" >
                             <tr>
                                 <th>
@@ -222,7 +240,7 @@
                                     <input type="text" size="10" name="pay_stub_amendment_data[percent_amount]" value="{{$pay_stub_amendment_data['percent_amount'] ?? ''}}">%
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Percent Of:
@@ -233,15 +251,15 @@
                                     </select>
                                 </td>
                             </tr>
-            
+
                             </tbody>
-            
+
                             <tr class="bg-primary text-white">
                                 <td colspan="2">
                                     Options
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Description:
@@ -250,7 +268,7 @@
                                     <input type="text" size="50" name="pay_stub_amendment_data[description]" value="{{$pay_stub_amendment_data['description'] ?? ''}}">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Effective Date:
@@ -259,7 +277,7 @@
                                     <input type="date" id="effective_date" name="pay_stub_amendment_data[effective_date]" value="{{getdate_helper('date', $pay_stub_amendment_data['effective_date'])}}">
                                 </td>
                             </tr>
-            
+
                             <tr>
                                 <th>
                                     Year to Date (YTD) Adjustment:
@@ -268,20 +286,20 @@
                                     <input type="checkbox" class="checkbox" name="pay_stub_amendment_data[ytd_adjustment]" value="1" {{ (!empty($pay_stub_amendment_data['ytd_adjustment']) && $pay_stub_amendment_data['ytd_adjustment']) ? 'checked' : '' }} >
                                 </td>
                             </tr>
-            
+
                         </table>
                         </div>
-            
+
                         <div id="contentBoxFour">
                             <input type="submit" class="button" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_user'))" {{ (!empty($pay_stub_amendment_data['status_id']) && $pay_stub_amendment_data['status_id'] == 55) ? 'disabled' : '' }} >
                         </div>
-            
+
                         <input type="hidden" name="pay_stub_amendment_data[id]" value="{{$pay_stub_amendment_data['id'] ?? ''}}">
                         {{-- {* <input type="hidden" name="user_id" value="{$user_data->getId()}"> *} --}}
                     </form>
 
                     {{-- --------------------------------------------------------------------------- --}}
-                    
+
                 </div><!-- end card -->
             </div>
             <!-- end col -->

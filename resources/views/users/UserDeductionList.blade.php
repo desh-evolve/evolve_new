@@ -34,7 +34,7 @@
                     <form method="get" name="userdeduction" action="{{ route('user.tax.index') }}">
                         @csrf
                         <table class="table table-bordered">
-            
+
                             <tr class="tblHeader">
                                 <td colspan="10">
                                     Employee:
@@ -51,7 +51,7 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
                             </tr>
-            
+
                             <tr class="tblHeader">
                                 <td>
                                     #
@@ -65,7 +65,7 @@
                                 <td>
                                     Calculation
                                 </td>
-            
+
                                 <td>
                                     Functions
                                 </td>
@@ -115,8 +115,8 @@
                                     </td>
                                 </tr>
                             @endif
-                            
-                            
+
+
                         </table>
                     </form>
 
@@ -129,4 +129,3 @@
         </div>
     </div>
 </x-app-layout>
-                    

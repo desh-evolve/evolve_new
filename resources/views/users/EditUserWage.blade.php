@@ -124,7 +124,7 @@
                                 <div class="row mb-3">
                                     <label for="hourly_rate" class="form-label req mb-1 col-md-3">Hourly Rate</label>
                                     <div class="col-md-9">
-                                        <input id="hourly_rate" size="15" type="text" class="form-control w-50" name="hourly_rate" value="{{ $wage_data['hourly_rate'] ?? '0.00' }}">
+                                        <input id="hourly_rate" size="15" type="text" class="form-control w-50" name="hourly_rate" value="{{ $wage_data['hourly_rate'] ?? 0.00 }}">
                                     </div>
                                 </div>
 
@@ -135,7 +135,7 @@
                                 <label for="effective_date" class="form-label req mb-1 col-md-3">Effective Date</label>
                                 <div class="col-md-9 d-flex align-items-center gap-2">
                                     <input type="date" class="form-control w-50" id="effective_date" name="effective_date"
-                                        value="{{ isset($wage_data['effective_date']) ? date('Y-m-d', $wage_data['effective_date']) : '' }}"
+                                        value="{{ getdate_helper('date', $wage_data['effective_date'] ?? '' )}}"
                                     >
                                     @if(count($pay_period_boundary_date_options) > 0)
                                         &nbsp;&nbsp;{{ __('or') }}&nbsp;&nbsp;
@@ -195,18 +195,39 @@
         }
     }
 
+    // function getHourlyRateAqua() {
+    //     const typeId = document.getElementById('type_id').value;
+    //     if (typeId != 10) {
+    //         const wage = document.getElementById('wage_val').value;
+    //         const time = document.getElementById('weekly_time_val').value;
+    //         const userId = document.getElementById('user_id_val').value;
+
+    //         // Replace with AJAX call or server interaction
+    //         const hourlyRate = (parseFloat(wage) / parseFloat(time || 1)).toFixed(2);
+    //         document.getElementById('hourly_rate').value = hourlyRate;
+    //     }
+    // }
+
+
     function getHourlyRateAqua() {
         const typeId = document.getElementById('type_id').value;
         if (typeId != 10) {
-            const wage = document.getElementById('wage_val').value;
-            const time = document.getElementById('weekly_time_val').value;
-            const userId = document.getElementById('user_id_val').value;
+            let wage = document.getElementById('wage_val').value.trim();
+            let time = document.getElementById('weekly_time_val').value.trim();
 
-            // Replace with AJAX call or server interaction
-            const hourlyRate = (parseFloat(wage) / parseFloat(time || 1)).toFixed(2);
-            document.getElementById('hourly_rate').value = hourlyRate;
+            // Convert to float or default to 0
+            wage = parseFloat(wage);
+            time = parseFloat(time);
+
+            if (!isNaN(wage) && !isNaN(time) && time > 0) {
+                const hourlyRate = (wage / time).toFixed(2);
+                document.getElementById('hourly_rate').value = hourlyRate;
+            } else {
+                document.getElementById('hourly_rate').value = '0.00'; // Fallback value
+            }
         }
     }
+
 
     document.addEventListener('DOMContentLoaded', function () {
         showWeeklyTime('weekly_time');

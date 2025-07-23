@@ -567,39 +567,40 @@ class LeaveRequestFactory  extends Factory {
 	}
 
 
+/*
+    function getDeleted(){
 
-       function getDeleted(){
-
-            	if ( isset($this->data['deleted']) ) {
-			return $this->data['deleted'];
-		}
-
-		return FALSE;
-
+        if ( isset($this->data['deleted']) ) {
+            return $this->data['deleted'];
         }
 
+        return FALSE;
 
-       function setDeleted($deleted) {
-		$deleted = trim($deleted);
-
-
-                    if(isset($deleted)){
-			$this->data['deleted'] = $deleted;
-
-			return TRUE;
-                    }
-
-		return FALSE;
-	}
+    }
 
 
+    function setDeleted($deleted) {
+        $deleted = trim($deleted);
+
+
+        if(isset($deleted)){
+            $this->data['deleted'] = $deleted;
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+
+*/
         function getLeaveMethod(){
 
             	if ( isset($this->data['method']) ) {
-			return $this->data['method'];
-		}
+                return $this->data['method'];
+            }
 
-		return FALSE;
+            return FALSE;
 
         }
 

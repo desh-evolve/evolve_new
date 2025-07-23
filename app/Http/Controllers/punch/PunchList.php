@@ -54,7 +54,7 @@ class PunchList extends Controller
 		$current_user = $this->currentUser;
 		$permission = $this->permission;
 
-		$ugdlf = new UserGenericDataListFactory(); 
+		$ugdlf = new UserGenericDataListFactory();
 		$ugdf = new UserGenericDataFactory();
 
 		$ulf = new UserListFactory();
@@ -62,7 +62,7 @@ class PunchList extends Controller
 
 		$hlf = new HierarchyListFactory();
 		$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
-		
+
 
 
 		$pplf = new PayPeriodListFactory();
@@ -77,7 +77,7 @@ class PunchList extends Controller
 		$punch_status_options = $plf->getOptions('status');
 		$punch_type_options = $plf->getOptions('type');
 
-		$utlf = new UserTitleListFactory(); 
+		$utlf = new UserTitleListFactory();
 		$utlf->getByCompanyId( $current_company->getId() );
 		$title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
@@ -85,11 +85,11 @@ class PunchList extends Controller
 		$blf->getByCompanyId( $current_company->getId() );
 		$branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-		$dlf = new DepartmentListFactory(); 
+		$dlf = new DepartmentListFactory();
 		$dlf->getByCompanyId( $current_company->getId() );
 		$department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-		$uglf = new UserGroupListFactory(); 
+		$uglf = new UserGroupListFactory();
 		$group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
 		$ulf = new UserListFactory();
@@ -98,7 +98,7 @@ class PunchList extends Controller
 		foreach ($plf->rs as $p_obj) {
 			$plf->data = (array)$p_obj;
 			$p_obj = $plf;
-			
+
 			$user_obj = $ulf->getById( $p_obj->getColumn('user_id') )->getCurrent();
 
 			$rows[] = array(
@@ -137,7 +137,7 @@ class PunchList extends Controller
 		}
 
 		$viewData['rows'] = $rows;
-
+        // dd($viewData);
 		return view('punch/PunchList', $viewData);
 	}
 

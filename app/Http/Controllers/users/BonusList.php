@@ -18,6 +18,7 @@ use App\Models\Users\BonusDecemberListFactory;
 use App\Models\Users\BonusDecemberUserListFactory;
 use Illuminate\Support\Facades\View;
 use App\Models\Users\UserListFactory;
+use Illuminate\Support\Facades\Log;
 
 class BonusList extends Controller
 {
@@ -56,7 +57,7 @@ class BonusList extends Controller
         $viewData['title'] = 'Bonus List ';
 
       extract(FormVariables::GetVariables(['action', 'dec_bo_id']));
-$action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
         //==================================================================================
         $action = '';
         if (isset($_POST['action'])) {
@@ -100,13 +101,13 @@ $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
                             ];
                         } catch (\Exception $e) {
                             // Log the error and continue with next record
-                            \Log::error("Error processing user bonus: " . $e->getMessage());
+                            Log::error("Error processing user bonus: " . $e->getMessage());
                             continue;
                         }
                     }
                 }
                 $viewData['data'] = $data;
-
+                dd($viewData);
                 break;
         }
 
