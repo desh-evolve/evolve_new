@@ -21,7 +21,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -43,7 +43,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -65,7 +65,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -115,7 +115,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 
 			$this->saveCache($this->rs,$cache_id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -154,7 +154,7 @@ class HierarchyObjectTypeListFactory extends HierarchyObjectTypeFactory implemen
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

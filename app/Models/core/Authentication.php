@@ -151,10 +151,9 @@ class Authentication {
 			$ulf = new UserListFactory();
 			$ulf->getByID($user_id);
 
-
-			$ulf->data = (array)$ulf->rs[0];
-
-			foreach ($ulf->data as $user) {
+			foreach ($ulf->rs as $user) {
+				$ulf->data = (array)$user;
+				$user = $ulf;
 				$this->obj = $ulf;
 
 				return TRUE;

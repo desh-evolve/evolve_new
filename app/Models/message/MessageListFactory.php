@@ -26,7 +26,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -48,7 +48,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -80,7 +80,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -119,7 +119,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 							AND a.deleted = 0
 					';
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -151,7 +151,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 							AND a.deleted = 0
 					';
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -323,7 +323,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -352,7 +352,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -377,7 +377,7 @@ class MessageListFactory extends MessageFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

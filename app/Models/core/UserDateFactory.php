@@ -23,7 +23,9 @@ class UserDateFactory extends Factory {
 			return $this->user_obj;
 		} else {
 			$ulf = new UserListFactory();
-			$this->user_obj = $ulf->getById( $this->getUser() )->getCurrent();
+			$ulf->getById( $this->getUser() );
+			$ulf->data = $ulf->rs;
+			$this->user_obj = $ulf->getCurrent();
 
 			return $this->user_obj;
 		}
@@ -34,7 +36,9 @@ class UserDateFactory extends Factory {
 			return $this->pay_period_obj;
 		} else {
 			$pplf = new PayPeriodListFactory();
-			$this->pay_period_obj = $pplf->getById( $this->getPayPeriod() )->getCurrent();
+			$pplf->getById( $this->getPayPeriod() );
+			$pplf->data = $pplf->rs;
+			$this->pay_period_obj = $pplf->getCurrent();
 
 			return $this->pay_period_obj;
 		}
@@ -75,6 +79,7 @@ class UserDateFactory extends Factory {
 			//This could severely slow down a lot of operations though, so make this specific to MySQL only.
 			$pplf = new PayPeriodListFactory();
 			$pplf->getByUserIdAndEndDate( $this->getUser(), $this->getDateStamp() );
+			$pplf->data = $pplf->rs;
 			$pay_period = $pplf->getCurrent();
 
 			Debug::Text('Pay Period Id: '. $pay_period->getId() , __FILE__, __LINE__, __METHOD__,10);
@@ -160,7 +165,7 @@ class UserDateFactory extends Factory {
 	static function findOrInsertUserDate($user_id, $date, $timezone = NULL ) {
 
 		$date = TTDate::getMiddleDayEpoch( $date ); //Use mid day epoch so the timezone conversion across DST doesn't affect the date.
-
+		
 
 		if ( $timezone == NULL ) {
 			//Find the employees preferred timezone, base the user date off that instead of the pay period timezone,
@@ -168,6 +173,7 @@ class UserDateFactory extends Factory {
 			//the PP Schedule timezone is 12hrs different or something.
 			$uplf = new UserPreferenceListFactory();
 			$uplf->getByUserID( $user_id );
+			$uplf->data = $uplf->rs;
 			if ( $uplf->getRecordCount() > 0 ) {
 				$timezone = $uplf->getCurrent()->getTimeZone();
 			}
@@ -178,19 +184,21 @@ class UserDateFactory extends Factory {
 
 		$udlf = new UserDateListFactory();
 		$udlf->getByUserIdAndDate( $user_id, $date );
+		$udlf->data = $udlf->rs;
+		
 		if ( $udlf->getRecordCount() == 1 ) {
 			$id = $udlf->getCurrent()->getId();
 			Debug::text(' Found Already Existing User Date ID: '. $id, __FILE__, __LINE__, __METHOD__,10);
 			return $id;
 		} elseif ( $udlf->getRecordCount() == 0 ) {
 			Debug::text(' Inserting new UserDate row.', __FILE__, __LINE__, __METHOD__,10);
-
+			
 			//Insert new row
 			$udf = new UserDateFactory();
 			$udf->setUser( $user_id );
 			$udf->setDateStamp( $date, 'date' );
 			$udf->setPayPeriod();
-			
+
 			if ( $udf->isValid() ) {
 				return $udf->Save();
 			} else {
@@ -227,7 +235,7 @@ class UserDateFactory extends Factory {
 
 	}
 
-	function isUnique() {
+	function isUnique() {	
 		if ( $this->getUser() == FALSE ) {
 			return FALSE;
 		}
@@ -243,13 +251,13 @@ class UserDateFactory extends Factory {
 
 		$query = 'select id from '. $this->getTable() .' where user_id = :user_id AND date_stamp = :date_stamp AND deleted=0';
 		// $user_date_id = $this->db->GetOne($query, $ph);
-        $user_date_id = DB::select($query, $ph);
+        $user_date_id = DB::select($query, $ph);	
         if (empty($user_date_id) || $user_date_id === FALSE ) {
             $user_date_id = 0;
         }else{
             $user_date_id = current(get_object_vars($user_date_id[0]));
         }
-        
+		
 		Debug::Arr($user_date_id,'Unique User Date.', __FILE__, __LINE__, __METHOD__,10);
 
 		if ( empty($user_date_id) || $user_date_id === FALSE ) {
@@ -282,6 +290,7 @@ class UserDateFactory extends Factory {
 		//Make sure the date isn't BEFORE the first pay period.
 		$pplf = new PayPeriodListFactory();
 		$pplf->getByUserID( $this->getUser(), NULL, NULL, NULL, array('a.start_date' => 'asc') );
+		$pplf->data = $pplf->rs;
 		if ( $pplf->getRecordCount() > 0 ) {
 			$first_pp_obj = $pplf->getCurrent();
 			if ( $this->getDateStamp() < $first_pp_obj->getStartDate() ) {

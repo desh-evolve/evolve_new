@@ -30,24 +30,6 @@ class ScheduleFactory extends Factory {
 	protected $schedule_policy_obj = NULL;
 	protected $absence_policy_obj = NULL;
 
-	protected $permission;
-    protected $current_user;
-    protected $current_company;
-    protected $current_user_prefs;
-
-    // public function __construct()
-    // {
-    //     $basePath = Environment::getBasePath();
-    //     require_once($basePath . '/app/Helpers/global.inc.php');
-    //     require_once($basePath . '/app/Helpers/Interface.inc.php');
-	// 	//require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
-
-    //     $this->permission = View::shared('permission');
-    //     $this->current_user = View::shared('current_user');
-    //     $this->current_company = View::shared('current_company');
-    //     $this->current_user_prefs = View::shared('current_user_prefs');
-    // }
-
 	function _getFactoryOptions( $name ) {
 
 		$retval = NULL;
@@ -281,6 +263,7 @@ class ScheduleFactory extends Factory {
 
 	function setUserDate($user_id, $date) {
 		$user_date_id = UserDateFactory::findOrInsertUserDate( $user_id, $date);
+		
 		Debug::text(' User Date ID: '. $user_date_id, __FILE__, __LINE__, __METHOD__,10);
 		if ( $user_date_id != '' ) {
 			$this->setUserDateID( $user_date_id );
@@ -368,7 +351,7 @@ class ScheduleFactory extends Factory {
 
 			) {
 
-			$this->data['start_time'] = $epoch;
+			$this->data['start_time'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -392,7 +375,7 @@ class ScheduleFactory extends Factory {
 
 			) {
 
-			$this->data['end_time'] = $epoch;
+			$this->data['end_time'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -734,8 +717,8 @@ class ScheduleFactory extends Factory {
 	}
 
 	function getScheduleArray( $filter_data )  {
-		$current_user = $this->current_user;
-		$current_user_prefs = $this->current_user_prefs;
+		$current_user = $this->currentUser;
+		$current_user_prefs = $this->userPrefs;
 
 		//Get all schedule data by general filter criteria.
 		Debug::Arr($filter_data, 'Filter Data: ', __FILE__, __LINE__, __METHOD__, 10);
@@ -1118,8 +1101,8 @@ class ScheduleFactory extends Factory {
 
 	//function getSchedule( $company_id, $user_ids, $start_date, $end_date, $start_week_day = 0, $group_schedule = FALSE ) {
 	function getSchedule( $filter_data, $start_week_day = 0, $group_schedule = FALSE ) {
-		$current_user = $this->current_user;
-		$current_user_prefs = $this->current_user_prefs;
+		$current_user = $this->currentUser;
+		$current_user_prefs = $this->userPrefs;
 
 		//Individual is one schedule per employee, or all on one schedule.
 		if (!is_array($filter_data) ) {

@@ -4213,10 +4213,12 @@ class CompanyDeductionFactory extends Factory {
 			$udlf->getByCompanyIdAndCompanyDeductionId( $this->getCompany(), $this->getId() );
 			if ( $udlf->getRecordCount() ) {
 				foreach( $udlf->rs as $ud_obj ) {
-					$udlf->rs = (array)$ud_obj;
-					$udlf->setDeleted(TRUE);
-					if ( $udlf->isValid() ) {
-						$udlf->Save();
+					$udlf->data = (array)$ud_obj;
+					$ud_obj = $udlf;
+					
+					$ud_obj->setDeleted(TRUE);
+					if ( $ud_obj->isValid() ) {
+						$ud_obj->Save();
 					}
 				}
 			}

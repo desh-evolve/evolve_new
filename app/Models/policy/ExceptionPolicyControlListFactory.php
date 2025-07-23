@@ -24,7 +24,7 @@ class ExceptionPolicyControlListFactory extends ExceptionPolicyControlFactory im
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -46,7 +46,7 @@ class ExceptionPolicyControlListFactory extends ExceptionPolicyControlFactory im
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -74,7 +74,7 @@ class ExceptionPolicyControlListFactory extends ExceptionPolicyControlFactory im
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -106,6 +106,8 @@ class ExceptionPolicyControlListFactory extends ExceptionPolicyControlFactory im
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getAPISearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
@@ -190,7 +192,7 @@ class ExceptionPolicyControlListFactory extends ExceptionPolicyControlFactory im
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

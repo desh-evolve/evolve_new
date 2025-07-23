@@ -741,18 +741,34 @@ class Factory
 
         return false;
     }
-
-	protected function getListSQL($array, $ph = null)
+/*
+	protected function getListSQL($array, $ph = null, $x=null)
 	{
+		
 		// Ensure it's an array
 		if (!is_array($array)) {
 			$array = explode(',', (string) $array); // Convert comma-separated string to array
 		}
 
 		// Trim values and filter out empty ones
-		$array = array_filter(array_map('trim', $array));
+		$a = implode(',', array_filter(array_map('trim', $array)));
+		
+		return $a;
+	}*/
 
-		return implode(',', $array);
+	protected function getListSQL($array, $ph = null)
+	{
+		if (!is_array($array)) {
+			$array = explode(',', (string) $array);
+		}
+
+		// Clean and wrap each item in double quotes
+		$array = array_filter(array_map('trim', $array));
+		$quoted = array_map(function ($item) {
+			return '"' . addslashes($item) . '"';
+		}, $array);
+
+		return implode(', ', $quoted);
 	}
 
 	function getDateRangeSQL($str, $column, $use_epoch = TRUE)
@@ -1824,7 +1840,7 @@ class Factory
 			throw new GeneralError('Invalid Data, not saving.');
 		}
 
-
+		
 		if ($this->isNew($force_lookup)) {
 			//Insert
 			$time = TTDate::getTime();
@@ -1866,7 +1882,7 @@ class Factory
 
 			//Update
 			$query = $this->getUpdateQuery(); //Don't pass data, too slow
-
+			
 			// Return true to indicate success
 			$retval = true;
 			$log_action = $this->getDeleted() ? 30 : 20; // 'Delete' or 'Edit'
@@ -1903,7 +1919,7 @@ class Factory
 				//tables like PayPeriodSchedule, so addLog() can't get the user information.
 				$this->addLog( $log_action );
 			}
-
+			
 			//Run postSave function.
 			if ( method_exists($this,'postSave') ) {
 				Debug::text('Calling postSave()' , __FILE__, __LINE__, __METHOD__,10);

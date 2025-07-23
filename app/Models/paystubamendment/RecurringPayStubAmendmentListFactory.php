@@ -24,7 +24,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -46,7 +46,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -68,7 +68,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -96,7 +96,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -125,7 +125,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -153,7 +153,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -297,7 +297,7 @@ class RecurringPayStubAmendmentListFactory extends RecurringPayStubAmendmentFact
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

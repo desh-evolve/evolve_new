@@ -91,6 +91,7 @@ use App\Http\Controllers\policy\RoundIntervalPolicyList;
 use App\Http\Controllers\policy\SchedulePolicyList;
 use App\Http\Controllers\timesheet\ViewUserTimeSheet;
 use App\Http\Controllers\progressbar\ProgressBar;
+use App\Http\Controllers\progressbar\ProgressBarControl;
 
 use App\Http\Controllers\punch\AddMassPunch;
 use App\Http\Controllers\punch\EditPunch;
@@ -146,7 +147,6 @@ use App\Http\Controllers\report\DailyAbsenceReport;
 
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
-use App\Http\Controllers\users\EditUserDeductionNew;
 use App\Http\Controllers\users\EditUserJobHistory;
 use App\Http\Controllers\users\EditUserPhonePasswordNew;
 use App\Http\Controllers\users\UserDeductionList;
@@ -171,6 +171,10 @@ use App\Http\Controllers\schedule\ViewScheduleWeek;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/blank', function () {
+    return view('blank');
 });
 
 
@@ -251,11 +255,11 @@ Route::get('/station/add/{id?}', [EditStation::class, 'index'])->name('station.a
 Route::post('/station/save/{id?}', [EditStation::class, 'submit'])->name('station.save');
 Route::delete('/station/delete/{id}', [StationList::class, 'delete'])->name('station.delete');
 // ==================== Permission Control =====================================================================================
-Route::get('/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+Route::match(['get', 'post', 'delete'], '/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+Route::match(['get', 'post', 'delete'], '/permission_control/add', [EditPermissionControl::class, 'index'])->name('permission_control.add');
 
-Route::get('/permission_control/add/{id?}', [EditPermissionControl::class, 'index'])->name('permission_control.add');
-Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
-Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
+//Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
+//Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
 // ==================== Permission Control =====================================================================================
 Route::get('/recurring_holidays', [RecurringHolidayList::class, 'index'])->name('recurring_holidays.index');
 
@@ -299,11 +303,13 @@ Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, '
 Route::get('/payroll/payroll_processing', [ClosePayPeriod::class, 'index'])->name('payroll.payroll_processing');
 Route::get('/punch/user_exception', [UserExceptionList::class, 'index'])->name('punch.user_exception');
 
+Route::match(['get', 'post', 'delete'], '/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
+Route::match(['get', 'post', 'delete'], '/payroll/pay_stub_amendment/add', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
 
-Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
-Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
-Route::post('/payroll/pay_stub_amendment/submit/{id?}', [EditPayStubAmendment::class, 'submit'])->name('payroll.pay_stub_amendment.submit');
-Route::delete('/payroll/pay_stub_amendment/delete/{id}', [PayStubAmendmentList::class, 'delete'])->name('payroll.pay_stub_amendment.delete');
+//Route::get('/payroll/pay_stub_amendment', [PayStubAmendmentList::class, 'index'])->name('payroll.pay_stub_amendment');
+//Route::get('/payroll/pay_stub_amendment/add/{id?}', [EditPayStubAmendment::class, 'index'])->name('payroll.pay_stub_amendment.add');
+//Route::post('/payroll/pay_stub_amendment/submit/{id?}', [EditPayStubAmendment::class, 'submit'])->name('payroll.pay_stub_amendment.submit');
+//Route::delete('/payroll/pay_stub_amendment/delete/{id}', [PayStubAmendmentList::class, 'delete'])->name('payroll.pay_stub_amendment.delete');
 
 Route::get('/payroll/recurring_pay_stub_amendment', [RecurringPayStubAmendmentList::class, 'index'])->name('payroll.recurring_pay_stub_amendment');
 Route::get('/payroll/recurring_pay_stub_amendment/add/{id?}', [EditRecurringPayStubAmendment::class, 'index'])->name('payroll.recurring_pay_stub_amendment.add');
@@ -469,7 +475,7 @@ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])
 
  Route::match(['get', 'post', 'delete'], '/user/tax', [UserDeductionList::class, 'index'])->name('user.tax.index');
  Route::match(['get', 'post', 'delete'],'/user/tax/add', [EditUserDeduction::class, 'index'])->name('user.tax.add');
- 
+
  //Route::get('/user/tax', [UserDeductionListNew::class, 'index'])->name('user.tax.index');
  //Route::get('/user/tax/add/{user_id?}', [UserDeductionListNew::class, 'add'])->name('user.tax.add');
  //Route::get('/user/tax/edit/{id?}', [EditUserDeductionNew::class, 'index'])->name('user.tax.edit');
@@ -614,9 +620,11 @@ Route::match(['get', 'post'], '/attendance/apply_leaves', [ApplyUserLeave::class
 
 Route::get('/attendance/leaves/covered_aprooval', [ApprovedCoveredBy::class, 'index'])->name('attendance.leaves.covered_aprooval');
 
-Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
-Route::post('/attendance/leaves/supervise-approval/reject', [ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
-Route::post('/attendance/leaves/supervise-approval/approved', [ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
+Route::match(['get', 'post', 'delete'], '/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
+
+//Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
+//Route::post('/attendance/leaves/supervise-approval/reject', [ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
+//Route::post('/attendance/leaves/supervise-approval/approved', [ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
 
 Route::get('/attendance/leaves/view_user_leave/{id}', [VIewUserLeave::class, 'index'])->name('attendance.leaves.viewUserLeave');
 Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::class, 'index'])->name('attendance.leaves.viewNumberLeave');
@@ -661,13 +669,10 @@ Route::post('/schedule/edit_recurring_schedule/submit/{id?}', [EditRecurringSche
 // ===============================================================================================================================
 // recurring_schedule_template_control
 // ===============================================================================================================================
-Route::match(['get', 'post'], '/schedule/recurring_schedule_template_control_list', [RecurringScheduleTemplateControlList::class, 'index'])->name('schedule.recurring_schedule_template_control_list');
+Route::match(['get', 'post', 'delete'], '/schedule/recurring_schedule_template_control_list', [RecurringScheduleTemplateControlList::class, 'index'])->name('schedule.recurring_schedule_template_control_list');
 Route::get('/schedule/recurring_schedule_template_control/add', [RecurringScheduleTemplateControlList::class, 'add'])->name('schedule.recurring_schedule_template_control.add');
-Route::delete('/schedule/recurring_schedule_template_control/delete/{id}', [RecurringScheduleTemplateControlList::class, 'delete'])->name('schedule.recurring_schedule_template_control.delete');
 
-Route::delete('/schedule/edit_recurring_schedule_template/delete/{id}', [EditRecurringScheduleTemplate::class, 'delete'])->name('schedule.edit_recurring_schedule_template.delete');
-Route::get('/schedule/edit_recurring_schedule_template/edit/{id?}', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template.edit');
-Route::post('/schedule/edit_recurring_schedule_template/submit/{id?}', [EditRecurringScheduleTemplate::class, 'submit'])->name('schedule.edit_recurring_schedule_template.submit');
+Route::match(['get', 'post'], '/schedule/edit_recurring_schedule_template/edit', [EditRecurringScheduleTemplate::class, 'index'])->name('schedule.edit_recurring_schedule_template.edit');
 
 // ===============================================================================================================================
 // Schedule List
@@ -682,3 +687,4 @@ Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_month', [ViewSc
 Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_week', [ViewScheduleWeek::class, 'index'])->name('schedule.view_schedule_week');
 
 // ===============================================================================================================================
+

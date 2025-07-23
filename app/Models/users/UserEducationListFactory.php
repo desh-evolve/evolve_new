@@ -31,7 +31,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -57,7 +57,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 
 			$this->rs = DB::select($query, $ph);
 
-
+			$this->data = $this->rs;
 
 		return $this;
 	}
@@ -105,7 +105,7 @@ class UserEducationListFactory extends UserEducationFactory  implements Iterator
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

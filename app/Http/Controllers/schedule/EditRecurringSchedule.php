@@ -16,6 +16,7 @@ use App\Models\Schedule\RecurringScheduleControlFactory;
 use App\Models\Schedule\RecurringScheduleControlListFactory;
 use App\Models\Schedule\RecurringScheduleTemplateControlListFactory;
 use App\Models\Users\UserListFactory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 
 class EditRecurringSchedule extends Controller
@@ -108,6 +109,7 @@ class EditRecurringSchedule extends Controller
 
         }
 
+
         //Select box options;
         $ulf = new UserListFactory();
         $ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
@@ -153,31 +155,38 @@ class EditRecurringSchedule extends Controller
         $data = $request->input('data');
         // dd($data);
 
-        if ( isset($data)) {
-			if ( $data['start_date'] != '' ) {
-				$data['start_date'] = TTDate::parseDateTime( $data['start_date'] );
-			}
-			if ( $data['end_date'] != '' ) {
-				$data['end_date'] = TTDate::parseDateTime( $data['end_date'] );
-			}
-		}
-
         $fail_transaction = FALSE;
 
         if ( is_array($data['template_id']) ) {
             foreach( $data['template_id'] as $template_id ) {
+
+                 if ( isset($data)) {
+                    if ( $data['start_date'] != '' ) {
+                        $data['start_date'] = TTDate::parseDateTime( $data['start_date'] );
+                    }
+                }
+
+                if ( isset($data)) {
+                    if ( $data['end_date'] != '' ) {
+                        $data['end_date'] = TTDate::parseDateTime( $data['end_date'] );
+                    }
+
+                }
+
                 $rscf->setId( $data['id'] );
                 $rscf->setCompany( $current_company->getId() );
                 $rscf->setRecurringScheduleTemplateControl( $template_id );
                 $rscf->setStartWeek( $data['start_week'] );
                 $rscf->setStartDate( $data['start_date'] );
                 $rscf->setEndDate( $data['end_date'] );
+
                 if ( isset($data['auto_fill']) ) {
                     $rscf->setAutoFill( TRUE );
                 } else {
                     $rscf->setAutoFill( FALSE );
                 }
 
+                // dd($data);
                 if ( $rscf->isValid() ) {
                     if ( $rscf->Save(FALSE) === FALSE ) {
                         $fail_transaction = TRUE;

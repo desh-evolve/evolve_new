@@ -48,7 +48,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -71,7 +71,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -96,7 +96,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -137,6 +137,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			$this->saveCache($this->rs, $id);
 		}
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -162,7 +163,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 						AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -265,7 +266,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		}
 
 		//$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -286,7 +287,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -317,7 +318,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -341,7 +342,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -368,7 +369,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -397,7 +398,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -425,7 +426,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -487,7 +488,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0";
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 				return $this;
 			}
 
@@ -517,7 +518,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -538,7 +539,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -565,7 +566,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -592,7 +593,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -619,7 +620,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -646,7 +647,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 								AND deleted = 0';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -741,7 +742,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -854,7 +855,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -881,7 +882,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$this->rs = DB::select($query, $ph);
 
 
-
+		$this->data = $this->rs;
 
 				return $this;
 			}
@@ -920,7 +921,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -960,7 +961,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1113,7 +1114,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			//$this->rs = DB::select($query, $ph);
 
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1197,7 +1198,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1239,7 +1240,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 				return $this;
 			}
 
@@ -1280,7 +1281,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 				return $this;
 			}
 
@@ -1464,7 +1465,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1657,7 +1658,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 					$this->rs = DB::select($query, $ph);
 					//$this->rs = DB::select($query, $ph);
 				}
-
+				$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1839,7 +1840,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2021,7 +2022,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2064,7 +2065,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order, $strict);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2118,7 +2119,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order, $strict);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2161,7 +2162,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 
 		$this->rs = DB::select($query, $ph);
 		//var_dump($this);
-
+		$this->data = $this->rs;
 				return $this;
 			}
 
@@ -2219,7 +2220,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order, $strict);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2292,7 +2293,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order, $strict);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2334,7 +2335,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL($order, FALSE);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2593,7 +2594,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2622,7 +2623,7 @@ class UserListFactory extends UserFactory implements IteratorAggregate {
                 $query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

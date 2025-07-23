@@ -16,7 +16,7 @@
 
 
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
@@ -42,113 +42,113 @@
                             @endif
             
                             <table class="table table-bordered">
-            
-                            @if( $company_deduction_id == '')
-                            <tr>
-                                <th>
-                                    Employee:
-                                </th>
-                                <td class="cellRightEditTable">
-                                    {{$data['user_full_name'] ?? ''}}
-                                </td>
-                            </tr>
-                            @endif
-            
-                            @if(!empty($data['add']) && $data['add'] == 1)
+                
+                                @if( $company_deduction_id == '')
                                 <tr>
                                     <th>
-                                        Add Deductions:
+                                        Employee:
                                     </th>
                                     <td class="cellRightEditTable">
-                                        <select id="deduction_id" name="data[deduction_ids][]" multiple>
-                                            {!! html_options([ 'options'=>$data['deduction_options'], 'selected'=>$data['deduction_ids'] ?? '']) !!}
-                                        </select>
-                                        <input type="hidden" name="data[add]" value="1">
+                                        {{$data['user_full_name'] ?? ''}}
                                     </td>
                                 </tr>
-                            @else
-                                <tr>
-                                    <th>
-                                        Status:
-                                    </th>
-                                    <td class="cellRightEditTable">
-                                        {{$data['status']}}
-                                    </td>
-                                </tr>
-            
-                                <tr>
-                                    <th>
-                                        Type:
-                                    </th>
-                                    <td class="cellRightEditTable">
-                                        {{$data['type']}}
-                                    </td>
-                                </tr>
-            
-                                <tr>
-                                    <th>
-                                        Name:
-                                    </th>
-                                    <td class="cellRightEditTable">
-                                        {{$data['name']}}
-                                    </td>
-                                </tr>
-            
-                                <tr>
-                                    <th>
-                                        Calculation:
-                                    </th>
-                                    <td class="cellRightEditTable">
-                                        {{$data['calculation']}}
-                                    </td>
-                                </tr>
-            
-                                @if( $data['country'] != '') 
+                                @endif
+                
+                                @if(!empty($data['add']) && $data['add'] == 1)
                                     <tr>
                                         <th>
-                                            Country:
+                                            Add Deductions:
                                         </th>
                                         <td class="cellRightEditTable">
-                                            {{$data['country']}}
+                                            <select id="deduction_id" name="data[deduction_ids][]" multiple>
+                                                {!! html_options([ 'options'=>$data['deduction_options'], 'selected'=>$data['deduction_ids'] ?? '']) !!}
+                                            </select>
+                                            <input type="hidden" name="data[add]" value="1">
                                         </td>
                                     </tr>
-                                @endif
-            
-                                @if ($data['province'] != '') 
-                                    <tr>
-                                        <th>
-                                            Province / State:
-                                        </th>
-                                        <td class="cellRightEditTable">
-                                            {{$data['province']}}
-                                        </td>
-                                    </tr>
-                                @endif
-            
-                                @if( $data['district'] != '') 
-                                    <tr>
-                                        <th>
-                                            District / County:
-                                        </th>
-                                        <td class="cellRightEditTable">
-                                            @if( $data['district_id'] == 'ALL' AND $data['default_user_value5'] != '')
-                                                {{$data['default_user_value5']}}
-                                            @else
-                                                {{$data['district']}}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endif
-                                
-                                @if (!empty($company_deduction_id))
-                                    @include('company.EditCompanyDeductionUserValues', ['page_type' => 'mass_user'])
                                 @else
-                                    @include('company.EditCompanyDeductionUserValues', ['page_type' => 'user'])
-                                @endif
+                                    <tr>
+                                        <th>
+                                            Status:
+                                        </th>
+                                        <td class="cellRightEditTable">
+                                            {{$data['status']}}
+                                        </td>
+                                    </tr>
+                
+                                    <tr>
+                                        <th>
+                                            Type:
+                                        </th>
+                                        <td class="cellRightEditTable">
+                                            {{$data['type']}}
+                                        </td>
+                                    </tr>
+                
+                                    <tr>
+                                        <th>
+                                            Name:
+                                        </th>
+                                        <td class="cellRightEditTable">
+                                            {{$data['name']}}
+                                        </td>
+                                    </tr>
+                
+                                    <tr>
+                                        <th>
+                                            Calculation:
+                                        </th>
+                                        <td class="cellRightEditTable">
+                                            {{$data['calculation']}}
+                                        </td>
+                                    </tr>
+                
+                                    @if( $data['country'] != '') 
+                                        <tr>
+                                            <th>
+                                                Country:
+                                            </th>
+                                            <td class="cellRightEditTable">
+                                                {{$data['country']}}
+                                            </td>
+                                        </tr>
+                                    @endif
+                
+                                    @if ($data['province'] != '') 
+                                        <tr>
+                                            <th>
+                                                Province / State:
+                                            </th>
+                                            <td class="cellRightEditTable">
+                                                {{$data['province']}}
+                                            </td>
+                                        </tr>
+                                    @endif
+                
+                                    @if( $data['district'] != '') 
+                                        <tr>
+                                            <th>
+                                                District / County:
+                                            </th>
+                                            <td class="cellRightEditTable">
+                                                @if( $data['district_id'] == 'ALL' AND $data['default_user_value5'] != '')
+                                                    {{$data['default_user_value5']}}
+                                                @else
+                                                    {{$data['district']}}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                    
+                                    @if (!empty($company_deduction_id))
+                                        @include('company.EditCompanyDeductionUserValues', ['page_type' => 'mass_user'])
+                                    @else
+                                        @include('company.EditCompanyDeductionUserValues', ['page_type' => 'user'])
+                                    @endif
 
-            
-                            @endif
-                        </table>
+                
+                                @endif
+                            </table>
                         </div>
             
                         <div id="contentBoxFour">

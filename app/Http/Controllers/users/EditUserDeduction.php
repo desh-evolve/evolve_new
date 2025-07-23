@@ -300,6 +300,7 @@ class EditUserDeduction extends Controller
 										//Get deduction data for each user.
 										//When ever we add/subtract users to/from a company dedution, the user deduction rows are handled then.
 										//So we don't need to worry about new users at all here.
+										$total_amount = 0;
 										foreach( $udlf->rs as $ud_obj ) {
 											$udlf->data = (array)$ud_obj;
 											$ud_obj = $udlf;

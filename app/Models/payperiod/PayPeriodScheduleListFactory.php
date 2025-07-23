@@ -23,7 +23,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -50,7 +50,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -76,7 +76,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -102,7 +102,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -143,6 +143,8 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByIdAndCompanyId($id, $company_id, $order = NULL) {
@@ -168,7 +170,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -199,7 +201,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -353,7 +355,7 @@ class PayPeriodScheduleListFactory extends PayPeriodScheduleFactory implements I
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

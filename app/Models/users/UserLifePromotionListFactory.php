@@ -32,7 +32,7 @@ class UserLifePromotionListFactory extends UserLifePromotionFactory implements I
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -59,7 +59,7 @@ class UserLifePromotionListFactory extends UserLifePromotionFactory implements I
 			$this->rs = DB::select($query, $ph);
 
 
-
+			$this->data = $this->rs;
 		return $this;
 	}
 
@@ -152,7 +152,7 @@ class UserLifePromotionListFactory extends UserLifePromotionFactory implements I
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

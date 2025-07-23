@@ -20,7 +20,7 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -80,7 +80,7 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -109,7 +109,7 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -137,13 +137,13 @@ class PermissionUserListFactory extends PermissionUserFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
 
 	function getByPermissionControlIdArray($id) {
-		$pculf = new PermissionControlUserListFactory();
+		$pculf = new PermissionControlUserListFactory(); 
 
 		$pculf->getByPayPermissionControlId($id);
 

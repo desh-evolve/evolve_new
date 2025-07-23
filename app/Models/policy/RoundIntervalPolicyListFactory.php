@@ -24,7 +24,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -51,7 +51,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -79,7 +79,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -116,6 +116,8 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByCompanyIdArray($company_id, $include_blank = TRUE) {
@@ -191,7 +193,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		$query .= ' LIMIT 1';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -290,7 +292,7 @@ class RoundIntervalPolicyListFactory extends RoundIntervalPolicyFactory implemen
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

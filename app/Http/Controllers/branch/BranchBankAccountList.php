@@ -153,7 +153,9 @@ class BranchBankAccountList extends Controller
 		if (isset($ids) && is_array($ids)) {
 			foreach ($ids as $id1) {
 				$bbalf->getById($id1);
-				foreach ($bbalf as $branch) {
+				foreach ($bbalf->rs as $branch) {
+					$bbalf->data = (array)$branch;
+					$branch = $bbalf;
 					$branch->setDeleted($delete);
 					$branch->Save();
 				}

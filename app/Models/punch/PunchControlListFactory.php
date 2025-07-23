@@ -33,7 +33,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -61,7 +61,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -94,7 +94,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -120,7 +120,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -143,7 +143,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -518,7 +518,7 @@ class PunchControlListFactory extends PunchControlFactory implements IteratorAgg
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

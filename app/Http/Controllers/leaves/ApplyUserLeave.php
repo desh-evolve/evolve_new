@@ -107,8 +107,15 @@ class ApplyUserLeave extends Controller
 
         $lrlf = new LeaveRequestListFactory();
 
-        $action = $_POST['action'] ?? '';
-        $action = !empty($action) ? strtolower($action) : '';
+        //===================================================================================
+        $action = '';
+        if (isset($_POST['action'])) {
+            $action = trim($_POST['action']);
+        } elseif (isset($_GET['action'])) {
+            $action = trim($_GET['action']);
+        }
+        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+        //===================================================================================
 
         switch ($action) {
             case 'submit':
@@ -504,8 +511,9 @@ class ApplyUserLeave extends Controller
         $user_options = Misc::prependArray( array( 0 => '-- Please Choose --' ), $user_options );
         $data['users_cover_options'] = $user_options;
         //$data['users_cover_options'] = $ulf;
+        
         $data['name'] =$current_user->getFullName();
-        $data['title'] = $current_user->getTitleObject()->getName();
+        $data['title'] = $current_user->getTitleObject()->getName(); //if this gives you error that means you should add/update data on 'user_title' table in db (it had deleted values and it gave me an error)
         $data['title_id'] = $current_user->getTitleObject()->getId();
 
         $data['leave_start_date'] = '';

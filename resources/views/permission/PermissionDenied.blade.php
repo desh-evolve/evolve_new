@@ -1,13 +1,42 @@
-<x-app-layout>
-    <div class="container">
-        <br>
-        <table id="form" class="table">
-            <tr id="error" class="table-danger">
-                <td colspan="5" class="text-center">
-                    <b>{{ __('Permission DENIED!') }}</b>
-                </td>
-            </tr>
-        </table>
-        <br>
+<x-app-layout :title="'Input Example'">
+    <style>
+        td, th{
+            padding: 5px !important;
+        }
+    </style>
+    <div class="d-flex justify-content-center">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header align-items-center d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
+                    </div>
+
+                    {{-- <div class="justify-content-md-end">
+                        <div class="d-flex justify-content-end">
+                            <a 
+                                type="button" 
+                                href="/payroll/paystub_accounts/add"
+                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
+                                Add <i class="ri-add-line"></i>
+                            </a>
+                        </div>
+                    </div> --}}
+                </div>
+
+                <div class="card-body">
+                   
+                    {{-- --------------------------------------------------------------------------- --}}
+
+                    Permission DENIED!
+
+                    {{-- --------------------------------------------------------------------------- --}}
+                
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
     </div>
+
 </x-app-layout>

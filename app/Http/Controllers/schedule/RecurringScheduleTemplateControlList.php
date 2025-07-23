@@ -47,9 +47,6 @@ class RecurringScheduleTemplateControlList extends Controller
 
 		$viewData['title'] = 'Recurring Schedule Template List';
 
-		/*
-		* Get FORM variables
-		*/
 		extract	(FormVariables::GetVariables(
 												array	(
 														'action',
@@ -93,6 +90,7 @@ class RecurringScheduleTemplateControlList extends Controller
                     foreach ($rstclf->rs as $rstc_obj) {
 						$rstclf->data = (array)$rstc_obj;
 						$rstc_obj = $rstclf;
+
 						$rstc_obj->StartTransaction();
 
 						//Get week data
@@ -102,6 +100,7 @@ class RecurringScheduleTemplateControlList extends Controller
 							foreach( $rstlf->rs as $rst_obj) {
 								$rstlf->data = (array)$rst_obj;
 								$rst_obj = $rstlf;
+
 								$week_rows[$rst_obj->getId()] = array(
 													'id' => $rst_obj->getId(),
 													'week' => $rst_obj->getWeek(),
@@ -179,6 +178,34 @@ class RecurringScheduleTemplateControlList extends Controller
 
 				break;
 
+            case 'delete':
+            case 'undelete':
+                if ( strtolower($action) == 'delete' ) {
+                    $delete = TRUE;
+                } else {
+                    $delete = FALSE;
+                }
+
+                $rstclf = new RecurringScheduleTemplateControlListFactory();
+
+                foreach ($ids as $id) {
+                    $rstclf->getByIdAndCompanyId($id, $current_company->getId() );
+
+                    foreach ($rstclf->rs as $rstc_obj) {
+                        $rstclf->data = (array)$rstc_obj;
+                        $rstc_obj = $rstclf;
+
+                        $rstc_obj->setDeleted($delete);
+                        if ( $rstc_obj->isValid() ) {
+                            $rstc_obj->Save();
+                        }
+                    }
+                }
+
+                Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_template_control_list') );
+
+                break;
+
 			default:
 				$rstclf = new RecurringScheduleTemplateControlListFactory();
 
@@ -214,35 +241,6 @@ class RecurringScheduleTemplateControlList extends Controller
 		return view('schedule/RecurringScheduleTemplateControlList', $viewData);
 
 	}
-
-
-    public function delete($id)
-    {
-        $current_company = $this->currentCompany;
-        $rstclf = new RecurringScheduleTemplateControlListFactory();
-        $delete = TRUE;
-
-        $rstclf->getByIdAndCompanyId($id, $current_company->getId() );
-
-            foreach ($rstclf->rs as $rstc_obj) {
-                $rstclf->data = (array)$rstc_obj;
-                $rstc_obj = $rstclf;
-
-                $rstc_obj->setDeleted($delete);
-                if ( $rstc_obj->isValid() ) {
-                    $res = $rstc_obj->Save();
-
-                    if($res){
-                        return response()->json(['success' => 'Recurring Schedule Template Deleted Successfully.']);
-                    }else{
-                        return response()->json(['error' => 'Recurring Schedule Template Deleted Failed.']);
-                    }
-                }
-            }
-
-        Redirect::Page( URLBuilder::getURL( NULL, '/schedule/recurring_schedule_template_control_list') );
-
-    }
 
 
     public function add()

@@ -167,7 +167,7 @@ class ProgressBarControl extends Controller
 		Offer a method to store the data in the user_generic_data table, and retreive it on the ProgressBar.php page, bypassing the URL completely.
 		*/
 
-		$url = URLBuilder::getURL( array('action' => $action, 'pay_period_ids' => $pay_period_ids, 'filter_user_id' => $filter_user_id, 'pay_stub_ids' => $pay_stub_ids, 'data' => $data, 'next_page' => urlencode($next_page) ), Environment::getBaseURL().'/progress_bar');
+		$url = URLBuilder::getURL( array('action' => $action, 'pay_period_ids' => $pay_period_ids, 'filter_user_id' => $filter_user_id, 'pay_stub_ids' => $pay_stub_ids, 'data' => $data, 'next_page' => urlencode($next_page) ), '/progress_bar');
 
 
 		$viewData['comment'] = $comment;

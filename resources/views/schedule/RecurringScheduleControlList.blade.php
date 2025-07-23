@@ -142,13 +142,14 @@
                                     @foreach ($columns as $key => $column)
                                         <td>
                                             @if ($key == 'start_date')
-                                                {{getdate_helper('date', $row['start_date'])}}
+                                                {{ $row['start_date'] }}
                                             @elseif ($key == 'end_date')
-                                                @if ($row['end_date'] == NULL)
+                                                @if ($row['end_date'] == null)
                                                     <span class="text-danger"><i class="ri-close-circle-line fs-17 align-middle"></i> Never</span>
                                                 @else
-                                                    {{ getdate_helper('date', $row['end_date']) }}
+                                                    {{ $row['end_date'] }}
                                                 @endif
+
                                             @else
                                                 {{$row[$key] ?? "--"}}
                                             @endif
@@ -161,7 +162,7 @@
                                         @endif
 
                                         @if ($permission->Check('recurring_schedule','delete') OR $permission->Check('recurring_schedule','delete_own') OR $permission->Check('recurring_schedule','delete_child'))
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/schedule/recurring_schedule_control/delete/{{ $row['id'] }}', 'Schedule', this)">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/schedule/recurring_schedule_control/delete/{{ $row['id'] }}', 'Recurring Schedule', this)">
                                                 Delete
                                             </button>
                                         @endif

@@ -278,7 +278,7 @@ class EditUserAbsence extends Controller
 								
 								$aluerlf = new AbsenceLeaveUserEntryRecordListFactory();
 							
-					foreach ($udtlf as $udt_obj) {
+					foreach ($udtlf->rs as $udt_obj) {
 						$udtlf->data = (array)$udt_obj;
 						$udt_obj = $udtlf;
 						//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);

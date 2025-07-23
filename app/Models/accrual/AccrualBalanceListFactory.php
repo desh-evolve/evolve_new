@@ -30,7 +30,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 			$this->rs = DB::select($query);
 			//$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -52,7 +52,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -80,7 +80,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -134,7 +134,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -185,7 +185,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -235,7 +235,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -263,7 +263,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -398,7 +398,7 @@ class AccrualBalanceListFactory extends AccrualBalanceFactory implements Iterato
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

@@ -23,7 +23,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -50,7 +50,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 
 			$this->saveCache($this->rs, $id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -78,7 +78,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -104,7 +104,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -130,7 +130,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -155,7 +155,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -206,7 +206,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -265,7 +265,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -334,7 +334,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -401,7 +401,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -490,7 +490,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -513,7 +513,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -540,7 +540,7 @@ class CompanyUserCountListFactory extends CompanyUserCountFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

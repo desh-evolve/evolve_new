@@ -30,7 +30,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -58,7 +58,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 
 			$this->saveCache($this->rs, $id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -82,7 +82,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getWhereSQL($where);
 		$query .= $this->getSortSQL($order);
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -209,7 +209,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -243,6 +243,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
+		$this->data = $this->rs;
 
 		return $this;
 	}
@@ -284,7 +285,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -327,7 +328,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -357,7 +358,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -388,7 +389,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -421,7 +422,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -461,7 +462,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -506,7 +507,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -549,7 +550,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		//Debug::Text('Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -601,7 +602,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		Debug::Arr($ph, 'Query: ' . $query, __FILE__, __LINE__, __METHOD__, 10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -644,7 +645,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		//Debug::Text('Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -686,7 +687,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		//Debug::Text('Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -726,7 +727,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		//Debug::Text('Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -782,7 +783,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -830,7 +831,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -872,7 +873,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -922,7 +923,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -958,7 +959,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		//Debug::Text('Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1018,7 +1019,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1047,7 +1048,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1089,7 +1090,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1148,7 +1149,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1264,7 +1265,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1429,7 +1430,7 @@ class PayPeriodListFactory extends PayPeriodFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

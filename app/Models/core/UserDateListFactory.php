@@ -26,7 +26,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -54,7 +54,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -74,7 +74,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -100,7 +100,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -131,7 +131,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -160,8 +160,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':company_id' => $company_id,
-                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
-                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+                    ':end_date' => date('Y-m-d', $end_date),
 					);
 
 		$query = '
@@ -179,7 +179,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -200,7 +200,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -221,7 +221,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -233,7 +233,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
+                    ':date' => date('Y-m-d', $date),
 					);
 
 		$query = '
@@ -246,11 +246,12 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
 	function getByUserIdAndDate($user_id, $date) {
+		
 		if ( $user_id == '' ) {
 			return FALSE;
 		}
@@ -263,7 +264,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-                    ':date' => $date,
+                    ':date' => date('Y-m-d', $date),
 				);
 
 		$query = '
@@ -278,7 +279,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$this->rs = DB::select($query, $ph);
 
-
+		$this->data = $this->rs;
 
 		return $this;
 	}
@@ -306,8 +307,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
-                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+                    ':end_date' => date('Y-m-d', $end_date),
 					);
 
 		$query = '
@@ -323,7 +324,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -350,8 +351,8 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$uf = new UserFactory();
 
 		$ph = array(
-                    ':start_date' => Carbon::createFromTimestamp($start_date)->toDateString(),
-                    ':end_date' => Carbon::createFromTimestamp($end_date)->toDateString(),
+                    ':start_date' => date('Y-m-d', $start_date),
+                    ':end_date' => date('Y-m-d', $end_date),
 					);
 
 		$query = '
@@ -368,7 +369,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -403,7 +404,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -447,7 +448,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -557,7 +558,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 		*/
 		
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -578,7 +579,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 
 		$ph = array(
 					':user_id' => $user_id,
-                    ':date' => Carbon::createFromTimestamp($date)->toDateString(),
+                    ':date' => date('Y-m-d', $date),
 					':deleted' => (int)$deleted
 					);
 
@@ -592,7 +593,7 @@ class UserDateListFactory extends UserDateFactory implements IteratorAggregate {
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -655,7 +656,7 @@ and udt.deleted = 0";
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
         }
 
@@ -706,7 +707,7 @@ and udt.deleted = 0";
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
         }
 

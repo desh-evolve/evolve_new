@@ -22,7 +22,7 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -44,7 +44,7 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -66,7 +66,7 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -91,7 +91,7 @@ class AllowanceListFactory  extends AllowanceFactory implements IteratorAggregat
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

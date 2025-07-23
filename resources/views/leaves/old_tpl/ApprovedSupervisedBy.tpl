@@ -63,14 +63,14 @@
                                         
                                        </tr>    
                                  </table>
-		</div>
+      </div>
 
-		<div id="contentBoxFour">
-			<input type="submit" class="" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('filter_include'));selectAll(document.getElementById('filter_exclude'));selectAll(document.getElementById('filter_user'));">
-                         <input type="submit" class="" name="action:rejected" value="{t}Rejected{/t}" onClick="selectAll(document.getElementById('filter_include'));selectAll(document.getElementById('filter_exclude'));selectAll(document.getElementById('filter_user'));">
-		</div>
+      <div id="contentBoxFour">
+        <input type="submit" class="" name="action:submit" value="{t}Submit{/t}" onClick="selectAll(document.getElementById('filter_include'));selectAll(document.getElementById('filter_exclude'));selectAll(document.getElementById('filter_user'));">
+                          <input type="submit" class="" name="action:rejected" value="{t}Rejected{/t}" onClick="selectAll(document.getElementById('filter_include'));selectAll(document.getElementById('filter_exclude'));selectAll(document.getElementById('filter_user'));">
+      </div>
 
-		<input type="hidden" id="id" name="data[id]" value="{$data.id}">
+      <input type="hidden" id="id" name="data[id]" value="{$data.id}">
 		</form>
 	</div>
 </div>

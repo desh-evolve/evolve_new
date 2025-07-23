@@ -60,7 +60,14 @@
                                     </th>
                                     <td class="cellRightEditTable">
                                         <div class="d-flex align-items-center gap-2">
-                                            <input type="date" class="form-select form-select-sm w-25" size="15" id="start_date" name="data[start_date]" value="{{ getdate_helper('date', $data['start_date']) }}">
+                                            <input
+                                                type="date"
+                                                class="form-select form-select-sm w-25"
+                                                size="15"
+                                                id="start_date"
+                                                name="data[start_date]"
+                                                value="{{ getdate_helper('date', $data['start_date'] ?? '' )}}"
+                                            >
                                             <span>ie: {{ $current_user_prefs->getDateFormatExample() }}</span>
                                         </div>
                                     </td>
@@ -73,7 +80,15 @@
                                     </th>
                                     <td class="cellRightEditTable">
                                         <div class="d-flex align-items-center gap-2">
-                                            <input type="date" class="form-select form-select-sm w-25" size="15" id="end_date" name="data[end_date]" value="{{getdate_helper('date', $data['end_date'])}}">
+                                            <input
+                                                type="date"
+                                                class="form-select form-select-sm w-25"
+                                                size="15"
+                                                id="end_date"
+                                                name="data[end_date]"
+                                                value="{{ getdate_helper('date', $data['end_date'] ?? '' )}}"
+                                            >
+
                                             ie: {{$current_user_prefs->getDateFormatExample()}} <b>(Leave blank for no end date)</b>
                                         </div>
                                     </td>

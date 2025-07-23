@@ -29,7 +29,7 @@ class UserCensusInformationListFactory  extends UserCensusInformationFactory  im
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -53,7 +53,7 @@ class UserCensusInformationListFactory  extends UserCensusInformationFactory  im
 
 			$this->rs = DB::select($query, $ph);
 
-
+			$this->data = $this->rs;
 
 		return $this;
 	}
@@ -100,7 +100,7 @@ class UserCensusInformationListFactory  extends UserCensusInformationFactory  im
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

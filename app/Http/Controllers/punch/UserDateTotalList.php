@@ -139,7 +139,9 @@ class UserDateTotalList extends Controller
 					$i=0;
 					foreach ($ids as $tmp_id) {
 						$udtlf->getById($tmp_id);
-						foreach ($udtlf as $udt_obj) {
+						foreach ($udtlf->rs as $udt_obj) {
+							$udtlf->data = (array)$udt_obj;
+							$udt_obj = $udtlf;
 							$udt_obj->setDeleted($delete);
 		
 							if ( $id_count == $i ) {

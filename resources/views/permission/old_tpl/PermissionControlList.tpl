@@ -3,8 +3,8 @@
   <div id="titleTab"><div class="textTitle"><span class="textTitleSub">{$title}</span></div>
 </div>
 <div id="rowContentInner">
-		<table class="tblList">
 		<form method="get" action="{$smarty.server.SCRIPT_NAME}">
+			<table class="tblList">
 				<tr>
 					<td class="tblPagingLeft" colspan="8" align="right">
 						{include file="pager.tpl" pager_data=$paging_data}

@@ -30,7 +30,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -57,7 +57,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -83,7 +83,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -114,7 +114,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -143,7 +143,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 
 			$this->saveCache($this->rs,$id.$user_id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -164,7 +164,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -200,7 +200,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		//Debug::text(' Query: '. $query , __FILE__, __LINE__, __METHOD__,10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -230,6 +230,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
 		if ( $this->getRecordCount() > 0 ) {
 			Debug::text('User Tax rows have been modified: '. $this->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
 			return TRUE;
@@ -264,7 +265,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					LIMIT 1';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -304,7 +305,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 						AND ( c.deleted = 0	AND a.deleted = 0)
 				';
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 		
@@ -339,7 +340,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					LIMIT 1';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -372,7 +373,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					LIMIT 1';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -429,7 +430,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -497,7 +498,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -562,7 +563,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -604,7 +605,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -757,7 +758,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -946,7 +947,7 @@ class UserWageListFactory extends UserWageFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

@@ -22,7 +22,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -44,7 +44,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -72,7 +72,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -100,7 +100,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -140,7 +140,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -186,7 +186,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -219,7 +219,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 
 		//Debug::Text('Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -348,7 +348,7 @@ class PermissionControlListFactory extends PermissionControlFactory implements I
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
