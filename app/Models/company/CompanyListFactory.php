@@ -39,7 +39,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 				'offset' => ($page - 1) * $limit,
 			]);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -80,7 +80,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 				$this->saveCache($this->rs, $id);
 			}
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -109,6 +109,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -134,6 +135,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -282,7 +284,7 @@ class CompanyListFactory extends CompanyFactory implements IteratorAggregate
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

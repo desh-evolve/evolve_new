@@ -5,6 +5,7 @@ namespace App\Models\Users;
 use App\Models\Company\CompanyGenericMapListFactory;
 use App\Models\Company\CompanyListFactory;
 use App\Models\Core\Debug;
+use App\Models\Core\Environment;
 use App\Models\Core\Factory;
 use App\Models\Core\FastTree;
 use App\Models\Core\Misc;
@@ -12,6 +13,7 @@ use App\Models\Core\StationUserGroupFactory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class UserGroupFactory extends Factory {
 	protected $table = 'user_group';
@@ -73,9 +75,7 @@ class UserGroupFactory extends Factory {
 		if ( is_object($this->fasttree_obj) ) {
 			return $this->fasttree_obj;
 		} else {
-			global $fast_tree_user_group_options;
-			$this->fasttree_obj = new FastTree($fast_tree_user_group_options);
-
+			$this->fasttree_obj = new FastTree(['table' => 'user_group_tree']);
 			return $this->fasttree_obj;
 		}
 	}
@@ -201,17 +201,15 @@ class UserGroupFactory extends Factory {
 
 	//Must be postSave because we need the ID of the object.
 	function postSave() {
-
+		//dd('hi check here');
 		$this->StartTransaction();
 
 		$this->getFastTreeObject()->setTree( $this->getCompany() );
-                
-                
-
+               
 		if ( $this->getDeleted() == TRUE ) {
 			//FIXME: Get parent of this object, and re-parent all groups to it.
 			$parent_id = $this->getFastTreeObject()->getParentId( $this->getId() );
-
+			
 			//Get items by group id.
 			$ulf = new UserListFactory();
 			$ulf->getByCompanyIdAndGroupId( $this->getCompany(), $this->getId() );
@@ -233,7 +231,6 @@ class UserGroupFactory extends Factory {
 			$query = 'delete from '. $sugf->getTable() .' where group_id = '. (int)$this->getId();
 			DB::select($query);
 
-                        
 			//Job employee criteria
 			$cgmlf = new CompanyGenericMapListFactory();
 			$cgmlf->getByCompanyIDAndObjectTypeAndMapID( $this->getCompany(), 1030, $this->getID() );
@@ -247,10 +244,9 @@ class UserGroupFactory extends Factory {
 			}
 
 			$this->CommitTransaction();
-
 			return TRUE;
 		} else {
-
+			
 			$retval = TRUE;
 			//if ( $this->getId() === FALSE ) {
 			if ( $this->insert_tree === TRUE ) {
@@ -258,11 +254,9 @@ class UserGroupFactory extends Factory {
 
 				//echo "Current ID: ".  $this->getID() ."<br>\n";
 				//echo "Parent ID: ".  $this->getParent() ."<br>\n";
+				//exit;
 
 				//Add node to tree
-                                
-                       
-                        
 				if ( $this->getFastTreeObject()->add( $this->getID(), $this->getParent() ) === FALSE ) {
 					Debug::Text(' Failed adding Node ', __FILE__, __LINE__, __METHOD__,10);
 
@@ -274,7 +268,7 @@ class UserGroupFactory extends Factory {
 				}
 			} else {
 				Debug::Text(' Editing Node ', __FILE__, __LINE__, __METHOD__,10);
-
+				
 				//Edit node.
 				$retval = $this->getFastTreeObject()->move( $this->getID() , $this->getParent() );
 			}
@@ -284,7 +278,7 @@ class UserGroupFactory extends Factory {
 			} else {
 				$this->FailTransaction();
 			}
-
+			
 			return $retval;
 		}
 	}

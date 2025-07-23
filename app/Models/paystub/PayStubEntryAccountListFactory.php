@@ -25,7 +25,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -57,7 +57,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 				$this->saveCache($this->rs,$id);
 			}
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -81,7 +81,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -110,7 +110,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -139,7 +139,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -167,7 +167,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -195,7 +195,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -229,7 +229,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -250,7 +250,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -287,7 +287,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -320,7 +320,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -429,7 +429,7 @@ class PayStubEntryAccountListFactory extends PayStubEntryAccountFactory implemen
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

@@ -154,7 +154,7 @@ function ViewTypeTarget(obj) {
 
 				<tr>
 					<td colspan="10">
-						<iframe style="width:100%; height:0px; border: 5px" id="schedule_layer" name="Schedule" src="{$BASE_URL}/blank.html"></iframe>
+						<iframe style="width:100%; height:0px; border: 5px" id="schedule_layer" name="Schedule" src="{$BASE_URL}/blank"></iframe>
 					</td>
 				</tr>
 			</table>

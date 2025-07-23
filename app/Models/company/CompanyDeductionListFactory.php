@@ -29,7 +29,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -62,7 +62,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 				$this->saveCache($this->rs,$id);
 			}
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -92,7 +92,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -123,7 +123,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		//Debug::Text('Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -151,7 +151,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -179,7 +179,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -200,7 +200,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -228,7 +228,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -256,7 +256,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -289,7 +289,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -298,7 +298,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 			return FALSE;
 		}
 
-		$psenlf = new PayStubEntryNameListFactory();
+		$psenlf = new PayStubEntryNameListFactory(); 
 		$psenlf->getById($id);
 
 		if ( $include_blank == TRUE ) {
@@ -470,7 +470,7 @@ class CompanyDeductionListFactory extends CompanyDeductionFactory implements Ite
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

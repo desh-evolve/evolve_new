@@ -24,7 +24,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -46,7 +46,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -74,7 +74,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -106,6 +106,8 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByCompanyIdAndUserId($company_id, $user_ids, $where = NULL, $order = NULL) {
@@ -145,6 +147,8 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByCompanyId($id, $where = NULL, $order = NULL) {
@@ -172,6 +176,8 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
@@ -250,7 +256,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -425,7 +431,7 @@ class PolicyGroupListFactory extends PolicyGroupFactory implements IteratorAggre
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

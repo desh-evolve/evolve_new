@@ -1763,7 +1763,7 @@ class PermissionFactory extends Factory {
 
 	function applyPreset($permission_control_id, $preset, $preset_flags) {
 		$preset_permissions = $this->getPresetPermissions( $preset, $preset_flags );
-
+		
 		if ( !is_array($preset_permissions) ) {
 			return FALSE;
 		}

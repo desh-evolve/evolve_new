@@ -25,7 +25,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -52,7 +52,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -78,7 +78,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -128,7 +128,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		$this->rs = DB::select($query, $ph);
 
 
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -157,6 +157,8 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getAPISearchByCompanyIdAndArrayCriteria( $company_id, $filter_data, $limit = NULL, $page = NULL, $where = NULL, $order = NULL ) {
@@ -259,7 +261,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -300,7 +302,7 @@ class AbsenceLeaveUserListFactory extends AbsenceLeaveUserFactory implements Ite
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

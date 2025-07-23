@@ -27,7 +27,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -51,7 +51,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -157,7 +157,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 	function getByIdAndCompanyId($id, $company_id, $order = NULL)
@@ -184,7 +184,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -211,7 +211,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -240,7 +240,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 
 			$this->saveCache($this->rs, $station_id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -268,7 +268,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -300,7 +300,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -335,7 +335,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		$query .= $this->getSortSQL($order);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -425,7 +425,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		//Debug::arr($ph, 'PH: ', __FILE__, __LINE__, __METHOD__, 10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -546,7 +546,7 @@ class StationListFactory extends StationFactory implements IteratorAggregate
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

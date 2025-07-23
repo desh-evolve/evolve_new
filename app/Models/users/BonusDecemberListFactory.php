@@ -23,7 +23,7 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -45,7 +45,7 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -80,7 +80,7 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -109,7 +109,7 @@ class BonusDecemberListFactory  extends  BonusDecemberFactory implements Iterato
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\Policy;
+
+use App\Models\Company\BranchListFactory;
 use App\Models\Core\Factory;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
@@ -67,7 +69,7 @@ class PremiumPolicyBranchFactory extends Factory {
 	function setBranch($id) {
 		$id = trim($id);
 
-		$blf = new BranchListFactory();
+		$blf = new BranchListFactory(); 
 
 		if ( $this->Validator->isResultSetWithRows(	'branch',
 													$blf->getByID($id),

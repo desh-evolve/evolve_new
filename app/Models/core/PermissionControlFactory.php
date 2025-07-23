@@ -369,7 +369,8 @@ class PermissionControlFactory extends Factory {
 		if ( $this->getId() == FALSE ) {
 			return FALSE;
 		}
-
+		
+		/*
 		if ( defined('TIMETREX_API') AND TIMETREX_API == TRUE ) {
 			//If we do the permission diff it messes up the HTML interface.
 			if ( !is_array($old_permission_arr) OR ( is_array($old_permission_arr) AND count($old_permission_arr) == 0 ) ) {
@@ -384,6 +385,7 @@ class PermissionControlFactory extends Factory {
 			Debug::Text(' New Permissions: '. count($permission_arr), __FILE__, __LINE__, __METHOD__,10);
 			//Debug::Arr($permission_arr, ' Final Permissions: '. count($permission_arr), __FILE__, __LINE__, __METHOD__,10);
 		}
+		*/
 
 		$pf = new PermissionFactory();
 
@@ -402,25 +404,26 @@ class PermissionControlFactory extends Factory {
 							) {
 
 						if ( $value == 0 OR $value == 1 ) {
-							Debug::Text('    Modifying/Adding Permission: '. $name .' - Value: '. $value, __FILE__, __LINE__, __METHOD__,10);
+							Debug::Text('Modifying/Adding Permission: '. $name .' - Value: '. $value, __FILE__, __LINE__, __METHOD__,10);
 							$tmp_pf = new PermissionFactory();
 							$tmp_pf->setCompany( $this->getCompanyObject()->getId() );
 							$tmp_pf->setPermissionControl( $this->getId() );
 							$tmp_pf->setSection( $section );
 							$tmp_pf->setName( $name );
 							$tmp_pf->setValue( (int)$value );
-
+							
 							if ( $tmp_pf->isValid() ) {
 								$tmp_pf->save();
 							}
 						}
 					} else {
-						Debug::Text('     Permission didnt change... Skipping', __FILE__, __LINE__, __METHOD__,10);
+						Debug::Text('Permission didnt change... Skipping', __FILE__, __LINE__, __METHOD__,10);
 					}
 				}
 			}
 		}
 
+		
 		return TRUE;
 	}
 

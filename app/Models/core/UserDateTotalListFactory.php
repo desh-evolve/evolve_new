@@ -40,7 +40,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -62,7 +62,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -102,7 +102,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -136,7 +136,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -171,7 +171,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -215,7 +215,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -240,7 +240,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -266,7 +266,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -313,7 +313,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -365,6 +365,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -416,7 +417,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -462,7 +463,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -510,7 +511,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -558,7 +559,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -606,7 +607,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -658,7 +659,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -679,7 +680,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -706,7 +707,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -997,7 +998,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1061,7 +1062,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1122,7 +1123,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1183,7 +1184,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 					';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1657,7 +1658,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1811,7 +1812,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1835,7 +1836,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1859,7 +1860,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1883,7 +1884,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1907,7 +1908,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -1945,7 +1946,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2048,7 +2049,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		//$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2178,7 +2179,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 				';
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2245,7 +2246,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2373,7 +2374,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 
 	}
@@ -2465,7 +2466,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -2822,7 +2823,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL($order, FALSE);
 	
 		$this->rs = DB::select($query, $ph);
-	
+		$this->data = $this->rs;
 		return $this;
 	}
 	
@@ -3012,6 +3013,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
                // print_r($this->rs);
 		return $this;
 	}
@@ -3130,7 +3132,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -3251,7 +3253,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		//Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__,10);
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -3390,7 +3392,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -3520,7 +3522,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		//Debug::Arr($ph, 'Query: '. $query, __FILE__, __LINE__, __METHOD__, 10);
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -3718,7 +3720,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, FALSE );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -3892,7 +3894,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$query .= $this->getSortSQL( $order, FALSE );
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -4050,7 +4052,7 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 
 		$query .= $this->getSortSQL( $order, FALSE );
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -4612,11 +4614,11 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict, $additional_order_fields );
 
 		if ($limit == NULL) {
-			$this->rs = $this->db->Execute($query, $ph);
+			$this->rs = DB::select($query, $ph);
 		} else {
 			$this->rs = $this->db->PageExecute($query, $limit, $page, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -4647,8 +4649,8 @@ class UserDateTotalListFactory extends UserDateTotalFactory implements IteratorA
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 
-		$this->rs = $this->db->Execute($query, $ph);
-
+		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
 		return $this;
 
 

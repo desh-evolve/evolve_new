@@ -20,7 +20,7 @@ class UserDefaultCompanyDeductionListFactory extends UserDefaultCompanyDeduction
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -42,7 +42,7 @@ class UserDefaultCompanyDeductionListFactory extends UserDefaultCompanyDeduction
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -65,7 +65,7 @@ class UserDefaultCompanyDeductionListFactory extends UserDefaultCompanyDeduction
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 }

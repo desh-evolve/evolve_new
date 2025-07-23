@@ -28,7 +28,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -50,7 +50,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -87,6 +87,9 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+
+		return $this;
 	}
 
 	function getByIdAndHolidayPolicyID($id, $holiday_policy_id, $where = NULL, $order = NULL) {
@@ -109,7 +112,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -136,6 +139,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByCompanyIdAndHolidayPolicyId($company_id, $id, $where = NULL, $order = NULL) {
@@ -169,6 +174,8 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
+		$this->data = $this->rs;
+		return $this;
 	}
 
 	function getByPolicyGroupUserId($user_id, $where = NULL, $order = NULL) {
@@ -207,7 +214,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -257,7 +264,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -316,7 +323,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -373,7 +380,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -501,7 +508,7 @@ class HolidayListFactory extends HolidayFactory implements IteratorAggregate {
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

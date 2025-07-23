@@ -110,7 +110,9 @@ class EditRequest extends Controller
 					$rlf = new RequestListFactory();
 					$rlf->getByIDAndCompanyID( $id, $current_company->getId() );
 
-					foreach ($rlf as $r_obj) {
+					foreach ($rlf->rs as $r_obj) {
+						$rlf->data = (array)$r_obj;
+						$r_obj = $rlf;
 						//Debug::Arr($station,'Department', __FILE__, __LINE__, __METHOD__,10);
 
 						$data = array (

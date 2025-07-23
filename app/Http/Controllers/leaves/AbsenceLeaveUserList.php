@@ -117,7 +117,9 @@ class AbsenceLeaveUserList extends Controller
 		$alulf = new AbsenceLeaveUserListFactory(); 
 		foreach ($ids as $id) {
 			$alulf->getById($id);
-			foreach ($alulf as $cd_obj) {
+			foreach ($alulf->rs as $cd_obj) {
+				$alulf->data = (array)$cd_obj;
+				$cd_obj = $alulf;
 				$cd_obj->setDeleted($delete);
 				if ( $cd_obj->isValid() ) {
 					$cd_obj->Save();
@@ -136,7 +138,9 @@ class AbsenceLeaveUserList extends Controller
 
 		foreach ($ids as $id) {
 			$cdlf->getByCompanyIdAndId($current_company->getId(), $id );
-			foreach ($cdlf as $cd_obj) {
+			foreach ($cdlf->rs as $cd_obj) {
+				$cdlf->data = (array)$cd_obj;
+				$cd_obj = $cdlf;
 				$tmp_cd_obj = clone $cd_obj;
 
 				$tmp_cd_obj->setId( FALSE );

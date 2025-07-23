@@ -24,7 +24,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -56,7 +56,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 				$this->saveCache($this->rs,$id);
 			}
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -93,7 +93,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -125,7 +125,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -159,7 +159,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -197,7 +197,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -232,7 +232,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -266,7 +266,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -309,7 +309,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
         
@@ -354,7 +354,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order, $strict );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
         
@@ -396,7 +396,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -489,7 +489,7 @@ class UserDeductionListFactory extends UserDeductionFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

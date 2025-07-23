@@ -26,7 +26,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -55,7 +55,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -85,7 +85,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -114,7 +114,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -145,7 +145,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			$this->saveCache($this->rs,$id);
 
-
+			$this->data = $this->rs;
 		return $this;
 	}
 
@@ -177,7 +177,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 			$this->rs = DB::select($query, $ph);
 
 			$this->saveCache($this->rs,$id);
-
+			$this->data = $this->rs;
 
 		return $this;
 	}
@@ -212,7 +212,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			$this->saveCache($this->rs,$id);
 
-
+			$this->data = $this->rs;
 		return $this;
 	}
 
@@ -246,7 +246,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			//$this->saveCache($this->rs,$id);
 
-
+			$this->data = $this->rs;
 		return $this;
         }
 
@@ -285,7 +285,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			//$this->saveCache($this->rs,$id);
 
-
+			$this->data = $this->rs;
 		return $this;
     }
 
@@ -334,7 +334,7 @@ class LeaveRequestListFactory extends LeaveRequestFactory  implements IteratorAg
 
 			$this->saveCache($this->rs,$id);
 
-
+			$this->data = $this->rs;
 		return $this;
 	}
 

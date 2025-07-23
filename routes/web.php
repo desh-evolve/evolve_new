@@ -172,6 +172,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/blank', function () {
+    return view('blank');
+});
+
 
 Route::get('/login', [Login::class, 'index'])->name('login');
 Route::get('/logout', [Login::class, 'index'])->name('logout');
@@ -231,11 +235,12 @@ Route::post('/department_branch_user/save/{id?}', [EditDepartmentBranchUser::cla
 
 
 // ==================== wage group =====================================================================================
-Route::get('/user_group', [UserGroupList::class, 'index'])->name('user_group.index');
+Route::match(['get', 'post', 'delete'], '/user_group', [UserGroupList::class, 'index'])->name('user_group.index');
+Route::match(['get', 'post', 'delete'], '/user_group/add', [EditUserGroup::class, 'index'])->name('user_group.add');
 
-Route::get('/user_group/add/{id?}', [EditUserGroup::class, 'index'])->name('user_group.add');
-Route::post('/user_group/save/{id?}', [EditUserGroup::class, 'submit'])->name('user_group.save');
-Route::delete('/user_group/delete/{id}', [UserGroupList::class, 'delete'])->name('user_group.delete');
+//Route::get('/user_group/add/{id?}', [EditUserGroup::class, 'index'])->name('user_group.add');
+//Route::post('/user_group/save/{id?}', [EditUserGroup::class, 'submit'])->name('user_group.save');
+//Route::delete('/user_group/delete/{id}', [UserGroupList::class, 'delete'])->name('user_group.delete');
 
 // ==================== user title =====================================================================================
 Route::get('/user_title', [UserTitleList::class, 'index'])->name('user_title.index');
@@ -251,11 +256,11 @@ Route::get('/station/add/{id?}', [EditStation::class, 'index'])->name('station.a
 Route::post('/station/save/{id?}', [EditStation::class, 'submit'])->name('station.save');
 Route::delete('/station/delete/{id}', [StationList::class, 'delete'])->name('station.delete');
 // ==================== Permission Control =====================================================================================
-Route::get('/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+Route::match(['get', 'post', 'delete'], '/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
+Route::match(['get', 'post', 'delete'], '/permission_control/add', [EditPermissionControl::class, 'index'])->name('permission_control.add');
 
-Route::get('/permission_control/add/{id?}', [EditPermissionControl::class, 'index'])->name('permission_control.add');
-Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
-Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
+//Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
+//Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
 // ==================== Permission Control =====================================================================================
 Route::get('/recurring_holidays', [RecurringHolidayList::class, 'index'])->name('recurring_holidays.index');
 
@@ -683,3 +688,4 @@ Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_month', [ViewSc
 Route::match(['get', 'post', 'delete'], '/schedule/view_schedule_week', [ViewScheduleWeek::class, 'index'])->name('schedule.view_schedule_week');
 
 // ===============================================================================================================================
+

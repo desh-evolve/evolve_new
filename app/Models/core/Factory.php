@@ -741,18 +741,34 @@ class Factory
 
         return false;
     }
-
-	protected function getListSQL($array, $ph = null)
+/*
+	protected function getListSQL($array, $ph = null, $x=null)
 	{
+		
 		// Ensure it's an array
 		if (!is_array($array)) {
 			$array = explode(',', (string) $array); // Convert comma-separated string to array
 		}
 
 		// Trim values and filter out empty ones
-		$array = array_filter(array_map('trim', $array));
+		$a = implode(',', array_filter(array_map('trim', $array)));
+		
+		return $a;
+	}*/
 
-		return implode(',', $array);
+	protected function getListSQL($array, $ph = null)
+	{
+		if (!is_array($array)) {
+			$array = explode(',', (string) $array);
+		}
+
+		// Clean and wrap each item in double quotes
+		$array = array_filter(array_map('trim', $array));
+		$quoted = array_map(function ($item) {
+			return '"' . addslashes($item) . '"';
+		}, $array);
+
+		return implode(', ', $quoted);
 	}
 
 	function getDateRangeSQL($str, $column, $use_epoch = TRUE)

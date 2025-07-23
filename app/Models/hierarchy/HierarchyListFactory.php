@@ -18,8 +18,7 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 		if ( is_object($this->fasttree_obj) ) {
 			return $this->fasttree_obj;
 		} else {
-			global $fast_tree_options;
-			$this->fasttree_obj = new FastTree($fast_tree_options);
+			$this->fasttree_obj = new FastTree(['table' => 'hierarchy_tree']);
 
 			return $this->fasttree_obj;
 		}

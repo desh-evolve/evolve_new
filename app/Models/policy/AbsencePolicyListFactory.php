@@ -23,7 +23,7 @@ class AbsencePolicyListFactory extends AbsencePolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -50,7 +50,7 @@ class AbsencePolicyListFactory extends AbsencePolicyFactory implements IteratorA
 
 			$this->saveCache($this->rs,$id);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -78,7 +78,7 @@ class AbsencePolicyListFactory extends AbsencePolicyFactory implements IteratorA
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -209,7 +209,7 @@ class AbsencePolicyListFactory extends AbsencePolicyFactory implements IteratorA
 		} else {
 			$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

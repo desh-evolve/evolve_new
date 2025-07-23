@@ -15,20 +15,16 @@ class FastTree
 
 	function __construct($options = NULL)
 	{
-		//Debug::Text(' Contruct... ', __FILE__, __LINE__, __METHOD__,10);
-		/*
-		$this->db = $options['db'];
-		//Debug::Text(' Setting DB to: '. $options['db'] , __FILE__, __LINE__, __METHOD__,10);
+		
+		//$this->db = $options['db'];
 
 		$this->table = $options['table'];
-		//Debug::Text(' Setting Table to: '. $options['table'] , __FILE__, __LINE__, __METHOD__,10);
 
 		if ( isset( $options['tree_id'] ) ) {
 			$this->setTree( $options['tree_id'] ) ;
 			//$this->tree_id = $options['tree_id'];
-			//Debug::Text(' Setting Tree ID to: '. $options['tree_id'] , __FILE__, __LINE__, __METHOD__,10);
 		}
-*/
+
 		return TRUE;
 	}
 
@@ -115,8 +111,8 @@ class FastTree
 		if (count($data) == 0) {
 			return FALSE;
 		}
-
-		return $data;
+		
+		return (array)$data[0];
 	}
 
 	function getLevel($object_id)
@@ -164,13 +160,12 @@ class FastTree
 
 	function getParentId($object_id)
 	{
-
 		$data = $this->getNode($object_id);
 		if ($data === FALSE || empty($data)) {
 			return FALSE;
 		}
-
-		return $data[0]->parent_id ?? FALSE;
+		
+		return $data['parent_id'] ?? FALSE;
 	}
 
 	function rebuildTree($object_id = FALSE)
@@ -180,7 +175,7 @@ class FastTree
 		// $this->db->BeginTrans();
 		// $this->db->SetTransactionMode( 'SERIALIZABLE' ); //Serialize rebuild tree transactions so concurrency issues don't corrupt the tree.
 		DB::beginTransaction(); // Begin the transaction
-		DB::statement('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE'); // Set the isolation level to SERIALIZABLE
+		//DB::statement('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE'); // Set the isolation level to SERIALIZABLE
 
 
 		if ( empty($object_id) || $object_id === FALSE ) {
@@ -324,10 +319,11 @@ class FastTree
 		//GetOne() automatically sets LIMIT 1;
 		$query = 'SELECT object_id FROM ' . $this->table . ' WHERE tree_id = :tree_id AND parent_id = :object_id ORDER BY left_id desc';
 		// $child_id = $this->db->GetOne($query, $ph);
+		
 		$child_id = DB::select($query, $ph);
 
         if (empty($child_id) || $child_id === FALSE ) {
-            $child_id = 0;
+            $child_id = FALSE;
         }else{
             $child_id = current(get_object_vars($child_id[0]));
         }
@@ -358,10 +354,11 @@ class FastTree
 			Debug::Text(' Getting node data of object id failed.' , __FILE__, __LINE__, __METHOD__,10);
 			return FALSE;
 		}
+		
 		// Access left_id from the first element
-		$left_id = $node_data[0]->left_id;
-		$right_id = $node_data[0]->right_id;
-		$level = $node_data[0]->level;
+		$left_id = $node_data['left_id'];
+		$right_id = $node_data['right_id'];
+		$level = $node_data['level'];
 		//Debug::Text(' Left ID: '. $node_data['left_id'] .' Level: '. $node_data['level'] , __FILE__, __LINE__, __METHOD__,10);
 
 		$query  = '
@@ -442,13 +439,14 @@ class FastTree
 	function _getLeftAndRightIds($parent_id)
 	{
 		Debug::Text(' getLeftAndRightIds: ' . $parent_id, __FILE__, __LINE__, __METHOD__, 10);
-
+		
 		$node_data = $this->getNode($parent_id);
-
+		
 		$parent_left = $node_data['left_id'];
 		$parent_right = $node_data['right_id'];
-
+		
 		$child_id = $this->getChild($parent_id);
+
 		if ($child_id !== FALSE) {
 			Debug::Text(' Child found, getting Child data: ' . $child_id, __FILE__, __LINE__, __METHOD__, 10);
 			$child_node_data = $this->getNode($child_id);
@@ -465,10 +463,7 @@ class FastTree
 			//$left_id = $child_right_id + 1;
 			//$right_id = $parent_right - 1;
 
-			if (
-				$right_id >= $parent_right
-				or $left_id >= $parent_right
-			) {
+			if ( $right_id >= $parent_right or $left_id >= $parent_right ) {
 				Debug::Text(' NO CHILD GAP LEFT: ', __FILE__, __LINE__, __METHOD__, 10);
 
 				return FALSE;
@@ -480,10 +475,7 @@ class FastTree
 			$left_id = $parent_left + 1;
 			$right_id = $parent_right - 1;
 
-			if (
-				$right_id >= $parent_right
-				or $left_id >= $parent_right
-			) {
+			if ( $right_id >= $parent_right or $left_id >= $parent_right ) {
 				Debug::Text(' NO PARENT GAP LEFT: ', __FILE__, __LINE__, __METHOD__, 10);
 
 				return FALSE;
@@ -507,19 +499,24 @@ class FastTree
 		if ($node_data != FALSE) {
 			Debug::Text(' Inserting gaps: ' . $this->spacer, __FILE__, __LINE__, __METHOD__, 10);
 
-			$ph = array(
+			$ph1 = array(
 				':tree_id' => $this->getTree(),
 				':right_id' => $node_data['right_id'],
 			);
+			$ph2 = array(
+				':tree_id' => $this->getTree(),
+				':left_id' => $node_data['left_id'],
+			);
 
-			$query  = 'UPDATE ' . $this->table . ' SET right_id = right_id + 1000 WHERE tree_id = :tree_id AND right_id >= :right_id';
-			DB::select($query, $ph);
+			$query1  = 'UPDATE ' . $this->table . ' SET right_id = right_id + 1000 WHERE tree_id = :tree_id AND right_id >= :right_id';
+			DB::statement($query1, $ph1);
 
-			$query  = 'UPDATE ' . $this->table . ' SET left_id = left_id + 1000 WHERE tree_id = :tree_id AND left_id > ?';
-			DB::select($query, $ph);
+			$query2  = 'UPDATE ' . $this->table . ' SET left_id = left_id + 1000 WHERE tree_id = :tree_id AND left_id > :left_id';
+			DB::statement($query2, $ph2);
 
 			return TRUE;
 		}
+		
 		Debug::Text(' Node Data Null: ' . $this->spacer, __FILE__, __LINE__, __METHOD__, 10);
 
 		return FALSE;
@@ -529,6 +526,7 @@ class FastTree
 	//MPTT + Gap add function.
 	function add($object_id, $parent_id = 0)
 	{
+		
 		Debug::Text(' Object ID: ' . $object_id . ' Parent ID: ' . $parent_id, __FILE__, __LINE__, __METHOD__, 10);
 
 		if (!is_numeric($object_id)) {
@@ -552,12 +550,7 @@ class FastTree
 
 		// $this->db->BeginTrans();
 		DB::beginTransaction();
-
-		try {
-			//code...
-		} catch (\Throwable $th) {
-			//throw $th;
-		}
+		
 		if ($parent_id == -1) {
 			Debug::Text(' Parent is 0', __FILE__, __LINE__, __METHOD__, 10);
 
@@ -567,14 +560,14 @@ class FastTree
 
 			$query = 'SELECT object_id FROM ' . $this->table . ' WHERE tree_id = :tree_id AND parent_id = -1';
 			$rs = DB::select($query, $ph);
-
+			
 			if (!is_object($rs)) {
 				Debug::Text(' Select failed', __FILE__, __LINE__, __METHOD__, 10);
 				// $this->db->RollBackTrans();
 				DB::rollBack();
 				return FALSE;
 			}
-
+			
 			if ($rs->RowCount() > 0) {
 				Debug::Text(' A root node already exists', __FILE__, __LINE__, __METHOD__, 10);
 				// $this->db->RollBackTrans();
@@ -600,11 +593,11 @@ class FastTree
 
 		} else {
 			Debug::Text(' Parent IS NOT 0', __FILE__, __LINE__, __METHOD__, 10);
-
+			
 			$left_and_right_ids = $this->_getLeftAndRightIds($parent_id);
 
 			if ($left_and_right_ids === FALSE) {
-				$this->insertGaps($parent_id);
+				$x = $this->insertGaps($parent_id);
 				$left_and_right_ids = $this->_getLeftAndRightIds($parent_id);
 			}
 
@@ -619,6 +612,7 @@ class FastTree
 			and is_numeric($left_id)
 			and is_numeric($right_id)
 		) {
+			
 			$ph = array(
 				':tree_id' => $this->getTree(),
 				':parent_id' => $parent_id,
@@ -630,8 +624,8 @@ class FastTree
 			Debug::Text(' Inserting Node... Left ID: ' . $left_id . ' Right ID: ' . $right_id, __FILE__, __LINE__, __METHOD__, 10);
 			$query = 'INSERT INTO ' . $this->table . ' (tree_id, parent_id, object_id, left_id, right_id) VALUES (:tree_id,:parent_id,:object_id,:left_id,:right_id)';
 			$rs = DB::insert($query, $ph);
-
-			if (!is_object($rs)) {
+			
+			if (!$rs) {
 				Debug::Text(' Error inserting node', __FILE__, __LINE__, __METHOD__, 10);
 				// $this->db->RollBackTrans();
 				DB::rollBack();
@@ -953,11 +947,11 @@ class FastTree
 		foreach ($nodes as $node) {
 			switch ($type) {
 				case 'no_tree_text':
-					$spacing = str_repeat('|  &nbsp;', $node['level'] * 1);
+					$spacing = str_repeat('| ', $node['level'] * 1);
 					$text = $node['name'];
 					break;
 				case 'text':
-					$spacing = str_repeat('|  &nbsp;', $node['level'] * 1);
+					$spacing = str_repeat('| ', $node['level'] * 1);
 					$text = $spacing . $node['name'];
 					break;
 				case 'plain_text':
@@ -966,7 +960,7 @@ class FastTree
 					break;
 				case 'html':
 					$width = ($node['level'] - 1) * 20;
-					$spacing = '<img src="' . Environment::getBaseURL() . 'images/s.gif" width="' . $width . '">';
+					$spacing = $width;
 					$text = $spacing . ' ' . $node['name'];
 					break;
 				case 'array':

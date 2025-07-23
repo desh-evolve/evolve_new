@@ -34,7 +34,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			$this->rs = DB::select($query);
 			//$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -56,7 +56,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -87,7 +87,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -119,7 +119,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -169,7 +169,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -228,7 +228,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -285,7 +285,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -347,7 +347,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -408,7 +408,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order, $strict_order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -442,7 +442,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -471,7 +471,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -507,7 +507,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -574,7 +574,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -716,7 +716,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 			$this->rs = DB::select($query, $ph);
 			//$this->rs = DB::select($query, $ph);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -751,7 +751,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -807,7 +807,7 @@ class AccrualListFactory extends AccrualFactory implements IteratorAggregate {
 		//$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 
     }

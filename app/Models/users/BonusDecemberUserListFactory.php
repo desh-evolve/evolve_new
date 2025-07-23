@@ -22,7 +22,7 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		} else {
 			$this->rs = DB::select($query);
 		}
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -44,7 +44,7 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -73,7 +73,7 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -98,7 +98,7 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 
@@ -124,7 +124,7 @@ class BonusDecemberUserListFactory extends BonusDecemberUserFactory implements I
 		$query .= $this->getSortSQL( $order );
 
 		$this->rs = DB::select($query, $ph);
-
+		$this->data = $this->rs;
 		return $this;
 	}
 

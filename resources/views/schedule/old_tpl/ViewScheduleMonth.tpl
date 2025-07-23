@@ -22,7 +22,7 @@ function showScheduleDay(epoch) {
 					{/foreach}
 					{if $total_users > 1}
 						<td width="30%" rowspan="100" valign="middle" height="100%">
-							<iframe style="width:0; height:100%; border: 5px" id="day_schedule" name="day_schedule" src="{$BASE_URL}/blank.html"></iframe>
+							<iframe style="width:0; height:100%; border: 5px" id="day_schedule" name="day_schedule" src="{$BASE_URL}/blank"></iframe>
 						</td>
 					{/if}
 				</tr>
