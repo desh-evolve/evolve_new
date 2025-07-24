@@ -39,7 +39,9 @@
                                         </th>
                                         <td colspan="3">
                                             <input type="date" id="start_date" name="data[start_date]"
-                                                value="{{ getdate_helper('date_time', $data['start_date'] ?? '') }}">
+                                                {{-- value="{{ getdate_helper('date_time', $data['start_date'] ?? '') }}"> --}}
+                                                value="{{ !empty($data['start_date']) ? date('Y-m-d', $data['start_date']) : '' }}">
+
                                         </td>
                                     </tr>
 
@@ -50,7 +52,8 @@
                                         <td colspan="3">
                                             <input type="date" id="end_date" onChange="setTransactionDate()"
                                                 name="data[end_date]"
-                                                value="{{ getdate_helper('date_time', $data['end_date']) }}">
+                                                {{-- value="{{ getdate_helper('date_time', $data['end_date']) }}"> --}}
+                                                value="{{ !empty($data['end_date']) ? date('Y-m-d', $data['end_date']) : '' }}">
                                         </td>
                                     </tr>
 

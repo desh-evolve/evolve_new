@@ -91,9 +91,15 @@ class PayPeriodScheduleList extends Controller
 		foreach ($ppslf->rs as $pay_period_schedule) {
 			$ppslf->data = (array)$pay_period_schedule;
 			$pay_period_schedule = $ppslf;
-			
+
 			$pay_period_schedule->setDeleted($delete);
-			$pay_period_schedule->Save();
+			$res = $pay_period_schedule->Save();
+
+            if($res){
+                return response()->json(['success' => 'recurring_pay_stub_amendment deleted successfully.']);
+            }else{
+                return response()->json(['error' => 'recurring_pay_stub_amendment deleted failed.']);
+            }
 		}
 
 		return redirect(URLBuilder::getURL(NULL, '/payroll/pay_period_schedules'));

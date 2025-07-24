@@ -59,12 +59,10 @@ class ApplyUserLeave extends Controller
 
     }
 
-    public function index(){
-        $permission = $this->permission;
+    public function index()
+    {
         $current_user = $this->current_user;
         $current_company = $this->current_company;
-        $current_user_prefs = $this->current_user_prefs;
-        $config_vars = $this->config_vars;
         /*
         if ( !$permission->Check('accrual','view')
                 OR (  $permission->Check('accrual','view_own') ) ) {
@@ -372,8 +370,10 @@ class ApplyUserLeave extends Controller
                     }
 
                     // dd($msg);
+                    return redirect()->route('attendance.apply_leaves')->with('success', 'Leave successfully applied');
 
                 break;
+
             default:
 
 
@@ -471,7 +471,7 @@ class ApplyUserLeave extends Controller
                 $total_taken_leave[]['taken'] = 0;
                 $total_balance_leave[]['balance'] = 0;
             }
- 
+
         }
 
         $leave_options = array();
@@ -511,7 +511,7 @@ class ApplyUserLeave extends Controller
         $user_options = Misc::prependArray( array( 0 => '-- Please Choose --' ), $user_options );
         $data['users_cover_options'] = $user_options;
         //$data['users_cover_options'] = $ulf;
-        
+
         $data['name'] =$current_user->getFullName();
         $data['title'] = $current_user->getTitleObject()->getName(); //if this gives you error that means you should add/update data on 'user_title' table in db (it had deleted values and it gave me an error)
         $data['title_id'] = $current_user->getTitleObject()->getId();
@@ -537,6 +537,8 @@ class ApplyUserLeave extends Controller
         return view('leaves/ApplyUserLeave', $viewData);
 
     }
+
+
 }
 
 

@@ -43,7 +43,7 @@ class PayStubAmendmentList extends Controller
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
-    
+
         $this->permission = View::shared('permission');
         $this->current_user = View::shared('current_user');
         $this->current_company = View::shared('current_company');
@@ -51,7 +51,8 @@ class PayStubAmendmentList extends Controller
 
     }
 
-	public function index(){
+	public function index()
+    {
 		$permission = $this->permission;
         $current_user = $this->current_user;
         $current_company = $this->current_company;
@@ -113,12 +114,12 @@ class PayStubAmendmentList extends Controller
             }
         }
 
-        $ugdlf = new UserGenericDataListFactory(); 
+        $ugdlf = new UserGenericDataListFactory();
         $ugdf = new UserGenericDataFactory();
         $pplf = new PayPeriodListFactory();
 
         //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-        $hlf = new HierarchyListFactory(); 
+        $hlf = new HierarchyListFactory();
         $permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
         Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -143,7 +144,7 @@ class PayStubAmendmentList extends Controller
 
         switch ($action) {
             case 'add':
-                
+
                 Redirect::Page( URLBuilder::getURL( array('user_id' => $filter_user_id), '/payroll/pay_stub_amendment/add', FALSE) );
 
                 break;
@@ -159,6 +160,7 @@ class PayStubAmendmentList extends Controller
 
                 foreach ($ids as $id) {
                     $psalf->getById( $id );
+
                     foreach ($psalf->rs as $pay_stub_amendment) {
                         $psalf->data = (array)$pay_stub_amendment;
                         $pay_stub_amendment = $psalf;
@@ -208,7 +210,7 @@ class PayStubAmendmentList extends Controller
                                                                     'page' => $page
                                                                 ) );
 
-                $ulf = new UserListFactory(); 
+                $ulf = new UserListFactory();
                 $psalf = new PayStubAmendmentListFactory();
 
                 if ( $permission->Check('pay_stub_amendment','view') == FALSE ) {
@@ -233,16 +235,19 @@ class PayStubAmendmentList extends Controller
                 }
                 $psalf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data, $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
 
+                $pay_stub_amendments = [];
+
                 $pager = new Pager($psalf);
 
-                $psealf = new PayStubEntryAccountListFactory(); 
+                $psealf = new PayStubEntryAccountListFactory();
                 $pay_stub_entry_name_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50,60,65) );
 
                 //Get pay periods
-                $pplf->getByCompanyId( $current_company->getId() );
-                $pay_period_options = $pplf->getArrayByListFactory( $pplf, FALSE, TRUE );
+                // $pplf = new PayPeriodListFactory();
+                // $pplf->getByCompanyId( $current_company->getId() );
+                // $pay_period_options = $pplf->getArrayByListFactory( $pplf, FALSE, TRUE );
 
-                $utlf = new UserTitleListFactory(); 
+                $utlf = new UserTitleListFactory();
                 $utlf->getByCompanyId( $current_company->getId() );
                 $title_options = $utlf->getArrayByListFactory( $utlf, FALSE, TRUE );
 
@@ -250,15 +255,15 @@ class PayStubAmendmentList extends Controller
                 $blf->getByCompanyId( $current_company->getId() );
                 $branch_options = $blf->getArrayByListFactory( $blf, FALSE, TRUE );
 
-                $dlf = new DepartmentListFactory(); 
+                $dlf = new DepartmentListFactory();
                 $dlf->getByCompanyId( $current_company->getId() );
                 $department_options = $dlf->getArrayByListFactory( $dlf, FALSE, TRUE );
 
-                $rpsalf = new RecurringPayStubAmendmentListFactory(); 
+                $rpsalf = new RecurringPayStubAmendmentListFactory();
                 $rpsalf->getByCompanyId( $current_company->getId() );
                 $recurring_ps_amendment_options = $rpsalf->getArrayByListFactory( $rpsalf, FALSE, TRUE );
 
-                $uglf = new UserGroupListFactory(); 
+                $uglf = new UserGroupListFactory();
                 $group_options = $uglf->getArrayByNodes( FastTree::FormatArray( $uglf->getByCompanyIdArray( $current_company->getId() ), 'TEXT', TRUE) );
 
                 foreach ($psalf->rs as $psa_obj) {
@@ -272,6 +277,7 @@ class PayStubAmendmentList extends Controller
                     } else {
                         $amount = $psa_obj->getPercentAmount().'%';
                     }
+
                     $pay_stub_amendments[] = array(
                                         'id' => $psa_obj->getId(),
                                         'user_id' => $psa_obj->getUser(),
@@ -308,7 +314,7 @@ class PayStubAmendmentList extends Controller
                 $filter_data['title_options'] = Misc::prependArray( $all_array_option, $title_options );
                 $filter_data['group_options'] = Misc::prependArray( $all_array_option, $group_options );
                 $filter_data['status_options'] = Misc::prependArray( $all_array_option, $ulf->getOptions('status') );
-                $filter_data['pay_period_options'] = Misc::prependArray( $all_array_option, $pay_period_options );
+                // $filter_data['pay_period_options'] = Misc::prependArray( $all_array_option, $pay_period_options );
                 $filter_data['recurring_ps_amendment_options'] = Misc::prependArray( $all_array_option, $recurring_ps_amendment_options );
                 $filter_data['pay_stub_entry_name_options'] = Misc::prependArray( $all_array_option, $pay_stub_entry_name_options );
 
@@ -334,11 +340,12 @@ class PayStubAmendmentList extends Controller
                 $viewData['sort_column'] = $sort_column ;
                 $viewData['sort_order'] = $sort_order ;
                 $viewData['saved_search_id'] = $saved_search_id ;
-
+                // dd($viewData);
                 break;
         }
 
         return view('pay_stub_amendment/PayStubAmendmentList', $viewData);
 
     }
+
 }

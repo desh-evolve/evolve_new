@@ -1,93 +1,70 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 5457 $
- * $Id: UserWageList.php 5457 2011-11-04 20:49:58Z ipso $
- * $Date: 2011-11-04 13:49:58 -0700 (Fri, 04 Nov 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('wage','enabled')
-		OR !( $permission->Check('wage','view') OR $permission->Check('wage','view_child') OR $permission->Check('wage','view_own') ) ) {
+namespace App\Http\Controllers\users;
 
-	$permission->Redirect( FALSE ); //Redirect
+use App\Http\Controllers\Controller;
+use App\Models\Company\WageGroupListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Redirect;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserWageListFactory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
-}
+class UserWageList extends Controller
+{
+    protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
 
-$smarty->assign('title', __($title = 'Employee Wage List')); // See index.php
-BreadCrumb::setCrumb($title);
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
-										array	(
-												'action',
-												'page',
-												'sort_column',
-												'sort_order',
-												'saved_search_id',
-												'ids',
-												'user_id'
-												) ) );
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
 
-$ulf = new UserListFactory();
-//$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
-//$user_data = $ulf->getCurrent();
-//$smarty->assign('title', $user_data->getFullName().'\'s Wage List' );
+        // if ( !$permission->Check('wage','enabled')
+        //         OR !( $permission->Check('wage','view') OR $permission->Check('wage','view_child') OR $permission->Check('wage','view_own') ) ) {
+        //     $permission->Redirect( FALSE ); //Redirect
+        // }
 
-URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
-											array(
-													'user_id' => $user_id,
-													'sort_column' => $sort_column,
-													'sort_order' => $sort_order,
-													'page' => $page
-												) );
+	}
 
-$sort_array = NULL;
-if ( $sort_column != '' ) {
-	$sort_array = array($sort_column => $sort_order);
-}
 
-Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
+    public function index(Request $request, $user_id = null)
+    {
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $current_user_prefs = $this->userPrefs;
+        $permission = $this->permission;
 
-$action = Misc::findSubmitButton();
-switch ($action) {
-	case 'add':
+        $viewData['title'] = 'Employee Wage List';
+        $ulf = new UserListFactory();
 
-		Redirect::Page( URLBuilder::getURL(array('user_id' => $user_id, 'saved_search_id' => $saved_search_id ), 'EditUserWage.php', FALSE) );
+        $filter_user_id = $request->input('user_id', $user_id);
 
-		break;
-	case 'delete' OR 'undelete':
-		if ( strtolower($action) == 'delete' ) {
-			$delete = TRUE;
-		} else {
-			$delete = FALSE;
-		}
+        if ( isset($filter_user_id) ) {
+            $user_id = $filter_user_id;
+        } else {
+            $user_id = $current_user->getId();
+            $filter_user_id = $current_user->getId();
+        }
 
-		$uwlf = new UserWageListFactory();
 
-		if ( $ids != '' ) {
-			foreach ($ids as $id) {
-				$uwlf->getByIdAndCompanyId($id, $current_company->getId() );
-				foreach ($uwlf as $wage) {
-					$wage->setDeleted($delete);
-					$wage->Save();
-				}
-			}
-		}
-
-		Redirect::Page( URLBuilder::getURL(array('user_id' => $user_id), 'UserWageList.php') );
-
-		break;
-
-	default:
-		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
+        //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 		$user_has_default_wage = FALSE;
 
 		$hlf = new HierarchyListFactory();
@@ -95,14 +72,17 @@ switch ($action) {
 		Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
 		$uwlf = new UserWageListFactory();
-		$uwlf->GetByUserIdAndCompanyId($user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage(), $page, NULL, $sort_array );
-
-		$pager = new Pager($uwlf);
+		$uwlf->GetByUserIdAndCompanyId($user_id, $current_company->getId(), $current_user_prefs->getItemsPerPage() );
 
 		$wglf = new WageGroupListFactory();
 		$wage_group_options = $wglf->getArrayByListFactory( $wglf->getByCompanyId( $current_company->getId() ), TRUE );
 
 		$user_obj = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent();
+        $user_factory = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
+        $user_obj = is_object($user_factory) ? $user_factory->getCurrent() : null;
+
+        $wages = [];
+
 		if ( is_object($user_obj) ) {
 			$is_owner = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getID() );
 			$is_child = $permission->isChild( $user_obj->getId(), $permission_children_ids );
@@ -116,7 +96,10 @@ switch ($action) {
 					OR ( $permission->Check('wage','view_own') AND $is_owner === TRUE )
 					OR ( $permission->Check('wage','view_child') AND $is_child === TRUE ) ) {
 
-				foreach ($uwlf as $wage) {
+				foreach ($uwlf->rs as $wage) {
+                    $uwlf->data = (array)$wage;
+                    $wage = $uwlf;
+
 					$wages[] = array(
 										'id' => $wage->getId(),
 										'user_id' => $wage->getUser(),
@@ -138,10 +121,9 @@ switch ($action) {
 			}
 		}
 
-		$ulf = new UserListFactory();
 
 		$filter_data = NULL;
-		extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, NULL ) );
+		// extract( UserGenericDataFactory::getSearchFormData( $saved_search_id, null) );
 
 		if ( $permission->Check('wage','view') == FALSE ) {
 			if ( $permission->Check('wage','view_child') ) {
@@ -156,19 +138,60 @@ switch ($action) {
 
 		$user_options = UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE );
 
-		$smarty->assign_by_ref('user_options', $user_options);
 
-		$smarty->assign_by_ref('wages', $wages);
-		$smarty->assign_by_ref('user_id', $user_id );
-		$smarty->assign_by_ref('user_has_default_wage', $user_has_default_wage );
+        $viewData['user_id'] = $user_id;
+        $viewData['user_has_default_wage'] = $user_has_default_wage;
+        $viewData['wages'] = $wages;
+        $viewData['user_options'] = $user_options;
+        // dd($viewData);
 
-		$smarty->assign_by_ref('saved_search_id', $saved_search_id );
-		$smarty->assign_by_ref('sort_column', $sort_column );
-		$smarty->assign_by_ref('sort_order', $sort_order );
+        return view('users.UserWageList', $viewData);
 
-		$smarty->assign_by_ref('paging_data', $pager->getPageVariables() );
+    }
 
-		break;
+
+    public function add($user_id = null)
+    {
+        if (!$user_id) {
+            return redirect()->back()->with('error', 'User ID is required to add wage.');
+        }
+
+        // Optionally, validate user exists here before proceeding
+        return redirect()->to(URLBuilder::getURL(array('user_id' => $user_id) , '/user/wage/edit', false));
+    }
+
+
+
+    public function delete($id)
+	{
+		$current_company = $this->currentCompany;
+
+		if (empty($id)) {
+			return response()->json(['error' => 'No Wage List selected.'], 400);
+		}
+
+		$uwlf = new UserWageListFactory();
+
+			$wage_list = $uwlf->getByIdAndCompanyId($id, $current_company->getId() );
+
+			foreach ($wage_list->rs as $wage) {
+				$wage_list->data = (array)$wage; // added bcz currency data is null and it gives an error
+
+				$wage_list->setDeleted(true); // Set deleted flag to true
+
+				if ($wage_list->isValid()) {
+					$res = $wage_list->Save();
+
+					if($res){
+						return response()->json(['success' => 'Wage List deleted successfully.']);
+					}else{
+						return response()->json(['error' => 'Wage List deleted failed.']);
+					}
+				}
+			}
+
+		return response()->json(['success' => 'Operation completed successfully.']);
+	}
+
+
 }
-$smarty->display('users/UserWageList.tpl');
-?>

@@ -147,7 +147,7 @@ class UserJobHistory extends Controller
         $viewData['user_options'] = $user_options;
         $viewData['user_has_default_wage'] = $user_has_default_wage;
         $viewData['user_id'] = $user_id;
-        dd($viewData);
+        // dd($viewData);
 
         return view('users.UserJobHistoryList', $viewData);
 

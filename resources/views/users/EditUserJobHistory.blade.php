@@ -86,7 +86,7 @@
                                 <label for="first_worked_date" class="form-label req mb-1 col-md-3">First Day Worked</label>
                                 <div class="col-md-9 d-flex align-items-center gap-2">
                                     <input type="date" class="form-control w-50" id="first_worked_date" name="first_worked_date"
-                                        value="{{ isset($job_history_data['first_worked_date']) ? date('Y-m-d', $job_history_data['first_worked_date']) : '' }}"
+                                        value="{{ getdate_helper('date', $job_history_data['first_worked_date'] ?? '' )}}"
                                     >
 
                                     @if(count($pay_period_boundary_date_options) > 0)
@@ -108,7 +108,7 @@
                                 <label for="last_worked_date" class="form-label req mb-1 col-md-3">Last Day Worked</label>
                                 <div class="col-md-9">
                                     <input type="date" class="form-control w-50" id="last_worked_date" name="last_worked_date"
-                                        value="{{ isset($job_history_data['last_worked_date']) ? date('Y-m-d', $job_history_data['last_worked_date']) : '' }}"
+                                        value="{{ getdate_helper('date', $job_history_data['last_worked_date'] ?? '' )}}"
                                     >
                                 </div>
                             </div>

@@ -21,7 +21,7 @@ use App\Models\Schedule\ScheduleFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
-class AddMassSchedule extends Controller
+class _AddMassSchedule extends Controller
 {
     protected $permission;
     protected $currentUser;
@@ -389,12 +389,12 @@ class AddMassSchedule extends Controller
                 $data['department_options'] = $department_options;
 
                 $viewData['data'] = $data;
-
+                dd($viewData);
                 break;
         }
 
         $viewData['sf'] = $sf;
-        // dd($viewData);
+
 
         return view('schedule/AddMassSchedule', $viewData);
     }

@@ -102,8 +102,7 @@ use App\Http\Controllers\punch\UserDateTotalList;
 use App\Http\Controllers\punch\UserExceptionList;
 
 use App\Http\Controllers\authorization\AuthorizationList;
-
-
+use App\Http\Controllers\leaves\_ApprovedSupervisedBy;
 // use App\Http\Controllers\Report\DailyAttendanceReport;
 use App\Http\Controllers\request\EditRequest;
 use App\Http\Controllers\request\UserRequestList;
@@ -115,13 +114,13 @@ use App\Http\Controllers\users\EditUserEducation;
 use App\Http\Controllers\users\EditUserLifePromotion;
 use App\Http\Controllers\users\EditUserPasswordNew;
 use App\Http\Controllers\Users\EditUserPreference;
-use App\Http\Controllers\users\EditUserWageNew;
+use App\Http\Controllers\users\EditUserWage;
 use App\Http\Controllers\users\EditUserWorkExperionce;
 use App\Http\Controllers\users\UserEducation;
 use App\Http\Controllers\users\UserGenericStatusList;
 use App\Http\Controllers\users\UserLifePromotion;
 use App\Http\Controllers\users\UserList;
-use App\Http\Controllers\users\UserWageListNew;
+use App\Http\Controllers\users\UserWageList;
 use App\Http\Controllers\users\UserWorkExperionce;
 
 use App\Http\Controllers\users\BonusCalc;
@@ -186,6 +185,7 @@ Route::post('/authenticate', [Login::class, 'login'])->name('authenticate');
 Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 
 Route::get('/dashboard/user_count', [Dashboard::class, 'userCount'])->name('dashboard.user_count');
+Route::get('/dashboard/approved_leaves_count', [Dashboard::class, 'confirmedLeaveCount'])->name('dashboard.approved_leaves_count');
 Route::get('/dashboard/three_days_absenteeism', [Dashboard::class, 'threeDaysAbsenteeism'])->name('dashboard.absenteeism');
 Route::get('/dashboard/recent_messages', [Dashboard::class, 'recentMessges'])->name('dashboard.recent_messages');
 Route::get('/dashboard/recent_request', [Dashboard::class, 'recentRequest'])->name('dashboard.recent_request');
@@ -388,11 +388,11 @@ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])
  // ===============================================================================================================================
  // User wage
  // ===============================================================================================================================
- Route::get('/user/wage', [UserWageListNew::class, 'index'])->name('user.wage.index');
- Route::get('/user/wage/add/{user_id?}', [UserWageListNew::class, 'add'])->name('user.wage.add');
- Route::get('/user/wage/edit/{id?}', [EditUserWageNew::class, 'index'])->name('user.wage.edit');
- Route::post('/user/wage/save/{id?}', [EditUserWageNew::class, 'save'])->name('user.wage.save');
- Route::delete('/user/wage/delete/{id}', [UserWageListNew::class, 'delete'])->name('user.wage.delete');
+ Route::get('/user/wage', [UserWageList::class, 'index'])->name('user.wage.index');
+ Route::get('/user/wage/add/{user_id?}', [UserWageList::class, 'add'])->name('user.wage.add');
+ Route::get('/user/wage/edit/{id?}', [EditUserWage::class, 'index'])->name('user.wage.edit');
+ Route::post('/user/wage/save/{id?}', [EditUserWage::class, 'save'])->name('user.wage.save');
+ Route::delete('/user/wage/delete/{id}', [UserWageList::class, 'delete'])->name('user.wage.delete');
 
  // ===============================================================================================================================
  // User census
@@ -456,7 +456,7 @@ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])
  Route::get('/user/web_password/{id?}', [EditUserPasswordNew::class, 'index'])->name('user.web_password.index');
  Route::post('/user/web_password/save/{id?}', [EditUserPasswordNew::class, 'save'])->name('user.web_password.save');
 
-  // ===============================================================================================================================
+ // ===============================================================================================================================
  // User Quick Punch Password
  // ===============================================================================================================================
  Route::get('/user/quick_punch_password/{id?}', [EditUserPhonePasswordNew::class, 'index'])->name('user.quick_punch_password.index');
@@ -627,9 +627,9 @@ Route::get('/attendance/leaves/covered_aprooval', [ApprovedCoveredBy::class, 'in
 
 Route::match(['get', 'post', 'delete'], '/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
 
-//Route::get('/attendance/leaves/supervise_aprooval', [ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
-//Route::post('/attendance/leaves/supervise-approval/reject', [ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
-//Route::post('/attendance/leaves/supervise-approval/approved', [ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
+// Route::get('/attendance/leaves/supervise_aprooval', [_ApprovedSupervisedBy::class, 'index'])->name('attendance.leaves.supervise_aprooval');
+// Route::post('/attendance/leaves/supervise-approval/reject', [_ApprovedSupervisedBy::class, 'rejected'])->name('attendance.leaves.supervise_aprooval.reject');
+// Route::post('/attendance/leaves/supervise-approval/approved', [_ApprovedSupervisedBy::class, 'submit'])->name('attendance.leaves.supervise_aprooval.approved');
 
 Route::get('/attendance/leaves/view_user_leave/{id}', [VIewUserLeave::class, 'index'])->name('attendance.leaves.viewUserLeave');
 Route::get('/attendance/leaves/view_number_leave/{id}', [VIewNumberOfLeave::class, 'index'])->name('attendance.leaves.viewNumberLeave');
