@@ -181,7 +181,8 @@ class ApplyUserLeave extends Controller
                             $date_sh_array = explode(',', $data['leave_start_date']);
 
                             $udtlf_s = new UserDateListFactory();
-                            $udtlf_s->getByUserIdAndDate($current_user->getId(), $date_sh_array[0]);
+                            $date_timestamp = strtotime(trim($date_sh_array[0]));
+                            $udtlf_s->getByUserIdAndDate($current_user->getId(), $date_timestamp);
 
                             $udf_obj = $udtlf_s->getCurrent();
                             $pp_id = $udf_obj->getPayPeriod();

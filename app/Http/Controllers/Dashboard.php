@@ -84,6 +84,33 @@ class Dashboard extends Controller
     }
 
 
+   public function getTodaysConfirmedLeavesCount()
+    {
+        $lrlf = new LeaveRequestListFactory();
+        $today = date('Y-m-d');
+
+        // Get all confirmed leaves (no date filter)
+        $filter_data = []; // No restrictions
+        $lrlf->getAllConfirmedLeave(0, $filter_data);
+
+        $count = 0;
+
+        if ($lrlf->getRecordCount() > 0) {
+            foreach ($lrlf->rs as $leave) {
+                if (
+                    isset($leave->leave_from, $leave->leave_to)
+                    && $leave->leave_to >= $today // must end today or in future
+                    && $leave->leave_from <= $today // must have started already or today
+                ) {
+                    $count++;
+                }
+            }
+        }
+
+        return response()->json(['confirmed_leave_count' => $count]);
+    }
+
+
 
     public function threeDaysAbsenteeism()
     {
@@ -95,9 +122,9 @@ class Dashboard extends Controller
             $filter_data = array();
         }
 
-        // if ( $permission->Check('authorization','enabled')
-		// 	AND $permission->Check('authorization','view')
-		// 	AND $permission->Check('request','authorize') ) {
+        if ( $permission->Check('authorization','enabled')
+			AND $permission->Check('authorization','view')
+			AND $permission->Check('request','authorize') ) {
 
 
             $ulf1 = new UserListFactory();
@@ -113,7 +140,8 @@ class Dashboard extends Controller
                 for($d=0;$d<3;$d++){
 
                     $udlf = new UserDateListFactory();
-                    $check_date = date('Y-m-d',  mktime(0, 0, 0, date("m")  , date("d")-$d, date("Y")));
+                    // $check_date = date('Y-m-d',  mktime(0, 0, 0, date("m")  , date("d")-$d, date("Y")));
+                    $check_date = strtotime("-{$d} days"); // returns a timestamp
                     $udlf->getByUserIdAndDate($u_obj->getId(), $check_date);
                     $udlf_obj = $udlf->getCurrent();
                     $user_date_id = $udlf_obj->getId();
@@ -165,7 +193,7 @@ class Dashboard extends Controller
                     );
                 }
             }
-        // }
+        }
 
         return response()->json(['data' => $threeDaysAbsence]);
     }
