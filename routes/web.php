@@ -585,17 +585,21 @@ Route::get('/attendance/timesheet', [ViewUserTimeSheet::class, 'index'])->name('
 Route::get('/close_window', [CloseWindow::class, 'index'])->name('close_window');
 Route::get('/authorization/authorization_list', [AuthorizationList::class, 'index'])->name('authorization.authorization_list');
 
-Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
-Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
+//check here
+Route::match(['get', 'post', 'delete'], '/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
+Route::match(['get', 'post', 'delete'], '/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
+
+//Route::get('/attendance/punchlist', [PunchList::class, 'index'])->name('attendance.punchlist');
+//Route::get('/attendance/punch/add', [EditPunch::class, 'index'])->name('attendance.punch.add');
+//Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
+//Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
+//Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete'])->name('attendance.punch_single.delete');
+
 Route::get('/attendance/punch/userdate_totals', [UserDateTotalList::class, 'index'])->name('attendance.punch.userdate_totals');
 Route::get('/attendance/punch/edit_userdate_total', [EditUserDateTotal::class, 'index'])->name('attendance.punch.edit_userdate_total');
 
 //when using switch case u can use like this
 Route::match(['get', 'post'], '/attendance/punch/edit_user_absence', [EditUserAbsence::class, 'index'])->name('attendance.punch.edit_user_absence');
-
-Route::post('/attendance/punch/submit/{id?}', [EditPunch::class, 'submit'])->name('attendance.punch.submit');
-Route::delete('/attendance/punch/delete/{id}', [PunchList::class, 'delete'])->name('attendance.punch.delete');
-Route::delete('/attendance/punch_single/delete/{id}', [EditPunch::class, 'delete'])->name('attendance.punch_single.delete');
 
 Route::match(['get', 'post'], '/attendance/masspunch/add', [AddMassPunch::class, 'index'])->name('attendance.masspunch.add');
 
