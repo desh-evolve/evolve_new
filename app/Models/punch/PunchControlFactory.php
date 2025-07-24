@@ -1067,7 +1067,10 @@ class PunchControlFactory extends Factory {
 
 		//Skip these checks if they are deleting a punch.
 		if ( is_object( $this->getPunchObject() ) AND $this->getPunchObject()->getDeleted() == FALSE ) {
+
 			$plf = $this->getPLFByPunchControlID();
+			//dd($plf);
+			//dd([$plf !== NULL ,   $this->isNew() , $plf->getRecordCount() == 2  , $plf->getRecordCount() > 2 ]);
 			if ( $plf !== NULL AND ( ( $this->isNew() AND $plf->getRecordCount() == 2 ) OR $plf->getRecordCount() > 2 ) ) {
 				//('Punch Control can not have more than two punches. Please use the Add Punch button instead')
 				//They might be trying to insert a punch inbetween two others?

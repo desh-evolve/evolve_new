@@ -111,21 +111,21 @@
                             @endif
             
                             <tr class="bg-primary text-white">
-                                <td colspan="8">
+                                <td colspan="8" align="center">
                                     Date:
-                                    <a href="prev_pp=1" onClick="resetAction();">
+                                    <a href="?prev_pp=1" onClick="resetAction();">
                                         <i class="ri-arrow-left-double-fill text-white"></i>
                                     </a>
-                                    <a href="prev_week=1" onClick="resetAction();">
+                                    <a href="?prev_week=1" onClick="resetAction();">
                                         <i class="ri-arrow-left-s-line text-white"></i>
                                     </a>
                                     <input type="date" id="filter_date" name="filter_data[date]" value="{{getdate_helper('date', $filter_data['date'])}}" onChange="resetAction();this.form.submit()">
                                     <i class="ri-calendar-2-line text-white" alt="Pick a date" onMouseOver="calendar_setup('filter_date', 'cal_filter_date', false);" id="cal_filter_date" ></i>
 
-                                    <a href="next_week=1" onClick="resetAction();">
+                                    <a href="?next_week=1" onClick="resetAction();">
                                         <i class="ri-arrow-right-s-line text-white"></i>
                                     </a>
-                                    <a href="next_pp=1" onClick="resetAction();">
+                                    <a href="?next_pp=1" onClick="resetAction();">
                                         <i class="ri-arrow-right-double-fill text-white"></i>
                                     </a>
                                 </td>
@@ -276,17 +276,22 @@
                                     <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_meal_total_row['name']}}
                                     </td>
-                                    @foreach ($date_meal_total_row['data'] as $date_meal_total_epoch => $date_meal_total_day)
-                                        <td>
-                                            @if ($date_meal_total_day['total_time'] < 0)
-                                                <p color="red">
-                                            @endif
-                                            {{ gettimeunit_helper($date_meal_total_day['total_time_display'], '00:00') }}
-                                            @if ($date_meal_total_day['total_time'] < 0)
-                                                </p>
-                                            @endif
-                                        </td>
-                                    @endforeach
+                                    @if (!empty($date_meal_total_row['data']))
+                                        @foreach ($date_meal_total_row['data'] as $date_meal_total_epoch => $date_meal_total_day)
+                                            <td>
+                                                @if (!empty($date_meal_total_day))
+                                                    @if ($date_meal_total_day['total_time'] < 0)
+                                                        <p color="red">
+                                                    @endif
+                                                    {{ gettimeunit_helper($date_meal_total_day['total_time_display'], '00:00') }}
+                                                    @if ($date_meal_total_day['total_time'] < 0)
+                                                        </p>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    @endif
+                                    
                                 </tr>
                             @endforeach
                             
@@ -506,7 +511,7 @@
                                     <td class="bg-primary text-white" style="font-weight: bold; text-align: right">
                                         {{$date_absence_total_row['name']}}
                                     </td>
-                                    @foreach ($date_absence_total_row.data as $date_absence_total_epoch => $date_absence_total_day)
+                                    @foreach ($date_absence_total_row['data'] as $date_absence_total_epoch => $date_absence_total_day)
                                         <td 
                                             @if ((empty($pay_period_locked_rows[$date_absence_total_epoch]) || $pay_period_locked_rows[$date_absence_total_epoch] == FALSE) AND ( $permission->Check('absence','edit') OR ($permission->Check('absence','edit_child') AND $is_child === TRUE) OR ($permission->Check('absence','edit_own') AND $is_owner === TRUE )))
                                                 class="cellHL" id="cursor-hand"
@@ -575,7 +580,7 @@
                                                 @if ($time_sheet_verify['display_verify_button'] == TRUE)
                                                     <tr class="tblDataWhiteNH">
                                                         <td colspan="2" @if($time_sheet_verify['verification_box_color'] != '') style="background-color: {{ $time_sheet_verify['verification_box_color'] }}" @endif>
-                                                            <input type="SUBMIT" class="button" name="action:verify" value="Verify" onClick="return confirmSubmit('By pressing OK, I hereby certify that this timesheet for the pay period of {{getdate_helper('date', $pay_period_start_date)}} to {{getdate_helper('date', $pay_period_end_date)}} is accurate and correct.');">
+                                                            <input type="SUBMIT" class="button" name="action" value="Verify" onClick="return confirmSubmit('By pressing OK, I hereby certify that this timesheet for the pay period of {{getdate_helper('date', $pay_period_start_date)}} to {{getdate_helper('date', $pay_period_end_date)}} is accurate and correct.');">
                                                         </td>
                                                     </tr>
                                                 @endif
@@ -707,7 +712,7 @@
                                                             <option value="{{$id}}">{{$name}}</option>
                                                         @endforeach
                                                     </select>
-                                                    <input type="SUBMIT" class="button" name="action:submit" value="Submit" onClick="return confirmAction();">
+                                                    <input type="SUBMIT" class="button" name="action" value="Submit" onClick="return confirmAction();">
                                                 </td>
                                             </tr>
                                         @endif
