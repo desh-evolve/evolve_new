@@ -340,7 +340,7 @@ class UserGenericDataListFactory extends UserGenericDataFactory implements Itera
 		if ( $company_id == '') {
 			return FALSE;
 		}
-
+		dd([$company_id, $filter_data]);
 		if ( !is_array($order) ) {
 			//Use Filter Data ordering if its set.
 			if ( isset($filter_data['sort_column']) AND $filter_data['sort_order']) {

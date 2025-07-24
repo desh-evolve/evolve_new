@@ -151,7 +151,7 @@ class EditUserJobHistory extends Controller
 
 
         $viewData['user_data'] = $user_data;
-        
+
         $viewData['job_history_data'] = $job_history_data;
         $viewData['tmp_effective_date'] = $tmp_effective_date;
         $viewData['pay_period_boundary_date_options'] = $pay_period_boundary_dates;
@@ -172,6 +172,7 @@ class EditUserJobHistory extends Controller
 
         $user_id = $request->input('user_id');
         $job_history_data = $request->all();
+
 
         $ulf = new UserListFactory();
         $ujf = new UserJobFactory();

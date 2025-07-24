@@ -480,7 +480,7 @@ if ( isset($enable_wap) AND $enable_wap == TRUE ) {
 	header( 'Content-type: text/vnd.wap.wml', TRUE );
 }
 
-require_once('Cache.inc.php');
-require_once('Database.inc.php');
+//require_once('Cache.inc.php');
+//require_once('Database.inc.php');
 
 ?>

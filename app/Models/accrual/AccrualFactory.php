@@ -211,7 +211,7 @@ class AccrualFactory extends Factory {
 	}
 	function setUserDateTotalID($id) {
 		$id = trim($id);
-		
+
 		$udtlf = new UserDateTotalListFactory();
 
 		if ( $id == 0 OR $this->Validator->isResultSetWithRows( 'user_date_total', $udtlf->getByID($id), ('User Date Total ID is invalid') ) ) {
@@ -238,7 +238,7 @@ class AccrualFactory extends Factory {
 		$epoch = trim($epoch);
 
 		if 	( $this->Validator->isDate( 'times_tamp', $epoch, ('Incorrect time stamp')) ) {
-			$this->data['time_stamp'] = $epoch;
+			$this->data['time_stamp'] = date('Y-m-d H:i:s', $epoch);
 
 			return TRUE;
 		}
@@ -253,12 +253,12 @@ class AccrualFactory extends Factory {
 		}
 
 		return FALSE;
-            
+
     }
-        
+
     function setLeaveRequestId($id) {
         $id = (int)trim($id);
-            
+
         if ( $id == '' OR empty($id) ) {
 			$id = NULL;
 		}
@@ -272,9 +272,9 @@ class AccrualFactory extends Factory {
 		}
 
 		return FALSE;
-            
+
     }
-        
+
 	function isValidAmount($amount) {
 		Debug::text('Type: '. $this->getType() .' Amount: '. $amount , __FILE__, __LINE__, __METHOD__, 10);
 		//Based on type, set Amount() pos/neg
@@ -316,7 +316,7 @@ class AccrualFactory extends Factory {
 			$int = 0;
 		}
 
-		if 	(	
+		if 	(
 				$this->Validator->isNumeric( 'amount', $int, ('Incorrect Amount'))
 				AND
 				$this->Validator->isTrue( 'amount', $this->isValidAmount($int), ('Amount does not match type, try using a negative or positive value instead'))

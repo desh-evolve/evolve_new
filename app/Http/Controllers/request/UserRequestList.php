@@ -50,9 +50,9 @@ class UserRequestList extends Controller
 		$current_user_prefs = $this->userPrefs;
 
 		$filter_data = [];
-		$rlf = new RequestListFactory(); 
+		$rlf = new RequestListFactory();
 		$rlf->getByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
-		
+
 		if ( !$permission->Check('request','enabled')
 				OR !( $permission->Check('request','view') OR $permission->Check('request','view_own') OR $permission->Check('request','view_child') ) ) {
 			$permission->Redirect( FALSE ); //Redirect
@@ -68,7 +68,7 @@ class UserRequestList extends Controller
 				'filter_start_date',
 				'filter_end_date',
 				'ids',
-			) 
+			)
 		) );
 
 		URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
@@ -79,7 +79,7 @@ class UserRequestList extends Controller
 				'sort_column' => $sort_column,
 				'sort_order' => $sort_order,
 				'page' => $page
-			) 
+			)
 		);
 
 		$sort_array = NULL;
@@ -167,6 +167,7 @@ class UserRequestList extends Controller
 		$viewData['sort_order'] = $sort_order ;
 
 		$viewData['paging_data'] = $pager->getPageVariables() ;
+        // dd($viewData);
 
 		return view('request/UserRequestList', $viewData);
 	}
@@ -178,7 +179,7 @@ class UserRequestList extends Controller
 		$rlf = new RequestListFactory();
 
 		$rlf->getByIdAndCompanyId( $id, $current_company->getId() );
-		
+
 		foreach ($rlf->rs as $r_obj) {
 			$rlf->data = (array)$r_obj;
 			unset($rlf->data['date_stamp']);

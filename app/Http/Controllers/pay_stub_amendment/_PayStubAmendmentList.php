@@ -17,7 +17,7 @@ use App\Models\Users\UserGenericDataFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
-class PayStubAmendmentList extends Controller
+class _PayStubAmendmentList extends Controller
 {
 	protected $permission;
 	protected $currentUser;
@@ -60,11 +60,13 @@ class PayStubAmendmentList extends Controller
 		$psalf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), $filter_data);
 		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_entry_name_options = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray($current_company->getId(), 10, array(10, 20, 30, 50, 60, 65));
-		$pay_stub_amendments = [];
+
+        $pay_stub_amendments = [];
 
 		foreach ($psalf->rs as $psa_obj) {
 			$psalf->data = (array)$psa_obj;
 			$psa_obj = $psalf;
+
 			$user_obj = $ulf->getById($psa_obj->getUser())->getCurrent();
 
 			if ($psa_obj->getType() == 10) {
@@ -103,6 +105,7 @@ class PayStubAmendmentList extends Controller
 		return view('pay_stub_amendment/PayStubAmendmentList', $viewData);
 	}
 
+    
 	public function delete($id)
 	{
 		$delete = TRUE;
@@ -131,4 +134,5 @@ class PayStubAmendmentList extends Controller
 
 		$saved_search_id = UserGenericDataFactory::searchFormDataHandler($action, $filter_data, URLBuilder::getURL(NULL, 'PayStubAmendmentList.php'));
 	}
+
 }

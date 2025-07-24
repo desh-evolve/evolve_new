@@ -283,7 +283,7 @@ class UserJobFactory extends Factory {
 			//return TRUE;
 
 			if 	( $epoch > 0 ) {
-				$this->data['first_worked_date'] = $epoch;
+				$this->data['first_worked_date'] = date('Y-m-d H:i:s', $epoch);
 
 				return TRUE;
 			} else {
@@ -332,7 +332,7 @@ class UserJobFactory extends Factory {
 			//return TRUE;
 
 			if 	( $epoch > 0 ) {
-				$this->data['last_worked_date'] = $epoch;
+				$this->data['last_worked_date'] = date('Y-m-d H:i:s', $epoch);
 
 				return TRUE;
 			} else {

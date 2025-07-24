@@ -50,7 +50,7 @@
                                             <td>
                                                 <p class="text-muted mb-0">
                                                     <i data-feather="users" class="me-2 icon-sm"></i>
-                                                    <span class="employee-count-pie">25</span>
+                                                    <span class="employee-count-pie">0</span>
                                                 </p>
                                             </td>
                                         </tr>
@@ -63,7 +63,7 @@
                                             <td>
                                                 <p class="text-muted mb-0">
                                                     <i data-feather="external-link" class="me-2 icon-sm"></i>
-                                                    <span class="leaves-count-pie">50</span>
+                                                    <span class="leaves-count-pie">0</span>
                                                 </p>
                                             </td>
                                         </tr>
@@ -107,7 +107,7 @@
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <p class="fw-semibold text-white mb-0 fs-5">Approved Leaves</p>
-                                            <h2 class="mt-4 text-white fs-1 fw-semibold"><span class="leaves-count">25</span></h2>
+                                            <h2 class="mt-4 text-white fs-1 fw-semibold"><span class="leaves-count">0</span></h2>
                                         </div>
                                         <div>
                                             <div class="avatar-sm flex-shrink-0">
@@ -157,6 +157,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -268,9 +269,9 @@
                                 <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 1;">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Employee</th>
-                                        <th scope="col">Type</th>
                                         <th scope="col">Date</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Type</th>
                                     </tr>
                                 </thead>
 
@@ -418,33 +419,66 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        var options = {
-            chart: {
-                type: 'pie',
-                height: 500
-            },
-            labels: ['Attendance', 'Approved Leaves'],
-            series: [25, 50], // Dummy values
-            colors: ['#00AE98', '#e15d44'],
-            legend: {
-                position: 'bottom'
+
+        let chart;
+
+        // Fetch employee count and approved leaves
+        Promise.all([
+            fetch('{{ route('dashboard.user_count') }}').then(res => res.json()),
+            fetch('{{ route('dashboard.approved_leaves_count') }}').then(res => res.json())
+        ])
+        .then(([employeeData, leaveData]) => {
+            const totalEmployees = employeeData.user_count || 0;
+            const approvedLeaves = leaveData.confirmed_leave_count || 0;
+            const attendance = totalEmployees - approvedLeaves;
+
+            // Update text in pie summary boxes
+            document.querySelector('.employee-count-pie').textContent = attendance;
+            document.querySelector('.leaves-count-pie').textContent = approvedLeaves;
+
+            // Update Dashboard user count & approved leaves count
+            document.querySelector('.employee-count').textContent = totalEmployees;
+            document.querySelector('.leaves-count').textContent = approvedLeaves;
+
+            // Prepare chart data
+            const options = {
+                chart: {
+                    type: 'pie',
+                    height: 500
+                },
+                labels: ['Attendance', 'Approved Leaves'],
+                series: [attendance, approvedLeaves],
+                colors: ['#00AE98', '#e15d44'],
+                legend: {
+                    position: 'bottom'
+                }
+            };
+
+            // Render chart
+            if (chart) {
+                chart.updateOptions(options);
+            } else {
+                chart = new ApexCharts(document.querySelector("#store-visits-source"), options);
+                chart.render();
             }
+        })
+        .catch(error => {
+            console.error('Error loading chart data:', error);
+            document.querySelector('.employee-count').textContent = 'N/A';
+            document.querySelector('.employee-count-pie').textContent = 'N/A';
+
+            document.querySelector('.leaves-count').textContent = 'N/A';
+            document.querySelector('.leaves-count-pie').textContent = 'N/A';
+        });
+
+
+        // Add this function above the fetch if not already present
+        const formatDate = (epoch) => {
+            if (!epoch || epoch === 0) return '-';
+            const date = new Date(epoch * 1000);
+            return date.toLocaleDateString();
         };
 
-        var chart = new ApexCharts(document.querySelector("#store-visits-source"), options);
-        chart.render();
-
-
-        // dashboard user count
-        fetch('{{ route('dashboard.user_count') }}')
-            .then(response => response.json())
-            .then(data => {
-                document.querySelector('.employee-count').textContent = data.user_count;
-            })
-            .catch(error => {
-                console.error('Error fetching user count:', error);
-                document.querySelector('.employee-count').textContent = 'N/A';
-            });
 
 
         // 3 days absands details
@@ -483,16 +517,19 @@
                 const tbody = document.getElementById('message_table_body');
                 tbody.innerHTML = ''; // Clear existing rows
 
-                if (data.data.length === 0) {
+                // Filter only messages with status_id === 10
+                const filteredMessages = data.data.filter(message => message.status_id === 10);
+
+                if (filteredMessages.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="4" class="text-center">No Recent Messages..</td></tr>`;
                 } else {
-                    data.data.forEach((message, index) => {
+                    filteredMessages.forEach((message, index) => {
                         tbody.innerHTML += `
                             <tr>
                                 <td>${index + 1}</td>
                                 <td>${message.user_full_name}</td>
                                 <td>${message.subject}</td>
-                                <td>${message.created_date}</td>
+                                <td>${formatDate(message.created_date)}</td>
                             </tr>
                         `;
                     });
@@ -519,7 +556,7 @@
                         tbody.innerHTML += `
                             <tr>
                                 <td>${index + 1}</td>
-                                <td>${request.date_stamp}</td>
+                                <td>${formatDate(request.date_stamp)}</td>
                                 <td>${request.status}</td>
                                 <td>${request.type}</td>
                             </tr>
@@ -550,7 +587,7 @@
                                 <td>${index + 1}</td>
                                 <td>${pendingRequests.user_full_name}</td>
                                 <td>${pendingRequests.type}</td>
-                                <td>${pendingRequests.date_stamp}</td>
+                                <td>${formatDate(pendingRequests.date_stamp)}</td>
                             </tr>
                         `;
                     });
@@ -563,12 +600,7 @@
             });
 
 
-        // Add this function above the fetch if not already present
-        const formatDate = (epoch) => {
-            if (!epoch || epoch === 0) return '-';
-            const date = new Date(epoch * 1000);
-            return date.toLocaleDateString();
-        };
+
 
         fetch('{{ route('dashboard.employement_confirmation_request') }}')
             .then(response => response.json())

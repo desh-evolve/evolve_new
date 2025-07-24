@@ -7,20 +7,13 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title mb-0 flex-grow-1">{{ __($title) }}</h4>
-                    </div>
 
-                    {{-- <div class="justify-content-md-end">
-                        <div class="d-flex justify-content-end">
-                            <a
-                                type="button"
-                                href="#"
-                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
-                                Add <i class="ri-add-line"></i>
-                            </a>
-                        </div>
-                    </div> --}}
+                    <h4 class="card-title mb-0 flex-grow-1">{{ __($title) }}</h4>
+
+                    <button type="button" class="btn btn-danger" onclick="refreshFilters()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+
                 </div>
 
                 <div class="card-body">
@@ -71,31 +64,14 @@
                                 </div>
                             </form>
                         </div>
-
-
-                        {{-- <div class="col-12 d-flex gap-1">
-                            <form method="post" name="frmleavesearch" action="#">
-                                <td class="tblActionRow" colspan="1">
-                                    <button type="submit" name="action:export" value="export" class="btn btn-outline-secondary">
-                                        Export&emsp;<i class="bi bi-plus"></i>
-                                    </button>
-                                </td>
-                            </form>
-
-                            <button type="button" class="btn btn-outline-danger" onclick="refreshFilters()">
-                                <i class="bi bi-arrow-clockwise"></i>
-                            </button>
-                        </div> --}}
-
                     </div>
 
+                    {{-- -------------------------------------------- --}}
 
-                    {{-- <div class="pt-1">
-
-                        <div id="contentBoxTwoEdit">
-
-                            <table id="confirmed_leavelist_table" class="table table-striped table-bordered">
-                                @if (isset($leaves['msg']) && $leaves['msg'] != '')
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="confirmed_leavelist_table" class="table nowrap align-middle" style="width:100%">
+                                 @if (isset($leaves['msg']) && $leaves['msg'] != '')
                                     <tr class="tblDataWarning">
                                         <td colspan="100" valign="center">
                                             <br>
@@ -105,54 +81,6 @@
                                     </tr>
                                 @endif
 
-                                <thead class="bg-primary text-white">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Employee</th>
-                                        <th>Leave Type</th>
-                                        <th>Leave Start Date</th>
-                                        <th>Leave End Date</th>
-                                        <th>No Days</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table_body">
-                                    @foreach ($leaves as $row)
-                                        @php
-                                            $row_class = isset($row['deleted']) && $row['deleted'] ? 'table-danger' : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
-                                        @endphp
-                                        <tr class="{{ $row_class }}">
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{$row['user']}}</td>
-                                            <td>{{$row['leave_name']}}</td>
-                                            <td>{{$row['start_date']}}</td>
-                                            <td>{{$row['end_date']}}</td>
-                                            <td>{{$row['amount']}}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='{{ url('/attendance/leaves/view_number_leave/' . $row['id']) }}'">
-                                                    Leave
-                                                </button>
-                                                <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='{{ url('/attendance/leaves/view_user_leave/' . $row['id']) }}'">
-                                                    View
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/confirmed_leave/delete/{{ $row['id'] }}', 'Leave', this)">
-                                                    Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
-                        </div>
-
-                    </div> --}}
-
-                    {{-- -------------------------------------------- --}}
-
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="confirmed_leavelist_table" class="table nowrap align-middle" style="width:100%">
                                 <thead class="bg-primary text-white">
                                     <tr>
                                         <th>#</th>

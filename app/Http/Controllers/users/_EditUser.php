@@ -206,11 +206,11 @@
 // 						// 'file_name'=>$user->getFileName(),
 // 						'probation' => $user->getProbation(),
 
-// 						// 'basis_of_employment'=>$user->getBasisOfEmployment(),    
+// 						// 'basis_of_employment'=>$user->getBasisOfEmployment(),
 // 						'month' => $user->getMonth(),
 
 // 						// 'user_template_url'=>$user->getUserTemplateUrl(),
-// 						// 'user_template_name'=>$user->getTemplateName(),							   
+// 						// 'user_template_name'=>$user->getTemplateName(),
 
 
 // 						// 'user_id_copy_url'=>$user->getUserIdCopyUrl(),
@@ -381,7 +381,7 @@
 // 				$user_data['hire_date'] = time();
 // 			}
 // 		}
-// 		//var_dump($user_data);              
+// 		//var_dump($user_data);
 
 // 		//Select box options;
 // 		$blf = new BranchListFactory();
@@ -703,7 +703,7 @@
 // 			 */
 // 			//                        if ( isset($user_data['employee_number_only']) ) {
 // 			//				$uf->setEmployeeNumberOnly($user_data['employee_number_only']);
-// 			//			}			
+// 			//			}
 
 // 			if (isset($user_data['city'])) {
 // 				$uf->setCity($user_data['city']);
@@ -1226,7 +1226,7 @@ class EditUser extends Controller
 			// Generate appointment letter
 			// $this->generateAppointmentLetter($user_data, $user_id);
 			// return redirect()->to(URLBuilder::getURL(null, '/department'))->with('success', 'Department saved successfully.');
-        
+
 			return redirect()->route('admin.userlist')->with('success', 'User saved successfully.');
 		}
 
@@ -1989,7 +1989,7 @@ class EditUser extends Controller
             abort(500, 'Error serving file');
         }
     }
-	
+
 	protected function deleteUserFile($file_name, $user_id, $file_type)
 	{
 		$file_types = [

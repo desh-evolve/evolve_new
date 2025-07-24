@@ -2,6 +2,7 @@
 
 namespace App\Models\PayPeriod;
 
+use App\Models\Core\AuthorizationFactory;
 use App\Models\Core\AuthorizationListFactory;
 use App\Models\Core\Debug;
 use App\Models\Core\Factory;
@@ -11,6 +12,7 @@ use App\Models\Core\TTDate;
 use App\Models\Core\TTi18n;
 use App\Models\Core\TTLog;
 use App\Models\Core\UserDateListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
 use App\Models\Policy\ExceptionPolicyFactory;
 use App\Models\Users\UserListFactory;
 
@@ -529,7 +531,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 			$user_obj = $ulf->getCurrent();
 
 			//Get timesheet verification hierarchy, so we know who the superiors are.
-			$hlf = new HierarchyListFactory();
+			$hlf = new HierarchyListFactory(); 
 			$timesheet_parent_level_user_ids = $hlf->getHierarchyParentByCompanyIdAndUserIdAndObjectTypeID( $user_obj->getCompany(), $user_obj->getId(), 90, TRUE, FALSE ); //Immediate superiors only can verify timesheets directly.
 			Debug::Arr( $timesheet_parent_level_user_ids, 'TimeSheet Parent Level Ids', __FILE__, __LINE__, __METHOD__,10);
 			if ( in_array( $current_user_id, (array)$timesheet_parent_level_user_ids ) ) {
@@ -668,7 +670,7 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 			}
 
 			if ( $authorize_timesheet == TRUE ) {
-				$af = new AuthorizationFactory();
+				$af = new AuthorizationFactory(); 
 				$af->setObjectType('timesheet');
 				$af->setObject( $this->getId() );
 				$af->setAuthorized(TRUE);
@@ -683,8 +685,9 @@ class PayPeriodTimeSheetVerifyFactory extends Factory {
 					$udlf->getByUserIdAndDate( $this->getUser(), $this->getPayPeriodObject()->getEndDate() );
 					if ( $udlf->getRecordCount() > 0 ) {
 						Debug::Text('Recalculating exceptions on last day of pay period...', __FILE__, __LINE__, __METHOD__,10);
-						ExceptionPolicyFactory::calcExceptions( $udlf->getCurrent()->getID(), FALSE, FALSE );
-					}
+						$epf = new ExceptionPolicyFactory();
+						$epf->calcExceptions( $udlf->getCurrent()->getID(), FALSE, FALSE );
+					} 
 				} else {
 					Debug::Text('No Pay Period found...', __FILE__, __LINE__, __METHOD__,10);
 				}

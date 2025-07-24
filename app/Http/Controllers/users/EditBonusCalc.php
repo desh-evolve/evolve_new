@@ -164,6 +164,9 @@ class EditBonusCalc extends Controller
 
 		$viewData['bdf'] = $bdf;
 		$viewData['view'] = $view;
+        // dd($viewData);
+
 		return view('users/EditBonusCalc', $viewData);
 	}
+
 }

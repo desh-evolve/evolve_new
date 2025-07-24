@@ -148,11 +148,12 @@ class ViewUserTimeSheet extends Controller
                 'next_pp'
             ) 
         ) );
-
+        
         //Load default filter settings, if other filter settings aren't set.
         $ugdlf = new UserGenericDataListFactory(); 
-
         $ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'], TRUE );
+        //dd($ugdlf->getCurrent()->getData());
+
         if ( $ugdlf->getRecordCount() > 0 ) {
             Debug::Text('Found Default Filter!', __FILE__, __LINE__, __METHOD__,10);
 
@@ -163,6 +164,8 @@ class ViewUserTimeSheet extends Controller
                 $filter_data = $ugd_obj->getData();
             }
         }
+
+        //dd(date('Y-m-d', $filter_data['date']));
 
         if ( !isset($filter_data['user_id']) ) {
             $filter_data['user_id'] = NULL;
@@ -250,7 +253,7 @@ class ViewUserTimeSheet extends Controller
         } elseif ( isset($next_week) ) {
             $filter_data['date'] = TTDate::getBeginDayEpoch( $filter_data['date']+((86400*7)+7200) ); //DST
         }
-
+        
         //Get current PP info
         if ( isset($prev_pp) OR isset($next_pp) ) {
             $pplf = new PayPeriodListFactory();
@@ -277,7 +280,7 @@ class ViewUserTimeSheet extends Controller
                 }
             }
         }
-
+        
         if ( $filter_data['date'] == '' OR $filter_data['date'] <= 0 ) {
             $filter_data['date'] = TTDate::getBeginDayEpoch( TTDate::getTime() );
         }
@@ -339,7 +342,19 @@ class ViewUserTimeSheet extends Controller
                                                             'filter_data' => $filter_data,
                                                         ) );
 
-        $action = Misc::findSubmitButton();
+
+        //$action = Misc::findSubmitButton();
+        //===================================================================================
+        $action = '';
+        if (isset($_POST['action'])) {
+            $action = trim($_POST['action']);
+        } elseif (isset($_GET['action'])) {
+            $action = trim($_GET['action']);
+        }
+        $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
+        //===================================================================================
+
+
         Debug::Text('Action: '. $action .' Action Option: '. $action_option, __FILE__, __LINE__, __METHOD__,10);
         //If submit is pressed, use $action_option from the dropdown box as the action instead.
         if ( $action == 'submit' AND $action_option != '' ) {

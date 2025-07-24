@@ -20,7 +20,7 @@
                     
                     {{-- ---------------------------------------------- --}}
 
-                    <form method="POST" action="{{ route('attendance.punch.submit') }}">
+                    <form method="POST" action="/attendance/punch/add">
                         @csrf
                         <div>
                             @if (!$pcf->Validator->isValid() OR !$pf->Validator->isValid())
@@ -296,9 +296,9 @@
                         </div>
             
                         <div id="contentBoxFour">
-                            <input type="submit" class="btn btn-sm btn-primary" name="action:submit" value="Submit">
+                            <input type="submit" class="btn btn-sm btn-primary" name="action" value="Submit" onClick="return singleSubmitHandler(this)">
                             @if (!empty($pc_data['punch_id']) AND ( $permission->Check('punch','delete') OR $permission->Check('punch','delete_own') OR $permission->Check('punch','delete_child') ))
-                                <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/attendance/punch_single/delete/{{ $pc_data['punch_id'] ?? '' }}', 'Punch', this, true)">Delete</button>
+                            <input type="submit" class="btnSubmit" name="action" value="Delete" onClick="return singleSubmitHandler(this)">
                             @endif
                         </div>
                 

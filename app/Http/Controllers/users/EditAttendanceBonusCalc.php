@@ -73,7 +73,7 @@ class EditAttendanceBonusCalc extends Controller
 
         switch ($action) {
             case 'submit':
-                dd($action);
+                // dd($action);
                 $abf->StartTransaction();
 
                 if ($data['id'] == '') {

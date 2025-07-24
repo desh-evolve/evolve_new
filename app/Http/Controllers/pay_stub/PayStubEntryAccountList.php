@@ -69,9 +69,9 @@ class PayStubEntryAccountList extends Controller
 			);
 
 		}
-		
+
 		$viewData['rows'] = $rows;
-		
+
         return view('pay_stub/PayStubEntryAccountList', $viewData);
 
     }
@@ -80,13 +80,14 @@ class PayStubEntryAccountList extends Controller
 		$current_company = $this->currentCompany;
 		//Debug::setVerbosity(11);
 		PayStubEntryAccountFactory::addPresets( $current_company->getId() );
-		
+
 		return redirect(URLBuilder::getURL( NULL, '/payroll/paystub_accounts'));
 	}
 
-	public function delete($id){
-		$delete = TRUE;
+	public function delete($id)
+    {
 		$current_company = $this->currentCompany;
+		$delete = TRUE;
 
 		$psealf = new PayStubEntryAccountListFactory();
 		$psealf->getByIdAndCompanyId($id, $current_company->getId() );
@@ -97,7 +98,13 @@ class PayStubEntryAccountList extends Controller
 
 			$psea_obj->setDeleted($delete);
 			if ( $psea_obj->isValid() ) {
-				$psea_obj->Save();
+				$res = $psea_obj->Save();
+
+                if($res){
+					return response()->json(['success' => 'Pay Stub Account Deleted Successfully.']);
+				}else{
+					return response()->json(['error' => 'Pay Stub Account Deleted Failed.']);
+				}
 			}
 		}
 

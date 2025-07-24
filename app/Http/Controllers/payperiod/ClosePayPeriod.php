@@ -41,20 +41,20 @@ class ClosePayPeriod extends Controller
         $basePath = Environment::getBasePath();
         require_once($basePath . '/app/Helpers/global.inc.php');
         require_once($basePath . '/app/Helpers/Interface.inc.php');
-    
+
         $this->permission = View::shared('permission');
         $this->current_user = View::shared('current_user');
         $this->current_company = View::shared('current_company');
         $this->current_user_prefs = View::shared('current_user_prefs');
 
-    }
+    } 
 
 	public function index(){
 		$permission = $this->permission;
         $current_user = $this->current_user;
         $current_company = $this->current_company;
         $current_user_prefs = $this->current_user_prefs;
-		
+
 		$viewData = [];
 
         if ( !$permission->Check('pay_period_schedule','enabled')
@@ -131,13 +131,13 @@ class ClosePayPeriod extends Controller
 
 
                 break;
-            
+
             case 'generate_pay_stubs':
                 Debug::Text('Generate Pay Stubs ', __FILE__, __LINE__, __METHOD__,10);
                 //var_dump($pay_stub_pay_period_ids); die;
                 Redirect::Page( URLBuilder::getURL( array('action' => 'generate_paystubs', 'pay_period_ids' => $pay_stub_pay_period_ids, 'next_page' => '/payroll/payroll_processing' ), '/progress_bar_control') );
-                
-                
+
+
                 break;
             default:
                 //Step 1, get all open pay periods that have ended and are before the transaction date.
@@ -148,11 +148,13 @@ class ClosePayPeriod extends Controller
 
                 //$pplf->getByCompanyIdAndTransactionDate( $current_company->getId(), TTDate::getTime() );
                 $pplf->getByCompanyIdAndStatus( $current_company->getId(), array(10,12,15) );
+                $pay_periods = [];
 
                 if ( $pplf->getRecordCount() > 0 ) {
                     foreach ($pplf->rs as $pay_period_obj) {
                         $pplf->data = (array)$pay_period_obj;
                         $pay_period_obj = $pplf;
+
                         $pay_period_schedule = $ppslf->getById( $pay_period_obj->getPayPeriodSchedule() )->getCurrent();
 
                         if ( $pay_period_schedule != FALSE ) {
@@ -164,6 +166,7 @@ class ClosePayPeriod extends Controller
                             $med_severity_exceptions = 0;
                             $high_severity_exceptions = 0;
                             $critical_severity_exceptions = 0;
+
                             if ( $elf->getRecordCount() > 0 ) {
                                 Debug::Text(' Found Exceptions: '. $elf->getRecordCount(), __FILE__, __LINE__, __METHOD__,10);
                                 foreach($elf->rs as $e_obj ) {
@@ -208,6 +211,7 @@ class ClosePayPeriod extends Controller
                             $pptsvlf->getByPayPeriodIdAndCompanyId( $pay_period_obj->getId(), $current_company->getId() );
                             $verified_time_sheets = 0;
                             $pending_time_sheets = 0;
+
                             if ( $pptsvlf->getRecordCount() > 0 ) {
                                 foreach( $pptsvlf->rs as $pptsv_obj ) {
                                     $pptsvlf->data = (array)$pptsv_obj;
@@ -280,4 +284,5 @@ class ClosePayPeriod extends Controller
         }
         return view('payperiod/ClosePayPeriod', $viewData);
     }
+
 }

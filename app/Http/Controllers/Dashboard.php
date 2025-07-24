@@ -16,6 +16,7 @@ use App\Models\Department\DepartmentListFactory;
 use App\Models\Hierarchy\HierarchyLevelListFactory;
 use App\Models\Hierarchy\HierarchyListFactory;
 use App\Models\Leaves\AbsenceLeaveUserEntryRecordListFactory;
+use App\Models\Leaves\LeaveRequestListFactory;
 use App\Models\Message\MessageControlListFactory;
 use App\Models\Punch\PunchControlListFactory;
 use App\Models\Request\RequestListFactory;
@@ -69,6 +70,21 @@ class Dashboard extends Controller
     }
 
 
+    public function confirmedLeaveCount()
+    {
+        $lrlf = new LeaveRequestListFactory();
+
+        // Pass null and empty array to ignore all filters
+        $lrlf->getAllConfirmedLeave(0, []);
+
+        // Get total number of confirmed leave records
+        $count = $lrlf->getRecordCount();
+
+        return response()->json(['confirmed_leave_count' => $count]);
+    }
+
+
+
     public function threeDaysAbsenteeism()
     {
         $current_company = $this->currentCompany;
@@ -79,9 +95,9 @@ class Dashboard extends Controller
             $filter_data = array();
         }
 
-        if ( $permission->Check('authorization','enabled')
-			AND $permission->Check('authorization','view')
-			AND $permission->Check('request','authorize') ) {
+        // if ( $permission->Check('authorization','enabled')
+		// 	AND $permission->Check('authorization','view')
+		// 	AND $permission->Check('request','authorize') ) {
 
 
             $ulf1 = new UserListFactory();
@@ -149,7 +165,7 @@ class Dashboard extends Controller
                     );
                 }
             }
-        }
+        // }
 
         return response()->json(['data' => $threeDaysAbsence]);
     }
@@ -330,7 +346,7 @@ class Dashboard extends Controller
         }
 
         $ulf1->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data);
-
+        $users1 = [];
 
             foreach ($ulf1->rs as $u_obj) {
                 $ulf1->data = (array)$u_obj;
@@ -516,6 +532,6 @@ class Dashboard extends Controller
     }
 
 
-   
+
 
 }

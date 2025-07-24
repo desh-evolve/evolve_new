@@ -681,7 +681,7 @@
                     $('#no_days').val(0.5);
                 } else if (selectedLeaveId === 3) {
                     // Short Leave — don't set no_days automatically
-                    $('#no_days').val('');
+                    $('#no_days').val(1);
                 }
             }
 
