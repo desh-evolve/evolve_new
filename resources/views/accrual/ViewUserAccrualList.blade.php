@@ -58,8 +58,10 @@
                                         <a class="btn btn-info btn-sm" href="#">View</a> --}}
 
                                         {{-- timesheet part  --}}
-                                        @if ($permission->Check('accrual','view') OR $permission->Check('accrual','view_own'))
-                                                [ <a href="/attendance/timesheet?filter_data[user_id]={{$accrual['user_id']}}&filter_data[date]={{$accrual['time_stamp']}}">View</a> ]
+
+                                        @if ($permission->Check('accrual', 'view') || $permission->Check('accrual', 'view_own'))
+                                            <a href="/attendance/timesheet?filter_data[user_id]={{ $accrual['user_id'] }}&filter_data[date]={{ $accrual['time_stamp'] }}"
+                                                class="btn btn-info btn-sm">View</a>
                                         @endif
 
                                         {{-- <a class="btn btn-info btn-sm" href="#">View</a>  --}}

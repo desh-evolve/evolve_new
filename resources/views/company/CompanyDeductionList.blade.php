@@ -81,15 +81,18 @@
                                         @if ($permission->Check('company_tax_deduction', 'edit'))
                                             [ <a href="/payroll/company_deductions/add?id={{ $row['id'] }}">Edit</a>
                                             ]
-                                            [ <a href="/user/tax/add?company_deduction_id={{ $row['id'] }}">Employee Settings</a> ]
+                                            [ <a href="/user/tax/add?company_deduction_id={{ $row['id'] }}">Employee
+                                                Settings</a> ]
                                         @endif
                                     </td>
+
                                     {{-- <td>
                                         @if ($row['calculation_id'] == '20')
-                                            <a
-                                                href="javascript:ImportCsvFile('{{ $row['name'] }}','{{ $row['id'] }}');"><img
-                                                    src="{$IMAGES_URL}/nav_popup.gif" alt=""
-                                                    style="vertical-align: middle" /></a>
+                                            <a href="javascript:void(0);"
+                                                onclick="openImportCsvFile('{{ $row['name'] }}', '{{ $row['id'] }}');">
+                                                <img src="{{ asset('images/nav_popup.gif') }}" alt="Import CSV"
+                                                    style="vertical-align: middle" />
+                                            </a>
                                         @endif
                                     </td> --}}
 
@@ -102,12 +105,16 @@
                             @endforeach
                             <tr>
                                 <td class="tblActionRow" colspan="8">
-                                    @if ($permission->Check('company_tax_deduction', 'add'))
-                                        <input type="submit" class="button" name="action" value="Add Presets" hidden
+                                    {{-- @if ($permission->Check('company_tax_deduction', 'add'))
+                                        <input type="submit" class="button" name="action" value="Add Presets" 
                                             onClick="return confirmSubmit('Are you sure you want to add all presets based on your company location?')">
                                         <input type="submit" class="button" name="action" value="Add" hidden>
-                                    @endif
+                                    @endif --}}
                                     <div style="text-align: right;">
+                                        @if ($permission->Check('company_tax_deduction', 'add'))
+                                            <input type="submit" class="button" name="action" value="Add Presets"
+                                                onClick="return confirmSubmit('Are you sure you want to add all presets based on your company location?')">
+                                        @endif
                                         @if ($permission->Check('company_tax_deduction', 'add'))
                                             <input type="submit" class="button" name="action" value="Copy"
                                                 style="display: inline-block;">
@@ -137,4 +144,12 @@
         </div>
         <!-- end col -->
     </div>
+
+    <script>
+        function openImportCsvFile(name, id) {
+            window.location.href = '{{ route('import_csv.index') }}?object_type=' + encodeURIComponent(name) +
+                '&object_id=' + encodeURIComponent(id);
+        }
+    </script>
+
 </x-app-layout>

@@ -22,6 +22,7 @@ use App\Http\Controllers\company\EditOtherField;
 use App\Http\Controllers\company\WageGroupList;
 use App\Http\Controllers\company\EditWageGroup;
 use App\Http\Controllers\company\OtherFieldList;
+use App\Http\Controllers\company\ImportCsvFile;
 
 use App\Http\Controllers\hierarchy\HierarchyControlList;
 use App\Http\Controllers\hierarchy\EditHierarchyControl;
@@ -168,6 +169,9 @@ use App\Http\Controllers\schedule\ViewScheduleDay;
 use App\Http\Controllers\schedule\ViewScheduleLinear;
 use App\Http\Controllers\schedule\ViewScheduleMonth;
 use App\Http\Controllers\schedule\ViewScheduleWeek;
+
+// use App\Controllers\company\ImportCsvFile;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -343,6 +347,8 @@ Route::post('/payroll/paystub_account_link/submit', [EditPayStubEntryAccountLink
 
 Route::match(['get', 'post'], '/payroll/company_deductions', [CompanyDeductionList::class, 'index'])->name('payroll.company_deductions');
 Route::match(['get', 'post'], '/payroll/company_deductions/add', [EditCompanyDeduction::class, 'index'])->name('payroll.company_deductions.add');
+
+Route::match(['get', 'post'], '/import_csv', [ImportCsvFile::class, 'index'])->name('import_csv.index');
 
 // ===============================================================================================================================
 // Progress Bar Functions
