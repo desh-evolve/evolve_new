@@ -366,7 +366,7 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 			return FALSE;
 		}
 
-		$additional_sort_fields = array( 'date_stamp', 'a.user_id' );
+		$additional_sort_fields = array( 'date_stamp', 'b.user_id' );
 
 		$sort_column_aliases = array(
 									 'date_stamp' => 'date_stamp',
