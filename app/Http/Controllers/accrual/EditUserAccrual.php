@@ -64,7 +64,7 @@ class EditUserAccrual extends Controller
         $viewData['title'] = $id ? 'Edit Accrual' : 'Add Accrual';
 
         if (isset($id)) { //edit
-            
+
 
             $alf = new AccrualListFactory();
             $alf->getById($id);
@@ -114,6 +114,7 @@ class EditUserAccrual extends Controller
         $data['accrual_policy_options'] = $accrual_options;
 
         $viewData['data'] = $data;
+        // dd($viewData);
         return view('accrual/EditUserAccrual', $viewData);
     }
 

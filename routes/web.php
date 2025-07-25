@@ -189,7 +189,7 @@ Route::post('/authenticate', [Login::class, 'login'])->name('authenticate');
 Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 
 Route::get('/dashboard/user_count', [Dashboard::class, 'userCount'])->name('dashboard.user_count');
-Route::get('/dashboard/approved_leaves_count', [Dashboard::class, 'confirmedLeaveCount'])->name('dashboard.approved_leaves_count');
+Route::get('/dashboard/approved_leaves_count', [Dashboard::class, 'getTodaysConfirmedLeavesCount'])->name('dashboard.approved_leaves_count');
 Route::get('/dashboard/three_days_absenteeism', [Dashboard::class, 'threeDaysAbsenteeism'])->name('dashboard.absenteeism');
 Route::get('/dashboard/recent_messages', [Dashboard::class, 'recentMessges'])->name('dashboard.recent_messages');
 Route::get('/dashboard/recent_request', [Dashboard::class, 'recentRequest'])->name('dashboard.recent_request');

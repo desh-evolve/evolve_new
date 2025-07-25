@@ -88,6 +88,7 @@ class UserRequestList extends Controller
 		}
 
 		$filter_data = array();
+        $requests = [];
 		//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 		$permission_children_ids = array();
 		if ( $permission->Check('request','view') == FALSE ) {

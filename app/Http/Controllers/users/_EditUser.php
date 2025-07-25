@@ -1040,9 +1040,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\PhpWord;
 
-class EditUser extends Controller
+class _EditUser extends Controller
 {
 	protected $permission;
 	protected $currentUser;

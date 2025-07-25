@@ -65,7 +65,7 @@ class EditUser extends Controller
         $current_company = $this->current_company;
         $current_user_prefs = $this->current_user_prefs;
 
-        //ARSP ADD CODE --> 
+        //ARSP ADD CODE -->
         //require_once('../../word_doc/PHPWord.php');
 
         //ARSP ADD CODE --> NEW CODE FOR DELETE UPLOADED USER FILES
@@ -96,8 +96,8 @@ class EditUser extends Controller
                 'delete_user_id',
                 'delete_file_type',
                 'probation_warning',
-                'basis_of_employment_warning'                   
-            ) 
+                'basis_of_employment_warning'
+            )
         ) );
 
         /*
@@ -118,12 +118,12 @@ class EditUser extends Controller
              */
             if ( isset($user_data['resign_date']) AND $user_data['resign_date'] != '') {
                 $user_data['resign_date'] = TTDate::parseDateTime($user_data['resign_date']);
-            }  
-            
+            }
+
             if ( isset($user_data['confirmed_date']) AND $user_data['confirmed_date'] != '') {
                 $user_data['confirmed_date'] = TTDate::parseDateTime($user_data['confirmed_date']);
             }
-            
+
             else {
                 Debug::Text('NOT Running strtotime on Termination date', __FILE__, __LINE__, __METHOD__,10);
             }
@@ -142,7 +142,7 @@ class EditUser extends Controller
         if ( $permission->Check('user','edit_own') ) {
             $permission_children_ids[] = $current_user->getId();
 
-                
+
         }
         //Debug::Arr($permission_children_ids,'Permission Children Ids:', __FILE__, __LINE__, __METHOD__,10);
 
@@ -182,7 +182,7 @@ class EditUser extends Controller
                 }
                 break;
             case 'submit':
-                
+
                 //Debug::setVerbosity( 11 );
                 Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
                 unset($id); //Do this so it doesn't reload the data from the DB.
@@ -265,7 +265,7 @@ class EditUser extends Controller
                         $uf->setPhonePassword($user_data['phone_password']);
                     }
                 }
-                        
+
                 if ( $user_data['id'] != $current_user->getID()
                         AND $permission->Check('user','edit_advanced') ) {
                     //Don't force them to update all fields.
@@ -275,21 +275,21 @@ class EditUser extends Controller
                     if ( isset($user_data['middle_name']) ) {
                         $uf->setMiddleName($user_data['middle_name']);
                     }
-                                
+
                     if ( isset($user_data['full_name']) ) {
                         $uf->setFullNameField($user_data['full_name']);
                     }
-                                
+
                     if ( isset($user_data['calling_name']) ) {
                         $uf->setCallingName($user_data['calling_name']);
                     }
-                                
-                                
+
+
                     if ( isset($user_data['name_with_initials']) ) {
                         $uf->setNameWithInitials($user_data['name_with_initials']);
                     }
-                                
-                            
+
+
 
                     $uf->setLastName($user_data['last_name']);
 
@@ -300,19 +300,19 @@ class EditUser extends Controller
                     if ( !empty($user_data['title_name']) ) {
                         $uf->setNameTitle($user_data['title_name']);
                     }
-                                
-                                
+
+
                     if ( !empty($user_data['sex']) ) {
                         $uf->setSex($user_data['sex']);
                     }
-                                
-                                
-                                
-                                
+
+
+
+
                     if ( !empty($user_data['religion']) ) {
                         $uf->setReligion($user_data['religion']);
                     }
-                                
+
                     if ( !empty($user_data['marital']) ) {
                         $uf->setMarital($user_data['marital']);
                     }
@@ -324,7 +324,7 @@ class EditUser extends Controller
                     if ( isset($user_data['address2']) ) {
                         $uf->setAddress2($user_data['address2']);
                     }
-                                
+
                     if ( isset($user_data['address3']) ) {
                         $uf->setAddress3($user_data['address3']);
                     }
@@ -336,31 +336,31 @@ class EditUser extends Controller
                     if ( isset($user_data['probation']) ) {
                         $uf->setProbation($user_data['probation']);
                     }
-                                
+
                     /**
                      * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                     */                        
+                     */
                     if ( isset($user_data['basis_of_employment']) ) {
                         $uf->setBasisOfEmployment($user_data['basis_of_employment']);
                     }
-                    
+
                     /**
                      * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
-                     */                         
+                     */
                     if ( isset($user_data['month']) ){
                         $uf->setMonth($user_data['month']);
-                    }                                      
+                    }
 
                     //ARSP EDIT CODE-----> ADD NEW CODE FOR EPF registration no
                     if ( isset($user_data['epf_registration_no']) ) {
                         $uf->setEpfRegistrationNo($user_data['epf_registration_no']);
-                    }      
+                    }
 
                     //ARSP EDIT CODE-----> ADD NEW CODE FOR EPF membership no
                     if ( isset($user_data['epf_membership_no']) ) {
                         $uf->setEpfMembershipNo($user_data['epf_membership_no']);
-                    } 	
-                    
+                    }
+
 
                     if ( isset($user_data['city']) ) {
                         $uf->setCity($user_data['city']);
@@ -405,12 +405,12 @@ class EditUser extends Controller
                     if ( isset($user_data['work_email']) ) {
                         $uf->setWorkEmail($user_data['work_email']);
                     }
-                                
+
                     if ( isset($user_data['office_mobile']) ) {
                         $uf->setOfficeMobile($user_data['office_mobile']);
                     }
-                                
-                                
+
+
                     if ( isset($user_data['personal_email']) ) {
                         $uf->setPersonalEmail($user_data['personal_email']);
                     }
@@ -418,14 +418,14 @@ class EditUser extends Controller
                     if ( isset($user_data['sin']) ) {
                         $uf->setSIN($user_data['sin']);
                     }
-                                
+
 
                     $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
-                    
+
                     $date = new DateTime();
                     $date->setTimestamp($uf->getBirthDate());
                     $date->modify('+60 years');
-            
+
                     $uf->setRetirementDate(  $date->getTimestamp()  );
                     $uf->setRetirementDate( $user_data['retirement_date']  );
                 } else {
@@ -436,7 +436,7 @@ class EditUser extends Controller
                     $uf->setFullNameField($user_data['full_name']);
                     $uf->setCallingName($user_data['calling_name']);
                     $uf->setNameWithInitials($user_data['name_with_initials']);
-                            
+
                     $uf->setLastName($user_data['last_name']);
                     if ( isset($user_data['second_last_name']) ) {
                         $uf->setSecondLastName($user_data['second_last_name']);
@@ -448,7 +448,7 @@ class EditUser extends Controller
                     $uf->setAddress2($user_data['address2']);
                     $uf->setAddress3($user_data['address3']);
                     $uf->setNameTitle($user_data['title_name']);
-                                
+
 
                     //ARSP EDIT CODE--->
                     $uf->setNic($user_data['nic']);
@@ -460,7 +460,7 @@ class EditUser extends Controller
                     $uf->setEpfRegistrationNo($user_data['epf_registration_no']);
 
                     //ARSP EDIT CODE---> ADD NEW CODE FOR Epf registration no
-                    $uf->setEpfMembershipNo($user_data['epf_membership_no']);				
+                    $uf->setEpfMembershipNo($user_data['epf_membership_no']);
 
                     $uf->setCity($user_data['city']);
 
@@ -484,13 +484,13 @@ class EditUser extends Controller
                     $uf->setPersonalEmail($user_data['personal_email']);
                     $uf->setConfiremedDate( $user_data['confirmed_date'] );
                     $uf->setResignDate( $user_data['resign_date'] );
-                                
+
                     if ( isset($user_data['sin']) ) {
                         $uf->setSIN($user_data['sin']);
                     }
 
                     $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
-                                
+
                     $uf->setRetirementDate( $user_data['retirement_date']  );
                 }
 
@@ -531,39 +531,39 @@ class EditUser extends Controller
                 if ( isset($user_data['termination_date']) ) {
                     $uf->setTerminationDate( $user_data['termination_date'] );
                 }
-                
+
                 /**
                 * ARSP NOTE -->
                 * I HIDE THIS ORIGINAL CODE FOR THUNDER & NEON AND ADDED NEW CODE
-                */  		 
+                */
                 //if ( isset($user_data['employee_number']) ) {
                 //	$uf->setEmployeeNumber( $user_data['employee_number'] );
                 //}
-                
+
                 /**
                 * ARSP NOTE -->
                 * I MODIFIED ABOVE ORIGINAL CODE THUNDER & NEON
-                */                
-                if ( isset($user_data['employee_number_only']) ) {                    
+                */
+                if ( isset($user_data['employee_number_only']) ) {
                     $uf->setEmployeeNumber( $user_data['branch_short_id'].$user_data['employee_number_only'] );
                 }
-                        
+
                         /**
                         * ARSP NOTE -->
                         * I ADDED THIS ORIGINAL CODE AND ADDED NEW CODE
-                        */                
-                if ( isset($user_data['employee_number_only']) ) {                        
+                        */
+                if ( isset($user_data['employee_number_only']) ) {
                     $uf->setEmployeeNumberOnly($user_data['employee_number_only'], $user_data['default_branch_id']);//ARSP NOTE --> I ADDED EXTRA PARAMETER FOR THUNDER & NEON
-                }                 
-                
+                }
+
                 /**
                 * ARSP NOTE -->
                 * I ADDED THIS ORIGINAL CODE AND ADDED NEW CODE
-                */  		
+                */
                 if ( isset($user_data['punch_machine_user_id']) ) {
                     $uf->setPunchMachineUserID( $user_data['punch_machine_user_id'] );
                 }
-                
+
                 if ( isset($user_data['default_branch_id']) ) {
                     $uf->setDefaultBranch( $user_data['default_branch_id'] );
                 }
@@ -576,14 +576,14 @@ class EditUser extends Controller
                 if ( isset($user_data['title_id']) ) {
                     $uf->setTitle($user_data['title_id']);
                 }
-                
+
                 /**
                 * EMPLOYEE JOB SKILLS
-                */                
-                if ( isset($user_data['job_skills']) ) {                        
+                */
+                if ( isset($user_data['job_skills']) ) {
                     $uf->setJobSkills($user_data['job_skills'],  $user_data['job_skills']);
-                }  		
-                
+                }
+
                 if ( isset($user_data['ibutton_id']) ) {
                     $uf->setIButtonId($user_data['ibutton_id']);
                 }
@@ -606,56 +606,56 @@ class EditUser extends Controller
                 if ( isset($user_data['note']) ) {
                     $uf->setNote( $user_data['note'] );
                 }
-                
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['hire_note']) ) {
                     $uf->setHireNote( $user_data['hire_note'] );
                 }
-                        
+
                 //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['termination_note']) ) {
                     $uf->setTerminationNote( $user_data['termination_note'] );
                 }
-                        
+
                         //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['immediate_contact_person']) ) {
                     $uf->setImmediateContactPerson($user_data['immediate_contact_person'] );
                 }
-                        
-                        
+
+
                         //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['immediate_contact_no']) ) {
                     $uf->setImmediateContactNo( $user_data['immediate_contact_no'] );
                 }
-                        
+
                         //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['bond_period']) ) {
                     $uf->setBondPeriod($user_data['bond_period'] );
-                }                   
-                        
+                }
+
                         /**
                         * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                         */
                 if ( isset($user_data['resign_date']) ) {
                     $uf->setResignDate( $user_data['resign_date'] );
-                }    
-                        
-                        
+                }
+
+
                 if ( isset($user_data['confirmed_date']) ) {
                     $uf->setConfiremedDate( $user_data['confirmed_date'] );
-                }    
+                }
 
 
-                
+
                 if ( $uf->isValid()) {
 
                     //dd($uf->data);
                     $uf->Save(FALSE);
-                    
+
                     $user_data['id'] = $uf->getId();
 
                     $this->uploadImages($_FILES, $user_data['id']);
-                    
+
 
                     Debug::Text('Inserted ID: '. $user_data['id'], __FILE__, __LINE__, __METHOD__,10);
 
@@ -663,14 +663,14 @@ class EditUser extends Controller
 
                     break;
                 }
-                        
+
             default:
                 //Debug::Text('bCompany ID: '. $company_id, __FILE__, __LINE__, __METHOD__,10);
                 if ( $permission->Check('company','view') == FALSE OR $company_id == '' OR $company_id == '-1' ) {
                     $company_id = $current_company->getId();
                 }
                 //Debug::Text('cCompany ID: '. $company_id, __FILE__, __LINE__, __METHOD__,10);
-                
+
                 if ( isset($id) AND $action !== 'submit' ) {
                     //Debug::Text('ID IS set', __FILE__, __LINE__, __METHOD__,10);
 
@@ -681,7 +681,7 @@ class EditUser extends Controller
                         //$ulf->GetByIdAndCompanyId( $id, $company_id )->getCurrent();
                         $ulf->getByIdAndCompanyId($id, $company_id );
                     }
-                    
+
                     foreach ($ulf->rs as $user) {
                         $ulf->data = (array)$user;
                         $user = $ulf;
@@ -717,7 +717,7 @@ class EditUser extends Controller
                                 'phone_password' => $user->getPhonePassword(),
                                 'ibutton_id' => $user->getIbuttonId(),
                                 'employee_number_only' => $user->getEmployeeNumberOnly(),
-                                'punch_machine_user_id' => $user->getPunchMachineUserID(),			
+                                'punch_machine_user_id' => $user->getPunchMachineUserID(),
                                 'title_name' => $user->getNameTitle(),
                                 'first_name' => $user->getFirstName(),
                                 'middle_name' => $user->getMiddleName(),
@@ -747,13 +747,13 @@ class EditUser extends Controller
                                 'work_email' => $user->getWorkEmail(),
                                 'personal_email' => $user->getPersonalEmail(),
                                 'epf_registration_no'=>$current_company->getEpfNo(),
-                                'epf_membership_no'=> $user->getEpfMembershipNo(),		
+                                'epf_membership_no'=> $user->getEpfMembershipNo(),
                                 'birth_date' => $user->getBirthDate(),
                                 'retirement_date' => $user->getRetirementDate(),
                                 'hire_date' => $user->getHireDate(),
                                 'termination_date' => $user->getTerminationDate(),
-                                'resign_date' => $user->getResignDate(), 
-                                'confirmed_date'=> $user->getConfiremedDate(), 
+                                'resign_date' => $user->getResignDate(),
+                                'confirmed_date'=> $user->getConfiremedDate(),
                                 'sin' => $sin_number,
                                 'other_id1' => $user->getOtherID1(),
                                 'other_id2' => $user->getOtherID2(),
@@ -763,11 +763,11 @@ class EditUser extends Controller
 
                                 'note' => $user->getNote(),
                                 'hire_note' => $user->getHireNote(),
-                                'termination_note' => $user->getTerminationNote(),                       
-                                
+                                'termination_note' => $user->getTerminationNote(),
+
                                 'immediate_contact_person' => $user->getImmediateContactPerson(),
-                                'immediate_contact_no' => $user->getImmediateContactNo(),                       
-                                    
+                                'immediate_contact_no' => $user->getImmediateContactNo(),
+
                                 'bond_period' => $user->getBondPeriod(),
 
                                 'default_branch_id' => $user->getDefaultBranch(),
@@ -784,38 +784,38 @@ class EditUser extends Controller
                                 'deleted_date' => $user->getDeletedDate(),
                                 'deleted_by' => $user->getDeletedBy(),
                                 'probation'=>$user->getProbation(),
-                                
-                                'basis_of_employment'=>$user->getBasisOfEmployment(),    
-                                'month'=>$user->getMonth(),    
-                                
+
+                                'basis_of_employment'=>$user->getBasisOfEmployment(),
+                                'month'=>$user->getMonth(),
+
                                 //'user_file'=> $user->getUserFilesUrl(),
                                 //'file_name'=>$user->getFileName(),
 
-                                    
+
                                 //'user_template_url'=>$user->getUserTemplateUrl(),
-                                //'user_template_name'=>$user->getTemplateName(),							   
-                                                                                                
-                                            
+                                //'user_template_name'=>$user->getTemplateName(),
+
+
                                 //'user_id_copy_url'=>$user->getUserIdCopyUrl(),
                                 //'user_id_copy_name'=>$user->getUserIdCopyFileName(),
-                                    
+
                                 //'user_birth_certificate_url'=>$user->getUserBirthCertificateUrl(),
                                 //'user_birth_certificate_name'=>$user->getUserBirthCertificateFileName(),
-                                                                        
+
                                 //'user_gs_letter_url'=>$user->getUserGsLetterUrl(),
                                 //'user_gs_letter_name'=>$user->getUserGsLetterFileName(),
-                                                                            
+
                                 //'user_police_report_url'=>$user->getUserPoliceReportUrl(),
                                 //'user_police_report_name'=>$user->getUserPoliceReportFileName(),
 
                                 //'user_nda_url'=>$user->getUserNdaUrl(),
                                 //'user_nda_name'=>$user->getUserNdaFileName(),
-                                    
+
                                 //'bond_url'=>$user->getBondUrl(),
                                 //'bond_name'=>$user->getBondFileName()
-                                                                                
+
                             );
-                                      
+
                             $pclfb = new PermissionControlListFactory();
                             $pclfb->getByCompanyIdAndUserId( $user->getCompany(), $id );
                             if ( $pclfb->getRecordCount() > 0 ) {
@@ -843,28 +843,28 @@ class EditUser extends Controller
                         }
 
                     }
-                    
-                    
-                    
-                    //START-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)----------------------------------------- 
+
+
+
+                    //START-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)-----------------------------------------
 
                         $uwlf = new UserWageListFactory();
-                        $uwlf->getByUserId($user_data['id']);                       
-                        
-                        foreach ($uwlf->rs as $wage) {        
+                        $uwlf->getByUserId($user_data['id']);
+
+                        foreach ($uwlf->rs as $wage) {
                             $uwlf->data = (array)$wage;
                             $wage = $uwlf;
 
                             $wage_data = array(
                                 'id' => $wage->getId(),
-                                'user_id' => $wage->getUser(),										
-                                'wage' => Misc::removeTrailingZeros( $wage->getWage() )									
+                                'user_id' => $wage->getUser(),
+                                'wage' => Misc::removeTrailingZeros( $wage->getWage() )
                             );
                         }
 
-                    //END-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)-----------------------------------------  
-                     
-                    
+                    //END-------------------------------------------//ARSP ADD NEW CODE FOR SALARY(WAGE)-----------------------------------------
+
+
                 } elseif ( $action == 'submit') {
                     Debug::Text('ID Not set', __FILE__, __LINE__, __METHOD__,10);
 
@@ -917,14 +917,14 @@ class EditUser extends Controller
 
                 } else {
                     Debug::Text('Adding new User.', __FILE__, __LINE__, __METHOD__,10);
-                    
+
                     //Get New Hire Defaults.
                     $udlf = new UserDefaultListFactory();
                     $udlf->getByCompanyId( $company_id );
                     if ( $udlf->getRecordCount() > 0 ) {
                         Debug::Text('Using User Defaults', __FILE__, __LINE__, __METHOD__,10);
                         $udf_obj = $udlf->getCurrent();
-                        
+
                         $user_data = array(
                             'company_id' => $company_id,
                             'title_id' => $udf_obj->getTitle(),
@@ -961,24 +961,24 @@ class EditUser extends Controller
                         $user_data['status'] = 10;
                     }
 
-                                   
-                    $ulf->getHighestEmployeeNumberOnlyByCompanyId( $company_id );                       
+
+                    $ulf->getHighestEmployeeNumberOnlyByCompanyId( $company_id );
                     if ( $ulf->getRecordCount() > 0 ) {
                         Debug::Text('Highest Employee Number: '. $ulf->getCurrent()->getEmployeeNumber(), __FILE__, __LINE__, __METHOD__,10);
-                        if ( is_numeric( $ulf->getCurrent()->getEmployeeNumberOnly() ) == TRUE ) {                                
+                        if ( is_numeric( $ulf->getCurrent()->getEmployeeNumberOnly() ) == TRUE ) {
                             $user_data['next_available_employee_number_only'] = $ulf->getCurrent()->getEmployeeNumberOnly()+1;
                         } else {
-                            Debug::Text('Highest Employee Number is not an integer.', __FILE__, __LINE__, __METHOD__,10);                                           
+                            Debug::Text('Highest Employee Number is not an integer.', __FILE__, __LINE__, __METHOD__,10);
                             $user_data['next_available_employee_number_only'] = NULL;
                         }
                     } else {
-                        $user_data['next_available_employee_number_only'] = 1;                            
-                    }			
+                        $user_data['next_available_employee_number_only'] = 1;
+                    }
 
                     if ( !isset($user_data['hire_date']) OR $user_data['hire_date'] == '' ) {
                         $user_data['hire_date'] = time();
                     }
-                }           
+                }
 
                 //Select box options;
                 $blf = new BranchListFactory();
@@ -997,11 +997,11 @@ class EditUser extends Controller
                 $hclf = new HierarchyControlListFactory();
                 $hclf->getObjectTypeAppendedListByCompanyID( $company_id );
                 $hierarchy_control_options = $hclf->getArrayByListFactory( $hclf, TRUE, TRUE );
-                        
-                        
+
+
                 $clf = new CompanyListFactory();
                 $clf->getById($company_id);
-                
+
                 $user_data['epf_registration_no'] =$current_company->getEpfNo();
 
                 //Select box options;
@@ -1010,25 +1010,25 @@ class EditUser extends Controller
                 $user_data['currency_options'] = $currency_options;
 
                 $user_data['sex_options'] = $uf->getOptions('sex');
-                        
+
                 $user_data['title_name_options'] = $uf->getOptions('title');
                 $user_data['status_options'] = $uf->getOptions('status');
                 $user_data['religion_options'] = $uf->getOptions('religion');
-                        
+
                 $user_data['marital_options'] = $uf->getOptions('marital');
-                
+
                 $clf = new CompanyListFactory();
                 $user_data['country_options'] = $clf->getOptions('country');
-                $user_data['province_options'] = $clf->getOptions('province', $user_data['country'] );
+                $user_data['province_options'] = $clf->getOptions('province');
 
                 $utlf = new UserTitleListFactory();
                 $user_titles = $utlf->getByCompanyIdArray( $company_id );
                 $user_data['title_options'] = $user_titles;
 
                 $user_data['month_options'] = $uf->getOptions('month');
-        
-                $user_data['bond_period_option'] = $uf->getOptions('bond_period'); 
-                        
+
+                $user_data['bond_period_option'] = $uf->getOptions('bond_period');
+
                 //Get Permission Groups
                 $pclf = new PermissionControlListFactory();
                 $pclf->getByCompanyIdAndLevel( $company_id, $permission->getLevel() );
@@ -1062,7 +1062,7 @@ class EditUser extends Controller
 
                 $filter_data = NULL;
                 $ugdf = new UserGenericDataFactory();
-                extract( $ugdf->getSearchFormData( $saved_search_id, NULL ) ); 
+                extract( $ugdf->getSearchFormData( $saved_search_id, NULL ) );
                 if ( $permission->Check('user','edit') == FALSE ) {
                     $filter_data['permission_children_ids'] = $permission_children_ids;
                 }
@@ -1078,8 +1078,8 @@ class EditUser extends Controller
                 Debug::Text('Current User Permission Level: '. $permission->getLevel() .' Level for user we are currently editing: '. $permission->getLevel( $uf->getID(), $uf->getCompany() ) .' User ID: '. $uf->getID(), __FILE__, __LINE__, __METHOD__,10);
 
                 break;
-                              
-                        
+
+
         }
 
         if(isset($delete_file_name) && isset($delete_user_id ) && isset($delete_file_type ))
@@ -1088,113 +1088,113 @@ class EditUser extends Controller
 
             if($delete_file_type == 'user_file' )
             {
-                $deleteFile = new fileupload(); 
+                $deleteFile = new fileupload();
                 $path ="../../storage/user_file/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
             }
-            
+
             if($delete_file_type == 'user_template' )
             {
                 $deleteFile = new fileupload();
                 $path ="../../storage/user_template_file/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
             }
-            
+
             if($delete_file_type == 'user_id_copy' )
             {
                 $deleteFile = new fileupload();
                 $path ="../../storage/user_id_copy/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
-            }    
+            }
 
             if($delete_file_type == 'user_birth_certificate' )
             {
                 $deleteFile = new fileupload();
                 $path ="../../storage/user_birth_certificate/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
-            }  
-            
+            }
+
             if($delete_file_type == 'user_gs_letter' )
             {
                 $deleteFile = new fileupload();
                 $path ="../../storage/user_gs_letter/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
-            }    
+            }
 
             if($delete_file_type == 'user_police_report' )
             {
                 $deleteFile = new fileupload();
                 $path ="../../storage/user_police_report/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
-            } 
-            
+            }
+
             if($delete_file_type == 'user_nda' )
             {
                 $deleteFile = new fileupload();
                 $path ="../../storage/user_nda/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
-            }   
-            
+            }
+
             if($delete_file_type == 'bond' )
             {
                 $deleteFile = new fileupload();
                 $path ="../../storage/user_bond/".$delete_user_id."/".$delete_file_name;
                 $deleteFile->deleteFiles($path,$delete_user_id );
-            }     
+            }
         }
 
-        if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['probation']) && ($user_data['probation'] > 0) ) 
+        if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['probation']) && ($user_data['probation'] > 0) )
         {
-            $probation_warning = $uf->getWarning($user_data['hire_date'], $user_data['probation']);    
+            $probation_warning = $uf->getWarning($user_data['hire_date'], $user_data['probation']);
             //$warning_message;
             if($probation_warning != "")
             {
                 //echo $warning_message;
                 $viewData['probation_warning'] = $probation_warning;//All files url
             }
-            
+
         }
 
-        if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['month']) && $user_data['month'] > 0 && ($user_data['basis_of_employment'] >0) && ($user_data['basis_of_employment'] != 4) && ($user_data['basis_of_employment'] != 6))  
+        if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['month']) && $user_data['month'] > 0 && ($user_data['basis_of_employment'] >0) && ($user_data['basis_of_employment'] != 4) && ($user_data['basis_of_employment'] != 6))
         {
             //$warning_message;
             if($user_data['basis_of_employment'] != 5)
-            {        
-                $basis_of_employment_warning = $uf->getWarning1($user_data['hire_date'], $user_data['month'],$user_data['basis_of_employment']);    
+            {
+                $basis_of_employment_warning = $uf->getWarning1($user_data['hire_date'], $user_data['month'],$user_data['basis_of_employment']);
 
                 if($basis_of_employment_warning != "")
                 {
                     $viewData['basis_of_employment_warning'] = $basis_of_employment_warning;//All files url
-                }        
+                }
             }
-            
+
             if($user_data['basis_of_employment'] == 5 && $user_data['resign_date'] != '')
             {
-                $basis_of_employment_warning = $uf->getWarning1($user_data['resign_date'], 3, $user_data['basis_of_employment']);    
+                $basis_of_employment_warning = $uf->getWarning1($user_data['resign_date'], 3, $user_data['basis_of_employment']);
 
                 if($basis_of_employment_warning != "")
                 {
                     //echo $warning_message;
                     $viewData['basis_of_employment_warning'] = $basis_of_employment_warning;//All files url
-                } 
+                }
             }
-            
+
         }
 
-        if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['bond_period']) && $user_data['bond_period'] > 0) 
+        if( isset($user_data['id']) && isset($user_data['hire_date']) && isset($user_data['bond_period']) && $user_data['bond_period'] > 0)
         {
-            //$warning_message;   
+            //$warning_message;
             if($user_data['bond_period'] != 0 && $user_data['hire_date'] != '')
             {
-                $bond_warning = $uf->getWarning2($user_data['hire_date'], $user_data['bond_period']);    
+                $bond_warning = $uf->getWarning2($user_data['hire_date'], $user_data['bond_period']);
 
                 if($bond_warning != "")
                 {
                     echo $warning_message;
                     $viewData['bond_warning'] = $bond_warning;
-                } 
+                }
             }
-            
+
         }
 
         $viewData['user_template_url'] = $user_data['user_template_url'] ?? [];//All template files url
@@ -1256,6 +1256,8 @@ class EditUser extends Controller
         $viewData['var7'] = $var7;
 
         $viewData['uf'] = $uf;
+
+        // dd($viewData);
         return view('users/EditUser', $viewData);
 
     }
@@ -1266,18 +1268,18 @@ class EditUser extends Controller
             'success' => [],
             'errors' => []
         ];
-    
+
         // Validate user_id
         $user_id = intval($user_id); // Sanitize user_id
         if ($user_id <= 0) {
             return ['errors' => ['Invalid user ID']];
         }
-    
+
         // Check if files are provided
         if (!isset($files['user_data']) || !is_array($files['user_data'])) {
             return ['errors' => ['No valid file data provided']];
         }
-    
+
         $fileData = $files['user_data'];
         $allowedFields = [
             'user_image',
@@ -1290,7 +1292,7 @@ class EditUser extends Controller
             'user_nda',
             'bond'
         ];
-    
+
         // Define allowed file types for each field
         $allowedFileTypes = [
             'user_image' => ['image/jpeg', 'image/jpg', 'image/png'],
@@ -1303,21 +1305,21 @@ class EditUser extends Controller
             'user_nda' => ['application/pdf'],
             'bond' => ['application/pdf']
         ];
-    
+
         // Define user directory
         $userDir = "user_files/{$user_id}";
-    
+
         // Check if directory exists and create it if not
         try {
             if (!Storage::disk('public')->exists($userDir)) {
                 Storage::disk('public')->makeDirectory($userDir);
                 Log::info("Created directory for user {$user_id}: {$userDir}");
-    
+
                 // Verify directory was created
                 if (!Storage::disk('public')->exists($userDir)) {
                     return ['errors' => ["Failed to create directory: storage/app/public/{$user_id}"]];
                 }
-    
+
                 // Set permissions (Unix-like systems)
                 $fullPath = storage_path("app/{$userDir}");
                 if (is_dir($fullPath)) {
@@ -1328,32 +1330,32 @@ class EditUser extends Controller
             Log::error("Failed to create directory for user {$user_id}: {$e->getMessage()}");
             return ['errors' => ["Directory creation failed: {$e->getMessage()}"]];
         }
-    
+
         foreach ($allowedFields as $field) {
             // Skip if no file was uploaded (error code 4)
             if ($fileData['error'][$field] !== UPLOAD_ERR_OK) {
                 continue;
             }
-    
+
             // Get file details
             $originalFileName = $fileData['name'][$field];
             $tmpName = $fileData['tmp_name'][$field];
             $fileSize = $fileData['size'][$field];
             $fileType = $fileData['type'][$field];
-    
+
             // Validate file size
             if ($fileSize > 10 * 1024 * 1024) { // 10MB limit
                 $response['errors'][$field] = "File {$field} exceeds 10MB limit.";
                 continue;
             }
-    
+
             // Validate file type
             if (!in_array($fileType, $allowedFileTypes[$field])) {
                 $allowedExt = $field === 'user_image' ? 'JPEG, JPG, PNG' : 'PDF';
                 $response['errors'][$field] = "File {$field} must be a {$allowedExt}.";
                 continue;
             }
-    
+
             // Determine file extension
             $extension = pathinfo($originalFileName, PATHINFO_EXTENSION);
             if (empty($extension)) {
@@ -1365,21 +1367,21 @@ class EditUser extends Controller
                     default => null
                 };
             }
-    
+
             if (!$extension) {
                 $response['errors'][$field] = "Invalid file extension for {$field}.";
                 continue;
             }
-    
+
             // Define storage path
             $fileName = "{$field}.{$extension}";
             $storagePath = "{$userDir}/{$fileName}";
-    
+
             try {
                 // Move the file from tmp to storage
                 $fileContents = file_get_contents($tmpName);
                 Storage::disk('public')->put($storagePath, $fileContents);
-    
+
                 // Verify the file was stored
                 if (Storage::disk('public')->exists($storagePath)) {
                     $response['success'][$field] = [
@@ -1395,15 +1397,15 @@ class EditUser extends Controller
                 Log::error("File upload failed for user {$user_id}: {$fileName}", ['error' => $e->getMessage()]);
             }
         }
-    
+
         // Return response
         if (empty($response['success']) && !empty($response['errors'])) {
             return ['errors' => $response['errors']];
         }
-    
+
         return $response;
     }
-    
+
     /**
      * Serve a file from storage/app/public/{$user_id}/{$fileName}.
      *
@@ -1414,11 +1416,11 @@ class EditUser extends Controller
     public function serveFile($user_id, $fileName)
     {
         $path = "user_files/{$user_id}/{$fileName}";
-    
+
         if (!Storage::disk('public')->exists($path)) {
             abort(404, 'File not found');
         }
-    
+
         return Storage::disk('public')->response($path);
     }
 }
