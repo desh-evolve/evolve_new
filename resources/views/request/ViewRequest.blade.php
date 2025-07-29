@@ -20,68 +20,67 @@
                     {{-- ------------------------------ --}}
 
                     <form method="POST" action="{{ route('attendance.request.view') }}">
-                        @csrf
+                 @csrf
 
-                        <div id="contentBoxTwoEdit">
-                            @if (!$rf->Validator->isValid())
-                                {{-- add form errors list here --}}
-                            @endif
-            
-                            <table class="table table-bordered">
-                
-                                <tr>
-                                    <th>
-                                        Employee:
-                                    </th>
-                                    <td>
-                                        {{$data['user_full_name']}}
-                                    </td>
-                                </tr>
-                
-                                <tr>
-                                    <th>
-                                        Date:
-                                    </th>
-                                    <td>
-                                        {{getdate_helper('date', $data['date_stamp'])}}
-                                        [ <a href="javascript:viewTimeSheet('{{$data['user_id']}}','{{$data['date_stamp']}}');">TimeSheet</a> | <a href="javascript:viewSchedule('{{$data['user_id']}}','{{$data['date_stamp']}}');">Schedule</a> ]
-                                    </td>
-                                </tr>
-                
-                                <tr>
-                                    <th>
-                                        Type:
-                                    </th>
-                                    <td>
-                                        {{$data['type']}}
-                                    </td>
-                                </tr>
-                
-                                <tr>
-                                    <td colspan="2">
-                                        {{embeddedauthorizationlist($data['hierarchy_type_id'], $data['id'])}}
-                                    </td>
-                                </tr>
-                
-                                @if ($data['authorized'] == FALSE AND $permission->Check('request','authorize'))
-                                    <tr class="bg-primary text-white">
-                                        <td colspan="2">
-                                            <input type="submit" class="button" name="action" value="Decline">
-                                            <input type="submit" class="button" name="action" value="Pass">
-                                            <input type="submit" class="button" name="action" value="Authorize">
-                                        </td>
-                                    </tr>
-                                @endif
-                
-                            </table>
-                        </div>
-            
-                        <input type="hidden" name="request_id" value="{{$data['id'] ?? ''}}">
-                        <input type="hidden" name="hierarchy_type_id" value="{{$data['hierarchy_type_id'] ?? ''}}">
-                        <input type="hidden" name="selected_level" value="{{$selected_level}}">
-                        <input type="hidden" name="request_queue_ids" value="{{$request_queue_ids}}">
+    <div id="contentBoxTwoEdit">
+        @if (!$rf->Validator->isValid())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($rf->Validator->errors()->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-                    </form>
+        <table class="table table-bordered">
+            <tr>
+                <th>Employee:</th>
+                <td>{{$data['user_full_name']}}</td>
+            </tr>
+            <tr>
+                <th>Date:</th>
+                <td>
+                    {{getdate_helper('date', $data['date_stamp'])}}
+                    [ <a href="/attendance/timesheet?filter_data[user_id]={{ $data['user_id'] }}&filter_data[date]={{ $data['date_stamp'] }}">TimeSheet</a>| <a href="/schedule/view_schedule?filter_data[user_id]={{ $data['user_id'] }}&filter_data[date]={{ $data['date_stamp'] }}">Schedule</a> ]
+                    {{-- | <a href="javascript:viewSchedule('{{$data['user_id']}}','{{$data['date_stamp']}}');">Schedule</a> ]
+                    |  ] --}}
+                   {{-- <a href="/attendance/timesheet?filter_data[user_id]={{ $data['user_id'] }}&filter_data[date]={{ $data['date_stamp'] }}"
+                                                class="btn btn-info btn-sm">View</a> --}}
+            </tr>
+            <tr>
+                <th>Type:</th>
+                <td>{{$data['type']}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">{{embeddedauthorizationlist($data['hierarchy_type_id'], $data['id'])}}</td>
+            </tr>
+            @if ($data['authorized'] == FALSE AND $permission->Check('request','authorize'))
+                <tr class="bg-primary text-white">
+                    <td colspan="2">
+                        <button type="button" style="background-color: #6aa7ec; color: white;" class="btn btn-sm" onclick="document.getElementById('action').value = 'Decline'; this.form.submit();">
+                            {{ __('Decline') }}
+                        </button>
+                        <button type="button" style="background-color: #6aa7ec; color: white;" class="btn btn-sm" onclick="document.getElementById('action').value = 'Pass'; this.form.submit();">
+                            {{ __('Pass') }}
+                        </button>
+                        <button type="button" style="background-color: #6aa7ec; color: white;" class="btn btn-sm" onclick="document.getElementById('action').value = 'Authorize'; this.form.submit();">
+                            {{ __('Authorize') }}
+                        </button>
+                        {{-- <input type="submit" class="btn btn-primary btn-sm" name="action" value="Pass">
+                        <input type="submit" class="btn btn-primary btn-sm" name="action" value="Authorize"> --}}
+                    </td>
+                </tr>
+            @endif
+        </table>
+    </div>
+
+    <input type="hidden" name="request_id" value="{{$data['id'] ?? ''}}">
+    <input type="hidden" name="hierarchy_type_id" value="{{$data['hierarchy_type_id'] ?? ''}}">
+    <input type="hidden" name="selected_level" value="{{$selected_level}}">
+    <input type="hidden" name="request_queue_ids" value="{{$request_queue_ids}}">
+    <input type="hidden" name="action" id="action" value="">
+</form>
 
                     @if (!empty($data['id']))
                         <br>
