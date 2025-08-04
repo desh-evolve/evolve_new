@@ -109,15 +109,15 @@
                                             href="/user/preference?user_id={{ $user['id'] }}">
                                             Prefs
                                         </a>
-                                        <a class="btn btn-info btn-sm"
+                                        <a class="btn btn-warning btn-sm"
                                             href="/user/jobhistory?user_id={{ $user['id'] }}">
                                             Job History
                                         </a>
 
-                                        <a class="btn btn-warning btn-sm"
+                                        {{-- <a class="btn btn-warning  btn-sm"
                                             href="/admin/userlist/kpi/{{ $user['id'] }}">
                                             KPI
-                                        </a>
+                                        </a> --}}
                                         <button type="button" class="btn btn-danger btn-sm"
                                             onclick="commonDeleteFunction('/admin/userlist/delete/{{ $user['id'] }}', 'User', this)">
                                             Delete
@@ -164,8 +164,7 @@
                         $functionCell.html(`
                             <a class="btn btn-secondary btn-sm" href="/admin/userlist/add?id=${userId}">Edit</a>
                             <a class="btn btn-info btn-sm" href="/user/preference?user_id=${userId}">Prefs</a>
-                            <a class="btn btn-info btn-sm" href="/user/jobhistory?user_id=${userId}">Job History</a>
-                            <a class="btn btn-warning btn-sm" href="/admin/userlist/kpi/${userId}">KPI</a>
+                            <a class="btn btn-warning btn-sm" href="/user/jobhistory?user_id=${userId}">Job History</a>
                             <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/admin/userlist/delete/${userId}', 'User', this)">Delete</button>
                         `);
                     } else if (type === 'payroll') {

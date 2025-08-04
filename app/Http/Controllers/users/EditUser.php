@@ -38,6 +38,7 @@ use App\Models\Core\URLBuilder;
 use App\Models\Users\UserGenericDataFactory;
 use App\Models\Users\UserWageFactory;
 use DateTime;
+use fileupload;
 
 class EditUser extends Controller
 {
@@ -59,7 +60,8 @@ class EditUser extends Controller
 
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $permission = $this->permission;
         $current_user = $this->current_user;
         $current_company = $this->current_company;
@@ -78,7 +80,7 @@ class EditUser extends Controller
             $permission->Redirect( FALSE ); //Redirect
         }
 
-        $viewData['title'] = 'Edit Employee';
+        $viewData['title'] = 'Employee';
 
         /*
         * Get FORM variables
@@ -182,6 +184,8 @@ class EditUser extends Controller
                 }
                 break;
             case 'submit':
+
+                // dd(request()->all());
 
                 //Debug::setVerbosity( 11 );
                 Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
@@ -306,9 +310,6 @@ class EditUser extends Controller
                         $uf->setSex($user_data['sex']);
                     }
 
-
-
-
                     if ( !empty($user_data['religion']) ) {
                         $uf->setReligion($user_data['religion']);
                     }
@@ -370,9 +371,9 @@ class EditUser extends Controller
                         $uf->setCountry($user_data['country']);
                     }
 
-                    //if ( isset($user_data['province']) ) {
-                    //    $uf->setProvince($user_data['province']);
-                    //}
+                    if ( isset($user_data['province']) ) {
+                       $uf->setProvince($user_data['province']);
+                    }
 
                     if ( isset($user_data['postal_code']) ) {
                         $uf->setPostalCode($user_data['postal_code']);
@@ -420,14 +421,29 @@ class EditUser extends Controller
                     }
 
 
-                    $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
+                    // $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
 
-                    $date = new DateTime();
-                    $date->setTimestamp($uf->getBirthDate());
-                    $date->modify('+60 years');
+                    // $date = new DateTime();
+                    // $date->setTimestamp($uf->getBirthDate());
+                    // $date->modify('+60 years');
 
-                    $uf->setRetirementDate(  $date->getTimestamp()  );
-                    $uf->setRetirementDate( $user_data['retirement_date']  );
+                    // $uf->setRetirementDate(  $date->getTimestamp()  );
+                    // $uf->setRetirementDate( $user_data['retirement_date']  );
+
+                    $birth_ts = TTDate::getTimeStampFromSmarty('birth_', $user_data);
+                    $uf->setBirthDate($birth_ts);
+
+                    if ($birth_ts) {
+                        $date = new DateTime();
+                        $date->setTimestamp($birth_ts);
+                        $date->modify('+60 years');
+                        $uf->setRetirementDate($date->getTimestamp());
+                    } else {
+                        // Fallback to user-provided value if birth date is not set
+                        $uf->setRetirementDate($user_data['retirement_date']);
+                    }
+
+
                 } else {
                     //Force them to update all fields.
 
@@ -468,9 +484,9 @@ class EditUser extends Controller
                         $uf->setCountry($user_data['country']);
                     }
 
-                    //if ( isset($user_data['province']) ) {
-                    //    $uf->setProvince($user_data['province']);
-                    //}
+                    if ( isset($user_data['province']) ) {
+                       $uf->setProvince($user_data['province']);
+                    }
 
                     $uf->setPostalCode($user_data['postal_code']);
                     $uf->setWorkPhone($user_data['work_phone']);
@@ -489,7 +505,9 @@ class EditUser extends Controller
                         $uf->setSIN($user_data['sin']);
                     }
 
+
                     $uf->setBirthDate( TTDate::getTimeStampFromSmarty('birth_', $user_data) );
+
 
                     $uf->setRetirementDate( $user_data['retirement_date']  );
                 }
@@ -1069,6 +1087,15 @@ class EditUser extends Controller
                 $ulf->getSearchByCompanyIdAndArrayCriteria( $company_id, $filter_data );
                 $user_data['user_options'] = UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE );
 
+
+                if (!empty($user_data['birth_date']) && is_numeric($user_data['birth_date'])) {
+                    $birthDate = getdate($user_data['birth_date']); // Converts timestamp to array
+                    $user_data['birth_Day'] = $birthDate['mday'];
+                    $user_data['birth_Month'] = $birthDate['mon'];
+                    $user_data['birth_Year'] = $birthDate['year'];
+                }
+
+
                 $viewData['user_data'] = $user_data;
 
                 $viewData['saved_search_id'] = $saved_search_id;
@@ -1190,6 +1217,7 @@ class EditUser extends Controller
 
                 if($bond_warning != "")
                 {
+                    $warning_message = $bond_warning;
                     echo $warning_message;
                     $viewData['bond_warning'] = $bond_warning;
                 }
@@ -1413,6 +1441,7 @@ class EditUser extends Controller
      * @param string $fileName
      * @return \Illuminate\Http\Response
      */
+
     public function serveFile($user_id, $fileName)
     {
         $path = "user_files/{$user_id}/{$fileName}";
@@ -1423,5 +1452,7 @@ class EditUser extends Controller
 
         return Storage::disk('public')->response($path);
     }
+
+
 }
 ?>

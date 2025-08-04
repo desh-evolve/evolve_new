@@ -1122,7 +1122,7 @@ class _EditUser extends Controller
 		$viewData['data_saved'] = $data_saved;
 
 		// return view('users.edit-user', $viewData);
-		return view('users/EditUser', $viewData);
+		return view('users/_EditUser', $viewData);
 	}
 
 	public function login(Request $request)

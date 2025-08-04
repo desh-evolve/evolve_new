@@ -168,6 +168,7 @@ use App\Http\Controllers\schedule\ViewScheduleDay;
 use App\Http\Controllers\schedule\ViewScheduleLinear;
 use App\Http\Controllers\schedule\ViewScheduleMonth;
 use App\Http\Controllers\schedule\ViewScheduleWeek;
+use App\Http\Controllers\users\PawaniTesting;
 
 // use App\Controllers\company\ImportCsvFile;
 
@@ -565,8 +566,6 @@ Route::delete('/policy/holidays/delete/{id}/{holiday_policy_id}', [HolidayList::
 // ===============================================================================================================================
 // user functions
 // ===============================================================================================================================
-
-
 Route::match(['get', 'post'], '/admin/userlist/add', [EditUser::class, 'index'])->name('admin.userlist.add');
 Route::get('/file/{user_id}/{fileName}', [EditUser::class, 'serveFile'])->name('serve.file');
 
@@ -580,7 +579,7 @@ Route::delete('/admin/userlist/delete/{id}', [UserList::class, 'delete'])->name(
 //     ->name('serveFile')
 //     ->where('path', '.*');
 Route::post('/users/delete-file', [EditUser::class, 'deleteFile'])->name('user.delete-file');
-Route::post('/users/upload', [EditUser::class, 'uploadFile'])->name('user.upload');
+Route::post('/users/upload', [EditUser::class, 'uploadImages'])->name('user.upload');
 Route::get('/storage/{disk}/{path}', [EditUser::class, 'serveFile'])->name('serveFile')->where('path', '.*');
 
 // ===============================================================================================================================

@@ -1368,7 +1368,7 @@ class UserFactory extends Factory {
 
 			$utlf = new UserTitleListFactory();
 			$utlf->getById( $this->getTitle() );
-			
+
 			if ( $utlf->getRecordCount() == 1 ) {
 				$this->title_obj = $utlf->getCurrent();
 
@@ -3650,7 +3650,7 @@ class UserFactory extends Factory {
 		return FALSE;
 	}
 	function setProvince($province) {
-		return TRUE; //this skips below code
+		// return TRUE; //this skips below code
 
 		$province = trim($province);
 
@@ -4106,7 +4106,7 @@ class UserFactory extends Factory {
 		if (!empty($epoch) || $epoch === 0) {
 
 			//Allow for negative epochs, for birthdates less than 1960's
-			$this->data['retirement_date'] = $epoch ; //Allow blank birthdate.
+			$this->data['retirement_date'] = $epoch; //Allow blank birthdate.
 
 			return TRUE;
 		}

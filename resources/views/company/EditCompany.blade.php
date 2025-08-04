@@ -375,6 +375,7 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -471,8 +472,8 @@
             if (selectedCountry) {
                 showProvince(); // Update province dropdown based on selected country
             }
-        };
-        
+        }
+
     </script>
 
 </x-app-layout>
