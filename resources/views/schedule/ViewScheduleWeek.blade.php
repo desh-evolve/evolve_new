@@ -53,7 +53,7 @@
 									<tr class="">
 										<td class="cellHL" 
 										@if( $permission->Check('schedule','edit') OR ( $permission->Check('schedule','edit_child') AND $shifts['is_child'] === TRUE ) OR ( $permission->Check('schedule','edit_own') AND $shifts['is_owner'] === TRUE )) 
-										id="cursor-hand" onClick="schedule.editSchedule('{{$shifts['id']}}',{{$shifts['user_id']}},{{$calendar['epoch']}},{{$shifts['status_id']}},{{$shifts['start_time']}},{{$shifts['end_time']}},'{{$shifts['schedule_policy_id']}}','{{$shifts['absence_policy_id']}}')"
+										id="cursor-hand" onClick="schedule.editSchedule('{{$shifts['user_id']}},{{$calendar['epoch']}},{{$shifts['status_id']}},{{$shifts['start_time']}},{{$shifts['end_time']}},'{{$shifts['schedule_policy_id']}}','{{$shifts['absence_policy_id']}}')"
 										@endif nowrap>
 											@if( $shifts['start_time'])
 												<b>{{$shifts['user_full_name']}}</b><br>
