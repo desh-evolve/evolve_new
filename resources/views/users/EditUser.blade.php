@@ -47,7 +47,6 @@
                                             </select>
                                         @else
                                             <input type="hidden" class="form-select" name="user_data[status]" value="{{$user_data['status']}}">
-                                            {{-- {{$user_data['status_options'][$user_data['status']]}} --}}
                                             <input type="text" class="form-control form-control-sm" value="{{ $user_data['status_options'][$user_data['status']] }}" readonly>
                                         @endif
                                     </div>
@@ -78,21 +77,21 @@
                                     </div>
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="status" class="form-label">Location:</label>
+                                        <label for="default_branch_id" class="form-label">Location:</label>
                                         <select class="form-select form-select-sm" name="user_data[default_branch_id]" id ="default_branch_id" onChange="getBranchShortId(), getNextHighestEmployeeNumberByBranch()">
                                             {!! html_options(['options'=>$user_data['branch_options'], 'selected'=>$user_data['default_branch_id']]) !!}
                                         </select>
                                     </div>
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="status" class="form-label">Department:</label>
+                                        <label for="default_department_id" class="form-label">Department:</label>
                                         <select class="form-select form-select-sm" name="user_data[default_department_id]">
                                             {!! html_options(['options'=>$user_data['department_options'], 'selected'=>$user_data['default_department_id']]) !!}
                                         </select>
                                     </div>
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="status" class="form-label">Division:</label>
+                                        <label for="default_department_id" class="form-label">Division:</label>
                                         <select class="form-select form-select-sm" name="user_data[default_department_id]">
                                             {!! html_options(['options'=>$user_data['department_options'], 'selected'=>$user_data['default_department_id']]) !!}
                                         </select>
@@ -117,33 +116,33 @@
                                     </div>
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="status" class="form-label">Policy Group:</label>
+                                        <label for="policy_group_id" class="form-label">Policy Group:</label>
                                         @if ($permission->Check('policy_group','edit') OR $permission->Check('user','edit_policy_group'))
                                             <select class="form-select form-select-sm" name="user_data[policy_group_id]">
                                                 {!! html_options(['options'=>$user_data['policy_group_options'], 'selected'=>$user_data['policy_group_id']]) !!}
                                             </select>
                                         @else
-                                            {{ $user_data['policy_group_options'][$user_data['policy_group_id']] ?? "N/A" }}
+                                            <input type="text" class="form-control form-control-sm" value="{{ $user_data['policy_group_options'][$user_data['policy_group_id']] ?? "N/A" }}">
                                             <input type="hidden" name="user_data[policy_group_id]" value="{{$user_data['policy_group_id']}}">
                                         @endif
                                     </div>
 
                                     <div class="mt-3">
-                                        <label for="address_1" class="form-label">Job Skills:</label>
+                                        <label for="job_skills" class="form-label">Job Skills:</label>
                                         <input type="text" size="40" class="form-control form-control-sm md-1" name="user_data[job_skills]" value="{{$user_data['job_skills'] ?? ''}}" placeholder="Enter Job Skills"> &nbsp;Ex:- driver, electrician
                                     </div>
 
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="address_1" class="form-label">Appoinment Date:</label>
-                                        <input type="date" class="form-control form-control-sm" name="user_data[hire_date]" value="{{ getdate_helper('date', $user_data['hire_date']) }}">
+                                        <label for="hire_date" class="form-label">Appoinment Date:</label>
+                                        <input type="date" class="form-control form-control-sm" name="user_data[hire_date]" value="{{ getdate_helper('date', $user_data['hire_date'] ?? '') }}">
                                         ie: {{$current_user_prefs->getDateFormatExample()}}
                                     </div>
 
                                 @endif
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="address_1" class="form-label">Termination Date:</label>
+                                        <label for="termination_date" class="form-label">Termination Date:</label>
                                         <input type="date" class="form-control form-control-sm" id="termination_date" name="user_data[termination_date]" value="{{ getdate_helper('date', $user_data['termination_date'] ?? '') }}">
                                         ie: {{$current_user_prefs->getDateFormatExample()}}
                                     </div>
@@ -152,7 +151,7 @@
                                     @if ($permission->Check('user','edit_advanced'))
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="address_2" class="form-label">Appoinment Note:</label>
+                                        <label for="hire_note" class="form-label">Appoinment Note:</label>
                                         <textarea rows="3" class="form-control" name="user_data[hire_note]" placeholder="Enter Appoinment Note">{{$user_data['hire_note'] ?? ''}}</textarea>
                                     </div>
                                     @endif
@@ -161,7 +160,7 @@
                                     @if ($permission->Check('user','edit_advanced'))
 
                                     <div class="col-lg-6 mt-3">
-                                        <label for="address_2" class="form-label">Termination Note:</label>
+                                        <label for="termination_note" class="form-label">Termination Note:</label>
                                         <textarea rows="3" class="form-control" name="user_data[termination_note]" placeholder="Enter Termination Note">{{$user_data['termination_note'] ?? ''}}</textarea>
                                     </div>
                                     @endif
@@ -219,26 +218,26 @@
                                         ie: {{$current_user_prefs->getDateFormatExample()}}
                                     </div>
 
-                                        <div class="col-lg-6 mt-3">
+                                    <div class="col-lg-6 mt-3">
                                         <label class="form-label" for="currency_id">Currency:</label>
                                             @if ($permission->Check('currency','edit'))
                                             <select class="form-select form-select-sm" name="user_data[currency_id]">
                                                 {!! html_options(['options'=>$user_data['currency_options'], 'selected'=>$user_data['currency_id']]) !!}
                                             </select>
                                         @else
-                                            {{$user_data['currency_options'][$user_data['currency_id']] ?? "N/A"}}
+                                            <input type="text" class="form-control form-control-sm" value="{{$user_data['currency_options'][$user_data['currency_id']] ?? "N/A"}}">
                                             <input type="hidden" name="user_data[currency_id]" value="{{$user_data['currency_id']}}">
                                         @endif
                                     </div>
 
-                                        <div class="col-lg-6 mt-3">
+                                    <div class="col-lg-6 mt-3">
                                         <label class="form-label" for="pay_period_schedule_id">Pay Period Schedule:</label>
                                             @if ($permission->Check('pay_period_schedule','edit') OR $permission->Check('user','edit_pay_period_schedule'))
                                             <select class="form-select form-select-sm" name="user_data[pay_period_schedule_id]">
                                                 {!! html_options(['options'=>$user_data['pay_period_schedule_options'], 'selected'=>$user_data['pay_period_schedule_id']]) !!}
                                             </select>
                                         @else
-                                            {{$user_data['pay_period_schedule_options'][$user_data['pay_period_schedule_id']] ?? "N/A"}}
+                                            <input type="text" class="form-control form-control-sm" value="{{$user_data['pay_period_schedule_options'][$user_data['pay_period_schedule_id']] ?? "N/A"}}">
                                             <input type="hidden" name="user_data[pay_period_schedule_id]" value="{{$user_data['pay_period_schedule_id']}}">
                                         @endif
                                     </div>
@@ -258,7 +257,6 @@
                                             </select>
                                         @else
                                             <input type="text" class="form-control form-control-sm" value="{{$user_data['permission_control_options'][$user_data['permission_control_id']] ?? "N/A"}}" readonly>
-                                            {{-- {{$user_data['permission_control_options'][$user_data['permission_control_id']] ?? "N/A"}} --}}
                                             <input type="hidden" name="user_data[permission_control_id]" value="{{$user_data['permission_control_id']}}">
                                         @endif
                                     </div>
@@ -754,6 +752,13 @@
                                         <br/>
                                     </div>
 
+                                    {{-- Instructional note --}}
+                                    <small class="text-danger d-block mb-1 mt-2">
+                                        <strong>[ Only PDF Documents are Allowed. ]</strong>
+                                    </small>
+
+                                    {{-- error message --}}
+                                    <div id="file-error" class="d-none"></div>
 
                                     <div class="mt-3">
                                         <label for="user_template_file" class="form-label">Appointment Letter:</label>
@@ -763,17 +768,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_template_file" name="user_data[user_template_file]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_template_file.pdf']) }}"
-                                                    alt="Appointment Letter"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_template_file.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -786,17 +788,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_file" name="user_data[user_file]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_file.pdf']) }}"
-                                                    alt="Personal Files"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_file.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -810,16 +809,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_id_copy" name="user_data[user_id_copy]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_id_copy.pdf']) }}"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_id_copy.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -833,16 +830,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_birth_certificate" name="user_data[user_birth_certificate]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_birth_certificate.pdf']) }}"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_birth_certificate.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -855,16 +850,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_gs_letter" name="user_data[user_gs_letter]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_gs_letter.pdf']) }}"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_gs_letter.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -878,16 +871,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_police_report" name="user_data[user_police_report]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_police_report.pdf']) }}"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_police_report.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -901,16 +892,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_nda" name="user_data[user_nda]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'user_nda.pdf']) }}"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_nda.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -924,16 +913,14 @@
                                                 <input type="file" class="form-control form-control-sm" id="bond_file" name="user_data[bond]">
                                             @endif
 
-                                            @if (!empty($user_data['id']))
-                                                <a
-                                                    target="_blank"
-                                                    href="{{ route('serve.file', ['user_id' => $user_data['id'], 'fileName' => 'bond.pdf']) }}"
-                                                    class="btn btn-sm btn-info"
-                                                    role="button"
-                                                >
-                                                    Download
-                                                </a>
-                                            @endif
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                onclick="downloadFile({{ $user_data['id'] }}, 'bond.pdf')"
+                                            >
+                                                Download
+                                            </button>
+
                                         </div>
                                     </div>
 
@@ -950,6 +937,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
 
                                     <!-- Submit Button -->
@@ -1113,6 +1101,52 @@
             if ( document.getElementById('default_branch_id').value != '' ) {
                 remoteHWTest1.getNextHighestEmployeeNumberByBranch( document.getElementById('default_branch_id').value);
             }
+        }
+
+
+        function downloadFile(userId, fileName) {
+            const url = `/file/${userId}/${fileName}`;
+            const errorBox = document.getElementById('file-error');
+
+            // Clear previous error
+            if (errorBox) {
+                errorBox.innerHTML = '';
+                errorBox.classList.add('d-none');
+            }
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Document not found');
+                        });
+                    }
+
+                    return response.blob();
+                })
+                .then(blob => {
+                    const downloadUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(downloadUrl);
+                })
+                .catch(error => {
+                    if (errorBox) {
+                        errorBox.innerHTML = `
+                            <div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+                                <strong>${error.message}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        `;
+                        errorBox.classList.remove('d-none');
+                    } else {
+                        alert(error.message);
+                    }
+                });
         }
 
 

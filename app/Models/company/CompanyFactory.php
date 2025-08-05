@@ -2133,7 +2133,7 @@ class CompanyFactory extends Factory {
 
 
 
-        	function getLogoFileWithoutPath( $company_id = NULL, $include_default_logo = TRUE, $primary_company_logo = FALSE ) {
+    function getLogoFileWithoutPath( $company_id = NULL, $include_default_logo = TRUE, $primary_company_logo = FALSE ) {
 
                    $file_name = 'logo';
 		//Test for both jpg and png

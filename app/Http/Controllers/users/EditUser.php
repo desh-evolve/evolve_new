@@ -30,6 +30,7 @@ use App\Models\Users\UserListFactory;
 use App\Models\Users\UserTitleListFactory;
 use App\Models\Users\UserWageListFactory;
 use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 use App\Models\Core\FormVariables;
 use App\Models\Core\Redirect;
@@ -672,8 +673,15 @@ class EditUser extends Controller
 
                     $user_data['id'] = $uf->getId();
 
-                    $this->uploadImages($_FILES, $user_data['id']);
+                    // $this->uploadImages($_FILES, $user_data['id']);
 
+                    $uploadResult = $this->uploadImages($_FILES, $user_data['id']);
+
+                    if (!empty($uploadResult['errors'])) {
+                        foreach ($uploadResult['errors'] as $field => $message) {
+                            $uf->Validator->isTrue($field, false, $message);
+                        }
+                    }
 
                     Debug::Text('Inserted ID: '. $user_data['id'], __FILE__, __LINE__, __METHOD__,10);
 
@@ -1106,7 +1114,6 @@ class EditUser extends Controller
 
                 break;
 
-
         }
 
         if(isset($delete_file_name) && isset($delete_user_id ) && isset($delete_file_type ))
@@ -1442,15 +1449,20 @@ class EditUser extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
     public function serveFile($user_id, $fileName)
     {
         $path = "user_files/{$user_id}/{$fileName}";
 
         if (!Storage::disk('public')->exists($path)) {
-            abort(404, 'File not found');
+            return response()->json([
+                'success' => false,
+                'message' => 'Document does not exist. Please add the Document before Downloading.'
+            ], 404);
         }
 
-        return Storage::disk('public')->response($path);
+        // Force download with correct headers
+        return response()->file(storage_path("app/public/{$path}"));
     }
 
 

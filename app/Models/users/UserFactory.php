@@ -322,6 +322,8 @@ class UserFactory extends Factory {
 	}
 
 
+   
+
 	//ARSP EDIT - > Add some code to remove already stored picture
     function cleanStoragePath( $user_id = NULL ) {
 		if ( $user_id == '' ) {
