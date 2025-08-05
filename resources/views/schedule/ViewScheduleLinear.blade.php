@@ -94,7 +94,8 @@
 										@if( !empty($shift['off_duty']) && $shift['on_duty'] > 0)
 											<td class="" colspan="{{$shift['on_duty']}}" 
 												@if( $permission->Check('schedule','edit') OR ( $permission->Check('schedule','edit_child') AND $shift['is_child'] === TRUE ) OR ( $permission->Check('schedule','edit_own') AND $shift['is_owner'] === TRUE ) )
-													id="cursor-hand" onClick="schedule.editSchedule('{{$shift['id']}}',{{$shift['user_id']}},{{$calendar['epoch']}},{{$shift['status_id']}},{{$shift['start_time']}},{{$shift['end_time']}},'{{$shift['schedule_policy_id']}}','{{$shift['absence_policy_id']}}')"
+													{{-- id="cursor-hand" onClick="schedule.editSchedule('{{$shift['id']}}',{{$shift['user_id']}},{{$calendar['epoch']}},{{$shift['status_id']}},{{$shift['start_time']}},{{$shift['end_time']}},'{{$shift['schedule_policy_id']}}','{{$shift['absence_policy_id']}}')" --}}
+													id="cursor-hand" onClick="schedule.editSchedule('{{$shift['user_id']}},{{$calendar['epoch']}},{{$shift['status_id']}},{{$shift['start_time']}},{{$shift['end_time']}},'{{$shift['schedule_policy_id']}}','{{$shift['absence_policy_id']}}')"
 												@endif nowrap>
 												@if( isset($shift['id']) AND ( $permission->Check('schedule','edit') OR ( $permission->Check('schedule','edit_child') AND $shift['is_child'] === TRUE ) OR ( $permission->Check('schedule','edit_own') AND $shift['is_owner'] === TRUE ) ))
 													<a href="javascript:schedule.editSchedule({{$shift['id']}},{{$shift['user_id']}},{{$calendar['epoch']}})">

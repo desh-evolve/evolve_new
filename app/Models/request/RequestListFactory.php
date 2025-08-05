@@ -467,7 +467,6 @@ class RequestListFactory extends RequestFactory implements IteratorAggregate {
 				';
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order, $strict_order, $additional_sort_fields );
-
 		if ($limit == NULL) {
 			$this->rs = DB::select($query, $ph);
 		} else {

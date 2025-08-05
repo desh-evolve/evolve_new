@@ -113,7 +113,7 @@ class ViewSchedule extends Controller
         }
         $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
 		//===================================================================================
-		
+
 		switch ($action) {
 			case 'print_schedule':
 				//Debug::setVerbosity(11);
@@ -263,6 +263,14 @@ class ViewSchedule extends Controller
 
 				$filter_data['show_days_options'] = array( 1 => _('1 Week'), 2 => _('2 Weeks'), 3 => _('3 Weeks'), 4 => _('4 Weeks'), 5 => _('5 Weeks'), 6 => _('6 Weeks'), 7 => _('7 Weeks'), 8 => _('8 Weeks'), 9 => _('9 Weeks'), 10 => _('10 Weeks'), 11 => _('11 Weeks'), 12 => _('12 Weeks'));
 				$filter_data['view_type_options'] = array( 10 => _('Month'), 20 => _('Week'), 30 => _('Day') );
+
+				 $hidden_elements = Misc::prependArray(array(
+                                'printSchedule' => 'hidden',
+                                'viewSchedule' => 'hidden',
+                                // 'displayDetailedTimeSheet' => 'hidden',
+                                'export' => ''
+                            ));
+                $viewData['hidden_elements'] = $hidden_elements;
 
 				$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 				$generic_data['saved_report_options'] = $saved_report_options;

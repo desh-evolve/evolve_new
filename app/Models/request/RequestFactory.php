@@ -374,7 +374,9 @@ class RequestFactory extends Factory {
 			$hierarchy_highest_level = 99;
 			if ( isset($hierarchy_arr) AND is_array( $hierarchy_arr ) ) {
 				Debug::Arr($hierarchy_arr, ' Hierarchy Array: ', __FILE__, __LINE__, __METHOD__,10);
-				$hierarchy_highest_level = end( array_keys( $hierarchy_arr ) ) ;
+				$keys = array_keys($hierarchy_arr);
+				$hierarchy_highest_level = end($keys);
+				// $hierarchy_highest_level = end( array_keys( $hierarchy_arr ) ) ;
 				Debug::Text(' Setting hierarchy level to: '. $hierarchy_highest_level, __FILE__, __LINE__, __METHOD__,10);
 			}
 			$this->setAuthorizationLevel( $hierarchy_highest_level );

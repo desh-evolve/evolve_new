@@ -79,20 +79,28 @@ class ViewRequest extends Controller
 		if ( isset($data) ) {
 			$data['date_stamp'] = TTDate::parseDateTime($data['date_stamp']);
 		}
-
 		$rf = new RequestFactory(); 
 
 		$action = $_POST['action'] ?? '';
+		
 		$action = !empty($action) ? strtolower($action) : '';
 
 		switch ($action) {
 			case 'pass':
-				if ( count($request_queue_ids) > 1 ) {
-					//Remove the authorized/declined request from the stack.
+				if (count($request_queue_ids) > 1) {
+					// Remove the authorized/declined request from the stack.
 					array_shift($request_queue_ids);
-					Redirect::Page( URLBuilder::getURL( array('id' => $request_queue_ids[0], 'selected_level' => $selected_level, 'request_queue_ids' => base64_encode( serialize($request_queue_ids) ) ), 'ViewRequest.php') );
+
+					$query = http_build_query([
+						'id' => $request_queue_ids[0],
+						'selected_level' => $selected_level,
+						'request_queue_ids' => base64_encode(serialize($request_queue_ids)),
+					]);
+
+					return redirect('ViewRequest.php?' . $query);
 				} else {
-					Redirect::Page( URLBuilder::getURL( array('refresh' => TRUE ), '../CloseWindow.php') );
+					$closeQuery = http_build_query(['refresh' => true]);
+					return redirect('../CloseWindow.php?' . $closeQuery);
 				}
 				break;
 			case 'decline':
@@ -133,6 +141,7 @@ class ViewRequest extends Controller
 
 					$rlf = new RequestListFactory();
 					$rlf->getByIDAndCompanyID( $id, $current_company->getId() );
+
 					if ( $rlf->getRecordCount() == 1 ) {
 						foreach ($rlf->rs as $r_obj) {
 							$rlf->data = (array)$r_obj;
@@ -161,7 +170,6 @@ class ViewRequest extends Controller
 												'deleted_by' => $r_obj->getDeletedBy()
 											);
 						}
-
 						//Get Next Request to authorize:
 						if ( $permission->Check('request','authorize')
 								AND $selected_level != NULL
@@ -174,6 +182,7 @@ class ViewRequest extends Controller
 							$hllf = new HierarchyLevelListFactory();
 
 							$request_levels = $hllf->getLevelsAndHierarchyControlIDsByUserIdAndObjectTypeID( $current_user->getId(), $hierarchy_type_id );
+							dd($request_levels);
 							//Debug::Arr( $request_levels, 'Request Levels', __FILE__, __LINE__, __METHOD__,10);
 
 							if ( isset($selected_level) AND isset($request_levels[$selected_level]) ) {
@@ -191,7 +200,7 @@ class ViewRequest extends Controller
 								$rlf = new RequestListFactory();
 								//$rlf->getByHierarchyLevelMapAndStatusAndNotAuthorized( $request_selected_level, 30 );
 								$rlf->getByHierarchyLevelMapAndTypeAndStatusAndNotAuthorized($request_selected_level, $type_id, 30 );
-
+							
 								//Get all IDs that need authorizing.
 								//Only do 25 at a time, then grab more.
 								$i=0;
@@ -242,7 +251,6 @@ class ViewRequest extends Controller
 		}
 
 		$viewData['rf'] = $rf;
-		//dd($viewData);
 		return view('request/ViewRequest', $viewData);
 
 	}

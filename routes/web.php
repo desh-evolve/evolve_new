@@ -610,7 +610,7 @@ Route::match(['get', 'post'], '/attendance/masspunch/add', [AddMassPunch::class,
 
 Route::get('/attendance/requests', [UserRequestList::class, 'index'])->name('attendance.requests');
 Route::match(['get', 'post'], '/attendance/request/add', [EditRequest::class, 'index'])->name('attendance.request.add');
-Route::get('/attendance/request/view', [ViewRequest::class, 'index'])->name('attendance.request.view');
+Route::match(['get', 'post'],'/attendance/request/view', [ViewRequest::class, 'index'])->name('attendance.request.view');
 Route::delete('/attendance/request/delete/{id}', [UserRequestList::class, 'delete'])->name('attendance.request.delete');
 
 Route::get('/attendance/accruals/{filter_user_id?}', [UserAccrualBalanceList::class, 'index'])->name('attendance.accruals');

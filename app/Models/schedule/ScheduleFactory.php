@@ -10,6 +10,7 @@ use App\Models\Core\Misc;
 use App\Models\Core\Option;
 use App\Models\Core\TTDate;
 use App\Models\Core\TTLog;
+use App\Models\Core\Sort;
 use App\Models\Core\UserDateFactory;
 use App\Models\Core\UserDateListFactory;
 use App\Models\Core\UserDateTotalFactory;
@@ -21,6 +22,7 @@ use App\Models\Policy\SchedulePolicyListFactory;
 use App\Models\Users\UserFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
+use TCPDF;
 
 class ScheduleFactory extends Factory {
 	protected $table = 'schedule';
@@ -750,8 +752,10 @@ class ScheduleFactory extends Factory {
 
 		Debug::text('Found Scheduled Rows: '. $slf->getRecordCount(), __FILE__, __LINE__, __METHOD__, 10);
 		Debug::Arr($absence_policy_paid_type_options, 'Paid Absences: ', __FILE__, __LINE__, __METHOD__, 10);
+		// dd($slf);
 		if ( $slf->getRecordCount() > 0 ) {
 			$this->getProgressBarObject()->start( $this->getAMFMessageID(), $slf->getRecordCount(), NULL, ('Processing Committed Shifts...') );
+
 
 			foreach( $slf->rs as $s_obj ) {
 				$slf->data = (array)$s_obj;
@@ -898,7 +902,6 @@ class ScheduleFactory extends Factory {
 		if ( isset($schedule_shifts) ) {
 			return $schedule_shifts;
 		}
-
 		return FALSE;
 	}
 
@@ -1113,8 +1116,8 @@ class ScheduleFactory extends Factory {
 
 		//Debug::Text('Start Date: '. TTDate::getDate('DATE', $start_date) .' End Date: '. TTDate::getDate('DATE', $end_date) , __FILE__, __LINE__, __METHOD__,10);
 		Debug::text(' Start Date: '. TTDate::getDate('DATE+TIME', $filter_data['start_date']) .' End Date: '. TTDate::getDate('DATE+TIME', $filter_data['end_date']) .' Start Week Day: '. $start_week_day, __FILE__, __LINE__, __METHOD__,10);
-
-		$pdf = new TTPDF('L', 'pt', 'Letter');
+		
+		$pdf = new TCPDF('L', 'pt', 'Letter');
 
 		$left_margin = 20;
 		$top_margin = 20;

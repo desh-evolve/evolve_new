@@ -27,6 +27,7 @@ use App\Models\Users\UserGroupListFactory;
 use App\Models\Users\UserListFactory;
 use App\Models\Users\UserTitleListFactory;
 use Illuminate\Support\Facades\View;
+use Termwind\Components\Dd;
 
 class ViewScheduleWeek extends Controller
 {
@@ -120,7 +121,7 @@ class ViewScheduleWeek extends Controller
 		$action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
 		//===================================================================================
 
-		switch ($do) {
+		switch (strtolower($do)) {
 			case 'view_schedule':
 			default:
 				$user_ids = array();
@@ -136,6 +137,7 @@ class ViewScheduleWeek extends Controller
 				Debug::text(' Start Date: '. TTDate::getDate('DATE+TIME', $start_date) .' End Date: '. TTDate::getDate('DATE+TIME', $end_date) , __FILE__, __LINE__, __METHOD__,10);
 
 				$sf = new ScheduleFactory(); 
+		
 				$raw_schedule_shifts = $sf->getScheduleArray( $filter_data );
 				if ( is_array($raw_schedule_shifts) ) {
 					foreach( $raw_schedule_shifts as $day_epoch => $day_schedule_shifts ) {
