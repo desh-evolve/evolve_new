@@ -768,6 +768,7 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_template_file" name="user_data[user_template_file]">
                                             @endif
 
+                                            @if (!empty($user_data['id']))
                                             <button
                                                 type="button"
                                                 class="btn btn-sm btn-info"
@@ -775,7 +776,7 @@
                                             >
                                                 Download
                                             </button>
-
+                                            @endif
                                         </div>
                                     </div>
 
@@ -788,14 +789,15 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_file" name="user_data[user_file]">
                                             @endif
 
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-info"
-                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_file.pdf')"
-                                            >
-                                                Download
-                                            </button>
-
+                                            @if (!empty($user_data['id']))
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-info"
+                                                    onclick="downloadFile({{ $user_data['id'] }}, 'user_file.pdf')"
+                                                >
+                                                    Download
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -809,14 +811,15 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_id_copy" name="user_data[user_id_copy]">
                                             @endif
 
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-info"
-                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_id_copy.pdf')"
-                                            >
-                                                Download
-                                            </button>
-
+                                            @if (!empty($user_data['id']))
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-info"
+                                                    onclick="downloadFile({{ $user_data['id'] }}, 'user_id_copy.pdf')"
+                                                >
+                                                    Download
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -830,14 +833,15 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_birth_certificate" name="user_data[user_birth_certificate]">
                                             @endif
 
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-info"
-                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_birth_certificate.pdf')"
-                                            >
-                                                Download
-                                            </button>
-
+                                            @if (!empty($user_data['id']))
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-info"
+                                                    onclick="downloadFile({{ $user_data['id'] }}, 'user_birth_certificate.pdf')"
+                                                >
+                                                    Download
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -850,14 +854,15 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_gs_letter" name="user_data[user_gs_letter]">
                                             @endif
 
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-info"
-                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_gs_letter.pdf')"
-                                            >
-                                                Download
-                                            </button>
-
+                                            @if (!empty($user_data['id']))
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-info"
+                                                    onclick="downloadFile({{ $user_data['id'] }}, 'user_gs_letter.pdf')"
+                                                >
+                                                    Download
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -871,14 +876,15 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_police_report" name="user_data[user_police_report]">
                                             @endif
 
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-info"
-                                                onclick="downloadFile({{ $user_data['id'] }}, 'user_police_report.pdf')"
-                                            >
-                                                Download
-                                            </button>
-
+                                            @if (!empty($user_data['id']))
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-info"
+                                                    onclick="downloadFile({{ $user_data['id'] }}, 'user_police_report.pdf')"
+                                                >
+                                                    Download
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -892,13 +898,15 @@
                                                 <input type="file" class="form-control form-control-sm" id="user_nda" name="user_data[user_nda]">
                                             @endif
 
-                                            <button
+                                            @if (!empty($user_data['id']))
+                                             <button
                                                 type="button"
                                                 class="btn btn-sm btn-info"
                                                 onclick="downloadFile({{ $user_data['id'] }}, 'user_nda.pdf')"
                                             >
                                                 Download
                                             </button>
+                                            @endif
 
                                         </div>
                                     </div>
@@ -913,14 +921,15 @@
                                                 <input type="file" class="form-control form-control-sm" id="bond_file" name="user_data[bond]">
                                             @endif
 
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-info"
-                                                onclick="downloadFile({{ $user_data['id'] }}, 'bond.pdf')"
-                                            >
-                                                Download
-                                            </button>
-
+                                            @if (!empty($user_data['id']))
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-info"
+                                                    onclick="downloadFile({{ $user_data['id'] }}, 'bond.pdf')"
+                                                >
+                                                    Download
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -984,13 +993,13 @@
         </div>
     </div>
 
-     <script>
+    <script>
         // Assuming `province_options` is passed from the backend like below
         var provinceOptions = @json($user_data['province_options']);
 
         function showProvince() {
-            var country = document.getElementById('country').value; // Get selected country
-            var provinceDropdown = document.getElementById('province'); // Get province dropdown
+            var country = document.getElementById('country').value;
+            var provinceDropdown = document.getElementById('province');
             var selectedProvince = document.getElementById('selected_province').value; // Get the selected province value
 
             // Clear the current province options

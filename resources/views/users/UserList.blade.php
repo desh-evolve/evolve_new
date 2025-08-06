@@ -170,7 +170,7 @@
                     } else if (type === 'payroll') {
                         $functionCell.html(`
                             <a class="btn btn-primary btn-sm" href="/user/wage?user_id=${userId}">Wage</a>
-                            <a class="btn btn-success btn-sm" href="/user/tax?id=${userId}">Tax</a>
+                            <a class="btn btn-success btn-sm" href="/user/tax?user_id=${userId}">Tax</a>
                             <a class="btn btn-info btn-sm" href="/payroll/pay_stub_amendment?filter_user_id=${userId}">PS Amendments</a>
                             <a class="btn btn-warning btn-sm" href="/bank_account/user/${userId}">Bank</a>
                         `);

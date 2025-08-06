@@ -1,4 +1,8 @@
 <x-app-layout :title="'Input Example'">
+     <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Employee Tax / Deduction') }}</h4>
+     </x-slot>
+     
     <style>
         th, td{
             padding: 5px !important;
@@ -9,7 +13,7 @@
         @include('company.EditCompanyDeduction_js', $data)
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                showCalculation(); 
+                showCalculation();
             });
         </script>
     @endif
@@ -40,9 +44,9 @@
                             @if( !$udf->Validator->isValid())
                                 {{-- {include file="form_errors.tpl" object="udf"} --}}
                             @endif
-            
+
                             <table class="table table-bordered">
-                
+
                                 @if( $company_deduction_id == '')
                                 <tr>
                                     <th>
@@ -53,7 +57,7 @@
                                     </td>
                                 </tr>
                                 @endif
-                
+
                                 @if(!empty($data['add']) && $data['add'] == 1)
                                     <tr>
                                         <th>
@@ -75,7 +79,7 @@
                                             {{$data['status']}}
                                         </td>
                                     </tr>
-                
+
                                     <tr>
                                         <th>
                                             Type:
@@ -84,7 +88,7 @@
                                             {{$data['type']}}
                                         </td>
                                     </tr>
-                
+
                                     <tr>
                                         <th>
                                             Name:
@@ -93,7 +97,7 @@
                                             {{$data['name']}}
                                         </td>
                                     </tr>
-                
+
                                     <tr>
                                         <th>
                                             Calculation:
@@ -102,8 +106,8 @@
                                             {{$data['calculation']}}
                                         </td>
                                     </tr>
-                
-                                    @if( $data['country'] != '') 
+
+                                    @if( $data['country'] != '')
                                         <tr>
                                             <th>
                                                 Country:
@@ -113,8 +117,8 @@
                                             </td>
                                         </tr>
                                     @endif
-                
-                                    @if ($data['province'] != '') 
+
+                                    @if ($data['province'] != '')
                                         <tr>
                                             <th>
                                                 Province / State:
@@ -124,8 +128,8 @@
                                             </td>
                                         </tr>
                                     @endif
-                
-                                    @if( $data['district'] != '') 
+
+                                    @if( $data['district'] != '')
                                         <tr>
                                             <th>
                                                 District / County:
@@ -139,22 +143,22 @@
                                             </td>
                                         </tr>
                                     @endif
-                                    
+
                                     @if (!empty($company_deduction_id))
                                         @include('company.EditCompanyDeductionUserValues', ['page_type' => 'mass_user'])
                                     @else
                                         @include('company.EditCompanyDeductionUserValues', ['page_type' => 'user'])
                                     @endif
 
-                
+
                                 @endif
                             </table>
                         </div>
-            
-                        <div id="contentBoxFour">
-                            <input type="submit" class="btnSubmit btn btn-sm btn-primary" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_include'))">
+
+                        <div id="contentBoxFour" class="text-end">
+                            <input type="submit" class="btnSubmit btn btn-primary" name="action" value="Submit" onClick="selectAll(document.getElementById('filter_include'))">
                         </div>
-            
+
                         <input type="hidden" id="id" name="data[id]" value="{{$data['id'] ?? ''}}">
                         <input type="hidden" name="data[user_id]" value="{{$data['user_id'] ?? ''}}">
                         <input type="hidden" name="saved_search_id" value="{{$saved_search_id}}">
@@ -164,7 +168,7 @@
                         <input type="hidden" id="country_id" value="{{$data['country_id'] ?? ''}}">
                         <input type="hidden" id="province_id" value="{{$data['province_id'] ?? ''}}">
                     </form>
-                    
+
                     {{-- -------------------------------------------------------- --}}
 
                     </div>
@@ -173,5 +177,5 @@
             </div>
         </div>
     </div>
-    
+
 </x-app-layout>

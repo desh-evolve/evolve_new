@@ -11,6 +11,7 @@ use App\Models\Core\Misc;
 use App\Models\Leaves\LeaveRequestFactory;
 use App\Models\Leaves\LeaveRequestListFactory;
 use App\Models\Policy\AccrualPolicyListFactory;
+use App\Models\Users\UserFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
@@ -51,7 +52,6 @@ class VIewUserLeave extends Controller
 		$lrlf->getById($id);
 
 		if($lrlf->getRecordCount() >0){
-
 			$lrf =  $lrlf->getCurrent();
 
 			$aplf = new AccrualPolicyListFactory();
@@ -68,8 +68,9 @@ class VIewUserLeave extends Controller
 			$leave_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $leave_options );
 			$data['leave_options'] = $leave_options;
 
+            $filter_data = [];
 			$ulf = new UserListFactory();
-			//$filter_data['default_branch_id'] = $current_user->getDefaultBranch();
+			// $filter_data['default_branch_id'] = $current_user->getDefaultBranch();
 			$filter_data['exclude_id'] = 1;
 
 			$ulf->getAPISearchByCompanyIdAndArrayCriteria( $current_company->getId(),$filter_data);
@@ -83,7 +84,6 @@ class VIewUserLeave extends Controller
 
 				$user_options[$uf->getId()] = $uf->getPunchMachineUserID().'-'.$uf->getFullName() ;
 			}
-
 
 			$leaves = $lrf->getLeaveDates();
 

@@ -1297,7 +1297,8 @@ class EditUser extends Controller
 
     }
 
-    public function uploadImages($files, $user_id){
+    public function uploadImages($files, $user_id)
+    {
         // Initialize response array
         $response = [
             'success' => [],

@@ -16,6 +16,7 @@ use App\Models\Users\AttendanceBonusListFactory;
 use App\Models\Users\UserDeductionListFactory;
 use App\Models\Users\UserGenericDataFactory;
 use App\Models\Users\UserListFactory;
+use Illuminate\Http\Request;
 
 class UserDeductionList extends Controller
 {
@@ -36,7 +37,7 @@ class UserDeductionList extends Controller
         $this->current_user_prefs = View::shared('current_user_prefs');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $permission = $this->permission;
         $current_user = $this->current_user;
@@ -80,8 +81,10 @@ class UserDeductionList extends Controller
 
 		Debug::Arr($ids,'Selected Objects', __FILE__, __LINE__, __METHOD__,10);
 
-
 		$ulf = new UserListFactory();
+
+        $user_id = $request->input('user_id', $current_user->getId());
+        $filter_user_id = $user_id;
 
 		//===================================================================================
         $action = '';
@@ -92,7 +95,7 @@ class UserDeductionList extends Controller
         }
         $action = !empty($action) ? strtolower(str_replace(' ', '_', $action)) : '';
         //===================================================================================
-		
+
 		switch ($action) {
 			case 'add':
 
@@ -106,7 +109,7 @@ class UserDeductionList extends Controller
 					$delete = FALSE;
 				}
 
-				$udlf = new UserDeductionListFactory(); 
+				$udlf = new UserDeductionListFactory();
 
 				if ( isset($ids) AND is_array($ids) ) {
 					foreach ($ids as $id) {
@@ -129,7 +132,7 @@ class UserDeductionList extends Controller
 			default:
 
 				//Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
-				$hlf = new HierarchyListFactory(); 
+				$hlf = new HierarchyListFactory();
 				$permission_children_ids = $hlf->getHierarchyChildrenByCompanyIdAndUserIdAndObjectTypeID( $current_company->getId(), $current_user->getId() );
 
 				$udlf = new UserDeductionListFactory();
@@ -140,7 +143,7 @@ class UserDeductionList extends Controller
 				$rows = [];
 				if ( $ulf->getRecordCount() > 0 ) {
 					$user_obj = $ulf->getCurrent();
-					
+
 					if ( is_object($user_obj) ) {
 						$is_owner = $permission->isOwner( $user_obj->getCreatedBy(), $user_obj->getID() );
 						$is_child = $permission->isChild( $user_obj->getId(), $permission_children_ids );
@@ -152,7 +155,7 @@ class UserDeductionList extends Controller
 							foreach ($udlf->rs as $ud_obj) {
 								$udlf->data = (array)$ud_obj;
 								$ud_obj = $udlf;
-							
+
 								$cd_obj = $ud_obj->getCompanyDeductionObject();
 
 								$rows[] = array(
@@ -179,7 +182,7 @@ class UserDeductionList extends Controller
 
 				$filter_data = NULL;
 				$ugdf = new UserGenericDataFactory();
-				//extract( $ugdf->getSearchFormData( $saved_search_id, NULL ) ); 
+				//extract( $ugdf->getSearchFormData( $saved_search_id, NULL ) );
 
 				if ( $permission->Check('user_tax_deduction','view') == FALSE ) {
 					if ( $permission->Check('user_tax_deduction','view_child') ) {
@@ -194,14 +197,18 @@ class UserDeductionList extends Controller
 
 				$viewData['user_options'] = $user_options;
 
+                $viewData['is_child'] = $is_child;
+                $viewData['is_owner'] = $is_owner;
 				$viewData['sort_column'] = $sort_column ;
 				$viewData['sort_order'] = $sort_order ;
 				$viewData['saved_search_id'] = $saved_search_id ;
 
+                // dd($viewData);
 				break;
 		}
-		
+
 		return view('users/UserDeductionList', $viewData);
 	}
+
 }
 ?>

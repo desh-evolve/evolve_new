@@ -1,131 +1,112 @@
 <x-app-layout :title="'Input Example'">
-    <style>
-        th, td{
-            padding: 5px !important;
-        }
-    </style>
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Employee Tax / Deduction') }}</h4>
+    </x-slot>
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header align-items-center d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title mb-0 flex-grow-1">{{ $title }}</h4>
-                    </div>
 
-                    <div class="justify-content-md-end">
-                        <div class="d-flex justify-content-end">
-                            @if ($permission->Check('user_tax_deduction','add') AND ( $permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ) ))
-                                {{-- <a type="button" href="{{ route('user.tax.add', ['user_id' => $user_id]) }}" class="btn btn-primary waves-effect waves-light material-shadow-none me-1">
-                                    New Tax / Deduction <i class="ri-add-line"></i>
-                                </a> --}}
-                            @endif
+            <form method="post" name="userdeduction" action="{{ route('user.tax.index') }}">
+                @csrf
+
+                <div class="card">
+                    <div class="card-header align-items-center d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title mb-0 flex-grow-1">{{ $title }}</h4>
                         </div>
 
-
+                        <div class="justify-content-md-end">
+                            <div class="d-flex justify-content-end">
+                                @if ($permission->Check('user_tax_deduction','add') AND ( $permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ) ))
+                                    {{-- <input type="submit" name="action" value="Add"><i class="ri-add-line"></i> --}}
+                                    <button type="submit" name="action" value="add" class="btn btn-primary waves-effect waves-light material-shadow-none me-1">
+                                        Add <i class="ri-add-line me-1"></i>
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="card-body">
                     <div class="card-body">
+                        <div class="card-body">
 
-                    {{-- -------------------------------------------------------- --}}
+                            <div class="row mb-4">
+                                <div class="col-lg-2">
+                                    <label for="filter_user_id" class="form-label mb-1 req">{{ __('Employee Name') }}</label>
+                                </div>
 
-                    <form method="get" name="userdeduction" action="{{ route('user.tax.index') }}">
-                        @csrf
-                        <table class="table table-bordered">
-
-                            <tr class="tblHeader">
-                                <td colspan="10">
-                                    Employee:
-                                    <a class="ps-3 pe-3" href="javascript: submitModifiedForm('filter_user', 'prev', document.userdeduction);">
-                                        <<
-                                    </a>
-                                    <select name="user_id" id="filter_user" onChange="submitModifiedForm('filter_user', '', document.userdeduction);">
-                                        {!! html_options([ 'options'=>$user_options, 'selected'=>$user_id]) !!}
+                                <div class="col-lg-10">
+                                    <select name="user_id" id="filter_user" class="form-select" onChange="this.form.submit()">
+                                        @foreach($user_options as $value => $label)
+                                            <option value ="{{ $value }}"
+                                                {{ $value == $user_id ? 'selected' : '' }}>
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
                                     </select>
-                                    <input type="hidden" id="old_filter_user" value="{{$user_id}}">
-                                    <a class="ps-3 pe-3" href="javascript: submitModifiedForm('filter_user', 'next', document.userdeduction);">
-                                        >>
-                                    </a>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                </td>
-                            </tr>
+                                    <input type="hidden" id="old_filter_user" value="{{ $user_id }}">
+                                </div>
+                            </div>
 
-                            <tr class="tblHeader">
-                                <td>
-                                    #
-                                </td>
-                                <td>
-                                    Type
-                                </td>
-                                <td>
-                                    Name
-                                </td>
-                                <td>
-                                    Calculation
-                                </td>
-
-                                <td>
-                                    Functions
-                                </td>
-                                <td>
-                                    <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
-                                </td>
-                            </tr>
-                            @if (!empty($rows))
-                                @foreach ($rows as $i => $row)
-                                    <tr class="">
-                                        <td>
-                                            {{ $i+1 }}
-                                        </td>
-                                        <td>
-                                            {{$row['type']}}
-                                        </td>
-                                        <td>
-                                            {{$row['name']}}
-                                        </td>
-                                        <td>
-                                            {{$row['calculation']}}
-                                        </td>
-                                        <td>
-                                            @if ($permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ))
-                                                [ <a href="{{ route('user.tax.add', ['id' => $row['id'], 'saved_search_id' => $saved_search_id]) }}">Edit</a> ]
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" class="checkbox" name="ids[]" value="{{$row['id']}}">
-                                        </td>
+                            <table class="table table-bordered">
+                                <thead class="bg-primary text-white">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Type</th>
+                                        <th>Name</th>
+                                        <th>Calculation</th>
+                                        <th>Functions</th>
+                                        <th>
+                                            <input type="checkbox" class="checkbox" name="select_all" onClick="CheckAll(this)"/>
+                                        </th>
                                     </tr>
-                                @endforeach
-                                <tr>
-                                    <td class="tblActionRow text-end" colspan="7">
-                                        @if ($permission->Check('user_tax_deduction','add') AND ( $permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ) ))
-                                            <input type="submit" class="button" name="action" value="Add">
-                                        @endif
-                                        @if($permission->Check('user_tax_deduction','delete') OR ( $permission->Check('user_tax_deduction','delete_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','delete_own') AND $row['is_owner'] === TRUE ))
-                                        <input type="submit" class="button" name="action" value="Delete" onClick="return confirmSubmit()">
-                                        @endif
-                                    </td>
-                                </tr>
-                            @else
-                                <tr>
-                                    <td class="tblActionRow" colspan="7" align="center">
-                                        No Data
-                                    </td>
-                                </tr>
-                            @endif
+                                </thead>
 
+                                <tbody id="table_body">
+                                    @if (!empty($rows))
+                                        @foreach ($rows as $i => $row)
+                                            <tr class="">
+                                                <td>{{ $i+1 }}</td>
+                                                <td>{{$row['type']}}</td>
+                                                <td>{{$row['name']}}</td>
+                                                <td>{{$row['calculation']}}</td>
+                                                <td>
+                                                    @if ($permission->Check('user_tax_deduction','edit') OR ( $permission->Check('user_tax_deduction','edit_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','edit_own') AND $row['is_owner'] === TRUE ))
+                                                        <a class="btn btn-secondary btn-sm"
+                                                            href="{{ route('user.tax.add', ['id' => $row['id'], 'saved_search_id' => $saved_search_id]) }}">
+                                                            Edit
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" class="checkbox" name="ids[]" value="{{$row['id']}}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        <tr>
+                                            <td class="tblActionRow text-end" colspan="7">
+                                                @if($permission->Check('user_tax_deduction','delete') OR ( $permission->Check('user_tax_deduction','delete_child') AND $row['is_child'] === TRUE ) OR ( $permission->Check('user_tax_deduction','delete_own') AND $row['is_owner'] === TRUE ))
+                                                    <input type="submit" class="btn btn-danger" name="action" value="Delete" onClick="return confirmSubmit()">
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td class="text-danger" colspan="7" align="center">
+                                                No Data...
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
 
-                        </table>
-                    </form>
-
-                    {{-- -------------------------------------------------------- --}}
-
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
+            </form>
+
         </div>
     </div>
 </x-app-layout>

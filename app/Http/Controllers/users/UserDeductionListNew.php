@@ -31,13 +31,6 @@ class UserDeductionListNew extends Controller
 		$this->currentCompany = View::shared('current_company');
 		$this->userPrefs = View::shared('current_user_prefs');
 
-        // if ( !$permission->Check('user_tax_deduction','enabled')
-        //         OR !( $permission->Check('user_tax_deduction','view') OR $permission->Check('user_tax_deduction','view_own') ) ) {
-
-        //     $permission->Redirect( FALSE ); //Redirect
-
-        // }
-
 	}
 
 
@@ -46,6 +39,13 @@ class UserDeductionListNew extends Controller
         $current_company = $this->currentCompany;
         $current_user = $this->currentUser;
         $permission = $this->permission;
+
+        // if ( !$permission->Check('user_tax_deduction','enabled')
+        //         OR !( $permission->Check('user_tax_deduction','view') OR $permission->Check('user_tax_deduction','view_own') ) ) {
+
+        //     $permission->Redirect( FALSE ); //Redirect
+
+        // }
 
         $ulf = new UserListFactory();
         $viewData['title'] = 'Employee Tax / Deduction List';
@@ -67,9 +67,10 @@ class UserDeductionListNew extends Controller
 		$udlf = new UserDeductionListFactory();
 		$udlf->getByCompanyIdAndUserId( $current_company->getId(), $user_id );
 
+		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
+
         $rows = [];
 
-		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 		if ( $ulf->getRecordCount() > 0 ) {
 			$user_obj = $ulf->getCurrent();
 
