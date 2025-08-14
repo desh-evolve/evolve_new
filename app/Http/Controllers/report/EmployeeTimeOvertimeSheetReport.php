@@ -1,20 +1,69 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: TimesheetDetail.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
-require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
 
-$smarty->assign('title', __($title = 'Employee Overtime  Report')); // See index.php
 
+namespace App\Http\Controllers\Report;
+
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Sort;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\OverTimePolicyListFactory;
+use App\Models\Policy\PremiumPolicyListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use App\Models\Users\UserWageListFactory;
+use App\Models\Report\TimesheetDetailReport;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
+use App\Models\Core\BreadCrumb;
+use TCPDF;
+
+class EmployeeTimeOvertimeSheetReport extends Controller
+{
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
+
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
+	public function index()
+	{
+
+		$viewData['title'] = 'Employee Overtime  Report';
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+        $current_user_prefs = $this->userPrefs;
 
 /*
  * Get FORM variables
@@ -25,7 +74,7 @@ extract	(FormVariables::GetVariables(
                     'generic_data',
                     'filter_data'
                     ) ) );
-
+       
 if ( isset($filter_data['print_timesheet']) AND $filter_data['print_timesheet'] >= 1 ) {
 	if ( !$permission->Check('punch','enabled')
 			OR !( $permission->Check('punch','view') OR $permission->Check('punch','view_own') OR $permission->Check('punch','view_child'))
@@ -47,15 +96,7 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
             ) );
 
 $static_columns = array(
-/*
-//Report shows full name by default.
-											'full_name' => 'Full Name',
-											'title' => 'Title',
-											'province' => 'Province',
-											'country' => 'Country',
-											'default_branch' => 'Default Branch',
-											'default_department' => 'Default Department',
-*/
+
 											'-1000-date_stamp' => _('Date'),
 											'-1050-min_punch_time_stamp' => 'First In Punch',
 											'-1060-max_punch_time_stamp' => 'Last Out Punch',
@@ -82,7 +123,9 @@ $columns = Misc::prependArray( $static_columns, $columns);
 $otplf = new OverTimePolicyListFactory();
 $otplf->getByCompanyId($current_company->getId());
 if ( $otplf->getRecordCount() > 0 ) {
-	foreach ($otplf as $otp_obj ) {
+	foreach ($otplf->rs as $otp_obj) { 
+            $otplf->data = (array)$otp_obj;
+            $otp_obj = $otplf;
 		$otp_columns['over_time_policy-'.$otp_obj->getId()] = $otp_obj->getName();
 	}
 
@@ -93,7 +136,9 @@ if ( $otplf->getRecordCount() > 0 ) {
 $pplf = new PremiumPolicyListFactory();
 $pplf->getByCompanyId($current_company->getId());
 if ( $pplf->getRecordCount() > 0 ) {
-	foreach ($pplf as $pp_obj ) {
+		foreach ($pplf->rs as $pp_obj) { 
+            $pplf->data = (array)$pp_obj;
+            $pp_obj = $pplf;
 		$pp_columns['premium_policy-'.$pp_obj->getId()] = $pp_obj->getName();
 	}
 
@@ -105,7 +150,9 @@ if ( $pplf->getRecordCount() > 0 ) {
 $aplf = new AbsencePolicyListFactory();
 $aplf->getByCompanyId($current_company->getId());
 if ( $aplf->getRecordCount() > 0 ) {
-	foreach ($aplf as $ap_obj ) {
+		foreach ($aplf->rs as $ap_obj) { 
+            $aplf->data = (array)$ap_obj;
+            $ap_obj = $aplf;
 		$ap_columns['absence_policy-'.$ap_obj->getId()] = $ap_obj->getName();
 	}
 
@@ -118,7 +165,10 @@ $pplf = new PayPeriodListFactory();
 $pplf->getByCompanyId( $current_company->getId() );
 if ( $pplf->getRecordCount() > 0 ) {
 	$pp=0;
-	foreach ($pplf as $pay_period_obj) {
+		foreach ($pplf->rs as $pay_period_obj) { 
+            $pplf->data = (array)$pay_period_obj;
+            $pay_period_obj = $pplf;
+
 		$pay_period_ids[] = $pay_period_obj->getId();
 		$pay_period_end_dates[$pay_period_obj->getId()] = $pay_period_obj->getEndDate();
 
@@ -178,7 +228,9 @@ $ugdf = new UserGenericDataFactory();
 
 //Debug::setVerbosity(11);
 
-$action = Misc::findSubmitButton();
+$action = $_POST['action'] ?? '';
+$action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
+
 switch ($action) {
 	case 'export':
 	case 'display_report':
@@ -186,7 +238,6 @@ switch ($action) {
 	case 'display_detailed_timesheet':
 		//Debug::setVerbosity(11);
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
-		//Debug::Arr($filter_data, 'Filter Data', __FILE__, __LINE__, __METHOD__,10);
 
 		//Determine if this is a regular employee trying to print their own timesheet.
 		//from the MyTimeSheet page.  
@@ -215,20 +266,6 @@ switch ($action) {
                     );
 		}
 
-/*
-	protected $status_options = array(
-										10 => 'System',
-										20 => 'Worked',
-										30 => 'Absence'
-									);
-
-	protected $type_options = array(
-										10 => 'Total',
-										20 => 'Regular',
-										30 => 'Overtime'
-									);
-*/
-
 		$ulf = new UserListFactory();
 //		$ulf->getSearchByCompanyIdAndArrayCriteriaForOT( $current_company->getId(), $filter_data );
                 $ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
@@ -240,7 +277,10 @@ switch ($action) {
 				unset($filter_data['pay_period_ids']);
 			}
 
-			foreach( $ulf as $u_obj ) {
+			foreach ($ulf->rs as $u_obj) { 
+            $ulf->data = (array)$u_obj;
+            $u_obj = $ulf;
+
 				$filter_data['user_id'][] = $u_obj->getId();
 			}
 
@@ -277,7 +317,6 @@ switch ($action) {
 			} else {
 				$end_date = $filter_data['end_date'];
 			}
-
             //Make sure we account for wage permissions.
             if ( $permission->Check('wage','view') == TRUE ) {
                 $wage_filter_data['permission_children_ids'] = $filter_data['user_id'];
@@ -318,7 +357,10 @@ switch ($action) {
 			}
 			//echo '<pre>'; print_r($udtlf); echo'<pre>';die;
 
-			foreach ($udtlf as $udt_obj ) {
+			foreach ($udtlf->rs as $udt_obj) { 
+            $udtlf->data = (array)$udt_obj;
+            $udt_obj = $udtlf;
+
 				$user_id = $udt_obj->getColumn('id');
 				$pay_period_id = $udt_obj->getColumn('pay_period_id');
 				$date_stamp = TTDate::strtotime( $udt_obj->getColumn('date_stamp') );
@@ -383,7 +425,7 @@ switch ($action) {
 						$tmp_rows[$pay_period_id][$user_id][$date_stamp]['actual_time_diff_wage'] = Misc::MoneyFormat( 0, FALSE );
                                                 $tmp_rows[$pay_period_id][$user_id][$date_stamp]['hourly_wage'] = 0;
 					}
-//                                        die;
+					//                                        die;
 					unset($actual_time_diff);
 				} elseif ( $column != NULL ) {
 					if ( $udt_obj->getColumn('total_time') > 0 ) {
@@ -432,7 +474,7 @@ switch ($action) {
 					}
 				}
                                 
-//                                echo '<pre>'; print_r($schedule_rows[$pay_period_id][$user_id][$date_stamp]['start_time']); echo '<pre>'; die;
+				//                                echo '<pre>'; print_r($schedule_rows[$pay_period_id][$user_id][$date_stamp]['start_time']); echo '<pre>'; die;
         
 				if ( isset($schedule_rows[$pay_period_id][$user_id][$date_stamp]['working']) ) {
 					$tmp_rows[$pay_period_id][$user_id][$date_stamp]['schedule_working'] = $schedule_rows[$pay_period_id][$user_id][$date_stamp]['working'];
@@ -578,8 +620,6 @@ switch ($action) {
 							$tmp_sub_rows = $sub_rows;
 							unset($sub_rows);
 
-//echo $action;
-//print_r($tmp_sub_rows);
 							$trimmed_static_columns = array_keys( Misc::trimSortPrefix($static_columns) );
 							foreach($tmp_sub_rows as $sub_row ) {
 								foreach($sub_row as $column => $column_data) {
@@ -628,8 +668,8 @@ switch ($action) {
 				$pdf_created_date = time();
 
 				//Page width: 205mm
-				$pdf = new TTPDF('P','mm','Letter');
-				$pdf->setMargins(10,5);
+				$pdf = new TCPDF('P','mm','Letter');
+				$pdf->setMargins(5,5);
 				$pdf->SetAutoPageBreak(FALSE);
 				$pdf->SetFont('freeserif','',10);
 
@@ -762,31 +802,39 @@ switch ($action) {
 							}
 
 							if ( $data['date_stamp'] !== '' ) {
+
+								$worked_time = is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                                $regular_time = is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                                $over_time = is_numeric($data['over_time']) ? $data['over_time'] : 0;
+                                $paid_time = is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+                                $absence_time = is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+
+
 								$pdf->SetFont('','',10);
 								$pdf->Cell( $column_widths['line'], 6, $x , 1, 0, 'C', 1);
 								$pdf->Cell( $column_widths['date_stamp'], 6, TTDate::getDate('DATE', $data['date_stamp'] ), 1, 0, 'C', 1);
 								$pdf->Cell( $column_widths['dow'], 6, date('D', $data['date_stamp']) , 1, 0, 'C', 1);
 								$pdf->Cell( $column_widths['min_punch_time_stamp'], 6, TTDate::getDate('TIME', $data['min_punch_time_stamp'] ), 1, 0, 'C', 1);
 								$pdf->Cell( $column_widths['max_punch_time_stamp'], 6, TTDate::getDate('TIME', $data['max_punch_time_stamp'] ), 1, 0, 'C', 1);
-								$pdf->Cell( $column_widths['worked_time'], 6, TTDate::getTimeUnit( $data['worked_time'] ) , 1, 0, 'C', 1);
-								$pdf->Cell( $column_widths['regular_time'], 6, TTDate::getTimeUnit( $data['regular_time'] ), 1, 0, 'C', 1);
-								$pdf->Cell( $column_widths['over_time'], 6, TTDate::getTimeUnit( $data['over_time'] ), 1, 0, 'C', 1);
-								$pdf->Cell( $column_widths['paid_time'], 6,  TTDate::getTimeUnit( $data['paid_time'] ), 1, 0, 'C', 1);
-								$pdf->Cell( $column_widths['absence_time'], 6, TTDate::getTimeUnit( $data['absence_time'] ), 1, 0, 'C', 1);
+								$pdf->Cell( $column_widths['worked_time'], 6, TTDate::getTimeUnit( $worked_time ) , 1, 0, 'C', 1);
+								$pdf->Cell( $column_widths['regular_time'], 6, TTDate::getTimeUnit( $regular_time), 1, 0, 'C', 1);
+								$pdf->Cell( $column_widths['over_time'], 6, TTDate::getTimeUnit( $over_time), 1, 0, 'C', 1);
+								$pdf->Cell( $column_widths['paid_time'], 6,  TTDate::getTimeUnit( $paid_time), 1, 0, 'C', 1);
+								$pdf->Cell( $column_widths['absence_time'], 6, TTDate::getTimeUnit( $absence_time), 1, 0, 'C', 1);
 								$pdf->Ln();
 							}
 
-							$totals['worked_time'] += $data['worked_time'];
-							$totals['paid_time'] += $data['paid_time'];
-							$totals['absence_time'] += $data['absence_time'];
-							$totals['regular_time'] += $data['regular_time'];
-							$totals['over_time'] += $data['over_time'];
+							$totals['worked_time'] += is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                            $totals['paid_time'] += is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+                            $totals['absence_time'] += is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+                            $totals['regular_time'] += is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                            $totals['over_time'] += is_numeric($data['over_time']) ? $data['over_time'] : 0;
 
-							$week_totals['worked_time'] += $data['worked_time'];
-							$week_totals['paid_time'] += $data['paid_time'];
-							$week_totals['absence_time'] += $data['absence_time'];
-							$week_totals['regular_time'] += $data['regular_time'];
-							$week_totals['over_time'] += $data['over_time'];
+                            $week_totals['worked_time'] += is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                            $week_totals['paid_time'] += is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+                            $week_totals['absence_time'] += is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+                            $week_totals['regular_time'] += is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                            $week_totals['over_time'] += is_numeric($data['over_time']) ? $data['over_time'] : 0;
 
 							if ( $x % 7 == 0 OR $i == $max_i ) {
 								//Show Week Total.
@@ -894,8 +942,8 @@ switch ($action) {
 				$pdf_created_date = time();
 
 				//Page width: 205mm
-				$pdf = new TTPDF('P','mm','Letter');
-				$pdf->setMargins(10,5);
+				$pdf = new TCPDF('P','mm','Letter');
+				$pdf->setMargins(5,5);
 				$pdf->SetAutoPageBreak(TRUE, 10);
 				$pdf->SetFont('freeserif','',10);
 
@@ -1103,9 +1151,13 @@ switch ($action) {
 									$pdf->Cell( $column_widths['out_punch_time_stamp'], $line_h, '', 1, 0, 'C', 1);
 								}
 
-								$pdf->Cell( $column_widths['worked_time'], $line_h, TTDate::getTimeUnit( $data['worked_time'] ) , 1, 0, 'C', 1);
-								$pdf->Cell( $column_widths['paid_time'], $line_h,  TTDate::getTimeUnit( $data['paid_time'] ), 1, 0, 'C', 1);
-								$pdf->Cell( $column_widths['regular_time'], $line_h, TTDate::getTimeUnit( $data['regular_time'] ), 1, 0, 'C', 1);
+								$worked_time = is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                                $regular_time = is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                                $paid_time = is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+
+								$pdf->Cell($column_widths['worked_time'], $line_h, TTDate::getTimeUnit($worked_time), 1, 0, 'C', 1);
+								$pdf->Cell($column_widths['paid_time'], $line_h,  TTDate::getTimeUnit($paid_time), 1, 0, 'C', 1);
+								$pdf->Cell($column_widths['regular_time'], $line_h, TTDate::getTimeUnit($regular_time), 1, 0, 'C', 1);
 
 								if ( $data['over_time'] > 0 AND isset($data['categorized_time']['over_time_policy']) ) {
 									$pre_over_time_x = $pdf->getX();
@@ -1123,7 +1175,8 @@ switch ($action) {
 
 									$pdf->SetFont('','',9);
 								} else {
-									$pdf->Cell( $column_widths['over_time'], $line_h, TTDate::getTimeUnit( $data['over_time'] ), 1, 0, 'C', 1);
+									$over_time = is_numeric($data['over_time']) ? $data['over_time'] : 0;
+									$pdf->Cell($column_widths['over_time'], $line_h, TTDate::getTimeUnit($over_time), 1, 0, 'C', 1);
 								}
 
 								if ( $data['absence_time'] > 0 AND isset($data['categorized_time']['absence_policy']) ) {
@@ -1141,7 +1194,8 @@ switch ($action) {
 
 									$pdf->SetFont('','',9);
 								} else {
-									$pdf->Cell( $column_widths['absence_time'], $line_h, TTDate::getTimeUnit( $data['absence_time'] ), 1, 0, 'C', 1);
+									$absence_time = is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+											$pdf->Cell($column_widths['absence_time'], $line_h, TTDate::getTimeUnit($absence_time), 1, 0, 'C', 1);
 								}
 
 								$pdf->Ln();
@@ -1149,17 +1203,18 @@ switch ($action) {
 								unset($day_punch_data);
 							}
 
-							$totals['worked_time'] += $data['worked_time'];
-							$totals['paid_time'] += $data['paid_time'];
-							$totals['absence_time'] += $data['absence_time'];
-							$totals['regular_time'] += $data['regular_time'];
-							$totals['over_time'] += $data['over_time'];
+									$totals['worked_time'] += is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                                    $totals['paid_time'] += is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+                                    $totals['absence_time'] += is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+                                    $totals['regular_time'] += is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                                    $totals['over_time'] += is_numeric($data['over_time']) ? $data['over_time'] : 0;
 
-							$week_totals['worked_time'] += $data['worked_time'];
-							$week_totals['paid_time'] += $data['paid_time'];
-							$week_totals['absence_time'] += $data['absence_time'];
-							$week_totals['regular_time'] += $data['regular_time'];
-							$week_totals['over_time'] += $data['over_time'];
+                                    $week_totals['worked_time'] += is_numeric($data['worked_time']) ? $data['worked_time'] : 0;
+                                    $week_totals['paid_time'] += is_numeric($data['paid_time']) ? $data['paid_time'] : 0;
+                                    $week_totals['absence_time'] += is_numeric($data['absence_time']) ? $data['absence_time'] : 0;
+                                    $week_totals['regular_time'] += is_numeric($data['regular_time']) ? $data['regular_time'] : 0;
+                                    $week_totals['over_time'] += is_numeric($data['over_time']) ? $data['over_time'] : 0;
+
 
 							if ( $x % 7 == 0 OR $i == $max_i ) {
 								//Show Week Total.
@@ -1330,27 +1385,20 @@ switch ($action) {
                                 
                                   
                             }
-                            
-                            
-                            //FL ADDED FOR GET OT DETAIL MONTHLY OP REPORT 20170715 
-                            
-                            
-                           
-                         
-                            
                            
                             
 			} else {
 				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
-			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
-			$smarty->assign_by_ref('pay_period_options', $pay_period_options );
-			$smarty->assign_by_ref('filter_data', $filter_data );
-			$smarty->assign_by_ref('columns', $filter_columns );
-			$smarty->assign_by_ref('rows', $rows);
 
-			$smarty->display('report/TimesheetDetailReport.tpl');
+			$viewData['generated_time']= TTDate::getTime() ;
+			$viewData['pay_period_options']= $pay_period_options ;
+			$viewData['filter_data']= $filter_data ;
+			$viewData['columns']=  $filter_columns ;
+			$viewData['rows']=  $rows;
+			
+			return view('report/TimesheetDetailReport', $viewData);
 		}
 
 		break;
@@ -1361,12 +1409,12 @@ switch ($action) {
 		$generic_data['id'] = UserGenericDataFactory::reportFormDataHandler( $action, $filter_data, $generic_data, URLBuilder::getURL(NULL, $_SERVER['SCRIPT_NAME']) );
 		unset($generic_data['name']);
 	default:
-		BreadCrumb::setCrumb($title);
+		// BreadCrumb::setCrumb($title);
 
 		if ( $action == 'load' ) {
 			Debug::Text('Loading Report!', __FILE__, __LINE__, __METHOD__,10);
 
-			extract( UserGenericDataFactory::getReportFormData( $generic_data['id'] ) );
+			$filter_data =  $ugdf->getReportFormData( $generic_data['id'] ) ;
 		} elseif ( $action == '' ) {
 			//Check for default saved report first.
 			$ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'] );
@@ -1405,14 +1453,7 @@ switch ($action) {
 
 				$filter_data['primary_sort'] = '-1000-date_stamp';
 				$filter_data['secondary_sort'] = '-1090-worked_time';
-/*
-				$filter_data['column_ids'] = array(
-											'date_stamp',
-											'worked_time',
-											'paid_time',
-											'regular_time'
-												);
-*/
+
 
 			}
 		}
@@ -1495,40 +1536,25 @@ switch ($action) {
                 //FL ADDED FOR HIDE BUTTON
                 $hidden_elements = Misc::prependArray( array( 'displayReport' => 'hidden', 'displayTimeSheet' => 'hidden', 'displayDetailedTimeSheet' => 'hidden', 'export' => '') );
                 
-                $smarty->assign('hidden_elements',$hidden_elements); // See index.php
                 
-/*
-		//Get employee list
-		$filter_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
 
-		//Get column list
-		$filter_data['column_options'] = $columns;
-
-		$filter_data['pay_period_options'] = $pay_period_options;
-
-		//Get primary/secondary order list
-		$filter_data['sort_options'] = $columns;
-		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
-
-		$filter_data['group_by_options'] = array(
-												'0' => 'No Grouping',
-												'title' => 'Title',
-												'province' => 'Province',
-												'country' => 'Country',
-												'default_branch' => 'Default Branch',
-												'default_department' => 'Default Department'
-											);
-*/
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;
-		$smarty->assign_by_ref('generic_data', $generic_data);
+		// $smarty->assign_by_ref('generic_data', $generic_data);
 
-		$smarty->assign_by_ref('filter_data', $filter_data);
+		// $smarty->assign_by_ref('filter_data', $filter_data);
 
-		$smarty->assign_by_ref('ugdf', $ugdf);
+		// $smarty->assign_by_ref('ugdf', $ugdf);
 
-		$smarty->display('report/OverTimesheetDetail.tpl');
+		// $smarty->display('report/OverTimesheetDetail.tpl');
+
+		// Assign data to view
+				$viewData['generic_data'] = $generic_data;
+				$viewData['filter_data'] = $filter_data;
+				$viewData['ugdf'] = new UserGenericDataFactory();
+				$viewData['hidden_elements'] = $hidden_elements;
+
+				return view('report/OverTimesheetDetail', $viewData);
 
 		break;
-}
-?>
+	}}}
