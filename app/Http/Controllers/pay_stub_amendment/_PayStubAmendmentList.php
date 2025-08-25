@@ -105,7 +105,7 @@ class _PayStubAmendmentList extends Controller
 		return view('pay_stub_amendment/PayStubAmendmentList', $viewData);
 	}
 
-    
+
 	public function delete($id)
 	{
 		$delete = TRUE;

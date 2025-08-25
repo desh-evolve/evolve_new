@@ -1,4 +1,7 @@
 <x-app-layout :title="'Input Example'">
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Employee Administration') }}</h4>
+    </x-slot>
 
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
@@ -118,6 +121,7 @@
                                             href="/admin/userlist/kpi/{{ $user['id'] }}">
                                             KPI
                                         </a> --}}
+
                                         <button type="button" class="btn btn-danger btn-sm"
                                             onclick="commonDeleteFunction('/admin/userlist/delete/{{ $user['id'] }}', 'User', this)">
                                             Delete
@@ -127,38 +131,77 @@
                             @endforeach
                         </table>
                     </div>
-                    {{-------------------------------------------------------------------------------}}
 
-                </div><!-- end card -->
+                </div>
             </div>
-            <!-- end col -->
         </div>
-        <!-- end col -->
     </div>
 
     <script>
+        // $(document).ready(function() {
+        //     function initTable() {
+        //         new DataTable("#userlist_table", {
+        //             scrollX: !0,
+        //             dom: "Bfrtip",
+        //             buttons: ["copy", "csv", "excel", "print", "pdf"],
+        //             //fixedHeader: !0
+        //         })
+        //     }
+
+        //     initTable();
+
+        //     // Added: Update Functions column buttons based on type
+        //     $('.function-type').on('click', function() {
+        //         var type = $(this).data('type');
+        //         $('.function-type').removeClass('active').removeClass('btn-light').addClass('btn-primary');
+        //         $(this).addClass('active').addClass('btn-light');
+
+        //         $('#userlist_table tbody tr').each(function() {
+        //             var $row = $(this);
+        //             var userId = $row.data('user-id');
+        //             var $functionCell = $row.find('.function-buttons');
+
+        //             if (type === 'employee') {
+        //                 $functionCell.html(`
+        //                     <a class="btn btn-secondary btn-sm" href="/admin/userlist/add?id=${userId}">Edit</a>
+        //                     <a class="btn btn-info btn-sm" href="/user/preference?user_id=${userId}">Prefs</a>
+        //                     <a class="btn btn-warning btn-sm" href="/user/jobhistory?user_id=${userId}">Job History</a>
+        //                     <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/admin/userlist/delete/${userId}', 'User', this)">Delete</button>
+        //                 `);
+        //             } else if (type === 'payroll') {
+        //                 $functionCell.html(`
+        //                     <a class="btn btn-primary btn-sm" href="/user/wage?user_id=${userId}">Wage</a>
+        //                     <a class="btn btn-success btn-sm" href="/user/tax?user_id=${userId}">Tax</a>
+        //                     <a class="btn btn-info btn-sm" href="/payroll/pay_stub_amendment?filter_user_id=${userId}">PS Amendments</a>
+        //                     <a class="btn btn-warning btn-sm" href="/bank_account/user/${userId}">Bank</a>
+        //                 `);
+        //             }
+        //         });
+        //     });
+
+        //     // Added: Initialize with Employee buttons
+        //     $('.function-type[data-type="employee"]').trigger('click');
+        // });
+
+
+        // new
         $(document).ready(function() {
-            function initTable() {
-                new DataTable("#userlist_table", {
-                    scrollX: !0,
-                    dom: "Bfrtip",
-                    buttons: ["copy", "csv", "excel", "print", "pdf"],
-                    //fixedHeader: !0
-                })
-            }
+            let currentMode = 'employee'; // default
 
-            initTable();
+            const table = new DataTable("#userlist_table", {
+                scrollX: true,
+                dom: "Bfrtip",
+                buttons: ["copy", "csv", "excel", "print", "pdf"]
+            });
 
-            // Added: Update Functions column buttons based on type
-            $('.function-type').on('click', function() {
-                var type = $(this).data('type');
-                $('.function-type').removeClass('active').removeClass('btn-light').addClass('btn-primary');
-                $(this).addClass('active').addClass('btn-light');
-
+            // Function to update function buttons per row
+            function updateFunctionButtons(type) {
                 $('#userlist_table tbody tr').each(function() {
-                    var $row = $(this);
-                    var userId = $row.data('user-id');
-                    var $functionCell = $row.find('.function-buttons');
+                    const $row = $(this);
+                    const userId = $row.data('user-id');
+                    const $functionCell = $row.find('.function-buttons');
+
+                    if (!$functionCell.length) return;
 
                     if (type === 'employee') {
                         $functionCell.html(`
@@ -176,11 +219,28 @@
                         `);
                     }
                 });
+            }
+
+            // Button click handler
+            $('.function-type').on('click', function() {
+                currentMode = $(this).data('type');
+
+                // toggle styles
+                $('.function-type').removeClass('active btn-light').addClass('btn-primary');
+                $(this).addClass('active btn-light').removeClass('btn-primary');
+
+                updateFunctionButtons(currentMode);
             });
 
-            // Added: Initialize with Employee buttons
+            // Hook into DataTables redraw event
+            table.on('draw', function() {
+                updateFunctionButtons(currentMode);
+            });
+
+            // Initialize with Employee buttons
             $('.function-type[data-type="employee"]').trigger('click');
         });
+
 
         var loading = false;
         var hwCallback = {
@@ -195,7 +255,6 @@
             }
         }
 
-        //var remoteHW = new AJAX_Server(hwCallback);
 
         function showProvince() {
             if (document.getElementById('selected_tab').value != '') {
@@ -203,5 +262,6 @@
                 remoteHW.getProvinceOptions(country);
             }
         }
+
     </script>
 </x-app-layout>

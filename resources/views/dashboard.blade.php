@@ -322,8 +322,8 @@
                     </div>
                         {{-- view button --}}
                         <div class="mt-2 mb-3 text-center">
-                        <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
-                    </div>
+                            <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
+                        </div>
                 </div>
 
             </div>

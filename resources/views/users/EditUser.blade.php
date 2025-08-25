@@ -1,9 +1,7 @@
 <x-app-layout :title="'Input Example'">
-    <style>
-        td, th{
-            padding: 5px !important;
-        }
-    </style>
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Employee Administration') }}</h4>
+    </x-slot>
 
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
@@ -437,7 +435,7 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-md-6 mt-3">
+                                    <div class="col-lg-6 mt-3">
                                         <label for="user_image" class="form-label">Employee Photo (.jpg):</label>
 
                                         @if ($permission->Check('user','edit_advanced'))
@@ -707,6 +705,9 @@
                                         @else
                                             {{$user_data['province_options'][$user_data['province'] ?? '']}}
                                             <input type="hidden" name="user_data[province]" value="{{$user_data['province'] ?? ''}}">
+                                            
+                                            {{-- {{$user_data['province_options'][$user_data['country']][$user_data['province'] ?? ''] ?? ''}} --}}
+                                            {{-- <input type="hidden" name="user_data[province]" value="{{$user_data['province'] ?? ''}}"> --}}
                                         @endif
                                         <input type="hidden" id="selected_province" value="{{ $user_data['province'] ?? '' }}">
                                     </div>
@@ -994,65 +995,37 @@
     </div>
 
     <script>
-        // Assuming `province_options` is passed from the backend like below
-        var provinceOptions = @json($user_data['province_options']);
+        // Province data from backend
+        const provinceOptions = @json($user_data['province_options']);
 
         function showProvince() {
-            var country = document.getElementById('country').value;
-            var provinceDropdown = document.getElementById('province');
-            var selectedProvince = document.getElementById('selected_province').value; // Get the selected province value
+            const countryEl = document.getElementById('country');
+            const provinceEl = document.getElementById('province');
+            const selectedProvince = document.getElementById('selected_province')?.value || '';
 
-            // Clear the current province options
-            provinceDropdown.innerHTML = '';
+            if (!countryEl || !provinceEl) return;
 
-            if (country in provinceOptions) {
-                // If provinces are available for the selected country
-                var provinces = provinceOptions[country];
+            const country = countryEl.value;
+            provinceEl.innerHTML = ''; // clear
 
-                // Loop through and add each province option
-                for (var provinceCode in provinces) {
-                    var option = document.createElement('option');
-                    option.value = provinceCode;
-                    option.text = provinces[provinceCode];
+            if (provinceOptions[country]) {
+                const provinces = provinceOptions[country];
 
-                    // If the province is already selected, set it as selected
-                    if (provinceCode == selectedProvince) {
-                        option.selected = true;
-                    }
-
-                    provinceDropdown.appendChild(option);
+                for (const [code, name] of Object.entries(provinces)) {
+                    const opt = document.createElement('option');
+                    opt.value = code;
+                    opt.text = name;
+                    if (code === selectedProvince) opt.selected = true;
+                    provinceEl.appendChild(opt);
                 }
             }
         }
 
+        // Run once on load
+        document.addEventListener('DOMContentLoaded', showProvince);
 
-        function populateSelectBox(selectObj, options, selectedValue) {
-            selectObj.innerHTML = ""; // Clear current options
-            options.forEach(function(option) {
-                let opt = document.createElement('option');
-                opt.value = option.value;
-                opt.textContent = option.label;
-                if (option.value === selectedValue) {
-                    opt.selected = true;
-                }
-                selectObj.appendChild(opt);
-            });
-        }
-
-
-        function setName(field) {
-            // Check if it's a field that influences the 'name' field
-            let nameField = document.getElementById('name');
-
-            if (field) {
-                // Dynamically change the 'name' field value based on the selected field's value
-                let selectedValue = field.options[field.selectedIndex].text; // Use the option's text
-                if (selectedValue) {
-                    nameField.value = selectedValue;
-                }
-            }
-        }
-
+        // Re-run when country changes
+        document.getElementById('country')?.addEventListener('change', showProvince);
 
 
         //------------------------ARPS NOTE START---------------------------------------
@@ -1081,11 +1054,6 @@
                 ajaxObj.getBranchShortId( document.getElementById('default_branch_id').value);//ARSP NOTE --> THIS IS AJAX FUNCTION
             }
         }
-
-        //------------------------ARPS END---------------------------------------
-
-
-
 
         //------------------------ARPS NOTE GET NEXT HIGHEST EMPLOYEE ID BRANCH WISE ---------------------------------------
 
@@ -1159,19 +1127,13 @@
         }
 
 
-        // Function to populate the province dropdown when the page loads
+
         window.onload = function() {
             formChangeDetect();
             getBranchShortId();
             getNextHighestEmployeeNumberByBranch();
-            showProvince();
-
-            // Set the initial selected country in the dropdown
-            var selectedCountry = document.getElementById('country').value;
-            if (selectedCountry) {
-                showProvince(); // Update province dropdown based on selected country
-            }
         }
+
 
     </script>
 

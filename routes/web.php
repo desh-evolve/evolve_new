@@ -551,7 +551,7 @@ Route::delete('/policy/premium_policies/delete/{id}', [PremiumPolicyList::class,
 Route::get('/policy/exception_policies', [ExceptionPolicyControlList::class, 'index'])->name('policy.exception_policies');
 Route::match(['get', 'post'], '/policy/exception_policies/add', [EditExceptionPolicyControl::class, 'index'])->name('policy.exception_policies.add');
 Route::delete('/policy/exception_policies/delete/{id}', [ExceptionPolicyControlList::class, 'delete'])->name('policy.exception_policies.delete');
-
+                                                                                                                                                                  
 Route::get('/policy/holiday_policies', [HolidayPolicyList::class, 'index'])->name('policy.holiday_policies');
 Route::get('/policy/holiday_policies/add/{id?}', [EditHolidayPolicy::class, 'index'])->name('policy.holiday_policies.add');
 Route::post('/policy/holiday_policies/submit/{id?}', [EditHolidayPolicy::class, 'submit'])->name('policy.holiday_policies.submit');

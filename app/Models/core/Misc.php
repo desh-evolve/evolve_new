@@ -157,7 +157,7 @@ class Misc {
 		return array_sum($arr) / count($arr);
 	}
 
-	
+
 	static function prependArray($prepend_arr, $arr = null) {
 		if ( !is_array($prepend_arr) AND is_array($arr) ) {
 			return $arr;
@@ -699,7 +699,7 @@ class Misc {
 	}
 
         static function Array2CSVReport( $data, $eol = "\n" ) {
-            
+
             foreach ($data as $key => $row) {
                 $employee_number[$key] = $row['employee_number'];
             }
@@ -712,18 +712,18 @@ class Misc {
 				$out .=  'EPF Number'.','.$rows['employee_number'].$eol;
                                 $out .=  'Full Name'.','.$rows['first_name'].' '.$rows['last_name'].$eol;
                                 $out .=  'Department'.','.$rows['default_department'].$eol.$eol;
-                                
+
 				$out .=  'Date,First In,Last Out,Worked Hrs,Status 1, Status 2,Late Arrival (Minute),Early Departure(Minute))'.$eol;
-                                
+
                                 $nof_ot_days = 0;
                                 $rows['tot_data'] = $rows['data'][count($rows['data']) - 1];
                                 array_pop($rows['data']);
-                                
+
                                 foreach($rows['data'] as $sub_data){
-                                        
+
                                         if($sub_data['date_stamp'] != NULL ){
                                             $date = DateTime::createFromFormat('d/m/Y', $sub_data['date_stamp'])->format('d/m/Y D');
-                                        
+
                                         if($sub_data['min_punch_time_stamp'] != NULL){
                                             $datetime1 = new DateTime();
                                             $datetime1->setTimestamp($sub_data['min_punch_time_stamp']);
@@ -739,7 +739,7 @@ class Misc {
                                         } else {
                                             $max_punch = '-';
                                         }
-                                        
+
                                         if($sub_data['min_punch_time_stamp'] != NULL && $sub_data['max_punch_time_stamp'] != NULL){
                                             $interval = $datetime1->diff($datetime2);
                                             $total_work_hr = $total_work_hr + $interval;
@@ -747,7 +747,7 @@ class Misc {
                                         } else {
                                             $date_int = '-';
                                         }
-                                        
+
                                         $dateStamp = '';
                                         if ($sub_data['date_stamp'] != '') {
                                             $dateStamp = DateTime::createFromFormat('d/m/Y', $sub_data['date_stamp'])->format('Y-m-d');
@@ -756,7 +756,7 @@ class Misc {
                                         if (isset($sub_data['over_time']) && $sub_data['over_time'] != '') {
                                              $nof_ot_days++;
                                         }
-                                        
+
                                         $ttdr = new TimesheetDetailReport();
                                         $EmpDateStatus = $ttdr->getReportStatusByUserIdAndDate($rows['user_id'], $dateStamp);
 
@@ -772,14 +772,14 @@ class Misc {
                                             if($sub_data['max_punch_time_stamp'] !=''){
                                                $earlySec = strtotime($sub_data['shedule_end_time']) - $sub_data['max_punch_time_stamp'];
                                             }
-                                            
+
                                             if ($earlySec > 0) {
 
                                                 $alf = new AccrualListFactory();
                                                 $day_check =$sub_data['date_stamp'];
                                                 $ch_date = DateTime::createFromFormat('d/m/Y', $day_check);
                                                 $ph_date = $ch_date->format('Y-m-d');
-                                                
+
                                                 $alf->getByAccrualByUserIdAndTypeIdAndDate($rows['user_id'],20,$ph_date);
 
                                                  if($alf->getRecordCount() > 0){
@@ -833,7 +833,7 @@ class Misc {
                                             $EmpDateStatus['status1'] = 'WO';
                                         }
                                         $date = DateTime::createFromFormat('d/m/Y', $sub_data['date_stamp'])->format('d/m/Y D');
-                                        $date_actual = DateTime::createFromFormat('d/m/Y', $day_2[0])->format('Y-m-d'); 
+                                        $date_actual = DateTime::createFromFormat('d/m/Y', $day_2[0])->format('Y-m-d');
                                         if($EmpDateStatus['status1'] == 'AB'){
                                             $alf = new AccrualListFactory();
 
@@ -853,22 +853,22 @@ class Misc {
                                         $early = '';
                                         $late = '';
                                 }
-                                
+
                         }
                                 //total
                                 $out .='Total,, '.$rows['tot_data']['worked_time'].',,,,'.gmdate("H:i", $totLate).','.gmdate("H:i", $totEarly).$eol;
                                 $totLate = '';
                                 $totEarly = '';
-                                
+
                                 $out .= $eol.$eol;
-                                
+
 			}
 			return $out;
 		}
 		return FALSE;
 	}
-        
-             
+
+
      static function getRemoteIPAddress() {
 		global $config_vars;
 
@@ -887,9 +887,9 @@ class Misc {
 		return FALSE;
 	}
 
-        
-        
-        
+
+
+
 	static function inArrayByKeyAndValue( $arr, $search_key, $search_value ) {
 		if ( !is_array($arr) AND $search_key != '' AND $search_value != '') {
 			return FALSE;
@@ -1445,12 +1445,12 @@ class Misc {
 		return $retval;
 	}
 
-        
-                
+
+
         //Checks refer to help mitigate CSRF attacks.
 	static function checkValidReferer( $referer = FALSE ) {
 		global $config_vars;
-		
+
 		if ( PRODUCTION == TRUE AND isset($config_vars['other']['enable_csrf_validation']) AND $config_vars['other']['enable_csrf_validation'] == TRUE ) {
 			if ( $referer == FALSE ) {
 				if ( isset($_SERVER['HTTP_ORIGIN']) AND $_SERVER['HTTP_ORIGIN'] != '' ) {
@@ -1496,9 +1496,9 @@ class Misc {
 
 		return TRUE;
 	}
-	
 
-        
+
+
 	static function disableCaching( $email_notification = TRUE ) {
 		//In case the cache directory does not exist, disabling caching can prevent errors from occurring or punches to be missed.
 		//So this should be enabled even for ON-DEMAND services just in case.
@@ -1572,6 +1572,7 @@ class Misc {
 		return FALSE;
 	}
 
+
 	static function getPasswordStrength( $password ) {
 		if ( strlen( $password ) == 0 ) {
 			return 1;
@@ -1633,23 +1634,23 @@ class Misc {
 			if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
 				return true;
 			}
-	
+
 			// Check for forwarded protocol (common in proxy setups)
 			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
 				return true;
 			}
-	
+
 			// Check for forwarded SSL (less common)
 			if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') {
 				return true;
 			}
-	
+
 			// Check for server port (if HTTPS is running on a non-standard port)
 			if (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) {
 				return true;
 			}
 		}
-	
+
 		return false;
 	}
 }

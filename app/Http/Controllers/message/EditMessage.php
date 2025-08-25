@@ -124,7 +124,7 @@ class EditMessage extends Controller
 		//Make sure the only array entry isn't 0 => 0;
 		if ( is_array($filter_user_id) AND count($filter_user_id) > 0 AND ( isset($filter_user_id[0]) AND $filter_user_id[0] != 0 ) ) {
 			$mcf->StartTransaction();
-
+ 
 			$mcf = new MessageControlFactory();
 			$mcf->setFromUserId( $current_user->getId() );
 			$mcf->setToUserId( $filter_user_id );

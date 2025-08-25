@@ -27,7 +27,7 @@ use App\Models\Policy\AccrualPolicyListFactory;
 use App\Models\Users\UserListFactory;
 use Illuminate\Support\Facades\View;
 
-class EditPayStubAmendment extends Controller
+class _EditPayStubAmendment extends Controller
 {
     protected $permission;
     protected $currentUser;
@@ -63,7 +63,7 @@ class EditPayStubAmendment extends Controller
 				$pay_stub_amendment_data['effective_date'] = TTDate::parseDateTime($pay_stub_amendment_data['effective_date']);
 			}
 		}
-		
+
 		$psaf = new PayStubAmendmentFactory();
 
 		if ( isset($id) ) {
@@ -131,14 +131,14 @@ class EditPayStubAmendment extends Controller
 
 		$status_options = Option::getByArray( $status_options_filter, $psaf->getOptions('status') );
 		$pay_stub_amendment_data['status_options'] = $status_options;
- 
-		$pseallf = new PayStubEntryAccountLinkListFactory(); 
+
+		$pseallf = new PayStubEntryAccountLinkListFactory();
 		$pseallf->getByCompanyId( $current_company->getId() );
 		if ( $pseallf->getRecordCount() > 0 ) {
 			$net_pay_psea_id = $pseallf->getCurrent()->getTotalNetPay();
 		}
 
-		$psealf = new PayStubEntryAccountListFactory(); 
+		$psealf = new PayStubEntryAccountListFactory();
 		$pay_stub_amendment_data['pay_stub_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,50,60,65) );
 		$pay_stub_amendment_data['percent_amount_entry_name_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40,50,60,65) );
 		if ( isset($net_pay_psea_id) ) {
@@ -162,7 +162,7 @@ class EditPayStubAmendment extends Controller
 		$psaf = new PayStubAmendmentFactory();
 
 		$pay_stub_amendment_data = $request->pay_stub_amendment_data;
-		
+
 		//Debug::setVerbosity( 11 );
 		Debug::Text('Submit!', __FILE__, __LINE__, __METHOD__,10);
 

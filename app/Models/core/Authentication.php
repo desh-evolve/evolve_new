@@ -594,7 +594,7 @@ class Authentication {
 
 		return TRUE;
 	}
-
+  
 	function Check($session_id = NULL) {
 		global $profiler;
 

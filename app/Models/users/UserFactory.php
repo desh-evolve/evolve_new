@@ -322,7 +322,7 @@ class UserFactory extends Factory {
 	}
 
 
-   
+
 
 	//ARSP EDIT - > Add some code to remove already stored picture
     function cleanStoragePath( $user_id = NULL ) {
@@ -4003,7 +4003,7 @@ class UserFactory extends Factory {
 	}
 
 
-       function getPersonalEmail() {
+    function getPersonalEmail() {
 		if ( isset($this->data['personal_email']) ) {
 			return $this->data['personal_email'];
 		}
@@ -4020,7 +4020,7 @@ class UserFactory extends Factory {
 			$error_threshold = 0; //DNS checks on email address.
 		}
 		if 	(	$personal_email == ''
-					OR $this->Validator->isEmailAdvanced(	'personal_email',
+					OR $this->Validator->isEmail(	'personal_email',
 													$personal_email,
 													('Personal Email address is invalid'),
 													$error_threshold ) ) {

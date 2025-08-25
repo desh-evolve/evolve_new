@@ -1,95 +1,15 @@
 <x-app-layout :title="'Input Example'">
-
-    <script	language="JavaScript">
-        function showPercent() {
-            if ( document.getElementById('type_id').value == 20 ) {
-                document.getElementById('type_id-10').style.display = 'none';
-
-                document.getElementById('type_id-20').className = '';
-                document.getElementById('type_id-20').style.display = '';
-            } else {
-                document.getElementById('type_id-20').style.display = 'none';
-
-                document.getElementById('type_id-10').className = '';
-                document.getElementById('type_id-10').style.display = '';
-            }
-        }
-
-        function calcAmount() {
-            //Round rate and units to 2 decimals
-            rate = document.getElementById('rate').value;
-            units = document.getElementById('units').value;
-
-            if ( ( document.getElementById('rate').value != '' && rate > 0 )
-                    || ( document.getElementById('units').value != '' && units > 0 ) ) {
-                document.getElementById('amount').disabled = true;
-
-                amount = rate * units;
-                document.getElementById('amount').value = MoneyFormat( amount );
-            } else {
-                document.getElementById('amount').disabled = false;
-            }
-        }
-
-        // var hwCallback = {
-        //         getUserHourlyRate: function(result) {
-        //             document.getElementById('rate').value = result;
-        //             calcAmount();
-        //         }
-        //     }
-
-        // var remoteHW = new AJAX_Server(hwCallback);
-
-        // function getHourlyRate() {
-        //     if ( document.getElementById('filter_user').options.length == 1 ) {
-        //         user_id = document.getElementById('filter_user').options[0].value
-        //         remoteHW.getUserHourlyRate( user_id, document.getElementById('effective_date').value);
-        //     } else if ( document.getElementById('filter_user').options.length > 1) {
-        //         document.getElementById('rate').value = '';
-        //         alert('{/literal}Unable to obtain rate when multiple employees are selected.{literal}');
-        //     } else {
-        //         document.getElementById('rate').value = '';
-        //         alert('{/literal}Unable to obtain rate when no employee is selected.{literal}');
-        //     }
-        // }
-
-        function getHourlyRate() {
-            const userSelect = document.getElementById('filter_user');
-            const rateInput = document.getElementById('rate');
-            const effectiveDate = document.getElementById('effective_date').value;
-
-            if (userSelect.options.length === 1) {
-                const user_id = userSelect.options[0].value;
-                remoteHW.getUserHourlyRate(user_id, effectiveDate);
-            } else if (userSelect.options.length > 1) {
-                rateInput.value = '';
-                alert('Unable to obtain rate when multiple employees are selected.');
-            } else {
-                rateInput.value = '';
-                alert('Unable to obtain rate when no employee is selected.');
-            }
-        }
-
-    </script>
+    <x-slot name="header">
+        <h4 class="mb-sm-0">{{ __('Pay Stub Amendment') }}</h4>
+    </x-slot>
 
     <div class="d-flex justify-content-center">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex justify-content-between">
                     <div>
-                        <h4 class="card-title mb-0 flex-grow-1">{{__($title)}}</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">{{ isset($pay_stub_amendment_data['id']) ? 'Edit' : 'Add' }} {{$title}}</h4>
                     </div>
-
-                    {{-- <div class="justify-content-md-end">
-                        <div class="d-flex justify-content-end">
-                            <a
-                                type="button"
-                                href="/payroll/pay_stub_amendment/add"
-                                class="btn btn-primary waves-effect waves-light material-shadow-none me-1" >
-                                Add <i class="ri-add-line"></i>
-                            </a>
-                        </div>
-                    </div> --}}
                 </div>
 
                 <div class="card-body">
@@ -306,5 +226,77 @@
         </div>
         <!-- end col -->
     </div>
+
+    <script	language="JavaScript">
+        function showPercent() {
+            if ( document.getElementById('type_id').value == 20 ) {
+                document.getElementById('type_id-10').style.display = 'none';
+
+                document.getElementById('type_id-20').className = '';
+                document.getElementById('type_id-20').style.display = '';
+            } else {
+                document.getElementById('type_id-20').style.display = 'none';
+
+                document.getElementById('type_id-10').className = '';
+                document.getElementById('type_id-10').style.display = '';
+            }
+        }
+
+        function calcAmount() {
+            //Round rate and units to 2 decimals
+            rate = document.getElementById('rate').value;
+            units = document.getElementById('units').value;
+
+            if ( ( document.getElementById('rate').value != '' && rate > 0 )
+                    || ( document.getElementById('units').value != '' && units > 0 ) ) {
+                document.getElementById('amount').disabled = true;
+
+                amount = rate * units;
+                document.getElementById('amount').value = MoneyFormat( amount );
+            } else {
+                document.getElementById('amount').disabled = false;
+            }
+        }
+
+        var hwCallback = {
+                getUserHourlyRate: function(result) {
+                    document.getElementById('rate').value = result;
+                    calcAmount();
+                }
+            }
+
+        var remoteHW = new AJAX_Server(hwCallback);
+
+        // function getHourlyRate() {
+        //     if ( document.getElementById('filter_user').options.length == 1 ) {
+        //         user_id = document.getElementById('filter_user').options[0].value
+        //         remoteHW.getUserHourlyRate( user_id, document.getElementById('effective_date').value);
+        //     } else if ( document.getElementById('filter_user').options.length > 1) {
+        //         document.getElementById('rate').value = '';
+        //         alert('{/literal}Unable to obtain rate when multiple employees are selected.{literal}');
+        //     } else {
+        //         document.getElementById('rate').value = '';
+        //         alert('{/literal}Unable to obtain rate when no employee is selected.{literal}');
+        //     }
+        // }
+
+        function getHourlyRate() {
+            const userSelect = document.getElementById('filter_user');
+            const rateInput = document.getElementById('rate');
+            const effectiveDate = document.getElementById('effective_date').value;
+
+            if (userSelect.options.length === 1) {
+                const user_id = userSelect.options[0].value;
+                remoteHW.getUserHourlyRate(user_id, effectiveDate);
+            } else if (userSelect.options.length > 1) {
+                rateInput.value = '';
+                alert('Unable to obtain rate when multiple employees are selected.');
+            } else {
+                rateInput.value = '';
+                alert('Unable to obtain rate when no employee is selected.');
+            }
+        }
+
+    </script>
 
 </x-app-layout>

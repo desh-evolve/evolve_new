@@ -44,7 +44,8 @@ class EditPayStubAmendment extends Controller
 
     }
 
-	public function index(){
+	public function index()
+    {
 		$permission = $this->permission;
         $current_user = $this->current_user;
         $current_company = $this->current_company;
@@ -56,7 +57,7 @@ class EditPayStubAmendment extends Controller
             $permission->Redirect( FALSE ); //Redirect
         }
 
-        $viewData['title'] = 'Edit Pay Stub Amendment';
+        $viewData['title'] = 'Pay Stub Amendment';
 
         /*
         * Get FORM variables
@@ -146,6 +147,19 @@ class EditPayStubAmendment extends Controller
                 } else {
                     $psaf->FailTransaction();
                 }
+
+            case 'getuserhourlyrate':
+                $ulf = new UserListFactory();
+                $ulf->getByIdAndCompanyId($user_id, $current_company->getId());
+                if ($ulf->getRecordCount() > 0) {
+                    $user = $ulf->getCurrent();
+                    $rate = $user->getHourlyRateOnDate($effective_date); // depends on your model
+                    echo json_encode($rate);
+                    exit;
+                }
+                echo json_encode(0);
+                exit;
+
             default:
 
                 if ( isset($id) ) {
@@ -253,8 +267,10 @@ class EditPayStubAmendment extends Controller
         }
 
         $viewData['psaf'] = $psaf;
+        // dd($viewData);
 
         return view('pay_stub_amendment/EditPayStubAmendment', $viewData);
 
     }
+
 }

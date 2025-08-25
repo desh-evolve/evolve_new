@@ -760,8 +760,8 @@ class EditUser extends Controller
                                 'address3' => $user->getAddress3(),
                                 'nic' =>$user->getNic(),
                                 'city' => $user->getCity(),
-                                'province' => $user->getProvince(),
                                 'country' => $user->getCountry(),
+                                'province' => $user->getProvince(),
                                 'postal_code' => $user->getPostalCode(),
                                 'work_phone' => $user->getWorkPhone(),
                                 'work_phone_ext' => $user->getWorkPhoneExt(),
@@ -926,13 +926,14 @@ class EditUser extends Controller
                             $user_data['birth_date'] = $user_obj->getBirthDate();
                         }
 
+                        if ( !isset( $user_data['country'] ) ) {
+                            $user_data['country'] = $user_obj->getCountry();
+                        }
+
                         if ( !isset( $user_data['province'] ) ) {
                             $user_data['province'] = $user_obj->getProvince();
                         }
 
-                        if ( !isset( $user_data['country'] ) ) {
-                            $user_data['country'] = $user_obj->getCountry();
-                        }
 
                     } else {
                         Debug::Text('User Object NOT set', __FILE__, __LINE__, __METHOD__,10);
@@ -956,8 +957,8 @@ class EditUser extends Controller
                             'title_id' => $udf_obj->getTitle(),
                             //'employee_number' => $udf_obj->getEmployeeNumber(),
                             'city' => $udf_obj->getCity(),
-                            'province' => $udf_obj->getProvince(),
                             'country' => $udf_obj->getCountry(),
+                            'province' => $udf_obj->getProvince(),
                             'work_phone' => $udf_obj->getWorkPhone(),
                             'work_phone_ext' => $udf_obj->getWorkPhoneExt(),
                             'work_email' => $udf_obj->getWorkEmail(),
