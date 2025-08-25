@@ -1414,9 +1414,10 @@ switch ($action) {
 		if ( $action == 'load' ) {
 			Debug::Text('Loading Report!', __FILE__, __LINE__, __METHOD__,10);
 
-			$filter_data =  $ugdf->getReportFormData( $generic_data['id'] ) ;
+			$ugdf = new UserGenericDataFactory();
+			$ugdf->getReportFormData($generic_data['id']);
 		} elseif ( $action == '' ) {
-			//Check for default saved report first.
+			//Check for default saved .report first.
 			$ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'] );
 			if ( $ugdlf->getRecordCount() > 0 ) {
 				Debug::Text('Found Default Report!', __FILE__, __LINE__, __METHOD__,10);

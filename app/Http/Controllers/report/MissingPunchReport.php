@@ -1,20 +1,69 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: TimesheetDetail.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
-require_once(Environment::getBasePath() .'classes/misc/arr_multisort.class.php');
-require_once(Environment::getBasePath() .'classes/php_excel/PHPExcel.php');
 
-$smarty->assign('title', __($title = 'Missing Punch Report')); // See index.php
+
+namespace App\Http\Controllers\Report;
+
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Sort;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Policy\AbsencePolicyListFactory;
+use App\Models\Policy\OverTimePolicyListFactory;
+use App\Models\Policy\PremiumPolicyListFactory;
+use App\Models\Punch\PunchListFactory;
+use App\Models\Schedule\ScheduleListFactory;
+use App\Models\Core\UserDateTotalListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use App\Models\Users\UserWageListFactory;
+use App\Models\Report\TimesheetDetailReport;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
+use App\Models\Core\BreadCrumb;
+use TCPDF;
+
+class MissingPunchReport extends Controller
+{
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
+
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
+	public function index()
+	{
+
+		$viewData['title'] = 'Missing Punch Report';
+		 $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+        $current_user_prefs = $this->userPrefs;
 
 //Debug::setVerbosity(11);
 /*
@@ -83,8 +132,10 @@ $columns = Misc::prependArray( $static_columns, $columns);
 $otplf = new OverTimePolicyListFactory();
 $otplf->getByCompanyId($current_company->getId());
 if ( $otplf->getRecordCount() > 0 ) {
-	foreach ($otplf as $otp_obj ) {
-		$otp_columns['over_time_policy-'.$otp_obj->getId()] = $otp_obj->getName();
+	foreach ($otplf->rs as $otp_obj) {
+    $otplf->data = (array)$otp_obj;
+    $otp_obj = $otplf;
+	$otp_columns['over_time_policy-'.$otp_obj->getId()] = $otp_obj->getName();
 	}
 
 	$columns = array_merge( $columns, $otp_columns);
@@ -94,7 +145,10 @@ if ( $otplf->getRecordCount() > 0 ) {
 $pplf = new PremiumPolicyListFactory();
 $pplf->getByCompanyId($current_company->getId());
 if ( $pplf->getRecordCount() > 0 ) {
-	foreach ($pplf as $pp_obj ) {
+	foreach ($pplf->rs as $pp_obj) {
+    $pplf->data = (array)$pp_obj;
+    $pp_obj = $pplf;
+
 		$pp_columns['premium_policy-'.$pp_obj->getId()] = $pp_obj->getName();
 	}
 
@@ -106,7 +160,9 @@ if ( $pplf->getRecordCount() > 0 ) {
 $aplf = new AbsencePolicyListFactory();
 $aplf->getByCompanyId($current_company->getId());
 if ( $aplf->getRecordCount() > 0 ) {
-	foreach ($aplf as $ap_obj ) {
+	foreach ($aplf->rs as $ap_obj) {
+    $aplf->data = (array)$ap_obj;
+    $ap_obj = $aplf;
 		$ap_columns['absence_policy-'.$ap_obj->getId()] = $ap_obj->getName();
 	}
 
@@ -119,7 +175,9 @@ $pplf = new PayPeriodListFactory();
 $pplf->getByCompanyId( $current_company->getId() );
 if ( $pplf->getRecordCount() > 0 ) {
 	$pp=0;
-	foreach ($pplf as $pay_period_obj) {
+	foreach ($pplf->rs as $pay_period_obj) {
+    $pplf->data = (array)$pay_period_obj;
+    $pay_period_obj = $pplf;
 		$pay_period_ids[] = $pay_period_obj->getId();
 		$pay_period_end_dates[$pay_period_obj->getId()] = $pay_period_obj->getEndDate();
 
@@ -177,7 +235,9 @@ if ( $permission->Check('wage','view') == FALSE ) {
 $ugdlf = new UserGenericDataListFactory();
 $ugdf = new UserGenericDataFactory();
 
-$action = Misc::findSubmitButton(); 
+$action = $_POST['action'] ?? '';
+        $action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
+// dd($action);
 switch ($action) {
 	case 'export':
 	case 'display_report':
@@ -242,7 +302,9 @@ switch ($action) {
                     unset($filter_data['pay_period_ids']);
             }
 
-            foreach( $ulf as $u_obj ) {
+			foreach ($ulf->rs as $u_obj) {
+    		$ulf->data = (array)$u_obj;
+    		$u_obj = $ulf;
                     $filter_data['user_id'][] = $u_obj->getId();
             }
 
@@ -287,7 +349,9 @@ switch ($action) {
 			$uwlf = new UserWageListFactory();
 			$uwlf->getLastWageByUserIdAndDate( $wage_filter_data['permission_children_ids'], $end_date );
 			if ( $uwlf->getRecordCount() > 0 ) {
-				foreach($uwlf as $uw_obj) {
+				foreach ($uwlf->rs as $uw_obj) {
+					$uwlf->data = (array)$uw_obj;
+					$uw_obj = $uwlf;
 					$user_wage[$uw_obj->getUser()] = $uw_obj->getBaseCurrencyHourlyRate( $uw_obj->getHourlyRate() );
 				}
 			}
@@ -298,14 +362,16 @@ switch ($action) {
 			if ( isset($filter_data['user_id']) ) {
 				$udtlf->getDayReportByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			}
-
 			$slf = new ScheduleListFactory();
 			if ( isset($filter_data['user_id']) ) {
 				$slf->getDayReportByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 			}
                         
 			if ( $slf->getRecordCount() > 0 ) {
-				foreach($slf as $s_obj) {
+				foreach ($slf->rs as $s_obj) {
+					$slf->data = (array)$s_obj;
+					$s_obj = $slf;
+
 					$user_id = $s_obj->getColumn('user_id');
 					$status_id = $s_obj->getColumn('status_id');
 					$status = strtolower( Option::getByKey($status_id, $s_obj->getOptions('status') ) );
@@ -318,23 +384,24 @@ switch ($action) {
 					unset($user_id, $status_id, $status, $pay_period_id, $date_stamp);
 				}
 			}
-//			echo '<pre>'; print_r($schedule_rows); echo'<pre>';
 
-			foreach ($udtlf as $udt_obj ) {
+			foreach ($udtlf->rs as $udt_obj) {
+					$udtlf->data = (array)$udt_obj;
+					$udt_obj = $udtlf;
+			
 				$user_id = $udt_obj->getColumn('id');
 				$pay_period_id = $udt_obj->getColumn('pay_period_id');
 				$date_stamp = TTDate::strtotime( $udt_obj->getColumn('date_stamp') );
-                                
-                                if($pay_period_id == 0){
+                       				
+   
+                if($pay_period_id == 0){  
                                     continue;
-                                }
+                }  
 
 				$status_id = $udt_obj->getColumn('status_id');
 				$type_id = $udt_obj->getColumn('type_id');
-
 				$category = 0;
 				$policy_id = 0;
-
 				if ( $status_id == 10 AND $type_id == 10 ) {
 					$column = 'paid_time';
 					$category = $column;
@@ -359,7 +426,6 @@ switch ($action) {
 				} else {
 					$column = NULL;
 				}
-
 				//Debug::Text('Column: '. $column .' Status ID: '. $status_id .' Type ID: '. $type_id .' Total Time: '. $udt_obj->getColumn('total_time'), __FILE__, __LINE__, __METHOD__,10);
 				if ( $column == 'worked_time' ) {
 					//Handle actual time diff/wage here.
@@ -452,15 +518,16 @@ switch ($action) {
 				$tmp_rows[$pay_period_id][$user_id][$date_stamp]['min_punch_time_stamp'] = TTDate::strtotime( $udt_obj->getColumn('min_punch_time_stamp') );
 				$tmp_rows[$pay_period_id][$user_id][$date_stamp]['max_punch_time_stamp'] = TTDate::strtotime( $udt_obj->getColumn('max_punch_time_stamp') );
 
-                    	}
-		
- 
+        
+			}
 			//Get all punches
 			if ( $action == 'display_detailed_timesheet'  ) {
 				$plf = new PunchListFactory();
 				$plf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data);
 				if ( $plf->getRecordCount() > 0 ) {
-					foreach( $plf as $p_obj ) {
+					foreach ($plf->rs as $p_obj) {
+					$plf->data = (array)$p_obj;
+					$p_obj = $plf;
 						$punch_rows[$p_obj->getColumn('pay_period_id')][$p_obj->getColumn('user_id')][TTDate::strtotime( $p_obj->getColumn('date_stamp') )][$p_obj->getPunchControlID()][$p_obj->getStatus()] = array( 'status_id' => $p_obj->getStatus(), 'type_id' => $p_obj->getType(), 'type_code' => $p_obj->getTypeCode(), 'time_stamp' => $p_obj->getTimeStamp() );
 					}
 				}
@@ -488,7 +555,9 @@ switch ($action) {
 				$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 				$pptsvlf->getByPayPeriodIdAndCompanyId( $filter_data['pay_period_ids'][0], $current_company->getId() );
 				if ( $pptsvlf->getRecordCount() > 0 ) {
-					foreach( $pptsvlf as $pptsv_obj ) {
+					foreach ($pptsvlf->rs as $pptsv_obj) {
+					$pptsvlf->data = (array)$pptsv_obj;
+					$pptsv_obj = $pptsvlf;
 						$verified_time_sheets[$pptsv_obj->getUser()][$pptsv_obj->getPayPeriod()] = array(
 								 'status_id' => $pptsv_obj->getStatus(),
 								 'created_date' => $pptsv_obj->getCreatedDate(),
@@ -496,11 +565,13 @@ switch ($action) {
 					}
 				}
 			}
+			
 //echo '<pre>'.print_r($tmp_rows).'<pre>';die;
 			if ( isset($tmp_rows) ) {
 
 				$i=0;
 				foreach($tmp_rows as $pay_period_id => $data_a ) {
+					
 					foreach($data_a as $user_id => $data_b ) {
 						$user_obj = $ulf->getById( $user_id )->getCurrent();
 
@@ -621,7 +692,7 @@ switch ($action) {
 								}
 							}
 						}
-
+						
 						$rows[$i]['data'] = $sub_rows;
 						unset($sub_rows, $tmp_sub_rows);
 						$i++;
@@ -631,7 +702,6 @@ switch ($action) {
 			unset($tmp_rows);
 		}
 		//die;
-		
 		if ( $action == 'export' ) {
                  
                 
@@ -665,13 +735,13 @@ switch ($action) {
 				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
-			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
-			$smarty->assign_by_ref('pay_period_options', $pay_period_options );
-			$smarty->assign_by_ref('filter_data', $filter_data );
-			$smarty->assign_by_ref('columns', $filter_columns );
-			$smarty->assign_by_ref('rows', $rows);
 
-			$smarty->display('report/MissingPunchReport.tpl');
+			$viewData['generated_time'] = TTDate::getTime();
+			$viewData['pay_period_options'] = $pay_period_options;
+			$viewData['filter_data'] = $filter_data;
+			$viewData['columns'] = $filter_columns;
+			$viewData['rows'] = $rows;
+			return view('report/MissingPunchReport', $viewData);
 		}
 
 		break;
@@ -682,12 +752,13 @@ switch ($action) {
 		$generic_data['id'] = UserGenericDataFactory::reportFormDataHandler( $action, $filter_data, $generic_data, URLBuilder::getURL(NULL, $_SERVER['SCRIPT_NAME']) );
 		unset($generic_data['name']);
 	default:
-		BreadCrumb::setCrumb($title);
-
 		if ( $action == 'load' ) {
 			Debug::Text('Loading Report!', __FILE__, __LINE__, __METHOD__,10);
 
-			extract( UserGenericDataFactory::getReportFormData( $generic_data['id'] ) );
+			
+			$ugdf = new UserGenericDataFactory();
+			$ugdf->getReportFormData($generic_data['id']);
+			
 		} elseif ( $action == '' ) {
 			//Check for default saved report first.
 			$ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'] );
@@ -812,7 +883,7 @@ switch ($action) {
                 //FL ADDED FOR HIDE BUTTON
                 $hidden_elements = Misc::prependArray( array( 'displayReport' => 'hidden', 'displayTimeSheet' => 'hidden', 'displayDetailedTimeSheet' => 'hidden', 'export' => '') );
                 
-                $smarty->assign('hidden_elements',$hidden_elements); // See index.php
+				$viewData['hidden_elements'] = $hidden_elements; // See index.php
                 
                 //FL ADDED FOR EXPORT TYPE
                 $filter_data['export_type_options'] = Misc::prependArray( array(  'pdfMissingPunch' => _('Missing Punch Report'),'excelMissingPunch'=>_('Missing Punch Ecel')) );
@@ -843,14 +914,16 @@ switch ($action) {
 */
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;
-		$smarty->assign_by_ref('generic_data', $generic_data);
 
-		$smarty->assign_by_ref('filter_data', $filter_data);
+			$viewData['generic_data'] = $generic_data;
 
-		$smarty->assign_by_ref('ugdf', $ugdf);
+			$viewData['filter_data'] = $filter_data;
 
-		$smarty->display('report/MissingPunchReport.tpl');
+			$viewData['ugdf'] = $ugdf;
+
+			return view('report/MissingPunchReport', $viewData);
 
 		break;
+		}
+	}
 }
-?>

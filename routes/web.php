@@ -145,6 +145,7 @@ use App\Http\Controllers\report\PayStubSummary;
 use App\Http\Controllers\report\EmployeeTimeSheetReport;
 use App\Http\Controllers\report\DailyAbsenceReport;
 use App\Http\Controllers\report\EmployeeTimeOvertimeSheetReport;
+use App\Http\Controllers\report\MissingPunchReport;
 
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
@@ -298,6 +299,8 @@ Route::match(['get', 'post'],'/report/department_attendance_report', [Department
 Route::match(['get', 'post'],'/report/daily_Absence_report', [DailyAbsenceReport::class, 'index'])->name('report.daily_Absence_report');
 
 Route::match(['get', 'post'],'/report/employee_time_overtime_report_monthly', [EmployeeTimeOvertimeSheetReport::class, 'index'])->name('report.employee_time_overtime_report_monthly');
+
+Route::match(['get', 'post'],'/report/missing_punch_report', [MissingPunchReport::class, 'index'])->name('report.missing_punch_report');
 
 
 Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
