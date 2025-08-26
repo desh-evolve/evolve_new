@@ -676,8 +676,8 @@ class PayStubListFactory extends PayStubFactory implements IteratorAggregate {
 					select 	*
 					from	'. $this->getTable() .'
 					where	pay_period_id = :pay_period_id
-						AND deleted = 0
-                                                GROUP BY user_id';
+						AND deleted = 0';
+
 		$query .= $this->getWhereSQL( $where );
 		$query .= $this->getSortSQL( $order );
 

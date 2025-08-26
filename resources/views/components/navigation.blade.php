@@ -198,6 +198,10 @@
                                 <a href="{{ route('report.missing_punch_report') }}"
                                     class="nav-link {{ request()->routeIs('report.missing_punch_report') ? 'active' : '' }}">Missing Punch Report
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.formE_payments') }}"
+                                    class="nav-link {{ request()->routeIs('report.formE_payments') ? 'active' : '' }}">EPF Payments Details
+                            </li>
                             {{-- <li class="nav-item">
                                 <a href="{{ route('report.general_ledger_summary_report') }}"
                                     class="nav-link {{ request()->routeIs('report.general_ledger_summary_report') ? 'active' : '' }}">General Ledger Summary Report
