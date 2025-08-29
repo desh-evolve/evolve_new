@@ -147,6 +147,7 @@ use App\Http\Controllers\report\DailyAbsenceReport;
 use App\Http\Controllers\report\EmployeeTimeOvertimeSheetReport;
 use App\Http\Controllers\report\MissingPunchReport;
 use App\Http\Controllers\report\FormEPayments;
+use App\Http\Controllers\report\BankTransferSummary;
 
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
@@ -309,6 +310,8 @@ Route::match(['get', 'post'],'/report/formE_payments', [FormEPayments::class, 'i
 Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
 
 Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, 'index'])->name('report.payroll_report');
+
+Route::match(['get', 'post'],'/report/bank_transfer_summary', [BankTransferSummary::class, 'index'])->name('report.bank_transfer_summary');
 
 // ===============================================================================================================================
 // Payroll
