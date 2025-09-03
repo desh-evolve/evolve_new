@@ -1,29 +1,60 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4104 $
- * $Id: SystemLog.php 4104 2011-01-04 19:04:05Z ipso $
- * $Date: 2011-01-04 11:04:05 -0800 (Tue, 04 Jan 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('report','enabled')
-		OR !$permission->Check('report','view_system_log') ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\Report;
 
-$smarty->assign('title', __($title = 'Audit Trail Report'));  // See index.php
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Sort;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Core\LogListFactory;
+use App\Models\Core\LogFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use Illuminate\Support\Facades\View;
+use App\Models\Core\BreadCrumb;
+
+class SystemLog extends Controller
+{
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
+
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
+
+	public function index()
+	{
 
 
-/*
- * Get FORM variables
- */
-extract	(FormVariables::GetVariables(
+		$viewData['title'] = 'Audit Trail Report';
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+        $current_user_prefs = $this->userPrefs;
+
+		extract	(FormVariables::GetVariables(
 										array	(
 												'action',
 												'generic_data',
@@ -77,7 +108,8 @@ if ( $permission->Check('user','view') == FALSE ) {
 $ugdlf = new UserGenericDataListFactory();
 $ugdf = new UserGenericDataFactory();
 
-$action = Misc::findSubmitButton();
+$action = $_POST['action'] ?? '';
+$action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
 switch ($action) {
 	case 'export':
 	case 'display_report':
@@ -96,7 +128,9 @@ switch ($action) {
 				unset($filter_data['pay_period_ids']);
 			}
 
-			foreach( $ulf as $u_obj ) {
+			foreach ($ulf->rs as $u_obj) {
+                    $ulf->data = (array)$u_obj;
+                    $u_obj = $ulf;
 				$filter_data['user_id'][] = $u_obj->getId();
 			}
 
@@ -121,7 +155,10 @@ switch ($action) {
 			if ( $llf->getRecordCount() > 0 ) {
 				$x=0;
 
-				foreach( $llf as $l_obj ) {
+				foreach ($llf->rs as $l_obj) {
+                        $llf->data = (array)$l_obj;
+                        $l_obj = $llf;
+
 					$user_obj = $ulf->getById( $l_obj->getUser() )->getCurrent();
 
 					$tmp_action = Option::getByKey($l_obj->getAction(), $log_action_options );
@@ -173,29 +210,38 @@ switch ($action) {
 			}
 		}
 
-		//var_dump($rows);
 		foreach( $filter_data['column_ids'] as $column_key ) {
 			$filter_columns[Misc::trimSortPrefix($column_key)] = $columns[$column_key];
 		}
 
+		// dd($rows);
 		if ( $action == 'export' ) {
 			if ( isset($rows) AND isset($filter_columns) ) {
 				Debug::Text('Exporting as CSV', __FILE__, __LINE__, __METHOD__,10);
-				$data = Misc::Array2CSV( $rows, $filter_columns );
+			
+            $data = Misc::Array2CSV($rows, $filter_columns);
 
-				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
-				echo $data;
+            // Set headers for CSV download
+            header('Content-Type: application/csv; charset=UTF-8');
+            header('Content-Disposition: attachment; filename="report.csv"');
+            header('Content-Length: ' . strlen($data));
+            header('Cache-Control: no-cache, no-store, must-revalidate');
+            header('Pragma: no-cache');
+            header('Expires: 0');
+
+            // Output the CSV data
+            echo $data;
 			} else {
 				echo __("No Data To Export!") ."<br>\n";
 			}
 		} else {
-			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
-			$smarty->assign_by_ref('pay_period_options', $pay_period_options );
-			$smarty->assign_by_ref('filter_data', $filter_data );
-			$smarty->assign_by_ref('columns', $filter_columns );
-			$smarty->assign_by_ref('rows', $rows);
 
-			$smarty->display('report/SystemLogReport.tpl');
+					$viewData['generated_time'] = TTDate::getTime();
+					// $viewData['pay_period_options'] = $pay_period_options;
+					$viewData['filter_data'] = $filter_data;
+					$viewData['columns'] = $filter_columns;
+					$viewData['rows'] = $rows;
+					return view('report/SystemLogReport', $viewData);
 		}
 
 		break;
@@ -206,10 +252,12 @@ switch ($action) {
 		$generic_data['id'] = UserGenericDataFactory::reportFormDataHandler( $action, $filter_data, $generic_data, URLBuilder::getURL(NULL, $_SERVER['SCRIPT_NAME']) );
 		unset($generic_data['name']);
 	default:
-		BreadCrumb::setCrumb($title);
+	BreadCrumb::setCrumb($viewData['title']);
+
 		if ( $action == 'load' ) {
 			Debug::Text('Loading Report!', __FILE__, __LINE__, __METHOD__,10);
-			extract( UserGenericDataFactory::getReportFormData( $generic_data['id'] ) );
+				$ugdf = new UserGenericDataFactory();
+				$ugdf->getReportFormData($generic_data['id']);
 		} elseif ( $action == '' ) {
 			//Check for default saved report first.
 			$ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'] );
@@ -325,14 +373,18 @@ switch ($action) {
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;
-		$smarty->assign_by_ref('generic_data', $generic_data);
 
-		$smarty->assign_by_ref('filter_data', $filter_data);
 
-		$smarty->assign_by_ref('ugdf', $ugdf);
+		$viewData['generic_data'] = $generic_data;
 
-		$smarty->display('report/SystemLog.tpl');
+		$viewData['filter_data'] = $filter_data;
+
+		$viewData['ugdf'] = $ugdf;
+
+		return view('report/SystemLog', $viewData);
 
 		break;
+
+		}
+	}
 }
-?>

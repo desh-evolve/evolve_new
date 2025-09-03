@@ -148,6 +148,7 @@ use App\Http\Controllers\report\EmployeeTimeOvertimeSheetReport;
 use App\Http\Controllers\report\MissingPunchReport;
 use App\Http\Controllers\report\FormEPayments;
 use App\Http\Controllers\report\BankTransferSummary;
+use App\Http\Controllers\report\SystemLog;
 
 use App\Http\Controllers\request\ViewRequest;
 use App\Http\Controllers\users\EditUserDeduction;
@@ -312,6 +313,8 @@ Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::cla
 Route::match(['get', 'post'],'/report/payroll_report', [PayStubSummary::class, 'index'])->name('report.payroll_report');
 
 Route::match(['get', 'post'],'/report/bank_transfer_summary', [BankTransferSummary::class, 'index'])->name('report.bank_transfer_summary');
+
+Route::match(['get', 'post'],'/report/audit_trail_report', [SystemLog::class, 'index'])->name('report.audit_trail_report');
 
 // ===============================================================================================================================
 // Payroll
