@@ -38,6 +38,7 @@ use App\Http\Controllers\station\EditStation;
 use App\Http\Controllers\station\StationList;
 use App\Http\Controllers\permission\PermissionControlList;
 use App\Http\Controllers\permission\EditPermissionControl;
+use App\Http\Controllers\permission\PermissionDenied;
 use App\Http\Controllers\policy\RecurringHolidayList;
 use App\Http\Controllers\policy\EditRecurringHoliday;
 
@@ -267,6 +268,7 @@ Route::delete('/station/delete/{id}', [StationList::class, 'delete'])->name('sta
 // ==================== Permission Control =====================================================================================
 Route::match(['get', 'post', 'delete'], '/permission_control', [PermissionControlList::class, 'index'])->name('permission_control.index');
 Route::match(['get', 'post', 'delete'], '/permission_control/add', [EditPermissionControl::class, 'index'])->name('permission_control.add');
+Route::get('/permission_denied', [PermissionDenied::class, 'index'])->name('permission_denied');
 
 //Route::post('/permission_control/save/{id?}', [EditPermissionControl::class, 'submit'])->name('permission_control.save');
 //Route::delete('/permission_control/delete/{id}', [PermissionControlList::class, 'delete'])->name('permission_control.delete');
@@ -449,6 +451,7 @@ Route::delete('/user/jobhistory/delete/{id}', [UserJobHistory::class, 'delete'])
  // ===============================================================================================================================
  // New Hire Defaults
  // ===============================================================================================================================
+
  Route::get('/new_hire_defaults', [EditUserDefault::class, 'index'])->name('new_hire_defaults.index');
  Route::get('/new_hire_defaults/add/{id?}', [EditUserDefault::class, 'index'])->name('new_hire_defaults.add');
  Route::post('/new_hire_defaults/save/{id?}', [EditUserDefault::class, 'save'])->name('new_hire_defaults.save');

@@ -424,8 +424,8 @@
 
         // Fetch employee count and approved leaves
         Promise.all([
-            fetch('{{ route('dashboard.user_count') }}').then(res => res.json()),
-            fetch('{{ route('dashboard.approved_leaves_count') }}').then(res => res.json())
+            fetch("/dashboard/user_count").then(res => res.json()),
+            fetch("/dashboard/approved_leaves_count").then(res => res.json())
         ])
         .then(([employeeData, leaveData]) => {
             const totalEmployees = employeeData.user_count || 0;

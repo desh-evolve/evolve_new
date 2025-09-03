@@ -366,7 +366,7 @@ class Validator {
 		return FALSE;
 	}
 
-	function isEmailAdvanced($label, $value, $msg = NULL, $error_level = TRUE ) {
+	/*function isEmailAdvanced($label, $value, $msg = NULL, $error_level = TRUE ) {
 		//Debug::text('Raw Email: '. $value, __FILE__, __LINE__, __METHOD__, $this->verbosity);
 
 		if ( Misc::isEmail( $value, TRUE, $error_level ) === TRUE ) {
@@ -375,6 +375,36 @@ class Validator {
 
 		$this->Error($label, $msg);
 
+		return FALSE;
+	}*/
+
+	function isEmailAdvanced($label, $value, $msg = NULL) {
+		// Trim whitespace and check if the value is empty
+		$value = trim($value);
+		if (empty($value)) {
+			if ($msg !== NULL) {
+				$this->Error($label, $msg ?: 'Email cannot be empty');
+			}
+			return FALSE;
+		}
+	
+		// Check email length (max 254 characters per RFC 5321)
+		if (strlen($value) > 254) {
+			if ($msg !== NULL) {
+				$this->Error($label, $msg ?: 'Email is too long');
+			}
+			return FALSE;
+		}
+	
+		// Validate email format using filter_var
+		if (filter_var($value, FILTER_VALIDATE_EMAIL) !== FALSE) {
+			return TRUE;
+		}
+	
+		// Set error message for invalid email
+		if ($msg !== NULL) {
+			$this->Error($label, $msg ?: 'Invalid email format');
+		}
 		return FALSE;
 	}
 

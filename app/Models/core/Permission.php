@@ -108,7 +108,7 @@ class Permission {
 
 	function Redirect($result) {
 		if ( $result !== TRUE ) {
-			Redirect::Page( URLBuilder::getURL( NULL, Environment::getBaseURL().'/permission/PermissionDenied.php') );
+			Redirect::Page( URLBuilder::getURL( null, '/permission_denied') );
 		}
 
 		return TRUE;

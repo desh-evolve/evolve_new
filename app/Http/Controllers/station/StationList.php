@@ -66,21 +66,23 @@ class StationList extends Controller
         $pager = new Pager($slf);
 
         $stations = [];
-        foreach ($slf->rs as $s_obj) {
-            $slf->data = (array)$s_obj;
-            $s_obj = $slf;
-			// dd($s_obj);
-            $stations[] = [
-                'id' => $s_obj->id,
-                'type' => Option::getByKey($s_obj->type_id, $slf->getOptions('type')),
-                'status' => Option::getByKey($s_obj->status_id, $slf->getOptions('status')),
-                'source' => $s_obj->source,
-                'station' => $s_obj->station_id,
-                'short_station' => Misc::TruncateString($s_obj->station_id, 15),
-                'description' => Misc::TruncateString($s_obj->description, 30),
-                'deleted' => $s_obj->deleted
-            ];
-        }
+        foreach ($slf->rs as $station) {
+            $slf->data = (array)$station;
+            $station = $slf;
+            
+			$stations[] = array(
+								'id' => $station->GetId(),
+								'type' => Option::getByKey($station->getType(), $station->getOptions('type') ),
+								'status' => Option::getByKey($station->getStatus(), $station->getOptions('status') ),
+								'source' => $station->getSource(),
+								'station' => $station->getStation(),
+								'short_station' => Misc::TruncateString( $station->getStation(), 15 ),
+								'description' => Misc::TruncateString( $station->getDescription(), 30 ) ,
+								'deleted' => $station->getDeleted()
+							);
+
+			unset($description);
+		}
 
         $viewData = [
             'title' => 'Station List',

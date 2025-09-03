@@ -104,7 +104,7 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 		$this->getFastTreeObject()->setTree( $id );
 
 		$children = $this->getFastTreeObject()->getAllChildren(NULL, 'RECURSE');
-
+		
 		if ( $children !== FALSE ) {
 			$uglf = new UserGroupListFactory();
 
@@ -115,7 +115,7 @@ class UserGroupListFactory extends UserGroupFactory implements IteratorAggregate
 
 					$nodes[] = array(
 									'id' => $object_id,
-									'name' => $obj->getName(),
+									'name' => !empty($obj->data) ? $obj->getName() : '',
 									'level' => $level
 									);
 				}
