@@ -1,55 +1,70 @@
 <?php
-/*********************************************************************************
- * TimeTrex is a Payroll and Time Management program developed by
- * TimeTrex Payroll Services Copyright (C) 2003 - 2012 TimeTrex Payroll Services.
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Affero General Public License version 3 as published by
- * the Free Software Foundation with the addition of the following permission
- * added to Section 15 as permitted in Section 7(a): FOR ANY PART OF THE COVERED
- * WORK IN WHICH THE COPYRIGHT IS OWNED BY TIMETREX, TIMETREX DISCLAIMS THE
- * WARRANTY OF NON INFRINGEMENT OF THIRD PARTY RIGHTS.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Affero General Public License along
- * with this program; if not, see http://www.gnu.org/licenses or write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301 USA.
- *
- * You can contact TimeTrex headquarters at Unit 22 - 2475 Dobbin Rd. Suite
- * #292 Westbank, BC V4T 2E9, Canada or at email address info@timetrex.com.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License
- * version 3, these Appropriate Legal Notices must retain the display of the
- * "Powered by TimeTrex" logo. If the display of the logo is not reasonably
- * feasible for technical reasons, the Appropriate Legal Notices must display
- * the words "Powered by TimeTrex".
- ********************************************************************************/
-/*
- * $Revision: 4600 $
- * $Id: PayStubSummary.php 4600 2011-04-28 21:35:12Z ipso $
- * $Date: 2011-04-28 14:35:12 -0700 (Thu, 28 Apr 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
-
-if ( !$permission->Check('report','enabled')
-		OR !$permission->Check('report','view_pay_stub_summary') ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
-
-$smarty->assign('title', __($title = 'Bank Transfer Summary'));  // See index.php
 
 
-/*
+namespace App\Http\Controllers\Report;
+
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayPeriod\PayPeriodTimeSheetVerifyListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Sort;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Core\CurrencyListFactory;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\PayStub\PayStubFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\BankAccountListFactory;
+use App\Models\Users\UserTitleListFactory;
+use Illuminate\Support\Facades\View;;
+use App\Models\Core\BreadCrumb;
+use TCPDF;
+use DateTime;
+use Exception;
+
+class BankTransferSummary extends Controller
+{
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
+
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
+	public function index()
+	{
+
+		$viewData['title'] = 'Bank Transfer Summary';
+		 $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+        $current_user_prefs = $this->userPrefs;
+
+
+/* 
  * Get FORM variables
  */
 extract	(FormVariables::GetVariables(
@@ -109,7 +124,10 @@ $pplf->getPayPeriodsWithPayStubsByCompanyId( $current_company->getId() );
 $pay_period_options = array();
 if ( $pplf->getRecordCount() > 0 ) {
 	$pp=0;
-	foreach ($pplf as $pay_period_obj) {
+	foreach ($pplf->rs as $pay_period_obj) {
+				$pplf->data = (array)$pay_period_obj;
+				$pay_period_obj = $pplf;
+
 		$pay_period_ids[] = $pay_period_obj->getId();
 		$pay_period_end_dates[$pay_period_obj->getId()] = $pay_period_obj->getEndDate();
 
@@ -153,7 +171,8 @@ if ( $permission->Check('pay_stub','view') == FALSE ) {
 $ugdlf = new UserGenericDataListFactory();
 $ugdf = new UserGenericDataFactory();
 
-$action = Misc::findSubmitButton();
+$action = $_POST['action'] ?? '';
+$action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
 switch ($action) {
 	case 'view_pay_stubs':
 	case 'export':
@@ -173,7 +192,10 @@ switch ($action) {
 				//unset($filter_data['pay_period_ids']);// ARSP EDIT-- > IM HIDE THIS CODE BCZ OTHER WISE CAN'T GET THE PAPERIOD  VALUES
 			}
 
-			foreach( $ulf as $u_obj ) {
+				foreach ($ulf->rs as $u_obj) {
+				$ulf->data = (array)$u_obj;
+				$u_obj = $ulf;
+
 				$filter_data['user_id'][] = $u_obj->getId();
 			}
 
@@ -272,7 +294,9 @@ switch ($action) {
 
 					//Strip off Employee Deduction, Earnings, etc from names so they don't clutter reports.
 					$psealf->getByCompanyId( $current_company->getId() );
-					foreach($psealf as $psea_obj) {
+					foreach ($psealf->rs as $psea_obj) {
+						$psealf->data = (array)$psea_obj;
+						$psea_obj = $psealf;
 						//$report_columns[$psen_obj->getId()] = $psen_obj->getDescription();
 						$report_columns[$psea_obj->getId()] = $psea_obj->getName();
 					}
@@ -284,7 +308,10 @@ switch ($action) {
 					$pself->getReportByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 					if ( $pself->getRecordCount() > 0 ) {
 						//Prepare data for regular report.
-						foreach( $pself as $pse_obj ) {
+						foreach ($pself->rs as $pse_obj) {
+						$pself->data = (array)$pse_obj;
+						$pse_obj = $pself;
+
 							$user_id = $pse_obj->getColumn('user_id');
 							$pay_stub_id = $pse_obj->getColumn('pay_stub_id');
 							$currency_id = $pse_obj->getColumn('currency_id');
@@ -657,14 +684,27 @@ else if ( $action == 'export' AND $filter_data['export_type'] == 'bank_transfer'
                     {                        
                         foreach($filter_data['pay_period_ids'] AS $id)
                         {                            
-                            if($id > 0)
-                            {
-                                $sub_string = substr($pay_period_options[$id],14); // this is the pay period format string(24) "26/03/2013 -> 25/04/2013"
-                                $replace_string = str_replace("/", "-", $sub_string);
-                                
-                                $date = new DateTime($replace_string);                                
-                                $payperiod_string.= $date->format('F Y').', ';
-                            }
+                            // if($id > 0)
+                            // {
+                            //     $sub_string = substr($pay_period_options[$id],14); // this is the pay period format string(24) "26/03/2013 -> 25/04/2013"
+                            //     $replace_string = str_replace("/", "-", $sub_string);
+                            //     dd($replace_string);
+                            //     $date = new DateTime($replace_string);                                
+                            //     $payperiod_string.= $date->format('F Y').', ';
+                            // }
+							if ($id > 0) {
+								// Extract the first date (before the arrow) from the pay period string
+								$sub_string = substr($pay_period_options[$id], 0, 10); // Extract "26/03/2013" (first 10 characters)
+								$replace_string = str_replace("/", "-", $sub_string); // Convert to "26-03-2013"
+
+								try {
+									$date = new DateTime($replace_string); // Parse the date
+									$payperiod_string .= $date->format('F Y') . ', '; // Format as "March 2013, "
+								} catch (Exception $e) {
+									// Handle the error gracefully
+									echo "Failed to parse date: " . $e->getMessage();
+								}
+							}
                             else
                             {
                                 $payperiod_string = "ALL  ";//if selected pay period is "All"  then only print "ALL" do not need to print all the pay period values
@@ -728,11 +768,11 @@ else if ( $action == 'export' AND $filter_data['export_type'] == 'bank_transfer'
 		$generic_data['id'] = UserGenericDataFactory::reportFormDataHandler( $action, $filter_data, $generic_data, URLBuilder::getURL(NULL, $_SERVER['SCRIPT_NAME']) );
 		unset($generic_data['name']);
 	default:
-		BreadCrumb::setCrumb($title);
 
 		if ( $action == 'load' ) {
 			Debug::Text('Loading Report!', __FILE__, __LINE__, __METHOD__,10);
-			extract( UserGenericDataFactory::getReportFormData( $generic_data['id'] ) );
+			$ugdf = new UserGenericDataFactory();
+			$ugdf->getReportFormData($generic_data['id']);
 		} elseif ( $action == '' ) {
 			//Check for default saved report first.
 			$ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'] );
@@ -765,10 +805,10 @@ else if ( $action == 'export' AND $filter_data['export_type'] == 'bank_transfer'
 					$pseal_obj = $pseallf->getCurrent();
 
 					$default_linked_columns = array(
-												$pseal_obj->getTotalGross(),
-												$pseal_obj->getTotalNetPay(),
-												$pseal_obj->getTotalEmployeeDeduction(),
-												$pseal_obj->getTotalEmployerDeduction() );
+									$pseal_obj->getTotalGross(),
+									$pseal_obj->getTotalNetPay(),
+									$pseal_obj->getTotalEmployeeDeduction(),
+									$pseal_obj->getTotalEmployerDeduction() );
 				} else {
 					$default_linked_columns = array();
 				}
@@ -856,21 +896,23 @@ else if ( $action == 'export' AND $filter_data['export_type'] == 'bank_transfer'
 		$psf = new PayStubFactory();
 		//ARSP EDIT --> ADD Some New code('pdf' => _('PDF (PDF)')) ) for new 'pdf' dropdown list from export type  
 		//$filter_data['export_type_options'] = Misc::prependArray( array( 'csv' => _('CSV (Excel)'), 'pdfp' => _('PDF (PORTRAIT)'), 'pdfl' => _('PDF (LANDSCAPE)'), 'formc' => _('Form C (PDF)')), Misc::trimSortPrefix( $psf->getOptions('export_type') ) );
-		//$filter_data['export_type_options'] = Misc::prependArray( array('formc' => _('Form C (PDF)')) ); //ARSP EDIT --> I HIDE THIS CODE ", Misc::trimSortPrefix( $psf->getOptions('export_type') )"  .IT'S USE TO HIDE THE ALL OTHER EXPORT OPTIONS  	
+		//$filter_data['export_type_options'] =  Misc::prependArray( array('formc' => _('Form C (PDF)')) ); //ARSP EDIT --> I HIDE THIS CODE ", Misc::trimSortPrefix( $psf->getOptions('export_type') )"  .IT'S USE TO HIDE THE ALL OTHER EXPORT OPTIONS  	
                 $filter_data['export_type_options'] = Misc::prependArray( array('bank_transfer' => _('Bank Transfer Summary (PDF)'),'csv' => _('Export CVS (Excel)')) ); //ARSP EDIT --> I HIDE THIS CODE ", Misc::trimSortPrefix( $psf->getOptions('export_type') )"  .IT'S USE TO HIDE THE ALL OTHER EXPORT OPTIONS              
 
 
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;
-		$smarty->assign_by_ref('generic_data', $generic_data);
+		
+			$viewData['generic_data'] = $generic_data;
 
-		$smarty->assign_by_ref('filter_data', $filter_data);
+			$viewData['filter_data'] = $filter_data;
 
-		$smarty->assign_by_ref('ugdf', $ugdf);
+			$viewData['ugdf'] = $ugdf;
 
-		$smarty->display('report/BankTransferSummary.tpl');
+			return view('report/BankTransferSummary', $viewData);
 
-		break;
+			break;
+		}
+	}
 }
-?>
