@@ -1,24 +1,65 @@
 <?php
-/*********************************************************************************
- * Evolve is a Payroll and Time Management program developed by
- * Evolve Technology PVT LTD.
- *
- ********************************************************************************/
-/*
- * $Revision: 4600 $
- * $Id: PayStubSummary.php 4600 2011-04-28 21:35:12Z ipso $
- * $Date: 2011-04-28 14:35:12 -0700 (Thu, 28 Apr 2011) $
- */
-require_once('../../includes/global.inc.php');
-require_once(Environment::getBasePath() .'includes/Interface.inc.php');
 
-if ( !$permission->Check('report','enabled')
-		OR !$permission->Check('report','cform_reports') ) {
-	$permission->Redirect( FALSE ); //Redirect
-}
+namespace App\Http\Controllers\Report;
 
-$smarty->assign('title', __($title = 'Form C Report'));  // See index.php
+use App\Http\Controllers\Controller;
+use App\Models\Company\BranchListFactory;
+use App\Models\Core\Debug;
+use App\Models\Core\Environment;
+use App\Models\Core\FastTree;
+use App\Models\Core\FormVariables;
+use App\Models\Core\Misc;
+use App\Models\Core\Option;
+use App\Models\Core\Sort;
+use App\Models\Core\TTDate;
+use App\Models\Core\URLBuilder;
+use App\Models\Department\DepartmentListFactory;
+use App\Models\Hierarchy\HierarchyListFactory;
+use App\Models\Users\UserGenericDataFactory;
+use App\Models\Users\UserGenericDataListFactory;
+use App\Models\Users\UserGroupListFactory;
+use App\Models\Users\UserListFactory;
+use App\Models\Users\UserTitleListFactory;
+use App\Models\Users\BankAccountListFactory;
+use App\Models\PayStub\PayStubFactory;
+use App\Models\PayStub\PayStubEntryAccountLinkListFactory;
+use App\Models\PayStub\PayStubEntryAccountListFactory;
+use App\Models\PayPeriod\PayPeriodListFactory;
+use App\Models\PayStub\PayStubListFactory;
+use App\Models\PayStub\PayStubEntryListFactory;
+use App\Models\Core\CurrencyListFactory;
+use Illuminate\Support\Facades\View;
+use App\Models\Core\BreadCrumb;
+use DateTime;
+use Exception;
 
+class FormC extends Controller
+{
+	protected $permission;
+	protected $currentUser;
+	protected $currentCompany;
+	protected $userPrefs;
+
+	public function __construct()
+	{
+		$basePath = Environment::getBasePath();
+		require_once($basePath . '/app/Helpers/global.inc.php');
+		require_once($basePath . '/app/Helpers/Interface.inc.php');
+
+		$this->permission = View::shared('permission');
+		$this->currentUser = View::shared('current_user');
+		$this->currentCompany = View::shared('current_company');
+		$this->userPrefs = View::shared('current_user_prefs');
+	}
+
+	public function index()
+	{
+
+		$viewData['title'] = 'Form C Report';
+        $current_company = $this->currentCompany;
+        $current_user = $this->currentUser;
+        $permission = $this->permission;
+        $current_user_prefs = $this->userPrefs;
 
 /*
  * Get FORM variables
@@ -80,7 +121,10 @@ $pplf->getPayPeriodsWithPayStubsByCompanyId( $current_company->getId() );
 $pay_period_options = array();
 if ( $pplf->getRecordCount() > 0 ) {
 	$pp=0;
-	foreach ($pplf as $pay_period_obj) {
+	foreach ($pplf->rs as $pay_period_obj) {
+        $pplf->data = (array)$pay_period_obj;
+        $pay_period_obj = $pplf;
+
 		$pay_period_ids[] = $pay_period_obj->getId();
 		$pay_period_end_dates[$pay_period_obj->getId()] = $pay_period_obj->getEndDate();
 
@@ -124,7 +168,9 @@ if ( $permission->Check('pay_stub','view') == FALSE ) {
 $ugdlf = new UserGenericDataListFactory();
 $ugdf = new UserGenericDataFactory();
 
-$action = Misc::findSubmitButton();
+$action = $_POST['action'] ?? '';
+$action = !empty($action) ? str_replace(' ', '_', strtolower(trim($action))) : '';
+// dd($action);
 switch ($action) {
 	case 'view_pay_stubs':
 	case 'export':
@@ -144,7 +190,10 @@ switch ($action) {
 				//unset($filter_data['pay_period_ids']);// ARSP EDIT-- > IM HIDE THIS CODE BCZ OTHER WISE CAN'T GET THE PAPERIOD  VALUES
 			}
 
-			foreach( $ulf as $u_obj ) {
+			foreach ($ulf->rs as $u_obj) {
+                $ulf->data = (array)$u_obj;
+                $u_obj = $ulf;	
+
 				$filter_data['user_id'][] = $u_obj->getId();
 			}
 
@@ -231,7 +280,9 @@ switch ($action) {
 
 					//Strip off Employee Deduction, Earnings, etc from names so they don't clutter reports.
 					$psealf->getByCompanyId( $current_company->getId() );
-					foreach($psealf as $psea_obj) {
+					foreach ($psealf->rs as $psea_obj) {
+						$psealf->data = (array)$psea_obj;
+						$psea_obj = $psealf;		
 						//$report_columns[$psen_obj->getId()] = $psen_obj->getDescription();
 						$report_columns[$psea_obj->getId()] = $psea_obj->getName();
 					}
@@ -243,7 +294,10 @@ switch ($action) {
 					$pself->getReportByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 					if ( $pself->getRecordCount() > 0 ) {
 						//Prepare data for regular report.
-						foreach( $pself as $pse_obj ) {
+						foreach ($pself->rs as $pse_obj) {
+							$pself->data = (array)$pse_obj;
+							$pse_obj = $pself;	
+
 							$user_id = $pse_obj->getColumn('user_id');
 							$pay_stub_id = $pse_obj->getColumn('pay_stub_id');
 							$currency_id = $pse_obj->getColumn('currency_id');
@@ -432,21 +486,26 @@ switch ($action) {
 				}
 			}
 		}
-
 		if ( $action == 'export' AND $filter_data['export_type'] == 'csv' ) {
+			
 			if ( isset($rows) AND isset($filter_columns) ) {
 				Debug::Text('Exporting as CSV', __FILE__, __LINE__, __METHOD__,10);
 				$data = Misc::Array2CSV( $rows, $filter_columns );
 
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
+
+				    // $data = Misc::Array2CSV($tmp_rows, $filter_columns);
+                    //             return response($data, 200, [
+                    //                 'Content-Type' => 'application/csv',
+                    //                 'Content-Disposition' => 'attachment; filename="report.csv"',
+                    //                 'Content-Length' => strlen($data)
+                    //             ]);
 			} else {
 				echo _('No Data To Export!') ."<br>\n";
 			}
 		}
 		
-		
-                
                 /*
                  * ARSP ADDED NEW CODE HERE...
                  * ARSP EDIT --> ADD NEW CODE FOR Export PDF REPORT
@@ -454,7 +513,6 @@ switch ($action) {
                  */
 				 //PAGE ORIENTATION IS PORTRAIT                       
                 else if ( $action == 'export' AND $filter_data['export_type'] == 'pdfp' ) {
-                    
                     
                     $payperiod_string= "";
                     if($filter_data['date_type'] == 'pay_period_ids')//ARSP -->IF YOU SELECT PAYPERIOD OPTION
@@ -474,21 +532,21 @@ switch ($action) {
                         $payperiod_string = substr_replace($payperiod_string ,"",-1);//remove the comma(',')							
                     }
                                   
-			if ( isset($rows) AND isset($filter_columns) ) {
+					if ( isset($rows) AND isset($filter_columns) ) {
 
-				Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
-                                
-                                $pslf = new PayStubListFactory();//new code                                
-                                $output = $pslf->Array2PDF($rows, $filter_columns, $current_user, $current_company, 	                                          $filter_data['transaction_start_date'], $filter_data['transaction_end_date'],                                          $payperiod_string);//new code                               
-                                                                                               
-                                if ( Debug::getVerbosity() < 11 ) {                                    
-                                    Misc::FileDownloadHeader('pay_stub.pdf', 'application/pdf', strlen($output));
-                                    echo $output;
-                                    exit;                           
-                                }                        
-                        }else {
-                                echo _('No PDF Data To Export!') ."<br>\n";                                    
-                                }
+						Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
+										
+										$pslf = new PayStubListFactory();//new code                                
+										$output = $pslf->Array2PDF($rows, $filter_columns, $current_user, $current_company, 	                                          $filter_data['transaction_start_date'], $filter_data['transaction_end_date'],                                          $payperiod_string);//new code                               
+																									
+										if ( Debug::getVerbosity() < 11 ) {                                    
+											Misc::FileDownloadHeader('pay_stub.pdf', 'application/pdf', strlen($output));
+											echo $output;
+											exit;                           
+										}                        
+								}else {
+										echo _('No PDF Data To Export!') ."<br>\n";                                    
+										}
                 }		
 				
 				
@@ -500,7 +558,6 @@ switch ($action) {
                  */        
 				 //PAGE ORIENTATION IS LANDSCAPE               
                 else if ( $action == 'export' AND $filter_data['export_type'] == 'pdfl' ) {
-                    
                     
                     $payperiod_string= "";
                     if($filter_data['date_type'] == 'pay_period_ids')//ARSP -->IF YOU SELECT PAYPERIOD OPTION
@@ -520,26 +577,23 @@ switch ($action) {
                         $payperiod_string = substr_replace($payperiod_string ,"",-1);//remove the comma(',')							
                     }
                                   
-			if ( isset($rows) AND isset($filter_columns) ) {
+						if ( isset($rows) AND isset($filter_columns) ) {
 
-				Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
-                                
-                                $pslf = new PayStubListFactory();//new code                                
-                                $output = $pslf->Array2PDFLandscape($rows, $filter_columns, $current_user, $current_company, 	                                          $filter_data['transaction_start_date'], $filter_data['transaction_end_date'],                                          $payperiod_string);//new code                               
-                                                                                               
-                                if ( Debug::getVerbosity() < 11 ) {                                    
-                                    Misc::FileDownloadHeader('pay_stub.pdf', 'application/pdf', strlen($output));
-                                    echo $output;
-                                    exit;                           
-                                }                        
-                        }else {
-                                echo _('No PDF Data To Export!') ."<br>\n";                                    
-                                }
+							Debug::Text('Exporting as PDF', __FILE__, __LINE__, __METHOD__,10);
+											
+											$pslf = new PayStubListFactory();//new code                                
+											$output = $pslf->Array2PDFLandscape($rows, $filter_columns, $current_user, $current_company, 	                                          $filter_data['transaction_start_date'], $filter_data['transaction_end_date'],                                          $payperiod_string);//new code                               
+																										
+											if ( Debug::getVerbosity() < 11 ) {                                    
+												Misc::FileDownloadHeader('pay_stub.pdf', 'application/pdf', strlen($output));
+												echo $output;
+												exit;                           
+											}                        
+									}else {
+											echo _('No PDF Data To Export!') ."<br>\n";                                    
+											}
                 }
 				
-				
-				
-
                 /*
                  * ARSP ADD NEW CODE HERE...
                  * ARSP EDIT --> ADD NEW CODE CREATE FORM C
@@ -547,30 +601,34 @@ switch ($action) {
                  */      
                 //PAGE ORIENTATION IS PORTRAIT 
                 else if ( $action == 'export' AND $filter_data['export_type'] == 'formc' ) {
-                    
+                  
                     $payperiod_string= "";
                     if(count($filter_data['pay_period_ids']) > 0)
                     {
-                        
                         foreach($filter_data['pay_period_ids'] AS $id)
-                        {                            
+                        {                           
                             if($id > 0)
-                            {
-                                $sub_string = substr($pay_period_options[$id],14); // this is the pay period format string(24) "26/03/2013 -> 25/04/2013"
-                                $replace_string = str_replace("/", "-", $sub_string);// replace string '26/03/2013' to '26-03-2013'
+                            // {
+                            //     $sub_string = substr($pay_period_options[$id],14); // this is the pay period format string(24) "26/03/2013 -> 25/04/2013"
+                            //     $replace_string = str_replace("/", "-", $sub_string);// replace string '26/03/2013' to '26-03-2013'
                                 
-                                $date = new DateTime($replace_string);                                
-                                $payperiod_string.= $date->format('F Y').', ';//only get Month Year Format eg:- April 2013
-                            }
-                            else
-                            {
+                            //     $date = new DateTime($replace_string);                                
+                            //     $payperiod_string.= $date->format('F Y').', ';//only get Month Year Format eg:- April 2013
+                            // }
+                            // else
+                            // {
+                            //     $payperiod_string = "ALL  ";//if selected pay period is "All"  then only print "ALL" do not need to print all the pay period values. put 2 space after the "ALL"
+                            // }
+
+							{
+                                $payperiod_string.= $pay_period_options[$id].', ';
+                            }else{
                                 $payperiod_string = "ALL  ";//if selected pay period is "All"  then only print "ALL" do not need to print all the pay period values. put 2 space after the "ALL"
-                            }
+                            }	
 
                             
                         }
-//                                Print $payperiod_string;
-//                                exit();
+
                         $payperiod_string = substr_replace($payperiod_string ,"",-1);//remove the last space
                         $payperiod_string = substr_replace($payperiod_string ,"",-1);//remove the comma(',')							
                     
@@ -580,6 +638,8 @@ switch ($action) {
                         $branch_id_only = null;
                         if(count($filter_data['branch_ids']) == 1 && $filter_data['branch_ids'][0] != -1)
                         {
+							
+								  dd('11');
                             $branch_id_only = $filter_data['branch_ids'][0];
                         } 
                                   
@@ -587,38 +647,31 @@ switch ($action) {
 
 				Debug::Text('Exporting as Form C PDF', __FILE__, __LINE__, __METHOD__,10);
                                 
-                                $pslf = new PayStubListFactory();//new code                                
-                                $output = $pslf->FormC($rows, $filter_data['include_user_ids'], $current_user, $current_company, $payperiod_string, $branch_id_only);//new code    
-                                
-                                   
-                               
-                                                                
-                                if ( Debug::getVerbosity() < 11 ) {                                    
-                                    Misc::FileDownloadHeader('form_c.pdf', 'application/pdf', strlen($output));
-                                    echo $output;
-                                    exit;                           
-                                }                        
-                        }else {
-                                echo _('Please Select at Least One Employee.') ."<br>\n";                                    
-                                }
-                    }else{
-                                echo _('Pleasae Select at Least One Pay Period.') ."<br>\n";                                    
-                                }
-                }  				
-									
-				
+                    $pslf = new PayStubListFactory();//new code   
 		
-		
-		
-		
-		 else {
-			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
-			$smarty->assign_by_ref('pay_period_options', $pay_period_options );
-			$smarty->assign_by_ref('filter_data', $filter_data );
-			$smarty->assign_by_ref('columns', $filter_columns );
-			$smarty->assign_by_ref('rows', $rows);
-
-			$smarty->display('report/PayStubSummaryReport.tpl');
+					// dd($rows, $filter_data['include_user_ids'], $current_user, $current_company, $payperiod_string, $branch_id_only);                             
+                    $output = $pslf->FormC($rows, $filter_data['include_user_ids'], $current_user, $current_company, $payperiod_string, $branch_id_only);//new code    
+                             			// dd($output);   
+                    if ( Debug::getVerbosity() < 11 ) {      
+						                         
+                         Misc::FileDownloadHeader('form_c.pdf', 'application/pdf', strlen($output));
+                         echo $output;
+                        exit;                           
+                         }                        
+                	} else {
+						
+                     	echo _('Please Select at Least One Employee.') ."<br>\n";                                    
+                        }
+                   	 } else {
+                        echo _('Pleasae Select at Least One Pay Period.') ."<br>\n";                                    
+                     }
+        }  	else {
+			$viewData['generated_time'] = TTDate::getTime();
+			$viewData['pay_period_options'] = $pay_period_options;
+			$viewData['filter_data'] = $filter_data;
+			$viewData['columns'] = $filter_columns;
+			$viewData['rows'] = $rows;
+			return view('report/PayStubSummaryReport', $viewData);
 		}
 
 		break;
@@ -629,11 +682,12 @@ switch ($action) {
 		$generic_data['id'] = UserGenericDataFactory::reportFormDataHandler( $action, $filter_data, $generic_data, URLBuilder::getURL(NULL, $_SERVER['SCRIPT_NAME']) );
 		unset($generic_data['name']);
 	default:
-		BreadCrumb::setCrumb($title);
+		BreadCrumb::setCrumb($viewData['title']);
 
 		if ( $action == 'load' ) {
 			Debug::Text('Loading Report!', __FILE__, __LINE__, __METHOD__,10);
-			extract( UserGenericDataFactory::getReportFormData( $generic_data['id'] ) );
+				$ugdf = new UserGenericDataFactory();
+				$ugdf->getReportFormData($generic_data['id']);
 		} elseif ( $action == '' ) {
 			//Check for default saved report first.
 			$ugdlf->getByUserIdAndScriptAndDefault( $current_user->getId(), $_SERVER['SCRIPT_NAME'] );
@@ -762,14 +816,17 @@ switch ($action) {
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;
-		$smarty->assign_by_ref('generic_data', $generic_data);
 
-		$smarty->assign_by_ref('filter_data', $filter_data);
+		$viewData['generic_data'] = $generic_data;
 
-		$smarty->assign_by_ref('ugdf', $ugdf);
+		$viewData['filter_data'] = $filter_data;
 
-		$smarty->display('report/FormC.tpl');
+		$viewData['ugdf'] = $ugdf;
+
+		return view('report/FormC', $viewData);
 
 		break;
+
+		}
+	}
 }
-?>

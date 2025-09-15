@@ -147,6 +147,7 @@ use App\Http\Controllers\report\DailyAbsenceReport;
 use App\Http\Controllers\report\EmployeeTimeOvertimeSheetReport;
 use App\Http\Controllers\report\MissingPunchReport;
 use App\Http\Controllers\report\FormEPayments;
+use App\Http\Controllers\report\FormC;
 use App\Http\Controllers\report\BankTransferSummary;
 use App\Http\Controllers\report\SystemLog;
 
@@ -306,6 +307,8 @@ Route::match(['get', 'post'],'/report/employee_time_overtime_report_monthly', [E
 Route::match(['get', 'post'],'/report/missing_punch_report', [MissingPunchReport::class, 'index'])->name('report.missing_punch_report');
 
 Route::match(['get', 'post'],'/report/formE_payments', [FormEPayments::class, 'index'])->name('report.formE_payments');
+
+Route::match(['get', 'post'],'/report/epf_c_form', [FormC::class, 'index'])->name('report.epf_c_form');
 
 
 Route::match(['get', 'post'],'/report/timesheet_summary', [TimesheetSummary::class, 'index'])->name('report.timesheet_summary');
