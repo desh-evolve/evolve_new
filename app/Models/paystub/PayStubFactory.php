@@ -14969,185 +14969,292 @@ class PayStubFactory extends Factory {
 	 *PAGE ORIENTATION IS PORTRAIT
 	 */	   
 
-        function BankTransfer($data, $include_user_ids , $current_user, $current_company, $payperiod_string)
-        {            
+        // function BankTransfer($data, $include_user_ids , $current_user, $current_company, $payperiod_string)
+        // {            
         
-            /* ARSP EDIT NOTE***************************************************
-             * 
-             * NOTE THIS :- HOW TO GET GET PAY PERIOD
-             * 
-             *  ARSP EDIT --> HOW TO GET PAYPERIOD FROM "$data" ARRAY 
-             *  IF PRINT "$data" ARRAY IT WILL SHOW (NET PAY/ GROSS SALARY / BASIC SALARY etc..) THESE KEY VALUES ARE NUMBER  
-             *  SO WE HAVE TO FIND OUT THE WHAT IS THE KEY VALUES 
-             *  WE HAVE TO PRINT THIS COLUMN VALUE --> "print_r($columns)" TO THIS FUNCTION --> "Array2PdfPortrait()" [HINT :ADD START OF THE FUNCTION]
-             * 
-             *  INTERFACE CHANGES --> I ADDED 2 NEW TEXT FIELDS TO THE Bank Account DETAILS
-             *  PATH : evolvepayroll\templates\report\BankTransferSummary.tpl 
-             * 
-             *  DATABASE CHANGES --> I ADDED 2 EXTRA FIELDS TO THE "bank_account" TABLE 
-             *  1.bank_name , Varchar , 100
-             *  2.bank_branch , Varchar , 100 
-             * 
-             *  NEW FUNCTION --> I ADDED 2 NEW FUNCTION TO GET & SET THE "bank_name" ,"bank_branch"  FROM  
-             *  PATH : evolvepayroll\classes\modules\users\BankAccountFactory.class.php
-             * 
-             *  ADD SOME NEW CODE
-             *  PATH --> C:\xampp\htdocs\evolvepayroll\interface\bank_account\EditBankAccount.php 
-             *  1. $baf->setBankName( $bank_data['bank_name'] );//ARSP EDIT --> I ADD NEW CODE FOR SET BANK NAME
-             *	2. $baf->setBankBranch( $bank_data['bank_branch'] );//ARSP EDIT --> I ADD NEW CODE FOR SET BANK NAME
-             * 
-             *  'account' => $bank_account->getSecureAccount(),//ARSP EDIT --> I Hide THIS CODE REASON- WE CANT SEE ORIGINAL ACCOUNT NUMBER
-	     *	'account' => $bank_account->getAccount(),//ARSP EDIT --> I ADD NEW CODE SHOW ONLY ORIGINAL ACCOUNT NUMBER
-             *  'bank_name' => $bank_account->getBankName(),//ARSP EDIT --> I ADD NEW CODE FOR BANK NAME
-             *  'bank_branch' => $bank_account->getBankBranch(),//ARSP EDIT --> I ADD NEW CODE FOR BANK BRANCH NAME
-             *
-             *
-             * 
-             * *****************************************************************
-             */
+        //     /* ARSP EDIT NOTE***************************************************
+        //      * 
+        //      * NOTE THIS :- HOW TO GET GET PAY PERIOD
+        //      * 
+        //      *  ARSP EDIT --> HOW TO GET PAYPERIOD FROM "$data" ARRAY 
+        //      *  IF PRINT "$data" ARRAY IT WILL SHOW (NET PAY/ GROSS SALARY / BASIC SALARY etc..) THESE KEY VALUES ARE NUMBER  
+        //      *  SO WE HAVE TO FIND OUT THE WHAT IS THE KEY VALUES 
+        //      *  WE HAVE TO PRINT THIS COLUMN VALUE --> "print_r($columns)" TO THIS FUNCTION --> "Array2PdfPortrait()" [HINT :ADD START OF THE FUNCTION]
+        //      * 
+        //      *  INTERFACE CHANGES --> I ADDED 2 NEW TEXT FIELDS TO THE Bank Account DETAILS
+        //      *  PATH : evolvepayroll\templates\report\BankTransferSummary.tpl 
+        //      * 
+        //      *  DATABASE CHANGES --> I ADDED 2 EXTRA FIELDS TO THE "bank_account" TABLE 
+        //      *  1.bank_name , Varchar , 100
+        //      *  2.bank_branch , Varchar , 100 
+        //      * 
+        //      *  NEW FUNCTION --> I ADDED 2 NEW FUNCTION TO GET & SET THE "bank_name" ,"bank_branch"  FROM  
+        //      *  PATH : evolvepayroll\classes\modules\users\BankAccountFactory.class.php
+        //      * 
+        //      *  ADD SOME NEW CODE
+        //      *  PATH --> C:\xampp\htdocs\evolvepayroll\interface\bank_account\EditBankAccount.php 
+        //      *  1. $baf->setBankName( $bank_data['bank_name'] );//ARSP EDIT --> I ADD NEW CODE FOR SET BANK NAME
+        //      *	2. $baf->setBankBranch( $bank_data['bank_branch'] );//ARSP EDIT --> I ADD NEW CODE FOR SET BANK NAME
+        //      * 
+        //      *  'account' => $bank_account->getSecureAccount(),//ARSP EDIT --> I Hide THIS CODE REASON- WE CANT SEE ORIGINAL ACCOUNT NUMBER
+	    //  *	'account' => $bank_account->getAccount(),//ARSP EDIT --> I ADD NEW CODE SHOW ONLY ORIGINAL ACCOUNT NUMBER
+        //      *  'bank_name' => $bank_account->getBankName(),//ARSP EDIT --> I ADD NEW CODE FOR BANK NAME
+        //      *  'bank_branch' => $bank_account->getBankBranch(),//ARSP EDIT --> I ADD NEW CODE FOR BANK BRANCH NAME
+        //      *
+        //      *
+        //      * 
+        //      * *****************************************************************
+        //      */
 
-            $ignore_last_row = TRUE;
-            $include_header = TRUE;
-            $eol = "\n";
+        //     $ignore_last_row = TRUE;
+        //     $include_header = TRUE;
+        //     $eol = "\n";
 
-            if ( is_array($data) AND count($include_user_ids) > 0 )
-            {
+        //     if ( is_array($data) AND count($include_user_ids) > 0 )
+        //     {
                 
-                if ( $ignore_last_row === TRUE )
-                {
-                    $last_row = array_pop($data);//ARSP EDIT --> THIS FUNCTION USE TO REMOVE THE LAST ELEMENT OF THEAT ARRAY
-                }               
+        //         if ( $ignore_last_row === TRUE )
+        //         {
+        //             $last_row = array_pop($data);//ARSP EDIT --> THIS FUNCTION USE TO REMOVE THE LAST ELEMENT OF THEAT ARRAY
+        //         }               
 
               
-                $_SESSION['header_data'] = array( 
-                                                  'image_path'   => $current_company->getLogoFileName(),
-                                                  'company_name' => $current_company->getName(),
-                                                  'address1'     => $current_company->getAddress1(),
-                                                  'address2'     => $current_company->getAddress2(),
-                                                  'city'         => $current_company->getCity(),
-                                                  'province'     => $current_company->getProvince(),
-                                                  'postal_code'  => $current_company->getPostalCode(),
-                                                  //'start_date'   => $transactionstart_date,    
-                                                  //'end_date'     => $transaction_end_date,
-                                                  'payperiod_string'     => $payperiod_string                    
-                                                );
+        //         $_SESSION['header_data'] = array( 
+        //                                           'image_path'   => $current_company->getLogoFileName(),
+        //                                           'company_name' => $current_company->getName(),
+        //                                           'address1'     => $current_company->getAddress1(),
+        //                                           'address2'     => $current_company->getAddress2(),
+        //                                           'city'         => $current_company->getCity(),
+        //                                           'province'     => $current_company->getProvince(),
+        //                                           'postal_code'  => $current_company->getPostalCode(),
+        //                                           //'start_date'   => $transactionstart_date,    
+        //                                           //'end_date'     => $transaction_end_date,
+        //                                           'payperiod_string'     => $payperiod_string                    
+        //                                         );
 
                 
-                $pdf = new PayStubBankTransfer();	
+        //         $pdf = new PayStubBankTransfer();	
                 
 									
                 
-                // set default header data
-                $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+        //         // set default header data
+        //         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
 
-                // set header and footer fonts
-                $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-                $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        //         // set header and footer fonts
+        //         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        //         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-                // set default monospaced font
-                $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        //         // set default monospaced font
+        //         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-                // set margins
-                //$pdf->SetMargins(PDF_MARGIN_LEFT, 44, PDF_MARGIN_RIGHT);
-                $pdf->SetMargins(10, 49, 2);
-                $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-                $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //         // set margins
+        //         //$pdf->SetMargins(PDF_MARGIN_LEFT, 44, PDF_MARGIN_RIGHT);
+        //         $pdf->SetMargins(10, 49, 2);
+        //         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        //         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-                // set auto page breaks
-                $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        //         // set auto page breaks
+        //         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-                // set image scale factor
-                $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        //         // set image scale factor
+        //         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-                // add a page
-                $pdf->AddPage('p','mm','A4');
+        //         // add a page
+        //         $pdf->AddPage('p','mm','A4');
                 
-                //Table border
-                $pdf->setLineWidth( 0.20 );
+        //         //Table border
+        //         $pdf->setLineWidth( 0.20 );
                 
-                //set table position
-                $adjust_x = 10;		
+        //         //set table position
+        //         $adjust_x = 10;		
+        //         $adjust_y = 10;		
                 
-                $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(49, $adjust_y) );
+        //         $pdf->setXY( Misc::AdjustXY(0, $adjust_x), Misc::AdjustXY(49, $adjust_y) );
 				           
                 
-                //TABLE CODE HERE
+        //         //TABLE CODE HERE
                         
-                //Header
-                // create some HTML content
-                $pdf->SetFont('times','',8);                
+        //         //Header
+        //         // create some HTML content
+        //         $pdf->SetFont('times','',8);                
                 
-                $html = '<table border="1" cellspacing="0" cellpadding="2" width="108%">';  
+        //         $html = '<table border="1" cellspacing="0" cellpadding="2" width="108%">';  
                 
             
-                $ulf = new UserListFactory();                     
-                $balf = new BankAccountListFactory();        
+        //         $ulf = new UserListFactory();                     
+        //         $balf = new BankAccountListFactory();        
                 
       
-                $i=1;   
-                foreach( $data as $row ) 
-                {                                   
-                    $user_id = $row['user_id']; 
-                    $full_name =  $row['full_name'];
-                    $employee_number = $row['employee_number'];
+        //         $i=1; 
+        //         foreach( $data as $row ) 
+        //         {                                   
+        //             $user_id = $row['user_id']; 
+        //             $full_name =  $row['full_name'];
+        //             $employee_number = $row['employee_number'];
+                     
+        //             $net_pay = $row[3]; //in this case $row['13'] is a Net Pay (change 2025/08/28)
+        //             // $net_pay = $row['13']; //in this case $row['13'] is a Net Pay
+        //             $bank_obj = $balf->getByUserId($user_id)->getCurrent();//get bank object  
                     
-                    $net_pay = $row['13']; //in this case $row['13'] is a Net Pay
-                    $bank_obj = $balf->getByUserId($user_id)->getCurrent();//get bank object  
-                    
-                    $bank_code = $bank_obj->getTransit();
-                    $bank_name = $bank_obj->getBankName();
-                    $bank_branch = $bank_obj->getBankBranch();
-                    $bank_account_no = $bank_obj->getAccount();                    
+        //             $bank_code = $bank_obj->getTransit();
+        //             $bank_name = $bank_obj->getBankName();
+        //             $bank_branch = $bank_obj->getBankBranch();
+        //             $bank_account_no = $bank_obj->getAccount();                    
                                         
                     
-                    if($i % 2 == 0)
-                    {
-                        $html=  $html.'<tr style ="text-align:" bgcolor="#EEEEEE" nobr="true">';//nobr="true" use to No breake the every page end of table row
-                    }
-                    else
-                    {
-                        $html=  $html.'<tr style ="text-align:" bgcolor="WHITE" nobr="true">';//nobr="true" use to No breake the every page end of table row
-                    }
+        //             if($i % 2 == 0)
+        //             {
+        //                 $html=  $html.'<tr style ="text-align:center" bgcolor="#EEEEEE" nobr="true">';//nobr="true" use to No breake the every page end of table row
+        //             }
+        //             else
+        //             {
+        //                 $html=  $html.'<tr style ="text-align:center" bgcolor="WHITE" nobr="true">';//nobr="true" use to No breake the every page end of table row
+        //             }
                     
                     
-                    $html =  $html.'
-                                    <td width="4%" align="center">'.$i.'</td>
-                                    <td width="8%"  align="left">'.$bank_code.'</td>
-                                    <td width="18%" align="left">'.$bank_name.'</td>
-                                    <td             align="left">'.$bank_branch.'</td>
-                                    <td width="13%" align="left">'.$bank_account_no.'</td>
-                                    <td width="6%" align="center">'.$employee_number.'</td>
-                                    <td width="20%" align="left">'.$full_name.'</td>
-                                    <td width="10%" align="right">'.number_format($net_pay, 2).'</td>     
-                             </tr>';  
+        //             $html =  $html.'
+        //                             <td width="4%" align="center">'.$i.'</td>
+        //                             <td width="8%"  align="left">'.$bank_code.'</td>
+        //                             <td width="18%" align="left">'.$bank_name.'</td>
+        //                             <td             align="left">'.$bank_branch.'</td>
+        //                             <td width="13%" align="left">'.$bank_account_no.'</td>
+        //                             <td width="6%" align="center">'.$employee_number.'</td>
+        //                             <td width="20%" align="left">'.$full_name.'</td>
+        //                             <td width="10%" align="right">'.number_format($net_pay, 2).'</td>     
+        //                      </tr>';  
                    
                     
-                    $i++;
+        //             $i++;
                      
-                }
-                
-                $html=  $html.'</table>';  				
+        //         }
+        //         $html=  $html.'</table>';  				
 				
-         
-                // output the HTML content
-                $pdf->writeHTML($html, true, false, true, false, '');
+        //         // output the HTML content
+		// 		$pdf->writeHTML($html, true, false, true, false, '');
                         
                 
                         
-                //Close and output PDF document
-		$output = $pdf->Output('','S');
+        //         //Close and output PDF document
+		// 		$output = $pdf->Output('','S');
+		// 		unset($_SESSION['header_data']);
+
+                
+		// 			if ( isset($output) )
+		// 			{
+		// 						return $output;				
+		// 			}
+							
+		// 			return FALSE;             
+		// 				}
+
+        // }
+
+	function BankTransfer($data, $include_user_ids, $current_user, $current_company, $payperiod_string)
+	{
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ALL);
+
+		$ignore_last_row = TRUE;
+		$include_header = TRUE;
+		$eol = "\n";
+
+		if (!is_array($data) || count($include_user_ids) === 0) {
+			error_log("Invalid input: data is not an array or include_user_ids is empty");
+			return FALSE;
+		}
+
+		// Log data columns to identify pay period key
+		$columns = array_keys($data[0] ?? []);
+		error_log("Data columns: " . print_r($columns, true));
+
+		if ($ignore_last_row === TRUE) {
+			$last_row = array_pop($data);
+		}
+
+		$_SESSION['header_data'] = [
+			'image_path' => file_exists($current_company->getLogoFileName()) ? $current_company->getLogoFileName() : '',
+			'company_name' => $current_company->getName(),
+			'address1' => $current_company->getAddress1(),
+			'address2' => $current_company->getAddress2(),
+			'city' => $current_company->getCity(),
+			'province' => $current_company->getProvince(),
+			'postal_code' => $current_company->getPostalCode(),
+			'payperiod_string' => $payperiod_string
+		];
+
+		$pdf = new PayStubBankTransfer();
+		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+		$pdf->setHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
+		$pdf->setFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		$pdf->SetMargins(10, 20, 10);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+		$pdf->AddPage('P', 'mm', 'A4');
+		$pdf->setLineWidth(0.20);
+		$pdf->setXY(Misc::AdjustXY(0, 10), Misc::AdjustXY(49, 10));
+
+		$pdf->SetFont('times', '', 8);
+		$html = '<table border="1" cellspacing="0" cellpadding="2" width="100%">';
+
+		$ulf = new UserListFactory();
+		$balf = new BankAccountListFactory();
+		$i = 1;
+
+		foreach ($data as $row) {
+			if (!isset($row['user_id'], $row['full_name'], $row['employee_number'], $row[3])) {
+				error_log("Invalid row data: " . print_r($row, true));
+				continue;
+			}
+
+			$user_id = $row['user_id'];
+			$full_name = $row['full_name'];
+			$employee_number = $row['employee_number'];
+			$net_pay = is_numeric($row[3]) ? $row[3] : 0;
+
+			$bank_obj = $balf->getByUserId($user_id)->getCurrent();
+			if (!is_object($bank_obj)) {
+				error_log("Bank object not found for user_id: $user_id");
+				continue;
+			}
+
+			$bank_code = $bank_obj->getTransit() ?? 'N/A';
+			$bank_name = $bank_obj->getBankName() ?? 'N/A';
+			$bank_branch = $bank_obj->getBankBranch() ?? 'N/A';
+			$bank_account_no = $bank_obj->getAccount() ?? 'N/A';
+
+			$html .= '<tr style="text-align:center" bgcolor="' . ($i % 2 == 0 ? '#EEEEEE' : 'white') . '">';
+			$html .= '
+				<td width="4.5%" align="center">' . $i . '</td>
+				<td width="8.5%" align="left">' . htmlspecialchars($bank_code) . '</td>
+				<td width="19.5%" align="left">' . htmlspecialchars($bank_name) . '</td>
+				<td width="13.5%" align="left">' . htmlspecialchars($bank_branch) . '</td>
+				<td width="14%" align="left">' . htmlspecialchars($bank_account_no) . '</td>
+				<td width="6.5%" align="center">' . htmlspecialchars($employee_number) . '</td>
+				<td width="21.5%" align="left">' . htmlspecialchars($full_name) . '</td>
+				<td width="11%" align="right">' . number_format($net_pay, 2) . '</td>
+			</tr>';
+			$i++;
+		}
+
+		$html .= '</table>';
+		$pdf->writeHTML($html, true, false, true, false, '');
+
+		$output = $pdf->Output('', 'S');
 		unset($_SESSION['header_data']);
 
-                
-		if ( isset($output) )
-		{
-                    return $output;				
+		if (isset($output)) {
+			header('Content-Type: application/pdf');
+			header('Content-Disposition: inline; filename="BankTransferSummary.pdf"');
+			echo $output;
+			exit;
 		}
-				
-		return FALSE;             
-            }
 
-        }
+		return FALSE;
+	}
 
 		
 	function addLog( $log_action ) {
