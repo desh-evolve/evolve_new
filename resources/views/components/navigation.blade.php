@@ -50,7 +50,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#attendance" data-bs-toggle="collapse" role="button"
                         aria-expanded="false">
-                        <i class="ri-bar-chart-line"></i> <span>Attendance</span>
+                        <i class="ri-calendar-check-fill"></i> <span>Attendance</span>
                     </a>
                     <div class="collapse menu-dropdown" id="attendance">
                         <ul class="nav nav-sm flex-column">
@@ -117,7 +117,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#schedule" data-bs-toggle="collapse" role="button"
                         aria-expanded="false">
-                        <i class="ri-bar-chart-line"></i> <span>Schedule</span>
+                        <i class="ri-calendar-line"></i> <span>Schedule</span>
                     </a>
                     <div class="collapse menu-dropdown" id="schedule">
                         <ul class="nav nav-sm flex-column">
@@ -210,7 +210,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#company" data-bs-toggle="collapse" role="button"
                         aria-expanded="false">
-                        <i class="ri-bar-chart-line"></i> <span>Company</span>
+                        <i class="ri-building-line"></i> <span>Company</span>
                     </a>
                     <div class="collapse menu-dropdown" id="company">
                         <ul class="nav nav-sm flex-column">
@@ -307,7 +307,7 @@
             <a class="nav-link menu-link {{ $checkPolicylNav ? 'active' : '' }}" href="#policy"
                 data-bs-toggle="collapse" role="button" aria-expanded="{{ $checkPolicylNav ? 'true' : 'false' }}"
                 aria-controls="policy">
-                <i class="ri-file-list-line"></i> <span>Policies</span>
+                <i class="ri-file-text-line"></i> <span>Policies</span>
             </a>
             <div class="collapse menu-dropdown" id="policy">
                 <ul class="nav nav-sm flex-column">
@@ -389,7 +389,7 @@
             <a class="nav-link menu-link {{ $checkPayrollNav ? 'active' : '' }}" href="#payroll"
                 data-bs-toggle="collapse" role="button" aria-expanded="{{ $checkPayrollNav ? 'true' : 'false' }}"
                 aria-controls="payroll">
-                <i class="ri-bar-chart-line"></i> <span>Payroll</span>
+                <i class="ri-wallet-line"></i> <span>Payroll</span>
             </a>
             <div class="collapse menu-dropdown" id="payroll">
                 <ul class="nav nav-sm flex-column">
@@ -442,7 +442,7 @@
         <li class="nav-item">
             <a class="nav-link menu-link" href="#employee" data-bs-toggle="collapse" role="button"
                 aria-expanded="false">
-                <i class="ri-bar-chart-line"></i> <span>Employees</span>
+                <i class="ri-group-line"></i> <span>Employees</span>
             </a>
             <div class="collapse menu-dropdown" id="employee">
                 <ul class="nav nav-sm flex-column">
@@ -490,7 +490,7 @@
             <a class="nav-link menu-link {{ $checkAdminNav ? 'active' : '' }}" href="#admin"
                 data-bs-toggle="collapse" role="button" aria-expanded="{{ $checkAdminNav ? 'true' : 'false' }}"
                 aria-controls="admin">
-                <i class="ri-admin-line"></i> <span>Admin</span>
+                <i class="ri-shield-line"></i> <span>Admin</span>
             </a>
             <div class="collapse menu-dropdown" id="admin">
                 <ul class="nav nav-sm flex-column">

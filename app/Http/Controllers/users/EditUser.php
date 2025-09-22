@@ -636,18 +636,18 @@ class EditUser extends Controller
                     $uf->setTerminationNote( $user_data['termination_note'] );
                 }
 
-                        //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['immediate_contact_person']) ) {
                     $uf->setImmediateContactPerson($user_data['immediate_contact_person'] );
                 }
 
 
-                        //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['immediate_contact_no']) ) {
                     $uf->setImmediateContactNo( $user_data['immediate_contact_no'] );
                 }
 
-                        //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
+                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 if ( isset($user_data['bond_period']) ) {
                     $uf->setBondPeriod($user_data['bond_period'] );
                 }

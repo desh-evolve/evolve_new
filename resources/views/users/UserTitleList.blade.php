@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="card-body">
-                
+
                     <table class="table table-bordered">
                         <thead class="bg-primary text-white">
                             <tr>
@@ -34,11 +34,11 @@
                             <tbody>
                                 @foreach($titles as $titleItem)
                                     @php
-                                        $row_class = (isset($titleItem['deleted']) && $titleItem['deleted']) 
-                                            ? 'table-danger' 
+                                        $row_class = (isset($titleItem['deleted']) && $titleItem['deleted'])
+                                            ? 'table-danger'
                                             : ($loop->iteration % 2 == 0 ? 'table-light' : 'table-white');
                                     @endphp
-                                    
+
                                     <tr class="{{ $row_class }}">
                                         <td>
                                             {{ $loop->iteration }}
@@ -49,7 +49,7 @@
                                             <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('user_title.add', ['id' => $titleItem['id'] ?? '']) }}'">
                                                 {{ __('Edit') }}
                                             </button>
-                                        
+                                 
                                             <!-- Delete Button -->
                                             <button type="button" class="btn btn-danger btn-sm" onclick="deleteUserTitle({{ $titleItem['id'] }})">
                                                 {{ __('Delete') }}
@@ -59,7 +59,7 @@
                                 @endforeach
                             </tbody>
 
-                            
+
                         </table>
 
                        </form>
@@ -84,7 +84,7 @@
                         });
 
                         const data = await response.json();
-                        
+
                         if (response.ok) {
                             alert(data.message || '{{ __("Title deleted successfully") }}');
                             window.location.reload();
