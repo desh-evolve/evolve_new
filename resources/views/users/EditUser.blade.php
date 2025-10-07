@@ -727,7 +727,7 @@
                                         @else
                                             {{$user_data['province_options'][$user_data['province'] ?? '']}}
                                             <input type="hidden" name="user_data[province]" value="{{$user_data['province'] ?? ''}}">
-                                            
+
                                             {{-- {{$user_data['province_options'][$user_data['country']][$user_data['province'] ?? ''] ?? ''}} --}}
                                             {{-- <input type="hidden" name="user_data[province]" value="{{$user_data['province'] ?? ''}}"> --}}
                                         @endif
@@ -2139,14 +2139,11 @@
         }
 
 
-
         window.onload = function() {
             formChangeDetect();
             getBranchShortId();
             getNextHighestEmployeeNumberByBranch();
         }
 
-
     </script>
-
 </x-app-layout>

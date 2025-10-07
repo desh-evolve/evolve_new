@@ -13,12 +13,10 @@
 
                     <div class="justify-content-md-end">
                         <div class="d-flex justify-content-end">
-                            <a type="button" href=" "
+                            <a type="button" href=""
                                 class="btn btn-primary waves-effect waves-light material-shadow-none me-1"
                                 id="add_new_btn">New Job History <i class="ri-add-line"></i></a>
                         </div>
-
-
                     </div>
                 </div>
 

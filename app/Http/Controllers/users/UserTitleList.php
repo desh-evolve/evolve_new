@@ -95,12 +95,12 @@ class UserTitleList extends Controller
 
 			foreach ($titles->rs as $title_obj) {
 				$titles->data = (array)$title_obj; // added bcz currency data is null and it gives an error
-				
+
 				$titles->setDeleted(true); // Set deleted flag to true
-	
+
 				if ($titles->isValid()) {
 					$res = $titles->Save();
-					
+
 					if($res){
 						return response()->json(['success' => 'Titles deleted successfully.']);
 					}else{

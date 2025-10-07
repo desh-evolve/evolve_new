@@ -138,53 +138,7 @@
     </div>
 
     <script>
-        // $(document).ready(function() {
-        //     function initTable() {
-        //         new DataTable("#userlist_table", {
-        //             scrollX: !0,
-        //             dom: "Bfrtip",
-        //             buttons: ["copy", "csv", "excel", "print", "pdf"],
-        //             //fixedHeader: !0
-        //         })
-        //     }
-
-        //     initTable();
-
-        //     // Added: Update Functions column buttons based on type
-        //     $('.function-type').on('click', function() {
-        //         var type = $(this).data('type');
-        //         $('.function-type').removeClass('active').removeClass('btn-light').addClass('btn-primary');
-        //         $(this).addClass('active').addClass('btn-light');
-
-        //         $('#userlist_table tbody tr').each(function() {
-        //             var $row = $(this);
-        //             var userId = $row.data('user-id');
-        //             var $functionCell = $row.find('.function-buttons');
-
-        //             if (type === 'employee') {
-        //                 $functionCell.html(`
-        //                     <a class="btn btn-secondary btn-sm" href="/admin/userlist/add?id=${userId}">Edit</a>
-        //                     <a class="btn btn-info btn-sm" href="/user/preference?user_id=${userId}">Prefs</a>
-        //                     <a class="btn btn-warning btn-sm" href="/user/jobhistory?user_id=${userId}">Job History</a>
-        //                     <button type="button" class="btn btn-danger btn-sm" onclick="commonDeleteFunction('/admin/userlist/delete/${userId}', 'User', this)">Delete</button>
-        //                 `);
-        //             } else if (type === 'payroll') {
-        //                 $functionCell.html(`
-        //                     <a class="btn btn-primary btn-sm" href="/user/wage?user_id=${userId}">Wage</a>
-        //                     <a class="btn btn-success btn-sm" href="/user/tax?user_id=${userId}">Tax</a>
-        //                     <a class="btn btn-info btn-sm" href="/payroll/pay_stub_amendment?filter_user_id=${userId}">PS Amendments</a>
-        //                     <a class="btn btn-warning btn-sm" href="/bank_account/user/${userId}">Bank</a>
-        //                 `);
-        //             }
-        //         });
-        //     });
-
-        //     // Added: Initialize with Employee buttons
-        //     $('.function-type[data-type="employee"]').trigger('click');
-        // });
-
-
-        // new
+        
         $(document).ready(function() {
             let currentMode = 'employee'; // default
 

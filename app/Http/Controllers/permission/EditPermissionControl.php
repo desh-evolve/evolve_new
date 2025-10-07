@@ -95,7 +95,7 @@ class EditPermissionControl extends Controller
 				$pcf->setName($data['name']);
 				$pcf->setDescription($data['description']);
 				$pcf->setLevel($data['level']);
-				
+
 				//Check to make sure the currently logged in user is NEVER in the unassigned
 				//user list. This prevents an administrator from accidently un-assigning themselves
 				//from a group and losing all permissions.
@@ -178,13 +178,13 @@ class EditPermissionControl extends Controller
 			default:
 				$pf = new PermissionFactory();
 				$plf = new PermissionListFactory();
-				
+
 				if ( !empty($id) ) {
 
 					$pclf = new PermissionControlListFactory();
 
 					$pclf->getByIdAndCompanyId($id, $current_company->getId() );
-					
+
 					foreach ($pclf->rs as $pc_obj) {
 						$pclf->data = (array)$pc_obj;
 						$pc_obj = $pclf;
@@ -307,7 +307,7 @@ class EditPermissionControl extends Controller
 		}
 
 		$viewData['pcf'] = $pcf;
-		
+
 		return view('permission/EditPermissionControl', $viewData);
 	}
 }

@@ -41,12 +41,12 @@
 
 
 /*******************************************************************************
- * 
+ *
  * ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
  * I COPIED THIS CODE FROM PATH:- evolvepayroll\interface\users\EditUserWage.php
  * THIS CODE ADDED BY ME
  * CREATE USERES JOB HISTORY
- * 
+ *
  *******************************************************************************/
 
 
@@ -76,7 +76,7 @@ extract	(FormVariables::GetVariables(
 												'user_date_update_data'
 												) ) );
 
-        
+
 
 //Get Permission Hierarchy Children first, as this can be used for viewing, or editing.
 $hlf = new HierarchyListFactory();
@@ -100,7 +100,7 @@ switch ($action) {
 			if ( $permission->Check('wage','edit')
 					OR ( $permission->Check('wage','edit_own') AND $is_owner === TRUE )
 					OR ( $permission->Check('wage','edit_child') AND $is_child === TRUE ) ) {
-                            
+
                                 $ujf->setUser($user_obj->getID());
                                 $ujf->setYearDate($user_date_update_data['year_date']);
                                 $ujf->setEpfNo($user_date_update_data['epf_no']);
@@ -120,26 +120,26 @@ switch ($action) {
                                 $ujf->setSpouseName($user_date_update_data['spouse_name']);
                                 $ujf->setMaritialStatus($user_date_update_data['maritial_status']);
                                 $ujf->setContactSpouse($user_date_update_data['contact_spouse']);
-                             
-                                //Children three fields concatenate by __ Double Underscore 
+
+                                //Children three fields concatenate by __ Double Underscore
                                 //child1
                                 $child1_str = $user_date_update_data['child1']['name'].'__'.$user_date_update_data['child1']['gender'].'__'.$user_date_update_data['child1']['dob'];
                                 $ujf->setChild($child1_str,'1');
-                             
+
                                 //child2
                                 $child1_str = $user_date_update_data['child2']['name'].'__'.$user_date_update_data['child2']['gender'].'__'.$user_date_update_data['child2']['dob'];
                                 $ujf->setChild($child1_str,'2');
-                             
+
                                 //child3
                                 $child1_str = $user_date_update_data['child3']['name'].'__'.$user_date_update_data['child3']['gender'].'__'.$user_date_update_data['child3']['dob'];
                                 $ujf->setChild($child1_str,'3');
-                             
+
                                 //child4
                                 $child1_str = $user_date_update_data['child4']['name'].'__'.$user_date_update_data['child4']['gender'].'__'.$user_date_update_data['child4']['dob'];
                                 $ujf->setChild($child1_str,'4');
-                                
+
 //                                    echo '<pre>';  print_r($ujf); echo '<pre>'; die;
-				if ( $ujf->isValid() ) {                               
+				if ( $ujf->isValid() ) {
 
 					$ujf->Save();
 
@@ -155,9 +155,9 @@ switch ($action) {
 	default:
 		if ( isset($id) ) {
 			BreadCrumb::setCrumb($title);
-                        
+
                         $uwlf = new UserDateUpdateFormListFactory();
-                        
+
 			$uwlf->getByIdAndCompanyId($id, $current_company->getId() );
 
 			foreach ($uwlf as $wage) {
@@ -175,7 +175,7 @@ switch ($action) {
 							OR ( $permission->Check('wage','edit_child') AND $is_child === TRUE ) ) {
 
 						$user_id = $wage->getUser();
-                                                
+
                                                 //child1 Data
                                                  $child1_arr = explode('__',$wage->getChild('1'));
                                                  $child2_arr = explode('__',$wage->getChild('2'));
@@ -184,16 +184,16 @@ switch ($action) {
 //                                                                             echo '<pre>'; print_r($child1_arr); echo '<pre>'; die;
 
 						//Debug::Text('Labor Burden Hourly Rate: '. $wage->getLaborBurdenHourlyRate( $wage->getHourlyRate() ), __FILE__, __LINE__, __METHOD__,10);
-						$user_date_update_data = array(       
-                                                    
+						$user_date_update_data = array(
+
 											'id' => $wage->getId(),
-											'user_id' => $wage->getUser(),                                                                                         
+											'user_id' => $wage->getUser(),
 											'year_date' => $wage->getYearDate(),
 											'epf_no' => $wage->getEpfNo(),
 											'full_name' => $wage->getFullName(),
-                                                                                        'title_id' => $wage->getTitle(),                                                                                               
-                                                                                        'nic' => $wage->getNic(),                                                                                               
-                                                                                        'contact_home' => $wage->getContactHome(),                                                                                               
+                                                                                        'title_id' => $wage->getTitle(),
+                                                                                        'nic' => $wage->getNic(),
+                                                                                        'contact_home' => $wage->getContactHome(),
 											'contact_mobile' => $wage->getContactMobile(),
 											'passport_no' => $wage->getPassportNo(),
 											'driving_licence_no' => $wage->getDrivingLicenseNo(),
@@ -226,41 +226,41 @@ switch ($action) {
 				}
 			}
 		} else {
-			if ( $action != 'submit' ) {                        
-                            
+			if ( $action != 'submit' ) {
+
                             $ulf = new UserListFactory();
-                            $temp_default_branch_id  = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent()->getDefaultBranch();                            
+                            $temp_default_branch_id  = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent()->getDefaultBranch();
                             $temp_default_department_id  = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent()->getDefaultDepartment();
                             $temp_title_id  = $ulf->getByIdAndCompanyId( $user_id, $current_company->getId() )->getCurrent()->getTitle();
-                            
-                            
+
+
                             //ARSP NOTE --> I MODIFIED THISC CODE
                             $user_date_update_data = array( 'first_worked_date' => TTDate::getTime(), 'default_branch_id' => $temp_default_branch_id, 'default_department_id' => $temp_default_department_id, 'title_id' => $temp_title_id );
 			}
 		}
-                
+
 //                var_dump($user_date_update_data); die;
-                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
+                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
 		//Select box options;
 		$blf = new BranchListFactory();
 		$user_date_update_data['branch_options'] = $blf->getByCompanyIdArray( $current_company->getId() );
-                
-                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
+
+                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 //Select box options;
 		$dlf = new DepartmentListFactory();
-		$user_date_update_data['department_options'] = $dlf->getByCompanyIdArray( $current_company->getId() );  
-                
-                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON 
+		$user_date_update_data['department_options'] = $dlf->getByCompanyIdArray( $current_company->getId() );
+
+                //ARSP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON
                 //Select box options;
 		$utlf = new UserTitleListFactory();
 		$user_date_update_data['title_options'] = $utlf->getByCompanyIdArray( $current_company->getId() );
 
-                
+
 		$ulf = new UserListFactory();
 		$ulf->getByIdAndCompanyId( $user_id, $current_company->getId() );
 		$user_data = $ulf->getCurrent();
 
-                
+
 		//Get pay period boundary dates for this user.
 		//Include user hire date in the list.
 		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = _('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
