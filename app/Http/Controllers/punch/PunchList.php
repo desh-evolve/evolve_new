@@ -301,7 +301,7 @@ class PunchList extends Controller
                             );
 
                 }
-                $viewData['rows'] = $rows;
+                $viewData['rows'] = $rows ?? [];
 
                 $all_array_option = array('-1' => '-- Any --');
 
