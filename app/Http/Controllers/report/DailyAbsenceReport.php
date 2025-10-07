@@ -539,7 +539,6 @@ class DailyAbsenceReport extends Controller
 						$pptsvlf = new PayPeriodTimeSheetVerifyListFactory();
 						$pptsvlf->getByPayPeriodIdAndCompanyId($filter_data['pay_period_ids'][0], $current_company->getId());
 						if ($pptsvlf->getRecordCount() > 0) {
-							dd($pptsvlf);
 							foreach ($pptsvlf as $pptsv_obj) {
 								$verified_time_sheets[$pptsv_obj->getUser()][$pptsv_obj->getPayPeriod()] = array(
 									'status_id' => $pptsv_obj->getStatus(),

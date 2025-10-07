@@ -200,6 +200,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('report.epf_c_form') }}"
+                                    class="nav-link {{ request()->routeIs('report.epf_c_form') ? 'active' : '' }}">EPF 'C' Form
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('report.bank_transfer_summary') }}"
                                     class="nav-link {{ request()->routeIs('report.bank_transfer_summary') ? 'active' : '' }}">Bank Transfer Summary
                                 </a>
@@ -213,6 +218,11 @@
                             <li class="nav-item">
                                 <a href="{{ route('report.payroll_report') }}"
                                     class="nav-link {{ request()->routeIs('report.payroll_report') ? 'active' : '' }}">Payroll Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.audit_trail_report') }}"
+                                    class="nav-link {{ request()->routeIs('report.audit_trail_report') ? 'active' : '' }}">Audit Trail Report
                                 </a>
                             </li>
                             {{-- <li class="nav-item"><a href="#" class="nav-link">Employee Report</a></li> --}}

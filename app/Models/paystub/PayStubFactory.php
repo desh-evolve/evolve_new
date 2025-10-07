@@ -12730,14 +12730,11 @@ class PayStubFactory extends Factory {
                 }               
 
                 
-                
-                
                 $_SESSION['header_data'] = array();// first we have to create session array then we can add new element into the session array
                 if($branch_id_only != "" || $branch_id_only != NULL)
                 {
                     $blf = new BranchListFactory();
                     $blf->getById($branch_id_only);
-
                     foreach ($blf->rs as $temp)
                     {
 						$blf->data = (array)$temp;
@@ -12787,36 +12784,51 @@ class PayStubFactory extends Factory {
                 
                 $ulf = new UserListFactory();     
                 $contributions = 0.0;  
-                foreach( $data as $row1 ) 
-                {
-                    $employer1= 0.0;
-                    $employee1 = 0.0;
-                    $total1 = 0.0;                    
+//                 foreach( $data as $row1 ) 
+//                 {
+//                     $employer1= 0.0;
+//                     $employee1 = 0.0;
+//                     $total1 = 0.0;                    
                     
-                    $user_id = $row1['user_id']; 
-//                    $regular_salary = $row1['1']; //in this case $row['1'] is a regular time earning value
-                    $regular_salary = number_format(doubleval($row1[49]) - doubleval($row1[45]),2,'.',''); //in this case $row['1'] is a regular time earning value
-                    $user_obj = $ulf->getById( $user_id )->getCurrent();//get user object  
+//                     $user_id = $row1['user_id']; 
+// //                    $regular_salary = $row1['1']; //in this case $row['1'] is a regular time earning value
+//                     $regular_salary = number_format(doubleval($row1[49]) - doubleval($row1[45]),2,'.',''); //in this case $row['1'] is a regular time earning value
+//                     $user_obj = $ulf->getById( $user_id )->getCurrent();//get user object  
                      
-                    $employer1= doubleval($row1[10]); //calculate 12 persentage of regular earning
-                    $employee1 = doubleval($row1[9]);//calculate 8 persentage of regular earning
-//             
-                    //$total = number_format(($employer + $employee ), 2);
-                    $total1 = (float)$employer1 + (float)$employee1;
-                    $contributions = (float)$contributions + (float)$total1;
+//                     $employer1= doubleval($row1[10]); //calculate 12 persentage of regular earning
+//                     $employee1 = doubleval($row1[9]);//calculate 8 persentage of regular earning
+// //             
+//                     //$total = number_format(($employer + $employee ), 2);
+//                     $total1 = (float)$employer1 + (float)$employee1;
+//                     $contributions = (float)$contributions + (float)$total1;
                      
-                } 
+//                 } 
+				foreach ($data as $row1) {
+					$employer1 = 0.0;
+					$employee1 = 0.0;
+					$total1 = 0.0;
+
+					$user_id = $row1['user_id'];
+					$regular_salary = 0.0;
+
+					// Safely calculate regular_salary
+					if (isset($row1[49]) && isset($row1[45]) && is_numeric($row1[49]) && is_numeric($row1[45])) {
+						$regular_salary = number_format(doubleval($row1[49]) - doubleval($row1[45]), 2, '.', '');
+					} else {
+						error_log("Missing or invalid keys 49 or 45 in row1: " . print_r($row1, true));
+					}
+
+					$user_obj = $ulf->getById($user_id)->getCurrent(); // Get user object
+
+					$employer1 = isset($row1[10]) && is_numeric($row1[10]) ? doubleval($row1[10]) : 0.0; // Employer contribution
+					$employee1 = isset($row1[9]) && is_numeric($row1[9]) ? doubleval($row1[9]) : 0.0; // Employee contribution
+
+					$total1 = (float)$employer1 + (float)$employee1;
+					$contributions = (float)$contributions + (float)$total1;
+				}
                 array_push($_SESSION['header_data'],number_format($contributions, 2));//ADD NEW ELEMENT INTO THE SESSION ARRAY.
 
-//--------------------------------- Get Contribution values --------------------  				
-				
-				
-				
-				
-				
-				
-				
-									
+//--------------------------------- Get Contribution values --------------------  	
                 
                 // set default header data
                 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -12848,7 +12860,7 @@ class PayStubFactory extends Factory {
                 
                 //set table position
                 $adjust_x = 9;		
-                
+                $adjust_y = 10;	
                 $pdf->setXY( Misc::AdjustXY(1, $adjust_x), Misc::AdjustXY(71.5, $adjust_y) );
 				           
                 
@@ -12867,59 +12879,120 @@ class PayStubFactory extends Factory {
                 $total_employer = 0.0;
                 $total_employee = 0.0;        
                 $i=1;   
-                foreach( $data as $row ) 
-                {
+//                 foreach( $data as $row ) 
+//                 {
                     
-                    $epf_membership_no = "";
-                    $nic = "";
-                    $employer= 0.0;
-                    $employee = 0.0;
-                    $total = 0.0;
+//                     $epf_membership_no = "";
+//                     $nic = "";
+//                     $employer= 0.0;
+//                     $employee = 0.0;
+//                     $total = 0.0;
                     
-                    $user_id = $row['user_id']; 
-                    $full_name =  $row['full_name'];
+//                     $user_id = $row['user_id']; 
+//                     $full_name =  $row['full_name'];
                     
-//                    $regular_salary = $row['1']; //in this case $row['1'] is a regular time earning value
-                    $regular_salary = number_format(doubleval($row[49]) - doubleval($row[45]),2,'.',''); //in this case $row['1'] is a regular time earning value
-                    $user_obj = $ulf->getById( $user_id )->getCurrent();//get user object  
-                    
-                    $employer= doubleval($row[10]); //calculate 12 persentage of regular earning
-                    $employee = doubleval($row[9]);//calculate 8 persentage of regular earning
-//                  
-                    $total_employer = (float)$total_employer + (float)$employer;
-                    $total_employee = (float)$total_employee + (float)$employee;
-                    
-                    
-                    //$total = number_format(($employer + $employee ), 2);
-                    $total = (float)$employer + (float)$employee;
-                    //$contributions = (float)$contributions + (float)$total;
-                    
-                    
-                    $epf_membership_no = $user_obj->getEmployeeNumber(); //get EPF REGISTRATION NO  
-                    $nic = $user_obj->getNic();//get NIC    
-                    
-                    if($i % 2 == 0)
-                    {
-                        $html=  $html.'<tr style ="text-align:" bgcolor="#EEEEEE" nobr="true">';//nobr="true" use to No breake the every page end of table row
-                    }
-                    else
-                    {
-                        $html=  $html.'<tr style ="text-align:" bgcolor="WHITE" nobr="true">';//nobr="true" use to No breake the every page end of table row
-                    }
+// //                    $regular_salary = $row['1']; //in this case $row['1'] is a regular time earning value
+//                     // $regular_salary = number_format(doubleval($row[49]) - doubleval($row[45]),2,'.',''); //in this case $row['1'] is a regular time earning value
+//                     $regular_salary = 0.0; // Default value
+// 					if (isset($row[3]) && isset($row[1]) && is_numeric($row[3]) && is_numeric($row[1])) {
+// 						$regular_salary = number_format(doubleval($row[3]) - doubleval($row[1]), 2, '.', '');
+// 					} else {
+// 						error_log("Missing or invalid regular_earning or deduction for user_id: " . ($row['user_id'] ?? 'unknown'));
+// 					}
+// 					$user_obj = $ulf->getById( $user_id )->getCurrent();//get user object  
+//                     // dd($row);
+//                     $employer= doubleval($row[10]); //calculate 12 persentage of regular earning
+//                     $employee = doubleval($row[9]);//calculate 8 persentage of regular earning
+// //                  
+//                     $total_employer = (float)$total_employer + (float)$employer;
+//                     $total_employee = (float)$total_employee + (float)$employee;
                     
                     
-                    $html =  $html.'
-                                    <td width= "28%" >'.$full_name.'</td>
-                                    <td width= "11%" align="center">'.$nic.'</td>
-                                    <td width= "7%" align="center">'.$epf_membership_no.'</td>
-                                    <td width= "14%" align="right">'.number_format($total, 2).'</td>
-                                    <td width= "12%" align="right">'.number_format($employer, 2).'</td>
-                                    <td width= "12%" align="right">'.number_format($employee, 2).'</td>
-                                    <td width= "15%" align="right">'.number_format($regular_salary, 2).'</td>
-                             </tr>';  
-                    $i++;
+//                     //$total = number_format(($employer + $employee ), 2);
+//                     $total = (float)$employer + (float)$employee;
+//                     //$contributions = (float)$contributions + (float)$total;
+                    
+                    
+//                     $epf_membership_no = $user_obj->getEmployeeNumber(); //get EPF REGISTRATION NO  
+//                     $nic = $user_obj->getNic();//get NIC    
+                    
+//                     if($i % 2 == 0)
+//                     {
+//                         $html=  $html.'<tr style ="text-align:" bgcolor="#EEEEEE" nobr="true">';//nobr="true" use to No breake the every page end of table row
+//                     }
+//                     else
+//                     {
+//                         $html=  $html.'<tr style ="text-align:" bgcolor="WHITE" nobr="true">';//nobr="true" use to No breake the every page end of table row
+//                     }
+                    
+                    
+//                     $html =  $html.'
+//                                     <td width= "28%" >'.$full_name.'</td>
+//                                     <td width= "11%" align="center">'.$nic.'</td>
+//                                     <td width= "7%" align="center">'.$epf_membership_no.'</td>
+//                                     <td width= "14%" align="right">'.number_format($total, 2).'</td>
+//                                     <td width= "12%" align="right">'.number_format($employer, 2).'</td>
+//                                     <td width= "12%" align="right">'.number_format($employee, 2).'</td>
+//                                     <td width= "15%" align="right">'.number_format($regular_salary, 2).'</td>
+//                              </tr>';  
+//                     $i++;
                      
-                }     
+//                 }     
+
+					foreach ($data as $row) 
+					{
+						$epf_membership_no = "";
+						$nic = "";
+						$employer = 0.0;
+						$employee = 0.0;
+						$total = 0.0;
+						
+						$user_id = $row['user_id']; 
+						$full_name = $row['full_name'];
+						
+						// Calculate regular salary (already in your code)
+						$regular_salary = 0.0; // Default value
+						if (isset($row[3]) && isset($row[1]) && is_numeric($row[3]) && is_numeric($row[1])) {
+							$regular_salary = number_format(doubleval($row[3]) - doubleval($row[1]), 2, '.', '');
+						} else {
+							error_log("Missing or invalid regular_earning or deduction for user_id: " . ($row['user_id'] ?? 'unknown'));
+						}
+						
+						// Calculate employer (12%) and employee (8%) contributions based on regular_salary
+						$employer = doubleval($regular_salary) * 0.12; // 12% of regular salary
+						$employee = doubleval($regular_salary) * 0.08; // 8% of regular salary
+						
+						// Calculate total contributions
+						$total = $employer + $employee;
+						
+						// Get user object
+						$user_obj = $ulf->getById($user_id)->getCurrent();
+						$epf_membership_no = $user_obj->getEmployeeNumber(); // Get EPF REGISTRATION NO  
+						$nic = $user_obj->getNic(); // Get NIC    
+						
+						// HTML table row styling
+						if ($i % 2 == 0) {
+							$html .= '<tr style="text-align:" bgcolor="#EEEEEE" nobr="true">';
+						} else {
+							$html .= '<tr style="text-align:" bgcolor="WHITE" nobr="true">';
+						}
+						
+						// HTML table row content
+						$html .= '
+							<td width="28%">' . $full_name . '</td>
+							<td width="11%" align="center">' . $nic . '</td>
+							<td width="7%" align="center">' . $epf_membership_no . '</td>
+							<td width="14%" align="right">' . number_format($total, 2) . '</td>
+							<td width="12%" align="right">' . number_format($employer, 2) . '</td>
+							<td width="12%" align="right">' . number_format($employee, 2) . '</td>
+							<td width="15%" align="right">' . number_format($regular_salary, 2) . '</td>
+						</tr>';  
+						$i++;
+						
+						// Update running totals
+						$total_employer = (float)$total_employer + (float)$employer;
+						$total_employee = (float)$total_employee + (float)$employee;
+					}
                                                         
 				//LAST ROW (TOTAL VALUES)
                 $html=  $html.'<tr style ="border-bottom: solid 3px black;">';
@@ -12935,11 +13008,6 @@ class PayStubFactory extends Factory {
                 
                 $html=  $html.'</table>';  				
 				
-				
-				
-				
-				 
-      
                         
                 // output the HTML content
                 $pdf->writeHTML($html, true, false, true, false, '');
