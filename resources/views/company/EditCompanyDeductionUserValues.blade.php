@@ -3,7 +3,7 @@
     <tr>
         <td colspan="2">
             <table width="100%" class="table table-bordered">
-                {{-- @if (isset($data['users']) && is_array($data['users']) && count($data['users']) > 0) --}}
+                @if (isset($data['users']) && is_array($data['users']) && count($data['users']) > 0)
                     @foreach ($data['users'] as $index => $row)
                         @if($loop->first)
                             <tr class="bg-primary text-white">
@@ -881,9 +881,9 @@
                             @endif
                         </tr>
                     @endforeach
-                {{-- @else
+                @else
                     <tr><td colspan="3">No user data available.</td></tr>
-                @endif --}}
+                @endif
 
                 <!-- ARSP EDIT -- ADD NEW CODE FOR PRIN THE TOTAL AMOUNT      -->
                 @if(isset($data['combined_calculation_id']) && $data['combined_calculation_id'] == 20)

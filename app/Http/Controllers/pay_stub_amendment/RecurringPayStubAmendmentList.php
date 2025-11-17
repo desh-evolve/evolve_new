@@ -71,7 +71,7 @@ class RecurringPayStubAmendmentList extends Controller
 
 		}
 
-		$viewData['recurring_pay_stub_amendments'] = $recurring_pay_stub_amendments;
+		$viewData['recurring_pay_stub_amendments'] = $recurring_pay_stub_amendments ?? [];
 
         return view('pay_stub_amendment/RecurringPayStubAmendmentList', $viewData);
 

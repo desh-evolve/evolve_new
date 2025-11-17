@@ -291,7 +291,7 @@ class EditUserDeduction extends Controller
 
 								$user_ids = $cd_obj->getUser();
 
-								Debug::Text('Assigned Users: '. count($user_ids), __FILE__, __LINE__, __METHOD__,10);
+								//Debug::Text('Assigned Users: '. count($user_ids), __FILE__, __LINE__, __METHOD__,10);
 								if ( is_array($user_ids) AND count($user_ids) > 0 ) {
 									//Get User deduction data for each user.
 									$udlf = new UserDeductionListFactory();
