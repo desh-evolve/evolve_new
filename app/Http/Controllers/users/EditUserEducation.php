@@ -40,7 +40,6 @@ class EditUserEducation extends Controller
 
     public function index($id = null)
     {
-
         $current_company = $this->currentCompany;
         $uef = new UserEducationFactory();
 
