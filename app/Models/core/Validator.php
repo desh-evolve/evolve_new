@@ -572,10 +572,26 @@ class Validator {
 				return FALSE;
 			}
 		}
-		Debug::Arr($this->errors, 'Errors', __FILE__, __LINE__, __METHOD__, $this->verbosity);
+		 Debug::Arr($this->errors, 'Errors', __FILE__, __LINE__, __METHOD__, $this->verbosity);
 
-		dd($this->errors);
-		return FALSE;
+			//  Convert all errors into a readable string
+			$errorMessages = "";
+			foreach ($this->errors as $key => $error) {
+				if (is_array($error)) {
+					// join array messages with comma or newline
+					$error = implode(", ", $error);
+				}
+				$errorMessages .= ucfirst($key) . ": " . $error . "\\n";
+			}
+
+			// Show popup & go back
+			echo "
+				<script>
+					alert('Validation Errors:\\n\\n{$errorMessages}');
+					window.history.back();
+				</script>
+			";
+			exit;
 	}
 
 	function resetErrors() {
