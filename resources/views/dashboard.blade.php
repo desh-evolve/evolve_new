@@ -32,7 +32,7 @@
                 <div class="col-xl-4">
                     <div class="card" style="height: 510px">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Employee Attendance 01</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Employee Attendance 000</h4>
                         </div>
                         <div class="card-body">
 
