@@ -86,13 +86,13 @@ class UserExceptionList extends Controller
 														) ) );
 
 		$columns = array(
-													'-1010-first_name' => _('First Name'),
-													'-1020-middle_name' => _('Middle Name'),
-													'-1030-last_name' => _('Last Name'),
-													'-1040-date_stamp' => _('Date'),
-													'-1050-severity' => _('Severity'),
-													'-1060-exception_policy_type' => _('Exception'),
-													'-1070-exception_policy_type_id' => _('Code'),
+													'-1010-first_name' => __('First Name'),
+													'-1020-middle_name' => __('Middle Name'),
+													'-1030-last_name' => __('Last Name'),
+													'-1040-date_stamp' => __('Date'),
+													'-1050-severity' => __('Severity'),
+													'-1060-exception_policy_type' => __('Exception'),
+													'-1070-exception_policy_type_id' => __('Code'),
 													);
 
 		if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
@@ -251,7 +251,7 @@ class UserExceptionList extends Controller
 
 				$viewData['rows'] = $rows;
 
-				$all_array_option = array('-1' => _('-- Any --'));
+				$all_array_option = array('-1' => __('-- Any --'));
 
 				$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array( 'permission_children_ids' => $filter_data['permission_children_ids'] ) );
 				$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

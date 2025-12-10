@@ -86,22 +86,22 @@ class EmployeeNopayCountReport extends Controller
 
         URLBuilder::setURL($_SERVER['SCRIPT_NAME'], ['filter_data' => $filter_data]);
         $static_columns = [
-            '-1000-date_stamp' => _('Date'),
+            '-1000-date_stamp' => __('Date'),
             '-1050-min_punch_time_stamp' => 'First In Punch',
             '-1060-max_punch_time_stamp' => 'Last Out Punch',
         ];
 
         $columns = [
-            '-1070-schedule_working' => _('Scheduled Time'),
-            '-1080-schedule_absence' => _('Scheduled Absence'),
-            '-1090-worked_time' => _('Worked Time'),
-            '-1100-actual_time' => _('Actual Time'),
-            '-1110-actual_time_diff' => _('Actual Time Difference'),
-            '-1120-actual_time_diff_wage' => _('Actual Time Difference Wage'),
-            '-1130-paid_time' => _('Paid Time'),
-            '-1140-regular_time' => _('Regular Time'),
-            '-1150-over_time' => _('Total Over Time'),
-            '-1160-absence_time' => _('Total Absence Time'),
+            '-1070-schedule_working' => __('Scheduled Time'),
+            '-1080-schedule_absence' => __('Scheduled Absence'),
+            '-1090-worked_time' => __('Worked Time'),
+            '-1100-actual_time' => __('Actual Time'),
+            '-1110-actual_time_diff' => __('Actual Time Difference'),
+            '-1120-actual_time_diff_wage' => __('Actual Time Difference Wage'),
+            '-1130-paid_time' => __('Paid Time'),
+            '-1140-regular_time' => __('Regular Time'),
+            '-1150-over_time' => __('Total Over Time'),
+            '-1160-absence_time' => __('Total Absence Time'),
         ];
 
         $columns = Misc::prependArray($static_columns, $columns);
@@ -455,15 +455,15 @@ class EmployeeNopayCountReport extends Controller
                                 $rows[$i]['verified_time_sheet_date'] = FALSE;
                                 if ($verified_time_sheets !== NULL && isset($verified_time_sheets[$user_id][$pay_period_id])) {
                                     if ($verified_time_sheets[$user_id][$pay_period_id]['status_id'] == 50) {
-                                        $rows[$i]['verified_time_sheet'] = _('Yes');
+                                        $rows[$i]['verified_time_sheet'] = __('Yes');
                                         $rows[$i]['verified_time_sheet_date'] = $verified_time_sheets[$user_id][$pay_period_id]['created_date'];
                                     } elseif (in_array($verified_time_sheets[$user_id][$pay_period_id]['status_id'], [30, 45])) {
-                                        $rows[$i]['verified_time_sheet'] = _('Pending');
+                                        $rows[$i]['verified_time_sheet'] = __('Pending');
                                     } else {
-                                        $rows[$i]['verified_time_sheet'] = _('Declined');
+                                        $rows[$i]['verified_time_sheet'] = __('Declined');
                                     }
                                 } else {
-                                    $rows[$i]['verified_time_sheet'] = _('No');
+                                    $rows[$i]['verified_time_sheet'] = __('No');
                                 }
 
                                 $x = 0;
@@ -539,17 +539,17 @@ class EmployeeNopayCountReport extends Controller
                         if (isset($rows) && isset($filter_columns)) {
                             if ($filter_data['export_type'] == 'csv') {
                                 $export_filter_columns = [
-                                    'first_name' => _('First Name'),
-                                    'last_name' => _('Last Name'),
-                                    'full_name' => _('Full Name'),
-                                    'employee_number' => _('Employee #'),
-                                    'province' => _('Province/State'),
-                                    'country' => _('Country'),
-                                    'group' => _('Group'),
-                                    'title' => _('Title'),
-                                    'default_branch' => _('Default Branch'),
-                                    'default_department' => _('Default Department'),
-                                    'pay_period' => _('Pay Period'),
+                                    'first_name' => __('First Name'),
+                                    'last_name' => __('Last Name'),
+                                    'full_name' => __('Full Name'),
+                                    'employee_number' => __('Employee #'),
+                                    'province' => __('Province/State'),
+                                    'country' => __('Country'),
+                                    'group' => __('Group'),
+                                    'title' => __('Title'),
+                                    'default_branch' => __('Default Branch'),
+                                    'default_department' => __('Default Department'),
+                                    'pay_period' => __('Pay Period'),
                                 ];
 
                                 $filter_columns = Misc::prependArray($export_filter_columns, $filter_columns);
@@ -683,7 +683,7 @@ class EmployeeNopayCountReport extends Controller
                 ], NULL);
 
                 $ulf = new UserListFactory();
-                $all_array_option = ['-1' => _('-- All --')];
+                $all_array_option = ['-1' => __('-- All --')];
 
                 $ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), ['permission_children_ids' => $permission_children_ids]);
                 $user_options = $ulf->getArrayByListFactory($ulf, FALSE, TRUE);
@@ -742,8 +742,8 @@ class EmployeeNopayCountReport extends Controller
                 $filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
                 $filter_data['export_type_options'] = Misc::prependArray([
-                    'EmployeeNapayCount' => _('Employee Nopay Count (PDF)'),
-                    'csv_format' => _('CSV (Excel)')
+                    'EmployeeNapayCount' => __('Employee Nopay Count (PDF)'),
+                    'csv_format' => __('CSV (Excel)')
                 ]);
 
                 $hidden_elements = Misc::prependArray([

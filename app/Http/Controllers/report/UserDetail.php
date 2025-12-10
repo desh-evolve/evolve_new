@@ -86,22 +86,22 @@ class UserDetail extends Controller
 
 
 		$columns = array(
-			'employee' => _('Employee Information'),
-			'wage' => _('Wage History'),
+			'employee' => __('Employee Information'),
+			'wage' => __('Wage History'),
 			//'schedule' => 'Schedule History',
-			'attendance' => _('Attendance History'),
-			'exception' => _('Exception History'),
+			'attendance' => __('Attendance History'),
+			'exception' => __('Exception History'),
 			//'accrual' => 'Accrual Balances',
 		);
 
 		$static_columns = array(
-			'-1000-full_name' => _('Full Name'),
-			'-1010-title' => _('Title'),
-			'-1020-province' => _('Province/State'),
-			'-1030-country' => _('Country'),
-			'-1040-default_branch' => _('Default Branch'),
-			'-1050-default_department' => _('Default Department'),
-			//'-1060-verified_time_sheet' => _('Verified TimeSheet'),
+			'-1000-full_name' => __('Full Name'),
+			'-1010-title' => __('Title'),
+			'-1020-province' => __('Province/State'),
+			'-1030-country' => __('Country'),
+			'-1040-default_branch' => __('Default Branch'),
+			'-1050-default_department' => __('Default Department'),
+			//'-1060-verified_time_sheet' => __('Verified TimeSheet'),
 		);
 
 		//$columns = Misc::prependArray( $columns, $deduction_columns);
@@ -644,7 +644,7 @@ class UserDetail extends Controller
 				}
 
 				$ulf = new UserListFactory();
-				$all_array_option = array('-1' => _('-- All --'));
+				$all_array_option = array('-1' => __('-- All --'));
 
 				//Get include employee list.
 				if ( !isset($filter_data['include_user_ids']) ) {

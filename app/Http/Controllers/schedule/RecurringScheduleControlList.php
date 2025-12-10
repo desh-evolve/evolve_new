@@ -73,13 +73,13 @@ class RecurringScheduleControlList extends Controller
 														) ) );
 
 		$columns = array(
-													'-1010-first_name' => _('First Name'),
-													'-1020-middle_name' => _('Middle Name'),
-													'-1030-last_name' => _('Last Name'),
-													'-1040-name' => _('Name'),
-													'-1050-description' => _('Description'),
-													'-1070-start_date' => _('Start Date'),
-													'-1080-end_date' => _('End Date'),
+													'-1010-first_name' => __('First Name'),
+													'-1020-middle_name' => __('Middle Name'),
+													'-1030-last_name' => __('Last Name'),
+													'-1040-name' => __('Name'),
+													'-1050-description' => __('Description'),
+													'-1070-start_date' => __('Start Date'),
+													'-1080-end_date' => __('End Date'),
 													);
 
 		if ( $saved_search_id == '' AND !isset($filter_data['columns']) ) {
@@ -230,7 +230,7 @@ class RecurringScheduleControlList extends Controller
 
 				}
 
-				$all_array_option = array('-1' => _('-- Any --'));
+				$all_array_option = array('-1' => __('-- Any --'));
 
 				$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 				$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

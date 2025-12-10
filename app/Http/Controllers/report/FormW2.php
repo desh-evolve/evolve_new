@@ -39,36 +39,36 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 												) );
 
 $static_columns = array(
-											'-1000-full_name' => _('Full Name'),
-											'-1010-province' => _('State'),
-											'-1020-ssn' => _('SSN'),
-											'-1180-state_1' => _('1- State (15)'),
-											'-1230-district_1' => _('1- Locality (20)'),
+											'-1000-full_name' => __('Full Name'),
+											'-1010-province' => __('State'),
+											'-1020-ssn' => __('SSN'),
+											'-1180-state_1' => __('1- State (15)'),
+											'-1230-district_1' => __('1- Locality (20)'),
 											);
 
 $non_static_columns = array(
-											'-1100-wage' => _('Wages, Tips, Other (1)'),
-											'-1110-federal_tax' => _('Federal Income Tax (2)'),
-											'-1120-ss_wage' => _('Social Security Wages (3)'),
-											'-1130-ss_tax' => _('Social Security Tax (4)'),
-											'-1140-medicare_wage' => _('Medicare Wages (5)'),
-											'-1150-medicare_tax' => _('Medicare Tax (6)'),
-											'-1160-ss_tips' => _('Social Security Tips (7)'),
-											'-1170-allocated_tips' => _('Allocated Tips (8)'),
-											'-1180-advance_eic' => _('Advance EIC Payment (9)'),
-											'-1190-dependent_care_benefit' => _('Dependent Care Benefits (10)'),
-											'-1200-nonqualified_plan' => _('Nonqualified Plans (11)'),
-											'-1210-box_12a' => _('Box 12a'),
-											'-1220-box_12b' => _('Box 12b'),
-											'-1230-box_12c' => _('Box 12c'),
-											'-1240-box_12d' => _('Box 12d'),
-											'-1250-box_14a' => _('Other Box 14(a)'),
-											'-1260-box_14b' => _('Other Box 14(b)'),
-											'-1260-box_14c' => _('Other Box 14(c)'),
-											'-1500-state_wage_1' => _('1- State Wages, Tips, Other (16)'),
-											'-1510-state_tax_1' => _('1- State Income Tax (17)'),
-											'-1600-district_wage_1' => _('1- Locality Wages, Tips, Other (18)'),
-											'-1610-district_tax_1' => _('1- Locality Income Tax (19)'),
+											'-1100-wage' => __('Wages, Tips, Other (1)'),
+											'-1110-federal_tax' => __('Federal Income Tax (2)'),
+											'-1120-ss_wage' => __('Social Security Wages (3)'),
+											'-1130-ss_tax' => __('Social Security Tax (4)'),
+											'-1140-medicare_wage' => __('Medicare Wages (5)'),
+											'-1150-medicare_tax' => __('Medicare Tax (6)'),
+											'-1160-ss_tips' => __('Social Security Tips (7)'),
+											'-1170-allocated_tips' => __('Allocated Tips (8)'),
+											'-1180-advance_eic' => __('Advance EIC Payment (9)'),
+											'-1190-dependent_care_benefit' => __('Dependent Care Benefits (10)'),
+											'-1200-nonqualified_plan' => __('Nonqualified Plans (11)'),
+											'-1210-box_12a' => __('Box 12a'),
+											'-1220-box_12b' => __('Box 12b'),
+											'-1230-box_12c' => __('Box 12c'),
+											'-1240-box_12d' => __('Box 12d'),
+											'-1250-box_14a' => __('Other Box 14(a)'),
+											'-1260-box_14b' => __('Other Box 14(b)'),
+											'-1260-box_14c' => __('Other Box 14(c)'),
+											'-1500-state_wage_1' => __('1- State Wages, Tips, Other (16)'),
+											'-1510-state_tax_1' => __('1- State Income Tax (17)'),
+											'-1600-district_wage_1' => __('1- Locality Wages, Tips, Other (18)'),
+											'-1610-district_tax_1' => __('1- Locality Income Tax (19)'),
 											);
 
 $pseallf = new PayStubEntryAccountLinkListFactory();
@@ -848,7 +848,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );

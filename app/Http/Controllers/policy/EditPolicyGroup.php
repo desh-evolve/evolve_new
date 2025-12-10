@@ -91,7 +91,7 @@ class EditPolicyGroup extends Controller
 			}
 		}
 
-		$none_array_option = array('0' => _('-- None --') );
+		$none_array_option = array('0' => __('-- None --') );
 
 		$ulf = new UserListFactory();
 		$user_options = $ulf->getByCompanyIDArray( $current_company->getId(), FALSE, TRUE );

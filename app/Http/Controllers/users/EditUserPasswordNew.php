@@ -151,13 +151,13 @@ class EditUserPasswordNew extends Controller
 					Debug::Text('Password check failed!', __FILE__, __LINE__, __METHOD__,10);
 					$uf->Validator->isTrue(	'current_password',
 											FALSE,
-											_('Current password is incorrect') );
+											__('Current password is incorrect') );
 				}
 			} else {
 				Debug::Text('Current password not specified', __FILE__, __LINE__, __METHOD__,10);
 				$uf->Validator->isTrue(	'current_password',
 										FALSE,
-										_('Current password is incorrect') );
+										__('Current password is incorrect') );
 
 			}
 
@@ -181,7 +181,7 @@ class EditUserPasswordNew extends Controller
 
 			if ( $uf->isValid() ) {
 				if ( DEMO_MODE == FALSE ) {
-					TTLog::addEntry( $uf->getId(), 20, _('Password - Web'), NULL, $uf->getTable() );
+					TTLog::addEntry( $uf->getId(), 20, __('Password - Web'), NULL, $uf->getTable() );
 					$uf->Save();
 				}
 

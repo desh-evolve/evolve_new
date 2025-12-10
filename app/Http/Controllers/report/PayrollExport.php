@@ -38,7 +38,7 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 
 $static_columns = array();
 
-$columns = array(					'-0010-regular_time' => _('Regular Time'),
+$columns = array(					'-0010-regular_time' => __('Regular Time'),
 									);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -757,7 +757,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -810,16 +810,16 @@ switch ($action) {
 		$filter_data['selected_pay_period_options'] = Misc::arrayIntersectByKey( (array)$filter_data['pay_period_ids'], $pay_period_options );
 
 		$filter_data['export_type_options'] = array(
-													0 => _('-- Please Choose --'),
-													'adp' => _('ADP'),
-													'paychex_preview' => _('Paychex Preview'),
-                                                    'paychex_online' => _('Paychex Online Payroll'),
-													'ceridian_insync' => _('Ceridian Insync'),
-													'millenium' => _('Millenium'),
-													'quickbooks' => _('QuickBooks Pro'),
-													'surepayroll' => _('SurePayroll'),
-													'csv' => _('Generic Excel/CSV'),
-													'other' => _('-- Other --'),
+													0 => __('-- Please Choose --'),
+													'adp' => __('ADP'),
+													'paychex_preview' => __('Paychex Preview'),
+                                                    'paychex_online' => __('Paychex Online Payroll'),
+													'ceridian_insync' => __('Ceridian Insync'),
+													'millenium' => __('Millenium'),
+													'quickbooks' => __('QuickBooks Pro'),
+													'surepayroll' => __('SurePayroll'),
+													'csv' => __('Generic Excel/CSV'),
+													'other' => __('-- Other --'),
 													);
 
 		$setup_data['src_column_options'] = $columns;
@@ -827,20 +827,20 @@ switch ($action) {
 		//
 		//ADP  specific columns
 		//
-		$setup_data['adp_hour_column_options'][0] = _('-- DO NOT EXPORT --');
-		$setup_data['adp_hour_column_options']['regular_time'] = _('Regular Time');
-		$setup_data['adp_hour_column_options']['overtime'] = _('Overtime');
+		$setup_data['adp_hour_column_options'][0] = __('-- DO NOT EXPORT --');
+		$setup_data['adp_hour_column_options']['regular_time'] = __('Regular Time');
+		$setup_data['adp_hour_column_options']['overtime'] = __('Overtime');
 		for ( $i=3; $i <= 4; $i++ ) {
-			$setup_data['adp_hour_column_options'][$i] = _('Hours') .' '. $i;
+			$setup_data['adp_hour_column_options'][$i] = __('Hours') .' '. $i;
 		}
 
 		//Quickbooks additional column mapping
 		$setup_data['quickbooks_proj_options'] = array(
-													0 => _('-- NONE --'),
-													'default_branch' => _('Default Branch'),
-													'default_department' => _('Default Department'),
-													'group' => _('Group'),
-													'title' => _('Title'),
+													0 => __('-- NONE --'),
+													'default_branch' => __('Default Branch'),
+													'default_department' => __('Default Department'),
+													'group' => __('Group'),
+													'title' => __('Title'),
 													);
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);

@@ -142,7 +142,7 @@ class EditMessage extends Controller
 			}
 			$mcf->FailTransaction();
 		} else {
-			$mcf->Validator->isTrue( 'to', FALSE,_('Please select at least one recipient') );
+			$mcf->Validator->isTrue( 'to', FALSE,__('Please select at least one recipient') );
             // If validation fails, return back with errors
             return redirect()->back()->withErrors(['error' => 'Invalid data provided.'])->withInput();
 		}

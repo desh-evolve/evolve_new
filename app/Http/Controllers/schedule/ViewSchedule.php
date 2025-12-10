@@ -134,7 +134,7 @@ class ViewSchedule extends Controller
 
 				//print_r($output);
 				if ( $output == FALSE ) {
-					echo _('No Schedule to print!')."<br>\n";
+					echo __('No Schedule to print!')."<br>\n";
 				} else {
 					if ( Debug::getVerbosity() < 11 ) {
 						Misc::FileDownloadHeader('schedule.pdf', 'application/pdf', strlen($output));
@@ -184,7 +184,7 @@ class ViewSchedule extends Controller
 				}
 
 				$ulf = new UserListFactory();
-				$all_array_option = array('-1' => _('-- All --'));
+				$all_array_option = array('-1' => __('-- All --'));
 
 				if ( !isset($filter_data['show_days']) OR ( isset($filter_data['show_days']) AND $filter_data['show_days'] == '' ) ) {
 					$filter_data['show_days'] = 4;
@@ -261,8 +261,8 @@ class ViewSchedule extends Controller
 				$filter_data['src_user_title_options'] = Misc::arrayDiffByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 				$filter_data['selected_user_title_options'] = Misc::arrayIntersectByKey( (array)$filter_data['user_title_ids'], $user_title_options );
 
-				$filter_data['show_days_options'] = array( 1 => _('1 Week'), 2 => _('2 Weeks'), 3 => _('3 Weeks'), 4 => _('4 Weeks'), 5 => _('5 Weeks'), 6 => _('6 Weeks'), 7 => _('7 Weeks'), 8 => _('8 Weeks'), 9 => _('9 Weeks'), 10 => _('10 Weeks'), 11 => _('11 Weeks'), 12 => _('12 Weeks'));
-				$filter_data['view_type_options'] = array( 10 => _('Month'), 20 => _('Week'), 30 => _('Day') );
+				$filter_data['show_days_options'] = array( 1 => __('1 Week'), 2 => __('2 Weeks'), 3 => __('3 Weeks'), 4 => __('4 Weeks'), 5 => __('5 Weeks'), 6 => __('6 Weeks'), 7 => __('7 Weeks'), 8 => __('8 Weeks'), 9 => __('9 Weeks'), 10 => __('10 Weeks'), 11 => __('11 Weeks'), 12 => __('12 Weeks'));
+				$filter_data['view_type_options'] = array( 10 => __('Month'), 20 => __('Week'), 30 => __('Day') );
 
 				 $hidden_elements = Misc::prependArray(array(
                                 'printSchedule' => 'hidden',

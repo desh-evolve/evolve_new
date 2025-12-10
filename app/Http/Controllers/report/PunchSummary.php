@@ -57,44 +57,44 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 													'filter_data' => $filter_data
 												) );
 
-$static_columns = array(			'-1000-full_name' => _('Full Name'),
-									'-1002-employee_number' => _('Employee #'),
-									'-1010-title' => _('Title'),
-									'-1020-province' => _('Province/State'),
-									'-1030-country' => _('Country'),
-									'-1039-group' => _('Group'),
-									'-1040-default_branch' => _('Default Branch'),
-									'-1050-default_department' => _('Default Department'),
-									'-1090-date_stamp' => _('Date'),
-									'-1100-in_time_stamp' => _('In Punch'),
-									'-1101-in_type' => _('In Type'),
-									'-1110-out_time_stamp' => _('Out Punch'),
-									'-1111-out_type' => _('Out Type'),
-									'-1120-in_actual_time_stamp' => _('In (Actual)'),
-									'-1130-out_actual_time_stamp' => _('Out (Actual)'),
-									'-1160-branch' => _('Branch'),
-									'-1170-department' => _('Department'),
-									'-1171-in_station_type' => _('In Station Type'),
-									'-1172-in_station_station_id' => _('In Station ID'),
-									'-1173-in_station_source' => _('In Station Source'),
-									'-1174-in_station_description' => _('In Station Description'),
-									'-1175-out_station_type' => _('Out Station Type'),
-									'-1176-out_station_station_id' => _('Out Station ID'),
-									'-1177-out_station_source' => _('Out Station Source'),
-									'-1178-out_station_description' => _('Out Station Description'),
-									'-1220-note' => _('Note'),
-									'-1229-hourly_rate' => _('Hourly Rate'),
+$static_columns = array(			'-1000-full_name' => __('Full Name'),
+									'-1002-employee_number' => __('Employee #'),
+									'-1010-title' => __('Title'),
+									'-1020-province' => __('Province/State'),
+									'-1030-country' => __('Country'),
+									'-1039-group' => __('Group'),
+									'-1040-default_branch' => __('Default Branch'),
+									'-1050-default_department' => __('Default Department'),
+									'-1090-date_stamp' => __('Date'),
+									'-1100-in_time_stamp' => __('In Punch'),
+									'-1101-in_type' => __('In Type'),
+									'-1110-out_time_stamp' => __('Out Punch'),
+									'-1111-out_type' => __('Out Type'),
+									'-1120-in_actual_time_stamp' => __('In (Actual)'),
+									'-1130-out_actual_time_stamp' => __('Out (Actual)'),
+									'-1160-branch' => __('Branch'),
+									'-1170-department' => __('Department'),
+									'-1171-in_station_type' => __('In Station Type'),
+									'-1172-in_station_station_id' => __('In Station ID'),
+									'-1173-in_station_source' => __('In Station Source'),
+									'-1174-in_station_description' => __('In Station Description'),
+									'-1175-out_station_type' => __('Out Station Type'),
+									'-1176-out_station_station_id' => __('Out Station ID'),
+									'-1177-out_station_source' => __('Out Station Source'),
+									'-1178-out_station_description' => __('Out Station Description'),
+									'-1220-note' => __('Note'),
+									'-1229-hourly_rate' => __('Hourly Rate'),
 									);
 
 $professional_edition_static_columns = array(
-									'-1180-job' => _('Job'),
-									'-1181-job_manual_id' => _('Job Code'),
-									'-1181-job_description' => _('Job Description'),
-									'-1182-job_status' => _('Job Status'),
-									'-1183-job_branch' => _('Job Branch'),
-									'-1184-job_department' => _('Job Department'),
-									'-1185-job_group' => _('Job Group'),
-									'-1190-job_item' => _('Task'),
+									'-1180-job' => __('Job'),
+									'-1181-job_manual_id' => __('Job Code'),
+									'-1181-job_description' => __('Job Description'),
+									'-1182-job_status' => __('Job Status'),
+									'-1183-job_branch' => __('Job Branch'),
+									'-1184-job_department' => __('Job Department'),
+									'-1185-job_group' => __('Job Group'),
+									'-1190-job_item' => __('Task'),
 									);
 
 if ( $current_company->getProductEdition() == 20 ) {
@@ -110,17 +110,17 @@ if ( is_array($other_field_names) ) {
 }
 
 $columns = array(
-											'-1430-total_time' => _('Total Time'),
-											'-1440-total_time_wage' => _('Total Time Wage'),
-											'-1440-actual_total_time' => _('Actual Time'),
-											'-1450-actual_total_time_wage' => _('Actual Time Wage'),
-											'-1460-actual_total_time_diff' => _('Actual Time Difference'),
-											'-1470-actual_total_time_diff_wage' => _('Actual Time Difference Wage'),
+											'-1430-total_time' => __('Total Time'),
+											'-1440-total_time_wage' => __('Total Time Wage'),
+											'-1440-actual_total_time' => __('Actual Time'),
+											'-1450-actual_total_time_wage' => __('Actual Time Wage'),
+											'-1460-actual_total_time_diff' => __('Actual Time Difference'),
+											'-1470-actual_total_time_diff_wage' => __('Actual Time Difference Wage'),
 											);
 
 $professional_edition_columns = array(
-											'-1400-quantity' => _('Quantity'),
-											'-1410-bad_quantity' => _('Bad Quantity'),
+											'-1400-quantity' => __('Quantity'),
+											'-1410-bad_quantity' => __('Bad Quantity'),
 									);
 
 if ( $current_company->getProductEdition() == 20 ) {
@@ -424,7 +424,7 @@ switch ($action) {
 								//$rows[$x]['job'] = Option::getByKey($data_c['job_id'], $job_options, NULL );
 								$rows[$x]['job'] = $data_c['job_name'];
 							} else {
-								$rows[$x]['job'] = _('- No Job -');
+								$rows[$x]['job'] = __('- No Job -');
 							}
 							$rows[$x]['job_manual_id'] = $data_c['job_manual_id'];
 							$rows[$x]['job_description'] = $data_c['job_description'];
@@ -436,7 +436,7 @@ switch ($action) {
 							if ( isset($job_item_options[$data_c['job_item_id']]) ) {
 								$rows[$x]['job_item'] = $job_item_options[$data_c['job_item_id']];
 							} else {
-								$rows[$x]['job_item'] = _('- No Task -');
+								$rows[$x]['job_item'] = __('- No Task -');
 							}
 
 							$rows[$x]['quantity'] = $data_c['quantity'];
@@ -570,7 +570,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo _('No Data To Export!') ."<br>\n";
+				echo __('No Data To Export!') ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -652,7 +652,7 @@ switch ($action) {
 
 		$ulf = new UserListFactory();
 
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -709,7 +709,7 @@ switch ($action) {
 
 			//Get include job list.
 			$jlf->getByCompanyId( $current_company->getId() );
-			$job_options = Misc::prependArray( array('0' => _('- No Job -') ), $jlf->getArrayByListFactory( $jlf, FALSE, TRUE ) );
+			$job_options = Misc::prependArray( array('0' => __('- No Job -') ), $jlf->getArrayByListFactory( $jlf, FALSE, TRUE ) );
 			$filter_data['job_manual_id_options'] = $jlf->getManualIDArrayByListFactory($jlf, TRUE);
 
 			$filter_data['src_include_job_options'] = Misc::arrayDiffByKey( (array)$filter_data['include_job_ids'], $job_options );
@@ -730,7 +730,7 @@ switch ($action) {
 			//Get Job Items
 			$jilf = new JobItemListFactory();
 			$jilf->getByCompanyId( $current_company->getId() );
-			$job_item_options = Misc::prependArray( array('-1' => _('-- All --'), '0' => _('- No Task -') ), $jilf->getArrayByListFactory( $jilf, FALSE, TRUE ) );
+			$job_item_options = Misc::prependArray( array('-1' => __('-- All --'), '0' => __('- No Task -') ), $jilf->getArrayByListFactory( $jilf, FALSE, TRUE ) );
 			$filter_data['src_job_item_options'] = Misc::arrayDiffByKey( (array)$filter_data['job_item_ids'], $job_item_options );
 			$filter_data['selected_job_item_options'] = Misc::arrayIntersectByKey( (array)$filter_data['job_item_ids'], $job_item_options );
 		}
@@ -753,7 +753,7 @@ switch ($action) {
 		unset($filter_data['sort_options']['effective_date']);
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => __('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

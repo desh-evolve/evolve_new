@@ -146,8 +146,8 @@ class EditUserJobHistory extends Controller
 
 		//Get pay period boundary dates for this user.
 		//Include user hire date in the list.
-		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = _('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
-		$pay_period_boundary_dates = Misc::prependArray( array(-1 => _('(Choose Date)')), $pay_period_boundary_dates);
+		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = __('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
+		$pay_period_boundary_dates = Misc::prependArray( array(-1 => __('(Choose Date)')), $pay_period_boundary_dates);
 
 
         $viewData['user_data'] = $user_data;

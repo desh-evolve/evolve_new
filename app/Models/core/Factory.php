@@ -1304,70 +1304,79 @@ class Factory
  * columns with dots and regression testing of other functions using getSortSQL are recommended.
  */
 	protected function getSortSQL($array, $strict = true, $additional_fields = null)
-	{
-		if (!is_array($array)) {
-			return false;
-		}
+{
+    if (!is_array($array)) {
+        return false;
+    }
 
-		$array = $this->convertFlexArray($array);
-		$alt_order_options = [1 => 'asc', -1 => 'desc'];
-		$order_options = ['asc', 'desc'];
-		$rs = $this->getEmptyRecordSet();
-		$fields = $this->getRecordSetColumnList($rs);
-		$sql_chunks = [];
+    $array = $this->convertFlexArray($array);
+    $alt_order_options = [1 => 'asc', -1 => 'desc'];
+    $order_options = ['asc', 'desc'];
+    $rs = $this->getEmptyRecordSet();
+    $fields = $this->getRecordSetColumnList($rs);
+    $sql_chunks = [];
 
-		if (is_array($additional_fields)) {
-			foreach ($additional_fields as $orig_column => $order) {
-				$order = strtoupper(trim($order));
-				if (is_numeric($orig_column)) {
-					$sql_chunks[] = trim($order) . ' ASC';
-				} else {
-					if (strpos($orig_column, '.') !== false) {
-						list($table, $col) = explode('.', $orig_column);
-						$sql_chunks[] = "`$table`.`$col` $order";
-					} else {
-						$sql_chunks[] = "`$orig_column` $order";
-					}
-				}
-			}
-		}
+    if (is_array($additional_fields)) {
+        foreach ($additional_fields as $orig_column => $order) {
+            // FIX: When key is numeric, $order is actually the column name
+            if (is_numeric($orig_column)) {
+                // $order is the column name, default to ASC
+                $column_name = trim($order);
+                if (strpos($column_name, '.') !== false) {
+                    list($table, $col) = explode('.', $column_name);
+                    $sql_chunks[] = "`$table`.`$col` asc";
+                } else {
+                    $sql_chunks[] = "`$column_name` asc";
+                }
+            } else {
+                // Original logic for associative arrays
+                $order = strtolower(trim($order)); // Changed to strtolower
+                if (strpos($orig_column, '.') !== false) {
+                    list($table, $col) = explode('.', $orig_column);
+                    $sql_chunks[] = "`$table`.`$col` $order";
+                } else {
+                    $sql_chunks[] = "`$orig_column` $order";
+                }
+            }
+        }
+    }
 
-		foreach ($array as $orig_column => $order) {
-			$orig_column = trim($orig_column);
-			$column = $this->parseColumnName($orig_column);
-			$order = trim($order);
+    foreach ($array as $orig_column => $order) {
+        $orig_column = trim($orig_column);
+        $column = $this->parseColumnName($orig_column);
+        $order = strtolower(trim($order)); // Changed to strtolower
 
-			if (is_numeric($order) && isset($alt_order_options[$order])) {
-				$order = $alt_order_options[$order];
-			}
+        if (is_numeric($order) && isset($alt_order_options[$order])) {
+            $order = $alt_order_options[$order];
+        }
 
-			if (
-				!$strict || (
-					is_array($fields) && (in_array($column, $fields) || in_array($orig_column, $fields)) &&
-					in_array(strtolower($order), $order_options)
-				)
-			) {
-				if (!$strict || (strpos($orig_column, ';') === false && strpos($order, ';') === false)) {
-					if (strpos($orig_column, '.') !== false) {
-						list($table, $col) = explode('.', $orig_column);
-						$sql_chunks[] = "`$table`.`$col` $order";
-					} else {
-						$sql_chunks[] = "`$orig_column` $order";
-					}
-				} else {
-					Debug::text("ERROR: Found ';' in SQL order string: $orig_column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
-				}
-			} else {
-				Debug::text("Invalid Sort Column/Order: $column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
-			}
-		}
+        if (
+            !$strict || (
+                is_array($fields) && (in_array($column, $fields) || in_array($orig_column, $fields)) &&
+                in_array(strtolower($order), $order_options)
+            )
+        ) {
+            if (!$strict || (strpos($orig_column, ';') === false && strpos($order, ';') === false)) {
+                if (strpos($orig_column, '.') !== false) {
+                    list($table, $col) = explode('.', $orig_column);
+                    $sql_chunks[] = "`$table`.`$col` $order";
+                } else {
+                    $sql_chunks[] = "`$orig_column` $order";
+                }
+            } else {
+                Debug::text("ERROR: Found ';' in SQL order string: $orig_column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
+            }
+        } else {
+            Debug::text("Invalid Sort Column/Order: $column Order: $order", __FILE__, __LINE__, __METHOD__, 10);
+        }
+    }
 
-		if (!empty($sql_chunks)) {
-			$sql_chunks = array_unique($sql_chunks);
-			return ' ORDER BY ' . implode(',', $sql_chunks);
-		}
-		return false;
-	}
+    if (!empty($sql_chunks)) {
+        $sql_chunks = array_unique($sql_chunks);
+        return ' ORDER BY ' . implode(',', $sql_chunks);
+    }
+    return false;
+}
 
 
 	public function getColumnList()

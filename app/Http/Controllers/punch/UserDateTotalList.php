@@ -228,7 +228,7 @@ class UserDateTotalList extends Controller
 						if ( $udt_obj->getJobItem() != FALSE ) {
 							$job_item = $job_item_options[$udt_obj->getJobItem()];
 						} else {
-							$job_item = _('No Task');
+							$job_item = __('No Task');
 						}
 		
 						$rows[] = array(

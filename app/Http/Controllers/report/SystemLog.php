@@ -70,12 +70,12 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 												) );
 
 $columns = $static_columns =  array(
-							'-1000-full_name' => _('Full Name'),
-							'-1010-date' => _('Date'),
-							'-1020-table_name' => _('Object'),
-							'-1030-action' => _('Action'),
-							'-1040-description' => _('Description'),
-							'-1050-function' => _('Functions'),
+							'-1000-full_name' => __('Full Name'),
+							'-1010-date' => __('Date'),
+							'-1020-table_name' => __('Object'),
+							'-1030-action' => __('Action'),
+							'-1040-description' => __('Description'),
+							'-1050-function' => __('Functions'),
 						);
 
 if ( isset($filter_data['start_date']) ) {
@@ -305,7 +305,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'log_action_ids', 'log_table_name_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -369,7 +369,7 @@ switch ($action) {
 		$filter_data['sort_options'] = $columns;
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		//$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
+		//$filter_data['group_by_options'] = Misc::prependArray( array('0' => __('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;
