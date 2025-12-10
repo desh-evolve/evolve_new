@@ -308,47 +308,47 @@ class EditStation extends Controller
 			$result_str = null;
 			switch ($data['time_clock_command']) {
 				case 'test_connection':
-					$result_str = $tc->testConnection() ? _('Connection Succeeded!') : _('Connection Failed!');
+					$result_str = $tc->testConnection() ? __('Connection Succeeded!') : __('Connection Failed!');
 					break;
 				case 'set_date':
 					TTDate::setTimeZone($data['time_zone_id'], $s_obj->getTimeZone());
 					$result_str = $tc->setDate(time()) ?
-						_('Date Successfully Set To: ') . TTDate::getDate('DATE+TIME', time()) :
-						_('Setting Date Failed!');
+						__('Date Successfully Set To: ') . TTDate::getDate('DATE+TIME', time()) :
+						__('Setting Date Failed!');
 					break;
 				case 'download':
 					if (isset($s_obj) && $tc->Poll($current_company, $s_obj)) {
-						$result_str = _('Download Data Succeeded!');
+						$result_str = __('Download Data Succeeded!');
 						if ($s_obj->isValid()) {
 							$s_obj->Save(false);
 						}
 					} else {
-						$result_str = _('Download Data Failed!');
+						$result_str = __('Download Data Failed!');
 					}
 					break;
 				case 'upload':
 					if (isset($s_obj) && $tc->Push($current_company, $s_obj)) {
-						$result_str = _('Upload Data Succeeded!');
+						$result_str = __('Upload Data Succeeded!');
 						if ($s_obj->isValid()) {
 							$s_obj->Save(false);
 						}
 					} else {
-						$result_str = _('Upload Data Failed!');
+						$result_str = __('Upload Data Failed!');
 					}
 					break;
 				case 'update_config':
 					$result_str = isset($s_obj) && $tc->setModeFlag($s_obj->getModeFlag()) ?
-						_('Update Configuration Succeeded') :
-						_('Update Configuration Failed');
+						__('Update Configuration Succeeded') :
+						__('Update Configuration Failed');
 					break;
 				case 'delete_data':
 					if (isset($s_obj) && $tc->DeleteAllData($s_obj)) {
-						$result_str = _('Delete Data Succeeded!');
+						$result_str = __('Delete Data Succeeded!');
 						if ($s_obj->isValid()) {
 							$s_obj->Save(false);
 						}
 					} else {
-						$result_str = _('Delete Data Failed!');
+						$result_str = __('Delete Data Failed!');
 					}
 					break;
 				case 'reset_last_punch_time_stamp':
@@ -365,19 +365,19 @@ class EditStation extends Controller
 					break;
 				case 'restart':
 					$tc->restart();
-					$result_str = _('Restart Succeeded!');
+					$result_str = __('Restart Succeeded!');
 					break;
 				case 'firmware':
 					$result_str = $tc->setFirmware() ?
-						_('Firmware Update Succeeded!') :
-						_('Firmware Update Failed!');
+						__('Firmware Update Succeeded!') :
+						__('Firmware Update Failed!');
 					break;
 			}
 
 			TTLog::addEntry(
 				$s_obj->getId(),
 				500,
-				_('TimeClock Manual Command') . ': ' . ucwords(str_replace('_', ' ', $data['time_clock_command'])) . ' ' . _('Result') . ': ' . $result_str,
+				__('TimeClock Manual Command') . ': ' . ucwords(str_replace('_', ' ', $data['time_clock_command'])) . ' ' . __('Result') . ': ' . $result_str,
 				null,
 				$s_obj->getTable()
 			);
@@ -393,7 +393,7 @@ class EditStation extends Controller
 			]);
 		} catch (Exception $e) {
 			return redirect()->back()->with([
-				'time_clock_command_result' => _('Connection Failed!'),
+				'time_clock_command_result' => __('Connection Failed!'),
 				'data' => $data
 			]);
 		}

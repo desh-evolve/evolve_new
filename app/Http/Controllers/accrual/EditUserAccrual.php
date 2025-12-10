@@ -130,7 +130,7 @@ class EditUserAccrual extends Controller
         $af->setType($data['type_id']);
         $af->setAccrualPolicyID($data['accrual_policy_id'] ?? null);
         $af->setAmount($data['amount'] * 8);
-        $af->setTimeStamp(strtotime($data['time_stamp'] . ' 12:00:00'));
+        $af->setTimeStamp($data['time_stamp']);
         $af->setEnableCalcBalance(TRUE);
 
         if ($af->isValid()) {

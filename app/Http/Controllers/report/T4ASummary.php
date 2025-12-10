@@ -38,25 +38,25 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 //													'sort_order' => $sort_order,
 												) );
 
-$static_columns = array(			'-1000-full_name' => _('Full Name'),
-									'-1010-title' => _('Title'),
-									'-1020-province' => _('Province'),
-									'-1030-country' => _('Country'),
-									'-1039-group' => _('Group'),
-									'-1040-default_branch' => _('Default Branch'),
-									'-1050-default_department' => _('Default Department'),
-									'-1060-sin' => _('SIN')
+$static_columns = array(			'-1000-full_name' => __('Full Name'),
+									'-1010-title' => __('Title'),
+									'-1020-province' => __('Province'),
+									'-1030-country' => __('Country'),
+									'-1039-group' => __('Group'),
+									'-1040-default_branch' => __('Default Branch'),
+									'-1050-default_department' => __('Default Department'),
+									'-1060-sin' => __('SIN')
 									);
 
-$non_static_columns = array(		'-1100-pension' => _('Pension Or Superannuation (16)'),
-									'-1110-lump_sum_payment' => _('Lump-sum Payments (18)'),
-									'-1120-income_tax' => _('Income Tax (22)'),
-									'-1125-eligible_retiring_allowance' => _('Eligible Retiring Allowance (26)'),
-									'-1126-non_eligible_retiring_allowance' => _('Non-Eligible Retiring Allowance (26)'),
-									'-1130-other_income' => _('Other Income (28)'),
-									'-1140-rpp' => _('RPP Contributions (32)'),
-									'-1150-pension_adjustment' => _('Pension Adjustment (34)'),
-									'-1180-charity' => _('Charity Donations (46)'),
+$non_static_columns = array(		'-1100-pension' => __('Pension Or Superannuation (16)'),
+									'-1110-lump_sum_payment' => __('Lump-sum Payments (18)'),
+									'-1120-income_tax' => __('Income Tax (22)'),
+									'-1125-eligible_retiring_allowance' => __('Eligible Retiring Allowance (26)'),
+									'-1126-non_eligible_retiring_allowance' => __('Non-Eligible Retiring Allowance (26)'),
+									'-1130-other_income' => __('Other Income (28)'),
+									'-1140-rpp' => __('RPP Contributions (32)'),
+									'-1150-pension_adjustment' => __('Pension Adjustment (34)'),
+									'-1180-charity' => __('Charity Donations (46)'),
 									);
 
 $pseallf = new PayStubEntryAccountLinkListFactory();
@@ -388,7 +388,7 @@ switch ($action) {
 		$filter_data['deduction_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(20,30), TRUE );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );
@@ -439,13 +439,13 @@ switch ($action) {
 		$filter_data['selected_column_options'] = Misc::arrayIntersectByKey( (array)$filter_data['column_ids'], $columns );
 
 		$filter_data['year_options'] = $year_options;
-		$filter_data['type_options'] = array('government' => _('Government (Multiple Employees/Page)'), 'employee' => _('Employee (One Employee/Page)') );
+		$filter_data['type_options'] = array('government' => __('Government (Multiple Employees/Page)'), 'employee' => __('Employee (One Employee/Page)') );
 
 		//Get primary/secondary order list
 		$filter_data['sort_options'] = $columns;
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => __('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

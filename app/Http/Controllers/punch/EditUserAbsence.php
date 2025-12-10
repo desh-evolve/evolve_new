@@ -334,7 +334,7 @@ class EditUserAbsence extends Controller
 				}
 
 				$aplf = new AbsencePolicyListFactory();
-				$absence_policy_options = Misc::prependArray( array( 0 => _('--') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
+				$absence_policy_options = Misc::prependArray( array( 0 => __('--') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
 				
 				$blf = new BranchListFactory();
 				$branch_options = $blf->getByCompanyIdArray( $current_company->getId() );

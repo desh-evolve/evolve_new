@@ -40,20 +40,20 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 												) );
 
 $columns = array(
-											'-1010-employee_number' => _('Employee #'),
-											'-1030-user_name' => _('User Name'),
-											'-1040-phone_id' => _('Phone ID'),
+											'-1010-employee_number' => __('Employee #'),
+											'-1030-user_name' => __('User Name'),
+											'-1040-phone_id' => __('Phone ID'),
 
-											'-1060-first_name' => _('First Name'),
-											'-1070-middle_name' => _('Middle Name'),
-											'-1080-last_name' => _('Last Name'),
+											'-1060-first_name' => __('First Name'),
+											'-1070-middle_name' => __('Middle Name'),
+											'-1080-last_name' => __('Last Name'),
 
-											'-1090-title' => _('Title'),
+											'-1090-title' => __('Title'),
 
-											'-1100-default_branch' => _('Branch'),
-											'-1110-default_department' => _('Department'),
+											'-1100-default_branch' => __('Branch'),
+											'-1110-default_department' => __('Department'),
 
-											'-1200-barcode' => _('Barcode'),
+											'-1200-barcode' => __('Barcode'),
 											);
 
 if ( !isset($filter_data['include_user_ids']) ) {
@@ -177,7 +177,7 @@ switch ($action) {
 
 				$pdf->AddPage();
 				$pdf->SetFont('freeserif','BU',20);
-				$pdf->Cell(190,10, _('Employees'), $border, 0, 'C');
+				$pdf->Cell(190,10, __('Employees'), $border, 0, 'C');
 
 				$pdf->SetFont('freeserif','B',10);
 
@@ -220,35 +220,35 @@ switch ($action) {
 						$row_next_y = $row_next_y+5;
 						$pdf->setXY($next_x,$row_next_y);
 						$pdf->Cell(5,5, '' , $border, 0, 'L');
-						$pdf->Cell(55,5, _('Title:').' '.$user_row['title'] , $border, 0, 'L');
+						$pdf->Cell(55,5, __('Title:').' '.$user_row['title'] , $border, 0, 'L');
 					}
 
 					if ( in_array('user_name', $filter_data['column_ids']) ) {
 						$row_next_y = $row_next_y+5;
 						$pdf->setXY($next_x,$row_next_y);
 						$pdf->Cell(5,5, '' , $border, 0, 'L');
-						$pdf->Cell(55,5, _('User Name:').' '.$user_row['user_name'] , $border, 0, 'L');
+						$pdf->Cell(55,5, __('User Name:').' '.$user_row['user_name'] , $border, 0, 'L');
 					}
 
 					if ( in_array('phone_id', $filter_data['column_ids']) ) {
 						$row_next_y = $row_next_y+5;
 						$pdf->setXY($next_x,$row_next_y);
 						$pdf->Cell(5,5, '' , $border, 0, 'L');
-						$pdf->Cell(55,5, _('Phone ID:').' '.$user_row['phone_id'] , $border, 0, 'L');
+						$pdf->Cell(55,5, __('Phone ID:').' '.$user_row['phone_id'] , $border, 0, 'L');
 					}
 
 					if ( in_array('default_branch', $filter_data['column_ids']) ) {
 						$row_next_y = $row_next_y+5;
 						$pdf->setXY($next_x,$row_next_y);
 						$pdf->Cell(5,5, '' , $border, 0, 'L');
-						$pdf->Cell(55,5, _('Branch:').' '.$user_row['default_branch'] , $border, 0, 'L');
+						$pdf->Cell(55,5, __('Branch:').' '.$user_row['default_branch'] , $border, 0, 'L');
 					}
 
 					if ( in_array('default_department', $filter_data['column_ids']) ) {
 						$row_next_y = $row_next_y+5;
 						$pdf->setXY($next_x,$row_next_y);
 						$pdf->Cell(5,5, '' , $border, 0, 'L');
-						$pdf->Cell(55,5, _('Department:').' '.$user_row['default_department'] , $border, 0, 'L');
+						$pdf->Cell(55,5, __('Department:').' '.$user_row['default_department'] , $border, 0, 'L');
 					}
 
 					if ( in_array('barcode', $filter_data['column_ids']) ) {
@@ -279,7 +279,7 @@ switch ($action) {
 			if ( isset($branch_options) AND count($branch_options) > 1 ) {
 				$pdf->AddPage();
 				$pdf->SetFont('freeserif','BU',20);
-				$pdf->Cell(190,10, _('Branches'), $border, 0, 'C');
+				$pdf->Cell(190,10, __('Branches'), $border, 0, 'C');
 
 				$pdf->SetFont('freeserif','',10);
 
@@ -336,7 +336,7 @@ switch ($action) {
 			if ( isset($department_options) AND count($department_options) > 1 ) {
 				$pdf->AddPage();
 				$pdf->SetFont('freeserif','BU',20);
-				$pdf->Cell(190,10, _('Departments'), $border, 0, 'C');
+				$pdf->Cell(190,10, __('Departments'), $border, 0, 'C');
 
 				$pdf->SetFont('freeserif','',10);
 
@@ -395,7 +395,7 @@ switch ($action) {
 			//
 			$pdf->AddPage();
 			$pdf->SetFont('freeserif','BU',20);
-			$pdf->Cell(190,10, _('Commands'), $border, 0, 'C');
+			$pdf->Cell(190,10, __('Commands'), $border, 0, 'C');
 
 			$pdf->SetFont('freeserif','',10);
 
@@ -404,7 +404,7 @@ switch ($action) {
 
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Normal') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Normal') , $border, 0, 'C');
 			$barcode_x = $next_x+6;
 			$barcode_y = $pdf->getY()+5;
 
@@ -419,7 +419,7 @@ switch ($action) {
 			$next_x = 80;
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Lunch') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Lunch') , $border, 0, 'C');
 			$barcode_x = $next_x+8;
 			$barcode_y = $pdf->getY()+5;
 
@@ -434,7 +434,7 @@ switch ($action) {
 			$next_x = 150;
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Break') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Break') , $border, 0, 'C');
 			$barcode_x = $next_x+8;
 			$barcode_y = $pdf->getY()+5;
 
@@ -451,7 +451,7 @@ switch ($action) {
 
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('In') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('In') , $border, 0, 'C');
 			$barcode_x = $next_x+13;
 			$barcode_y = $pdf->getY()+5;
 
@@ -466,7 +466,7 @@ switch ($action) {
 			$next_x = 150;
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Out') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Out') , $border, 0, 'C');
 			$barcode_x = $next_x+11;
 			$barcode_y = $pdf->getY()+5;
 
@@ -484,7 +484,7 @@ switch ($action) {
 
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Good Quantity') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Good Quantity') , $border, 0, 'C');
 			$barcode_x = $next_x+3;
 			$barcode_y = $pdf->getY()+5;
 
@@ -499,7 +499,7 @@ switch ($action) {
 			$next_x = 150;
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Bad Quantity') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Bad Quantity') , $border, 0, 'C');
 			$barcode_x = $next_x+0;
 			$barcode_y = $pdf->getY()+5;
 
@@ -672,7 +672,7 @@ switch ($action) {
 
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Clear') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Clear') , $border, 0, 'C');
 			$barcode_x = $next_x+9;
 			$barcode_y = $pdf->getY()+5;
 
@@ -687,7 +687,7 @@ switch ($action) {
 			$next_x = 150;
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Delete') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Delete') , $border, 0, 'C');
 			$barcode_x = $next_x+6;
 			$barcode_y = $pdf->getY()+5;
 
@@ -705,7 +705,7 @@ switch ($action) {
 
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Transfer') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Transfer') , $border, 0, 'C');
 			$barcode_x = $next_x+3;
 			$barcode_y = $pdf->getY()+5;
 
@@ -720,7 +720,7 @@ switch ($action) {
 			$next_x = 150;
 			$pdf->setXY($next_x,$next_y);
 			$pdf->SetFont('freeserif','B',10);
-			$pdf->Cell(50,5, _('Submit') , $border, 0, 'C');
+			$pdf->Cell(50,5, __('Submit') , $border, 0, 'C');
 			$barcode_x = $next_x+6;
 			$barcode_y = $pdf->getY()+5;
 
@@ -746,7 +746,7 @@ switch ($action) {
 			echo $output;
 			exit;
 		} else {
-			echo _('Sorry, no items match your criteria.')."<br>\n";
+			echo __('Sorry, no items match your criteria.')."<br>\n";
 		}
 
 		exit;
@@ -800,7 +800,7 @@ switch ($action) {
 
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 
@@ -877,7 +877,7 @@ switch ($action) {
 
 		//Get primary/secondary order list
 		$filter_data['sort_options'] = $columns;
-		$filter_data['sort_options']['effective_date_order'] = _('Wage Effective Date');
+		$filter_data['sort_options']['effective_date_order'] = __('Wage Effective Date');
 		unset($filter_data['sort_options']['effective_date']);
 
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();

@@ -85,12 +85,12 @@ class GeneralLedgerSummary extends Controller
         ]);
 
         $static_columns = [
-            '-1000-full_name' => _('Full Name'),
-            '-1010-title' => _('Title'),
-            '-1020-province' => _('Province'),
-            '-1030-country' => _('Country'),
-            '-1040-default_branch' => _('Default Branch'),
-            '-1050-default_department' => _('Default Department'),
+            '-1000-full_name' => __('Full Name'),
+            '-1010-title' => __('Title'),
+            '-1020-province' => __('Province'),
+            '-1030-country' => __('Country'),
+            '-1040-default_branch' => __('Default Branch'),
+            '-1050-default_department' => __('Default Department'),
         ];
 
         $columns = $static_columns;
@@ -517,7 +517,7 @@ class GeneralLedgerSummary extends Controller
                 ], null);
 
                 $ulf = new UserListFactory();
-                $all_array_option = ['-1' => _('-- All --')];
+                $all_array_option = ['-1' => __('-- All --')];
 
                 $ulf->getByCompanyId($current_company->getId());
                 $user_options = $ulf->getArrayByListFactory($ulf, FALSE, TRUE);
@@ -572,10 +572,10 @@ class GeneralLedgerSummary extends Controller
 
                 $filter_data['sort_options'] = $columns;
                 $filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
-                $filter_data['group_by_options'] = Misc::prependArray(['0' => _('No Grouping')], $static_columns);
+                $filter_data['group_by_options'] = Misc::prependArray(['0' => __('No Grouping')], $static_columns);
                 $filter_data['export_type_options'] = [
-                    'csv' => _('CSV (Excel)'),
-                    // 'simply' => _('Simply Accounting GL'),
+                    'csv' => __('CSV (Excel)'),
+                    // 'simply' => __('Simply Accounting GL'),
                 ];
 
                 $saved_report_options = $ugdlf->getByUserIdAndScriptArray($current_user->getId(), $_SERVER['SCRIPT_NAME']);

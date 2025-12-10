@@ -210,7 +210,7 @@ class EmbeddedMessageList extends Controller
 
                     if ($i == 0) {
                         $parent_id = $message->getId();
-                        $default_subject = _('Re:') . ' ' . $message->getSubject();
+                        $default_subject = __('Re:') . ' ' . $message->getSubject();
                     }
 
                     $i++;

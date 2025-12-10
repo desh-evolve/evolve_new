@@ -43,21 +43,21 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 
 $static_columns = array(
 
-											'-1000-full_name' => _('Full Name'),
-											'-1005-sin' => _('SIN/SSN'),
-											'-1010-title' => _('Title'),
-											'-1020-province' => _('Province/State'),
-											'-1030-country' => _('Country'),
-											'-1039-group' => _('Group'),
-											'-1040-default_branch' => _('Default Branch'),
-											'-1050-default_department' => _('Default Department'),
-											'-1060-transaction_date' => _('Transaction Date'),
+											'-1000-full_name' => __('Full Name'),
+											'-1005-sin' => __('SIN/SSN'),
+											'-1010-title' => __('Title'),
+											'-1020-province' => __('Province/State'),
+											'-1030-country' => __('Country'),
+											'-1039-group' => __('Group'),
+											'-1040-default_branch' => __('Default Branch'),
+											'-1050-default_department' => __('Default Department'),
+											'-1060-transaction_date' => __('Transaction Date'),
 											);
 
 $columns = array(
-											'-1070-subject_wages' => _('Subject Wages'),
-											'-1080-taxable_wages' => _('Taxable Wages'),
-											'-1090-tax_withheld' => _('Tax Withheld'),
+											'-1070-subject_wages' => __('Subject Wages'),
+											'-1080-taxable_wages' => __('Taxable Wages'),
+											'-1090-tax_withheld' => __('Tax Withheld'),
 											);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -287,7 +287,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo _('No Data To Export!') ."<br>\n";
+				echo __('No Data To Export!') ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -359,7 +359,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('company_deduction_ids', 'include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );
@@ -420,17 +420,17 @@ switch ($action) {
 
 		//Get transaction date format options
 		$filter_data['transaction_date_format_options'] = array(
-																10 => _('Complete Date'),
-																20 => _('Month'),
-																30 => _('Quarter'),
-																40 => _('Year'),
+																10 => __('Complete Date'),
+																20 => __('Month'),
+																30 => __('Quarter'),
+																40 => __('Year'),
 																);
 		//Get primary/secondary order list
 		$filter_data['sort_options'] = $columns;
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => __('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

@@ -166,8 +166,8 @@ class EditUserWage extends Controller
 
 		//Get pay period boundary dates for this user.
 		//Include user hire date in the list.
-		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = _('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
-		$pay_period_boundary_dates = Misc::prependArray( array(-1 => _('(Choose Date)')), $pay_period_boundary_dates);
+		$pay_period_boundary_dates[TTDate::getDate('DATE', $user_data->getHireDate() )] = __('(Appointment Date)').' '. TTDate::getDate('DATE', $user_data->getHireDate() );
+		$pay_period_boundary_dates = Misc::prependArray( array(-1 => __('(Choose Date)')), $pay_period_boundary_dates);
 
 		$ppslf = new PayPeriodScheduleListFactory();
 		$ppslf->getByUserId( $user_id );
@@ -195,7 +195,7 @@ class EditUserWage extends Controller
             $viewData['pay_period_schedule'] = false;
 			$uwf->Validator->isTrue(		'employee',
 											FALSE,
-											_('Employee is not currently assigned to a pay period schedule.').' <a href="'.URLBuilder::getURL( NULL, '../payperiod/PayPeriodScheduleList.php').'">'. _('Click here</a> to assign') );
+											__('Employee is not currently assigned to a pay period schedule.').' <a href="'.URLBuilder::getURL( NULL, '../payperiod/PayPeriodScheduleList.php').'">'. __('Click here</a> to assign') );
 		}
 
 

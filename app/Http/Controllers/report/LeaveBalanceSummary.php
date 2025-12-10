@@ -36,18 +36,18 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 													'filter_data' => $filter_data
 												) );
 
-$static_columns = array(			'-1000-full_name' => _('Full Name'),
-									'-1002-employee_number' => _('Employee #'),
-									'-1010-title' => _('Title'),
-									'-1020-province' => _('Province/State'),
-									'-1030-country' => _('Country'),
-									'-1039-group' => _('Group'),
-									'-1040-default_branch' => _('Default Branch'),
-									'-1050-default_department' => _('Default Department'),
+$static_columns = array(			'-1000-full_name' => __('Full Name'),
+									'-1002-employee_number' => __('Employee #'),
+									'-1010-title' => __('Title'),
+									'-1020-province' => __('Province/State'),
+									'-1030-country' => __('Country'),
+									'-1039-group' => __('Group'),
+									'-1040-default_branch' => __('Default Branch'),
+									'-1050-default_department' => __('Default Department'),
 									);
 
 $columns = array(
-				'-1060-total_balance' => _('Total Balance'),
+				'-1060-total_balance' => __('Total Balance'),
 				);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -388,7 +388,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'leave_year_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -451,7 +451,7 @@ switch ($action) {
 		$filter_data['sort_options'] = $columns;
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => __('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

@@ -381,7 +381,7 @@ switch ($action) {
 				exit;
 			}
 		} else {
-			echo _('No Employees Match Your Criteria!'). "br>\n";
+			echo __('No Employees Match Your Criteria!'). "br>\n";
 		}
 		break;
 	case 'delete':
@@ -428,7 +428,7 @@ switch ($action) {
 		}
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );

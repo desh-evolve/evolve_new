@@ -60,7 +60,7 @@ $quarter_dates = array(
 
 //Get a unique list of states each employee belongs to
 $cf = new CompanyFactory();
-$state_options = Misc::prependArray( array( 0 => _('- Multi-state Employer -') ), $cf->getOptions('province', 'US' ) );
+$state_options = Misc::prependArray( array( 0 => __('- Multi-state Employer -') ), $cf->getOptions('province', 'US' ) );
 /*
 $ulf = new UserListFactory();
 $ulf->getByCompanyId( $current_company->getId() );
@@ -394,7 +394,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );
@@ -445,20 +445,20 @@ switch ($action) {
 		$filter_data['pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(10,20,30,40), TRUE );
 
 		$filter_data['return_type_options'] = array(
-											0 => _('--'),
-											10 => _('Amended'),
-											20 => _('Successor Employer'),
-											30 => _('No Payments to Employees'),
-											40 => _('Final: Business closed or stopped paying wages'),
+											0 => __('--'),
+											10 => __('Amended'),
+											20 => __('Successor Employer'),
+											30 => __('No Payments to Employees'),
+											40 => __('Final: Business closed or stopped paying wages'),
 										);
 
 		$filter_data['exempt_payment_options'] = array(
-											0 => _('--'),
-											10 => _('4a. Fringe benefits'),
-											20 => _('4b. Group term life insurance'),
-											30 => _('4c. Retirement/Pension'),
-											40 => _('4d. Dependant care'),
-											50 => _('4e. Other'),
+											0 => __('--'),
+											10 => __('4a. Fringe benefits'),
+											20 => __('4b. Group term life insurance'),
+											30 => __('4c. Retirement/Pension'),
+											40 => __('4d. Dependant care'),
+											50 => __('4e. Other'),
 										);
 
 		$filter_data['state_options'] = $state_options;

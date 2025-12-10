@@ -605,7 +605,7 @@ class DepartmentAttendanceReport extends Controller
                 ], NULL);
 
                 $ulf = new UserListFactory();
-                $all_array_option = ['-1' => _('-- All --')];
+                $all_array_option = ['-1' => __('-- All --')];
 
                 $ulf->getSearchByCompanyIdAndArrayCriteria($current_company->getId(), ['permission_children_ids' => $permission_children_ids]);
                 $user_options = $ulf->getArrayByListFactory($ulf, FALSE, TRUE);

@@ -150,7 +150,7 @@ class EditPayPeriodSchedule extends Controller
 		$pay_period_schedule_data['day_of_week_options'] = TTDate::getDayOfWeekArray();
 		$pay_period_schedule_data['transaction_date_options'] = Misc::prependArray( array( 0 => '0' ), TTDate::getDayOfMonthArray() );
 		$pay_period_schedule_data['day_of_month_options'] = TTDate::getDayOfMonthArray();
-		$pay_period_schedule_data['day_of_month_options'][-1] = _('- Last Day Of Month -');
+		$pay_period_schedule_data['day_of_month_options'][-1] = __('- Last Day Of Month -');
 
 		$pay_period_schedule_data['user_options'] = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE, TRUE);
 

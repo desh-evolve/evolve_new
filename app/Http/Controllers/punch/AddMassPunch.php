@@ -164,7 +164,7 @@ class AddMassPunch extends Controller
 				$user_options = Misc::arrayDiffByKey( (array)$filter_user_id, $src_user_options );
 				$filter_user_options = Misc::arrayIntersectByKey( (array)$filter_user_id, $src_user_options );
 				
-				$prepend_array_option = array( 0 => '--', -1 => _('-- Default --') );
+				$prepend_array_option = array( 0 => '--', -1 => __('-- Default --') );
 
 				$blf = new BranchListFactory();
 				$blf->getByCompanyId( $current_company->getId() );

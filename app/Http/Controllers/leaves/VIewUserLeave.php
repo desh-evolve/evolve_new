@@ -65,7 +65,7 @@ class VIewUserLeave extends Controller
 				$leave_options[$apf->getId()]=$apf->getName();
 			}
 
-			$leave_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $leave_options );
+			$leave_options = Misc::prependArray( array( 0 => __('-- Please Choose --') ), $leave_options );
 			$data['leave_options'] = $leave_options;
 
             $filter_data = [];
@@ -94,7 +94,7 @@ class VIewUserLeave extends Controller
 			$date_string .= "'".trim($date)."'," ;
 			}
 
-			$user_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $user_options );
+			$user_options = Misc::prependArray( array( 0 => __('-- Please Choose --') ), $user_options );
 			$data['users_cover_options'] = $user_options;
 			//$data['users_cover_options'] = $ulf;
 			$data['name'] =$lrf->getUserObject()->getFullName();
@@ -104,7 +104,7 @@ class VIewUserLeave extends Controller
 			$data['leave_type'] = $lrf->getAccuralPolicyObject()->getId();
 
 			$method_options = $lrf->getOptions('leave_method');
-			$method_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $method_options );
+			$method_options = Misc::prependArray( array( 0 => __('-- Please Choose --') ), $method_options );
 
 			$data['method_options'] = $method_options;
 			$data['method_type'] = $lrf->getLeaveMethod();
