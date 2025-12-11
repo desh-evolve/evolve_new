@@ -58,10 +58,10 @@ $pplf = new PayPeriodListFactory();
 $year_options = $pplf->getYearsArrayByCompanyId( $current_company->getId() );
 
 $quarter_options = array(
-						1 => _('Quarter 1 (01-Jan to 31-Mar)'),
-						2 => _('Quarter 2 (01-Apr to 30-Jun)'),
-						3 => _('Quarter 3 (01-Jul to 30-Sep)'),
-						4 => _('Quarter 4 (01-Oct to 31-Dec)'),
+						1 => __('Quarter 1 (01-Jan to 31-Mar)'),
+						2 => __('Quarter 2 (01-Apr to 30-Jun)'),
+						3 => __('Quarter 3 (01-Jul to 30-Sep)'),
+						4 => __('Quarter 4 (01-Oct to 31-Dec)'),
 						);
 
 $quarter_dates = array(
@@ -391,7 +391,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );
@@ -447,7 +447,7 @@ switch ($action) {
 		//Quarters
 		$filter_data['quarter_options'] = $quarter_options;
 		$filter_data['year_options'] = $year_options;
-		$filter_data['deposit_schedule_options'] = array( 10 => _('Monthly'), 20 => _('Semi-Weekly') );
+		$filter_data['deposit_schedule_options'] = array( 10 => __('Monthly'), 20 => __('Semi-Weekly') );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

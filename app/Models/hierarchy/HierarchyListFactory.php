@@ -596,18 +596,18 @@ class HierarchyListFactory extends HierarchyFactory implements IteratorAggregate
 				if ( $immediate_parents_only == TRUE ) {
 					//Even if immediate_parents_only is set, we need to return all parents at the same level.
 					//Prior to v3.1 we just returned a single parent.
-					if ( $valid_level === FALSE OR $valid_level == $row['level'] ) {
-						$retval[] = (int)$row['user_id'];
+					if ( $valid_level === FALSE OR $valid_level == $row->level ) {
+						$retval[] = (int)$row->user_id;
 
 						if ( empty($valid_level) || $valid_level === FALSE ) {
-							$valid_level = $row['level'];
+							$valid_level = $row->level;
 						}
 					}
 				} else {
 					if ( $include_levels == TRUE ) {
-						$retval[(int)$row['level']][] = (int)$row['user_id'];
+						$retval[(int)$row->level][] = (int)$row->user_id;
 					} else {
-						$retval[] = (int)$row['user_id'];
+						$retval[] = (int)$row->user_id;
 					}
 				}
 			}

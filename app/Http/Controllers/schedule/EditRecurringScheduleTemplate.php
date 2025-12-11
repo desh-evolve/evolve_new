@@ -409,7 +409,7 @@ class EditRecurringScheduleTemplate extends Controller
                                     );
                 }
 
-                $prepend_array_option = array( 0 => '--', -1 => _('-- Default --') );
+                $prepend_array_option = array( 0 => '--', -1 => __('-- Default --') );
 
                 //Select box options;
                 $splf = new SchedulePolicyListFactory();

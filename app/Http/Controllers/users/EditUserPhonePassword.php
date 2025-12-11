@@ -52,13 +52,13 @@ switch ($action) {
 					Debug::Text('Password check failed!', __FILE__, __LINE__, __METHOD__,10);
 					$uf->Validator->isTrue(	'current_password',
 											FALSE,
-											_('Current password is incorrect') );
+											__('Current password is incorrect') );
 				}
 			} else {
 				Debug::Text('Current password not specified', __FILE__, __LINE__, __METHOD__,10);
 				$uf->Validator->isTrue(	'current_password',
 										FALSE,
-										_('Current password is incorrect') );
+										__('Current password is incorrect') );
 
 			}
 
@@ -82,7 +82,7 @@ switch ($action) {
 
 			if ( $uf->isValid() ) {
 				if ( DEMO_MODE == FALSE ) {
-					TTLog::addEntry( $uf->getId(), 20, _('Password - Phone'), NULL, $uf->getTable() );
+					TTLog::addEntry( $uf->getId(), 20, __('Password - Phone'), NULL, $uf->getTable() );
 					$uf->Save();
 				}
 

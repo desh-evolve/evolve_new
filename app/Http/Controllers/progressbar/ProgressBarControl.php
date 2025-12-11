@@ -61,7 +61,7 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Recalculating Company TimeSheet...');
+				$comment = __('Recalculating Company TimeSheet...');
 
 				break;
 			case 'recalculate_employee':
@@ -73,7 +73,7 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Recalculating Employee TimeSheet...');
+				$comment = __('Recalculating Employee TimeSheet...');
 
 				break;
 			case 'generate_paystubs':
@@ -85,7 +85,7 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Generating Pay Stubs...');
+				$comment = __('Generating Pay Stubs...');
 
 				break;
 			case 'recalculate_paystub_ytd':
@@ -97,7 +97,7 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Recalculating Pay Stub Year To Date (YTD) amounts...');
+				$comment = __('Recalculating Pay Stub Year To Date (YTD) amounts...');
 
 				break;
 			case 'recalculate_accrual_policy':
@@ -111,7 +111,7 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Recalculating Accrual Policy...');
+				$comment = __('Recalculating Accrual Policy...');
 
 				break;
 			case 'add_mass_punch':
@@ -125,7 +125,7 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Adding Punches...');
+				$comment = __('Adding Punches...');
 
 				break;
 			case 'add_mass_schedule':
@@ -139,7 +139,7 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Adding Schedule Shifts...');
+				$comment = __('Adding Schedule Shifts...');
 
 				break;
 			case 'add_mass_schedule_npvc':
@@ -154,11 +154,11 @@ class ProgressBarControl extends Controller
 				$permission->Redirect( FALSE ); //Redirect
 				}
 
-				$comment = _('Adding Schedule Shifts...');
+				$comment = __('Adding Schedule Shifts...');
 
 				break;
 			default:
-				$comment = _('Test Progress Bar...');
+				$comment = __('Test Progress Bar...');
 				break;
 		}
 

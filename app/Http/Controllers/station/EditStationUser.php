@@ -103,7 +103,7 @@ switch ($action) {
 		$station_data['type_options'] = $sf->getOptions('type');
 
 		$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
-		$user_options = Misc::prependArray( array( -1 => _('-- ALL --')), $user_options );
+		$user_options = Misc::prependArray( array( -1 => __('-- ALL --')), $user_options );
 		$station_data['user_options'] = $user_options;
 
 		$smarty->assign_by_ref('station_data', $station_data);

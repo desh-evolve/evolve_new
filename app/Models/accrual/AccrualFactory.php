@@ -234,14 +234,26 @@ class AccrualFactory extends Factory {
 
 		return FALSE;
 	}
-	function setTimeStamp($epoch) {
+		function setTimeStamp($epoch) {
 		$epoch = trim($epoch);
 
-		if 	( $this->Validator->isDate( 'times_tamp', $epoch, ('Incorrect time stamp')) ) {
-			$this->data['time_stamp'] = date('Y-m-d H:i:s', $epoch);
+// 		if 	( $this->Validator->isDate( 'times_tamp', $epoch, ('Incorrect time stamp')) ) {
+// 			$this->data['time_stamp'] = date('Y-m-d H:i:s', $epoch);
 
-			return TRUE;
-		}
+// 			return TRUE;
+// 		}
+
+    $epoch = TTDate::getTime();
+
+    	if ($this->Validator->isDate(
+    			'time_stamp',
+    			$epoch,
+    			('Incorrect time stamp')
+    		)) {
+    
+    			$this->data['time_stamp'] = $epoch;
+    					return TRUE;
+    		}
 
 		return FALSE;
 	}

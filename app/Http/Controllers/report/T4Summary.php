@@ -37,34 +37,34 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 //													'sort_order' => $sort_order,
 												) );
 
-$static_columns = array(			'-1000-full_name' => _('Full Name'),
-									'-1010-title' => _('Title'),
-									'-1020-province' => _('Province'),
-									'-1030-country' => _('Country'),
-									'-1039-group' => _('Group'),
-									'-1040-default_branch' => _('Default Branch'),
-									'-1050-default_department' => _('Default Department'),
-									'-1060-sin' => _('SIN')
+$static_columns = array(			'-1000-full_name' => __('Full Name'),
+									'-1010-title' => __('Title'),
+									'-1020-province' => __('Province'),
+									'-1030-country' => __('Country'),
+									'-1039-group' => __('Group'),
+									'-1040-default_branch' => __('Default Branch'),
+									'-1050-default_department' => __('Default Department'),
+									'-1060-sin' => __('SIN')
 									);
 
-$non_static_columns = array(		'-1100-income' => _('Income (14)'),
-									'-1110-income_tax' => _('Income Tax (22)'),
-									'-1120-employee_cpp' => _('Employee CPP (16)'),
-									'-1125-ei_earnings' => _('EI Insurable Earnings (24)'),
-									'-1126-cpp_earnings' => _('CPP Pensionable Earnings (26)'),
-									'-1130-employee_ei' => _('Employee EI (18)'),
-									'-1140-union_dues' => _('Union Dues (44)'),
-									'-1150-employer_cpp' => _('Employer CPP'),
-									'-1160-employer_ei' => _('Employer EI'),
-									'-1170-rpp' => _('RPP Contributions (20)'),
-									'-1180-charity' => _('Charity Donations (46)'),
-									'-1190-pension_adjustment' => _('Pension Adjustment (52)'),
-									'-1200-other_box_0' => _('Other Box 1'),
-									'-1210-other_box_1' => _('Other Box 2'),
-									'-1220-other_box_2' => _('Other Box 3'),
-									'-1220-other_box_3' => _('Other Box 4'),
-									'-1220-other_box_4' => _('Other Box 5'),
-									'-1220-other_box_5' => _('Other Box 6'),
+$non_static_columns = array(		'-1100-income' => __('Income (14)'),
+									'-1110-income_tax' => __('Income Tax (22)'),
+									'-1120-employee_cpp' => __('Employee CPP (16)'),
+									'-1125-ei_earnings' => __('EI Insurable Earnings (24)'),
+									'-1126-cpp_earnings' => __('CPP Pensionable Earnings (26)'),
+									'-1130-employee_ei' => __('Employee EI (18)'),
+									'-1140-union_dues' => __('Union Dues (44)'),
+									'-1150-employer_cpp' => __('Employer CPP'),
+									'-1160-employer_ei' => __('Employer EI'),
+									'-1170-rpp' => __('RPP Contributions (20)'),
+									'-1180-charity' => __('Charity Donations (46)'),
+									'-1190-pension_adjustment' => __('Pension Adjustment (52)'),
+									'-1200-other_box_0' => __('Other Box 1'),
+									'-1210-other_box_1' => __('Other Box 2'),
+									'-1220-other_box_2' => __('Other Box 3'),
+									'-1220-other_box_3' => __('Other Box 4'),
+									'-1220-other_box_4' => __('Other Box 5'),
+									'-1220-other_box_5' => __('Other Box 6'),
 									);
 
 $pseallf = new PayStubEntryAccountLinkListFactory();
@@ -434,7 +434,7 @@ switch ($action) {
 				echo $output;
 				exit;
 			} else {
-				echo _('Invalid data, unable to generate report.');
+				echo __('Invalid data, unable to generate report.');
 				Debug::writeToLog();
 				exit;
 			}
@@ -450,7 +450,7 @@ switch ($action) {
 				Misc::FileDownloadHeader('report.csv', 'application/csv', strlen($data) );
 				echo $data;
 			} else {
-				echo _('No Data To Export!') ."<br>\n";
+				echo __('No Data To Export!') ."<br>\n";
 			}
 		} else {
 			$smarty->assign_by_ref('generated_time', TTDate::getTime() );
@@ -523,7 +523,7 @@ switch ($action) {
 		$filter_data['deduction_pay_stub_entry_account_options'] = $psealf->getByCompanyIdAndStatusIdAndTypeIdArray( $current_company->getId(), 10, array(20,30), TRUE );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );
@@ -574,13 +574,13 @@ switch ($action) {
 		$filter_data['selected_column_options'] = Misc::arrayIntersectByKey( (array)$filter_data['column_ids'], $columns );
 
 		$filter_data['year_options'] = $year_options;
-		$filter_data['type_options'] = array('government' => _('Government (Multiple Employees/Page)'), 'employee' => _('Employee (One Employee/Page)') );
+		$filter_data['type_options'] = array('government' => __('Government (Multiple Employees/Page)'), 'employee' => __('Employee (One Employee/Page)') );
 
 		//Get primary/secondary order list
 		$filter_data['sort_options'] = $columns;
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => __('No Grouping')), $static_columns );
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);
 		$generic_data['saved_report_options'] = $saved_report_options;

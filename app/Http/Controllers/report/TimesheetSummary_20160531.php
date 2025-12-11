@@ -38,29 +38,29 @@ URLBuilder::setURL($_SERVER['SCRIPT_NAME'],
 //													'sort_order' => $sort_order,
 												) );
 
-$static_columns = array(			'-1000-full_name' => _('Full Name'),
-									'-1002-employee_number' => _('Employee #'),
-									'-1005-status' => _('Status'),
-									'-1010-title' => _('Title'),
-									'-1020-province' => _('Province/State'),
-									'-1030-country' => _('Country'),
-									'-1039-group' => _('Group'),
-									'-1040-default_branch' => _('Default Branch'),
-									'-1050-default_department' => _('Default Department'),
-									'-1060-verified_time_sheet' => _('Verified TimeSheet'),
-									'-1062-pending_request' => _('Pending Requests'),
-									'-1065-pay_period' => _('Pay Period')
+$static_columns = array(			'-1000-full_name' => __('Full Name'),
+									'-1002-employee_number' => __('Employee #'),
+									'-1005-status' => __('Status'),
+									'-1010-title' => __('Title'),
+									'-1020-province' => __('Province/State'),
+									'-1030-country' => __('Country'),
+									'-1039-group' => __('Group'),
+									'-1040-default_branch' => __('Default Branch'),
+									'-1050-default_department' => __('Default Department'),
+									'-1060-verified_time_sheet' => __('Verified TimeSheet'),
+									'-1062-pending_request' => __('Pending Requests'),
+									'-1065-pay_period' => __('Pay Period')
 									);
 
-$columns = array(					'-1070-schedule_working' => _('Scheduled Time'),
-									'-1080-schedule_absence' => _('Scheduled Absence'),
-									'-1085-worked_days' => _('Worked Days'),
-									'-1090-worked_time' => _('Worked Time'),
-									'-1100-actual_time' => _('Actual Time'),
-									'-1110-actual_time_diff' => _('Actual Time Difference'),
-									'-1120-actual_time_diff_wage' => _('Actual Time Difference Wage'),
-									'-1130-paid_time' => _('Paid Time'),
-									'-1140-regular_time' => _('Regular Time'),
+$columns = array(					'-1070-schedule_working' => __('Scheduled Time'),
+									'-1080-schedule_absence' => __('Scheduled Absence'),
+									'-1085-worked_days' => __('Worked Days'),
+									'-1090-worked_time' => __('Worked Time'),
+									'-1100-actual_time' => __('Actual Time'),
+									'-1110-actual_time_diff' => __('Actual Time Difference'),
+									'-1120-actual_time_diff_wage' => __('Actual Time Difference Wage'),
+									'-1130-paid_time' => __('Paid Time'),
+									'-1140-regular_time' => __('Regular Time'),
 									);
 
 $columns = Misc::prependArray( $static_columns, $columns);
@@ -421,14 +421,14 @@ switch ($action) {
 
 						if ( $verified_time_sheets !== NULL AND isset($verified_time_sheets[$user_id][$pay_period_id]) ) {
 							if ( $verified_time_sheets[$user_id][$pay_period_id] == 50 ) {
-								$rows[$x]['verified_time_sheet'] = _('Yes');
+								$rows[$x]['verified_time_sheet'] = __('Yes');
 							} elseif ( $verified_time_sheets[$user_id][$pay_period_id] == 30 OR $verified_time_sheets[$user_id][$pay_period_id] == 45 ) {
-								$rows[$x]['verified_time_sheet'] = _('Pending');
+								$rows[$x]['verified_time_sheet'] = __('Pending');
 							} else {
-								$rows[$x]['verified_time_sheet'] = _('Declined');
+								$rows[$x]['verified_time_sheet'] = __('Declined');
 							}
 						} else {
-							$rows[$x]['verified_time_sheet'] = _('No');
+							$rows[$x]['verified_time_sheet'] = __('No');
 						}
 
 						if ( isset($pending_requests[$pay_period_id]) ) {
@@ -592,7 +592,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'punch_branch_ids', 'punch_department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL);
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), array('permission_children_ids' => $permission_children_ids ) );
@@ -662,7 +662,7 @@ switch ($action) {
 		$filter_data['sort_direction_options'] = Misc::getSortDirectionArray();
 
 		/***/
-		$filter_data['group_by_options'] = Misc::prependArray( array('0' => _('No Grouping')), $static_columns );
+		$filter_data['group_by_options'] = Misc::prependArray( array('0' => __('No Grouping')), $static_columns );
 		/***/
 
 		$saved_report_options = $ugdlf->getByUserIdAndScriptArray( $current_user->getId(), $_SERVER['SCRIPT_NAME']);

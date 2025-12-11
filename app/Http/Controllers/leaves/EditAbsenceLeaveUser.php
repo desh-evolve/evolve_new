@@ -130,7 +130,7 @@ class EditAbsenceLeaveUser extends Controller
 
 
         $aplf = new AbsencePolicyListFactory();
-		$absence_policy_options = Misc::prependArray( array( 0 => _('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
+		$absence_policy_options = Misc::prependArray( array( 0 => __('-- Please Choose --') ), $aplf->getByCompanyIdArray( $current_company->getId() ) );
 
 		$data['status_options'] = $aluf->getOptions('status');
 		$data['type_options'] = $aluf->getOptions('type');

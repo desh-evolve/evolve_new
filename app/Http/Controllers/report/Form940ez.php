@@ -429,7 +429,7 @@ switch ($action) {
 		$filter_data = Misc::preSetArrayValues( $filter_data, array('include_user_ids', 'exclude_user_ids', 'user_status_ids', 'group_ids', 'branch_ids', 'department_ids', 'user_title_ids', 'pay_period_ids', 'column_ids' ), NULL );
 
 		$ulf = new UserListFactory();
-		$all_array_option = array('-1' => _('-- All --'));
+		$all_array_option = array('-1' => __('-- All --'));
 
 		//Get include employee list.
 		$ulf->getByCompanyId( $current_company->getId() );

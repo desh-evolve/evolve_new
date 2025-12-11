@@ -76,28 +76,28 @@ class ScheduleList extends Controller
 														) ) );
 
 		$columns = array(
-											'-1000-first_name' => _('First Name'),
-											'-1002-last_name' => _('Last Name'),
-											'-1010-title' => _('Title'),
-											'-1039-group' => _('Group'),
-											'-1040-default_branch' => _('Default Branch'),
-											'-1050-default_department' => _('Default Department'),
-											'-1160-branch_id' => _('Branch'),
-											'-1170-department_id' => _('Department'),
-											'-1202-status_id' => _('Status'),
-											'-1210-start_time' => _('Start Time'),
-											'-1220-end_time' => _('End Time'),
-											'-1230-total_time' => _('Total Time'),
+											'-1000-first_name' => __('First Name'),
+											'-1002-last_name' => __('Last Name'),
+											'-1010-title' => __('Title'),
+											'-1039-group' => __('Group'),
+											'-1040-default_branch' => __('Default Branch'),
+											'-1050-default_department' => __('Default Department'),
+											'-1160-branch_id' => __('Branch'),
+											'-1170-department_id' => __('Department'),
+											'-1202-status_id' => __('Status'),
+											'-1210-start_time' => __('Start Time'),
+											'-1220-end_time' => __('End Time'),
+											'-1230-total_time' => __('Total Time'),
 											);
 
 		$professional_edition_columns = array(
 		/*
-											'-1180-job' => _('Job'),
-											'-1182-job_status' => _('Job Status'),
-											'-1183-job_branch' => _('Job Branch'),
-											'-1184-job_department' => _('Job Department'),
-											'-1185-job_group' => _('Job Group'),
-											'-1190-job_item' => _('Task'),
+											'-1180-job' => __('Job'),
+											'-1182-job_status' => __('Job Status'),
+											'-1183-job_branch' => __('Job Branch'),
+											'-1184-job_department' => __('Job Department'),
+											'-1185-job_group' => __('Job Group'),
+											'-1190-job_item' => __('Task'),
 		*/
 											);
 
@@ -269,7 +269,7 @@ class ScheduleList extends Controller
 
 				$viewData['rows'] = $rows;
 
-				$all_array_option = array('-1' => _('-- Any --'));
+				$all_array_option = array('-1' => __('-- Any --'));
 
 				$ulf->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data );
 				$filter_data['user_options'] = Misc::prependArray( $all_array_option, UserListFactory::getArrayByListFactory( $ulf, FALSE, TRUE ) );

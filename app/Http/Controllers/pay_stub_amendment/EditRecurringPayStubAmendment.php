@@ -160,7 +160,7 @@ class EditRecurringPayStubAmendment extends Controller
 
 		
 		$user_options = UserListFactory::getByCompanyIdArray( $current_company->getId(), FALSE );
-		$user_options = Misc::prependArray( array( -1 => _('-- ALL --')), $user_options );
+		$user_options = Misc::prependArray( array( -1 => __('-- ALL --')), $user_options );
 		$pay_stub_amendment_data['user_options'] = $user_options;
 		
 		$viewData['pay_stub_amendment_data'] = $pay_stub_amendment_data;
