@@ -12,8 +12,11 @@
         -->
     </x-slot>
 
-
-
+    <style>
+        #resultsOffcanvas {
+            width: 900px !important;
+        }
+    </style>
 
     <div class="row">
 
@@ -171,19 +174,24 @@
             <div>
                 <div class="card rounded-0 h-100">
                     <div class="card-body p-0">
-                        {{-- <div class="p-2 bg-primary">
-                            <h6 class="text-white mb-2 mt-1 text-uppercase fw-semibold fs-5">Employee Pending Confirmation</h6>
-                        </div> --}}
-                        <div data-simplebar style="height: 292px;" class="p-3 pt-6 mt-4">
+                        <div class="p-2 bg-primary">
+                            <h6 class="text-white mt-1 text-uppercase fw-semibold fs-5">Employee Details</h6>
+                        </div>
 
-                            <form id="searchForm">
+                        {{-- search employee details  --}}
+                        <div data-simplebar style="height: 262px;" class="p-3 pt-6 mt-2">
+
+                            <div>
+
                                 <div class="mb-2">
                                     <label for="startDate" class="form-label">Start Date</label>
                                     <input type="date" class="form-control form-control-sm" id="startDate">
+                                    <div class="text-danger small mt-1" id="startDateError" style="display:none;">Start Date is required</div>
                                 </div>
                                 <div class="mb-2">
                                     <label for="endDate" class="form-label">End Date</label>
                                     <input type="date" class="form-control form-control-sm" id="endDate">
+                                    <div class="text-danger small mt-1" id="endDateError" style="display:none;">End Date is required</div>
                                 </div>
                                 <div class="mb-2">
                                     <label for="category" class="form-label">Category</label>
@@ -194,23 +202,21 @@
                                         <option value="4">Permanent (Confirmed) </option>
                                         <option value="5">Resign </option>
                                     </select>
+                                    <div class="text-danger small mt-1" id="categoryError" style="display:none;">Category is required</div>
                                 </div>
 
                                 <!-- Buttons -->
-                                <div class="d-flex justify-content-between mt-4">
-                                    <button type="button" class="btn btn-sm btn-warning w-100 me-1">Search</button>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button type="button" class="btn btn-sm btn-warning w-100 me-1" id="emp_type_search">Search</button>
                                 </div>
 
-                            </form>
-
-                            <!-- Results container -->
-                            <div id="resultsContainer" class="mt-4"></div>
+                            </div>
 
                         </div>
 
 
                         {{-- current exception --}}
-                        <div class="mb-0 pb-0">
+                        <div>
                             <div class="p-2 bg-primary">
                                 <h6 class="text-white mb-1 mt-1 text-uppercase fw-semibold fs-5">Current Exceptions</h6>
                             </div>
@@ -285,10 +291,7 @@
                             </table>
                         </div>
                     </div>
-                    {{-- view button --}}
-                    <div class="mt-2 mb-3 text-center">
-                        <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -320,10 +323,7 @@
                             </table>
                         </div>
                     </div>
-                        {{-- view button --}}
-                        <div class="mt-2 mb-3 text-center">
-                            <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
-                        </div>
+                       
                 </div>
 
             </div>
@@ -366,10 +366,7 @@
                             </table>
                         </div>
                     </div>
-                        {{-- view button --}}
-                        <div class="mt-2 mb-3 text-center">
-                        <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
-                    </div>
+
                 </div>
 
             </div>
@@ -404,10 +401,7 @@
                             </table>
                         </div>
                     </div>
-                        {{-- view button --}}
-                        <div class="mt-2 mb-3 text-center">
-                        <a href="#" class="text-info text-decoration-underline fs-6">View More</a>
-                    </div>
+
                 </div>
 
             </div>
@@ -417,7 +411,39 @@
     </div>
 
 
-<script>
+    <!-- Results Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="resultsOffcanvas" aria-labelledby="resultsOffcanvasLabel">
+        <div class="offcanvas-header bg-gray text-black">
+            <h5 class="mt-2" id="offcanvasRightLabel">Search Results</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+
+            <table class="table table-bordered" id="resultsTable">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>#</th>
+                        <th>Employee No</th>
+                        <th>Full Name</th>
+                        <th>Hire Date</th>
+                        <th>Resign Date</th>
+                        <th>Category Type</th>
+                        <th>Month</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filled dynamically -->
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</x-app-layout>
+
+{{-- OLD SCRIPT CODE --}}
+
+{{-- <script>
     document.addEventListener("DOMContentLoaded", function () {
 
         let chart;
@@ -601,7 +627,7 @@
 
 
 
-
+        // Basis of Employment Confirmation Request
         fetch('{{ route('dashboard.employement_confirmation_request') }}')
             .then(response => response.json())
             .then(data => {
@@ -682,7 +708,8 @@
         });
 
 
-    document.querySelector('.btn-warning').addEventListener('click', () => {
+    // searching employees details
+    document.querySelector('#emp_type_search').addEventListener('click', () => {
         const data = {
             start_date: document.getElementById('startDate').value,
             end_date: document.getElementById('endDate').value,
@@ -699,16 +726,372 @@
         })
         .then(response => response.json())
         .then(res => {
-            let html = '<pre>' + JSON.stringify(res.data, null, 2) + '</pre>';
-            document.getElementById('resultsContainer').innerHTML = html;
-        })
-        .catch(err => {
-            console.error(err);
-        });
+            const tbody = document.querySelector('#resultsTable tbody');
+            tbody.innerHTML = ''; // Clear previous results
 
+            if (res.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">No records found</td></tr>';
+            } else {
+                res.data.forEach((user, index) => {
+                    const categoryNames = {
+                        1: 'Contract',
+                        2: 'Training',
+                        3: 'Permanent (With Probation)',
+                        4: 'Permanent (Confirmed)',
+                        5: 'Resign'
+                    };
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${user.employee_number}</td>
+                            <td>${user.full_name}</td>
+                            <td>${user.hire_date ?? '-'}</td>
+                            <td>${user.resign_date ?? '-'}</td>
+                            <td>${categoryNames[user.basis_of_employment]}</td>
+                            <td>${user.month}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // Open Offcanvas
+            let offcanvas = new bootstrap.Offcanvas(document.getElementById('resultsOffcanvas'));
+            offcanvas.show();
+        })
+        .catch(err => console.error(err));
+    });
+
+</scrip> --}}
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ===============================
+    // Helper function: format UNIX timestamp to "YYYY/MM/DD"
+    // ===============================
+    const formatDate = (epoch) => {
+        if (!epoch || epoch === 0) return '-';
+        const date = new Date(epoch * 1000);
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        return `${yyyy}/${mm}/${dd}`;
+    };
+
+    // ===============================
+    // Employee Count & Approved Leaves Pie Chart
+    // ===============================
+    (function loadDashboardStats() {
+        let chart;
+        Promise.all([
+            fetch("/dashboard/user_count").then(res => res.json()),
+            fetch("/dashboard/approved_leaves_count").then(res => res.json())
+        ])
+        .then(([employeeData, leaveData]) => {
+            const totalEmployees = employeeData.user_count || 0;
+            const approvedLeaves = leaveData.confirmed_leave_count || 0;
+            const attendance = totalEmployees - approvedLeaves;
+
+            // Update counts
+            document.querySelector('.employee-count-pie').textContent = attendance;
+            document.querySelector('.leaves-count-pie').textContent = approvedLeaves;
+            document.querySelector('.employee-count').textContent = totalEmployees;
+            document.querySelector('.leaves-count').textContent = approvedLeaves;
+
+            // ApexCharts Pie Chart
+            const options = {
+                chart: { type: 'pie', height: 500 },
+                labels: ['Attendance', 'Approved Leaves'],
+                series: [attendance, approvedLeaves],
+                colors: ['#00AE98', '#e15d44'],
+                legend: { position: 'bottom' }
+            };
+
+            if (chart) {
+                chart.updateOptions(options);
+            } else {
+                chart = new ApexCharts(document.querySelector("#store-visits-source"), options);
+                chart.render();
+            }
+        })
+        .catch(error => {
+            console.error('Error loading chart data:', error);
+            document.querySelector('.employee-count').textContent = 'N/A';
+            document.querySelector('.employee-count-pie').textContent = 'N/A';
+            document.querySelector('.leaves-count').textContent = 'N/A';
+            document.querySelector('.leaves-count-pie').textContent = 'N/A';
+        });
+    })();
+
+    // ===============================
+    // 3 Days Absenteeism Table
+    // ===============================
+    (function loadAbsenteeism() {
+        fetch('{{ route('dashboard.absenteeism') }}')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('absenteeism_table_body');
+                tbody.innerHTML = '';
+                if (!data.data || data.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No Recent Data..</td></tr>';
+                } else {
+                    data.data.forEach((emp, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${emp.full_name}</td>
+                                <td>${emp.default_branch}</td>
+                                <td>${emp.default_department}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(err => {
+                const tbody = document.getElementById('absenteeism_table_body');
+                tbody.innerHTML = '<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>';
+                console.error(err);
+            });
+    })();
+
+    // ===============================
+    // Recent Messages
+    // ===============================
+    (function loadMessages() {
+        fetch('{{ route('dashboard.recent_messages') }}')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('message_table_body');
+                tbody.innerHTML = '';
+                const messages = (data.data || []).filter(msg => msg.status_id === 10);
+                if (messages.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No Recent Messages..</td></tr>';
+                } else {
+                    messages.forEach((msg, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${msg.user_full_name}</td>
+                                <td>${msg.subject}</td>
+                                <td>${formatDate(msg.created_date)}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(err => {
+                const tbody = document.getElementById('message_table_body');
+                tbody.innerHTML = '<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>';
+                console.error(err);
+            });
+    })();
+
+    // ===============================
+    // Recent Request Table
+    // ===============================
+    (function loadRecentRequest() {
+        fetch('{{ route('dashboard.recent_request') }}')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('request_table_body');
+                tbody.innerHTML = '';
+                if (!data.data || data.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No Recent Request..</td></tr>';
+                } else {
+                    data.data.forEach((req, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${formatDate(req.date_stamp)}</td>
+                                <td>${req.status}</td>
+                                <td>${req.type}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(err => {
+                const tbody = document.getElementById('request_table_body');
+                tbody.innerHTML = '<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>';
+                console.error(err);
+            });
+    })();
+
+    // ===============================
+    // Pending Request Table
+    // ===============================
+    (function loadPendingRequest() {
+        fetch('{{ route('dashboard.pending_request') }}')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('pending_request_table_body');
+                tbody.innerHTML = '';
+                if (!data.data || data.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No Pending Request..</td></tr>';
+                } else {
+                    data.data.forEach((req, index) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${req.user_full_name}</td>
+                                <td>${req.type}</td>
+                                <td>${formatDate(req.date_stamp)}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(err => {
+                const tbody = document.getElementById('pending_request_table_body');
+                tbody.innerHTML = '<tr><td colspan="4" class="text-danger text-center">Failed to load data.</td></tr>';
+                console.error(err);
+            });
+    })();
+
+    // ===============================
+    // Basis of Employment Confirmation Request Table
+    // ===============================
+    (function loadEmploymentConfirmation() {
+        fetch('{{ route('dashboard.employement_confirmation_request') }}')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('emp_confirmation_table_body');
+                tbody.innerHTML = '';
+                if (!data.data || data.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">No Employment Confirmation Request..</td></tr>';
+                } else {
+                    data.data.forEach((emp, index) => {
+                        let relevantDate = (emp.basis_of_employment == 5) ? formatDate(emp.resign_date) : formatDate(emp.hire_date);
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${emp.employee_number}</td>
+                                <td>${emp.full_name}</td>
+                                <td>${emp['0'] || '-'}</td>
+                                <td>${relevantDate}</td>
+                                <td>${emp['1'] || '-'}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(err => {
+                const tbody = document.getElementById('emp_confirmation_table_body');
+                tbody.innerHTML = '<tr><td colspan="6" class="text-danger text-center">Failed to load data.</td></tr>';
+                console.error(err);
+            });
+    })();
+
+    // ===============================
+    // Current Exception Table
+    // ===============================
+    (function loadExceptions() {
+        fetch('{{ route('dashboard.exception') }}')
+            .then(res => res.json())
+            .then(result => {
+                const data = result.data || {};
+                const mapping = {30:'#high-value', 20:'#medium-value', 10:'#low-value'};
+                Object.keys(mapping).forEach(key => {
+                    const el = document.querySelector(mapping[key]);
+                    if (!el) return;
+                    const value = data[key] || 0;
+                    el.textContent = `(${value})`;
+                    if (value > 0 && key == 30) el.classList.add('text-danger', 'fw-bold');
+                    if (value > 0 && key == 20) el.classList.add('text-warning', 'fw-bold');
+                });
+            })
+            .catch(err => console.error('Error loading exceptions:', err));
+    })();
+
+    // ===============================
+    // Employee Search & Show in Offcanvas
+    // ===============================
+    document.querySelector('#emp_type_search').addEventListener('click', () => {
+        // Get input values
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const category = document.getElementById('category').value;
+
+        let valid = true;
+
+        // Validate Start Date
+        if (!startDate) {
+            document.getElementById('startDateError').style.display = 'block';
+            valid = false;
+        } else {
+            document.getElementById('startDateError').style.display = 'none';
+        }
+
+        // Validate End Date
+        if (!endDate) {
+            document.getElementById('endDateError').style.display = 'block';
+            valid = false;
+        } else {
+            document.getElementById('endDateError').style.display = 'none';
+        }
+
+        // Validate Category
+        if (!category) {
+            document.getElementById('categoryError').style.display = 'block';
+            valid = false;
+        } else {
+            document.getElementById('categoryError').style.display = 'none';
+        }
+
+        // Stop if validation fails
+        if (!valid) return;
+
+        // Prepare data for fetch
+        const data = { start_date: startDate, end_date: endDate, category: category };
+
+        // Fetch search results
+        fetch('/dashboard/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(res => {
+            const tbody = document.querySelector('#resultsTable tbody');
+            tbody.innerHTML = '';
+            if (!res.data || res.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">No records found</td></tr>';
+            } else {
+                const categoryNames = {
+                    1: 'Contract',
+                    2: 'Training',
+                    3: 'Permanent (With Probation)',
+                    4: 'Permanent (Confirmed)',
+                    5: 'Resign'
+                };
+                res.data.forEach((user, index) => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${user.employee_number}</td>
+                            <td>${user.full_name}</td>
+                            <td>${user.hire_date ?? '-'}</td>
+                            <td>${user.resign_date ?? '-'}</td>
+                            <td>${categoryNames[user.basis_of_employment]}</td>
+                            <td>${user.month}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // Show Offcanvas
+            const offcanvas = new bootstrap.Offcanvas(document.getElementById('resultsOffcanvas'));
+            offcanvas.show();
+        })
+        .catch(err => console.error(err));
     });
 
 
-
+});
 </script>
-</x-app-layout>
+

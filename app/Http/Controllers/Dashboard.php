@@ -460,105 +460,65 @@ class Dashboard extends Controller
 
     public function search(Request $request)
     {
-        $current_company = $this->currentCompany;
-        $ulf1 = new UserListFactory();
-        $uf1 = new UserFactory();
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date'   => 'nullable|date|after_or_equal:start_date',
+            'category'   => 'required|integer'
+        ]);
 
-        if(!isset($filter_data)){
-            $filter_data = array();
+        $filter_data = [
+            'basis_of_employment' => (int)$request->category
+        ];
+
+        // Step 1: Call factory WITHOUT date filtering (model unchanged!)
+        $ulf = new UserListFactory();
+        $ulf->getSearchByCompanyIdAndArrayCriteria(
+            $this->currentCompany->getId(),
+            $filter_data
+        );
+
+        $start_ts = $request->start_date ? strtotime($request->start_date . " 00:00:00") : null;
+        $end_ts   = $request->end_date   ? strtotime($request->end_date   . " 23:59:59") : null;
+
+        // Step 2: Determine which date field to filter on
+        $date_column = "hire_date";
+        if ($filter_data['basis_of_employment'] == 5) {
+            $date_column = "resign_date";
         }
 
-        // Get input from request
-        $filter_data['start_date'] = $request->input('start_date');
-        $filter_data['end_date'] = $request->input('end_date');
-        $filter_data['basis_of_employment'] = $request->input('category');
+        // Step 3: Apply filtering manually (post-filtering)
+        $filtered = [];
 
-        //echo '<pre>'; print_r($filter_data['basis_of_employment']); echo '<pre>';  die;
-        $ulf1->getSearchByCompanyIdAndArrayCriteria( $current_company->getId(), $filter_data);
-        // echo '<pre>'; print_r($filter_data); echo '<pre>';  die;
+        foreach ($ulf->rs as $row) {
 
-        $users1 = [];
-            foreach ($ulf1->rs as $u_obj) {
-                $ulf1->data = (array)$u_obj;
-                $u_obj = $ulf1;
-                    //$company_name = $clf->getById( $u_obj->getCompany() )->getCurrent()->getName();
-                    //echo $u_obj;
-                    //print_r($u_obj);
-                    //exit('this is INTEX Object');
-                    if($u_obj->getMonth() > 0 && $u_obj->getBasisOfEmployment() > 0 && $u_obj->getBasisOfEmployment() != 4 && $u_obj->getBasisOfEmployment() != 6)
-                    {
+            // Row timestamps
+            $row_ts = (int)$row->$date_column;
 
-                        $users1[] = array(
-                                'id' => $u_obj->getId(),
-                                'company_id' => $u_obj->getCompany(),
-                                'employee_number' => $u_obj->getEmployeeNumber(),
-        //									'status_id' => $u_obj->getStatus(),
-        //									'status' => Option::getByKey( $u_obj->getStatus(), $u_obj->getOptions('status') ),
-        //									'user_name' => $u_obj->getUserName(),
-        //									'phone_id' => $u_obj->getPhoneID(),
-        //									'ibutton_id' => $u_obj->getIButtonID(),
-        //
-                                'full_name' => $u_obj->getFullName(TRUE),
-        //									'first_name' => $u_obj->getFirstName(),
-        //									'middle_name' => $u_obj->getMiddleName(),
-        //									'last_name' => $u_obj->getLastName(),
-        //
-        //									'title' => Option::getByKey($u_obj->getTitle(), $title_options ),
-        //									'user_group' => Option::getByKey($u_obj->getGroup(), $group_options ),
-        //
-        //									'default_branch' => Option::getByKey($u_obj->getDefaultBranch(), $branch_options ),
-        //									'default_department' => Option::getByKey($u_obj->getDefaultDepartment(), $department_options ),
-        //
-        //									'sex_id' => $u_obj->getSex(),
-        //									'sex' => Option::getByKey($u_obj->getSex(), $u_obj->getOptions('sex') ),
-        //
-        //									'address1' => $u_obj->getAddress1(),
-        //									'address2' => $u_obj->getAddress2(),
-        //									'city' => $u_obj->getCity(),
-        //									'province' => $u_obj->getProvince(),
-        //									'country' => $u_obj->getCountry(),
-        //									'postal_code' => $u_obj->getPostalCode(),
-        //									'work_phone' => $u_obj->getWorkPhone(),
-        //									'home_phone' => $u_obj->getHomePhone(),
-        //									'mobile_phone' => $u_obj->getMobilePhone(),
-        //									'fax_phone' => $u_obj->getFaxPhone(),
-        //									'home_email' => $u_obj->getHomeEmail(),
-        //									'work_email' => $u_obj->getWorkEmail(),
-        //									'birth_date' => TTDate::getDate('DATE', $u_obj->getBirthDate() ),
-        //									'sin' => $u_obj->getSecureSIN(),
+            // Skip if row has invalid date
+            if ($row_ts <= 0) continue;
 
-                                                                                //'hire_date' => TTDate::getDate('DATE', $u_obj->getHireDate() ),
-                                    'hire_date' => $u_obj->getHireDate(),
+            // Apply start date
+            if ($start_ts && $row_ts < $start_ts) continue;
 
-                                    /* ASRP NOTE --> I ADDED THIS CODE FOR THUNDER & NEON  */
-                                    'resign_date' => $u_obj->getResignDate(),
+            // Apply end date
+            if ($end_ts && $row_ts > $end_ts) continue;
 
-        //									'termination_date' => TTDate::getDate('DATE', $u_obj->getTerminationDate() ),
-        //
-        //									'map_url' => $u_obj->getMapURL(),
-        //
-        //									'is_owner' => $permission->isOwner( $u_obj->getCreatedBy(), $u_obj->getId() ),
-        //									'is_child' => $permission->isChild( $u_obj->getId(), $permission_children_ids ),
-        //									'deleted' => $u_obj->getDeleted(),
-                                            //ARSP NOT --> I HIDE THIS CODE FOR THUNDER & NEON   'probation'=>$u_obj->getProbation()
-                                    'basis_of_employment' =>$u_obj->getBasisOfEmployment(),
-                                    'month'=>$u_obj->getMonth()
-                            );
-                    }
+            // Pass filtered row
+            $filtered[] = [
+                'id' => $row->id,
+                'employee_number' => $row->employee_number,
+                'full_name' => $row->full_name ?? trim(($row->first_name ?? '').' '.($row->last_name ?? '')),
+                'hire_date' => $row->hire_date ? date('Y/m/d', $row->hire_date) : null,
+                'resign_date' => $row->resign_date ? date('Y/m/d', $row->resign_date) : null,
+                'basis_of_employment' => $row->basis_of_employment,
+                'month' => $row->month
+            ];
         }
-        //print_r($users1);
-        //exit('this is INTEX Object');
 
-
-        //print_r($uf->getWarningEmployees($users));
-        $basis_of_employment_warning_employees  = $uf1->getWarningBasisOfEmployment($users1);
-        // print_r($basis_of_employment_warning_employees);
-        //exit('this is INTEX Object');
-
-        return response()->json(['data' => $basis_of_employment_warning_employees]);
-
+        return response()->json([
+            'data' => $filtered
+        ]);
     }
-
 
 
 

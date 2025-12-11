@@ -36,7 +36,7 @@
                         <table class="table table-striped table-bordered">
                             <thead class="bg-primary text-white">
                                 <th>#</th>
-                                <th>Name </th>
+                                <th>Name</th>
                                 <th>Description</th>
                                 <th>Functions</th>
                                 <td>
